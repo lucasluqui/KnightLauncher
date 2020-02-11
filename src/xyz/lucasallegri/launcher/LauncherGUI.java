@@ -48,7 +48,7 @@ public class LauncherGUI {
 		Boot.onBootStart();
 		
 		launcherGUIForm = new JFrame();
-		launcherGUIForm.setTitle("KnightLauncher — " + ConstantsKL.VERSION);
+		launcherGUIForm.setTitle("KnightLauncher — " + LauncherConstants.VERSION);
 		launcherGUIForm.setBounds(100, 100, 605, 350);
 		launcherGUIForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		launcherGUIForm.getContentPane().setLayout(null);
