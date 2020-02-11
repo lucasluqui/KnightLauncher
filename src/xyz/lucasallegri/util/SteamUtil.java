@@ -1,9 +1,8 @@
-package com.lucasallegri.util;
+package xyz.lucasallegri.util;
 
+import xyz.lucasallegri.launcher.ConstantsKL;
 import java.awt.Desktop;
 import java.net.URI;
-
-import com.lucasallegri.launcher.ConstantsKL;
 
 public class SteamUtil {
 

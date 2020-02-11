@@ -1,4 +1,4 @@
-package com.lucasallegri.launcher;
+package xyz.lucasallegri.launcher;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;

@@ -1,18 +1,16 @@
-package com.lucasallegri.launcher;
+package xyz.lucasallegri.launcher;
 
+import xyz.lucasallegri.launcher.EventHandler;
+import xyz.lucasallegri.util.ImageUtil;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Choice;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-
-import com.lucasallegri.launcher.EventHandler;
-import com.lucasallegri.util.ImageUtil;
 
 public class LauncherGUI {
 

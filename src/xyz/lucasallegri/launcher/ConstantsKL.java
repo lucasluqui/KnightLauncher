@@ -1,4 +1,4 @@
-package com.lucasallegri.launcher;
+package xyz.lucasallegri.launcher;
 
 public class ConstantsKL {
 

@@ -1,8 +1,7 @@
-package com.lucasallegri.launcher;
+package xyz.lucasallegri.launcher;
 
+import xyz.lucasallegri.util.SteamUtil;
 import java.awt.event.ActionEvent;
-
-import com.lucasallegri.util.SteamUtil;
 
 public class EventHandler {
 	
