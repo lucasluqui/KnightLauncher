@@ -11,6 +11,7 @@ public class Boot {
 	
 	public static void onBootStart() {
 		
+		
 		setupLookAndFeel();
 		checkForDirectories();
 		

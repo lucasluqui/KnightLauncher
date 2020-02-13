@@ -3,14 +3,19 @@ package xyz.lucasallegri.launcher;
 import xyz.lucasallegri.launcher.EventHandler;
 import xyz.lucasallegri.util.ImageUtil;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
 
 public class LauncherGUI {
 
@@ -49,16 +54,43 @@ public class LauncherGUI {
 	 */
 	private void initialize() {
 		
+		InputStream fontRegIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Regular.ttf");
+		InputStream fontRegBigIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Regular.ttf");
+		InputStream fontMedIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Medium.ttf");
+		InputStream fontMedBigIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Medium.ttf");
+		Font fontReg = null;
+		Font fontRegBig = null;
+		Font fontMed = null;
+		Font fontMedBig = null;
+		try {
+			fontReg = Font.createFont(Font.TRUETYPE_FONT, fontRegIs);
+			fontReg = fontReg.deriveFont(11.0f);
+			fontReg = fontReg.deriveFont(Font.ITALIC);
+			
+			fontRegBig = Font.createFont(Font.TRUETYPE_FONT, fontRegBigIs);
+			fontRegBig = fontRegBig.deriveFont(14.0f);
+			
+			fontMed = Font.createFont(Font.TRUETYPE_FONT, fontMedIs);
+			fontMed = fontMed.deriveFont(11.0f);
+			
+			fontMedBig = Font.createFont(Font.TRUETYPE_FONT, fontMedBigIs);
+			fontMedBig = fontMedBig.deriveFont(14.0f);
+		} catch (FontFormatException | IOException e) {
+			e.printStackTrace();
+		}
+		
 		Boot.onBootStart();
 		
 		launcherGUIForm = new JFrame();
 		launcherGUIForm.setTitle("KnightLauncher (" + LauncherConstants.VERSION + ")");
+		launcherGUIForm.setResizable(false);
 		launcherGUIForm.setBounds(100, 100, 750, 450);
 		launcherGUIForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		launcherGUIForm.getContentPane().setLayout(null);
 		
 		launchButton = new JButton("LAUNCH");
 		launchButton.setBounds(17, 350, 155, 48);
+		launchButton.setFont(fontMedBig);
 		launcherGUIForm.getContentPane().add(launchButton);
 		launchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
@@ -72,18 +104,23 @@ public class LauncherGUI {
 		
 		JButton modButton = new JButton("Mods");
 		modButton.setBounds(537, 375, 89, 23);
+		modButton.setFont(fontMed);
 		launcherGUIForm.getContentPane().add(modButton);
 		
 		JButton settingsButton = new JButton("Settings");
 		settingsButton.setBounds(630, 375, 89, 23);
+		settingsButton.setFont(fontMed);
 		launcherGUIForm.getContentPane().add(settingsButton);
 		
 		JLabel labelTweets = new JLabel("<html>Latest on <b>@SpiralKnights</b></html>");
 		labelTweets.setBounds(534, 12, 127, 28);
+		labelTweets.setFont(fontReg);
 		launcherGUIForm.getContentPane().add(labelTweets);
 		
 		tweetsContainer = new JLabel("Retrieving tweets...");
+		tweetsContainer.setHorizontalAlignment(SwingConstants.CENTER);
 		tweetsContainer.setBounds(535, 48, 189, 261);
+		tweetsContainer.setFont(fontReg);
 		launcherGUIForm.getContentPane().add(tweetsContainer);
 		
 		launchProgressBar = new JProgressBar();
@@ -91,8 +128,9 @@ public class LauncherGUI {
 		launchProgressBar.setVisible(false);
 		launcherGUIForm.getContentPane().add(launchProgressBar);
 		
-		launchState = new JLabel("You shouldn't be seeing this");
+		launchState = new JLabel("");
 		launchState.setBounds(183, 356, 325, 14);
+		launchState.setFont(fontReg);
 		launchState.setVisible(false);
 		launcherGUIForm.getContentPane().add(launchState);
 		
