@@ -2,6 +2,7 @@ package xyz.lucasallegri.launcher.mods;
 
 import java.io.IOException;
 
+import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.util.FileUtil;
 
@@ -37,6 +38,38 @@ public class Mods {
 		ProgressBar.setBarMax(1);
 		ProgressBar.setBarValue(1);
 		
+	}
+	
+	public static void rebuildJars() {
+		
+		LauncherGUI.launchButton.setEnabled(false);
+		
+		ProgressBar.setBarMax(4);
+		ProgressBar.showBar();
+		ProgressBar.setState("Rebuilding game files...");
+		ProgressBar.showState();
+		
+		try {
+			
+			ProgressBar.setBarValue(1);
+			ProgressBar.setState("Rebuilding full-music-bundle.jar...");
+			FileUtil.unzip("rsrc/full-music-bundle.jar", "rsrc/");
+			
+			ProgressBar.setBarValue(2);
+			ProgressBar.setState("Rebuilding full-rest-bundle.jar...");
+			FileUtil.unzip("rsrc/full-rest-bundle.jar", "rsrc/");
+			
+			ProgressBar.setBarValue(3);
+			ProgressBar.setState("Rebuilding intro-bundle.jar...");
+			FileUtil.unzip("rsrc/intro-bundle.jar", "rsrc/");
+			
+			ProgressBar.setBarValue(4);
+			ProgressBar.setState("Rebuild complete, game launch ready.");
+			LauncherGUI.launchButton.setEnabled(true);
+			
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 }

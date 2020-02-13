@@ -15,6 +15,7 @@ import javax.swing.JProgressBar;
 public class LauncherGUI {
 
 	public static JFrame launcherGUIForm;
+	public static JButton launchButton;
 	public static JLabel tweetsContainer;
 	public static JLabel launchState;
 	public static JProgressBar launchProgressBar;
@@ -56,7 +57,7 @@ public class LauncherGUI {
 		launcherGUIForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		launcherGUIForm.getContentPane().setLayout(null);
 		
-		JButton launchButton = new JButton("LAUNCH");
+		launchButton = new JButton("LAUNCH");
 		launchButton.setBounds(17, 350, 155, 48);
 		launcherGUIForm.getContentPane().add(launchButton);
 		launchButton.addActionListener(new ActionListener() {
@@ -65,7 +66,7 @@ public class LauncherGUI {
 			}
 		});
 		
-		imageContainer = new JLabel(new ImageIcon(ImageUtil.getImageFromURL("https://content.spiralknights.com/images/glacial/glacial_uplink-lrg_en.png")));
+		imageContainer = new JLabel(new ImageIcon(ImageUtil.getImageFromURL("http://px-api.lucasallegri.xyz/event.png")));
 		imageContainer.setBounds(10, 10, 514, 311);
 		launcherGUIForm.getContentPane().add(imageContainer);
 		
@@ -91,9 +92,11 @@ public class LauncherGUI {
 		launcherGUIForm.getContentPane().add(launchProgressBar);
 		
 		launchState = new JLabel("You shouldn't be seeing this");
-		launchState.setBounds(183, 356, 342, 14);
+		launchState.setBounds(183, 356, 325, 14);
 		launchState.setVisible(false);
 		launcherGUIForm.getContentPane().add(launchState);
+		
+		launcherGUIForm.setLocationRelativeTo(null);
 		
 		Boot.onBootEnd();
 		
