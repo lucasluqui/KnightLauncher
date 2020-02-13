@@ -14,7 +14,7 @@ public class ImageUtil {
 		try {
 			URL _url = new URL(url);
 			image = ImageIO.read(_url);
-			image = image.getScaledInstance(589, 234, Image.SCALE_SMOOTH);
+			image = image.getScaledInstance(514, 311, Image.SCALE_SMOOTH);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
