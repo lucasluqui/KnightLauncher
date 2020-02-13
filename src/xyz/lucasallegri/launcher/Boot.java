@@ -1,46 +1,27 @@
 package xyz.lucasallegri.launcher;
 
-import java.util.List;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import twitter4j.Status;
-import twitter4j.TwitterException;
-
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import xyz.lucasallegri.util.TwitterUtil;
+import xyz.lucasallegri.util.FileUtil;
 
 public class Boot {
 	
 	public static void onBootStart() {
 		
 		setupLookAndFeel();
-		
-//		List<Status> ses = null;
-//		String parsedTweets = "<html>";
-//		
-//		try {
-//			ses = TwitterUtil.getStatuses("SpiralKnights", 5);
-//		} catch (TwitterException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		for(int i = 0; i < ses.size(); i++) {
-//			Status status = ses.get(i);
-//			parsedTweets = parsedTweets + status.getText() + "<br>";			
-//		}
-//		
-//		parsedTweets = parsedTweets + "</html>";
-//		
-//		LauncherGUI.tweetsContainer.setText(parsedTweets);
+		checkForDirectories();
 		
 	}
 	
 	public static void onBootEnd() {
 		
-		populatePlatforms();
+		
 		
 	}
 	
@@ -59,9 +40,8 @@ public class Boot {
 		
 	}
 	
-	private static void populatePlatforms() {
-		//LauncherGUI.platformChoice.add("Steam");
-		//LauncherGUI.platformChoice.add("Standalone");
+	private static void checkForDirectories() {
+		FileUtil.createFolder("mods");
 	}
 
 }

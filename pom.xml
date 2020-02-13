@@ -7,11 +7,6 @@
   <description>Advanced game launcher for Spiral Knights</description>
   
    <dependencies>
-      <dependency>
-           <groupId>org.twitter4j</groupId>
-           <artifactId>twitter4j-core</artifactId>
-           <version>[4.0,)</version>
-       </dependency>
    </dependencies>
   
   <build>
