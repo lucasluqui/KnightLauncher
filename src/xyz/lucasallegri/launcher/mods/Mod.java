@@ -3,7 +3,7 @@ package xyz.lucasallegri.launcher.mods;
 public class Mod {
 	
 	protected String displayName;
-	protected String fileName ;
+	protected String fileName;
 	protected Boolean isEnabled;
 	
 	public Mod() {
