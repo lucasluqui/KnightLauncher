@@ -27,7 +27,9 @@ public class Mods {
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
 			try {
+				KnightLog.log.info("Mounting mod: " + ModList.installedMods.get(i));
 				FileUtil.unzip("mods/" + ModList.installedMods.get(i), "rsrc/");
+				KnightLog.log.info(ModList.installedMods.get(i) + " was mounted successfully.");
 			} catch (IOException e) {
 				KnightLog.log.severe(e.getLocalizedMessage());
 			}

@@ -36,6 +36,13 @@ public class LauncherGUI {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
+		try {
+			KnightLog.setup();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
