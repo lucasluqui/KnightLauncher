@@ -14,11 +14,13 @@ public class EventHandler {
 				Mods.mount();
 				
 				if(Mods.modSetupFinished) {
-					try {
-						SteamUtil.startGameById("99900");
-						LauncherGUI.launcherGUIForm.dispose();
-					} catch (Exception e) {
-						e.printStackTrace();
+					if(LauncherSettings.USE_STEAM_PROTOCOL) {
+						try {
+							SteamUtil.startGameById("99900");
+							LauncherGUI.launcherGUIForm.dispose();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
