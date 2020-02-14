@@ -1,6 +1,7 @@
 package xyz.lucasallegri.launcher.mods;
 
 import java.io.IOException;
+import java.util.List;
 
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.ProgressBar;
@@ -13,7 +14,10 @@ public class ModLoader {
 	
 	public static void checkInstalled() {
 		
-		ModList.installedMods = FileUtil.fileNamesInDirectory("mods/", ".zip");
+		List<String> rawFiles = FileUtil.fileNamesInDirectory("mods/", ".zip");
+		for(String file : rawFiles) {
+			ModList.installedMods.add(new Mod(file.substring(0, file.length() - 4), file));
+		}
 		
 	}
 	
@@ -27,9 +31,9 @@ public class ModLoader {
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
 			try {
-				KnightLog.log.info("Mounting mod: " + ModList.installedMods.get(i));
-				FileUtil.unzip("mods/" + ModList.installedMods.get(i), "rsrc/");
-				KnightLog.log.info(ModList.installedMods.get(i) + " was mounted successfully.");
+				KnightLog.log.info("Mounting mod: " + ModList.installedMods.get(i).getDisplayName());
+				FileUtil.unzip("mods/" + ModList.installedMods.get(i).getFileName(), "rsrc/");
+				KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
 			} catch (IOException e) {
 				KnightLog.log.severe(e.getLocalizedMessage());
 			}

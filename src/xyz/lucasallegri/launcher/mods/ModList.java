@@ -4,6 +4,6 @@ import java.util.List;
 
 public class ModList {
 	
-	public static List<String> installedMods = null;
+	public static List<Mod> installedMods = null;
 
 }
