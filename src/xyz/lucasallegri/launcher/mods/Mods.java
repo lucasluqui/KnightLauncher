@@ -48,9 +48,7 @@ public class Mods {
 		LauncherGUI.launchButton.setEnabled(false);
 		
 		ProgressBar.setBarMax(4);
-		ProgressBar.showBar();
 		ProgressBar.setState("Rebuilding game files...");
-		ProgressBar.showState();
 		
 		try {
 			

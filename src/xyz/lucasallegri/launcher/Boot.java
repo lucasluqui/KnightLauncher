@@ -24,6 +24,10 @@ public class Boot {
 	public static void onBootEnd() {
 		
 		if(Settings.doRebuilds) {
+			
+			ProgressBar.showBar();
+			ProgressBar.showState();
+			
 			Thread rebuildThread = new Thread(new Runnable(){
 				public void run() { Mods.rebuildJars(); }
 			});

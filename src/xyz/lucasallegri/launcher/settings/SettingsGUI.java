@@ -1,12 +1,15 @@
 package xyz.lucasallegri.launcher.settings;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import xyz.lucasallegri.launcher.LauncherEventHandler;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 
@@ -69,6 +72,11 @@ public class SettingsGUI {
 		checkboxRebuilds.setFont(LauncherGUI.fontReg);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
 		checkboxRebuilds.setSelected(Settings.doRebuilds);
+		checkboxRebuilds.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.rebuildsChangeEvent(_action);
+			}
+		});
 		
 		settingsGUIFrame.setLocationRelativeTo(null);
 		

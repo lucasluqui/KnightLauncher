@@ -14,6 +14,9 @@ public class LauncherEventHandler {
 		Thread launchThread = new Thread(new Runnable(){
 			public void run() {
 				
+				ProgressBar.showBar();
+				ProgressBar.showState();
+				
 				Mods.mount();
 				
 				if(Mods.modSetupFinished) {
