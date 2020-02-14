@@ -55,6 +55,7 @@ public class SettingsGUI {
 		settingsGUIFrame.getContentPane().add(choicePlatform);
 		choicePlatform.add("Steam");
 		choicePlatform.add("Standalone");
+		choicePlatform.select(Settings.gamePlatform);
 		choicePlatform.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
@@ -67,6 +68,7 @@ public class SettingsGUI {
 		checkboxRebuilds.setBounds(6, 40, 97, 23);
 		checkboxRebuilds.setFont(LauncherGUI.fontReg);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
+		checkboxRebuilds.setSelected(Settings.doRebuilds);
 		
 		settingsGUIFrame.setLocationRelativeTo(null);
 		
