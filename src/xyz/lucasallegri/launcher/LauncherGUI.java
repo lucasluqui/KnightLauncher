@@ -1,6 +1,7 @@
 package xyz.lucasallegri.launcher;
 
 import xyz.lucasallegri.launcher.LauncherEventHandler;
+import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.util.ImageUtil;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -111,6 +112,11 @@ public class LauncherGUI {
 		settingsButton.setBounds(630, 375, 89, 23);
 		settingsButton.setFont(fontMed);
 		launcherGUIForm.getContentPane().add(settingsButton);
+		settingsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsGUI.compose();
+			}
+		});
 		
 		JLabel labelTweets = new JLabel("<html>Latest on <b>@SpiralKnights</b></html>");
 		labelTweets.setBounds(534, 12, 127, 28);
