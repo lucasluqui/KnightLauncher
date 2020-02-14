@@ -61,5 +61,10 @@ public class FileUtil {
 		return fileNames;
 	}
 	
+	public static boolean fileExists(String path) {
+		File file = new File(path);
+		return file.exists();
+	}
+	
 
 }
