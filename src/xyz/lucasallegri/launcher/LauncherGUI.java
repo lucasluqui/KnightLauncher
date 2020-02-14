@@ -123,7 +123,7 @@ public class LauncherGUI {
 		launcherGUIForm.getContentPane().add(modButton);
 		
 		JButton settingsButton = new JButton("Settings");
-		settingsButton.setBounds(630, 375, 89, 23);
+		settingsButton.setBounds(632, 375, 89, 23);
 		settingsButton.setFont(fontMed);
 		launcherGUIForm.getContentPane().add(settingsButton);
 		settingsButton.addActionListener(new ActionListener() {
