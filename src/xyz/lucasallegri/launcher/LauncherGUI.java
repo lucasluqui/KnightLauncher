@@ -1,6 +1,6 @@
 package xyz.lucasallegri.launcher;
 
-import xyz.lucasallegri.launcher.EventHandler;
+import xyz.lucasallegri.launcher.LauncherEventHandler;
 import xyz.lucasallegri.util.ImageUtil;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -94,7 +94,7 @@ public class LauncherGUI {
 		launcherGUIForm.getContentPane().add(launchButton);
 		launchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				EventHandler.launchEvent(_action);
+				LauncherEventHandler.launchEvent(_action);
 			}
 		});
 		

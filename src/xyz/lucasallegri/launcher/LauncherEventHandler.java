@@ -1,10 +1,11 @@
 package xyz.lucasallegri.launcher;
 
 import xyz.lucasallegri.launcher.mods.Mods;
+import xyz.lucasallegri.util.ProcessUtil;
 import xyz.lucasallegri.util.SteamUtil;
 import java.awt.event.ActionEvent;
 
-public class EventHandler {
+public class LauncherEventHandler {
 	
 	public static void launchEvent(ActionEvent action) {
 		
@@ -15,13 +16,20 @@ public class EventHandler {
 				
 				if(Mods.modSetupFinished) {
 					if(LauncherSettings.USE_STEAM_PROTOCOL) {
+						
 						try {
 							SteamUtil.startGameById("99900");
-							LauncherGUI.launcherGUIForm.dispose();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
+						
+					} else {
+						
+						ProcessUtil.startApplication(LauncherConstants.STANDALONE_CLIENT_ARGS);
+						
 					}
+					
+					LauncherGUI.launcherGUIForm.dispose();
 				}
 			}
 		});
