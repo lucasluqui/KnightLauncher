@@ -4,6 +4,9 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import xyz.lucasallegri.launcher.LauncherGUI;
+
 import java.awt.Choice;
 import javax.swing.JCheckBox;
 
@@ -39,10 +42,12 @@ public class SettingsGUI {
 		
 		JLabel labelChoicePlatform = new JLabel("Platform");
 		labelChoicePlatform.setBounds(10, 15, 48, 14);
+		labelChoicePlatform.setFont(LauncherGUI.fontReg);
 		settingsGUIFrame.getContentPane().add(labelChoicePlatform);
 		
 		choicePlatform = new Choice();
 		choicePlatform.setBounds(62, 11, 83, 20);
+		labelChoicePlatform.setFont(LauncherGUI.fontReg);
 		settingsGUIFrame.getContentPane().add(choicePlatform);
 		choicePlatform.add("Steam");
 		choicePlatform.add("Standalone");
@@ -50,6 +55,7 @@ public class SettingsGUI {
 		checkboxRebuilds = new JCheckBox("Rebuilds");
 		checkboxRebuilds.setSelected(true);
 		checkboxRebuilds.setBounds(6, 40, 97, 23);
+		labelChoicePlatform.setFont(LauncherGUI.fontReg);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
 	}
 }

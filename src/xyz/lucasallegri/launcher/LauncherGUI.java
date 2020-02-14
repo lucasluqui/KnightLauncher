@@ -26,6 +26,10 @@ public class LauncherGUI {
 	public static JLabel launchState;
 	public static JProgressBar launchProgressBar;
 	public static JLabel imageContainer;
+	public static Font fontReg = null;
+	public static Font fontRegBig = null;
+	public static Font fontMed = null;
+	public static Font fontMedBig = null;
 
 	/**
 	 * Launch the application.
@@ -59,10 +63,10 @@ public class LauncherGUI {
 		InputStream fontRegBigIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Regular.ttf");
 		InputStream fontMedIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Medium.ttf");
 		InputStream fontMedBigIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Medium.ttf");
-		Font fontReg = null;
-		Font fontRegBig = null;
-		Font fontMed = null;
-		Font fontMedBig = null;
+		fontReg = null;
+		fontRegBig = null;
+		fontMed = null;
+		fontMedBig = null;
 		try {
 			fontReg = Font.createFont(Font.TRUETYPE_FONT, fontRegIs);
 			fontReg = fontReg.deriveFont(11.0f);
