@@ -1,6 +1,8 @@
 package xyz.lucasallegri.launcher.settings;
 
 import java.awt.EventQueue;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,6 +39,7 @@ public class SettingsGUI {
 		settingsGUIFrame = new JFrame();
 		settingsGUIFrame.setTitle("KnightLauncher Settings");
 		settingsGUIFrame.setBounds(100, 100, 200, 135);
+		settingsGUIFrame.setResizable(false);
 		settingsGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		settingsGUIFrame.getContentPane().setLayout(null);
 		
@@ -47,15 +50,21 @@ public class SettingsGUI {
 		
 		choicePlatform = new Choice();
 		choicePlatform.setBounds(62, 11, 83, 20);
-		labelChoicePlatform.setFont(LauncherGUI.fontReg);
+		choicePlatform.setFont(LauncherGUI.fontReg);
 		settingsGUIFrame.getContentPane().add(choicePlatform);
 		choicePlatform.add("Steam");
 		choicePlatform.add("Standalone");
+		choicePlatform.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				SettingsEventHandler.platformChangeEvent(event);
+			}
+		});
 		
 		checkboxRebuilds = new JCheckBox("Rebuilds");
 		checkboxRebuilds.setSelected(true);
 		checkboxRebuilds.setBounds(6, 40, 97, 23);
-		labelChoicePlatform.setFont(LauncherGUI.fontReg);
+		checkboxRebuilds.setFont(LauncherGUI.fontReg);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
 	}
 }
