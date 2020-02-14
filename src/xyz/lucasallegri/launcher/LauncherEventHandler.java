@@ -1,6 +1,7 @@
 package xyz.lucasallegri.launcher;
 
 import xyz.lucasallegri.launcher.mods.Mods;
+import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.util.ProcessUtil;
 import xyz.lucasallegri.util.SteamUtil;
 import java.awt.event.ActionEvent;
@@ -15,7 +16,7 @@ public class LauncherEventHandler {
 				Mods.mount();
 				
 				if(Mods.modSetupFinished) {
-					if(LauncherSettings.USE_STEAM_PROTOCOL) {
+					if(Settings.gamePlatform.startsWith("Steam")) {
 						
 						try {
 							SteamUtil.startGameById("99900");

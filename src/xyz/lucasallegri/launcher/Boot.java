@@ -5,6 +5,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import xyz.lucasallegri.launcher.mods.Mods;
+import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.util.FileUtil;
 
 public class Boot {
@@ -18,10 +19,12 @@ public class Boot {
 	
 	public static void onBootEnd() {
 		
-		Thread rebuildThread = new Thread(new Runnable(){
-			public void run() { Mods.rebuildJars(); }
-		});
-		rebuildThread.start();
+		if(Settings.doRebuilds) {
+			Thread rebuildThread = new Thread(new Runnable(){
+				public void run() { Mods.rebuildJars(); }
+			});
+			rebuildThread.start();
+		}
 		
 		Mods.checkInstalled();
 		
