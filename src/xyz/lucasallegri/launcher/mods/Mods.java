@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.ProgressBar;
+import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.FileUtil;
 
 public class Mods {
@@ -28,7 +29,7 @@ public class Mods {
 			try {
 				FileUtil.unzip("mods/" + ModList.installedMods.get(i), "rsrc/");
 			} catch (IOException e) {
-				e.printStackTrace();
+				KnightLog.log.severe(e.getLocalizedMessage());
 			}
 		}
 		
@@ -68,7 +69,7 @@ public class Mods {
 			LauncherGUI.launchButton.setEnabled(true);
 			
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			KnightLog.log.severe(e1.getLocalizedMessage());
 		}
 	}
 

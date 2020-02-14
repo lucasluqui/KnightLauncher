@@ -2,6 +2,7 @@ package xyz.lucasallegri.launcher;
 
 import xyz.lucasallegri.launcher.mods.Mods;
 import xyz.lucasallegri.launcher.settings.Settings;
+import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ProcessUtil;
 import xyz.lucasallegri.util.SteamUtil;
 import java.awt.event.ActionEvent;
@@ -21,7 +22,7 @@ public class LauncherEventHandler {
 						try {
 							SteamUtil.startGameById("99900");
 						} catch (Exception e) {
-							e.printStackTrace();
+							KnightLog.log.severe(e.getLocalizedMessage());
 						}
 						
 					} else {

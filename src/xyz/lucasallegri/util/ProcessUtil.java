@@ -2,13 +2,15 @@ package xyz.lucasallegri.util;
 
 import java.io.IOException;
 
+import xyz.lucasallegri.logging.KnightLog;
+
 public class ProcessUtil {
 	
 	public static void startApplication(String commandLine) {
 		try {
 			final Process p = Runtime.getRuntime().exec(commandLine);
 		} catch (IOException e) {
-			e.printStackTrace();
+			KnightLog.log.severe(e.getLocalizedMessage());
 		}
 	}
 	
@@ -16,7 +18,7 @@ public class ProcessUtil {
 		try {
 			final Process p = Runtime.getRuntime().exec(args);
 		} catch (IOException e) {
-			e.printStackTrace();
+			KnightLog.log.severe(e.getLocalizedMessage());
 		}
 	}
 

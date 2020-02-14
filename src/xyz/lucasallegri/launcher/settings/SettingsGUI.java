@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import xyz.lucasallegri.launcher.LauncherGUI;
+import xyz.lucasallegri.logging.KnightLog;
 
 import java.awt.Choice;
 import javax.swing.JCheckBox;
@@ -25,7 +26,7 @@ public class SettingsGUI {
 					SettingsGUI window = new SettingsGUI();
 					window.settingsGUIFrame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					KnightLog.log.severe(e.getLocalizedMessage());
 				}
 			}
 		});

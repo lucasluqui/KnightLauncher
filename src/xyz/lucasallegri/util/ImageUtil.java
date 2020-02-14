@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
+import xyz.lucasallegri.logging.KnightLog;
+
 public class ImageUtil {
 	
 	public static Image getImageFromURL(String url) {
@@ -16,7 +18,7 @@ public class ImageUtil {
 			image = ImageIO.read(_url);
 			image = image.getScaledInstance(514, 311, Image.SCALE_SMOOTH);
 		} catch (IOException e) {
-			e.printStackTrace();
+			KnightLog.log.severe(e.getLocalizedMessage());
 		}
 		
 		return image;
