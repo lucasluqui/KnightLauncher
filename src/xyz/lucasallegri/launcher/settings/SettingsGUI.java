@@ -66,5 +66,8 @@ public class SettingsGUI {
 		checkboxRebuilds.setBounds(6, 40, 97, 23);
 		checkboxRebuilds.setFont(LauncherGUI.fontReg);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
+		
+		settingsGUIFrame.setLocationRelativeTo(null);
+		
 	}
 }
