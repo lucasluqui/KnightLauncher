@@ -2,6 +2,7 @@ package xyz.lucasallegri.launcher;
 
 import xyz.lucasallegri.launcher.LauncherEventHandler;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
+import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ImageUtil;
 import java.awt.EventQueue;
@@ -39,6 +40,7 @@ public class LauncherGUI {
 		
 		try {
 			KnightLog.setup();
+			SettingsProperties.setup();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

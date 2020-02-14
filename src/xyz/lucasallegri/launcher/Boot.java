@@ -7,6 +7,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import xyz.lucasallegri.launcher.mods.Mods;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
+import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.FileUtil;
 
@@ -16,6 +17,7 @@ public class Boot {
 		
 		setupLookAndFeel();
 		checkForDirectories();
+		SettingsProperties.loadFromProp();
 		
 	}
 	
