@@ -13,7 +13,7 @@ public class ModLoader {
 	
 	public static void checkInstalled() {
 		
-		ModList.installedMods = FileUtil.fileNamesInDirectory("mods/");
+		ModList.installedMods = FileUtil.fileNamesInDirectory("mods/", ".zip");
 		
 	}
 	
