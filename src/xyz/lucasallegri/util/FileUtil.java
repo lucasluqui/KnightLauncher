@@ -68,7 +68,9 @@ public class FileUtil {
 		List<String> fileNames = new ArrayList<String>();
 		
 		for(int i = 0; i < fileList.length; i++) {
-			if(fileList[i].isDirectory() == false && fileList[i].toString().contains(ext)) { fileNames.add(fileList[i].getName()); }
+			if(fileList[i].isDirectory() == false && fileList[i].toString().contains(ext)) { 
+				fileNames.add(fileList[i].getName()); 
+			}
 		}
 		
 		return fileNames;
