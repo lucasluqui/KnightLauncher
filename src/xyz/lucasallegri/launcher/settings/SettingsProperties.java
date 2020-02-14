@@ -31,7 +31,8 @@ public class SettingsProperties {
 	}
 	
 	private static void fillWithBaseProp() throws IOException {
-		String baseProp = 	"platform=Steam" + System.lineSeparator() +
+		String baseProp = 	"propver=1" + System.lineSeparator() +
+							"platform=Steam" + System.lineSeparator() +
 							"rebuilds=true";
 		BufferedWriter writer = new BufferedWriter(new FileWriter(propPath, true));
 		writer.append(baseProp);
