@@ -4,7 +4,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import xyz.lucasallegri.launcher.mods.Mods;
+import xyz.lucasallegri.launcher.mods.ModLoader;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
@@ -29,12 +29,12 @@ public class Boot {
 			ProgressBar.showState();
 			
 			Thread rebuildThread = new Thread(new Runnable(){
-				public void run() { Mods.rebuildJars(); }
+				public void run() { ModLoader.rebuildJars(); }
 			});
 			rebuildThread.start();
 		}
 		
-		Mods.checkInstalled();
+		ModLoader.checkInstalled();
 		
 	}
 	

@@ -1,6 +1,6 @@
 package xyz.lucasallegri.launcher;
 
-import xyz.lucasallegri.launcher.mods.Mods;
+import xyz.lucasallegri.launcher.mods.ModLoader;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ProcessUtil;
@@ -17,9 +17,9 @@ public class LauncherEventHandler {
 				ProgressBar.showBar();
 				ProgressBar.showState();
 				
-				Mods.mount();
+				ModLoader.mount();
 				
-				if(Mods.modSetupFinished) {
+				if(ModLoader.modLoadFinished) {
 					if(Settings.gamePlatform.startsWith("Steam")) {
 						
 						try {
@@ -44,7 +44,7 @@ public class LauncherEventHandler {
 	
 	public static void rebuildEvent(ActionEvent action) {
 		new Thread(new Runnable(){
-			public void run() { Mods.rebuildJars(); }
+			public void run() { ModLoader.rebuildJars(); }
 		});
 	}
 

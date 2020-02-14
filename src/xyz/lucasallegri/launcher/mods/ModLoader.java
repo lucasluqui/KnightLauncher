@@ -7,9 +7,9 @@ import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.FileUtil;
 
-public class Mods {
+public class ModLoader {
 	
-	public static Boolean modSetupFinished = false;
+	public static Boolean modLoadFinished = false;
 	
 	public static void checkInstalled() {
 		
@@ -19,7 +19,7 @@ public class Mods {
 	
 	public static void mount() {
 		
-		Mods.checkInstalled();
+		ModLoader.checkInstalled();
 		
 		ProgressBar.setBarMax(ModList.installedMods.size() + 1);
 		ProgressBar.setState("Mounting mods...");
@@ -35,7 +35,7 @@ public class Mods {
 			}
 		}
 		
-		modSetupFinished = true;
+		modLoadFinished = true;
 		
 		ProgressBar.setState("All mods mounted. Launching game...");
 		ProgressBar.setBarMax(1);
