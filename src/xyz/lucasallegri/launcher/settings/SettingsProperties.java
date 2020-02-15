@@ -15,6 +15,7 @@ import xyz.lucasallegri.util.FileUtil;
 
 public class SettingsProperties {
 
+	public static final String PROP_VER = "2";
 	public static Properties prop = new Properties();
 	private static String propPath = System.getProperty("user.dir") + File.separator + "KnightLauncher.properties";
 	
@@ -24,6 +25,12 @@ public class SettingsProperties {
 				File file = new File(propPath);
 				file.createNewFile();
 				fillWithBaseProp();
+			} else if(FileUtil.fileExists(propPath) && !getValue("propver").startsWith(PROP_VER)) {
+				KnightLog.log.info("Old prop version detected, resetting properties file.");
+				File file = new File(propPath);
+				file.delete();
+				file.createNewFile();
+				fillWithBaseProp();
 			}
 		} catch (IOException e) {
 			KnightLog.logException(e);
@@ -31,9 +38,10 @@ public class SettingsProperties {
 	}
 	
 	private static void fillWithBaseProp() throws IOException {
-		String baseProp = 	"propver=1" + System.lineSeparator() +
+		String baseProp = 	"propver=" + PROP_VER + System.lineSeparator() +
 							"platform=Steam" + System.lineSeparator() +
-							"rebuilds=true";
+							"rebuilds=true"  + System.lineSeparator() +
+							"keepOpen=false";
 		BufferedWriter writer = new BufferedWriter(new FileWriter(propPath, true));
 		writer.append(baseProp);
 		writer.close();
@@ -61,6 +69,7 @@ public class SettingsProperties {
 	public static void loadFromProp() {
 		Settings.gamePlatform = getValue("platform");
 		Settings.doRebuilds = getValue("rebuilds").startsWith("true") ? true : false;
+		Settings.keepOpen = getValue("keepOpen").startsWith("true") ? true : false;
 	}
 	
 }

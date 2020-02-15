@@ -15,4 +15,9 @@ public class SettingsEventHandler {
 		SettingsProperties.setValue("rebuilds", SettingsGUI.checkboxRebuilds.isSelected() ? "true" : "false");
 	}
 
+	public static void keepOpenChangeEvent(ActionEvent event) {
+		Settings.keepOpen = SettingsGUI.checkboxKeepOpen.isSelected();
+		SettingsProperties.setValue("keepOpen", SettingsGUI.checkboxKeepOpen.isSelected() ? "true" : "false");
+	}
+
 }

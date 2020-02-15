@@ -11,7 +11,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import xyz.lucasallegri.launcher.LauncherEventHandler;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 
@@ -23,6 +22,7 @@ public class SettingsGUI {
 	public static JFrame settingsGUIFrame;
 	public static Choice choicePlatform;
 	public static JCheckBox checkboxRebuilds;
+	public static JCheckBox checkboxKeepOpen;
 
 	public static void compose() {
 		EventQueue.invokeLater(new Runnable() {
@@ -69,7 +69,6 @@ public class SettingsGUI {
 		});
 		
 		checkboxRebuilds = new JCheckBox("Rebuilds");
-		checkboxRebuilds.setSelected(true);
 		checkboxRebuilds.setBounds(6, 40, 97, 23);
 		checkboxRebuilds.setFont(LauncherGUI.fontReg);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
@@ -77,6 +76,17 @@ public class SettingsGUI {
 		checkboxRebuilds.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
 				SettingsEventHandler.rebuildsChangeEvent(_action);
+			}
+		});
+		
+		checkboxKeepOpen = new JCheckBox("Keep open on launch");
+		checkboxKeepOpen.setBounds(6, 62, 139, 23);
+		checkboxKeepOpen.setFont(LauncherGUI.fontReg);
+		settingsGUIFrame.getContentPane().add(checkboxKeepOpen);
+		checkboxKeepOpen.setSelected(Settings.keepOpen);
+		checkboxKeepOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.keepOpenChangeEvent(_action);
 			}
 		});
 		
