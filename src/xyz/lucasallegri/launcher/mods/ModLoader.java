@@ -23,8 +23,6 @@ public class ModLoader {
 	
 	public static void mount() {
 		
-		ModLoader.checkInstalled();
-		
 		ProgressBar.setBarMax(ModList.installedMods.size() + 1);
 		ProgressBar.setState("Mounting mods...");
 		
