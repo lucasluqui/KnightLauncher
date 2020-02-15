@@ -32,6 +32,7 @@ public class ModLoader {
 			ProgressBar.setBarValue(i + 1);
 			try {
 				KnightLog.log.info("Mounting mod: " + ModList.installedMods.get(i).getDisplayName());
+				ProgressBar.setState("Mounting mods... (" + ModList.installedMods.get(i).getDisplayName() + ")");
 				FileUtil.unzip("mods/" + ModList.installedMods.get(i).getFileName(), "rsrc/");
 				KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
 			} catch (IOException e) {
