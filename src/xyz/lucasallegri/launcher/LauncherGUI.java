@@ -24,6 +24,7 @@ public class LauncherGUI {
 
 	public static JFrame launcherGUIForm;
 	public static JButton launchButton;
+	public static JButton settingsButton;
 	public static JLabel tweetsContainer;
 	public static JLabel launchState;
 	public static JProgressBar launchProgressBar;
@@ -122,12 +123,13 @@ public class LauncherGUI {
 		modButton.setFont(fontMed);
 		launcherGUIForm.getContentPane().add(modButton);
 		
-		JButton settingsButton = new JButton("Settings");
+		settingsButton = new JButton("Settings");
 		settingsButton.setBounds(632, 375, 89, 23);
 		settingsButton.setFont(fontMed);
 		launcherGUIForm.getContentPane().add(settingsButton);
 		settingsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
+				settingsButton.setEnabled(false);
 				SettingsGUI.compose();
 			}
 		});
