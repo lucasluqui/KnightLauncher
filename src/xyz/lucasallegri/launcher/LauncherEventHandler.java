@@ -5,6 +5,7 @@ import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ProcessUtil;
 import xyz.lucasallegri.util.SteamUtil;
+
 import java.awt.event.ActionEvent;
 
 public class LauncherEventHandler {
@@ -25,7 +26,7 @@ public class LauncherEventHandler {
 						try {
 							SteamUtil.startGameById("99900");
 						} catch (Exception e) {
-							KnightLog.log.severe(e.getLocalizedMessage());
+							KnightLog.logException(e);
 						}
 						
 					} else {

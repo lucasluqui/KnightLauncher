@@ -5,6 +5,7 @@ import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ImageUtil;
+
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -43,7 +44,7 @@ public class LauncherGUI {
 			KnightLog.setup();
 			SettingsProperties.setup();
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			KnightLog.logException(ex);
 		}
 		
 		EventQueue.invokeLater(new Runnable() {
@@ -52,7 +53,7 @@ public class LauncherGUI {
 					LauncherGUI window = new LauncherGUI();
 					window.launcherGUIForm.setVisible(true);
 				} catch (Exception e) {
-					KnightLog.log.severe(e.getLocalizedMessage());
+					KnightLog.logException(e);
 				}
 			}
 		});
@@ -92,7 +93,7 @@ public class LauncherGUI {
 			fontMedBig = Font.createFont(Font.TRUETYPE_FONT, fontMedBigIs);
 			fontMedBig = fontMedBig.deriveFont(14.0f);
 		} catch (FontFormatException | IOException e) {
-			KnightLog.log.severe(e.getLocalizedMessage());
+			KnightLog.logException(e);
 		}
 		
 		Boot.onBootStart();

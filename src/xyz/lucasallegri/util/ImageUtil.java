@@ -18,7 +18,7 @@ public class ImageUtil {
 			image = ImageIO.read(_url);
 			image = image.getScaledInstance(514, 311, Image.SCALE_SMOOTH);
 		} catch (IOException e) {
-			KnightLog.log.severe(e.getLocalizedMessage());
+			KnightLog.logException(e);
 		}
 		
 		return image;

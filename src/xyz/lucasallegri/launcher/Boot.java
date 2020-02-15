@@ -46,7 +46,7 @@ public class Boot {
 					UIManager.setLookAndFeel(info.getClassName());
 				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 						| UnsupportedLookAndFeelException e) {
-					KnightLog.log.severe(e.getLocalizedMessage());
+					KnightLog.logException(e);
 				}
 			}
 		}

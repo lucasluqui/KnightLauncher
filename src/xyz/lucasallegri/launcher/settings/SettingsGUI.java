@@ -31,7 +31,7 @@ public class SettingsGUI {
 					SettingsGUI window = new SettingsGUI();
 					window.settingsGUIFrame.setVisible(true);
 				} catch (Exception e) {
-					KnightLog.log.severe(e.getLocalizedMessage());
+					KnightLog.logException(e);
 				}
 			}
 		});

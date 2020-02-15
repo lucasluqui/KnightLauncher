@@ -35,7 +35,7 @@ public class ModLoader {
 				FileUtil.unzip("mods/" + ModList.installedMods.get(i).getFileName(), "rsrc/");
 				KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
 			} catch (IOException e) {
-				KnightLog.log.severe(e.getLocalizedMessage());
+				KnightLog.logException(e);
 			}
 		}
 		
@@ -72,8 +72,8 @@ public class ModLoader {
 			ProgressBar.setState("Rebuild complete, game launch ready.");
 			LauncherGUI.launchButton.setEnabled(true);
 			
-		} catch (IOException e1) {
-			KnightLog.log.severe(e1.getLocalizedMessage());
+		} catch (IOException ex) {
+			KnightLog.logException(ex);
 		}
 	}
 

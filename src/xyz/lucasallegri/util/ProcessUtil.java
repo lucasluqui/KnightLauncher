@@ -10,7 +10,7 @@ public class ProcessUtil {
 		try {
 			final Process p = Runtime.getRuntime().exec(commandLine);
 		} catch (IOException e) {
-			KnightLog.log.severe(e.getLocalizedMessage());
+			KnightLog.logException(e);
 		}
 	}
 	
@@ -18,7 +18,7 @@ public class ProcessUtil {
 		try {
 			final Process p = Runtime.getRuntime().exec(args);
 		} catch (IOException e) {
-			KnightLog.log.severe(e.getLocalizedMessage());
+			KnightLog.logException(e);
 		}
 	}
 
