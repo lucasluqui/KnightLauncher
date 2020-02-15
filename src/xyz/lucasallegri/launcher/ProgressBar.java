@@ -14,12 +14,12 @@ public class ProgressBar {
 		LauncherGUI.launchProgressBar.setMaximum(n);
 	}
 	
-	public static void showState() {
-		LauncherGUI.launchState.setVisible(LauncherGUI.launchState.isVisible() ? false : true);
+	public static void showState(boolean show) {
+		LauncherGUI.launchState.setVisible(show);
 	}
 	
-	public static void showBar() {
-		LauncherGUI.launchProgressBar.setVisible(LauncherGUI.launchProgressBar.isVisible() ? false : true);
+	public static void showBar(boolean show) {
+		LauncherGUI.launchProgressBar.setVisible(show);
 	}
 
 }
