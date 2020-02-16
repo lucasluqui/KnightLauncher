@@ -117,7 +117,7 @@ public class FileUtil {
 	            while (read > -1) {
 	                read = dis.read(buffer);
 	            }
-	            hash = Arrays.toString(dis.getMessageDigest().digest());
+	            hash = new String(dis.getMessageDigest().digest());
 	        }
 	    } catch (NoSuchAlgorithmException | IOException e) {
 			KnightLog.logException(e);
