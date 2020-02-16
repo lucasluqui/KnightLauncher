@@ -1,13 +1,11 @@
 package xyz.lucasallegri.launcher.mods;
 
-import java.awt.Desktop;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
 import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.LauncherGUI;
-import xyz.lucasallegri.launcher.settings.SettingsEventHandler;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.DesktopUtil;
 
@@ -16,8 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;

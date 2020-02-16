@@ -1,7 +1,5 @@
 package xyz.lucasallegri.launcher;
 
-import java.awt.Desktop;
-import java.io.File;
 import java.io.IOException;
 
 import javax.swing.UIManager;
@@ -38,6 +36,7 @@ public class Boot {
 			KnightLog.logException(ex);
 		}
 		
+		KnightLog.log.info(System.getProperty("java.home"));
 		setupLookAndFeel();
 		Fonts.setup();
 		checkForDirectories();
