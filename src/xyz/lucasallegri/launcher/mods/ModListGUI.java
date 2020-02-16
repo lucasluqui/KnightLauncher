@@ -9,6 +9,8 @@ import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.settings.SettingsEventHandler;
 import xyz.lucasallegri.logging.KnightLog;
+import xyz.lucasallegri.util.DesktopUtil;
+
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -80,11 +82,7 @@ public class ModListGUI {
 		modListGUIFrame.getContentPane().add(modFolderButton);
 		modFolderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				try {
-					Desktop.getDesktop().open(new File(System.getProperty("user.dir") + "/mods"));
-				} catch (IOException e) {
-					KnightLog.logException(e);
-				}
+				DesktopUtil.openDir(System.getProperty("user.dir") + "/mods");
 			}
 		});
 		

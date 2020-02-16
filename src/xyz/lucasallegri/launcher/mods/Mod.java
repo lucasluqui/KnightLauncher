@@ -18,7 +18,6 @@ public class Mod {
 		this.displayName = displayName;
 		this.fileName = fileName;
 		this.isEnabled = true;
-		this.hasHash = false;
 	}
 	
 	public String getDisplayName() {
@@ -43,14 +42,6 @@ public class Mod {
 	
 	public void setEnabled(boolean enabled) {
 		this.isEnabled = enabled;
-	}
-	
-	public Boolean hasHash() {
-		return this.hasHash;
-	}
-	
-	public void setHasHash(boolean _hasHash) {
-		this.hasHash = _hasHash;
 	}
 
 }

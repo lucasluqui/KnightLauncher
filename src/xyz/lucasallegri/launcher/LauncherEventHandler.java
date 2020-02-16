@@ -22,17 +22,13 @@ public class LauncherEventHandler {
 				
 				if(ModLoader.modLoadFinished) {
 					if(Settings.gamePlatform.startsWith("Steam")) {
-						
 						try {
 							SteamUtil.startGameById("99900");
 						} catch (Exception e) {
 							KnightLog.logException(e);
 						}
-						
 					} else {
-						
 						ProcessUtil.startApplication(LauncherConstants.STANDALONE_CLIENT_ARGS);
-						
 					}
 					
 					if(!Settings.keepOpen) LauncherGUI.launcherGUIFrame.dispose();

@@ -7,6 +7,11 @@
 	<description>Advanced game launcher for Spiral Knights</description>
   
 	<dependencies>
+		<dependency>
+			<groupId>com.github.vatbub</groupId>
+			<artifactId>mslinks</artifactId>
+			<version>1.0.5</version>
+		</dependency>
 	</dependencies>
   
 	<build>

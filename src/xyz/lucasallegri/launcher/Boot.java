@@ -13,6 +13,7 @@ import xyz.lucasallegri.launcher.mods.ModLoader;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
+import xyz.lucasallegri.util.DesktopUtil;
 import xyz.lucasallegri.util.FileUtil;
 import xyz.lucasallegri.util.SteamUtil;
 
@@ -26,11 +27,7 @@ public class Boot {
 		if(!FileUtil.fileExists("getdown.txt")) {
 			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
 					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
-			try {
-				Desktop.getDesktop().open(new File(SteamUtil.getGamePathWindows()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			DesktopUtil.openDir(SteamUtil.getGamePathWindows());
 			return;
 		}
 		
