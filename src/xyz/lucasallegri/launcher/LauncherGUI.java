@@ -108,6 +108,7 @@ public class LauncherGUI {
 		launchButton = new JButton("LAUNCH");
 		launchButton.setBounds(17, 350, 155, 48);
 		launchButton.setFont(fontMedBig);
+		launchButton.setFocusPainted(false);
 		launcherGUIForm.getContentPane().add(launchButton);
 		launchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
@@ -122,11 +123,13 @@ public class LauncherGUI {
 		JButton modButton = new JButton("Mods");
 		modButton.setBounds(537, 375, 89, 23);
 		modButton.setFont(fontMed);
+		modButton.setFocusPainted(false);
 		launcherGUIForm.getContentPane().add(modButton);
 		
 		settingsButton = new JButton("Settings");
 		settingsButton.setBounds(632, 375, 89, 23);
 		settingsButton.setFont(fontMed);
+		settingsButton.setFocusPainted(false);
 		launcherGUIForm.getContentPane().add(settingsButton);
 		settingsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {

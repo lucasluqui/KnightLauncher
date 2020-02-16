@@ -57,6 +57,7 @@ public class SettingsGUI {
 		choicePlatform = new Choice();
 		choicePlatform.setBounds(62, 11, 83, 20);
 		choicePlatform.setFont(LauncherGUI.fontReg);
+		choicePlatform.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choicePlatform);
 		choicePlatform.add("Steam");
 		choicePlatform.add("Standalone");
@@ -71,6 +72,7 @@ public class SettingsGUI {
 		checkboxRebuilds = new JCheckBox("Rebuilds");
 		checkboxRebuilds.setBounds(6, 40, 97, 23);
 		checkboxRebuilds.setFont(LauncherGUI.fontReg);
+		checkboxRebuilds.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
 		checkboxRebuilds.setSelected(Settings.doRebuilds);
 		checkboxRebuilds.addActionListener(new ActionListener() {
@@ -82,6 +84,7 @@ public class SettingsGUI {
 		checkboxKeepOpen = new JCheckBox("Keep open on launch");
 		checkboxKeepOpen.setBounds(6, 62, 139, 23);
 		checkboxKeepOpen.setFont(LauncherGUI.fontReg);
+		checkboxKeepOpen.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxKeepOpen);
 		checkboxKeepOpen.setSelected(Settings.keepOpen);
 		checkboxKeepOpen.addActionListener(new ActionListener() {
