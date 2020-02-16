@@ -73,7 +73,7 @@ public class ModListGUI {
 		modListGUIFrame.getContentPane().add(labelModCountText);
 		
 		JButton modFolderButton = new JButton("Open mods folder");
-		modFolderButton.setBounds(199, 328, 136, 23);
+		modFolderButton.setBounds(203, 328, 136, 23);
 		modFolderButton.setFont(Fonts.fontMed);
 		modFolderButton.setFocusPainted(false);
 		modFolderButton.setFocusable(false);
