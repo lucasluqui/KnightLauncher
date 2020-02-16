@@ -23,6 +23,7 @@ public class ModLoader {
 	
 	public static void mount() {
 		
+		LauncherGUI.launchButton.setEnabled(false);
 		ProgressBar.setBarMax(ModList.installedMods.size() + 1);
 		ProgressBar.setState("Mounting mods...");
 		
@@ -43,6 +44,7 @@ public class ModLoader {
 		ProgressBar.setState("All mods mounted. Launching game...");
 		ProgressBar.setBarMax(1);
 		ProgressBar.setBarValue(1);
+		LauncherGUI.launchButton.setEnabled(true);
 		
 	}
 	
