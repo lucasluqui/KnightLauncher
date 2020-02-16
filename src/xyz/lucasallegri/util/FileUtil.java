@@ -142,7 +142,7 @@ public class FileUtil {
 			writer.write(content);
 		} catch (IOException e) {
 			KnightLog.logException(e);
-	}
+		}
 	}
 
 }
