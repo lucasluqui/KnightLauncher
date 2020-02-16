@@ -17,6 +17,7 @@ import xyz.lucasallegri.logging.KnightLog;
 
 import java.awt.Choice;
 import javax.swing.JCheckBox;
+import javax.swing.JButton;
 
 public class SettingsGUI {
 
@@ -24,6 +25,7 @@ public class SettingsGUI {
 	public static Choice choicePlatform;
 	public static JCheckBox checkboxRebuilds;
 	public static JCheckBox checkboxKeepOpen;
+	public static JButton forceRebuildButton;
 
 	public static void compose() {
 		EventQueue.invokeLater(new Runnable() {
@@ -45,7 +47,7 @@ public class SettingsGUI {
 	private void initialize() {
 		settingsGUIFrame = new JFrame();
 		settingsGUIFrame.setTitle("KnightLauncher Settings");
-		settingsGUIFrame.setBounds(100, 100, 200, 135);
+		settingsGUIFrame.setBounds(100, 100, 200, 160);
 		settingsGUIFrame.setResizable(false);
 		settingsGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		settingsGUIFrame.getContentPane().setLayout(null);
@@ -91,6 +93,18 @@ public class SettingsGUI {
 		checkboxKeepOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
 				SettingsEventHandler.keepOpenChangeEvent(_action);
+			}
+		});
+		
+		forceRebuildButton = new JButton("Force Rebuild");
+		forceRebuildButton.setBounds(10, 90, 103, 23);
+		forceRebuildButton.setFont(Fonts.fontMed);
+		forceRebuildButton.setFocusPainted(false);
+		forceRebuildButton.setFocusable(false);
+		settingsGUIFrame.getContentPane().add(forceRebuildButton);
+		forceRebuildButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.forceRebuildEvent();
 			}
 		});
 		

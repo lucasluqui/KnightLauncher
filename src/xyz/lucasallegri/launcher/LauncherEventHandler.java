@@ -42,11 +42,5 @@ public class LauncherEventHandler {
 		launchThread.start();
 		
 	}
-	
-	public static void rebuildEvent(ActionEvent action) {
-		new Thread(new Runnable(){
-			public void run() { ModLoader.rebuildJars(); }
-		});
-	}
 
 }

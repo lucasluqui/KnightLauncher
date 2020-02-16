@@ -6,6 +6,7 @@ import java.util.List;
 
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.ProgressBar;
+import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.FileUtil;
 
@@ -71,27 +72,27 @@ public class ModLoader {
 	public static void rebuildJars() {
 		
 		LauncherGUI.launchButton.setEnabled(false);
+		LauncherGUI.settingsButton.setEnabled(false);
+		try { SettingsGUI.forceRebuildButton.setEnabled(false); } catch(Exception e) {}
 		
-		ProgressBar.setBarMax(4);
+		String[] jarFiles = {"full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar"};
+		
+		ProgressBar.setBarMax(jarFiles.length + 1);
 		ProgressBar.setState("Rebuilding game files...");
 		
 		try {
 			
-			ProgressBar.setBarValue(1);
-			ProgressBar.setState("Rebuilding full-music-bundle.jar...");
-			FileUtil.unzip("rsrc/full-music-bundle.jar", "rsrc/");
+			for(int i = 0; i < jarFiles.length; i++) {
+				ProgressBar.setBarValue(i + 1);
+				ProgressBar.setState("Rebuilding... (" + jarFiles[i] + ")");
+				FileUtil.unzip("rsrc/" + jarFiles[i], "rsrc/");
+			}
 			
-			ProgressBar.setBarValue(2);
-			ProgressBar.setState("Rebuilding full-rest-bundle.jar...");
-			FileUtil.unzip("rsrc/full-rest-bundle.jar", "rsrc/");
-			
-			ProgressBar.setBarValue(3);
-			ProgressBar.setState("Rebuilding intro-bundle.jar...");
-			FileUtil.unzip("rsrc/intro-bundle.jar", "rsrc/");
-			
-			ProgressBar.setBarValue(4);
+			ProgressBar.setBarValue(jarFiles.length + 1);
 			ProgressBar.setState("Rebuild complete, game launch ready.");
 			LauncherGUI.launchButton.setEnabled(true);
+			LauncherGUI.settingsButton.setEnabled(true);
+			try { SettingsGUI.forceRebuildButton.setEnabled(true); } catch(Exception e) {}
 			
 		} catch (IOException ex) {
 			KnightLog.logException(ex);

@@ -3,6 +3,9 @@ package xyz.lucasallegri.launcher.settings;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
+import xyz.lucasallegri.launcher.ProgressBar;
+import xyz.lucasallegri.launcher.mods.ModLoader;
+
 public class SettingsEventHandler {
 	
 	public static void platformChangeEvent(ItemEvent event) {
@@ -18,6 +21,17 @@ public class SettingsEventHandler {
 	public static void keepOpenChangeEvent(ActionEvent event) {
 		Settings.keepOpen = SettingsGUI.checkboxKeepOpen.isSelected();
 		SettingsProperties.setValue("keepOpen", SettingsGUI.checkboxKeepOpen.isSelected() ? "true" : "false");
+	}
+	
+	public static void forceRebuildEvent() {
+		
+		ProgressBar.showBar(true);
+		ProgressBar.showState(true);
+		
+		Thread rebuildThread = new Thread(new Runnable(){
+			public void run() { ModLoader.rebuildJars(); }
+		});
+		rebuildThread.start();
 	}
 
 }
