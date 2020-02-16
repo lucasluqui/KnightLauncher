@@ -36,7 +36,6 @@ public class Boot {
 			KnightLog.logException(ex);
 		}
 		
-		KnightLog.log.info(System.getProperty("java.home"));
 		setupLookAndFeel();
 		Fonts.setup();
 		checkForDirectories();
