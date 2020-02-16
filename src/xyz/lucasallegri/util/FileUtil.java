@@ -12,7 +12,7 @@ import java.util.zip.ZipInputStream;
 
 public class FileUtil {
 	
-	private static final int BUFFER_SIZE = 4096;
+	private static final int EXTRACT_BUFFER_SIZE = 16384;
 	
 	public static void createFolder(String path) {
 		new File(path).mkdirs();
@@ -40,7 +40,7 @@ public class FileUtil {
     
     private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
-        byte[] bytesIn = new byte[BUFFER_SIZE];
+        byte[] bytesIn = new byte[EXTRACT_BUFFER_SIZE];
         int read = 0;
         while ((read = zipIn.read(bytesIn)) != -1) {
             bos.write(bytesIn, 0, read);
