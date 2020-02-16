@@ -11,9 +11,11 @@ import xyz.lucasallegri.util.ImageUtil;
 import xyz.lucasallegri.util.SteamUtil;
 import xyz.lucasallegri.util.WinRegistry;
 
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -44,6 +46,11 @@ public class LauncherGUI {
 		if(!FileUtil.fileExists("getdown.txt")) {
 			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
 					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
+			try {
+				Desktop.getDesktop().open(new File(SteamUtil.getGamePathWindows()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return;
 		}
 		
