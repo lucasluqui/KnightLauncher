@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 
@@ -51,12 +52,12 @@ public class SettingsGUI {
 		
 		JLabel labelChoicePlatform = new JLabel("Platform");
 		labelChoicePlatform.setBounds(10, 15, 48, 14);
-		labelChoicePlatform.setFont(LauncherGUI.fontReg);
+		labelChoicePlatform.setFont(Fonts.fontReg);
 		settingsGUIFrame.getContentPane().add(labelChoicePlatform);
 		
 		choicePlatform = new Choice();
 		choicePlatform.setBounds(62, 11, 83, 20);
-		choicePlatform.setFont(LauncherGUI.fontReg);
+		choicePlatform.setFont(Fonts.fontReg);
 		choicePlatform.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choicePlatform);
 		choicePlatform.add("Steam");
@@ -71,7 +72,7 @@ public class SettingsGUI {
 		
 		checkboxRebuilds = new JCheckBox("Rebuilds");
 		checkboxRebuilds.setBounds(6, 40, 97, 23);
-		checkboxRebuilds.setFont(LauncherGUI.fontReg);
+		checkboxRebuilds.setFont(Fonts.fontReg);
 		checkboxRebuilds.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
 		checkboxRebuilds.setSelected(Settings.doRebuilds);
@@ -83,7 +84,7 @@ public class SettingsGUI {
 		
 		checkboxKeepOpen = new JCheckBox("Keep open on launch");
 		checkboxKeepOpen.setBounds(6, 62, 139, 23);
-		checkboxKeepOpen.setFont(LauncherGUI.fontReg);
+		checkboxKeepOpen.setFont(Fonts.fontReg);
 		checkboxKeepOpen.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxKeepOpen);
 		checkboxKeepOpen.setSelected(Settings.keepOpen);

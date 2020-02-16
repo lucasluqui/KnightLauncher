@@ -35,7 +35,7 @@ public class LauncherEventHandler {
 						
 					}
 					
-					if(!Settings.keepOpen) LauncherGUI.launcherGUIForm.dispose();
+					if(!Settings.keepOpen) LauncherGUI.launcherGUIFrame.dispose();
 				}
 			}
 		});

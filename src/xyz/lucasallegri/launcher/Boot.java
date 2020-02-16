@@ -15,6 +15,7 @@ public class Boot {
 	public static void onBootStart() {
 		
 		setupLookAndFeel();
+		Fonts.setup();
 		checkForDirectories();
 		SettingsProperties.loadFromProp();
 		
