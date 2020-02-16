@@ -1,18 +1,45 @@
 package xyz.lucasallegri.launcher;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import xyz.lucasallegri.dialog.DialogError;
 import xyz.lucasallegri.launcher.mods.ModLoader;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.FileUtil;
+import xyz.lucasallegri.util.SteamUtil;
 
 public class Boot {
 	
 	public static void onBootStart() {
+		
+		/*
+		 * Checking if we're being ran inside the game's directory, "getdown.txt" should always be present if so.
+		 */
+		if(!FileUtil.fileExists("getdown.txt")) {
+			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
+					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
+			try {
+				Desktop.getDesktop().open(new File(SteamUtil.getGamePathWindows()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return;
+		}
+		
+		try {
+			KnightLog.setup();
+			SettingsProperties.setup();
+		} catch (IOException ex) {
+			KnightLog.logException(ex);
+		}
 		
 		setupLookAndFeel();
 		Fonts.setup();

@@ -40,26 +40,7 @@ public class LauncherGUI {
 
 	public static void main(String[] args) {
 		
-		/*
-		 * Checking if we're being ran inside the game's directory, "getdown.txt" should always be present if so.
-		 */
-		if(!FileUtil.fileExists("getdown.txt")) {
-			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
-					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
-			try {
-				Desktop.getDesktop().open(new File(SteamUtil.getGamePathWindows()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return;
-		}
-		
-		try {
-			KnightLog.setup();
-			SettingsProperties.setup();
-		} catch (IOException ex) {
-			KnightLog.logException(ex);
-		}
+		Boot.onBootStart();
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -78,8 +59,6 @@ public class LauncherGUI {
 	}
 
 	private void initialize() {
-		
-		Boot.onBootStart();
 		
 		launcherGUIFrame = new JFrame();
 		launcherGUIFrame.setTitle("KnightLauncher (" + LauncherConstants.VERSION + ")");
