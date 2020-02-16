@@ -1,24 +1,27 @@
 package xyz.lucasallegri.launcher;
 
+import xyz.lucasallegri.dialog.DialogError;
 import xyz.lucasallegri.launcher.LauncherEventHandler;
 import xyz.lucasallegri.launcher.mods.ModListGUI;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
+import xyz.lucasallegri.util.FileUtil;
 import xyz.lucasallegri.util.ImageUtil;
+import xyz.lucasallegri.util.SteamUtil;
+import xyz.lucasallegri.util.WinRegistry;
 
 import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
@@ -34,6 +37,15 @@ public class LauncherGUI {
 	public static JLabel imageContainer;
 
 	public static void main(String[] args) {
+		
+		/*
+		 * Checking if we're being ran inside the game's directory, "getdown.txt" should always be present if so.
+		 */
+		if(!FileUtil.fileExists("getdown.txt")) {
+			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
+					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
+			return;
+		}
 		
 		try {
 			KnightLog.setup();
