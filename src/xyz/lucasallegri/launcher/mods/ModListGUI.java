@@ -1,18 +1,25 @@
 package xyz.lucasallegri.launcher.mods;
 
+import java.awt.Desktop;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
 import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.LauncherGUI;
+import xyz.lucasallegri.launcher.settings.SettingsEventHandler;
 import xyz.lucasallegri.logging.KnightLog;
 import java.awt.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.JButton;
 
 public class ModListGUI {
 
@@ -63,6 +70,22 @@ public class ModListGUI {
 		labelModCountText.setBounds(178, 92, 176, 14);
 		labelModCountText.setFont(Fonts.fontReg);
 		modListGUIFrame.getContentPane().add(labelModCountText);
+		
+		JButton modFolderButton = new JButton("Open mods folder");
+		modFolderButton.setBounds(199, 328, 136, 23);
+		modFolderButton.setFont(Fonts.fontMed);
+		modFolderButton.setFocusPainted(false);
+		modFolderButton.setFocusable(false);
+		modListGUIFrame.getContentPane().add(modFolderButton);
+		modFolderButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				try {
+					Desktop.getDesktop().open(new File(System.getProperty("user.dir") + "/mods"));
+				} catch (IOException e) {
+					KnightLog.logException(e);
+				}
+			}
+		});
 		
 		modListGUIFrame.setLocationRelativeTo(null);
 		
