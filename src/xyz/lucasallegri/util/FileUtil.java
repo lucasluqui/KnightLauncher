@@ -1,18 +1,35 @@
 package xyz.lucasallegri.util;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import xyz.lucasallegri.logging.KnightLog;
+
 public class FileUtil {
 	
-	private static final int EXTRACT_BUFFER_SIZE = 16384;
+	private static final int EXTRACT_BUFFER_SIZE = 8196;
+	private static final int HASH_BUFFER_SIZE = 4096;
 	
 	public static void createFolder(String path) {
 		new File(path).mkdirs();
@@ -81,5 +98,51 @@ public class FileUtil {
 		return file.exists();
 	}
 	
+	public static String getZipHash(String source) {
+	    InputStream file = null;
+	    String hash = null;
+		try {
+			file = new FileInputStream(source);
+		} catch (FileNotFoundException ex) {
+			KnightLog.logException(ex);
+		}
+	    ZipInputStream stream = new ZipInputStream(file);
+	    try {
+	        ZipEntry entry;
+	        while((entry = stream.getNextEntry()) != null) {
+	            MessageDigest md = MessageDigest.getInstance("MD5");
+	            DigestInputStream dis = new DigestInputStream(stream, md);
+	            byte[] buffer = new byte[HASH_BUFFER_SIZE];
+	            int read = dis.read(buffer);
+	            while (read > -1) {
+	                read = dis.read(buffer);
+	            }
+	            hash = Arrays.toString(dis.getMessageDigest().digest());
+	        }
+	    } catch (NoSuchAlgorithmException | IOException e) {
+			KnightLog.logException(e);
+		} finally { 
+			try {
+				stream.close();
+			} catch (IOException e) {
+				KnightLog.logException(e);
+			}
+		}
+	    return hash;
+	}
+	
+	public static String readFile(String path) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, StandardCharsets.UTF_8);
+	}
+	
+	public static void writeFile(String path, String content) {
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+	              new FileOutputStream(path), "utf-8"))) {
+			writer.write(content);
+		} catch (IOException e) {
+			KnightLog.logException(e);
+	}
+	}
 
 }

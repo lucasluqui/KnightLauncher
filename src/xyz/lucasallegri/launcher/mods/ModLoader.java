@@ -1,5 +1,6 @@
 package xyz.lucasallegri.launcher.mods;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -11,12 +12,31 @@ import xyz.lucasallegri.util.FileUtil;
 public class ModLoader {
 	
 	public static Boolean modLoadFinished = false;
+	public static Boolean rebuildJars = false;
 	
 	public static void checkInstalled() {
 		
 		List<String> rawFiles = FileUtil.fileNamesInDirectory("mods/", ".zip");
 		for(String file : rawFiles) {
-			ModList.installedMods.add(new Mod(file.substring(0, file.length() - 4), file));
+			Mod mod = new Mod(file.substring(0, file.length() - 4), file);
+			ModList.installedMods.add(mod);
+			
+			String hash = FileUtil.getZipHash("mods/" + file);
+			String hashFilePath = "mods/" + mod.getDisplayName() + ".hash";
+			if(FileUtil.fileExists(hashFilePath)) {
+				try {
+					String fileHash = FileUtil.readFile(hashFilePath);
+					if(hash.startsWith(fileHash)) continue;
+					new File(hashFilePath).delete();
+					FileUtil.writeFile(hashFilePath, hash);
+					rebuildJars = true;
+				} catch (IOException e) {
+					KnightLog.logException(e);
+				}
+			} else {
+				FileUtil.writeFile(hashFilePath, hash);
+				rebuildJars = true;
+			}
 		}
 		
 	}

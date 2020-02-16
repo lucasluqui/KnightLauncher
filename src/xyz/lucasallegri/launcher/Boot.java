@@ -23,7 +23,9 @@ public class Boot {
 	
 	public static void onBootEnd() {
 		
-		if(Settings.doRebuilds) {
+		ModLoader.checkInstalled();
+		
+		if(Settings.doRebuilds && ModLoader.rebuildJars) {
 			
 			ProgressBar.showBar(true);
 			ProgressBar.showState(true);
@@ -33,8 +35,6 @@ public class Boot {
 			});
 			rebuildThread.start();
 		}
-		
-		ModLoader.checkInstalled();
 		
 	}
 	
