@@ -49,6 +49,7 @@ public class ModListGUI {
 		modListGUIFrame = new JFrame();
 		modListGUIFrame.setTitle("KnightLauncher Mods");
 		modListGUIFrame.setBounds(100, 100, 380, 400);
+		modListGUIFrame.setResizable(false);
 		modListGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		modListGUIFrame.getContentPane().setLayout(null);
 		
