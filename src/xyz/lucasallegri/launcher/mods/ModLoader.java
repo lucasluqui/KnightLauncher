@@ -7,6 +7,7 @@ import java.util.List;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
+import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.FileUtil;
 
@@ -22,6 +23,9 @@ public class ModLoader {
 			Mod mod = new Mod(file.substring(0, file.length() - 4), file);
 			ModList.installedMods.add(mod);
 			
+			/*
+			 * Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
+			 */
 			String hash = FileUtil.getZipHash("mods/" + file);
 			String hashFilePath = "mods/" + mod.getDisplayName() + ".hash";
 			if(FileUtil.fileExists(hashFilePath)) {
@@ -38,6 +42,14 @@ public class ModLoader {
 				FileUtil.writeFile(hashFilePath, hash);
 				rebuildJars = true;
 			}
+		}
+		
+		/*
+		 * Check if there's a new or removed mod since last execution, rebuild will be needed in that case.
+		 */
+		if(Integer.parseInt(SettingsProperties.getValue("lastModCount")) != ModList.installedMods.size()) {
+			SettingsProperties.setValue("lastModCount", Integer.toString(ModList.installedMods.size()));
+			rebuildJars = true;
 		}
 		
 	}
@@ -84,7 +96,7 @@ public class ModLoader {
 			
 			for(int i = 0; i < jarFiles.length; i++) {
 				ProgressBar.setBarValue(i + 1);
-				ProgressBar.setState("Rebuilding... (" + jarFiles[i] + ")");
+				ProgressBar.setState("Rebuilding, this might take a while... (" + jarFiles[i] + ")");
 				FileUtil.unzip("rsrc/" + jarFiles[i], "rsrc/");
 			}
 			

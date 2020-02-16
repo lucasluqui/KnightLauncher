@@ -15,7 +15,7 @@ import xyz.lucasallegri.util.FileUtil;
 
 public class SettingsProperties {
 
-	public static final String PROP_VER = "2";
+	public static final String PROP_VER = "3";
 	public static Properties prop = new Properties();
 	private static String propPath = System.getProperty("user.dir") + File.separator + "KnightLauncher.properties";
 	
@@ -39,6 +39,7 @@ public class SettingsProperties {
 	
 	private static void fillWithBaseProp() throws IOException {
 		String baseProp = 	"propver=" + PROP_VER + System.lineSeparator() +
+							"lastModCount=0" + System.lineSeparator() +
 							"platform=Steam" + System.lineSeparator() +
 							"rebuilds=true"  + System.lineSeparator() +
 							"keepOpen=false";
