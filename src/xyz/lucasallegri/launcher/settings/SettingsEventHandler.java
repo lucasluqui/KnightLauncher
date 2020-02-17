@@ -28,5 +28,10 @@ public class SettingsEventHandler {
 		ModLoader.startJarRebuild();
 		
 	}
+	
+	public static void createShortcutChangeEvent(ActionEvent event) {
+		Settings.createShortcut = SettingsGUI.checkboxShortcut.isSelected();
+		SettingsProperties.setValue("createShortcut", SettingsGUI.checkboxShortcut.isSelected() ? "true" : "false");
+	}
 
 }

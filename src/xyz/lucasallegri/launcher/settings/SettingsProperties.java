@@ -15,7 +15,7 @@ import xyz.lucasallegri.util.FileUtil;
 
 public class SettingsProperties {
 
-	public static final String PROP_VER = "3";
+	public static final String PROP_VER = "4";
 	public static Properties prop = new Properties();
 	private static String propPath = System.getProperty("user.dir") + File.separator + "KnightLauncher.properties";
 	
@@ -42,7 +42,8 @@ public class SettingsProperties {
 							"lastModCount=0" + System.lineSeparator() +
 							"platform=Steam" + System.lineSeparator() +
 							"rebuilds=true"  + System.lineSeparator() +
-							"keepOpen=false";
+							"keepOpen=false" + System.lineSeparator() +
+							"createShortcut=true";
 		BufferedWriter writer = new BufferedWriter(new FileWriter(propPath, true));
 		writer.append(baseProp);
 		writer.close();
@@ -71,6 +72,7 @@ public class SettingsProperties {
 		Settings.gamePlatform = getValue("platform");
 		Settings.doRebuilds = getValue("rebuilds").startsWith("true") ? true : false;
 		Settings.keepOpen = getValue("keepOpen").startsWith("true") ? true : false;
+		Settings.createShortcut = getValue("createShortcut").startsWith("true") ? true : false;
 	}
 	
 }

@@ -26,6 +26,7 @@ public class SettingsGUI {
 	public static JCheckBox checkboxRebuilds;
 	public static JCheckBox checkboxKeepOpen;
 	public static JButton forceRebuildButton;
+	public static JCheckBox checkboxShortcut;
 
 	public static void compose() {
 		EventQueue.invokeLater(new Runnable() {
@@ -47,7 +48,7 @@ public class SettingsGUI {
 	private void initialize() {
 		settingsGUIFrame = new JFrame();
 		settingsGUIFrame.setTitle("KnightLauncher Settings");
-		settingsGUIFrame.setBounds(100, 100, 200, 160);
+		settingsGUIFrame.setBounds(100, 100, 200, 190);
 		settingsGUIFrame.setResizable(false);
 		settingsGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		settingsGUIFrame.getContentPane().setLayout(null);
@@ -97,7 +98,7 @@ public class SettingsGUI {
 		});
 		
 		forceRebuildButton = new JButton("Force Rebuild");
-		forceRebuildButton.setBounds(10, 90, 103, 23);
+		forceRebuildButton.setBounds(10, 114, 103, 23);
 		forceRebuildButton.setFont(Fonts.fontMed);
 		forceRebuildButton.setFocusPainted(false);
 		forceRebuildButton.setFocusable(false);
@@ -105,6 +106,17 @@ public class SettingsGUI {
 		forceRebuildButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
 				SettingsEventHandler.forceRebuildEvent();
+			}
+		});
+		
+		checkboxShortcut = new JCheckBox("Create shortcut");
+		checkboxShortcut.setBounds(6, 84, 123, 23);
+		checkboxShortcut.setFont(Fonts.fontReg);
+		checkboxShortcut.setFocusPainted(false);
+		settingsGUIFrame.getContentPane().add(checkboxShortcut);
+		checkboxShortcut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.createShortcutChangeEvent(_action);
 			}
 		});
 		
