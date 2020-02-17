@@ -89,6 +89,11 @@ public class ModListGUI {
 		getModsButton.setFocusPainted(false);
 		getModsButton.setFocusable(false);
 		modListGUIFrame.getContentPane().add(getModsButton);
+		getModsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				ModListEventHandler.getModsEvent(_action);
+			}
+		});
 		
 		refreshButton = new JButton("Refresh");
 		refreshButton.setBounds(9, 342, 89, 23);
