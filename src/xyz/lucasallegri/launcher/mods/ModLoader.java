@@ -18,7 +18,15 @@ public class ModLoader {
 	
 	public static void checkInstalled() {
 		
+		// Clean the list in case something remains in it.
+		if(ModList.installedMods.size() > 0) ModList.installedMods.clear();
+		
+		/*
+		 * Append all .zip and .jar files inside the mod folder into an ArrayList.
+		 */
 		List<String> rawFiles = FileUtil.fileNamesInDirectory("mods/", ".zip");
+		rawFiles.addAll(FileUtil.fileNamesInDirectory("mods/", ".jar"));
+		
 		for(String file : rawFiles) {
 			Mod mod = new Mod(file.substring(0, file.length() - 4), file);
 			ModList.installedMods.add(mod);
@@ -81,7 +89,17 @@ public class ModLoader {
 		
 	}
 	
-	public static void rebuildJars() {
+	public static void startJarRebuild() {
+		ProgressBar.showBar(true);
+		ProgressBar.showState(true);
+		
+		Thread rebuildThread = new Thread(new Runnable(){
+			public void run() { ModLoader.rebuildJars(); }
+		});
+		rebuildThread.start();
+	}	
+	
+	private static void rebuildJars() {
 		
 		LauncherGUI.launchButton.setEnabled(false);
 		LauncherGUI.settingsButton.setEnabled(false);
@@ -102,6 +120,7 @@ public class ModLoader {
 			
 			ProgressBar.setBarValue(jarFiles.length + 1);
 			ProgressBar.setState("Rebuild complete, game launch ready.");
+			rebuildJars = false;
 			LauncherGUI.launchButton.setEnabled(true);
 			LauncherGUI.settingsButton.setEnabled(true);
 			try { SettingsGUI.forceRebuildButton.setEnabled(true); } catch(Exception e) {}

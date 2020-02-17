@@ -47,16 +47,7 @@ public class Boot {
 		
 		ModLoader.checkInstalled();
 		
-		if(Settings.doRebuilds && ModLoader.rebuildJars) {
-			
-			ProgressBar.showBar(true);
-			ProgressBar.showState(true);
-			
-			Thread rebuildThread = new Thread(new Runnable(){
-				public void run() { ModLoader.rebuildJars(); }
-			});
-			rebuildThread.start();
-		}
+		if(Settings.doRebuilds && ModLoader.rebuildJars) ModLoader.startJarRebuild();
 		
 	}
 	

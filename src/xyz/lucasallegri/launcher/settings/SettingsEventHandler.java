@@ -25,13 +25,8 @@ public class SettingsEventHandler {
 	
 	public static void forceRebuildEvent() {
 		
-		ProgressBar.showBar(true);
-		ProgressBar.showState(true);
+		ModLoader.startJarRebuild();
 		
-		Thread rebuildThread = new Thread(new Runnable(){
-			public void run() { ModLoader.rebuildJars(); }
-		});
-		rebuildThread.start();
 	}
 
 }
