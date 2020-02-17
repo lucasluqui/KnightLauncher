@@ -114,6 +114,7 @@ public class SettingsGUI {
 		checkboxShortcut.setFont(Fonts.fontReg);
 		checkboxShortcut.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxShortcut);
+		checkboxShortcut.setSelected(Settings.createShortcut);
 		checkboxShortcut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
 				SettingsEventHandler.createShortcutChangeEvent(_action);

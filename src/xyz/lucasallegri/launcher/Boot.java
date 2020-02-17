@@ -20,15 +20,7 @@ public class Boot {
 	
 	public static void onBootStart() {
 		
-		/*
-		 * Checking if we're being ran inside the game's directory, "getdown.txt" should always be present if so.
-		 */
-		if(!FileUtil.fileExists("getdown.txt")) {
-			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
-					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
-			DesktopUtil.openDir(SteamUtil.getGamePathWindows());
-			return;
-		}
+		checkStartLocation();
 		
 		try {
 			KnightLog.setup();
@@ -37,19 +29,11 @@ public class Boot {
 			KnightLog.logException(ex);
 		}
 		
-		
-		/*
-		 * Create a shortcut to the application if there's none.
-		 */
-		if(SystemUtil.isWindows() && Settings.createShortcut
-				&& !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/Knight Launcher.lnk")) {
-			DesktopUtil.createShortcut();
-		}
-		
 		setupLookAndFeel();
 		Fonts.setup();
 		checkForDirectories();
 		SettingsProperties.loadFromProp();
+		checkShortcut();
 		
 	}
 	
@@ -78,6 +62,28 @@ public class Boot {
 	
 	private static void checkForDirectories() {
 		FileUtil.createFolder("mods");
+	}
+	
+	private static void checkStartLocation() {
+		/*
+		 * Checking if we're being ran inside the game's directory, "getdown.txt" should always be present if so.
+		 */
+		if(!FileUtil.fileExists("getdown.txt")) {
+			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
+					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
+			DesktopUtil.openDir(SteamUtil.getGamePathWindows());
+			return;
+		}
+	}
+	
+	private static void checkShortcut() {
+		/*
+		 * Create a shortcut to the application if there's none.
+		 */
+		if(SystemUtil.isWindows() && Settings.createShortcut
+				&& !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherConstants.LNK_FILE_NAME)) {
+			DesktopUtil.createShortcut();
+		}
 	}
 
 }
