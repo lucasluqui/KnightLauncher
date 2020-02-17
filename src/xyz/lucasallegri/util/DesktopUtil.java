@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import mslinks.ShellLink;
+import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 
@@ -45,17 +46,16 @@ public class DesktopUtil {
 		return System.getProperty("user.home") + File.separator + "Desktop" + File.separator;
 	}
 	
-	public static void createShortcut() {
-		ShellLink sl = ShellLink.createLink(System.getProperty("java.home") + "\\bin\\javaw.exe")
-				.setCMDArgs("-jar \"" + System.getProperty("user.dir") + "\\KnightLauncher.jar\"")
-				.setWorkingDir(System.getProperty("user.dir"))
-				.setIconLocation(System.getProperty("user.dir") + "\\icon-128.ico")
-				.setName("Start KnightLauncher");
-		
+	public static void createShellLink(String target, String args, String workDir, String ico, String hover, String name) {
+		ShellLink sl = ShellLink.createLink(target)
+				.setCMDArgs(args)
+				.setWorkingDir(workDir)
+				.setIconLocation(ico)
+				.setName(hover);
 		try {
-			sl.saveTo(getPathToDesktop() + "/Knight Launcher.lnk");
+			sl.saveTo(getPathToDesktop() + "/" + name + ".lnk");
 		} catch (IOException e) {
-			e.printStackTrace();
+			KnightLog.logException(e);
 		}
 	}
 
