@@ -25,6 +25,7 @@ public class ModListGUI {
 	public static List modListContainer;
 	public static JLabel labelModCount;
 	private JLabel labelModCountText;
+	private JButton refreshButton;
 
 	public static void compose() {
 		EventQueue.invokeLater(new Runnable() {
@@ -52,7 +53,7 @@ public class ModListGUI {
 		modListGUIFrame.getContentPane().setLayout(null);
 		
 		modListContainer = new List();
-		modListContainer.setBounds(10, 10, 162, 341);
+		modListContainer.setBounds(10, 10, 162, 326);
 		modListContainer.setFont(Fonts.fontMed);
 		modListContainer.setFocusable(false);
 		modListGUIFrame.getContentPane().add(modListContainer);
@@ -71,7 +72,7 @@ public class ModListGUI {
 		modListGUIFrame.getContentPane().add(labelModCountText);
 		
 		JButton modFolderButton = new JButton("Open mods folder");
-		modFolderButton.setBounds(203, 328, 136, 23);
+		modFolderButton.setBounds(101, 342, 136, 23);
 		modFolderButton.setFont(Fonts.fontMed);
 		modFolderButton.setFocusPainted(false);
 		modFolderButton.setFocusable(false);
@@ -79,6 +80,25 @@ public class ModListGUI {
 		modFolderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
 				DesktopUtil.openDir(System.getProperty("user.dir") + "/mods");
+			}
+		});
+		
+		JButton getModsButton = new JButton("Get more mods");
+		getModsButton.setBounds(240, 342, 126, 23);
+		getModsButton.setFont(Fonts.fontMed);
+		getModsButton.setFocusPainted(false);
+		getModsButton.setFocusable(false);
+		modListGUIFrame.getContentPane().add(getModsButton);
+		
+		refreshButton = new JButton("Refresh");
+		refreshButton.setBounds(9, 342, 89, 23);
+		refreshButton.setFont(Fonts.fontMed);
+		refreshButton.setFocusPainted(false);
+		refreshButton.setFocusable(false);
+		modListGUIFrame.getContentPane().add(refreshButton);
+		refreshButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				ModListEventHandler.refreshEvent(_action);
 			}
 		});
 		

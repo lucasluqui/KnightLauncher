@@ -1,3 +1,9 @@
 package xyz.lucasallegri.launcher.mods;
 
-public class ModListEventHandler {}
+import java.awt.event.ActionEvent;
+
+public class ModListEventHandler {
+	
+	public static void refreshEvent(ActionEvent action) {}
+	
+}
