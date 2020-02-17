@@ -14,6 +14,7 @@ import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.DesktopUtil;
 import xyz.lucasallegri.util.FileUtil;
 import xyz.lucasallegri.util.SteamUtil;
+import xyz.lucasallegri.util.SystemUtil;
 
 public class Boot {
 	
@@ -34,6 +35,15 @@ public class Boot {
 			SettingsProperties.setup();
 		} catch (IOException ex) {
 			KnightLog.logException(ex);
+		}
+		
+		
+		/*
+		 * Create a shortcut to the application if there's none.
+		 */
+		if(SystemUtil.isWindows() && Settings.createShortcut
+				&& !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/Knight Launcher.lnk")) {
+			DesktopUtil.createShortcut();
 		}
 		
 		setupLookAndFeel();

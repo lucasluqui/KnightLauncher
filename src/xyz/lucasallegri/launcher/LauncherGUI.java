@@ -7,6 +7,7 @@ import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ImageUtil;
 
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

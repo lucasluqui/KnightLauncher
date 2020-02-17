@@ -8,6 +8,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import mslinks.ShellLink;
+import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 
 public class DesktopUtil {
@@ -37,6 +39,24 @@ public class DesktopUtil {
 	    } catch (URISyntaxException | MalformedURLException e) {
 	        KnightLog.logException(e);
 	    }
+	}
+	
+	public static String getPathToDesktop() {
+		return System.getProperty("user.home") + File.separator + "Desktop" + File.separator;
+	}
+	
+	public static void createShortcut() {
+		ShellLink sl = ShellLink.createLink(System.getProperty("java.home") + "\\bin\\javaw.exe")
+				.setCMDArgs("-jar \"" + System.getProperty("user.dir") + "\\KnightLauncher.jar\"")
+				.setWorkingDir(System.getProperty("user.dir"))
+				.setIconLocation(System.getProperty("user.dir") + "\\icon-128.ico")
+				.setName("Start KnightLauncher");
+		
+		try {
+			sl.saveTo(getPathToDesktop() + "/Knight Launcher.lnk");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
