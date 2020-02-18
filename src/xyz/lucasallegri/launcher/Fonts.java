@@ -37,6 +37,7 @@ public class Fonts {
 			
 			fontRegBig = Font.createFont(Font.TRUETYPE_FONT, fontRegBigIs);
 			fontRegBig = fontRegBig.deriveFont(14.0f);
+			fontRegBig = fontRegBig.deriveFont(Font.ITALIC);
 			
 			fontMed = Font.createFont(Font.TRUETYPE_FONT, fontMedIs);
 			fontMed = fontMed.deriveFont(11.0f);

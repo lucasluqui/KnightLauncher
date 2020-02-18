@@ -7,6 +7,7 @@ import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ImageUtil;
 
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -70,8 +71,18 @@ public class LauncherGUI {
 			}
 		});
 		
-		imageContainer = new JLabel(new ImageIcon(ImageUtil.getImageFromURL("http://px-api.lucasallegri.xyz/event.png")));
+		Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL, 514, 311);
+		if(eventImage == null) {
+			imageContainer = new JLabel("Unable to retrieve event image");
+		} else {
+			imageContainer = new JLabel(new ImageIcon(eventImage));
+		}
 		imageContainer.setBounds(10, 10, 514, 311);
+		imageContainer.setFont(Fonts.fontRegBig);
+		imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		
+		
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
 		modButton = new JButton("Mods");

@@ -9,14 +9,14 @@ import xyz.lucasallegri.logging.KnightLog;
 
 public class ImageUtil {
 	
-	public static Image getImageFromURL(String url) {
+	public static Image getImageFromURL(String url, int width, int height) {
 		
 		Image image = null;
 		
 		try {
 			URL _url = new URL(url);
 			image = ImageIO.read(_url);
-			image = image.getScaledInstance(514, 311, Image.SCALE_SMOOTH);
+			image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
