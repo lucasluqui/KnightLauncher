@@ -7,6 +7,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import xyz.lucasallegri.dialog.DialogError;
+import xyz.lucasallegri.discord.DiscordInstance;
+import xyz.lucasallegri.launcher.mods.ModList;
 import xyz.lucasallegri.launcher.mods.ModLoader;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
@@ -34,6 +36,8 @@ public class Boot {
 		checkForDirectories();
 		SettingsProperties.loadFromProp();
 		checkShortcut();
+		DiscordInstance.start();
+		DiscordInstance.setPresence("Booting up");
 		
 	}
 	
@@ -42,6 +46,8 @@ public class Boot {
 		ModLoader.checkInstalled();
 		
 		if(Settings.doRebuilds && ModLoader.rebuildJars) ModLoader.startJarRebuild();
+		
+		DiscordInstance.setPresence("Ready for launch (" + ModList.installedMods.size() + " mods)");
 		
 	}
 	

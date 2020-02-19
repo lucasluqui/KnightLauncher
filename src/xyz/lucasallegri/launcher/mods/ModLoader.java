@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
@@ -67,6 +68,7 @@ public class ModLoader {
 		LauncherGUI.launchButton.setEnabled(false);
 		ProgressBar.setBarMax(ModList.installedMods.size() + 1);
 		ProgressBar.setState("Mounting mods...");
+		DiscordInstance.setPresence("Mounting mods...");
 		
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
@@ -104,6 +106,7 @@ public class ModLoader {
 		LauncherGUI.launchButton.setEnabled(false);
 		LauncherGUI.settingsButton.setEnabled(false);
 		try { SettingsGUI.forceRebuildButton.setEnabled(false); } catch(Exception e) {}
+		DiscordInstance.setPresence("Rebuilding...");
 		
 		String[] jarFiles = {"full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar"};
 		
@@ -115,6 +118,7 @@ public class ModLoader {
 			for(int i = 0; i < jarFiles.length; i++) {
 				ProgressBar.setBarValue(i + 1);
 				ProgressBar.setState("Rebuilding, this might take a while... (" + jarFiles[i] + ")");
+				DiscordInstance.setPresence("Rebuilding... (" + (i + 1) + "/" + jarFiles.length + ")");
 				FileUtil.unzip("rsrc/" + jarFiles[i], "rsrc/");
 			}
 			
@@ -124,6 +128,7 @@ public class ModLoader {
 			LauncherGUI.launchButton.setEnabled(true);
 			LauncherGUI.settingsButton.setEnabled(true);
 			try { SettingsGUI.forceRebuildButton.setEnabled(true); } catch(Exception e) {}
+			DiscordInstance.setPresence("Ready for launch (" + ModList.installedMods.size() + " mods)");
 			
 		} catch (IOException ex) {
 			KnightLog.logException(ex);
