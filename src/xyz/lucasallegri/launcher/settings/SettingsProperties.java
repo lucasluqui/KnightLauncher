@@ -70,9 +70,9 @@ public class SettingsProperties {
 	
 	public static void loadFromProp() {
 		Settings.gamePlatform = getValue("platform");
-		Settings.doRebuilds = getValue("rebuilds").startsWith("true") ? true : false;
-		Settings.keepOpen = getValue("keepOpen").startsWith("true") ? true : false;
-		Settings.createShortcut = getValue("createShortcut").startsWith("true") ? true : false;
+		Settings.doRebuilds = Boolean.parseBoolean(getValue("rebuilds"));
+		Settings.keepOpen = Boolean.parseBoolean(getValue("keepOpen"));
+		Settings.createShortcut = Boolean.parseBoolean(getValue("createShortcut"));
 	}
 	
 }
