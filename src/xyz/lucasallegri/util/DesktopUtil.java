@@ -9,8 +9,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import mslinks.ShellLink;
-import xyz.lucasallegri.launcher.LauncherConstants;
-import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 
 public class DesktopUtil {

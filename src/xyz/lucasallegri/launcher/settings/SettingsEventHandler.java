@@ -3,7 +3,6 @@ package xyz.lucasallegri.launcher.settings;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
-import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.launcher.mods.ModLoader;
 
 public class SettingsEventHandler {

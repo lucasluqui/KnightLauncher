@@ -1,9 +1,7 @@
 package xyz.lucasallegri.launcher;
 
-import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.io.FileUtils;
 

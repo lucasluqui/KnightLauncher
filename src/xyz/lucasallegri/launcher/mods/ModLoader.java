@@ -1,9 +1,7 @@
 package xyz.lucasallegri.launcher.mods;
 
-import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import xyz.lucasallegri.discord.DiscordInstance;
