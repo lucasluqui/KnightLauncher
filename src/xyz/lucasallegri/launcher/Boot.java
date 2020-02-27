@@ -45,8 +45,9 @@ public class Boot {
 	
 	public static void onBootEnd() {
 		
-		ModLoader.checkInstalled();
+		if(!Settings.jvmPatched && SystemUtil.is64Bit()) JVMPatcher.start();
 		
+		ModLoader.checkInstalled();
 		if(Settings.doRebuilds && ModLoader.rebuildJars) ModLoader.startJarRebuild();
 		
 		DiscordInstance.setPresence("Ready for launch (" + ModList.installedMods.size() + " mods)");

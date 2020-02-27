@@ -22,14 +22,12 @@ public class SettingsProperties {
 	public static void setup() {
 		try {
 			if(!FileUtil.fileExists(propPath)) {
-				File file = new File(propPath);
-				file.createNewFile();
+				FileUtil.create(propPath);
 				fillWithBaseProp();
-			} else if(FileUtil.fileExists(propPath) && !getValue("propver").startsWith(PROP_VER)) {
-				KnightLog.log.info("Old prop version detected, resetting properties file.");
-				File file = new File(propPath);
-				file.delete();
-				file.createNewFile();
+			} else if(FileUtil.fileExists(propPath) && getValue("PROP_VER") != null
+					&& !getValue("PROP_VER").startsWith(PROP_VER)) {
+				KnightLog.log.info("Old PROP_VER detected, resetting properties file.");
+				FileUtil.recreate(propPath);
 				fillWithBaseProp();
 			}
 		} catch (IOException e) {
@@ -38,7 +36,7 @@ public class SettingsProperties {
 	}
 	
 	private static void fillWithBaseProp() throws IOException {
-		String baseProp = 	"propver=" + PROP_VER + System.lineSeparator() +
+		String baseProp = 	"PROP_VER=" + PROP_VER + System.lineSeparator() +
 							"lastModCount=0" + System.lineSeparator() +
 							"platform=Steam" + System.lineSeparator() +
 							"rebuilds=true"  + System.lineSeparator() +

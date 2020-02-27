@@ -31,6 +31,29 @@ public class FileUtil {
 	public static void createFolder(String path) {
 		new File(path).mkdirs();
 	}
+	
+	public static void create(String path) {
+		File file = new File(path);
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			KnightLog.logException(e);
+		}
+	}
+	
+	public static void recreate(String path) {
+		File file = new File(path);
+		file.delete();
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			KnightLog.logException(e);
+		}
+	}
+	
+	public static void rename(File old, File dest) {
+		old.renameTo(dest);
+	}
 
     public static void unzip(String zipFilePath, String destDirectory) throws IOException {
         createFolder(destDirectory);
