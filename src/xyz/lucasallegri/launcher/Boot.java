@@ -27,17 +27,19 @@ public class Boot {
 		try {
 			KnightLog.setup();
 			SettingsProperties.setup();
+			SettingsProperties.loadFromProp();
 		} catch (IOException ex) {
 			KnightLog.logException(ex);
 		}
 		
-		setupLookAndFeel();
-		Fonts.setup();
-		checkForDirectories();
-		SettingsProperties.loadFromProp();
+		checkDirectories();
 		checkShortcut();
+		
 		DiscordInstance.start();
 		DiscordInstance.setPresence("Booting up");
+		
+		setupLookAndFeel();
+		Fonts.setup();
 		
 	}
 	
@@ -66,7 +68,7 @@ public class Boot {
 		
 	}
 	
-	private static void checkForDirectories() {
+	private static void checkDirectories() {
 		FileUtil.createFolder("mods");
 	}
 	
