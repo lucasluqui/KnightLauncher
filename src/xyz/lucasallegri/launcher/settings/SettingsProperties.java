@@ -22,12 +22,12 @@ public class SettingsProperties {
 	public static void setup() {
 		try {
 			if(!FileUtil.fileExists(propPath)) {
-				FileUtil.create(propPath);
+				FileUtil.createFile(propPath);
 				fillWithBaseProp();
 			} else if(FileUtil.fileExists(propPath) && getValue("PROP_VER") != null
 					&& !getValue("PROP_VER").startsWith(PROP_VER)) {
 				KnightLog.log.info("Old PROP_VER detected, resetting properties file.");
-				FileUtil.recreate(propPath);
+				FileUtil.recreateFile(propPath);
 				fillWithBaseProp();
 			}
 		} catch (IOException e) {

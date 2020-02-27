@@ -70,7 +70,7 @@ public class Boot {
 	}
 	
 	private static void checkDirectories() {
-		FileUtil.createFolder("mods");
+		FileUtil.createDir("mods");
 	}
 	
 	private static void checkStartLocation() {

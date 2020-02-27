@@ -29,7 +29,7 @@ public class JVMPatcher {
 		ProgressBar.setState("Renaming current java_vm to old_java_vm...");
 		FileUtil.rename(new File("java_vm"), new File("old_java_vm"));
 		ProgressBar.setState("Creating new java_vm...");
-		FileUtil.createFolder("java_vm");
+		FileUtil.createDir("java_vm");
 		try {
 			ProgressBar.setState("Moving installed JRE to java_vm...");
 			KnightLog.log.info("java.home = " + System.getProperty("java.home"));

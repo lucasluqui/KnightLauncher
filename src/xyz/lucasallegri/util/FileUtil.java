@@ -28,11 +28,11 @@ public class FileUtil {
 	private static final int EXTRACT_BUFFER_SIZE = 8196;
 	private static final int HASH_BUFFER_SIZE = 4096;
 	
-	public static void createFolder(String path) {
+	public static void createDir(String path) {
 		new File(path).mkdirs();
 	}
 	
-	public static void create(String path) {
+	public static void createFile(String path) {
 		File file = new File(path);
 		try {
 			file.createNewFile();
@@ -41,7 +41,7 @@ public class FileUtil {
 		}
 	}
 	
-	public static void recreate(String path) {
+	public static void recreateFile(String path) {
 		File file = new File(path);
 		file.delete();
 		try {
@@ -56,7 +56,7 @@ public class FileUtil {
 	}
 
     public static void unzip(String zipFilePath, String destDirectory) throws IOException {
-        createFolder(destDirectory);
+        createDir(destDirectory);
         ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
         ZipEntry entry = zipIn.getNextEntry();
         // iterates over entries in the zip file
@@ -67,7 +67,7 @@ public class FileUtil {
                 extractFile(zipIn, filePath);
             } else {
                 // if the entry is a directory, make the directory
-                createFolder(filePath);
+                createDir(filePath);
             }
             zipIn.closeEntry();
             entry = zipIn.getNextEntry();
