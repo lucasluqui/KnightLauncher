@@ -26,9 +26,6 @@ public class JVMPatcher {
 	
 	public static void patch() {
 		ProgressBar.setBarMax(1);
-		ProgressBar.showBar(true);
-		ProgressBar.showState(true);
-		
 		ProgressBar.setState("Renaming current java_vm to old_java_vm...");
 		FileUtil.rename(new File("java_vm"), new File("old_java_vm"));
 		ProgressBar.setState("Creating new java_vm...");
@@ -40,7 +37,6 @@ public class JVMPatcher {
 			ProgressBar.setState("Successfully patched java_vm");
 			ProgressBar.setBarValue(1);
 			SettingsProperties.setValue("jvmPatched", "true");
-			Settings.jvmPatched = true;
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
