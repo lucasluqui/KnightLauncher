@@ -67,7 +67,7 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(launchButton);
 		launchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				LauncherEventHandler.launchEvent(_action);
+				LauncherEventHandler.launchGameEvent(_action);
 			}
 		});
 		

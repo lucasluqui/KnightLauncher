@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 
 public class LauncherEventHandler {
 	
-	public static void launchEvent(ActionEvent action) {
+	public static void launchGameEvent(ActionEvent action) {
 		
 		Thread launchThread = new Thread(new Runnable(){
 			public void run() {
