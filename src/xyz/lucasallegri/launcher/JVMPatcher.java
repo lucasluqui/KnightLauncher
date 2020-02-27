@@ -37,6 +37,7 @@ public class JVMPatcher {
 		FileUtil.createFolder("java_vm");
 		try {
 			ProgressBar.setState("Moving installed JRE to java_vm...");
+			KnightLog.log.info("java.home = " + System.getProperty("java.home"));
 			FileUtils.copyDirectory(new File(System.getProperty("java.home")), new File("java_vm"));
 			ProgressBar.setState("Successfully patched java_vm");
 			ProgressBar.setBarValue(1);
