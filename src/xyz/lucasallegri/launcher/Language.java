@@ -27,37 +27,37 @@ public class Language {
 	
 	public static String getValue(String key) {
 		String value = null;
-    	try {
+		try {
 			prop.load(propStream);
 			value = prop.getProperty(key);
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
-    	if(value != null) return value.substring(1, value.length() - 1);
+		if(value != null) return value.substring(1, value.length() - 1);
 		return key;
 	}
 	
 	public static String getValue(String key, String arg) {
 		String value = null;
-    	try {
+		try {
 			prop.load(propStream);
 			value = MessageFormat.format(prop.getProperty(key), arg);
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
-    	if(value != null) return value.substring(1, value.length() - 1);
+		if(value != null) return value.substring(1, value.length() - 1);
 		return key;
 	}
 	
 	public static String getValue(String key, String[] args) {
 		String value = null;
-    	try {
+		try {
 			prop.load(propStream);
 			value = MessageFormat.format(prop.getProperty(key), (Object[])args);
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
-    	if(value != null) return value.substring(1, value.length() - 1);
+		if(value != null) return value.substring(1, value.length() - 1);
 		return key;
 	}
 	
