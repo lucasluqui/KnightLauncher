@@ -121,7 +121,7 @@ public class ModLoader {
 			for(int i = 0; i < jarFiles.length; i++) {
 				ProgressBar.setBarValue(i + 1);
 				ProgressBar.setState(Language.getValue("m.rebuilding", jarFiles[i]));
-				DiscordInstance.setPresence("Rebuilding... (" + (i + 1) + "/" + jarFiles.length + ")");
+				DiscordInstance.setPresence(Language.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(jarFiles.length)}));
 				FileUtil.unzip("rsrc/" + jarFiles[i], "rsrc/");
 			}
 			
