@@ -15,7 +15,7 @@ public class Language {
 	public static String[] AVAILABLE_LANGUAGES = {
 			"English",
 			"Español",
-			"Deutsche",
+			"Deutsch",
 			"Português",
 			"Français",
 			"日本語"
@@ -65,7 +65,7 @@ public class Language {
 		switch(code) {
 		case "en": return "English";
 		case "es": return "Español";
-		case "de": return "Deutsche";
+		case "de": return "Deutsch";
 		case "pt": return "Português";
 		case "fr": return "Français";
 		case "jp": return "日本語";
@@ -77,7 +77,7 @@ public class Language {
 		switch(detailed) {
 		case "English": return "en";
 		case "Español": return "es";
-		case "Deutsche": return "de";
+		case "Deutsch": return "de";
 		case "Português": return "pt";
 		case "Français": return "fr";
 		case "日本語": return "jp";
