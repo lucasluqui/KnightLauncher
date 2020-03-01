@@ -36,8 +36,7 @@ public class Language {
 		String value = null;
     	try {
 			prop.load(propStream);
-			value = new MessageFormat(prop.getProperty(key)).format(arg);
-			
+			value = MessageFormat.format(prop.getProperty(key), arg);
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
@@ -49,8 +48,7 @@ public class Language {
 		String value = null;
     	try {
 			prop.load(propStream);
-			value = new MessageFormat(prop.getProperty(key)).format(args);
-			
+			value = MessageFormat.format(prop.getProperty(key), (Object[])args);
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
