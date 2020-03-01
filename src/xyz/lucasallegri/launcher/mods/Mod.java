@@ -5,13 +5,11 @@ public class Mod {
 	protected String displayName;
 	protected String fileName;
 	protected Boolean isEnabled;
-	protected Boolean hasHash;
 	
 	public Mod() {
 		this.displayName = null;
 		this.fileName = null;
 		this.isEnabled = true;
-		this.hasHash = false;
 	}
 	
 	public Mod(String displayName, String fileName) {
