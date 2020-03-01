@@ -53,7 +53,7 @@ public class SettingsGUI {
 	private void initialize() {
 		settingsGUIFrame = new JFrame();
 		settingsGUIFrame.setTitle(Language.getValue("t.settings"));
-		settingsGUIFrame.setBounds(100, 100, 325, 550);
+		settingsGUIFrame.setBounds(100, 100, 325, 560);
 		settingsGUIFrame.setResizable(false);
 		settingsGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		settingsGUIFrame.getContentPane().setLayout(null);
