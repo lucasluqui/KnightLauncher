@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.MessageFormat;
 import java.util.Properties;
 
 import xyz.lucasallegri.launcher.settings.Settings;
@@ -35,7 +36,21 @@ public class Language {
 		String value = null;
     	try {
 			prop.load(propStream);
-			value = prop.getProperty(key).replaceFirst("/{0}/", arg);
+			value = new MessageFormat(prop.getProperty(key)).format(arg);
+			
+		} catch (IOException e) {
+			KnightLog.logException(e);
+		}
+    	if(value != null) return value.substring(1, value.length() - 1);
+		return key;
+	}
+	
+	public static String getValue(String key, String[] args) {
+		String value = null;
+    	try {
+			prop.load(propStream);
+			value = new MessageFormat(prop.getProperty(key)).format(args);
+			
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
