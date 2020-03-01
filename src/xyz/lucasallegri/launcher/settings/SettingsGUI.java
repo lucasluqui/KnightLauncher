@@ -132,7 +132,7 @@ public class SettingsGUI {
 		});
 		
 		forceRebuildButton = new JButton(Language.getValue("b.force_rebuild"));
-		forceRebuildButton.setBounds(183, 185, 103, 23);
+		forceRebuildButton.setBounds(166, 185, 120, 23);
 		forceRebuildButton.setFont(Fonts.fontMed);
 		forceRebuildButton.setFocusPainted(false);
 		forceRebuildButton.setFocusable(false);
