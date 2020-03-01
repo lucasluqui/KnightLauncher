@@ -4,6 +4,7 @@ public class Settings {
 	
 	public static String apiEndpoint = "px-api.lucasallegri.xyz:5500/v1/";
 	public static String gamePlatform = "Steam";
+	public static String lang = "en";
 	public static Boolean doRebuilds = true;
 	public static Boolean keepOpen = false;
 	public static Boolean createShortcut = true;

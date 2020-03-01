@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import xyz.lucasallegri.launcher.Fonts;
+import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 
@@ -26,6 +27,7 @@ public class SettingsGUI {
 
 	public static JFrame settingsGUIFrame;
 	public static Choice choicePlatform;
+	public static Choice choiceLanguage;
 	public static JCheckBox checkboxRebuilds;
 	public static JCheckBox checkboxKeepOpen;
 	public static JButton forceRebuildButton;
@@ -51,7 +53,7 @@ public class SettingsGUI {
 	private void initialize() {
 		settingsGUIFrame = new JFrame();
 		settingsGUIFrame.setTitle("KnightLauncher Settings");
-		settingsGUIFrame.setBounds(100, 100, 325, 500);
+		settingsGUIFrame.setBounds(100, 100, 325, 550);
 		settingsGUIFrame.setResizable(false);
 		settingsGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		settingsGUIFrame.getContentPane().setLayout(null);
@@ -66,12 +68,12 @@ public class SettingsGUI {
 		settingsGUIFrame.getContentPane().add(sepLauncherSettings);
 		
 		JLabel labelChoicePlatform = new JLabel("Platform");
-		labelChoicePlatform.setBounds(15, 55, 48, 14);
+		labelChoicePlatform.setBounds(15, 59, 48, 14);
 		labelChoicePlatform.setFont(Fonts.fontReg);
 		settingsGUIFrame.getContentPane().add(labelChoicePlatform);
 		
 		choicePlatform = new Choice();
-		choicePlatform.setBounds(80, 51, 83, 20);
+		choicePlatform.setBounds(80, 55, 83, 20);
 		choicePlatform.setFont(Fonts.fontReg);
 		choicePlatform.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choicePlatform);
@@ -85,8 +87,28 @@ public class SettingsGUI {
 			}
 		});
 		
+		JLabel labelLanguage = new JLabel("Language");
+		labelLanguage.setBounds(15, 104, 65, 14);
+		labelLanguage.setFont(Fonts.fontReg);
+		settingsGUIFrame.getContentPane().add(labelLanguage);
+		
+		choiceLanguage = new Choice();
+		choiceLanguage.setBounds(80, 100, 83, 20);
+		choiceLanguage.setFont(Fonts.fontReg);
+		choiceLanguage.setFocusable(false);
+		settingsGUIFrame.getContentPane().add(choiceLanguage);
+		choiceLanguage.add("English");
+		choiceLanguage.add("Español");
+		choiceLanguage.select(Language.getLangName(Settings.lang));
+		choiceLanguage.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				SettingsEventHandler.languageChangeEvent(event);
+			}
+		});
+		
 		checkboxRebuilds = new JCheckBox("Rebuilds");
-		checkboxRebuilds.setBounds(11, 85, 97, 23);
+		checkboxRebuilds.setBounds(11, 141, 97, 23);
 		checkboxRebuilds.setFont(Fonts.fontReg);
 		checkboxRebuilds.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
@@ -98,7 +120,7 @@ public class SettingsGUI {
 		});
 		
 		checkboxKeepOpen = new JCheckBox("Keep open on launch");
-		checkboxKeepOpen.setBounds(11, 107, 139, 23);
+		checkboxKeepOpen.setBounds(11, 163, 139, 23);
 		checkboxKeepOpen.setFont(Fonts.fontReg);
 		checkboxKeepOpen.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxKeepOpen);
@@ -110,7 +132,7 @@ public class SettingsGUI {
 		});
 		
 		forceRebuildButton = new JButton("Force Rebuild");
-		forceRebuildButton.setBounds(183, 129, 103, 23);
+		forceRebuildButton.setBounds(183, 185, 103, 23);
 		forceRebuildButton.setFont(Fonts.fontMed);
 		forceRebuildButton.setFocusPainted(false);
 		forceRebuildButton.setFocusable(false);
@@ -122,7 +144,7 @@ public class SettingsGUI {
 		});
 		
 		checkboxShortcut = new JCheckBox("Create shortcut");
-		checkboxShortcut.setBounds(11, 129, 123, 23);
+		checkboxShortcut.setBounds(11, 185, 123, 23);
 		checkboxShortcut.setFont(Fonts.fontReg);
 		checkboxShortcut.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxShortcut);
@@ -134,23 +156,23 @@ public class SettingsGUI {
 		});
 		
 		JSeparator sepExtraTxt = new JSeparator();
-		sepExtraTxt.setBounds(10, 190, 272, 2);
+		sepExtraTxt.setBounds(10, 246, 272, 2);
 		settingsGUIFrame.getContentPane().add(sepExtraTxt);
 		
 		JLabel labelExtraTxt = new JLabel("Spiral Knights Settings (extra.txt)");
 		labelExtraTxt.setFont(Fonts.fontMed);
-		labelExtraTxt.setBounds(10, 170, 271, 14);
+		labelExtraTxt.setBounds(10, 226, 271, 14);
 		settingsGUIFrame.getContentPane().add(labelExtraTxt);
 		
 		JLabel labelMemory = new JLabel("Allocated Memory");
 		labelMemory.setFont(Fonts.fontReg);
-		labelMemory.setBounds(15, 209, 93, 14);
+		labelMemory.setBounds(15, 265, 93, 14);
 		settingsGUIFrame.getContentPane().add(labelMemory);
 		
 		Choice choiceMemory = new Choice();
 		choiceMemory.setFont(Fonts.fontReg);
 		choiceMemory.setFocusable(false);
-		choiceMemory.setBounds(125, 205, 115, 20);
+		choiceMemory.setBounds(125, 261, 115, 20);
 		settingsGUIFrame.getContentPane().add(choiceMemory);
 		choiceMemory.add("Default (512 MB)");
 		choiceMemory.add("Low (1 GB)");
@@ -160,32 +182,32 @@ public class SettingsGUI {
 		
 		JCheckBox checkboxStringDeduplication = new JCheckBox("Use String Deduplication");
 		checkboxStringDeduplication.setFont(Fonts.fontReg);
-		checkboxStringDeduplication.setBounds(11, 239, 176, 23);
+		checkboxStringDeduplication.setBounds(11, 295, 176, 23);
 		settingsGUIFrame.getContentPane().add(checkboxStringDeduplication);
 		
 		JCheckBox checkboxG1GC = new JCheckBox("Use G1GC");
 		checkboxG1GC.setFont(Fonts.fontReg);
-		checkboxG1GC.setBounds(11, 261, 97, 23);
+		checkboxG1GC.setBounds(11, 317, 97, 23);
 		settingsGUIFrame.getContentPane().add(checkboxG1GC);
 		
 		JCheckBox checkboxExplicitGC = new JCheckBox("Disable Explicit GC");
 		checkboxExplicitGC.setFont(Fonts.fontReg);
-		checkboxExplicitGC.setBounds(11, 283, 139, 23);
+		checkboxExplicitGC.setBounds(11, 339, 139, 23);
 		settingsGUIFrame.getContentPane().add(checkboxExplicitGC);
 		
 		JCheckBox checkboxUndecorated = new JCheckBox("Undecorated Window");
 		checkboxUndecorated.setFont(Fonts.fontReg);
-		checkboxUndecorated.setBounds(11, 305, 139, 23);
+		checkboxUndecorated.setBounds(11, 361, 139, 23);
 		settingsGUIFrame.getContentPane().add(checkboxUndecorated);
 		
 		JEditorPane argumentsPane = new JEditorPane();
 		argumentsPane.setFont(Fonts.fontReg);
-		argumentsPane.setBounds(11, 365, 272, 85);
+		argumentsPane.setBounds(11, 421, 272, 85);
 		settingsGUIFrame.getContentPane().add(argumentsPane);
 		
 		JLabel labelArgumentsPane = new JLabel("Additional arguments (Advanced)");
 		labelArgumentsPane.setFont(Fonts.fontMed);
-		labelArgumentsPane.setBounds(13, 344, 271, 14);
+		labelArgumentsPane.setBounds(13, 400, 271, 14);
 		settingsGUIFrame.getContentPane().add(labelArgumentsPane);
 		
 		settingsGUIFrame.setLocationRelativeTo(null);

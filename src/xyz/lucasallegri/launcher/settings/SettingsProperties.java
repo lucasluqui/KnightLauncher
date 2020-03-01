@@ -15,8 +15,8 @@ import xyz.lucasallegri.util.FileUtil;
 
 public class SettingsProperties {
 
-	public static final String PROP_VER = "5";
-	public static Properties prop = new Properties();
+	private static final String PROP_VER = "6";
+	private static Properties prop = new Properties();
 	private static String propPath = System.getProperty("user.dir") + File.separator + "KnightLauncher.properties";
 	
 	public static void setup() {
@@ -42,7 +42,8 @@ public class SettingsProperties {
 							"rebuilds=true"  + System.lineSeparator() +
 							"keepOpen=false" + System.lineSeparator() +
 							"createShortcut=true" + System.lineSeparator() +
-							"jvmPatched=false";
+							"jvmPatched=false" + System.lineSeparator() +
+							"lang=en";
 		BufferedWriter writer = new BufferedWriter(new FileWriter(propPath, true));
 		writer.append(baseProp);
 		writer.close();
@@ -73,6 +74,7 @@ public class SettingsProperties {
 		Settings.keepOpen = Boolean.parseBoolean(getValue("keepOpen"));
 		Settings.createShortcut = Boolean.parseBoolean(getValue("createShortcut"));
 		Settings.jvmPatched = Boolean.parseBoolean(getValue("jvmPatched"));
+		Settings.lang = getValue("lang");
 	}
 	
 }

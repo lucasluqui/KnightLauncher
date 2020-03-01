@@ -32,6 +32,8 @@ public class Boot {
 			KnightLog.logException(ex);
 		}
 		
+		Language.setup();
+		
 		checkDirectories();
 		checkShortcut();
 		

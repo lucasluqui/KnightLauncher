@@ -116,7 +116,7 @@ public class LauncherGUI {
 		labelTweets.setFont(Fonts.fontReg);
 		launcherGUIFrame.getContentPane().add(labelTweets);
 		
-		tweetsContainer = new JLabel("Retrieving tweets...");
+		tweetsContainer = new JLabel(Language.getValue("m.twitter_load"));
 		tweetsContainer.setHorizontalAlignment(SwingConstants.CENTER);
 		tweetsContainer.setBounds(535, 48, 189, 261);
 		tweetsContainer.setFont(Fonts.fontReg);
