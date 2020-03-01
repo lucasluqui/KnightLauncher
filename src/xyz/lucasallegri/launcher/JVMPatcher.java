@@ -26,15 +26,15 @@ public class JVMPatcher {
 	
 	public static void patch() {
 		ProgressBar.setBarMax(1);
-		ProgressBar.setState("Renaming current java_vm to old_java_vm...");
+		ProgressBar.setState(Language.getValue("m.jvm_rename"));
 		FileUtil.rename(new File("java_vm"), new File("old_java_vm"));
-		ProgressBar.setState("Creating new java_vm...");
+		ProgressBar.setState(Language.getValue("m.jvm_create"));
 		FileUtil.createDir("java_vm");
 		try {
-			ProgressBar.setState("Moving installed JRE to java_vm...");
+			ProgressBar.setState(Language.getValue("m.jvm_movingjre"));
 			KnightLog.log.info("java.home = " + System.getProperty("java.home"));
 			FileUtils.copyDirectory(new File(System.getProperty("java.home")), new File("java_vm"));
-			ProgressBar.setState("Successfully patched java_vm");
+			ProgressBar.setState(Language.getValue("m.jvm_success"));
 			ProgressBar.setBarValue(1);
 			SettingsProperties.setValue("jvmPatched", "true");
 		} catch (IOException e) {

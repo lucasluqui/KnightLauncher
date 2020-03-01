@@ -24,11 +24,11 @@ public class Language {
     	try {
 			prop.load(propStream);
 			value = prop.getProperty(key);
-			return value.substring(1, value.length() - 1);
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
-		return null;
+    	if(value != null) return value.substring(1, value.length() - 1);
+		return key;
 	}
 	
 	public static String getValue(String key, String arg) {
@@ -36,11 +36,11 @@ public class Language {
     	try {
 			prop.load(propStream);
 			value = prop.getProperty(key).replaceFirst("/{0}/", arg);
-			return value.substring(1, value.length() - 1);
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
-		return null;
+    	if(value != null) return value.substring(1, value.length() - 1);
+		return key;
 	}
 	
 	public static String getLangName(String code) {

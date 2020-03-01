@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import xyz.lucasallegri.discord.DiscordInstance;
+import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
@@ -67,14 +68,14 @@ public class ModLoader {
 		
 		LauncherGUI.launchButton.setEnabled(false);
 		ProgressBar.setBarMax(ModList.installedMods.size() + 1);
-		ProgressBar.setState("Mounting mods...");
-		DiscordInstance.setPresence("Mounting mods...");
+		ProgressBar.setState(Language.getValue("m.mount_start"));
+		DiscordInstance.setPresence(Language.getValue("m.mount_start"));
 		
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
 			try {
 				KnightLog.log.info("Mounting mod: " + ModList.installedMods.get(i).getDisplayName());
-				ProgressBar.setState("Mounting mods... (" + ModList.installedMods.get(i).getDisplayName() + ")");
+				ProgressBar.setState(Language.getValue("m.mounting", ModList.installedMods.get(i).getDisplayName()));
 				FileUtil.unzip("mods/" + ModList.installedMods.get(i).getFileName(), "rsrc/");
 				KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
 			} catch (IOException e) {
@@ -84,7 +85,7 @@ public class ModLoader {
 		
 		modLoadFinished = true;
 		
-		ProgressBar.setState("All mods mounted. Launching game...");
+		ProgressBar.setState(Language.getValue("m.mount_finished"));
 		ProgressBar.setBarMax(1);
 		ProgressBar.setBarValue(1);
 		LauncherGUI.launchButton.setEnabled(true);
@@ -113,24 +114,24 @@ public class ModLoader {
 		String[] jarFiles = {"full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar"};
 		
 		ProgressBar.setBarMax(jarFiles.length + 1);
-		ProgressBar.setState("Rebuilding game files...");
+		ProgressBar.setState(Language.getValue("m.rebuild_start"));
 		
 		try {
 			
 			for(int i = 0; i < jarFiles.length; i++) {
 				ProgressBar.setBarValue(i + 1);
-				ProgressBar.setState("Rebuilding, this might take a while... (" + jarFiles[i] + ")");
+				ProgressBar.setState(Language.getValue("m.rebuilding", jarFiles[i]));
 				DiscordInstance.setPresence("Rebuilding... (" + (i + 1) + "/" + jarFiles.length + ")");
 				FileUtil.unzip("rsrc/" + jarFiles[i], "rsrc/");
 			}
 			
 			ProgressBar.setBarValue(jarFiles.length + 1);
-			ProgressBar.setState("Rebuild complete, game launch ready.");
+			ProgressBar.setState(Language.getValue("m.rebuild_complete"));
 			rebuildJars = false;
 			LauncherGUI.launchButton.setEnabled(true);
 			LauncherGUI.settingsButton.setEnabled(true);
 			try { SettingsGUI.forceRebuildButton.setEnabled(true); } catch(Exception e) {}
-			DiscordInstance.setPresence("Ready for launch (" + ModList.installedMods.size() + " mods)");
+			DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
 			
 		} catch (IOException ex) {
 			KnightLog.logException(ex);

@@ -38,7 +38,6 @@ public class Boot {
 		checkShortcut();
 		
 		DiscordInstance.start();
-		DiscordInstance.setPresence("Booting up");
 		
 		setupLookAndFeel();
 		Fonts.setup();
@@ -52,7 +51,7 @@ public class Boot {
 		ModLoader.checkInstalled();
 		if(Settings.doRebuilds && ModLoader.rebuildJars) ModLoader.startJarRebuild();
 		
-		DiscordInstance.setPresence("Ready for launch (" + ModList.installedMods.size() + " mods)");
+		DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
 		
 	}
 	
@@ -80,7 +79,7 @@ public class Boot {
 		 * Checking if we're being ran inside the game's directory, "getdown.txt" should always be present if so.
 		 */
 		if(!FileUtil.fileExists("getdown.txt")) {
-			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
+			DialogError.push(Language.getValue("error.invalid_dir")
 					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
 			DesktopUtil.openDir(SteamUtil.getGamePathWindows());
 			return;

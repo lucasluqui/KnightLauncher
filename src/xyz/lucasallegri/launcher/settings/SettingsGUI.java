@@ -52,13 +52,13 @@ public class SettingsGUI {
 
 	private void initialize() {
 		settingsGUIFrame = new JFrame();
-		settingsGUIFrame.setTitle("KnightLauncher Settings");
+		settingsGUIFrame.setTitle(Language.getValue("t.settings"));
 		settingsGUIFrame.setBounds(100, 100, 325, 550);
 		settingsGUIFrame.setResizable(false);
 		settingsGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		settingsGUIFrame.getContentPane().setLayout(null);
 		
-		JLabel labelLauncherSettings = new JLabel("Launcher Settings");
+		JLabel labelLauncherSettings = new JLabel(Language.getValue("m.launcher_settings"));
 		labelLauncherSettings.setFont(Fonts.fontMed);
 		labelLauncherSettings.setBounds(10, 16, 271, 14);
 		settingsGUIFrame.getContentPane().add(labelLauncherSettings);
@@ -67,7 +67,7 @@ public class SettingsGUI {
 		sepLauncherSettings.setBounds(10, 36, 272, 2);
 		settingsGUIFrame.getContentPane().add(sepLauncherSettings);
 		
-		JLabel labelChoicePlatform = new JLabel("Platform");
+		JLabel labelChoicePlatform = new JLabel(Language.getValue("m.platform"));
 		labelChoicePlatform.setBounds(15, 59, 48, 14);
 		labelChoicePlatform.setFont(Fonts.fontReg);
 		settingsGUIFrame.getContentPane().add(labelChoicePlatform);
@@ -77,8 +77,8 @@ public class SettingsGUI {
 		choicePlatform.setFont(Fonts.fontReg);
 		choicePlatform.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choicePlatform);
-		choicePlatform.add("Steam");
-		choicePlatform.add("Standalone");
+		choicePlatform.add(Language.getValue("o.steam"));
+		choicePlatform.add(Language.getValue("o.standalone"));
 		choicePlatform.select(Settings.gamePlatform);
 		choicePlatform.addItemListener(new ItemListener() {
 			@Override
@@ -87,7 +87,7 @@ public class SettingsGUI {
 			}
 		});
 		
-		JLabel labelLanguage = new JLabel("Language");
+		JLabel labelLanguage = new JLabel(Language.getValue("m.language"));
 		labelLanguage.setBounds(15, 104, 65, 14);
 		labelLanguage.setFont(Fonts.fontReg);
 		settingsGUIFrame.getContentPane().add(labelLanguage);
@@ -107,7 +107,7 @@ public class SettingsGUI {
 			}
 		});
 		
-		checkboxRebuilds = new JCheckBox("Rebuilds");
+		checkboxRebuilds = new JCheckBox(Language.getValue("m.rebuilds"));
 		checkboxRebuilds.setBounds(11, 141, 97, 23);
 		checkboxRebuilds.setFont(Fonts.fontReg);
 		checkboxRebuilds.setFocusPainted(false);
@@ -119,7 +119,7 @@ public class SettingsGUI {
 			}
 		});
 		
-		checkboxKeepOpen = new JCheckBox("Keep open on launch");
+		checkboxKeepOpen = new JCheckBox(Language.getValue("m.keep_open"));
 		checkboxKeepOpen.setBounds(11, 163, 139, 23);
 		checkboxKeepOpen.setFont(Fonts.fontReg);
 		checkboxKeepOpen.setFocusPainted(false);
@@ -131,7 +131,7 @@ public class SettingsGUI {
 			}
 		});
 		
-		forceRebuildButton = new JButton("Force Rebuild");
+		forceRebuildButton = new JButton(Language.getValue("b.force_rebuild"));
 		forceRebuildButton.setBounds(183, 185, 103, 23);
 		forceRebuildButton.setFont(Fonts.fontMed);
 		forceRebuildButton.setFocusPainted(false);
@@ -143,7 +143,7 @@ public class SettingsGUI {
 			}
 		});
 		
-		checkboxShortcut = new JCheckBox("Create shortcut");
+		checkboxShortcut = new JCheckBox(Language.getValue("m.create_shortcut"));
 		checkboxShortcut.setBounds(11, 185, 123, 23);
 		checkboxShortcut.setFont(Fonts.fontReg);
 		checkboxShortcut.setFocusPainted(false);
@@ -159,12 +159,12 @@ public class SettingsGUI {
 		sepExtraTxt.setBounds(10, 246, 272, 2);
 		settingsGUIFrame.getContentPane().add(sepExtraTxt);
 		
-		JLabel labelExtraTxt = new JLabel("Spiral Knights Settings (extra.txt)");
+		JLabel labelExtraTxt = new JLabel(Language.getValue("m.extratxt_settings"));
 		labelExtraTxt.setFont(Fonts.fontMed);
 		labelExtraTxt.setBounds(10, 226, 271, 14);
 		settingsGUIFrame.getContentPane().add(labelExtraTxt);
 		
-		JLabel labelMemory = new JLabel("Allocated Memory");
+		JLabel labelMemory = new JLabel(Language.getValue("m.allocated_memory"));
 		labelMemory.setFont(Fonts.fontReg);
 		labelMemory.setBounds(15, 265, 93, 14);
 		settingsGUIFrame.getContentPane().add(labelMemory);
@@ -174,28 +174,28 @@ public class SettingsGUI {
 		choiceMemory.setFocusable(false);
 		choiceMemory.setBounds(125, 261, 115, 20);
 		settingsGUIFrame.getContentPane().add(choiceMemory);
-		choiceMemory.add("Default (512 MB)");
-		choiceMemory.add("Low (1 GB)");
-		choiceMemory.add("Medium (2 GB)");
-		choiceMemory.add("High (4 GB)");
-		choiceMemory.add("Flex (8 GB)");
+		choiceMemory.add(Language.getValue("o.memory_default"));
+		choiceMemory.add(Language.getValue("o.memory_low"));
+		choiceMemory.add(Language.getValue("o.memory_med"));
+		choiceMemory.add(Language.getValue("o.memory_high"));
+		choiceMemory.add(Language.getValue("o.memory_flex"));
 		
-		JCheckBox checkboxStringDeduplication = new JCheckBox("Use String Deduplication");
+		JCheckBox checkboxStringDeduplication = new JCheckBox(Language.getValue("m.use_string_deduplication"));
 		checkboxStringDeduplication.setFont(Fonts.fontReg);
 		checkboxStringDeduplication.setBounds(11, 295, 176, 23);
 		settingsGUIFrame.getContentPane().add(checkboxStringDeduplication);
 		
-		JCheckBox checkboxG1GC = new JCheckBox("Use G1GC");
+		JCheckBox checkboxG1GC = new JCheckBox(Language.getValue("m.use_g1gc"));
 		checkboxG1GC.setFont(Fonts.fontReg);
 		checkboxG1GC.setBounds(11, 317, 97, 23);
 		settingsGUIFrame.getContentPane().add(checkboxG1GC);
 		
-		JCheckBox checkboxExplicitGC = new JCheckBox("Disable Explicit GC");
+		JCheckBox checkboxExplicitGC = new JCheckBox(Language.getValue("m.disable_explicit_gc"));
 		checkboxExplicitGC.setFont(Fonts.fontReg);
 		checkboxExplicitGC.setBounds(11, 339, 139, 23);
 		settingsGUIFrame.getContentPane().add(checkboxExplicitGC);
 		
-		JCheckBox checkboxUndecorated = new JCheckBox("Undecorated Window");
+		JCheckBox checkboxUndecorated = new JCheckBox(Language.getValue("m.undecorated_window"));
 		checkboxUndecorated.setFont(Fonts.fontReg);
 		checkboxUndecorated.setBounds(11, 361, 139, 23);
 		settingsGUIFrame.getContentPane().add(checkboxUndecorated);
@@ -205,7 +205,7 @@ public class SettingsGUI {
 		argumentsPane.setBounds(11, 421, 272, 85);
 		settingsGUIFrame.getContentPane().add(argumentsPane);
 		
-		JLabel labelArgumentsPane = new JLabel("Additional arguments (Advanced)");
+		JLabel labelArgumentsPane = new JLabel(Language.getValue("m.additional_args"));
 		labelArgumentsPane.setFont(Fonts.fontMed);
 		labelArgumentsPane.setBounds(13, 400, 271, 14);
 		settingsGUIFrame.getContentPane().add(labelArgumentsPane);

@@ -53,13 +53,13 @@ public class LauncherGUI {
 	private void initialize() {
 		
 		launcherGUIFrame = new JFrame();
-		launcherGUIFrame.setTitle("KnightLauncher (" + LauncherConstants.VERSION + ")");
+		launcherGUIFrame.setTitle(Language.getValue("t.main", LauncherConstants.VERSION));
 		launcherGUIFrame.setResizable(false);
 		launcherGUIFrame.setBounds(100, 100, 750, 450);
 		launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		launcherGUIFrame.getContentPane().setLayout(null);
 		
-		launchButton = new JButton("LAUNCH");
+		launchButton = new JButton(Language.getValue("b.launch"));
 		launchButton.setBounds(17, 350, 155, 48);
 		launchButton.setFont(Fonts.fontMedBig);
 		launchButton.setFocusPainted(false);
@@ -73,7 +73,7 @@ public class LauncherGUI {
 		
 		Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL, 514, 311);
 		if(eventImage == null) {
-			imageContainer = new JLabel("Unable to retrieve event image");
+			imageContainer = new JLabel(Language.getValue("error.event_image_missing"));
 		} else {
 			imageContainer = new JLabel(new ImageIcon(eventImage));
 		}
@@ -85,7 +85,7 @@ public class LauncherGUI {
 		
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
-		modButton = new JButton("Mods");
+		modButton = new JButton(Language.getValue("b.mods"));
 		modButton.setBounds(537, 375, 89, 23);
 		modButton.setFont(Fonts.fontMed);
 		modButton.setFocusPainted(false);
@@ -98,7 +98,7 @@ public class LauncherGUI {
 			}
 		});
 		
-		settingsButton = new JButton("Settings");
+		settingsButton = new JButton(Language.getValue("b.settings"));
 		settingsButton.setBounds(632, 375, 89, 23);
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
@@ -111,7 +111,7 @@ public class LauncherGUI {
 			}
 		});
 		
-		JLabel labelTweets = new JLabel("<html>Latest on <b>@SpiralKnights</b></html>");
+		JLabel labelTweets = new JLabel(Language.getValue("m.twitter_title"));
 		labelTweets.setBounds(534, 12, 127, 28);
 		labelTweets.setFont(Fonts.fontReg);
 		launcherGUIFrame.getContentPane().add(labelTweets);

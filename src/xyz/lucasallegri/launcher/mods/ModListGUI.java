@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 import xyz.lucasallegri.launcher.Fonts;
+import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.DesktopUtil;
@@ -46,7 +47,7 @@ public class ModListGUI {
 
 	private void initialize() {
 		modListGUIFrame = new JFrame();
-		modListGUIFrame.setTitle("KnightLauncher Mods");
+		modListGUIFrame.setTitle(Language.getValue("t.mods"));
 		modListGUIFrame.setBounds(100, 100, 380, 400);
 		modListGUIFrame.setResizable(false);
 		modListGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -65,13 +66,13 @@ public class ModListGUI {
 		labelModCount.setFont(Fonts.fontMedGiant);
 		modListGUIFrame.getContentPane().add(labelModCount);
 		
-		labelModCountText = new JLabel("Mods installed");
+		labelModCountText = new JLabel(Language.getValue("m.mods_installed"));
 		labelModCountText.setHorizontalAlignment(SwingConstants.CENTER);
 		labelModCountText.setBounds(178, 92, 176, 14);
 		labelModCountText.setFont(Fonts.fontReg);
 		modListGUIFrame.getContentPane().add(labelModCountText);
 		
-		JButton modFolderButton = new JButton("Open mods folder");
+		JButton modFolderButton = new JButton(Language.getValue("b.open_mods_folder"));
 		modFolderButton.setBounds(101, 342, 136, 23);
 		modFolderButton.setFont(Fonts.fontMed);
 		modFolderButton.setFocusPainted(false);
@@ -83,7 +84,7 @@ public class ModListGUI {
 			}
 		});
 		
-		JButton getModsButton = new JButton("Get more mods");
+		JButton getModsButton = new JButton(Language.getValue("b.get_mods"));
 		getModsButton.setBounds(240, 342, 126, 23);
 		getModsButton.setFont(Fonts.fontMed);
 		getModsButton.setFocusPainted(false);
@@ -95,7 +96,7 @@ public class ModListGUI {
 			}
 		});
 		
-		refreshButton = new JButton("Refresh");
+		refreshButton = new JButton(Language.getValue("b.refresh"));
 		refreshButton.setBounds(9, 342, 89, 23);
 		refreshButton.setFont(Fonts.fontMed);
 		refreshButton.setFocusPainted(false);
