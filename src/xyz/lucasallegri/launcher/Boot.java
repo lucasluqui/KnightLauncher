@@ -99,7 +99,7 @@ public class Boot {
 										System.getProperty("user.dir") + "\\icon-128.ico", 
 										"Start KnightLauncher", 
 										LauncherConstants.LNK_FILE_NAME
-										);
+			);
 		}
 	}
 
