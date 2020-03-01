@@ -35,7 +35,7 @@ public class SettingsEventHandler {
 	}
 	
 	public static void languageChangeEvent(ItemEvent event) {
-		Settings.lang = SettingsGUI.choiceLanguage.getSelectedItem();
+		Settings.lang = Language.getLangCode(SettingsGUI.choiceLanguage.getSelectedItem());
 		SettingsProperties.setValue("lang", Language.getLangCode(SettingsGUI.choiceLanguage.getSelectedItem()));
 	}
 
