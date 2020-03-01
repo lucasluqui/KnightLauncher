@@ -97,8 +97,9 @@ public class SettingsGUI {
 		choiceLanguage.setFont(Fonts.fontReg);
 		choiceLanguage.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choiceLanguage);
-		choiceLanguage.add("English");
-		choiceLanguage.add("Español");
+		for(String lang : Language.AVAILABLE_LANGUAGES) {
+			choiceLanguage.add(lang);
+		}
 		choiceLanguage.select(Language.getLangName(Settings.lang));
 		choiceLanguage.addItemListener(new ItemListener() {
 			@Override

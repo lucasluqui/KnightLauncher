@@ -15,6 +15,14 @@ public class Language {
 	
 	private static Properties prop = new Properties();
 	private static InputStream propStream = null;
+	public static String[] AVAILABLE_LANGUAGES = {
+			"English",
+			"Español",
+			"Deutsche",
+			"Português",
+			"Français",
+			"日本語"
+	};
 	
 	public static void setup() {
 		propStream = Language.class.getResourceAsStream("/lang/lang_" + Settings.lang + ".properties");
@@ -59,7 +67,11 @@ public class Language {
 	public static String getLangName(String code) {
 		switch(code) {
 		case "en": return "English";
-		case "es": return "Espa�ol";
+		case "es": return "Español";
+		case "de": return "Deutsche";
+		case "pt": return "Português";
+		case "fr": return "Français";
+		case "jp": return "日本語";
 		}
 		return null;
 	}
@@ -67,7 +79,11 @@ public class Language {
 	public static String getLangCode(String detailed) {
 		switch(detailed) {
 		case "English": return "en";
-		case "Espa�ol": return "es";
+		case "Español": return "es";
+		case "Deutsche": return "de";
+		case "Português": return "pt";
+		case "Français": return "fr";
+		case "日本語": return "jp";
 		}
 		return null;
 	}
