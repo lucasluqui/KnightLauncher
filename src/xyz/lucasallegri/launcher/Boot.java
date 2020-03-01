@@ -82,7 +82,7 @@ public class Boot {
 			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
 					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
 			DesktopUtil.openDir(SteamUtil.getGamePathWindows());
-			return;
+			System.exit(1);;
 		}
 	}
 	
