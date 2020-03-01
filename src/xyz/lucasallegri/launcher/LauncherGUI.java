@@ -84,9 +84,6 @@ public class LauncherGUI {
 		imageContainer.setBounds(10, 10, 514, 311);
 		imageContainer.setFont(Fonts.fontRegBig);
 		imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		
-		
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
 		modButton = new JButton(Language.getValue("b.mods"));
