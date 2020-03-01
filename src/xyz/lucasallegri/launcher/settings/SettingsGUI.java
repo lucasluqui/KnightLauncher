@@ -68,12 +68,12 @@ public class SettingsGUI {
 		settingsGUIFrame.getContentPane().add(sepLauncherSettings);
 		
 		JLabel labelChoicePlatform = new JLabel(Language.getValue("m.platform"));
-		labelChoicePlatform.setBounds(15, 59, 48, 14);
+		labelChoicePlatform.setBounds(15, 59, 65, 14);
 		labelChoicePlatform.setFont(Fonts.fontReg);
 		settingsGUIFrame.getContentPane().add(labelChoicePlatform);
 		
 		choicePlatform = new Choice();
-		choicePlatform.setBounds(80, 55, 83, 20);
+		choicePlatform.setBounds(100, 55, 83, 20);
 		choicePlatform.setFont(Fonts.fontReg);
 		choicePlatform.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choicePlatform);
@@ -93,7 +93,7 @@ public class SettingsGUI {
 		settingsGUIFrame.getContentPane().add(labelLanguage);
 		
 		choiceLanguage = new Choice();
-		choiceLanguage.setBounds(80, 100, 83, 20);
+		choiceLanguage.setBounds(100, 100, 83, 20);
 		choiceLanguage.setFont(Fonts.fontReg);
 		choiceLanguage.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choiceLanguage);
@@ -108,7 +108,7 @@ public class SettingsGUI {
 		});
 		
 		checkboxRebuilds = new JCheckBox(Language.getValue("m.rebuilds"));
-		checkboxRebuilds.setBounds(11, 141, 97, 23);
+		checkboxRebuilds.setBounds(11, 141, 139, 23);
 		checkboxRebuilds.setFont(Fonts.fontReg);
 		checkboxRebuilds.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
@@ -144,7 +144,7 @@ public class SettingsGUI {
 		});
 		
 		checkboxShortcut = new JCheckBox(Language.getValue("m.create_shortcut"));
-		checkboxShortcut.setBounds(11, 185, 123, 23);
+		checkboxShortcut.setBounds(11, 185, 139, 23);
 		checkboxShortcut.setFont(Fonts.fontReg);
 		checkboxShortcut.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxShortcut);
@@ -172,7 +172,7 @@ public class SettingsGUI {
 		Choice choiceMemory = new Choice();
 		choiceMemory.setFont(Fonts.fontReg);
 		choiceMemory.setFocusable(false);
-		choiceMemory.setBounds(125, 261, 115, 20);
+		choiceMemory.setBounds(125, 261, 125, 20);
 		settingsGUIFrame.getContentPane().add(choiceMemory);
 		choiceMemory.add(Language.getValue("o.memory_default"));
 		choiceMemory.add(Language.getValue("o.memory_low"));
@@ -187,17 +187,17 @@ public class SettingsGUI {
 		
 		JCheckBox checkboxG1GC = new JCheckBox(Language.getValue("m.use_g1gc"));
 		checkboxG1GC.setFont(Fonts.fontReg);
-		checkboxG1GC.setBounds(11, 317, 97, 23);
+		checkboxG1GC.setBounds(11, 317, 176, 23);
 		settingsGUIFrame.getContentPane().add(checkboxG1GC);
 		
 		JCheckBox checkboxExplicitGC = new JCheckBox(Language.getValue("m.disable_explicit_gc"));
 		checkboxExplicitGC.setFont(Fonts.fontReg);
-		checkboxExplicitGC.setBounds(11, 339, 139, 23);
+		checkboxExplicitGC.setBounds(11, 339, 176, 23);
 		settingsGUIFrame.getContentPane().add(checkboxExplicitGC);
 		
 		JCheckBox checkboxUndecorated = new JCheckBox(Language.getValue("m.undecorated_window"));
 		checkboxUndecorated.setFont(Fonts.fontReg);
-		checkboxUndecorated.setBounds(11, 361, 139, 23);
+		checkboxUndecorated.setBounds(11, 361, 176, 23);
 		settingsGUIFrame.getContentPane().add(checkboxUndecorated);
 		
 		JEditorPane argumentsPane = new JEditorPane();
