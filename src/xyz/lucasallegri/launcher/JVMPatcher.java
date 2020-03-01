@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
-import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.FileUtil;
