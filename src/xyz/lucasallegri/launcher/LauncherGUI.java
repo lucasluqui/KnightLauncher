@@ -2,6 +2,7 @@ package xyz.lucasallegri.launcher;
 
 import xyz.lucasallegri.launcher.LauncherEventHandler;
 import xyz.lucasallegri.launcher.mods.ModListGUI;
+import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ImageUtil;
@@ -71,7 +72,8 @@ public class LauncherGUI {
 			}
 		});
 		
-		Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL, 514, 311);
+		String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
+		Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 514, 311);
 		if(eventImage == null) {
 			imageContainer = new JLabel(Language.getValue("error.event_image_missing"));
 		} else {
