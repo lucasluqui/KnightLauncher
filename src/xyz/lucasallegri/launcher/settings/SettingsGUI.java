@@ -172,7 +172,7 @@ public class SettingsGUI {
 		Choice choiceMemory = new Choice();
 		choiceMemory.setFont(Fonts.fontReg);
 		choiceMemory.setFocusable(false);
-		choiceMemory.setBounds(125, 261, 125, 20);
+		choiceMemory.setBounds(125, 261, 135, 20);
 		settingsGUIFrame.getContentPane().add(choiceMemory);
 		choiceMemory.add(Language.getValue("o.memory_default"));
 		choiceMemory.add(Language.getValue("o.memory_low"));
