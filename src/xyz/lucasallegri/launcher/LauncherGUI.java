@@ -1,5 +1,6 @@
 package xyz.lucasallegri.launcher;
 
+import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.LauncherEventHandler;
 import xyz.lucasallegri.launcher.mods.ModListGUI;
 import xyz.lucasallegri.launcher.settings.Settings;
@@ -12,6 +13,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
@@ -136,6 +139,13 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(launchState);
 		
 		launcherGUIFrame.setLocationRelativeTo(null);
+		
+		launcherGUIFrame.addWindowListener(new WindowAdapter() {
+		    @Override
+		    public void windowClosed(WindowEvent windowEvent) {
+		        DiscordInstance.stop();
+		    }
+		});
 		
 		Boot.onBootEnd();
 		
