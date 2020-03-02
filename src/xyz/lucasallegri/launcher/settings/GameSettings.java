@@ -17,6 +17,8 @@ public class GameSettings {
 			if(Settings.gameUseG1GC) writer.println("-XX:+UseG1GC");
 			if(Settings.gameDisableExplicitGC) writer.println("-XX:+DisableExplicitGC");
 			if(Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
+			writer.println("-Xms" + (Settings.gameMemory / 2) + "M");
+			writer.println("-Xmx" + Settings.gameMemory + "M");
 			writer.println(Settings.gameAdditionalArgs);
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {

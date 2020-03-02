@@ -9,6 +9,7 @@ public class Settings {
 	public static Boolean keepOpen = false;
 	public static Boolean createShortcut = true;
 	public static Boolean jvmPatched = false;
+	public static Integer gameMemory = 512;
 	public static Boolean gameUseStringDeduplication = false;
 	public static Boolean gameUseG1GC = false;
 	public static Boolean gameDisableExplicitGC = false;
