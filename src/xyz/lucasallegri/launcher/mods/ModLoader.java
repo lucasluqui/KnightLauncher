@@ -16,7 +16,7 @@ import xyz.lucasallegri.util.FileUtil;
 public class ModLoader {
 	
 	public static Boolean modLoadFinished = false;
-	public static Boolean rebuildJars = false;
+	public static Boolean rebuildFiles = false;
 	
 	public static void checkInstalled() {
 		
@@ -44,13 +44,13 @@ public class ModLoader {
 					if(hash.startsWith(fileHash)) continue;
 					new File(hashFilePath).delete();
 					FileUtil.writeFile(hashFilePath, hash);
-					rebuildJars = true;
+					rebuildFiles = true;
 				} catch (IOException e) {
 					KnightLog.logException(e);
 				}
 			} else {
 				FileUtil.writeFile(hashFilePath, hash);
-				rebuildJars = true;
+				rebuildFiles = true;
 			}
 		}
 		
@@ -59,7 +59,7 @@ public class ModLoader {
 		 */
 		if(Integer.parseInt(SettingsProperties.getValue("lastModCount")) != ModList.installedMods.size()) {
 			SettingsProperties.setValue("lastModCount", Integer.toString(ModList.installedMods.size()));
-			rebuildJars = true;
+			rebuildFiles = true;
 		}
 		
 	}
@@ -127,7 +127,7 @@ public class ModLoader {
 			
 			ProgressBar.setBarValue(jarFiles.length + 1);
 			ProgressBar.setState(Language.getValue("m.rebuild_complete"));
-			rebuildJars = false;
+			rebuildFiles = false;
 			LauncherGUI.launchButton.setEnabled(true);
 			LauncherGUI.settingsButton.setEnabled(true);
 			try { SettingsGUI.forceRebuildButton.setEnabled(true); } catch(Exception e) {}
