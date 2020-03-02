@@ -197,6 +197,7 @@ public class SettingsGUI {
 		checkboxStringDeduplication = new JCheckBox(Language.getValue("m.use_string_deduplication"));
 		checkboxStringDeduplication.setFont(Fonts.fontReg);
 		checkboxStringDeduplication.setBounds(11, 295, 249, 23);
+		checkboxStringDeduplication.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxStringDeduplication);
 		checkboxStringDeduplication.setSelected(Settings.gameUseStringDeduplication);
 		checkboxStringDeduplication.addActionListener(new ActionListener() {
@@ -208,6 +209,7 @@ public class SettingsGUI {
 		checkboxG1GC = new JCheckBox(Language.getValue("m.use_g1gc"));
 		checkboxG1GC.setFont(Fonts.fontReg);
 		checkboxG1GC.setBounds(11, 317, 249, 23);
+		checkboxG1GC.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxG1GC);
 		checkboxG1GC.setSelected(Settings.gameUseG1GC);
 		checkboxG1GC.addActionListener(new ActionListener() {
@@ -219,6 +221,7 @@ public class SettingsGUI {
 		checkboxExplicitGC = new JCheckBox(Language.getValue("m.disable_explicit_gc"));
 		checkboxExplicitGC.setFont(Fonts.fontReg);
 		checkboxExplicitGC.setBounds(11, 339, 249, 23);
+		checkboxExplicitGC.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxExplicitGC);
 		checkboxExplicitGC.setSelected(Settings.gameDisableExplicitGC);
 		checkboxExplicitGC.addActionListener(new ActionListener() {
@@ -230,6 +233,7 @@ public class SettingsGUI {
 		checkboxUndecorated = new JCheckBox(Language.getValue("m.undecorated_window"));
 		checkboxUndecorated.setFont(Fonts.fontReg);
 		checkboxUndecorated.setBounds(11, 361, 249, 23);
+		checkboxUndecorated.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxUndecorated);
 		checkboxUndecorated.setSelected(Settings.gameUndecoratedWindow);
 		checkboxUndecorated.addActionListener(new ActionListener() {
