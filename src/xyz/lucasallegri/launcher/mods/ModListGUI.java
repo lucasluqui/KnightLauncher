@@ -48,7 +48,7 @@ public class ModListGUI {
 	private void initialize() {
 		modListGUIFrame = new JFrame();
 		modListGUIFrame.setTitle(Language.getValue("t.mods"));
-		modListGUIFrame.setBounds(100, 100, 390, 410);
+		modListGUIFrame.setBounds(100, 100, 385, 405);
 		modListGUIFrame.setResizable(false);
 		modListGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		modListGUIFrame.getContentPane().setLayout(null);

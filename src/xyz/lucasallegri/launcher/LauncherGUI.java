@@ -87,7 +87,7 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
 		modButton = new JButton(Language.getValue("b.mods"));
-		modButton.setBounds(529, 375, 89, 23);
+		modButton.setBounds(530, 375, 89, 23);
 		modButton.setFont(Fonts.fontMed);
 		modButton.setFocusPainted(false);
 		modButton.setFocusable(false);
@@ -100,7 +100,7 @@ public class LauncherGUI {
 		});
 		
 		settingsButton = new JButton(Language.getValue("b.settings"));
-		settingsButton.setBounds(622, 375, 100, 23);
+		settingsButton.setBounds(628, 375, 100, 23);
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
