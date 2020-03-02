@@ -21,7 +21,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import javax.swing.JEditorPane;
-import javax.swing.DropMode;
 
 public class SettingsGUI {
 
@@ -32,6 +31,11 @@ public class SettingsGUI {
 	public static JCheckBox checkboxKeepOpen;
 	public static JButton forceRebuildButton;
 	public static JCheckBox checkboxShortcut;
+	public static JCheckBox checkboxStringDeduplication;
+	public static JCheckBox checkboxG1GC;
+	public static JCheckBox checkboxExplicitGC;
+	public static JCheckBox checkboxUndecorated;
+	public static JEditorPane argumentsPane;
 
 	public static void compose() {
 		EventQueue.invokeLater(new Runnable() {
@@ -181,35 +185,60 @@ public class SettingsGUI {
 		choiceMemory.add(Language.getValue("o.memory_high"));
 		choiceMemory.add(Language.getValue("o.memory_flex"));
 		
-		JCheckBox checkboxStringDeduplication = new JCheckBox(Language.getValue("m.use_string_deduplication"));
+		checkboxStringDeduplication = new JCheckBox(Language.getValue("m.use_string_deduplication"));
 		checkboxStringDeduplication.setFont(Fonts.fontReg);
 		checkboxStringDeduplication.setBounds(11, 295, 249, 23);
 		settingsGUIFrame.getContentPane().add(checkboxStringDeduplication);
+		checkboxStringDeduplication.setSelected(Settings.gameUseStringDeduplication);
+		checkboxStringDeduplication.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.useStringDeduplicationChangeEvent(_action);
+			}
+		});
 		
-		JCheckBox checkboxG1GC = new JCheckBox(Language.getValue("m.use_g1gc"));
+		checkboxG1GC = new JCheckBox(Language.getValue("m.use_g1gc"));
 		checkboxG1GC.setFont(Fonts.fontReg);
 		checkboxG1GC.setBounds(11, 317, 249, 23);
 		settingsGUIFrame.getContentPane().add(checkboxG1GC);
+		checkboxG1GC.setSelected(Settings.gameUseG1GC);
+		checkboxG1GC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.useG1GCChangeEvent(_action);
+			}
+		});
 		
-		JCheckBox checkboxExplicitGC = new JCheckBox(Language.getValue("m.disable_explicit_gc"));
+		checkboxExplicitGC = new JCheckBox(Language.getValue("m.disable_explicit_gc"));
 		checkboxExplicitGC.setFont(Fonts.fontReg);
 		checkboxExplicitGC.setBounds(11, 339, 249, 23);
 		settingsGUIFrame.getContentPane().add(checkboxExplicitGC);
+		checkboxExplicitGC.setSelected(Settings.gameDisableExplicitGC);
+		checkboxExplicitGC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.disableExplicitGCChangeEvent(_action);
+			}
+		});
 		
-		JCheckBox checkboxUndecorated = new JCheckBox(Language.getValue("m.undecorated_window"));
+		checkboxUndecorated = new JCheckBox(Language.getValue("m.undecorated_window"));
 		checkboxUndecorated.setFont(Fonts.fontReg);
 		checkboxUndecorated.setBounds(11, 361, 249, 23);
 		settingsGUIFrame.getContentPane().add(checkboxUndecorated);
-		
-		JEditorPane argumentsPane = new JEditorPane();
-		argumentsPane.setFont(Fonts.fontReg);
-		argumentsPane.setBounds(11, 421, 272, 85);
-		settingsGUIFrame.getContentPane().add(argumentsPane);
+		checkboxUndecorated.setSelected(Settings.gameUndecoratedWindow);
+		checkboxUndecorated.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.undecoratedWindowChangeEvent(_action);
+			}
+		});
 		
 		JLabel labelArgumentsPane = new JLabel(Language.getValue("m.additional_args"));
 		labelArgumentsPane.setFont(Fonts.fontMed);
 		labelArgumentsPane.setBounds(13, 400, 271, 14);
 		settingsGUIFrame.getContentPane().add(labelArgumentsPane);
+		
+		argumentsPane = new JEditorPane();
+		argumentsPane.setFont(Fonts.fontReg);
+		argumentsPane.setBounds(11, 421, 272, 85);
+		settingsGUIFrame.getContentPane().add(argumentsPane);
+		argumentsPane.setText(Settings.gameAdditionalArgs);
 		
 		settingsGUIFrame.setLocationRelativeTo(null);
 		
@@ -217,6 +246,7 @@ public class SettingsGUI {
 		    @Override
 		    public void windowClosed(WindowEvent windowEvent) {
 		        LauncherGUI.settingsButton.setEnabled(true);
+		        SettingsEventHandler.saveAdditionalArgs();
 		    }
 		});
 		

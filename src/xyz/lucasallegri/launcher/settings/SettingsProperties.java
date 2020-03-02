@@ -38,12 +38,17 @@ public class SettingsProperties {
 	private static void fillWithBaseProp() throws IOException {
 		String baseProp = 	"PROP_VER=" + PROP_VER + System.lineSeparator() +
 							"lastModCount=0" + System.lineSeparator() +
-							"platform=Steam" + System.lineSeparator() +
+							"game.platform=Steam" + System.lineSeparator() +
 							"rebuilds=true"  + System.lineSeparator() +
 							"keepOpen=false" + System.lineSeparator() +
 							"createShortcut=true" + System.lineSeparator() +
 							"jvmPatched=false" + System.lineSeparator() +
-							"lang=en";
+							"lang=en" + System.lineSeparator() +
+							"game.useStringDeduplication=false" + System.lineSeparator() +
+							"game.useG1GC=false" + System.lineSeparator() +
+							"game.disableExplicitGC=false" + System.lineSeparator() +
+							"game.undecoratedWindow=false" + System.lineSeparator() +
+							"game.additionalArgs=";
 		BufferedWriter writer = new BufferedWriter(new FileWriter(propPath, true));
 		writer.append(baseProp);
 		writer.close();
@@ -69,12 +74,17 @@ public class SettingsProperties {
 	}
 	
 	public static void loadFromProp() {
-		Settings.gamePlatform = getValue("platform");
+		Settings.gamePlatform = getValue("game.platform");
 		Settings.doRebuilds = Boolean.parseBoolean(getValue("rebuilds"));
 		Settings.keepOpen = Boolean.parseBoolean(getValue("keepOpen"));
 		Settings.createShortcut = Boolean.parseBoolean(getValue("createShortcut"));
 		Settings.jvmPatched = Boolean.parseBoolean(getValue("jvmPatched"));
 		Settings.lang = getValue("lang");
+		Settings.gameUseStringDeduplication = Boolean.parseBoolean(getValue("game.useStringDeduplication"));
+		Settings.gameUseG1GC = Boolean.parseBoolean(getValue("game.useG1GC"));
+		Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));
+		Settings.gameUndecoratedWindow = Boolean.parseBoolean(getValue("game.undecoratedWindow"));
+		Settings.gameAdditionalArgs = getValue("game.additionalArgs");
 	}
 	
 }
