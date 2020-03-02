@@ -125,7 +125,7 @@ public class SettingsGUI {
 		});
 		
 		checkboxKeepOpen = new JCheckBox(Language.getValue("m.keep_open"));
-		checkboxKeepOpen.setBounds(11, 163, 139, 23);
+		checkboxKeepOpen.setBounds(11, 163, 270, 23);
 		checkboxKeepOpen.setFont(Fonts.fontReg);
 		checkboxKeepOpen.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxKeepOpen);
@@ -171,13 +171,13 @@ public class SettingsGUI {
 		
 		JLabel labelMemory = new JLabel(Language.getValue("m.allocated_memory"));
 		labelMemory.setFont(Fonts.fontReg);
-		labelMemory.setBounds(15, 265, 93, 14);
+		labelMemory.setBounds(15, 265, 124, 14);
 		settingsGUIFrame.getContentPane().add(labelMemory);
 		
 		Choice choiceMemory = new Choice();
 		choiceMemory.setFont(Fonts.fontReg);
 		choiceMemory.setFocusable(false);
-		choiceMemory.setBounds(125, 261, 135, 20);
+		choiceMemory.setBounds(145, 261, 135, 20);
 		settingsGUIFrame.getContentPane().add(choiceMemory);
 		choiceMemory.add(Language.getValue("o.memory_default"));
 		choiceMemory.add(Language.getValue("o.memory_low"));

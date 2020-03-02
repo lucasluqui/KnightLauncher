@@ -63,7 +63,7 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().setLayout(null);
 		
 		launchButton = new JButton(Language.getValue("b.launch"));
-		launchButton.setBounds(17, 350, 155, 48);
+		launchButton.setBounds(14, 350, 155, 48);
 		launchButton.setFont(Fonts.fontMedBig);
 		launchButton.setFocusPainted(false);
 		launchButton.setFocusable(false);
@@ -87,7 +87,7 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
 		modButton = new JButton(Language.getValue("b.mods"));
-		modButton.setBounds(537, 375, 89, 23);
+		modButton.setBounds(529, 375, 89, 23);
 		modButton.setFont(Fonts.fontMed);
 		modButton.setFocusPainted(false);
 		modButton.setFocusable(false);
@@ -100,7 +100,7 @@ public class LauncherGUI {
 		});
 		
 		settingsButton = new JButton(Language.getValue("b.settings"));
-		settingsButton.setBounds(632, 375, 89, 23);
+		settingsButton.setBounds(622, 375, 100, 23);
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
@@ -124,12 +124,12 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(tweetsContainer);
 		
 		launchProgressBar = new JProgressBar();
-		launchProgressBar.setBounds(182, 375, 342, 23);
+		launchProgressBar.setBounds(179, 375, 342, 23);
 		launchProgressBar.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchProgressBar);
 		
 		launchState = new JLabel("");
-		launchState.setBounds(183, 356, 325, 14);
+		launchState.setBounds(180, 356, 325, 14);
 		launchState.setFont(Fonts.fontReg);
 		launchState.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchState);
