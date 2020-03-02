@@ -21,6 +21,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class SettingsGUI {
 
@@ -186,7 +188,7 @@ public class SettingsGUI {
 		choiceMemory.add(Language.getValue("o.memory_med"));
 		choiceMemory.add(Language.getValue("o.memory_high"));
 		choiceMemory.add(Language.getValue("o.memory_flex"));
-		choiceMemory.select(parseSelectedMemoryAsIndex());
+		choiceMemory.select(parseSelectedMemoryIndex());
 		choiceMemory.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
@@ -249,9 +251,15 @@ public class SettingsGUI {
 		
 		argumentsPane = new JEditorPane();
 		argumentsPane.setFont(Fonts.fontReg);
-		argumentsPane.setBounds(11, 421, 272, 85);
+		argumentsPane.setBounds(11, 421, 255, 85);
 		settingsGUIFrame.getContentPane().add(argumentsPane);
 		argumentsPane.setText(Settings.gameAdditionalArgs);
+		
+		JScrollPane scrollBar = new JScrollPane(argumentsPane);
+		scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollBar.setBounds(11, 421, 272, 85);
+		settingsGUIFrame.getContentPane().add(scrollBar);
 		
 		settingsGUIFrame.setLocationRelativeTo(null);
 		
@@ -276,7 +284,7 @@ public class SettingsGUI {
 		return 512;
 	}
 	
-	public static int parseSelectedMemoryAsIndex() {
+	public static int parseSelectedMemoryIndex() {
 		switch(Settings.gameMemory) {
 		case 512: return 0;
 		case 1024: return 1;
