@@ -109,7 +109,7 @@ public class SettingsGUI {
 		});
 		
 		checkboxRebuilds = new JCheckBox(Language.getValue("m.rebuilds"));
-		checkboxRebuilds.setBounds(11, 141, 139, 23);
+		checkboxRebuilds.setBounds(11, 141, 270, 23);
 		checkboxRebuilds.setFont(Fonts.fontReg);
 		checkboxRebuilds.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
@@ -183,22 +183,22 @@ public class SettingsGUI {
 		
 		JCheckBox checkboxStringDeduplication = new JCheckBox(Language.getValue("m.use_string_deduplication"));
 		checkboxStringDeduplication.setFont(Fonts.fontReg);
-		checkboxStringDeduplication.setBounds(11, 295, 176, 23);
+		checkboxStringDeduplication.setBounds(11, 295, 249, 23);
 		settingsGUIFrame.getContentPane().add(checkboxStringDeduplication);
 		
 		JCheckBox checkboxG1GC = new JCheckBox(Language.getValue("m.use_g1gc"));
 		checkboxG1GC.setFont(Fonts.fontReg);
-		checkboxG1GC.setBounds(11, 317, 176, 23);
+		checkboxG1GC.setBounds(11, 317, 249, 23);
 		settingsGUIFrame.getContentPane().add(checkboxG1GC);
 		
 		JCheckBox checkboxExplicitGC = new JCheckBox(Language.getValue("m.disable_explicit_gc"));
 		checkboxExplicitGC.setFont(Fonts.fontReg);
-		checkboxExplicitGC.setBounds(11, 339, 176, 23);
+		checkboxExplicitGC.setBounds(11, 339, 249, 23);
 		settingsGUIFrame.getContentPane().add(checkboxExplicitGC);
 		
 		JCheckBox checkboxUndecorated = new JCheckBox(Language.getValue("m.undecorated_window"));
 		checkboxUndecorated.setFont(Fonts.fontReg);
-		checkboxUndecorated.setBounds(11, 361, 176, 23);
+		checkboxUndecorated.setBounds(11, 361, 249, 23);
 		settingsGUIFrame.getContentPane().add(checkboxUndecorated);
 		
 		JEditorPane argumentsPane = new JEditorPane();
