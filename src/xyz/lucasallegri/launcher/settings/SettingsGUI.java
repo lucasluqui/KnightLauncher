@@ -188,7 +188,7 @@ public class SettingsGUI {
 		choiceMemory.add(Language.getValue("o.memory_med"));
 		choiceMemory.add(Language.getValue("o.memory_high"));
 		choiceMemory.add(Language.getValue("o.memory_flex"));
-		choiceMemory.select(parseSelectedMemoryIndex());
+		choiceMemory.select(parseSelectedMemoryAsIndex());
 		choiceMemory.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
@@ -284,7 +284,7 @@ public class SettingsGUI {
 		return 512;
 	}
 	
-	public static int parseSelectedMemoryIndex() {
+	public static int parseSelectedMemoryAsIndex() {
 		switch(Settings.gameMemory) {
 		case 512: return 0;
 		case 1024: return 1;
