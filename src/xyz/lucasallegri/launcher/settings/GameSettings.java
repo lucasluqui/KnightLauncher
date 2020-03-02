@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
+import xyz.lucasallegri.launcher.Language;
+import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.logging.KnightLog;
 
 public class GameSettings {
@@ -13,6 +15,7 @@ public class GameSettings {
 		try {
 			new File("extra.txt").delete();
 			PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");
+			ProgressBar.setState(Language.getValue("m.gamesettings_loading"));
 			if(Settings.gameUseStringDeduplication) writer.println("-XX:+UseStringDeduplication");
 			if(Settings.gameUseG1GC) writer.println("-XX:+UseG1GC");
 			if(Settings.gameDisableExplicitGC) writer.println("-XX:+DisableExplicitGC");
@@ -21,6 +24,7 @@ public class GameSettings {
 			writer.println("-Xmx" + Settings.gameMemory + "M");
 			writer.println(Settings.gameAdditionalArgs);
 			writer.close();
+			ProgressBar.setState(Language.getValue("m.gamesettings_loaded"));
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			KnightLog.logException(e);
 		}
