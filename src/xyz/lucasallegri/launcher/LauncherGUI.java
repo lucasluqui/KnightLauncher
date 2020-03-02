@@ -100,7 +100,7 @@ public class LauncherGUI {
 		});
 		
 		settingsButton = new JButton(Language.getValue("b.settings"));
-		settingsButton.setBounds(628, 375, 100, 23);
+		settingsButton.setBounds(626, 375, 100, 23);
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
