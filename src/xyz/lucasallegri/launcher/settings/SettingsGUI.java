@@ -27,6 +27,7 @@ public class SettingsGUI {
 	public static JFrame settingsGUIFrame;
 	public static Choice choicePlatform;
 	public static Choice choiceLanguage;
+	public static Choice choiceMemory;
 	public static JCheckBox checkboxRebuilds;
 	public static JCheckBox checkboxKeepOpen;
 	public static JButton forceRebuildButton;
@@ -175,7 +176,7 @@ public class SettingsGUI {
 		labelMemory.setBounds(15, 265, 124, 14);
 		settingsGUIFrame.getContentPane().add(labelMemory);
 		
-		Choice choiceMemory = new Choice();
+		choiceMemory = new Choice();
 		choiceMemory.setFont(Fonts.fontReg);
 		choiceMemory.setFocusable(false);
 		choiceMemory.setBounds(145, 261, 135, 20);
@@ -185,6 +186,13 @@ public class SettingsGUI {
 		choiceMemory.add(Language.getValue("o.memory_med"));
 		choiceMemory.add(Language.getValue("o.memory_high"));
 		choiceMemory.add(Language.getValue("o.memory_flex"));
+		choiceMemory.select(parseSelectedMemoryAsIndex());
+		choiceMemory.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				SettingsEventHandler.memoryChangeEvent(event);
+			}
+		});
 		
 		checkboxStringDeduplication = new JCheckBox(Language.getValue("m.use_string_deduplication"));
 		checkboxStringDeduplication.setFont(Fonts.fontReg);
@@ -252,4 +260,27 @@ public class SettingsGUI {
 		});
 		
 	}
+	
+	public static int parseSelectedMemoryAsInt() {
+		switch(choiceMemory.getSelectedIndex()) {
+		case 0: return 512;
+		case 1: return 1024;
+		case 2: return 2048;
+		case 3: return 4096;
+		case 4: return 8192;
+		}
+		return 512;
+	}
+	
+	public static int parseSelectedMemoryAsIndex() {
+		switch(Settings.gameMemory) {
+		case 512: return 0;
+		case 1024: return 1;
+		case 2048: return 2;
+		case 4096: return 3;
+		case 8192: return 4;
+		}
+		return 0;
+	}
+	
 }

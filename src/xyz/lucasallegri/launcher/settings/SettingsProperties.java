@@ -48,7 +48,8 @@ public class SettingsProperties {
 							"game.useG1GC=false" + System.lineSeparator() +
 							"game.disableExplicitGC=false" + System.lineSeparator() +
 							"game.undecoratedWindow=false" + System.lineSeparator() +
-							"game.additionalArgs=";
+							"game.additionalArgs=" + System.lineSeparator() +
+							"game.memory=512";
 		BufferedWriter writer = new BufferedWriter(new FileWriter(propPath, true));
 		writer.append(baseProp);
 		writer.close();
@@ -85,6 +86,7 @@ public class SettingsProperties {
 		Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));
 		Settings.gameUndecoratedWindow = Boolean.parseBoolean(getValue("game.undecoratedWindow"));
 		Settings.gameAdditionalArgs = getValue("game.additionalArgs");
+		Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
 	}
 	
 }

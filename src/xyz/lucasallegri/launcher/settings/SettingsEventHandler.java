@@ -63,5 +63,10 @@ public class SettingsEventHandler {
 		Settings.gameAdditionalArgs = SettingsGUI.argumentsPane.getText();
 		SettingsProperties.setValue("game.additionalArgs", SettingsGUI.argumentsPane.getText());
 	}
+	
+	public static void memoryChangeEvent(ItemEvent event) {
+		Settings.gameMemory = SettingsGUI.parseSelectedMemoryAsInt();
+		SettingsProperties.setValue("game.memory", String.valueOf(SettingsGUI.parseSelectedMemoryAsInt()));
+	}
 
 }
