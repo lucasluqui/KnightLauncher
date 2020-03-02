@@ -1,6 +1,7 @@
 package xyz.lucasallegri.launcher;
 
 import xyz.lucasallegri.launcher.mods.ModLoader;
+import xyz.lucasallegri.launcher.settings.GameSettings;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ProcessUtil;
@@ -19,6 +20,7 @@ public class LauncherEventHandler {
 				ProgressBar.showState(true);
 				
 				ModLoader.mount();
+				GameSettings.load();
 				
 				if(ModLoader.modLoadFinished) {
 					if(Settings.gamePlatform.startsWith("Steam")) {
