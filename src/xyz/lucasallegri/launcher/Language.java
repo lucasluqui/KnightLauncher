@@ -16,7 +16,7 @@ public class Language {
 			"English",
 			"Español",
 			"Deutsch",
-			"Português",
+			"Português (Brasil)",
 			"Français",
 			"日本語"
 	};
@@ -66,7 +66,7 @@ public class Language {
 		case "en": return "English";
 		case "es": return "Español";
 		case "de": return "Deutsch";
-		case "pt": return "Português";
+		case "pt-br": return "Português (Brasil)";
 		case "fr": return "Français";
 		case "jp": return "日本語";
 		}
@@ -78,7 +78,7 @@ public class Language {
 		case "English": return "en";
 		case "Español": return "es";
 		case "Deutsch": return "de";
-		case "Português": return "pt";
+		case "Português (Brasil)": return "pt-br";
 		case "Français": return "fr";
 		case "日本語": return "jp";
 		}
