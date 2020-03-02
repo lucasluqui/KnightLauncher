@@ -10,7 +10,7 @@ public class SettingsEventHandler {
 	
 	public static void platformChangeEvent(ItemEvent event) {
 		Settings.gamePlatform = SettingsGUI.choicePlatform.getSelectedItem();
-		SettingsProperties.setValue("platform", SettingsGUI.choicePlatform.getSelectedItem());
+		SettingsProperties.setValue("game.platform", SettingsGUI.choicePlatform.getSelectedItem());
 	}
 	
 	public static void rebuildsChangeEvent(ActionEvent event) {
