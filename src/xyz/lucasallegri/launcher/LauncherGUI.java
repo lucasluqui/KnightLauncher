@@ -91,6 +91,7 @@ public class LauncherGUI {
 		modButton.setFont(Fonts.fontMed);
 		modButton.setFocusPainted(false);
 		modButton.setFocusable(false);
+		modButton.setToolTipText(Language.getValue("b.mods"));
 		launcherGUIFrame.getContentPane().add(modButton);
 		modButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
@@ -104,6 +105,7 @@ public class LauncherGUI {
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
+		settingsButton.setToolTipText(Language.getValue("b.settings"));
 		launcherGUIFrame.getContentPane().add(settingsButton);
 		settingsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {

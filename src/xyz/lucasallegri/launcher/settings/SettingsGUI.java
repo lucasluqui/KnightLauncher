@@ -141,6 +141,7 @@ public class SettingsGUI {
 		forceRebuildButton.setFont(Fonts.fontMed);
 		forceRebuildButton.setFocusPainted(false);
 		forceRebuildButton.setFocusable(false);
+		forceRebuildButton.setToolTipText(Language.getValue("b.force_rebuild"));
 		settingsGUIFrame.getContentPane().add(forceRebuildButton);
 		forceRebuildButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
