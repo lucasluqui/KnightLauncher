@@ -10,7 +10,7 @@ public class ModListEventHandler {
 	public static void refreshEvent(ActionEvent action) {
 		
 		ModLoader.checkInstalled();
-		if(ModLoader.rebuildFiles) { ModLoader.startJarRebuild(); }
+		if(ModLoader.rebuildFiles) { ModLoader.startFileRebuild(); }
 		ModListGUI.modListGUIFrame.dispose();
 		ModListGUI.compose();
 		

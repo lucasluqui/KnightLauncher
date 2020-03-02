@@ -49,7 +49,7 @@ public class Boot {
 		if(!Settings.jvmPatched && SystemUtil.is64Bit()) JVMPatcher.start();
 		
 		ModLoader.checkInstalled();
-		if(Settings.doRebuilds && ModLoader.rebuildFiles) ModLoader.startJarRebuild();
+		if(Settings.doRebuilds && ModLoader.rebuildFiles) ModLoader.startFileRebuild();
 		
 		DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
 		

@@ -92,19 +92,19 @@ public class ModLoader {
 		
 	}
 	
-	public static void startJarRebuild() {
+	public static void startFileRebuild() {
 		ProgressBar.showBar(true);
 		ProgressBar.showState(true);
 		
 		Thread rebuildThread = new Thread(new Runnable() {
 			public void run() {
-				rebuildJars();
+				rebuildFiles();
 			}
 		});
 		rebuildThread.start();
 	}	
 	
-	private static void rebuildJars() {
+	private static void rebuildFiles() {
 		
 		LauncherGUI.launchButton.setEnabled(false);
 		LauncherGUI.settingsButton.setEnabled(false);

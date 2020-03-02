@@ -25,7 +25,7 @@ public class SettingsEventHandler {
 	
 	public static void forceRebuildEvent() {
 		
-		ModLoader.startJarRebuild();
+		ModLoader.startFileRebuild();
 		
 	}
 	
