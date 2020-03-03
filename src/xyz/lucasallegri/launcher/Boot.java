@@ -7,6 +7,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import xyz.lucasallegri.dialog.DialogError;
+import xyz.lucasallegri.dialog.DialogWarning;
 import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.mods.ModList;
 import xyz.lucasallegri.launcher.mods.ModLoader;
@@ -15,6 +16,7 @@ import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.DesktopUtil;
 import xyz.lucasallegri.util.FileUtil;
+import xyz.lucasallegri.util.INetUtil;
 import xyz.lucasallegri.util.SteamUtil;
 import xyz.lucasallegri.util.SystemUtil;
 
@@ -41,6 +43,8 @@ public class Boot {
 		
 		setupLookAndFeel();
 		Fonts.setup();
+		
+		checkVersion();
 		
 	}
 	
@@ -100,6 +104,16 @@ public class Boot {
 										"Start KnightLauncher", 
 										LauncherConstants.LNK_FILE_NAME
 			);
+		}
+	}
+	
+	private static void checkVersion() {
+		String latestVer = INetUtil.getWebpageContent(LauncherConstants.VERSION_QUERY_URL);
+		if(latestVer != null && !latestVer.contains(LauncherConstants.VERSION)) {
+			DialogWarning.pushTranslated(Language.getValue("m.update_available", new String[] {
+					latestVer,
+					LauncherConstants.RELEASES_URL
+			}));
 		}
 	}
 
