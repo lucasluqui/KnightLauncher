@@ -100,7 +100,7 @@ public class SettingsGUI {
 		settingsGUIFrame.getContentPane().add(labelLanguage);
 		
 		choiceLanguage = new Choice();
-		choiceLanguage.setBounds(100, 100, 100, 20);
+		choiceLanguage.setBounds(100, 100, 120, 20);
 		choiceLanguage.setFont(Fonts.fontReg);
 		choiceLanguage.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choiceLanguage);
