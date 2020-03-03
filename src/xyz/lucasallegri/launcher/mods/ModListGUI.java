@@ -60,7 +60,7 @@ public class ModListGUI {
 		modListGUIFrame.getContentPane().add(modListContainer);
 		for(Mod mod : ModList.installedMods) { modListContainer.add(mod.getDisplayName()); }
 		
-		labelModCount = new JLabel(""+ModList.installedMods.size());
+		labelModCount = new JLabel(String.valueOf(ModList.installedMods.size()));
 		labelModCount.setHorizontalAlignment(SwingConstants.CENTER);
 		labelModCount.setBounds(178, 43, 176, 40);
 		labelModCount.setFont(Fonts.fontMedGiant);
@@ -72,11 +72,25 @@ public class ModListGUI {
 		labelModCountText.setFont(Fonts.fontReg);
 		modListGUIFrame.getContentPane().add(labelModCountText);
 		
+		refreshButton = new JButton(Language.getValue("b.refresh"));
+		refreshButton.setBounds(9, 342, 89, 23);
+		refreshButton.setFont(Fonts.fontMed);
+		refreshButton.setFocusPainted(false);
+		refreshButton.setFocusable(false);
+		refreshButton.setToolTipText(Language.getValue("b.refresh"));
+		modListGUIFrame.getContentPane().add(refreshButton);
+		refreshButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				ModListEventHandler.refreshEvent(_action);
+			}
+		});
+		
 		JButton modFolderButton = new JButton(Language.getValue("b.open_mods_folder"));
 		modFolderButton.setBounds(101, 342, 136, 23);
 		modFolderButton.setFont(Fonts.fontMed);
 		modFolderButton.setFocusPainted(false);
 		modFolderButton.setFocusable(false);
+		modFolderButton.setToolTipText(Language.getValue("b.open_mods_folder"));
 		modListGUIFrame.getContentPane().add(modFolderButton);
 		modFolderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
@@ -89,22 +103,11 @@ public class ModListGUI {
 		getModsButton.setFont(Fonts.fontMed);
 		getModsButton.setFocusPainted(false);
 		getModsButton.setFocusable(false);
+		getModsButton.setToolTipText(Language.getValue("b.get_mods"));
 		modListGUIFrame.getContentPane().add(getModsButton);
 		getModsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
 				ModListEventHandler.getModsEvent(_action);
-			}
-		});
-		
-		refreshButton = new JButton(Language.getValue("b.refresh"));
-		refreshButton.setBounds(9, 342, 89, 23);
-		refreshButton.setFont(Fonts.fontMed);
-		refreshButton.setFocusPainted(false);
-		refreshButton.setFocusable(false);
-		modListGUIFrame.getContentPane().add(refreshButton);
-		refreshButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent _action) {
-				ModListEventHandler.refreshEvent(_action);
 			}
 		});
 		
