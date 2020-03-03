@@ -21,9 +21,9 @@ Still under heavy development, please open an issue in case you run into a bug!
 * Reinstall your game without having to re-download anything, not a single file!
 * Basic Discord RPC implementation, not yet reflecting what you're doing in-game, but will in the future.
 * Automatic 64-bit JVM (java_vm folder) installation.
+* Intuitive and user-friendly GUI for extra.txt configuring.
 
 ## Planned features
-* Intuitive and user-friendly GUI for extra.txt configuring.
 * Enhanced Discord RPC integration that shows exactly what you're up to in the world of Cradle.
 
 ## Translators
