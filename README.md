@@ -26,6 +26,13 @@ Still under heavy development, please open an issue in case you run into a bug!
 * Intuitive and user-friendly GUI for extra.txt configuring.
 * Enhanced Discord RPC integration that shows exactly what you're up to in the world of Cradle.
 
+## Translators
+Thank you all for helping KnightLauncher, making it usable for everyone worldwide!
+* Deutsch: Deathkey and Airbee
+* Português (Brasil): Azuresh and Gugaarleo
+* French: PtitKrugger
+Would you like to help translating? Seek for information in our Discord server.
+
 
 You can join KnightLauncher's official Discord server for further assistance:
 https://discord.gg/RAf499a
