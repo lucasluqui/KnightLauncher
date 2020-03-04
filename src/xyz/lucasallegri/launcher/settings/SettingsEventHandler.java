@@ -9,8 +9,8 @@ import xyz.lucasallegri.launcher.mods.ModLoader;
 public class SettingsEventHandler {
 	
 	public static void platformChangeEvent(ItemEvent event) {
-		Settings.gamePlatform = SettingsGUI.choicePlatform.getSelectedItem();
-		SettingsProperties.setValue("game.platform", SettingsGUI.choicePlatform.getSelectedItem());
+		Settings.gamePlatform = (String)SettingsGUI.choicePlatform.getSelectedItem();
+		SettingsProperties.setValue("game.platform", (String)SettingsGUI.choicePlatform.getSelectedItem());
 	}
 	
 	public static void rebuildsChangeEvent(ActionEvent event) {
@@ -35,8 +35,8 @@ public class SettingsEventHandler {
 	}
 	
 	public static void languageChangeEvent(ItemEvent event) {
-		Settings.lang = Language.getLangCode(SettingsGUI.choiceLanguage.getSelectedItem());
-		SettingsProperties.setValue("lang", Language.getLangCode(SettingsGUI.choiceLanguage.getSelectedItem()));
+		Settings.lang = Language.getLangCode((String)SettingsGUI.choiceLanguage.getSelectedItem());
+		SettingsProperties.setValue("lang", Language.getLangCode((String)SettingsGUI.choiceLanguage.getSelectedItem()));
 	}
 	
 	public static void useStringDeduplicationChangeEvent(ActionEvent action) {

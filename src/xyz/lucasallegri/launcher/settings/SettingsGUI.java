@@ -17,7 +17,9 @@ import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 
 import java.awt.Choice;
+
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import javax.swing.JEditorPane;
@@ -27,9 +29,9 @@ import javax.swing.ScrollPaneConstants;
 public class SettingsGUI {
 
 	public static JFrame settingsGUIFrame;
-	public static Choice choicePlatform;
-	public static Choice choiceLanguage;
-	public static Choice choiceMemory;
+	public static JComboBox<String> choicePlatform;
+	public static JComboBox<String> choiceLanguage;
+	public static JComboBox<String> choiceMemory;
 	public static JCheckBox checkboxRebuilds;
 	public static JCheckBox checkboxKeepOpen;
 	public static JButton forceRebuildButton;
@@ -75,18 +77,18 @@ public class SettingsGUI {
 		settingsGUIFrame.getContentPane().add(sepLauncherSettings);
 		
 		JLabel labelChoicePlatform = new JLabel(Language.getValue("m.platform"));
-		labelChoicePlatform.setBounds(15, 59, 65, 14);
+		labelChoicePlatform.setBounds(15, 59, 95, 14);
 		labelChoicePlatform.setFont(Fonts.fontReg);
 		settingsGUIFrame.getContentPane().add(labelChoicePlatform);
 		
-		choicePlatform = new Choice();
-		choicePlatform.setBounds(100, 55, 83, 20);
+		choicePlatform = new JComboBox<String>();
+		choicePlatform.setBounds(125, 55, 105, 20);
 		choicePlatform.setFont(Fonts.fontReg);
 		choicePlatform.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choicePlatform);
-		choicePlatform.add(Language.getValue("o.steam"));
-		choicePlatform.add(Language.getValue("o.standalone"));
-		choicePlatform.select(Settings.gamePlatform);
+		choicePlatform.addItem(Language.getValue("o.steam"));
+		choicePlatform.addItem(Language.getValue("o.standalone"));
+		choicePlatform.setSelectedItem(Settings.gamePlatform);
 		choicePlatform.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
@@ -95,19 +97,19 @@ public class SettingsGUI {
 		});
 		
 		JLabel labelLanguage = new JLabel(Language.getValue("m.language"));
-		labelLanguage.setBounds(15, 104, 65, 14);
+		labelLanguage.setBounds(15, 104, 95, 14);
 		labelLanguage.setFont(Fonts.fontReg);
 		settingsGUIFrame.getContentPane().add(labelLanguage);
 		
-		choiceLanguage = new Choice();
-		choiceLanguage.setBounds(100, 100, 120, 20);
+		choiceLanguage = new JComboBox<String>();
+		choiceLanguage.setBounds(125, 100, 120, 20);
 		choiceLanguage.setFont(Fonts.fontReg);
 		choiceLanguage.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choiceLanguage);
 		for(String lang : Language.AVAILABLE_LANGUAGES) {
-			choiceLanguage.add(lang);
+			choiceLanguage.addItem(lang);
 		}
-		choiceLanguage.select(Language.getLangName(Settings.lang));
+		choiceLanguage.setSelectedItem(Language.getLangName(Settings.lang));
 		choiceLanguage.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
@@ -178,17 +180,17 @@ public class SettingsGUI {
 		labelMemory.setBounds(15, 265, 124, 14);
 		settingsGUIFrame.getContentPane().add(labelMemory);
 		
-		choiceMemory = new Choice();
+		choiceMemory = new JComboBox<String>();
 		choiceMemory.setFont(Fonts.fontReg);
 		choiceMemory.setFocusable(false);
 		choiceMemory.setBounds(145, 261, 135, 20);
 		settingsGUIFrame.getContentPane().add(choiceMemory);
-		choiceMemory.add(Language.getValue("o.memory_default"));
-		choiceMemory.add(Language.getValue("o.memory_low"));
-		choiceMemory.add(Language.getValue("o.memory_med"));
-		choiceMemory.add(Language.getValue("o.memory_high"));
-		choiceMemory.add(Language.getValue("o.memory_flex"));
-		choiceMemory.select(parseSelectedMemoryAsIndex());
+		choiceMemory.addItem(Language.getValue("o.memory_default"));
+		choiceMemory.addItem(Language.getValue("o.memory_low"));
+		choiceMemory.addItem(Language.getValue("o.memory_med"));
+		choiceMemory.addItem(Language.getValue("o.memory_high"));
+		choiceMemory.addItem(Language.getValue("o.memory_flex"));
+		choiceMemory.setSelectedItem(parseSelectedMemoryAsIndex());
 		choiceMemory.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
