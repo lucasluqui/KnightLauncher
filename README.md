@@ -31,6 +31,7 @@ Thank you all for helping KnightLauncher, making it usable for everyone worldwid
 * Deutsch: Deathkey and Airbee
 * Português (Brasil): Azuresh and Gugaarleo
 * Français: PtitKrugger
+* Japanese: Armin
 
 Would you like to help translating? Seek for information in our Discord server.
 
