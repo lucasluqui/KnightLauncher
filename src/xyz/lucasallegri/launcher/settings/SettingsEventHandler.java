@@ -67,6 +67,7 @@ public class SettingsEventHandler {
 	public static void memoryChangeEvent(ItemEvent event) {
 		Settings.gameMemory = SettingsGUI.parseSelectedMemoryAsInt();
 		SettingsProperties.setValue("game.memory", String.valueOf(SettingsGUI.parseSelectedMemoryAsInt()));
+		SettingsGUI.choiceMemory.setToolTipText((String)SettingsGUI.choiceMemory.getSelectedItem());
 	}
 
 }
