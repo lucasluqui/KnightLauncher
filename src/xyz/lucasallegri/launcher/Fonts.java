@@ -19,6 +19,7 @@ public class Fonts {
 	public static Font fontMed = null;
 	public static Font fontMedBig = null;
 	public static Font fontMedGiant = null;
+	private static float sizeMultiplier = 1.0f;
 
 	public static void setup() {
 		
@@ -34,6 +35,7 @@ public class Fonts {
 			fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
 			fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
 			fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
+			sizeMultiplier = 1.1f;
 		} else {
 			fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
 			fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
@@ -45,21 +47,21 @@ public class Fonts {
 		try {
 			
 			fontReg = Font.createFont(Font.TRUETYPE_FONT, fontRegIs);
-			fontReg = fontReg.deriveFont(11.0f);
+			fontReg = fontReg.deriveFont(11.0f * sizeMultiplier);
 			fontReg = fontReg.deriveFont(Font.ITALIC);
 			
 			fontRegBig = Font.createFont(Font.TRUETYPE_FONT, fontRegBigIs);
-			fontRegBig = fontRegBig.deriveFont(14.0f);
+			fontRegBig = fontRegBig.deriveFont(14.0f * sizeMultiplier);
 			fontRegBig = fontRegBig.deriveFont(Font.ITALIC);
 			
 			fontMed = Font.createFont(Font.TRUETYPE_FONT, fontMedIs);
-			fontMed = fontMed.deriveFont(11.0f);
+			fontMed = fontMed.deriveFont(11.0f * sizeMultiplier);
 			
 			fontMedBig = Font.createFont(Font.TRUETYPE_FONT, fontMedBigIs);
-			fontMedBig = fontMedBig.deriveFont(14.0f);
+			fontMedBig = fontMedBig.deriveFont(14.0f * sizeMultiplier);
 
 			fontMedGiant = Font.createFont(Font.TRUETYPE_FONT, fontMedGiantIs);
-			fontMedGiant = fontMedGiant.deriveFont(40.0f);
+			fontMedGiant = fontMedGiant.deriveFont(40.0f * sizeMultiplier);
 			
 		} catch (FontFormatException | IOException e) {
 			KnightLog.logException(e);
