@@ -17,8 +17,8 @@ public class Language {
 			"Español",
 			"Deutsch",
 			"Português (Brasil)",
-			"Français"
-			//"日本語"
+			"Français",
+			"日本語"
 	};
 	
 	public static void setup() {
@@ -33,7 +33,7 @@ public class Language {
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
-		if(value != null) return value.substring(1, value.length() - 1);
+		if(value != null) return value.substring(1, value.length() - 1);;
 		return key;
 	}
 	
@@ -68,7 +68,7 @@ public class Language {
 		case "de": return "Deutsch";
 		case "pt-br": return "Português (Brasil)";
 		case "fr": return "Français";
-		//case "jp": return "日本語";
+		case "jp": return "日本語";
 		}
 		return null;
 	}
@@ -80,7 +80,7 @@ public class Language {
 		case "Deutsch": return "de";
 		case "Português (Brasil)": return "pt-br";
 		case "Français": return "fr";
-		//case "日本語": return "jp";
+		case "日本語": return "jp";
 		}
 		return null;
 	}
