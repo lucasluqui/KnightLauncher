@@ -5,10 +5,15 @@ import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 
 public class Fonts {
 	
+	private static final String fontPathRegular = "/fonts/GoogleSans-Regular.ttf";
+	private static final String fontPathMedium = "/fonts/GoogleSans-Medium.ttf";
+	private static final String fontPathRegularJP = "/fonts/NotoSansJP-Regular.otf";
+	private static final String fontPathMediumJP = "/fonts/NotoSansJP-Medium.otf";
 	public static Font fontReg = null;
 	public static Font fontRegBig = null;
 	public static Font fontMed = null;
@@ -17,17 +22,25 @@ public class Fonts {
 
 	public static void setup() {
 		
-		InputStream fontRegIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Regular.ttf");
-		InputStream fontRegBigIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Regular.ttf");
-		InputStream fontMedIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Medium.ttf");
-		InputStream fontMedBigIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Medium.ttf");
-		InputStream fontMedGiantIs = LauncherGUI.class.getResourceAsStream("/fonts/GoogleSans-Medium.ttf");
+		InputStream fontRegIs;
+		InputStream fontRegBigIs;
+		InputStream fontMedIs;
+		InputStream fontMedBigIs;
+		InputStream fontMedGiantIs;
 		
-		fontReg = null;
-		fontRegBig = null;
-		fontMed = null;
-		fontMedBig = null;
-		fontMedGiant = null;
+		if(Settings.lang.contains("jp")) {
+			fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
+			fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
+			fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
+			fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
+			fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
+		} else {
+			fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
+			fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
+			fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
+			fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
+			fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
+		}
 		
 		try {
 			
