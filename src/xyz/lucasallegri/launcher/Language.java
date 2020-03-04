@@ -33,7 +33,7 @@ public class Language {
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
-		if(value != null) return value.substring(1, value.length() - 1);;
+		if(value != null) return value.substring(1, value.length() - 1);
 		return key;
 	}
 	
