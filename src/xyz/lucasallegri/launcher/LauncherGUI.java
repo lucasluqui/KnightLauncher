@@ -6,6 +6,7 @@ import xyz.lucasallegri.launcher.mods.ModListGUI;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.logging.KnightLog;
+import xyz.lucasallegri.util.DesktopUtil;
 import xyz.lucasallegri.util.ImageUtil;
 
 import java.awt.Color;
@@ -140,13 +141,18 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(launchState);
 		
 		JButton updateAvailableButton = new JButton(Language.getValue("b.update_available"));
-		updateAvailableButton.setFont(Fonts.fontMedBig);
+		updateAvailableButton.setFont(Fonts.fontMedIta);
 		updateAvailableButton.setFocusPainted(false);
 		updateAvailableButton.setFocusable(false);
 		updateAvailableButton.setForeground(new Color(0, 102, 34));
 		updateAvailableButton.setVisible(showUpdateButton);
 		updateAvailableButton.setBounds(532, 340, 196, 25);
 		launcherGUIFrame.getContentPane().add(updateAvailableButton);
+		updateAvailableButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				DesktopUtil.openWebpage(LauncherConstants.RELEASES_URL);
+			}
+		});
 		
 		launcherGUIFrame.setLocationRelativeTo(null);
 		
