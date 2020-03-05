@@ -25,5 +25,9 @@ public class SystemUtil {
 		}
 		return is64Bit;
 	}
+	
+	public static boolean hasValidJavaHome() {
+		return !System.getProperty("java.home").contains("jdk");
+	}
 
 }
