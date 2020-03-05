@@ -190,7 +190,7 @@ public class SettingsGUI {
 		choiceMemory.addItem(Language.getValue("o.memory_med"));
 		choiceMemory.addItem(Language.getValue("o.memory_high"));
 		choiceMemory.addItem(Language.getValue("o.memory_flex"));
-		choiceMemory.setSelectedItem(parseSelectedMemoryAsIndex());
+		choiceMemory.setSelectedIndex(parseSelectedMemoryAsIndex());
 		choiceMemory.setToolTipText((String)choiceMemory.getSelectedItem());
 		choiceMemory.addItemListener(new ItemListener() {
 			@Override
