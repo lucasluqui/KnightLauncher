@@ -140,12 +140,12 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(launchState);
 		
 		JButton updateAvailableButton = new JButton(Language.getValue("b.update_available"));
-		updateAvailableButton.setFont(Fonts.fontMed);
+		updateAvailableButton.setFont(Fonts.fontMedBig);
 		updateAvailableButton.setFocusPainted(false);
 		updateAvailableButton.setFocusable(false);
 		updateAvailableButton.setForeground(new Color(0, 102, 34));
 		updateAvailableButton.setVisible(showUpdateButton);
-		updateAvailableButton.setBounds(532, 335, 196, 30);
+		updateAvailableButton.setBounds(532, 340, 196, 25);
 		launcherGUIFrame.getContentPane().add(updateAvailableButton);
 		
 		launcherGUIFrame.setLocationRelativeTo(null);
