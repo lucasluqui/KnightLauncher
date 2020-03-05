@@ -17,6 +17,7 @@ public class Fonts {
 	public static Font fontReg = null;
 	public static Font fontRegBig = null;
 	public static Font fontMed = null;
+	public static Font fontMedIta = null;
 	public static Font fontMedBig = null;
 	public static Font fontMedGiant = null;
 	private static float sizeMultiplier = 1.0f;
@@ -26,6 +27,7 @@ public class Fonts {
 		InputStream fontRegIs;
 		InputStream fontRegBigIs;
 		InputStream fontMedIs;
+		InputStream fontMedItaIs;
 		InputStream fontMedBigIs;
 		InputStream fontMedGiantIs;
 		
@@ -33,6 +35,7 @@ public class Fonts {
 			fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
 			fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
 			fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
+			fontMedItaIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
 			fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
 			fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
 			sizeMultiplier = 1.1f;
@@ -40,6 +43,7 @@ public class Fonts {
 			fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
 			fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
 			fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
+			fontMedItaIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
 			fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
 			fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
 		}
@@ -56,6 +60,10 @@ public class Fonts {
 			
 			fontMed = Font.createFont(Font.TRUETYPE_FONT, fontMedIs);
 			fontMed = fontMed.deriveFont(11.0f * sizeMultiplier);
+			
+			fontMedIta = Font.createFont(Font.TRUETYPE_FONT, fontMedItaIs);
+			fontMedIta = fontMedIta.deriveFont(11.0f * sizeMultiplier);
+			fontMedIta = fontMedIta.deriveFont(Font.ITALIC);
 			
 			fontMedBig = Font.createFont(Font.TRUETYPE_FONT, fontMedBigIs);
 			fontMedBig = fontMedBig.deriveFont(14.0f * sizeMultiplier);
