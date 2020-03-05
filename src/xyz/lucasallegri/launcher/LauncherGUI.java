@@ -8,6 +8,7 @@ import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ImageUtil;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -32,6 +33,8 @@ public class LauncherGUI {
 	public static JLabel launchState;
 	public static JProgressBar launchProgressBar;
 	public static JLabel imageContainer;
+	
+	public static Boolean showUpdateButton = false;
 
 	public static void main(String[] args) {
 		
@@ -63,7 +66,7 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().setLayout(null);
 		
 		launchButton = new JButton(Language.getValue("b.launch").toUpperCase());
-		launchButton.setBounds(14, 350, 155, 48);
+		launchButton.setBounds(15, 350, 155, 48);
 		launchButton.setFont(Fonts.fontMedBig);
 		launchButton.setFocusPainted(false);
 		launchButton.setFocusable(false);
@@ -87,7 +90,7 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
 		modButton = new JButton(Language.getValue("b.mods"));
-		modButton.setBounds(530, 375, 89, 23);
+		modButton.setBounds(532, 375, 89, 23);
 		modButton.setFont(Fonts.fontMed);
 		modButton.setFocusPainted(false);
 		modButton.setFocusable(false);
@@ -101,7 +104,7 @@ public class LauncherGUI {
 		});
 		
 		settingsButton = new JButton(Language.getValue("b.settings"));
-		settingsButton.setBounds(626, 375, 100, 23);
+		settingsButton.setBounds(628, 375, 100, 23);
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
@@ -126,15 +129,24 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(tweetsContainer);
 		
 		launchProgressBar = new JProgressBar();
-		launchProgressBar.setBounds(179, 375, 342, 23);
+		launchProgressBar.setBounds(180, 375, 342, 23);
 		launchProgressBar.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchProgressBar);
 		
 		launchState = new JLabel("");
-		launchState.setBounds(180, 356, 325, 14);
+		launchState.setBounds(181, 356, 325, 14);
 		launchState.setFont(Fonts.fontReg);
 		launchState.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchState);
+		
+		JButton updateAvailableButton = new JButton(Language.getValue("b.update_available"));
+		updateAvailableButton.setFont(Fonts.fontMed);
+		updateAvailableButton.setFocusPainted(false);
+		updateAvailableButton.setFocusable(false);
+		updateAvailableButton.setForeground(new Color(0, 102, 34));
+		updateAvailableButton.setVisible(showUpdateButton);
+		updateAvailableButton.setBounds(532, 335, 196, 30);
+		launcherGUIFrame.getContentPane().add(updateAvailableButton);
 		
 		launcherGUIFrame.setLocationRelativeTo(null);
 		

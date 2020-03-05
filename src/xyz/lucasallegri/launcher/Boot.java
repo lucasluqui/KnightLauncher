@@ -114,6 +114,7 @@ public class Boot {
 					latestVer,
 					LauncherConstants.RELEASES_URL
 			}));
+			LauncherGUI.showUpdateButton = true;
 		}
 	}
 
