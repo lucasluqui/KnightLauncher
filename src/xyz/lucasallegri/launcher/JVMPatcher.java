@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
+import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.FileUtil;
@@ -39,6 +40,11 @@ public class JVMPatcher {
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
+	}
+	
+	public static Boolean isPatched() {
+		if(!Settings.jvmPatched && FileUtil.fileExists("old_java_vm")) SettingsProperties.setValue("jvmPatched", "true");
+		return Settings.jvmPatched || FileUtil.fileExists("old_java_vm");
 	}
 
 }
