@@ -110,10 +110,6 @@ public class Boot {
 	private static void checkVersion() {
 		String latestVer = INetUtil.getWebpageContent(LauncherConstants.VERSION_QUERY_URL);
 		if(latestVer != null && !latestVer.contains(LauncherConstants.VERSION)) {
-			DialogWarning.pushTranslated(Language.getValue("m.update_available", new String[] {
-					latestVer,
-					LauncherConstants.RELEASES_URL
-			}));
 			LauncherGUI.showUpdateButton = true;
 		}
 	}
