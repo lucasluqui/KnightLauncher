@@ -11,6 +11,7 @@ import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
+import xyz.lucasallegri.util.Compressor;
 import xyz.lucasallegri.util.FileUtil;
 
 public class ModLoader {
@@ -36,7 +37,7 @@ public class ModLoader {
 			/*
 			 * Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
 			 */
-			String hash = FileUtil.getZipHash("mods/" + file);
+			String hash = Compressor.getZipHash("mods/" + file);
 			String hashFilePath = "mods/" + mod.getDisplayName() + ".hash";
 			if(FileUtil.fileExists(hashFilePath)) {
 				try {
@@ -73,14 +74,9 @@ public class ModLoader {
 		
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
-			try {
-				KnightLog.log.info("Mounting mod: " + ModList.installedMods.get(i).getDisplayName());
-				ProgressBar.setState(Language.getValue("m.mounting", ModList.installedMods.get(i).getDisplayName()));
-				FileUtil.unzip("mods/" + ModList.installedMods.get(i).getFileName(), "rsrc/");
-				KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
-			} catch (IOException e) {
-				KnightLog.logException(e);
-			}
+			ProgressBar.setState(Language.getValue("m.mounting", ModList.installedMods.get(i).getDisplayName()));
+			Compressor.unzip4j("mods/" + ModList.installedMods.get(i).getFileName(), "rsrc/");
+			KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
 		}
 		
 		modLoadFinished = true;
@@ -116,26 +112,20 @@ public class ModLoader {
 		ProgressBar.setBarMax(jarFiles.length + 1);
 		ProgressBar.setState(Language.getValue("m.rebuild_start"));
 		
-		try {
-			
-			for(int i = 0; i < jarFiles.length; i++) {
-				ProgressBar.setBarValue(i + 1);
-				ProgressBar.setState(Language.getValue("m.rebuilding", jarFiles[i]));
-				DiscordInstance.setPresence(Language.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(jarFiles.length)}));
-				FileUtil.unzip("rsrc/" + jarFiles[i], "rsrc/");
-			}
-			
-			ProgressBar.setBarValue(jarFiles.length + 1);
-			ProgressBar.setState(Language.getValue("m.rebuild_complete"));
-			rebuildFiles = false;
-			LauncherGUI.launchButton.setEnabled(true);
-			LauncherGUI.settingsButton.setEnabled(true);
-			try { SettingsGUI.forceRebuildButton.setEnabled(true); } catch(Exception e) {}
-			DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
-			
-		} catch (IOException ex) {
-			KnightLog.logException(ex);
+		for(int i = 0; i < jarFiles.length; i++) {
+			ProgressBar.setBarValue(i + 1);
+			ProgressBar.setState(Language.getValue("m.rebuilding", jarFiles[i]));
+			DiscordInstance.setPresence(Language.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(jarFiles.length)}));
+			Compressor.unzip4j("rsrc/" + jarFiles[i], "rsrc/");
 		}
+		
+		ProgressBar.setBarValue(jarFiles.length + 1);
+		ProgressBar.setState(Language.getValue("m.rebuild_complete"));
+		rebuildFiles = false;
+		LauncherGUI.launchButton.setEnabled(true);
+		LauncherGUI.settingsButton.setEnabled(true);
+		try { SettingsGUI.forceRebuildButton.setEnabled(true); } catch(Exception e) {}
+		DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
 	}
 
 }

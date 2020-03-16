@@ -21,12 +21,11 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import xyz.lucasallegri.logging.KnightLog;
 
 public class FileUtil {
-	
-	private static final int EXTRACT_BUFFER_SIZE = 8196;
-	private static final int HASH_BUFFER_SIZE = 4096;
 	
 	public static void createDir(String path) {
 		new File(path).mkdirs();
@@ -54,36 +53,6 @@ public class FileUtil {
 	public static void rename(File old, File dest) {
 		old.renameTo(dest);
 	}
-
-    public static void unzip(String zipFilePath, String destDirectory) throws IOException {
-        createDir(destDirectory);
-        ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
-        ZipEntry entry = zipIn.getNextEntry();
-        // iterates over entries in the zip file
-        while (entry != null) {
-            String filePath = destDirectory + File.separator + entry.getName();
-            if (!entry.isDirectory()) {
-                // if the entry is a file, extracts it
-                extractFile(zipIn, filePath);
-            } else {
-                // if the entry is a directory, make the directory
-                createDir(filePath);
-            }
-            zipIn.closeEntry();
-            entry = zipIn.getNextEntry();
-        }
-        zipIn.close();
-    }
-    
-    private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
-        byte[] bytesIn = new byte[EXTRACT_BUFFER_SIZE];
-        int read = 0;
-        while ((read = zipIn.read(bytesIn)) != -1) {
-            bos.write(bytesIn, 0, read);
-        }
-        bos.close();
-    }
     
 	public static List<String> fileNamesInDirectory(String dir) {
 		
@@ -116,39 +85,6 @@ public class FileUtil {
 	public static boolean fileExists(String path) {
 		File file = new File(path);
 		return file.exists();
-	}
-	
-	public static String getZipHash(String source) {
-	    InputStream file = null;
-	    String hash = null;
-		try {
-			file = new FileInputStream(source);
-		} catch (FileNotFoundException ex) {
-			KnightLog.logException(ex);
-		}
-	    ZipInputStream stream = new ZipInputStream(file);
-	    try {
-	        ZipEntry entry;
-	        while((entry = stream.getNextEntry()) != null) {
-	            MessageDigest md = MessageDigest.getInstance("MD5");
-	            DigestInputStream dis = new DigestInputStream(stream, md);
-	            byte[] buffer = new byte[HASH_BUFFER_SIZE];
-	            int read = dis.read(buffer);
-	            while (read > -1) {
-	                read = dis.read(buffer);
-	            }
-	            hash = new String(dis.getMessageDigest().digest());
-	        }
-	    } catch (NoSuchAlgorithmException | IOException e) {
-			KnightLog.logException(e);
-		} finally { 
-			try {
-				stream.close();
-			} catch (IOException e) {
-				KnightLog.logException(e);
-			}
-		}
-	    return hash;
 	}
 	
 	public static String readFile(String path) throws IOException {

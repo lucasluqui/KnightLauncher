@@ -50,7 +50,7 @@ public class Boot {
 	
 	public static void onBootEnd() {
 		
-		if(!JVMPatcher.isPatched() && SystemUtil.is64Bit() && SystemUtil.hasValidJavaHome()) JVMPatcher.start();
+		//if(!JVMPatcher.isPatched() && SystemUtil.is64Bit() && SystemUtil.hasValidJavaHome()) JVMPatcher.start();
 		
 		ModLoader.checkInstalled();
 		if(Settings.doRebuilds && ModLoader.rebuildFiles) ModLoader.startFileRebuild();
@@ -76,13 +76,14 @@ public class Boot {
 	
 	private static void checkDirectories() {
 		FileUtil.createDir("mods");
+		FileUtil.createDir("KnightLauncher/logs/");
 	}
 	
 	private static void checkStartLocation() {
 		/*
 		 * Checking if we're being ran inside the game's directory, "getdown.txt" should always be present if so.
 		 */
-		if(!FileUtil.fileExists("getdown.txt")) {
+		if(!FileUtil.fileExists("getdown-pro.jar")) {
 			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
 					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
 			DesktopUtil.openDir(SteamUtil.getGamePathWindows());
