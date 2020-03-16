@@ -21,9 +21,20 @@ public class Compressor {
 	
 	private static final int EXTRACT_BUFFER_SIZE = 8196;
 	private static final int HASH_BUFFER_SIZE = 4096;
+    
+    
+	public static void unzip4j(String source, String dest) {
+	    try {
+	        ZipFile zipFile = new ZipFile(source);
+	        zipFile.extractAll(dest);
+	   } catch (ZipException e) {
+	       KnightLog.logException(e);
+	   }
+    }
 	
 	
-    public static void unzip(String zipFilePath, String destDirectory) throws IOException {
+    @Deprecated
+	public static void unzip(String zipFilePath, String destDirectory) throws IOException {
         FileUtil.createDir(destDirectory);
         ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
         ZipEntry entry = zipIn.getNextEntry();
@@ -44,6 +55,7 @@ public class Compressor {
     }
     
     
+    @Deprecated
     private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
         byte[] bytesIn = new byte[EXTRACT_BUFFER_SIZE];
@@ -53,17 +65,7 @@ public class Compressor {
         }
         bos.close();
     }
-    
-    
-    public static void unzip4j(String source, String dest) {
-	    try {
-	        ZipFile zipFile = new ZipFile(source);
-	        zipFile.extractAll(dest);
-	   } catch (ZipException e) {
-	       KnightLog.logException(e);
-	   }
-    }
-    
+	
     
 	public static String getZipHash(String source) {
 	    InputStream file = null;
