@@ -5,6 +5,7 @@ import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
 import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherConstants;
+import xyz.lucasallegri.logging.KnightLog;
 
 public class DiscordInstance {
 	
@@ -14,6 +15,7 @@ public class DiscordInstance {
 	public static void start() {
 		DiscordRPC.discordInitialize(CLIENT_ID, EVENT_HANDLER, true);
 		setPresence(Language.getValue("presence.starting"));
+		KnightLog.log.info("DiscordInstance is now running.");
 	}
 	
 	public static void setPresence(String details) {
@@ -21,6 +23,7 @@ public class DiscordInstance {
 		presence.setDetails(details);
 		presence.setBigImage("icon-512", Language.getValue("presence.image_desc", LauncherConstants.VERSION));
 		DiscordRPC.discordUpdatePresence(presence.build());
+		KnightLog.log.info("Updating presence detail to: " + details);
 	}
 	
 	public static void stop() {

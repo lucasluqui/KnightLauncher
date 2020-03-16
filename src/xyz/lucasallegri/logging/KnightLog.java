@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -13,19 +15,20 @@ import java.util.logging.SimpleFormatter;
 public class KnightLog {
 
 	public final static Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	public final static String curTime = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Calendar.getInstance().getTime());
 	private static FileHandler fileHandler;
 	private static ConsoleHandler consoleHandler;
 	private static SimpleFormatter formatterTxt;
 
 	public static void setup() throws IOException {
 	
-		new File("KnightLauncher.log").delete();
-		new File("KnightLauncher.log.lck").delete();
-		new File("KnightLauncher.log.1").delete();
+		//new File("KnightLauncher.log").delete();
+		//new File("KnightLauncher.log.lck").delete();
+		//new File("KnightLauncher.log.1").delete();
 		
 		// get the global logger to configure it
 	    consoleHandler = new ConsoleHandler();
-	    fileHandler = new FileHandler("KnightLauncher.log", true);
+	    fileHandler = new FileHandler("KnightLauncher/logs/" + curTime + "_KnightLauncher.log", true);
 	
 	    log.setLevel(Level.ALL);
 	    fileHandler.setLevel(Level.ALL);
@@ -37,6 +40,8 @@ public class KnightLog {
 	    log.addHandler(fileHandler);
 	    log.addHandler(consoleHandler);
 	    log.setUseParentHandlers(false);
+	    
+	    log.info("Logging further interactions...");
 	}
     
 	public static void logException(Exception e) {

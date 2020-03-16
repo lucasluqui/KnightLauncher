@@ -58,6 +58,7 @@ public class SettingsProperties {
 	public static String getValue(String key) {
         try (InputStream is = new FileInputStream(propPath)) {
         	prop.load(is);
+        	KnightLog.log.info("Request for prop key: " + key);
             return prop.getProperty(key);
         } catch (IOException e) {
         	KnightLog.logException(e);
@@ -69,6 +70,7 @@ public class SettingsProperties {
 		try (OutputStream os = new FileOutputStream(propPath)) {
 			prop.setProperty(key, value);
 			prop.store(new FileOutputStream(propPath), null);
+			KnightLog.log.info("Setting new key value: key=" + key + ",value=" + value);
 		} catch(IOException e) {
 			KnightLog.logException(e);
 		}
@@ -87,6 +89,7 @@ public class SettingsProperties {
 		Settings.gameUndecoratedWindow = Boolean.parseBoolean(getValue("game.undecoratedWindow"));
 		Settings.gameAdditionalArgs = getValue("game.additionalArgs");
 		Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
+		KnightLog.log.info("Successfully loaded all settings from prop file.");
 	}
 	
 }
