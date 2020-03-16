@@ -25,6 +25,7 @@ public class Boot {
 	public static void onBootStart() {
 		
 		checkStartLocation();
+		setupLookAndFeel();
 		
 		try {
 			KnightLog.setup();
@@ -35,16 +36,11 @@ public class Boot {
 		}
 		
 		Language.setup();
-		
 		checkDirectories();
 		checkShortcut();
-		
-		DiscordInstance.start();
-		
-		setupLookAndFeel();
-		Fonts.setup();
-		
 		checkVersion();
+		DiscordInstance.start();
+		Fonts.setup();
 		
 	}
 	
