@@ -130,7 +130,7 @@ public class SettingsGUI {
 		});
 		
 		checkboxKeepOpen = new JCheckBox(Language.getValue("m.keep_open"));
-		checkboxKeepOpen.setBounds(11, 163, 270, 23);
+		checkboxKeepOpen.setBounds(11, 163, 270, 21);
 		checkboxKeepOpen.setFont(Fonts.fontReg);
 		checkboxKeepOpen.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxKeepOpen);

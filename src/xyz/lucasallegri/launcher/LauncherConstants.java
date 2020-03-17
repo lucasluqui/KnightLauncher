@@ -11,5 +11,6 @@ public class LauncherConstants {
 	public static final String EVENT_QUERY_URL = "http://px-api.lucasallegri.xyz/event";
 	public static final String VERSION_QUERY_URL = "http://aegis.lucasallegri.xyz/knightlauncher/version.txt";
 	public static final String RELEASES_URL = "https://github.com/lucas-allegri/KnightLauncher/releases";
+	public static final String TWEETS_URL = "http://aegis.lucasallegri.xyz/knightlauncher/tweets.txt";
 	
 }

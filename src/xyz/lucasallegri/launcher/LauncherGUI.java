@@ -7,6 +7,7 @@ import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.DesktopUtil;
+import xyz.lucasallegri.util.INetUtil;
 import xyz.lucasallegri.util.ImageUtil;
 
 import java.awt.Color;
@@ -22,6 +23,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 public class LauncherGUI {
@@ -30,7 +34,7 @@ public class LauncherGUI {
 	public static JButton launchButton;
 	public static JButton settingsButton;
 	public static JButton modButton;
-	public static JLabel tweetsContainer;
+	public static JTextPane tweetsContainer;
 	public static JLabel launchState;
 	public static JProgressBar launchProgressBar;
 	public static JLabel imageContainer;
@@ -79,13 +83,13 @@ public class LauncherGUI {
 		});
 		
 		String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
-		Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 514, 311);
+		Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 515, 300);
 		if(eventImage == null) {
 			imageContainer = new JLabel(Language.getValue("error.event_image_missing"));
 		} else {
 			imageContainer = new JLabel(new ImageIcon(eventImage));
 		}
-		imageContainer.setBounds(10, 10, 514, 311);
+		imageContainer.setBounds(10, 10, 515, 300);
 		imageContainer.setFont(Fonts.fontRegBig);
 		imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
 		launcherGUIFrame.getContentPane().add(imageContainer);
@@ -123,11 +127,25 @@ public class LauncherGUI {
 		labelTweets.setFont(Fonts.fontReg);
 		launcherGUIFrame.getContentPane().add(labelTweets);
 		
-		tweetsContainer = new JLabel(Language.getValue("m.twitter_load"));
-		tweetsContainer.setHorizontalAlignment(SwingConstants.CENTER);
+		tweetsContainer = new JTextPane();
+		tweetsContainer.setText(Language.getValue("m.twitter_load"));
 		tweetsContainer.setBounds(535, 48, 189, 261);
+		tweetsContainer.setEditable(false);
+		tweetsContainer.setContentType("text/html");
 		tweetsContainer.setFont(Fonts.fontReg);
+		tweetsContainer.setBackground(Color.WHITE);
 		launcherGUIFrame.getContentPane().add(tweetsContainer);
+		String tweets = INetUtil.getWebpageContent(LauncherConstants.TWEETS_URL);
+		if(tweets != null) {
+			String parsedTweets = tweets.replaceFirst("FONT_FAMILY", tweetsContainer.getFont().getFamily());
+			tweetsContainer.setText(parsedTweets);
+			tweetsContainer.setCaretPosition(0);
+			JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
+			tweetsJsp.setBounds(535, 48, 189, 261);
+			launcherGUIFrame.add(tweetsJsp);
+		} else {
+			tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
+		}
 		
 		launchProgressBar = new JProgressBar();
 		launchProgressBar.setBounds(180, 375, 342, 23);

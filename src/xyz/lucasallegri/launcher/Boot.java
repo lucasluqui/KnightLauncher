@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import mdlaf.MaterialLookAndFeel;
+
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import xyz.lucasallegri.dialog.DialogError;
@@ -60,9 +63,8 @@ public class Boot {
 		for( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels() ) {
 			if( "Windows".equals(info.getName()) ) {
 				try {
-					UIManager.setLookAndFeel(info.getClassName());
-				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-						| UnsupportedLookAndFeelException e) {
+					UIManager.setLookAndFeel(new MaterialLookAndFeel());
+				} catch (UnsupportedLookAndFeelException e) {
 					KnightLog.logException(e);
 				}
 			}
