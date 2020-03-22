@@ -108,7 +108,9 @@ public class Boot {
 	
 	private static void checkVersion() {
 		String latestVer = INetUtil.getWebpageContent(LauncherConstants.VERSION_QUERY_URL);
-		if(latestVer != null && !latestVer.contains(LauncherConstants.VERSION)) {
+		if(latestVer == null) {
+			LauncherGUI.offlineMode = true;
+		} else if (!latestVer.contains(LauncherConstants.VERSION)) {
 			LauncherGUI.showUpdateButton = true;
 		}
 	}
