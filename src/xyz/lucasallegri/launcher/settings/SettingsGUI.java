@@ -158,6 +158,7 @@ public class SettingsGUI {
 		checkboxShortcut.setBounds(11, 185, 139, 23);
 		checkboxShortcut.setFont(Fonts.fontReg);
 		checkboxShortcut.setFocusPainted(false);
+		checkboxShortcut.setToolTipText(Language.getValue("m.create_shortcut"));
 		settingsGUIFrame.getContentPane().add(checkboxShortcut);
 		checkboxShortcut.setSelected(Settings.createShortcut);
 		checkboxShortcut.addActionListener(new ActionListener() {
