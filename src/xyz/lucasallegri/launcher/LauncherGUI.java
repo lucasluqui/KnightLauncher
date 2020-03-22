@@ -142,7 +142,7 @@ public class LauncherGUI {
 			tweetsContainer.setCaretPosition(0);
 			JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
 			tweetsJsp.setBounds(535, 48, 189, 261);
-			launcherGUIFrame.add(tweetsJsp);
+			launcherGUIFrame.getContentPane().add(tweetsJsp);
 		} else {
 			tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
 		}
@@ -164,13 +164,17 @@ public class LauncherGUI {
 		updateAvailableButton.setFocusable(false);
 		updateAvailableButton.setForeground(new Color(0, 102, 34));
 		updateAvailableButton.setVisible(showUpdateButton);
-		updateAvailableButton.setBounds(532, 340, 196, 25);
+		updateAvailableButton.setBounds(532, 345, 196, 25);
 		launcherGUIFrame.getContentPane().add(updateAvailableButton);
 		updateAvailableButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
 				DesktopUtil.openWebpage(LauncherConstants.RELEASES_URL);
 			}
 		});
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setBounds(19, 331, 507, 14);
+		launcherGUIFrame.getContentPane().add(lblNewLabel);
 		
 		launcherGUIFrame.setLocationRelativeTo(null);
 		
