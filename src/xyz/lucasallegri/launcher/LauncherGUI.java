@@ -9,6 +9,7 @@ import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.DesktopUtil;
 import xyz.lucasallegri.util.INetUtil;
 import xyz.lucasallegri.util.ImageUtil;
+import xyz.lucasallegri.util.SteamUtil;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -172,9 +173,11 @@ public class LauncherGUI {
 			}
 		});
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(19, 331, 507, 14);
-		launcherGUIFrame.getContentPane().add(lblNewLabel);
+		JLabel playerCountLabel = new JLabel(Language.getValue("m.player_count", new String[] { SteamUtil.getCurrentPlayersApproximateTotal("99900"), SteamUtil.getCurrentPlayers("99900") }));
+		playerCountLabel.setFont(Fonts.fontReg);
+		playerCountLabel.setForeground(new Color(0, 102, 34));
+		playerCountLabel.setBounds(16, 331, 507, 14);
+		launcherGUIFrame.getContentPane().add(playerCountLabel);
 		
 		launcherGUIFrame.setLocationRelativeTo(null);
 		
