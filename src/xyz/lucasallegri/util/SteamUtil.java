@@ -27,6 +27,7 @@ public class SteamUtil {
     
     public static String getCurrentPlayers(String id) {
     	String rawResponse = INetUtil.getWebpageContent("https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid="+id);
+    	if(rawResponse == null) return "error";
     	JSONObject jsonResponse = new JSONObject(rawResponse);
     	String currentPlayers = String.valueOf(jsonResponse.getJSONObject("response").getInt("player_count"));
     	return currentPlayers;
@@ -34,6 +35,7 @@ public class SteamUtil {
     
     public static String getCurrentPlayersApproximateTotal(String id) {
     	String rawResponse = INetUtil.getWebpageContent("https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid="+id);
+    	if(rawResponse == null) return "error";
     	JSONObject jsonResponse = new JSONObject(rawResponse);
     	int currentPlayers = jsonResponse.getJSONObject("response").getInt("player_count");
     	String approximatePlayers = String.valueOf(Math.round(currentPlayers*1.6f));
