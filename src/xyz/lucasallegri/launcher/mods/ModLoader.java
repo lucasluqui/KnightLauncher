@@ -33,7 +33,12 @@ public class ModLoader {
 		rawFiles.addAll(FileUtil.fileNamesInDirectory("mods/", ".jar"));
 		
 		for(String file : rawFiles) {
-			JSONObject modJson = new JSONObject(Compressor.readFileInsideZip("mods/" + file, "mod.json")).getJSONObject("mod");
+			JSONObject modJson;
+			try {
+				modJson = new JSONObject(Compressor.readFileInsideZip(System.getProperty("user.dir") + "/mods/" + file, "mod.json")).getJSONObject("mod");
+			} catch(Exception e) {
+				modJson = null;
+			}
 			Mod mod = new Mod(file);
 			if(modJson != null) {
 				mod.setDisplayName(modJson.getString("name"));
