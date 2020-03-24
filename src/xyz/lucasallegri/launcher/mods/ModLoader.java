@@ -15,6 +15,7 @@ import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.Compressor;
 import xyz.lucasallegri.util.FileUtil;
+import xyz.lucasallegri.util.SystemUtil;
 
 public class ModLoader {
 	
@@ -91,7 +92,7 @@ public class ModLoader {
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
 			ProgressBar.setState(Language.getValue("m.mounting", ModList.installedMods.get(i).getDisplayName()));
-			Compressor.unzip("./mods/" + ModList.installedMods.get(i).getFileName(), "./rsrc/");
+			Compressor.unzip("./mods/" + ModList.installedMods.get(i).getFileName(), "./rsrc/", SystemUtil.isMac());
 			KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
 		}
 		
@@ -132,7 +133,7 @@ public class ModLoader {
 			ProgressBar.setBarValue(i + 1);
 			ProgressBar.setState(Language.getValue("m.rebuilding", jarFiles[i]));
 			DiscordInstance.setPresence(Language.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(jarFiles.length)}));
-			Compressor.unzip("./rsrc/" + jarFiles[i], "./rsrc/");
+			Compressor.unzip("./rsrc/" + jarFiles[i], "./rsrc/", false);
 		}
 		
 		ProgressBar.setBarValue(jarFiles.length + 1);
