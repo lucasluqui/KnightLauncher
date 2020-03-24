@@ -7,17 +7,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-import xyz.lucasallegri.launcher.Fonts;
-import xyz.lucasallegri.launcher.Language;
-import xyz.lucasallegri.launcher.LauncherGUI;
-import xyz.lucasallegri.logging.KnightLog;
-
-import java.awt.Choice;
-
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -25,6 +16,10 @@ import javax.swing.JSeparator;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import xyz.lucasallegri.launcher.Fonts;
+import xyz.lucasallegri.launcher.Language;
+import xyz.lucasallegri.launcher.LauncherGUI;
+import xyz.lucasallegri.logging.KnightLog;
 
 public class SettingsGUI {
 
@@ -44,6 +39,7 @@ public class SettingsGUI {
 
 	public static void compose() {
 		EventQueue.invokeLater(new Runnable() {
+			@SuppressWarnings("static-access")
 			public void run() {
 				try {
 					SettingsGUI window = new SettingsGUI();

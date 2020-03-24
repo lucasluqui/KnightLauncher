@@ -3,14 +3,10 @@ package xyz.lucasallegri.launcher;
 import java.io.IOException;
 
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import mdlaf.MaterialLookAndFeel;
-
 import javax.swing.UIManager.LookAndFeelInfo;
-
+import javax.swing.UnsupportedLookAndFeelException;
+import mdlaf.MaterialLookAndFeel;
 import xyz.lucasallegri.dialog.DialogError;
-import xyz.lucasallegri.dialog.DialogWarning;
 import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.mods.ModList;
 import xyz.lucasallegri.launcher.mods.ModLoader;

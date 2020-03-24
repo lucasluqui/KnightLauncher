@@ -1,17 +1,10 @@
 package xyz.lucasallegri.launcher.mods;
 
-import java.awt.Color;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-
 import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherGUI;
-import xyz.lucasallegri.launcher.settings.SettingsEventHandler;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.DesktopUtil;
-
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +12,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+import java.awt.Color;
+import java.awt.EventQueue;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
@@ -42,6 +37,7 @@ public class ModListGUI {
 
 	public static void compose() {
 		EventQueue.invokeLater(new Runnable() {
+			@SuppressWarnings("static-access")
 			public void run() {
 				try {
 					ModListGUI window = new ModListGUI();

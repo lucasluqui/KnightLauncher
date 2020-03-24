@@ -6,6 +6,7 @@ import xyz.lucasallegri.logging.KnightLog;
 
 public class ProcessUtil {
 	
+	@SuppressWarnings("unused")
 	public static void startApplication(String commandLine) {
 		try {
 			final Process p = Runtime.getRuntime().exec(commandLine);
@@ -14,6 +15,7 @@ public class ProcessUtil {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	public static void startApplication(String[] args) {
 		try {
 			final Process p = Runtime.getRuntime().exec(args);

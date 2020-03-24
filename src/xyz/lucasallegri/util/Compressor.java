@@ -95,6 +95,7 @@ public class Compressor {
 	}
 	
     
+	@SuppressWarnings("unused")
 	public static String getZipHash(String source) {
 	    InputStream file = null;
 	    String hash = null;

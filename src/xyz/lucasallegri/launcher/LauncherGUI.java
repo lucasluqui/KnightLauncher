@@ -10,7 +10,6 @@ import xyz.lucasallegri.util.DesktopUtil;
 import xyz.lucasallegri.util.INetUtil;
 import xyz.lucasallegri.util.ImageUtil;
 import xyz.lucasallegri.util.SteamUtil;
-
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Image;
@@ -18,7 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 public class LauncherGUI {
@@ -48,6 +45,7 @@ public class LauncherGUI {
 		Boot.onBootStart();
 		
 		EventQueue.invokeLater(new Runnable() {
+			@SuppressWarnings("static-access")
 			public void run() {
 				try {
 					LauncherGUI window = new LauncherGUI();
