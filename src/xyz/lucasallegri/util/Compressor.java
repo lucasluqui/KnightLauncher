@@ -36,6 +36,9 @@ public class Compressor {
 			case "4j":
 				unzip4j(source, dest);
 				break;
+			default:
+				unzipSafe(source, dest);
+				break;
 			}
 		} catch(IOException e) {
 			KnightLog.logException(e);

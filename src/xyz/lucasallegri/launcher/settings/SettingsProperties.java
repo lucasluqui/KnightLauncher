@@ -58,10 +58,12 @@ public class SettingsProperties {
 	}
 	
 	public static String getValue(String key) {
+		String value;
         try (InputStream is = new FileInputStream(propPath)) {
         	prop.load(is);
-        	KnightLog.log.info("Request for prop key: " + key);
-            return prop.getProperty(key);
+        	value = prop.getProperty(key);
+        	KnightLog.log.info("Request for prop key: " + key + ", reply value: " + value);
+            return value;
         } catch (IOException e) {
         	KnightLog.logException(e);
         }
