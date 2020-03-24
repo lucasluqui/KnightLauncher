@@ -43,6 +43,38 @@ public class Mod {
 		this.displayName = _displayName;
 	}
 	
+	public String getDescription() {
+		return this.description;
+	}
+	
+	public void setDescription(String _description) {
+		this.description = _description;
+	}
+	
+	public String getAuthor() {
+		return this.authorName;
+	}
+	
+	public void setAuthor(String _author) {
+		this.authorName = _author;
+	}
+	
+	public String getVersion() {
+		return this.version;
+	}
+	
+	public void setVersion(String _version) {
+		this.version = _version;
+	}
+	
+	public String getCompatibilityVersion() {
+		return this.compatibilityVersion;
+	}
+	
+	public void setCompatibilityVersion(String _compatibilityVersion) {
+		this.compatibilityVersion = _compatibilityVersion;
+	}
+	
 	public String getFileName() {
 		return this.fileName;
 	}
