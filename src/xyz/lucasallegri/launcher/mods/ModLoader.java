@@ -31,7 +31,7 @@ public class ModLoader {
 		rawFiles.addAll(FileUtil.fileNamesInDirectory("mods/", ".jar"));
 		
 		for(String file : rawFiles) {
-			Mod mod = new Mod(file.substring(0, file.length() - 4), file);
+			Mod mod = new Mod(file);
 			ModList.installedMods.add(mod);
 			
 			/*
