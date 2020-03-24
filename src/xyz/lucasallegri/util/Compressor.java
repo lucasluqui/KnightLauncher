@@ -23,13 +23,19 @@ public class Compressor {
 	private static final int HASH_BUFFER_SIZE = 4096;
     
     
-	public static void unzip(String source, String dest) {
+	public static void unzip(String source, String dest, Boolean force4j) {
 		try {
 			switch(Settings.compressorUnzipMethod) {
 			case "safe":
+				if(force4j) {
+					unzip4j(source, dest);
+					break;
+				}
 				unzipSafe(source, dest);
+				break;
 			case "4j":
 				unzip4j(source, dest);
+				break;
 			}
 		} catch(IOException e) {
 			KnightLog.logException(e);
