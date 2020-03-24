@@ -44,6 +44,8 @@ public class SettingsProperties {
 							"createShortcut=true" + System.lineSeparator() +
 							"jvmPatched=" + (firstTime ? "false" : "true") + System.lineSeparator() +
 							"lang=en" + System.lineSeparator() +
+							"compressor.unzipMethod=safe" + System.lineSeparator() +
+							"compressor.extractBuffer=8196" + System.lineSeparator() +
 							"game.useStringDeduplication=false" + System.lineSeparator() +
 							"game.useG1GC=false" + System.lineSeparator() +
 							"game.disableExplicitGC=false" + System.lineSeparator() +
@@ -83,6 +85,8 @@ public class SettingsProperties {
 		Settings.createShortcut = Boolean.parseBoolean(getValue("createShortcut"));
 		Settings.jvmPatched = Boolean.parseBoolean(getValue("jvmPatched"));
 		Settings.lang = getValue("lang");
+		Settings.compressorUnzipMethod = getValue("compressor.unzipMethod");
+		Settings.compressorExtractBuffer = Integer.parseInt(getValue("compressor.extractBuffer"));
 		Settings.gameUseStringDeduplication = Boolean.parseBoolean(getValue("game.useStringDeduplication"));
 		Settings.gameUseG1GC = Boolean.parseBoolean(getValue("game.useG1GC"));
 		Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));

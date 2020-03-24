@@ -21,11 +21,11 @@ import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
 import net.lingala.zip4j.model.LocalFileHeader;
+import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 
 public class Compressor {
 	
-	private static final int EXTRACT_BUFFER_SIZE = 8196;
 	private static final int HASH_BUFFER_SIZE = 4096;
     
     
@@ -67,7 +67,7 @@ public class Compressor {
     @Deprecated
     private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
-        byte[] bytesIn = new byte[EXTRACT_BUFFER_SIZE];
+        byte[] bytesIn = new byte[Settings.compressorExtractBuffer];
         int read = 0;
         while ((read = zipIn.read(bytesIn)) != -1) {
             bos.write(bytesIn, 0, read);

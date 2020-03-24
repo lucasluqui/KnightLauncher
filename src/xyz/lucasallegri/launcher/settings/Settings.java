@@ -9,6 +9,8 @@ public class Settings {
 	public static Boolean keepOpen = false;
 	public static Boolean createShortcut = true;
 	public static Boolean jvmPatched = false;
+	public static String compressorUnzipMethod = "safe";
+	public static Integer compressorExtractBuffer = 8196;
 	public static Integer gameMemory = 512;
 	public static Boolean gameUseStringDeduplication = false;
 	public static Boolean gameUseG1GC = false;
