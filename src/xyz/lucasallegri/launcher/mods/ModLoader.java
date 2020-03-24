@@ -91,11 +91,7 @@ public class ModLoader {
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
 			ProgressBar.setState(Language.getValue("m.mounting", ModList.installedMods.get(i).getDisplayName()));
-			try {
-				Compressor.unzip("mods/" + ModList.installedMods.get(i).getFileName(), "rsrc/");
-			} catch (IOException e) {
-				KnightLog.logException(e);
-			}
+			Compressor.unzip4j("mods/" + ModList.installedMods.get(i).getFileName(), "rsrc/");
 			KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
 		}
 		
