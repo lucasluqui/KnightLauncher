@@ -68,7 +68,7 @@ public class LauncherGUI {
 		launcherGUIFrame = new JFrame();
 		launcherGUIFrame.setTitle(Language.getValue("t.main", LauncherConstants.VERSION));
 		launcherGUIFrame.setResizable(false);
-		launcherGUIFrame.setBounds(100, 100, 750, 450);
+		launcherGUIFrame.setBounds(100, 100, 745, 440);
 		launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		launcherGUIFrame.getContentPane().setLayout(null);
 		
@@ -110,7 +110,7 @@ public class LauncherGUI {
 		});
 		
 		settingsButton = new JButton(Language.getValue("b.settings"));
-		settingsButton.setBounds(628, 375, 100, 23);
+		settingsButton.setBounds(626, 375, 100, 23);
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
@@ -164,7 +164,7 @@ public class LauncherGUI {
 		updateAvailableButton.setFocusable(false);
 		updateAvailableButton.setForeground(new Color(0, 102, 34));
 		updateAvailableButton.setVisible(showUpdateButton);
-		updateAvailableButton.setBounds(532, 345, 196, 25);
+		updateAvailableButton.setBounds(532, 345, 194, 25);
 		launcherGUIFrame.getContentPane().add(updateAvailableButton);
 		updateAvailableButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
