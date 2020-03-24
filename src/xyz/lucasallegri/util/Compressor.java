@@ -7,20 +7,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
-import net.lingala.zip4j.model.LocalFileHeader;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 
@@ -29,14 +23,25 @@ public class Compressor {
 	private static final int HASH_BUFFER_SIZE = 4096;
     
     
-	public static void unzip4j(String source, String dest) {
-	    try {
-	        ZipFile zipFile = new ZipFile(source);
-	        zipFile.extractAll(dest);
-	   } catch (ZipException e) {
-	       KnightLog.logException(e);
-	   }
+	public static void unzip(String source, String dest) {
+		try {
+			switch(Settings.compressorUnzipMethod) {
+			case "safe":
+				unzipSafe(source, dest);
+			case "4j":
+				unzip4j(source, dest);
+			}
+		} catch(IOException e) {
+			KnightLog.logException(e);
+		}
+	}
+	
+	
+	public static void unzip4j(String source, String dest) throws ZipException {
+        ZipFile zipFile = new ZipFile(source);
+        zipFile.extractAll(dest);
     }
+	
 	
 	public static void unzipSafe(String zipFilePath, String destDirectory) throws IOException {
         FileUtil.createDir(destDirectory);
@@ -52,7 +57,7 @@ public class Compressor {
             }
             if (!entry.isDirectory()) {
                 // if the entry is a file, extracts it
-                extractFile(zipIn, filePath);
+                extractFileSafe(zipIn, filePath);
             } else {
                 // if the entry is a directory, make the directory
                 FileUtil.createDir(filePath);
@@ -64,8 +69,7 @@ public class Compressor {
     }
 	
 	
-    @Deprecated
-    private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
+    private static void extractFileSafe(ZipInputStream zipIn, String filePath) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
         byte[] bytesIn = new byte[Settings.compressorExtractBuffer];
         int read = 0;
