@@ -56,6 +56,7 @@ public class SettingsGUI {
 	}
 
 	public SettingsGUI() {
+		LauncherGUI.settingsButton.setEnabled(false);
 		initialize();
 	}
 

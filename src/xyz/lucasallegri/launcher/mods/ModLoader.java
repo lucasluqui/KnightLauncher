@@ -45,7 +45,7 @@ public class ModLoader {
 				mod.setDescription(modJson.getString("description"));
 				mod.setAuthor(modJson.getString("author"));
 				mod.setVersion(modJson.getString("version"));
-				mod.setVersion(modJson.getString("compatibility"));
+				mod.setCompatibilityVersion(modJson.getString("compatibility"));
 			}
 			ModList.installedMods.add(mod);
 			KnightLog.log.info(mod.toString());
@@ -54,7 +54,7 @@ public class ModLoader {
 			 * Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
 			 */
 			String hash = Compressor.getZipHash("mods/" + file);
-			String hashFilePath = "mods/" + mod.getDisplayName() + ".hash";
+			String hashFilePath = "mods/" + mod.getFileName() + ".hash";
 			if(FileUtil.fileExists(hashFilePath)) {
 				try {
 					String fileHash = FileUtil.readFile(hashFilePath);

@@ -105,7 +105,6 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(modButton);
 		modButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				modButton.setEnabled(false);
 				ModListGUI.compose();
 			}
 		});
@@ -119,7 +118,6 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(settingsButton);
 		settingsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				settingsButton.setEnabled(false);
 				SettingsGUI.compose();
 			}
 		});
