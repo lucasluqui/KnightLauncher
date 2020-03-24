@@ -91,7 +91,11 @@ public class ModLoader {
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
 			ProgressBar.setState(Language.getValue("m.mounting", ModList.installedMods.get(i).getDisplayName()));
-			Compressor.unzip4j("mods/" + ModList.installedMods.get(i).getFileName(), "rsrc/");
+			try {
+				Compressor.unzip("mods/" + ModList.installedMods.get(i).getFileName(), "rsrc/");
+			} catch (IOException e) {
+				KnightLog.logException(e);
+			}
 			KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
 		}
 		
@@ -132,7 +136,11 @@ public class ModLoader {
 			ProgressBar.setBarValue(i + 1);
 			ProgressBar.setState(Language.getValue("m.rebuilding", jarFiles[i]));
 			DiscordInstance.setPresence(Language.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(jarFiles.length)}));
-			Compressor.unzip4j("rsrc/" + jarFiles[i], "rsrc/");
+			try {
+				Compressor.unzip("rsrc/" + jarFiles[i], "rsrc/");
+			} catch (IOException e) {
+				KnightLog.logException(e);
+			}
 		}
 		
 		ProgressBar.setBarValue(jarFiles.length + 1);

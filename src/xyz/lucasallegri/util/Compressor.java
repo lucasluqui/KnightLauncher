@@ -57,6 +57,10 @@ public class Compressor {
         // iterates over entries in the zip file
         while (entry != null) {
             String filePath = destDirectory + File.separator + entry.getName();
+            if(entry.getName().contains(".json")) {
+                zipIn.closeEntry();
+                entry = zipIn.getNextEntry();
+            }
             if (!entry.isDirectory()) {
                 // if the entry is a file, extracts it
                 extractFile(zipIn, filePath);
