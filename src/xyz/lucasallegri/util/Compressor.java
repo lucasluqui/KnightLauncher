@@ -15,6 +15,7 @@ import java.util.zip.ZipInputStream;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.FileHeader;
 import xyz.lucasallegri.logging.KnightLog;
 
 public class Compressor {
@@ -31,6 +32,21 @@ public class Compressor {
 	       KnightLog.logException(e);
 	   }
     }
+	
+	
+	public static String readFileInsideZip(String zip, String pathInZip) {
+		ZipFile zipFile = new ZipFile(zip);
+		FileHeader fileHeader;
+		String content = null;
+		try {
+			fileHeader = zipFile.getFileHeader(pathInZip);
+			InputStream inputStream = zipFile.getInputStream(fileHeader);
+			content = FileUtil.convertInputStreamToString(inputStream);
+		} catch (IOException e) {
+			KnightLog.logException(e);
+		}
+		return content;
+	}
 	
 	
     @Deprecated

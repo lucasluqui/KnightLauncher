@@ -1,6 +1,7 @@
 package xyz.lucasallegri.util;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -100,5 +102,53 @@ public class FileUtil {
 			KnightLog.logException(e);
 		}
 	}
+	
+    /*
+     * Method to convert InputStream to String
+     */
+    public static String convertInputStreamToString(InputStream is) {
+        
+        BufferedReader br = null;
+        StringBuilder sbContent = new StringBuilder();
+        
+        try {
+            /*
+             * Create BufferedReader from InputStreamReader 
+             */
+            br = new BufferedReader(new InputStreamReader(is));
+            
+            /*
+             * read line by line and append content to
+             * StringBuilder
+             */
+            String strLine = null;
+            boolean isFirstLine = true;
+            
+            while((strLine = br.readLine()) != null) {
+                if(isFirstLine) {
+                	sbContent.append(strLine);
+                } else {
+                	sbContent.append("\n").append(strLine);
+                }
+                
+                /*
+                 * Flag to make sure we don't append new line
+                 * before the first line. 
+                 */
+                isFirstLine = false;
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        } finally {            
+            try {
+                if(br  != null) br.close();
+            } catch(Exception e) { 
+            	e.printStackTrace();
+            }
+        }
+        
+        //convert StringBuilder to String and return
+        return sbContent.toString();
+    }
 
 }
