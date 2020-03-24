@@ -7,15 +7,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
+import net.lingala.zip4j.model.LocalFileHeader;
 import xyz.lucasallegri.logging.KnightLog;
 
 public class Compressor {
@@ -33,24 +38,7 @@ public class Compressor {
 	   }
     }
 	
-	
-	public static String readFileInsideZip(String zip, String pathInZip) {
-		ZipFile zipFile = new ZipFile(zip);
-		FileHeader fileHeader;
-		String content = null;
-		try {
-			fileHeader = zipFile.getFileHeader(pathInZip);
-			InputStream inputStream = zipFile.getInputStream(fileHeader);
-			content = FileUtil.convertInputStreamToString(inputStream);
-		} catch (IOException e) {
-			KnightLog.logException(e);
-		}
-		return content;
-	}
-	
-	
-    @Deprecated
-	public static void unzip(String zipFilePath, String destDirectory) throws IOException {
+	public static void unzipSafe(String zipFilePath, String destDirectory) throws IOException {
         FileUtil.createDir(destDirectory);
         ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
         ZipEntry entry = zipIn.getNextEntry();
@@ -74,8 +62,8 @@ public class Compressor {
         }
         zipIn.close();
     }
-    
-    
+	
+	
     @Deprecated
     private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
@@ -86,6 +74,21 @@ public class Compressor {
         }
         bos.close();
     }
+    
+	
+	public static String readFileInsideZip(String zip, String pathInZip) {
+		ZipFile zipFile = new ZipFile(zip);
+		FileHeader fileHeader;
+		String content = null;
+		try {
+			fileHeader = zipFile.getFileHeader(pathInZip);
+			InputStream inputStream = zipFile.getInputStream(fileHeader);
+			content = FileUtil.convertInputStreamToString(inputStream);
+		} catch (IOException e) {
+			KnightLog.logException(e);
+		}
+		return content;
+	}
 	
     
 	public static String getZipHash(String source) {
