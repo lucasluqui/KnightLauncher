@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherGUI;
@@ -31,8 +33,17 @@ public class ModLoader {
 		rawFiles.addAll(FileUtil.fileNamesInDirectory("mods/", ".jar"));
 		
 		for(String file : rawFiles) {
+			JSONObject modJson = new JSONObject(Compressor.readFileInsideZip("mods/" + file, "mod.json")).getJSONObject("mod");
 			Mod mod = new Mod(file);
+			if(modJson != null) {
+				mod.setDisplayName(modJson.getString("name"));
+				mod.setDescription(modJson.getString("description"));
+				mod.setAuthor(modJson.getString("author"));
+				mod.setVersion(modJson.getString("version"));
+				mod.setVersion(modJson.getString("compatibility"));
+			}
 			ModList.installedMods.add(mod);
+			KnightLog.log.info(mod.toString());
 			
 			/*
 			 * Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.

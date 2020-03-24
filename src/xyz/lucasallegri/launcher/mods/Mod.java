@@ -90,5 +90,10 @@ public class Mod {
 	public void setEnabled(boolean enabled) {
 		this.isEnabled = enabled;
 	}
+	
+	@Override
+	public String toString() {
+		return "[Mod displayName="+this.displayName+",description="+this.description+",author="+this.authorName+",version="+this.version+",compatibility="+this.compatibilityVersion+",fileName="+this.fileName+",isEnabled="+this.isEnabled+"]";
+	}
 
 }
