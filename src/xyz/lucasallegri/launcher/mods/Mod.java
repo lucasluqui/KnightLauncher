@@ -12,8 +12,8 @@ public class Mod {
 	
 	protected final String DEFAULT_DESCRIPTION = "Hello, I'm a mod without description!";
 	protected final String DEFAULT_AUTHOR = "Someone, somewhere";
-	protected final String DEFAULT_VERSION = "0.0.1";
-	protected final String DEFAULT_COMPATIBILITYVERSION = "1.0.0";
+	protected final String DEFAULT_VERSION = "Unknown";
+	protected final String DEFAULT_COMPATIBILITYVERSION = "Unknown";
 	
 	public Mod() {
 		this.displayName = null;
