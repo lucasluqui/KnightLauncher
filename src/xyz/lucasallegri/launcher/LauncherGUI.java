@@ -120,7 +120,7 @@ public class LauncherGUI {
 			}
 		});
 		
-		JLabel labelTweets = new JLabel(Language.getValue("m.twitter_title"));
+		JLabel labelTweets = new JLabel("<html>" + Language.getValue("m.twitter_title") + "</html>");
 		labelTweets.setBounds(534, 12, 127, 28);
 		labelTweets.setFont(Fonts.fontReg);
 		launcherGUIFrame.getContentPane().add(labelTweets);
