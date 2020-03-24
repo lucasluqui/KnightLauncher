@@ -60,6 +60,7 @@ public class Compressor {
             if(entry.getName().contains(".json")) {
                 zipIn.closeEntry();
                 entry = zipIn.getNextEntry();
+                continue;
             }
             if (!entry.isDirectory()) {
                 // if the entry is a file, extracts it
