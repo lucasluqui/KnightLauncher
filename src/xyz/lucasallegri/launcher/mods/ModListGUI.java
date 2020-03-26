@@ -136,31 +136,31 @@ public class ModListGUI {
 		separator.setBounds(178, 117, 195, 2);
 		modListGUIFrame.getContentPane().add(separator);
 		
-		labelName = new JLabel(ModList.installedMods.get(0).getDisplayName());
+		labelName = new JLabel("");
 		labelName.setFont(Fonts.fontMed);
 		labelName.setHorizontalAlignment(SwingConstants.CENTER);
 		labelName.setBounds(178, 135, 188, 14);
 		modListGUIFrame.getContentPane().add(labelName);
 		
-		labelAuthor = new JLabel(Language.getValue("m.mod_author", ModList.installedMods.get(0).getAuthor()));
+		labelAuthor = new JLabel("");
 		labelAuthor.setFont(Fonts.fontReg);
 		labelAuthor.setHorizontalAlignment(SwingConstants.CENTER);
 		labelAuthor.setBounds(178, 152, 188, 14);
 		modListGUIFrame.getContentPane().add(labelAuthor);
 		
-		labelDescription = new JLabel("<html>" + ModList.installedMods.get(0).getDescription() + "</html>");
+		labelDescription = new JLabel("");
 		labelDescription.setFont(Fonts.fontReg);
 		labelDescription.setHorizontalAlignment(SwingConstants.LEADING);
 		labelDescription.setVerticalAlignment(SwingConstants.TOP);
 		labelDescription.setBounds(188, 183, 178, 70);
 		modListGUIFrame.getContentPane().add(labelDescription);
 		
-		labelVersion = new JLabel(Language.getValue("m.mod_version", ModList.installedMods.get(0).getVersion()));
+		labelVersion = new JLabel("");
 		labelVersion.setFont(Fonts.fontReg);
 		labelVersion.setBounds(188, 261, 178, 14);
 		modListGUIFrame.getContentPane().add(labelVersion);
 		
-		labelCompatibility = new JLabel(Language.getValue("m.mod_compatibility", ModList.installedMods.get(0).getCompatibilityVersion()));
+		labelCompatibility = new JLabel("");
 		labelCompatibility.setFont(Fonts.fontReg);
 		labelCompatibility.setBounds(188, 282, 178, 14);
 		modListGUIFrame.getContentPane().add(labelCompatibility);
