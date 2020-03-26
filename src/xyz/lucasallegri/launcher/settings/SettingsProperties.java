@@ -23,26 +23,27 @@ public class SettingsProperties {
 		try {
 			if(!FileUtil.fileExists(propPath)) {
 				FileUtil.createFile(propPath);
-				fillWithBaseProp(true);
+				fillWithBaseProp(false);
 			} else if(FileUtil.fileExists(propPath) && getValue("PROP_VER") != null
 					&& !getValue("PROP_VER").startsWith(PROP_VER)) {
 				KnightLog.log.info("Old PROP_VER detected, resetting properties file.");
 				FileUtil.recreateFile(propPath);
-				fillWithBaseProp(false);
+				fillWithBaseProp(true);
 			}
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
 	}
 	
-	private static void fillWithBaseProp(Boolean firstTime) throws IOException {
+	private static void fillWithBaseProp(Boolean alreadyExists) throws IOException {
+		String _alreadyExists = String.valueOf(alreadyExists);
 		String baseProp = 	"PROP_VER=" + PROP_VER + System.lineSeparator() +
 							"lastModCount=0" + System.lineSeparator() +
 							"game.platform=Steam" + System.lineSeparator() +
 							"rebuilds=true"  + System.lineSeparator() +
 							"keepOpen=false" + System.lineSeparator() +
 							"createShortcut=true" + System.lineSeparator() +
-							"jvmPatched=" + (firstTime ? "false" : "true") + System.lineSeparator() +
+							"jvmPatched=" + _alreadyExists + System.lineSeparator() +
 							"lang=en" + System.lineSeparator() +
 							"compressor.unzipMethod=safe" + System.lineSeparator() +
 							"compressor.extractBuffer=8196" + System.lineSeparator() +
