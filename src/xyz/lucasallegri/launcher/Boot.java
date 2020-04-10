@@ -23,6 +23,10 @@ public class Boot {
 	
 	public static void onBootStart() {
 		
+		System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
+		System.setProperty("http.agent", "Mozilla/5.0");
+		System.setProperty("https.agent", "Mozilla/5.0");
+		
 		checkStartLocation();
 		setupLookAndFeel();
 		
