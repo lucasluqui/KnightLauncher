@@ -31,7 +31,7 @@ public class Fonts {
 		InputStream fontMedBigIs;
 		InputStream fontMedGiantIs;
 		
-		if(Settings.lang.contains("jp")) {
+		if(Settings.lang.equalsIgnoreCase("jp")) {
 			fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
 			fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
 			fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);

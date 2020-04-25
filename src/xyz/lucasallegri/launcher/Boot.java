@@ -117,7 +117,7 @@ public class Boot {
 		String latestVer = INetUtil.getWebpageContent(LauncherConstants.VERSION_QUERY_URL);
 		if(latestVer == null) {
 			LauncherGUI.offlineMode = true;
-		} else if (!latestVer.contains(LauncherConstants.VERSION)) {
+		} else if (!latestVer.equalsIgnoreCase(LauncherConstants.VERSION)) {
 			LauncherGUI.showUpdateButton = true;
 		}
 	}
