@@ -44,6 +44,7 @@ public class SettingsProperties {
 							"launcher.keepOpen=false" + System.lineSeparator() +
 							"launcher.createShortcut=true" + System.lineSeparator() +
 							"launcher.lang=en" + System.lineSeparator() +
+							"launcher.style=dark" + System.lineSeparator() +
 							"compressor.unzipMethod=safe" + System.lineSeparator() +
 							"compressor.extractBuffer=8196" + System.lineSeparator() +
 							"game.platform=Steam" + System.lineSeparator() +
@@ -86,6 +87,7 @@ public class SettingsProperties {
 		Settings.keepOpen = Boolean.parseBoolean(getValue("launcher.keepOpen"));
 		Settings.createShortcut = Boolean.parseBoolean(getValue("launcher.createShortcut"));
 		Settings.lang = getValue("launcher.lang");
+		Settings.launcherStyle = getValue("launcher.style");
 		Settings.compressorUnzipMethod = getValue("compressor.unzipMethod");
 		Settings.compressorExtractBuffer = Integer.parseInt(getValue("compressor.extractBuffer"));
 		Settings.gamePlatform = getValue("game.platform");
