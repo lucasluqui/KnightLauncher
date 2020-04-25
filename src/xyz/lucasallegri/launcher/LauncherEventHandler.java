@@ -25,13 +25,13 @@ public class LauncherEventHandler {
 				if(ModLoader.modLoadFinished) {
 					if(Settings.gamePlatform.startsWith("Steam")) {
 						try {
-							//SteamUtil.startGameById("99900");
-							ProcessUtil.startApplication(LauncherConstants.STEAM_CLIENT_ARGS);
+							SteamUtil.startGameById("99900");
+							//ProcessUtil.startApplication(LauncherConstants.STANDALONE_CLIENT_ARGS);
 						} catch (Exception e) {
 							KnightLog.logException(e);
 						}
 					} else {
-						ProcessUtil.startApplication(LauncherConstants.STANDALONE_CLIENT_ARGS);
+						ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
 					}
 					
 					if(!Settings.keepOpen) LauncherGUI.launcherGUIFrame.dispose();

@@ -14,7 +14,7 @@ public class LauncherConstants {
 	public static final String USER_DIR = System.getProperty("user.dir");
 	
 	
-	public static final String[] STANDALONE_CLIENT_ARGS = {"java",
+	public static final String[] STANDALONE_LAUNCHER_ARGS = {"java",
 			"-Dsun.java2d.d3d=false",
 			"-Dcheck_unpacked=true",
 			"-jar",
@@ -23,7 +23,7 @@ public class LauncherConstants {
 			"client"
 	};
 	
-	public static final String[] STEAM_CLIENT_ARGS = {"java",
+	public static final String[] STANDALONE_CLIENT_ARGS = {"java",
 			"-classpath",
 			USER_DIR + File.separator + "./code/config.jar;" +
 			USER_DIR + File.separator + "./code/projectx-config.jar;" +
