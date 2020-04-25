@@ -15,7 +15,8 @@ import xyz.lucasallegri.util.FileUtil;
 
 public class SettingsProperties {
 
-	private static final String PROP_VER = "7";
+	private static final String PROP_VER = "8";
+	
 	private static Properties prop = new Properties();
 	private static String propPath = System.getProperty("user.dir") + File.separator + "KnightLauncher.properties";
 	
@@ -38,15 +39,14 @@ public class SettingsProperties {
 	private static void fillWithBaseProp(Boolean alreadyExists) throws IOException {
 		String _alreadyExists = String.valueOf(alreadyExists);
 		String baseProp = 	"PROP_VER=" + PROP_VER + System.lineSeparator() +
-							"lastModCount=0" + System.lineSeparator() +
-							"game.platform=Steam" + System.lineSeparator() +
-							"rebuilds=true"  + System.lineSeparator() +
-							"keepOpen=false" + System.lineSeparator() +
-							"createShortcut=true" + System.lineSeparator() +
-							"jvmPatched=" + _alreadyExists + System.lineSeparator() +
-							"lang=en" + System.lineSeparator() +
+							"launcher.lastModCount=0" + System.lineSeparator() +
+							"launcher.rebuilds=true"  + System.lineSeparator() +
+							"launcher.keepOpen=false" + System.lineSeparator() +
+							"launcher.createShortcut=true" + System.lineSeparator() +
+							"launcher.lang=en" + System.lineSeparator() +
 							"compressor.unzipMethod=safe" + System.lineSeparator() +
 							"compressor.extractBuffer=8196" + System.lineSeparator() +
+							"game.platform=Steam" + System.lineSeparator() +
 							"game.useStringDeduplication=false" + System.lineSeparator() +
 							"game.useG1GC=false" + System.lineSeparator() +
 							"game.disableExplicitGC=false" + System.lineSeparator() +
@@ -82,14 +82,13 @@ public class SettingsProperties {
 	}
 	
 	public static void loadFromProp() {
-		Settings.gamePlatform = getValue("game.platform");
-		Settings.doRebuilds = Boolean.parseBoolean(getValue("rebuilds"));
-		Settings.keepOpen = Boolean.parseBoolean(getValue("keepOpen"));
-		Settings.createShortcut = Boolean.parseBoolean(getValue("createShortcut"));
-		Settings.jvmPatched = Boolean.parseBoolean(getValue("jvmPatched"));
-		Settings.lang = getValue("lang");
+		Settings.doRebuilds = Boolean.parseBoolean(getValue("launcher.rebuilds"));
+		Settings.keepOpen = Boolean.parseBoolean(getValue("launcher.keepOpen"));
+		Settings.createShortcut = Boolean.parseBoolean(getValue("launcher.createShortcut"));
+		Settings.lang = getValue("launcher.lang");
 		Settings.compressorUnzipMethod = getValue("compressor.unzipMethod");
 		Settings.compressorExtractBuffer = Integer.parseInt(getValue("compressor.extractBuffer"));
+		Settings.gamePlatform = getValue("game.platform");
 		Settings.gameUseStringDeduplication = Boolean.parseBoolean(getValue("game.useStringDeduplication"));
 		Settings.gameUseG1GC = Boolean.parseBoolean(getValue("game.useG1GC"));
 		Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));
