@@ -27,7 +27,6 @@ public class Boot {
 		
 		checkStartLocation();
 		setupHTTPSProtocol();
-		setupLauncherStyle();
 		
 		try {
 			KnightLog.setup();
@@ -37,6 +36,7 @@ public class Boot {
 			KnightLog.logException(ex);
 		}
 		
+		setupLauncherStyle();
 		Language.setup();
 		checkDirectories();
 		checkShortcut();

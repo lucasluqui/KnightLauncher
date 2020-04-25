@@ -38,7 +38,6 @@ public class LauncherGUI {
 	public static JLabel imageContainer;
 	
 	public static Boolean showUpdateButton = false;
-	public static Boolean offlineMode = false;
 
 	public static void main(String[] args) {
 		
