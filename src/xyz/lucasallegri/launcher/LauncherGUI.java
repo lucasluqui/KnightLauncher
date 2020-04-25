@@ -36,8 +36,6 @@ public class LauncherGUI {
 	public static JLabel launchState;
 	public static JProgressBar launchProgressBar;
 	public static JLabel imageContainer;
-	
-	public static Boolean showUpdateButton = false;
 
 	public static void main(String[] args) {
 		
@@ -83,7 +81,7 @@ public class LauncherGUI {
 		
 		String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
 		Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 515, 300);
-		if(offlineMode) {
+		if(Settings.offlineMode) {
 			imageContainer = new JLabel(Language.getValue("error.event_image_missing"));
 		} else {
 			imageContainer = new JLabel(new ImageIcon(eventImage));
@@ -134,7 +132,7 @@ public class LauncherGUI {
 		tweetsContainer.setForeground(Color.WHITE);
 		launcherGUIFrame.getContentPane().add(tweetsContainer);
 		String tweets = INetUtil.getWebpageContent(LauncherConstants.TWEETS_URL);
-		if(offlineMode) {
+		if(Settings.offlineMode) {
 			tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
 		} else {
 			String styledTweets = tweets.replaceFirst("FONT_FAMILY", tweetsContainer.getFont().getFamily()).replaceFirst("COLOR", "#ffffff");
@@ -161,7 +159,7 @@ public class LauncherGUI {
 		updateAvailableButton.setFocusPainted(false);
 		updateAvailableButton.setFocusable(false);
 		updateAvailableButton.setForeground(new Color(0, 194, 65));
-		updateAvailableButton.setVisible(showUpdateButton);
+		updateAvailableButton.setVisible(Settings.showUpdateButton);
 		updateAvailableButton.setBounds(532, 345, 194, 25);
 		launcherGUIFrame.getContentPane().add(updateAvailableButton);
 		updateAvailableButton.addActionListener(new ActionListener() {
@@ -171,7 +169,7 @@ public class LauncherGUI {
 		});
 		
 		JLabel playerCountLabel = new JLabel("");
-		if(offlineMode) {
+		if(Settings.offlineMode) {
 			playerCountLabel.setText(Language.getValue("error.get_player_count"));
 		} else {
 			playerCountLabel.setText(Language.getValue("m.player_count", new String[] { SteamUtil.getCurrentPlayersApproximateTotal("99900"), SteamUtil.getCurrentPlayers("99900") }));

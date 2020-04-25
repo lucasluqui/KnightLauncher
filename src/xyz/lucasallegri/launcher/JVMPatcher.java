@@ -42,9 +42,9 @@ public class JVMPatcher {
 		}
 	}
 	
-	public static Boolean isPatched() {
-		if(!Settings.jvmPatched && FileUtil.fileExists("old_java_vm")) SettingsProperties.setValue("jvmPatched", "true");
-		return Settings.jvmPatched || FileUtil.fileExists("old_java_vm");
-	}
+//	public static Boolean isPatched() {
+//		if(!Settings.jvmPatched && FileUtil.fileExists("old_java_vm")) SettingsProperties.setValue("jvmPatched", "true");
+//		return Settings.jvmPatched || FileUtil.fileExists("old_java_vm");
+//	}
 
 }
