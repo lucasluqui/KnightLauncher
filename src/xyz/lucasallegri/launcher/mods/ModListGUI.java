@@ -179,7 +179,7 @@ public class ModListGUI {
 		
 		disableButton = new JButton(Language.getValue("b.disable"));
 		disableButton.setFont(Fonts.fontMed);
-		disableButton.setForeground(new Color(102, 0, 0));
+		disableButton.setForeground(new Color(194, 0, 0));
 		disableButton.setEnabled(false);
 		disableButton.setFocusable(false);
 		disableButton.setFocusPainted(false);
