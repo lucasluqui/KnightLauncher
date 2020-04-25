@@ -37,6 +37,7 @@ public class ModListGUI {
 
 	public static void compose() {
 		EventQueue.invokeLater(new Runnable() {
+
 			@SuppressWarnings("static-access")
 			public void run() {
 				try {
@@ -65,6 +66,8 @@ public class ModListGUI {
 		modListContainer = new List();
 		modListContainer.setBounds(10, 10, 162, 326);
 		modListContainer.setFont(Fonts.fontMed);
+		modListContainer.setBackground(new Color(45, 48, 56));
+		modListContainer.setForeground(Color.WHITE);
 		modListContainer.setFocusable(false);
 		modListGUIFrame.getContentPane().add(modListContainer);
 		for(Mod mod : ModList.installedMods) { modListContainer.add(mod.getDisplayName()); }
