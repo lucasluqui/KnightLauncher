@@ -25,7 +25,7 @@ public class Boot {
 		
 		checkStartLocation();
 		setupHTTPSProtocol();
-		setupLookAndFeel();
+		setupLauncherStyle();
 		
 		try {
 			KnightLog.setup();
@@ -55,7 +55,7 @@ public class Boot {
 		
 	}
 	
-	private static void setupLookAndFeel() {
+	private static void setupLauncherStyle() {
 		
 		for( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels() ) {
 			if( "Windows".equals(info.getName()) ) {
