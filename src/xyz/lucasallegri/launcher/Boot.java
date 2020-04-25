@@ -46,8 +46,6 @@ public class Boot {
 	
 	public static void onBootEnd() {
 		
-		if(!JVMPatcher.isPatched() && SystemUtil.is64Bit() && SystemUtil.hasValidJavaHome()) JVMPatcher.start();
-		
 		ModLoader.checkInstalled();
 		if(Settings.doRebuilds && ModLoader.rebuildFiles) ModLoader.startFileRebuild();
 		
