@@ -170,7 +170,7 @@ public class ModListGUI {
 		
 		enableButton = new JButton(Language.getValue("b.enable"));
 		enableButton.setFont(Fonts.fontMed);
-		enableButton.setForeground(new Color(0, 102, 34));
+		enableButton.setForeground(new Color(0, 194, 65));
 		enableButton.setEnabled(false);
 		enableButton.setFocusable(false);
 		enableButton.setFocusPainted(false);

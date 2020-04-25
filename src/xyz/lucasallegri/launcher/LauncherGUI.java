@@ -178,7 +178,7 @@ public class LauncherGUI {
 			playerCountLabel.setText(Language.getValue("m.player_count", new String[] { SteamUtil.getCurrentPlayersApproximateTotal("99900"), SteamUtil.getCurrentPlayers("99900") }));
 		}
 		playerCountLabel.setFont(Fonts.fontReg);
-		playerCountLabel.setForeground(new Color(0, 102, 34));
+		playerCountLabel.setForeground(new Color(0, 194, 65));
 		playerCountLabel.setBounds(16, 331, 507, 14);
 		launcherGUIFrame.getContentPane().add(playerCountLabel);
 		
