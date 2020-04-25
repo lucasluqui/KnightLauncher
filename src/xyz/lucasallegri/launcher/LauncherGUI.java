@@ -131,14 +131,15 @@ public class LauncherGUI {
 		tweetsContainer.setEditable(false);
 		tweetsContainer.setContentType("text/html");
 		tweetsContainer.setFont(Fonts.fontReg);
-		tweetsContainer.setBackground(Color.WHITE);
+		tweetsContainer.setBackground(new Color(45, 48, 56));
+		tweetsContainer.setForeground(Color.WHITE);
 		launcherGUIFrame.getContentPane().add(tweetsContainer);
 		String tweets = INetUtil.getWebpageContent(LauncherConstants.TWEETS_URL);
 		if(offlineMode) {
 			tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
 		} else {
-			String parsedTweets = tweets.replaceFirst("FONT_FAMILY", tweetsContainer.getFont().getFamily());
-			tweetsContainer.setText(parsedTweets);
+			String styledTweets = tweets.replaceFirst("FONT_FAMILY", tweetsContainer.getFont().getFamily()).replaceFirst("COLOR", "#ffffff");
+			tweetsContainer.setText(styledTweets);
 			tweetsContainer.setCaretPosition(0);
 			JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
 			tweetsJsp.setBounds(535, 48, 189, 261);
