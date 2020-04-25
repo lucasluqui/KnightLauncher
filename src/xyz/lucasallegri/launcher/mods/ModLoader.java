@@ -75,8 +75,8 @@ public class ModLoader {
 		/*
 		 * Check if there's a new or removed mod since last execution, rebuild will be needed in that case.
 		 */
-		if(Integer.parseInt(SettingsProperties.getValue("lastModCount")) != ModList.installedMods.size()) {
-			SettingsProperties.setValue("lastModCount", Integer.toString(ModList.installedMods.size()));
+		if(Integer.parseInt(SettingsProperties.getValue("modloader.lastModCount")) != ModList.installedMods.size()) {
+			SettingsProperties.setValue("modloader.lastModCount", Integer.toString(ModList.installedMods.size()));
 			rebuildFiles = true;
 		}
 		

@@ -39,12 +39,12 @@ public class SettingsProperties {
 	private static void fillWithBaseProp(Boolean alreadyExists) throws IOException {
 		String _alreadyExists = String.valueOf(alreadyExists);
 		String baseProp = 	"PROP_VER=" + PROP_VER + System.lineSeparator() +
-							"launcher.lastModCount=0" + System.lineSeparator() +
 							"launcher.rebuilds=true"  + System.lineSeparator() +
 							"launcher.keepOpen=false" + System.lineSeparator() +
 							"launcher.createShortcut=true" + System.lineSeparator() +
 							"launcher.lang=en" + System.lineSeparator() +
 							"launcher.style=dark" + System.lineSeparator() +
+							"modloader.lastModCount=0" + System.lineSeparator() +
 							"compressor.unzipMethod=safe" + System.lineSeparator() +
 							"compressor.extractBuffer=8196" + System.lineSeparator() +
 							"game.platform=Steam" + System.lineSeparator() +
