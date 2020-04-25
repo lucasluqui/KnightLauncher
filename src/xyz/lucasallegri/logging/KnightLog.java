@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import xyz.lucasallegri.launcher.LauncherConstants;
+
 public class KnightLog {
 
 	public final static Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -40,6 +42,7 @@ public class KnightLog {
 	    log.addHandler(consoleHandler);
 	    log.setUseParentHandlers(false);
 	    
+	    log.info("Running on version: " + LauncherConstants.VERSION);
 	    log.info("Logging further interactions...");
 	}
     
