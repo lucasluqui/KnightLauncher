@@ -46,8 +46,6 @@ public class LauncherConstants {
 			"-Dappdir=" + USER_DIR + File.separator + ".",
 			"-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
 			"com.threerings.projectx.client.ProjectXApp",
-			"-jar",
-			USER_DIR + File.separator + "code/projectx-config.jar;",
 	};
 	
 }
