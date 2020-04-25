@@ -179,7 +179,7 @@ public class LauncherGUI {
 		}
 		playerCountLabel.setFont(Fonts.fontReg);
 		playerCountLabel.setForeground(new Color(0, 194, 65));
-		playerCountLabel.setBounds(16, 331, 507, 14);
+		playerCountLabel.setBounds(16, 328, 507, 14);
 		launcherGUIFrame.getContentPane().add(playerCountLabel);
 		
 		launcherGUIFrame.setLocationRelativeTo(null);
