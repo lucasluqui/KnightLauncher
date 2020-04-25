@@ -37,7 +37,7 @@ public class LauncherConstants {
 			USER_DIR + File.separator + "./code/commons-digester.jar;" +
 			USER_DIR + File.separator + "./code/commons-logging.jar;",
 			"-Dcom.threerings.getdown=true",
-			"-Xmx256M",
+			"-Xmx512M",
 			"-XX:+AggressiveOpts",
 			"-XX:SoftRefLRUPolicyMSPerMB=10",
 			"-Djava.library.path=" + USER_DIR + File.separator + "./native",
