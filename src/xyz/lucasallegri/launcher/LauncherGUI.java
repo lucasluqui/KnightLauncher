@@ -161,7 +161,7 @@ public class LauncherGUI {
 		updateAvailableButton.setFont(Fonts.fontMedIta);
 		updateAvailableButton.setFocusPainted(false);
 		updateAvailableButton.setFocusable(false);
-		updateAvailableButton.setForeground(new Color(0, 102, 34));
+		updateAvailableButton.setForeground(new Color(0, 194, 65));
 		updateAvailableButton.setVisible(showUpdateButton);
 		updateAvailableButton.setBounds(532, 345, 194, 25);
 		launcherGUIFrame.getContentPane().add(updateAvailableButton);
