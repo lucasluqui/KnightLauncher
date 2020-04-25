@@ -6,6 +6,8 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import mdlaf.MaterialLookAndFeel;
+import mdlaf.themes.JMarsDarkTheme;
+import mdlaf.themes.MaterialLiteTheme;
 import xyz.lucasallegri.dialog.DialogError;
 import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.mods.ModList;
@@ -41,7 +43,6 @@ public class Boot {
 		checkVersion();
 		DiscordInstance.start();
 		Fonts.setup();
-		
 	}
 	
 	public static void onBootEnd() {
@@ -50,7 +51,6 @@ public class Boot {
 		if(Settings.doRebuilds && ModLoader.rebuildFiles) ModLoader.startFileRebuild();
 		
 		DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
-		
 	}
 	
 	private static void setupLauncherStyle() {
@@ -59,6 +59,18 @@ public class Boot {
 			if( "Windows".equals(info.getName()) ) {
 				try {
 					UIManager.setLookAndFeel(new MaterialLookAndFeel());
+					
+					switch(Settings.launcherStyle) {
+					case "dark":
+						MaterialLookAndFeel.changeTheme(new JMarsDarkTheme());
+						break;
+					case "light":
+						MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
+						break;
+					default:
+						MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
+						break;
+					}
 				} catch (UnsupportedLookAndFeelException e) {
 					KnightLog.logException(e);
 				}
@@ -72,10 +84,10 @@ public class Boot {
 		FileUtil.createDir("KnightLauncher/logs/");
 	}
 	
+	/*
+	 * Checking if we're being ran inside the game's directory, "getdown.txt" should always be present if so.
+	 */
 	private static void checkStartLocation() {
-		/*
-		 * Checking if we're being ran inside the game's directory, "getdown.txt" should always be present if so.
-		 */
 		if(!FileUtil.fileExists("getdown-pro.jar")) {
 			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
 					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
@@ -84,10 +96,10 @@ public class Boot {
 		}
 	}
 	
+	/*
+	 * Create a shortcut to the application if there's none.
+	 */
 	private static void checkShortcut() {
-		/*
-		 * Create a shortcut to the application if there's none.
-		 */
 		if(SystemUtil.isWindows() && Settings.createShortcut
 				&& !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherConstants.LNK_FILE_NAME)) {
 			
