@@ -15,12 +15,12 @@ public class SettingsEventHandler {
 	
 	public static void rebuildsChangeEvent(ActionEvent event) {
 		Settings.doRebuilds = SettingsGUI.checkboxRebuilds.isSelected();
-		SettingsProperties.setValue("rebuilds", SettingsGUI.checkboxRebuilds.isSelected() ? "true" : "false");
+		SettingsProperties.setValue("launcher.rebuilds", SettingsGUI.checkboxRebuilds.isSelected() ? "true" : "false");
 	}
 
 	public static void keepOpenChangeEvent(ActionEvent event) {
 		Settings.keepOpen = SettingsGUI.checkboxKeepOpen.isSelected();
-		SettingsProperties.setValue("keepOpen", SettingsGUI.checkboxKeepOpen.isSelected() ? "true" : "false");
+		SettingsProperties.setValue("launcher.keepOpen", SettingsGUI.checkboxKeepOpen.isSelected() ? "true" : "false");
 	}
 	
 	public static void forceRebuildEvent() {
@@ -31,12 +31,12 @@ public class SettingsEventHandler {
 	
 	public static void createShortcutChangeEvent(ActionEvent event) {
 		Settings.createShortcut = SettingsGUI.checkboxShortcut.isSelected();
-		SettingsProperties.setValue("createShortcut", SettingsGUI.checkboxShortcut.isSelected() ? "true" : "false");
+		SettingsProperties.setValue("launcher.createShortcut", SettingsGUI.checkboxShortcut.isSelected() ? "true" : "false");
 	}
 	
 	public static void languageChangeEvent(ItemEvent event) {
 		Settings.lang = Language.getLangCode((String)SettingsGUI.choiceLanguage.getSelectedItem());
-		SettingsProperties.setValue("lang", Language.getLangCode((String)SettingsGUI.choiceLanguage.getSelectedItem()));
+		SettingsProperties.setValue("launcher.lang", Language.getLangCode((String)SettingsGUI.choiceLanguage.getSelectedItem()));
 	}
 	
 	public static void useStringDeduplicationChangeEvent(ActionEvent action) {
