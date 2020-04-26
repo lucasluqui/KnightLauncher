@@ -1,8 +1,10 @@
 package xyz.lucasallegri.launcher.mods;
 
+import xyz.lucasallegri.launcher.DefaultColors;
 import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherGUI;
+import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.DesktopUtil;
 import java.awt.List;
@@ -66,8 +68,8 @@ public class ModListGUI {
 		modListContainer = new List();
 		modListContainer.setBounds(10, 10, 162, 326);
 		modListContainer.setFont(Fonts.fontMed);
-		modListContainer.setBackground(new Color(45, 48, 56));
-		modListContainer.setForeground(Color.WHITE);
+		modListContainer.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_PRIMARY_DARK : Color.WHITE);
+		modListContainer.setForeground(Settings.launcherStyle.equals("dark") ? Color.WHITE : Color.BLACK);
 		modListContainer.setFocusable(false);
 		modListGUIFrame.getContentPane().add(modListContainer);
 		for(Mod mod : ModList.installedMods) { modListContainer.add(mod.getDisplayName()); }
@@ -170,7 +172,7 @@ public class ModListGUI {
 		
 		enableButton = new JButton(Language.getValue("b.enable"));
 		enableButton.setFont(Fonts.fontMed);
-		enableButton.setForeground(new Color(0, 194, 65));
+		enableButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		enableButton.setEnabled(false);
 		enableButton.setFocusable(false);
 		enableButton.setFocusPainted(false);
@@ -179,7 +181,7 @@ public class ModListGUI {
 		
 		disableButton = new JButton(Language.getValue("b.disable"));
 		disableButton.setFont(Fonts.fontMed);
-		disableButton.setForeground(new Color(194, 0, 0));
+		disableButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_RED : DefaultColors.DARK_RED);
 		disableButton.setEnabled(false);
 		disableButton.setFocusable(false);
 		disableButton.setFocusPainted(false);

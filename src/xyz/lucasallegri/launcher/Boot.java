@@ -143,7 +143,8 @@ public class Boot {
 				}
 				
 				String tweets = INetUtil.getWebpageContent(LauncherConstants.TWEETS_URL);
-				String styledTweets = tweets.replaceFirst("FONT_FAMILY", LauncherGUI.tweetsContainer.getFont().getFamily()).replaceFirst("COLOR", "#ffffff");
+				String styledTweets = tweets.replaceFirst("FONT_FAMILY", LauncherGUI.tweetsContainer.getFont().getFamily())
+											.replaceFirst("COLOR", Settings.launcherStyle.equals("dark") ? "#ffffff" : "#000000");
 				LauncherGUI.tweetsContainer.setText(styledTweets);
 				LauncherGUI.tweetsContainer.setCaretPosition(0);
 				

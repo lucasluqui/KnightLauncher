@@ -123,7 +123,7 @@ public class LauncherGUI {
 		tweetsContainer.setEditable(false);
 		tweetsContainer.setContentType("text/html");
 		tweetsContainer.setFont(Fonts.fontReg);
-		tweetsContainer.setBackground(new Color(45, 48, 56));
+		tweetsContainer.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_PRIMARY_DARK : Color.WHITE);
 		tweetsContainer.setForeground(Color.WHITE);
 		launcherGUIFrame.getContentPane().add(tweetsContainer);
 		
@@ -146,7 +146,7 @@ public class LauncherGUI {
 		updateAvailableButton.setFont(Fonts.fontMedIta);
 		updateAvailableButton.setFocusPainted(false);
 		updateAvailableButton.setFocusable(false);
-		updateAvailableButton.setForeground(new Color(0, 194, 65));
+		updateAvailableButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		updateAvailableButton.setVisible(Settings.showUpdateButton);
 		updateAvailableButton.setBounds(532, 345, 194, 25);
 		launcherGUIFrame.getContentPane().add(updateAvailableButton);
@@ -158,7 +158,7 @@ public class LauncherGUI {
 		
 		playerCountLabel = new JLabel("Retrieving player count...");
 		playerCountLabel.setFont(Fonts.fontReg);
-		playerCountLabel.setForeground(new Color(0, 194, 65));
+		playerCountLabel.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		playerCountLabel.setBounds(16, 328, 507, 14);
 		launcherGUIFrame.getContentPane().add(playerCountLabel);
 		
