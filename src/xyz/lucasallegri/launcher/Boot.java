@@ -1,7 +1,9 @@
 package xyz.lucasallegri.launcher;
 
+import java.awt.Image;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -18,6 +20,7 @@ import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.DesktopUtil;
 import xyz.lucasallegri.util.FileUtil;
 import xyz.lucasallegri.util.INetUtil;
+import xyz.lucasallegri.util.ImageUtil;
 import xyz.lucasallegri.util.SteamUtil;
 import xyz.lucasallegri.util.SystemUtil;
 
@@ -51,32 +54,8 @@ public class Boot {
 		if(Settings.doRebuilds && ModLoader.rebuildFiles) ModLoader.startFileRebuild();
 		
 		DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
-	}
-	
-	private static void setupLauncherStyle() {
 		
-		for( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels() ) {
-			if( "Windows".equals(info.getName()) ) {
-				try {
-					UIManager.setLookAndFeel(new MaterialLookAndFeel());
-					
-					switch(Settings.launcherStyle) {
-					case "dark":
-						MaterialLookAndFeel.changeTheme(new JMarsDarkTheme());
-						break;
-					case "light":
-						MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
-						break;
-					default:
-						MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
-						break;
-					}
-				} catch (UnsupportedLookAndFeelException e) {
-					KnightLog.logException(e);
-				}
-			}
-		}
-		
+		loadOnlineAssets();
 	}
 	
 	private static void checkDirectories() {
@@ -122,10 +101,60 @@ public class Boot {
 		}
 	}
 	
+	private static void setupLauncherStyle() {
+		
+		for( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels() ) {
+			if( "Windows".equals(info.getName()) ) {
+				try {
+					UIManager.setLookAndFeel(new MaterialLookAndFeel());
+					
+					switch(Settings.launcherStyle) {
+					case "dark":
+						MaterialLookAndFeel.changeTheme(new JMarsDarkTheme());
+						break;
+					case "light":
+						MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
+						break;
+					default:
+						MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
+						break;
+					}
+				} catch (UnsupportedLookAndFeelException e) {
+					KnightLog.logException(e);
+				}
+			}
+		}
+		
+	}
+	
 	private static void setupHTTPSProtocol() {
 		System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
 		System.setProperty("http.agent", "Mozilla/5.0");
 		System.setProperty("https.agent", "Mozilla/5.0");
+	}
+	
+	private static void loadOnlineAssets() {
+		Thread oassetsThread = new Thread(new Runnable() {
+			public void run() {
+				if(Settings.offlineMode) {
+					LauncherGUI.tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
+					LauncherGUI.playerCountLabel.setText(Language.getValue("error.get_player_count"));
+					LauncherGUI.imageContainer.setText(Language.getValue("error.event_image_missing"));
+				}
+				
+				String tweets = INetUtil.getWebpageContent(LauncherConstants.TWEETS_URL);
+				String styledTweets = tweets.replaceFirst("FONT_FAMILY", LauncherGUI.tweetsContainer.getFont().getFamily()).replaceFirst("COLOR", "#ffffff");
+				LauncherGUI.tweetsContainer.setText(styledTweets);
+				LauncherGUI.tweetsContainer.setCaretPosition(0);
+				
+				LauncherGUI.playerCountLabel.setText(Language.getValue("m.player_count", new String[] { SteamUtil.getCurrentPlayersApproximateTotal("99900"), SteamUtil.getCurrentPlayers("99900") }));
+				
+				String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
+				Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 515, 300);
+				LauncherGUI.imageContainer.setIcon(new ImageIcon(eventImage));
+			}
+		});
+		oassetsThread.start();
 	}
 
 }

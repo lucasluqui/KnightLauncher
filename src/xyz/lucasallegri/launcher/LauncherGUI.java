@@ -36,6 +36,7 @@ public class LauncherGUI {
 	public static JLabel launchState;
 	public static JProgressBar launchProgressBar;
 	public static JLabel imageContainer;
+	public static JLabel playerCountLabel;
 
 	public static void main(String[] args) {
 		
@@ -79,16 +80,10 @@ public class LauncherGUI {
 			}
 		});
 		
-		String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
-		Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 515, 300);
-		if(Settings.offlineMode) {
-			imageContainer = new JLabel(Language.getValue("error.event_image_missing"));
-		} else {
-			imageContainer = new JLabel(new ImageIcon(eventImage));
-		}
-		imageContainer.setBounds(10, 10, 515, 300);
-		imageContainer.setFont(Fonts.fontRegBig);
-		imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
+		LauncherGUI.imageContainer = new JLabel("Loading...");
+		LauncherGUI.imageContainer.setBounds(10, 10, 515, 300);
+		LauncherGUI.imageContainer.setFont(Fonts.fontRegBig);
+		LauncherGUI.imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
 		modButton = new JButton(Language.getValue("b.mods"));
@@ -131,17 +126,10 @@ public class LauncherGUI {
 		tweetsContainer.setBackground(new Color(45, 48, 56));
 		tweetsContainer.setForeground(Color.WHITE);
 		launcherGUIFrame.getContentPane().add(tweetsContainer);
-		String tweets = INetUtil.getWebpageContent(LauncherConstants.TWEETS_URL);
-		if(Settings.offlineMode) {
-			tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
-		} else {
-			String styledTweets = tweets.replaceFirst("FONT_FAMILY", tweetsContainer.getFont().getFamily()).replaceFirst("COLOR", "#ffffff");
-			tweetsContainer.setText(styledTweets);
-			tweetsContainer.setCaretPosition(0);
-			JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
-			tweetsJsp.setBounds(535, 48, 189, 261);
-			launcherGUIFrame.getContentPane().add(tweetsJsp);
-		}
+		
+		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
+		tweetsJsp.setBounds(535, 48, 189, 261);
+		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
 		
 		launchProgressBar = new JProgressBar();
 		launchProgressBar.setBounds(180, 375, 342, 23);
@@ -168,12 +156,7 @@ public class LauncherGUI {
 			}
 		});
 		
-		JLabel playerCountLabel = new JLabel("");
-		if(Settings.offlineMode) {
-			playerCountLabel.setText(Language.getValue("error.get_player_count"));
-		} else {
-			playerCountLabel.setText(Language.getValue("m.player_count", new String[] { SteamUtil.getCurrentPlayersApproximateTotal("99900"), SteamUtil.getCurrentPlayers("99900") }));
-		}
+		playerCountLabel = new JLabel("Retrieving player count...");
 		playerCountLabel.setFont(Fonts.fontReg);
 		playerCountLabel.setForeground(new Color(0, 194, 65));
 		playerCountLabel.setBounds(16, 328, 507, 14);
