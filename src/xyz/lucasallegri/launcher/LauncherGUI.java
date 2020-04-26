@@ -80,7 +80,7 @@ public class LauncherGUI {
 			}
 		});
 		
-		LauncherGUI.imageContainer = new JLabel("Loading...");
+		LauncherGUI.imageContainer = new JLabel("");
 		LauncherGUI.imageContainer.setBounds(10, 10, 515, 300);
 		LauncherGUI.imageContainer.setFont(Fonts.fontRegBig);
 		LauncherGUI.imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
