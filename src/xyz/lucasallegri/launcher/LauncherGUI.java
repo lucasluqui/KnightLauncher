@@ -9,6 +9,7 @@ import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.DesktopUtil;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -17,6 +18,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -225,16 +227,31 @@ public class LauncherGUI {
 		windowTitle.setBounds(10, 0, 150, 20);
 		titleBar.add(windowTitle);
 		
-		JButton closeButton = new JButton("X");
-		closeButton.setBounds(720, 0, 20, 20);
+		JButton closeButton = new JButton("x");
+		closeButton.setBounds(723, 0, 20, 20);
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
-		closeButton.setBorder(null);
+		closeButton.setBorder(BorderFactory.createLineBorder(new Color(34, 36, 42)));
+		closeButton.setFont(Fonts.fontMed);
 		titleBar.add(closeButton);
 		closeButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
 		    {
 		       System.exit(0);
+		    }
+		});
+		
+		JButton minimizeButton = new JButton("-");
+		minimizeButton.setBounds(703, 0, 20, 20);
+		minimizeButton.setFocusPainted(false);
+		minimizeButton.setFocusable(false);
+		minimizeButton.setBorder(BorderFactory.createLineBorder(new Color(34, 36, 42)));
+		minimizeButton.setFont(Fonts.fontMed);
+		titleBar.add(minimizeButton);
+		minimizeButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e)
+		    {
+		       launcherGUIFrame.setState(Frame.ICONIFIED);
 		    }
 		});
 		
