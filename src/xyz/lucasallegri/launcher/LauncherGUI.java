@@ -184,40 +184,40 @@ public class LauncherGUI {
 		 * link: https://stackoverflow.com/questions/24476496/drag-and-resize-undecorated-jframe
 		 */
 		titleBar.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent me) {
-            	
-                pX = me.getX();
-                pY = me.getY();
-            }
-        });
+		    public void mousePressed(MouseEvent me) {
+		    	
+		        pX = me.getX();
+		        pY = me.getY();
+		    }
+		});
 		titleBar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent me) {
 				
-                pX = me.getX();
-                pY = me.getY();
-            }
-
-            @Override 
-            public void mouseDragged(MouseEvent me) {
-
-                launcherGUIFrame.setLocation(launcherGUIFrame.getLocation().x + me.getX() - pX,
-                launcherGUIFrame.getLocation().y + me.getY() - pY);
-            }
-        });
+		        pX = me.getX();
+		        pY = me.getY();
+		    }
+		
+		    @Override 
+		    public void mouseDragged(MouseEvent me) {
+		
+		        launcherGUIFrame.setLocation(launcherGUIFrame.getLocation().x + me.getX() - pX,
+		        launcherGUIFrame.getLocation().y + me.getY() - pY);
+		    }
+		});
 		titleBar.addMouseMotionListener(new MouseMotionListener() {
-        	@Override
-        	public void mouseDragged(MouseEvent me) {
-
-                launcherGUIFrame.setLocation(launcherGUIFrame.getLocation().x + me.getX() - pX,
-                launcherGUIFrame.getLocation().y + me.getY() - pY);
-            }
-
+			@Override
+			public void mouseDragged(MouseEvent me) {
+		
+		        launcherGUIFrame.setLocation(launcherGUIFrame.getLocation().x + me.getX() - pX,
+		        launcherGUIFrame.getLocation().y + me.getY() - pY);
+		    }
+		
 			@Override
 			public void mouseMoved(MouseEvent arg0) {
 				// Auto-generated method stub
 			}
-        });
+		});
 		
 		launcherGUIFrame.setLocationRelativeTo(null);
 		
