@@ -7,18 +7,13 @@ import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.DesktopUtil;
-import xyz.lucasallegri.util.INetUtil;
-import xyz.lucasallegri.util.ImageUtil;
-import xyz.lucasallegri.util.SteamUtil;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -73,7 +68,7 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().setLayout(null);
 		
 		launchButton = new JButton(Language.getValue("b.launch").toUpperCase());
-		launchButton.setBounds(15, 350, 155, 48);
+		launchButton.setBounds(15, 377, 155, 48);
 		launchButton.setFont(Fonts.fontMedBig);
 		launchButton.setFocusPainted(false);
 		launchButton.setFocusable(false);
@@ -84,14 +79,14 @@ public class LauncherGUI {
 			}
 		});
 		
-		LauncherGUI.imageContainer = new JLabel("");
-		LauncherGUI.imageContainer.setBounds(10, 10, 515, 300);
-		LauncherGUI.imageContainer.setFont(Fonts.fontRegBig);
-		LauncherGUI.imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
+		imageContainer = new JLabel("");
+		imageContainer.setBounds(10, 37, 515, 300);
+		imageContainer.setFont(Fonts.fontRegBig);
+		imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
 		modButton = new JButton(Language.getValue("b.mods"));
-		modButton.setBounds(532, 375, 89, 23);
+		modButton.setBounds(536, 402, 89, 23);
 		modButton.setFont(Fonts.fontMed);
 		modButton.setFocusPainted(false);
 		modButton.setFocusable(false);
@@ -104,7 +99,7 @@ public class LauncherGUI {
 		});
 		
 		settingsButton = new JButton(Language.getValue("b.settings"));
-		settingsButton.setBounds(626, 375, 100, 23);
+		settingsButton.setBounds(630, 402, 100, 23);
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
@@ -117,13 +112,13 @@ public class LauncherGUI {
 		});
 		
 		JLabel labelTweets = new JLabel("<html>" + Language.getValue("m.twitter_title") + "</html>");
-		labelTweets.setBounds(534, 12, 127, 28);
+		labelTweets.setBounds(534, 39, 127, 28);
 		labelTweets.setFont(Fonts.fontReg);
 		launcherGUIFrame.getContentPane().add(labelTweets);
 		
 		tweetsContainer = new JTextPane();
 		tweetsContainer.setText(Language.getValue("m.twitter_load"));
-		tweetsContainer.setBounds(535, 48, 189, 261);
+		tweetsContainer.setBounds(539, 75, 189, 261);
 		tweetsContainer.setEditable(false);
 		tweetsContainer.setContentType("text/html");
 		tweetsContainer.setFont(Fonts.fontReg);
@@ -131,17 +126,23 @@ public class LauncherGUI {
 		tweetsContainer.setForeground(Color.WHITE);
 		launcherGUIFrame.getContentPane().add(tweetsContainer);
 		
+		/*
+		 * Comment the following three lines to preview this GUI with WindowBuilder
+		 * I have no idea why they're conflicting with it, but without doing so
+		 * you won't be able to see anything, throwing errors on Language.getValue()
+		 * during t.main and b.launch parsing. Java is fun :)
+		 */
 		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
-		tweetsJsp.setBounds(535, 48, 189, 261);
+		tweetsJsp.setBounds(539, 75, 189, 261);
 		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
 		
 		launchProgressBar = new JProgressBar();
-		launchProgressBar.setBounds(180, 375, 342, 23);
+		launchProgressBar.setBounds(180, 402, 346, 23);
 		launchProgressBar.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchProgressBar);
 		
 		launchState = new JLabel("");
-		launchState.setBounds(181, 356, 325, 14);
+		launchState.setBounds(181, 383, 345, 14);
 		launchState.setFont(Fonts.fontReg);
 		launchState.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchState);
@@ -152,7 +153,7 @@ public class LauncherGUI {
 		updateButton.setFocusable(false);
 		updateButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		updateButton.setVisible(false);
-		updateButton.setBounds(532, 345, 194, 25);
+		updateButton.setBounds(536, 372, 194, 25);
 		launcherGUIFrame.getContentPane().add(updateButton);
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
@@ -163,7 +164,7 @@ public class LauncherGUI {
 		playerCountLabel = new JLabel(Language.getValue("m.player_count_load"));
 		playerCountLabel.setFont(Fonts.fontReg);
 		playerCountLabel.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
-		playerCountLabel.setBounds(16, 328, 507, 14);
+		playerCountLabel.setBounds(16, 355, 507, 14);
 		launcherGUIFrame.getContentPane().add(playerCountLabel);
 		
 		launcherGUIFrame.setLocationRelativeTo(null);
