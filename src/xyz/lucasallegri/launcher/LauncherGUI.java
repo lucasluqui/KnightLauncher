@@ -69,6 +69,7 @@ public class LauncherGUI {
 		launcherGUIFrame.setResizable(false);
 		launcherGUIFrame.setBounds(100, 100, 745, 440);
 		launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		launcherGUIFrame.setUndecorated(true);
 		launcherGUIFrame.getContentPane().setLayout(null);
 		
 		launchButton = new JButton(Language.getValue("b.launch").toUpperCase());
