@@ -177,7 +177,7 @@ public class LauncherGUI {
 		
 		JPanel titleBar = new JPanel();
 		titleBar.setBounds(0, 0, 745, 20);
-		titleBar.setBackground(new Color(34, 36, 42));
+		titleBar.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT);
 		launcherGUIFrame.getContentPane().add(titleBar);
 		
 		
@@ -231,7 +231,7 @@ public class LauncherGUI {
 		closeButton.setBounds(723, 0, 20, 20);
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
-		closeButton.setBorder(BorderFactory.createLineBorder(new Color(34, 36, 42)));
+		closeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
 		closeButton.setFont(Fonts.fontMed);
 		titleBar.add(closeButton);
 		closeButton.addActionListener(new ActionListener() {
@@ -245,7 +245,7 @@ public class LauncherGUI {
 		minimizeButton.setBounds(703, 0, 20, 20);
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
-		minimizeButton.setBorder(BorderFactory.createLineBorder(new Color(34, 36, 42)));
+		minimizeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
 		minimizeButton.setFont(Fonts.fontMed);
 		titleBar.add(minimizeButton);
 		minimizeButton.addActionListener(new ActionListener() {
