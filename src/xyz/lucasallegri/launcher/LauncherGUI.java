@@ -88,7 +88,7 @@ public class LauncherGUI {
 		});
 		
 		imageContainer = new JLabel("");
-		imageContainer.setBounds(10, 37, 515, 300);
+		imageContainer.setBounds(10, 34, 515, 300);
 		imageContainer.setFont(Fonts.fontRegBig);
 		imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
 		launcherGUIFrame.getContentPane().add(imageContainer);
@@ -120,13 +120,13 @@ public class LauncherGUI {
 		});
 		
 		JLabel labelTweets = new JLabel("<html>" + Language.getValue("m.twitter_title") + "</html>");
-		labelTweets.setBounds(534, 39, 127, 28);
+		labelTweets.setBounds(545, 36, 127, 28);
 		labelTweets.setFont(Fonts.fontReg);
 		launcherGUIFrame.getContentPane().add(labelTweets);
 		
 		tweetsContainer = new JTextPane();
 		tweetsContainer.setText(Language.getValue("m.twitter_load"));
-		tweetsContainer.setBounds(539, 75, 189, 261);
+		tweetsContainer.setBounds(545, 72, 189, 261);
 		tweetsContainer.setEditable(false);
 		tweetsContainer.setContentType("text/html");
 		tweetsContainer.setFont(Fonts.fontReg);
@@ -140,9 +140,9 @@ public class LauncherGUI {
 		 * you won't be able to see anything, throwing errors on Language.getValue()
 		 * during t.main and b.launch parsing. Java is fun :)
 		 */
-//		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
-//		tweetsJsp.setBounds(539, 75, 189, 261);
-//		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
+		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
+		tweetsJsp.setBounds(545, 72, 189, 261);
+		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
 		
 		launchProgressBar = new JProgressBar();
 		launchProgressBar.setBounds(180, 402, 346, 23);
@@ -224,7 +224,7 @@ public class LauncherGUI {
 		
 		JLabel windowTitle = new JLabel(Language.getValue("t.main", LauncherConstants.VERSION));
 		windowTitle.setFont(Fonts.fontMed);
-		windowTitle.setBounds(10, 0, 150, 20);
+		windowTitle.setBounds(10, 0, 500, 20);
 		titleBar.add(windowTitle);
 		
 		JButton closeButton = new JButton("x");
@@ -241,7 +241,7 @@ public class LauncherGUI {
 		    }
 		});
 		
-		JButton minimizeButton = new JButton("-");
+		JButton minimizeButton = new JButton("_");
 		minimizeButton.setBounds(703, 0, 20, 20);
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
