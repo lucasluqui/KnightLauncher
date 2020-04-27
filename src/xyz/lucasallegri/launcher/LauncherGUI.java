@@ -160,7 +160,7 @@ public class LauncherGUI {
 			}
 		});
 		
-		playerCountLabel = new JLabel("Retrieving player count...");
+		playerCountLabel = new JLabel(Language.getValue("m.player_count_load"));
 		playerCountLabel.setFont(Fonts.fontReg);
 		playerCountLabel.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		playerCountLabel.setBounds(16, 328, 507, 14);
