@@ -3,6 +3,7 @@ package xyz.lucasallegri.launcher.mods;
 import xyz.lucasallegri.launcher.DefaultColors;
 import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.Language;
+import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
@@ -120,7 +121,7 @@ public class ModListGUI {
 		modListGUIFrame.getContentPane().add(modFolderButton);
 		modFolderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				DesktopUtil.openDir(System.getProperty("user.dir") + "/mods");
+				DesktopUtil.openDir(LauncherConstants.USER_DIR + "/mods");
 			}
 		});
 		

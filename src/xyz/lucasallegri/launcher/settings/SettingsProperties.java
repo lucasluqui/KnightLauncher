@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.FileUtil;
 
@@ -18,7 +19,7 @@ public class SettingsProperties {
 	private static final String PROP_VER = "8";
 	
 	private static Properties prop = new Properties();
-	private static String propPath = System.getProperty("user.dir") + File.separator + "KnightLauncher.properties";
+	private static String propPath = LauncherConstants.USER_DIR + File.separator + "KnightLauncher.properties";
 	
 	public static void setup() {
 		try {

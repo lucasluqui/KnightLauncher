@@ -82,9 +82,9 @@ public class Boot {
 				&& !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherConstants.LNK_FILE_NAME)) {
 			
 			DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe", 
-										"-jar \"" + System.getProperty("user.dir") + "\\KnightLauncher.jar\"", 
-										System.getProperty("user.dir"), 
-										System.getProperty("user.dir") + "\\icon-128.ico", 
+										"-jar \"" + LauncherConstants.USER_DIR + "\\KnightLauncher.jar\"", 
+										LauncherConstants.USER_DIR, 
+										LauncherConstants.USER_DIR + "\\icon-128.ico", 
 										"Start KnightLauncher", 
 										LauncherConstants.LNK_FILE_NAME
 			);

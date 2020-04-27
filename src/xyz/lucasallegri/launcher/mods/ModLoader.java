@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.Language;
+import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
@@ -36,7 +37,7 @@ public class ModLoader {
 		for(String file : rawFiles) {
 			JSONObject modJson;
 			try {
-				modJson = new JSONObject(Compressor.readFileInsideZip(System.getProperty("user.dir") + "/mods/" + file, "mod.json")).getJSONObject("mod");
+				modJson = new JSONObject(Compressor.readFileInsideZip(LauncherConstants.USER_DIR + "/mods/" + file, "mod.json")).getJSONObject("mod");
 			} catch(Exception e) {
 				modJson = null;
 			}
