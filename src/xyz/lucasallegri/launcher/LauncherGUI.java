@@ -11,6 +11,9 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
@@ -20,6 +23,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.JPanel;
 
 public class LauncherGUI {
 
@@ -33,6 +37,8 @@ public class LauncherGUI {
 	public static JProgressBar launchProgressBar;
 	public static JLabel imageContainer;
 	public static JLabel playerCountLabel;
+	
+	int pX, pY;
 
 	public static void main(String[] args) {
 		
@@ -132,9 +138,9 @@ public class LauncherGUI {
 		 * you won't be able to see anything, throwing errors on Language.getValue()
 		 * during t.main and b.launch parsing. Java is fun :)
 		 */
-		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
-		tweetsJsp.setBounds(539, 75, 189, 261);
-		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
+//		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
+//		tweetsJsp.setBounds(539, 75, 189, 261);
+//		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
 		
 		launchProgressBar = new JProgressBar();
 		launchProgressBar.setBounds(180, 402, 346, 23);
@@ -166,6 +172,52 @@ public class LauncherGUI {
 		playerCountLabel.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		playerCountLabel.setBounds(16, 355, 507, 14);
 		launcherGUIFrame.getContentPane().add(playerCountLabel);
+		
+		JPanel titleBar = new JPanel();
+		titleBar.setBounds(0, 0, 745, 20);
+		titleBar.setBackground(Color.BLACK);
+		launcherGUIFrame.getContentPane().add(titleBar);
+		
+		
+		/*
+		 * Based on Paul Samsotha's reply @ StackOverflow
+		 * link: https://stackoverflow.com/questions/24476496/drag-and-resize-undecorated-jframe
+		 */
+		titleBar.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent me) {
+            	
+                pX = me.getX();
+                pY = me.getY();
+            }
+        });
+		titleBar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent me) {
+				
+                pX = me.getX();
+                pY = me.getY();
+            }
+
+            @Override 
+            public void mouseDragged(MouseEvent me) {
+
+                launcherGUIFrame.setLocation(launcherGUIFrame.getLocation().x + me.getX() - pX,
+                launcherGUIFrame.getLocation().y + me.getY() - pY);
+            }
+        });
+		titleBar.addMouseMotionListener(new MouseMotionListener() {
+        	@Override
+        	public void mouseDragged(MouseEvent me) {
+
+                launcherGUIFrame.setLocation(launcherGUIFrame.getLocation().x + me.getX() - pX,
+                launcherGUIFrame.getLocation().y + me.getY() - pY);
+            }
+
+			@Override
+			public void mouseMoved(MouseEvent arg0) {
+				// Auto-generated method stub
+			}
+        });
 		
 		launcherGUIFrame.setLocationRelativeTo(null);
 		
