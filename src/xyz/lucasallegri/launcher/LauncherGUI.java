@@ -175,7 +175,7 @@ public class LauncherGUI {
 		
 		JPanel titleBar = new JPanel();
 		titleBar.setBounds(0, 0, 745, 20);
-		titleBar.setBackground(Color.BLACK);
+		titleBar.setBackground(new Color(34, 36, 42));
 		launcherGUIFrame.getContentPane().add(titleBar);
 		
 		
