@@ -57,12 +57,11 @@ public class LauncherGUI {
 				}
 			}
 		});
-		
-		Boot.onBootEnd();
 	}
 
 	public LauncherGUI() {
 		initialize();
+		Boot.onBootEnd();
 	}
 
 	private void initialize() {
