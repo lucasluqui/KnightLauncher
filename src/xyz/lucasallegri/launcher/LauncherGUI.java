@@ -218,6 +218,25 @@ public class LauncherGUI {
 				// Auto-generated method stub
 			}
 		});
+		titleBar.setLayout(null);
+		
+		JLabel windowTitle = new JLabel(Language.getValue("t.main", LauncherConstants.VERSION));
+		windowTitle.setFont(Fonts.fontMed);
+		windowTitle.setBounds(10, 0, 150, 20);
+		titleBar.add(windowTitle);
+		
+		JButton closeButton = new JButton("X");
+		closeButton.setBounds(720, 0, 20, 20);
+		closeButton.setFocusPainted(false);
+		closeButton.setFocusable(false);
+		closeButton.setBorder(null);
+		titleBar.add(closeButton);
+		closeButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e)
+		    {
+		       System.exit(0);
+		    }
+		});
 		
 		launcherGUIFrame.setLocationRelativeTo(null);
 		
