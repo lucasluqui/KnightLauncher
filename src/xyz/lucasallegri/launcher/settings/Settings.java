@@ -17,6 +17,6 @@ public class Settings {
 	public static String gameAdditionalArgs = null;
 	public static String launcherStyle = "dark";
 	public static Boolean offlineMode = false;
-	public static Boolean showUpdateButton = false;
+	public static Boolean isOutdated = false;
 
 }

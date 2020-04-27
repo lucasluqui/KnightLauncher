@@ -32,6 +32,7 @@ public class LauncherGUI {
 	public static JButton launchButton;
 	public static JButton settingsButton;
 	public static JButton modButton;
+	public static JButton updateButton;
 	public static JTextPane tweetsContainer;
 	public static JLabel launchState;
 	public static JProgressBar launchProgressBar;
@@ -53,6 +54,8 @@ public class LauncherGUI {
 				}
 			}
 		});
+		
+		Boot.onBootEnd();
 	}
 
 	public LauncherGUI() {
@@ -142,15 +145,15 @@ public class LauncherGUI {
 		launchState.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchState);
 		
-		JButton updateAvailableButton = new JButton(Language.getValue("b.update_available"));
-		updateAvailableButton.setFont(Fonts.fontMedIta);
-		updateAvailableButton.setFocusPainted(false);
-		updateAvailableButton.setFocusable(false);
-		updateAvailableButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
-		updateAvailableButton.setVisible(Settings.showUpdateButton);
-		updateAvailableButton.setBounds(532, 345, 194, 25);
-		launcherGUIFrame.getContentPane().add(updateAvailableButton);
-		updateAvailableButton.addActionListener(new ActionListener() {
+		updateButton = new JButton(Language.getValue("b.update_available"));
+		updateButton.setFont(Fonts.fontMedIta);
+		updateButton.setFocusPainted(false);
+		updateButton.setFocusable(false);
+		updateButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
+		updateButton.setVisible(false);
+		updateButton.setBounds(532, 345, 194, 25);
+		launcherGUIFrame.getContentPane().add(updateButton);
+		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
 				DesktopUtil.openWebpage(LauncherConstants.RELEASES_URL);
 			}
@@ -170,8 +173,6 @@ public class LauncherGUI {
 		        DiscordInstance.stop();
 		    }
 		});
-		
-		Boot.onBootEnd();
 		
 	}
 }

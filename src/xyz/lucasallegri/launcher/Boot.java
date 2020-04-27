@@ -43,7 +43,6 @@ public class Boot {
 		Language.setup();
 		checkDirectories();
 		checkShortcut();
-		checkVersion();
 		DiscordInstance.start();
 		Fonts.setup();
 	}
@@ -97,7 +96,8 @@ public class Boot {
 		if(latestVer == null) {
 			Settings.offlineMode = true;
 		} else if (!latestVer.equalsIgnoreCase(LauncherConstants.VERSION)) {
-			Settings.showUpdateButton = true;
+			Settings.isOutdated = true;
+			LauncherGUI.updateButton.setVisible(true);
 		}
 	}
 	
@@ -136,6 +136,9 @@ public class Boot {
 	private static void loadOnlineAssets() {
 		Thread oassetsThread = new Thread(new Runnable() {
 			public void run() {
+				
+				checkVersion();
+				
 				if(Settings.offlineMode) {
 					LauncherGUI.tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
 					LauncherGUI.playerCountLabel.setText(Language.getValue("error.get_player_count"));
