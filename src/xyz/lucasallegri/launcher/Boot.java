@@ -147,7 +147,7 @@ public class Boot {
 				LauncherGUI.playerCountLabel.setText(Language.getValue("m.player_count", new String[] { SteamUtil.getCurrentPlayersApproximateTotal("99900"), SteamUtil.getCurrentPlayers("99900") }));
 				
 				String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
-				Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 515, 300);
+				Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 525, 305);
 				LauncherGUI.imageContainer.setIcon(new ImageIcon(eventImage));
 			}
 		});

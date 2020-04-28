@@ -87,7 +87,7 @@ public class LauncherGUI {
 		});
 		
 		imageContainer = new JLabel("");
-		imageContainer.setBounds(15, 36, 550, 336);
+		imageContainer.setBounds(23, 48, 525, 305);
 		imageContainer.setFont(Fonts.fontRegBig);
 		imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
 		launcherGUIFrame.getContentPane().add(imageContainer);
@@ -106,7 +106,7 @@ public class LauncherGUI {
 		});
 		
 		settingsButton = new JButton(Language.getValue("b.settings"));
-		settingsButton.setBounds(266, 434, 100, 25);
+		settingsButton.setBounds(273, 434, 100, 25);
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
@@ -119,13 +119,13 @@ public class LauncherGUI {
 		});
 		
 		JLabel labelTweets = new JLabel("<html>" + Language.getValue("m.twitter_title") + "</html>");
-		labelTweets.setBounds(575, 36, 127, 28);
+		labelTweets.setBounds(566, 36, 127, 28);
 		labelTweets.setFont(Fonts.fontReg);
 		launcherGUIFrame.getContentPane().add(labelTweets);
 		
 		tweetsContainer = new JTextPane();
 		tweetsContainer.setText(Language.getValue("m.twitter_load"));
-		tweetsContainer.setBounds(575, 75, 265, 297);
+		tweetsContainer.setBounds(566, 75, 260, 297);
 		tweetsContainer.setEditable(false);
 		tweetsContainer.setContentType("text/html");
 		tweetsContainer.setFont(Fonts.fontReg);
@@ -139,9 +139,9 @@ public class LauncherGUI {
 		 * you won't be able to see anything, throwing errors on Language.getValue()
 		 * during t.main and b.launch parsing. Java is fun :)
 		 */
-//		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
-//		tweetsJsp.setBounds(651, 75, 189, 297);
-//		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
+		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
+		tweetsJsp.setBounds(566, 75, 260, 297);
+		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
 		
 		launchProgressBar = new JProgressBar();
 		launchProgressBar.setBounds(0, 470, 850, 5);
@@ -161,7 +161,7 @@ public class LauncherGUI {
 		updateButton.setFocusable(false);
 		updateButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		updateButton.setVisible(false);
-		updateButton.setBounds(375, 434, 31, 25);
+		updateButton.setBounds(381, 434, 31, 25);
 		launcherGUIFrame.getContentPane().add(updateButton);
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
