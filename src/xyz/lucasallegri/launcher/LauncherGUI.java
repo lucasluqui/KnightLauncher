@@ -87,13 +87,13 @@ public class LauncherGUI {
 		});
 		
 		imageContainer = new JLabel("");
-		imageContainer.setBounds(15, 36, 612, 336);
+		imageContainer.setBounds(15, 36, 550, 336);
 		imageContainer.setFont(Fonts.fontRegBig);
 		imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
 		modButton = new JButton(Language.getValue("b.mods"));
-		modButton.setBounds(169, 435, 89, 23);
+		modButton.setBounds(175, 434, 89, 25);
 		modButton.setFont(Fonts.fontMed);
 		modButton.setFocusPainted(false);
 		modButton.setFocusable(false);
@@ -106,7 +106,7 @@ public class LauncherGUI {
 		});
 		
 		settingsButton = new JButton(Language.getValue("b.settings"));
-		settingsButton.setBounds(263, 436, 100, 23);
+		settingsButton.setBounds(266, 434, 100, 25);
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
@@ -119,13 +119,13 @@ public class LauncherGUI {
 		});
 		
 		JLabel labelTweets = new JLabel("<html>" + Language.getValue("m.twitter_title") + "</html>");
-		labelTweets.setBounds(651, 36, 127, 28);
+		labelTweets.setBounds(575, 36, 127, 28);
 		labelTweets.setFont(Fonts.fontReg);
 		launcherGUIFrame.getContentPane().add(labelTweets);
 		
 		tweetsContainer = new JTextPane();
 		tweetsContainer.setText(Language.getValue("m.twitter_load"));
-		tweetsContainer.setBounds(651, 75, 189, 297);
+		tweetsContainer.setBounds(575, 75, 265, 297);
 		tweetsContainer.setEditable(false);
 		tweetsContainer.setContentType("text/html");
 		tweetsContainer.setFont(Fonts.fontReg);
@@ -140,7 +140,7 @@ public class LauncherGUI {
 		 * during t.main and b.launch parsing. Java is fun :)
 		 */
 //		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
-//		tweetsJsp.setBounds(545, 72, 189, 261);
+//		tweetsJsp.setBounds(651, 75, 189, 297);
 //		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
 		
 		launchProgressBar = new JProgressBar();
@@ -150,7 +150,7 @@ public class LauncherGUI {
 		
 		launchState = new JLabel("");
 		launchState.setHorizontalAlignment(SwingConstants.RIGHT);
-		launchState.setBounds(642, 443, 203, 23);
+		launchState.setBounds(638, 443, 203, 23);
 		launchState.setFont(Fonts.fontRegBig);
 		launchState.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchState);
@@ -161,7 +161,7 @@ public class LauncherGUI {
 		updateButton.setFocusable(false);
 		updateButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		updateButton.setVisible(false);
-		updateButton.setBounds(365, 438, 31, 20);
+		updateButton.setBounds(375, 434, 31, 25);
 		launcherGUIFrame.getContentPane().add(updateButton);
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
