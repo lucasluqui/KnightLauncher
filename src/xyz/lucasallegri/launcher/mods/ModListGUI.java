@@ -13,13 +13,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Frame;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 
@@ -37,6 +44,8 @@ public class ModListGUI {
 	private JLabel labelVersion;
 	private JLabel labelCompatibility;
 	private JLabel labelAuthor;
+	
+	int pY, pX;
 
 	public static void compose() {
 		EventQueue.invokeLater(new Runnable() {
@@ -63,11 +72,12 @@ public class ModListGUI {
 		modListGUIFrame.setTitle(Language.getValue("t.mods"));
 		modListGUIFrame.setBounds(100, 100, 385, 400);
 		modListGUIFrame.setResizable(false);
+		modListGUIFrame.setUndecorated(true);
 		modListGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		modListGUIFrame.getContentPane().setLayout(null);
 		
 		modListContainer = new List();
-		modListContainer.setBounds(10, 10, 162, 326);
+		modListContainer.setBounds(10, 34, 162, 326);
 		modListContainer.setFont(Fonts.fontMed);
 		modListContainer.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_PRIMARY_DARK : Color.WHITE);
 		modListContainer.setForeground(Settings.launcherStyle.equals("dark") ? Color.WHITE : Color.BLACK);
@@ -89,18 +99,18 @@ public class ModListGUI {
 		
 		labelModCount = new JLabel(String.valueOf(ModList.installedMods.size()));
 		labelModCount.setHorizontalAlignment(SwingConstants.CENTER);
-		labelModCount.setBounds(178, 31, 188, 40);
+		labelModCount.setBounds(178, 54, 188, 40);
 		labelModCount.setFont(Fonts.fontMedGiant);
 		modListGUIFrame.getContentPane().add(labelModCount);
 		
 		labelModCountText = new JLabel(Language.getValue("m.mods_installed"));
 		labelModCountText.setHorizontalAlignment(SwingConstants.CENTER);
-		labelModCountText.setBounds(178, 80, 188, 14);
+		labelModCountText.setBounds(178, 103, 188, 14);
 		labelModCountText.setFont(Fonts.fontReg);
 		modListGUIFrame.getContentPane().add(labelModCountText);
 		
 		refreshButton = new JButton(Language.getValue("b.refresh"));
-		refreshButton.setBounds(9, 342, 89, 23);
+		refreshButton.setBounds(9, 370, 89, 23);
 		refreshButton.setFont(Fonts.fontMed);
 		refreshButton.setFocusPainted(false);
 		refreshButton.setFocusable(false);
@@ -113,7 +123,7 @@ public class ModListGUI {
 		});
 		
 		JButton modFolderButton = new JButton(Language.getValue("b.open_mods_folder"));
-		modFolderButton.setBounds(104, 342, 136, 23);
+		modFolderButton.setBounds(104, 370, 136, 23);
 		modFolderButton.setFont(Fonts.fontMed);
 		modFolderButton.setFocusPainted(false);
 		modFolderButton.setFocusable(false);
@@ -126,7 +136,7 @@ public class ModListGUI {
 		});
 		
 		JButton getModsButton = new JButton(Language.getValue("b.get_mods"));
-		getModsButton.setBounds(245, 342, 126, 23);
+		getModsButton.setBounds(245, 370, 126, 23);
 		getModsButton.setFont(Fonts.fontMed);
 		getModsButton.setFocusPainted(false);
 		getModsButton.setFocusable(false);
@@ -139,36 +149,36 @@ public class ModListGUI {
 		});
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(178, 117, 195, 2);
+		separator.setBounds(178, 140, 195, 2);
 		modListGUIFrame.getContentPane().add(separator);
 		
 		labelName = new JLabel("");
 		labelName.setFont(Fonts.fontMed);
 		labelName.setHorizontalAlignment(SwingConstants.CENTER);
-		labelName.setBounds(178, 135, 188, 14);
+		labelName.setBounds(178, 158, 188, 14);
 		modListGUIFrame.getContentPane().add(labelName);
 		
 		labelAuthor = new JLabel("");
 		labelAuthor.setFont(Fonts.fontReg);
 		labelAuthor.setHorizontalAlignment(SwingConstants.CENTER);
-		labelAuthor.setBounds(178, 152, 188, 14);
+		labelAuthor.setBounds(178, 175, 188, 14);
 		modListGUIFrame.getContentPane().add(labelAuthor);
 		
 		labelDescription = new JLabel("");
 		labelDescription.setFont(Fonts.fontReg);
 		labelDescription.setHorizontalAlignment(SwingConstants.LEADING);
 		labelDescription.setVerticalAlignment(SwingConstants.TOP);
-		labelDescription.setBounds(188, 183, 178, 70);
+		labelDescription.setBounds(188, 206, 178, 70);
 		modListGUIFrame.getContentPane().add(labelDescription);
 		
 		labelVersion = new JLabel("");
 		labelVersion.setFont(Fonts.fontReg);
-		labelVersion.setBounds(188, 261, 178, 14);
+		labelVersion.setBounds(188, 284, 178, 14);
 		modListGUIFrame.getContentPane().add(labelVersion);
 		
 		labelCompatibility = new JLabel("");
 		labelCompatibility.setFont(Fonts.fontReg);
-		labelCompatibility.setBounds(188, 282, 178, 14);
+		labelCompatibility.setBounds(188, 305, 178, 14);
 		modListGUIFrame.getContentPane().add(labelCompatibility);
 		
 		enableButton = new JButton(Language.getValue("b.enable"));
@@ -177,7 +187,7 @@ public class ModListGUI {
 		enableButton.setEnabled(false);
 		enableButton.setFocusable(false);
 		enableButton.setFocusPainted(false);
-		enableButton.setBounds(180, 309, 89, 23);
+		enableButton.setBounds(183, 336, 89, 23);
 		modListGUIFrame.getContentPane().add(enableButton);
 		
 		disableButton = new JButton(Language.getValue("b.disable"));
@@ -186,8 +196,88 @@ public class ModListGUI {
 		disableButton.setEnabled(false);
 		disableButton.setFocusable(false);
 		disableButton.setFocusPainted(false);
-		disableButton.setBounds(281, 309, 89, 23);
+		disableButton.setBounds(281, 336, 89, 23);
 		modListGUIFrame.getContentPane().add(disableButton);
+		
+		JPanel titleBar = new JPanel();
+		titleBar.setBounds(0, 0, modListGUIFrame.getWidth(), 20);
+		titleBar.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT);
+		modListGUIFrame.getContentPane().add(titleBar);
+		
+		
+		/*
+		 * Based on Paul Samsotha's reply @ StackOverflow
+		 * link: https://stackoverflow.com/questions/24476496/drag-and-resize-undecorated-jframe
+		 */
+		titleBar.addMouseListener(new MouseAdapter() {
+		    public void mousePressed(MouseEvent me) {
+		    	
+		        pX = me.getX();
+		        pY = me.getY();
+		    }
+		});
+		titleBar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent me) {
+				
+		        pX = me.getX();
+		        pY = me.getY();
+		    }
+		
+		    @Override 
+		    public void mouseDragged(MouseEvent me) {
+		
+		    	modListGUIFrame.setLocation(modListGUIFrame.getLocation().x + me.getX() - pX,
+		    	modListGUIFrame.getLocation().y + me.getY() - pY);
+		    }
+		});
+		titleBar.addMouseMotionListener(new MouseMotionListener() {
+			@Override
+			public void mouseDragged(MouseEvent me) {
+		
+				modListGUIFrame.setLocation(modListGUIFrame.getLocation().x + me.getX() - pX,
+				modListGUIFrame.getLocation().y + me.getY() - pY);
+		    }
+		
+			@Override
+			public void mouseMoved(MouseEvent arg0) {
+				// Auto-generated method stub
+			}
+		});
+		titleBar.setLayout(null);
+		
+		JLabel windowTitle = new JLabel(Language.getValue("t.mods"));
+		windowTitle.setFont(Fonts.fontMed);
+		windowTitle.setBounds(10, 0, modListGUIFrame.getWidth() - 100, 20);
+		titleBar.add(windowTitle);
+		
+		JButton closeButton = new JButton("x");
+		closeButton.setBounds(modListGUIFrame.getWidth() - 22, 0, 20, 20);
+		closeButton.setFocusPainted(false);
+		closeButton.setFocusable(false);
+		closeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		closeButton.setFont(Fonts.fontMed);
+		titleBar.add(closeButton);
+		closeButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e)
+		    {
+		    	modListGUIFrame.dispose();
+		    }
+		});
+		
+		JButton minimizeButton = new JButton("_");
+		minimizeButton.setBounds(modListGUIFrame.getWidth() - 42, 0, 20, 20);
+		minimizeButton.setFocusPainted(false);
+		minimizeButton.setFocusable(false);
+		minimizeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		minimizeButton.setFont(Fonts.fontMed);
+		titleBar.add(minimizeButton);
+		minimizeButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e)
+		    {
+		    	modListGUIFrame.setState(Frame.ICONIFIED);
+		    }
+		});
 		
 		modListGUIFrame.setLocationRelativeTo(null);
 		

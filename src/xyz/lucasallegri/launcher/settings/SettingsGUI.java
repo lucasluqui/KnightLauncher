@@ -26,7 +26,6 @@ import javax.swing.ScrollPaneConstants;
 import xyz.lucasallegri.launcher.DefaultColors;
 import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.Language;
-import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 
