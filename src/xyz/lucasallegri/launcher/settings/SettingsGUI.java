@@ -1,23 +1,32 @@
 package xyz.lucasallegri.launcher.settings;
 
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+
+import xyz.lucasallegri.launcher.DefaultColors;
 import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.Language;
+import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 
@@ -36,6 +45,8 @@ public class SettingsGUI {
 	public static JCheckBox checkboxExplicitGC;
 	public static JCheckBox checkboxUndecorated;
 	public static JEditorPane argumentsPane;
+	
+	int pY, pX;
 
 	public static void compose() {
 		EventQueue.invokeLater(new Runnable() {
@@ -61,25 +72,26 @@ public class SettingsGUI {
 		settingsGUIFrame.setTitle(Language.getValue("t.settings"));
 		settingsGUIFrame.setBounds(100, 100, 310, 560);
 		settingsGUIFrame.setResizable(false);
+		settingsGUIFrame.setUndecorated(true);
 		settingsGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		settingsGUIFrame.getContentPane().setLayout(null);
 		
 		JLabel labelLauncherSettings = new JLabel(Language.getValue("m.launcher_settings"));
 		labelLauncherSettings.setFont(Fonts.fontMed);
-		labelLauncherSettings.setBounds(10, 16, 271, 14);
+		labelLauncherSettings.setBounds(10, 36, 271, 14);
 		settingsGUIFrame.getContentPane().add(labelLauncherSettings);
 		
 		JSeparator sepLauncherSettings = new JSeparator();
-		sepLauncherSettings.setBounds(10, 36, 272, 2);
+		sepLauncherSettings.setBounds(10, 56, 272, 2);
 		settingsGUIFrame.getContentPane().add(sepLauncherSettings);
 		
 		JLabel labelChoicePlatform = new JLabel(Language.getValue("m.platform"));
-		labelChoicePlatform.setBounds(15, 59, 95, 14);
+		labelChoicePlatform.setBounds(15, 79, 95, 14);
 		labelChoicePlatform.setFont(Fonts.fontReg);
 		settingsGUIFrame.getContentPane().add(labelChoicePlatform);
 		
 		choicePlatform = new JComboBox<String>();
-		choicePlatform.setBounds(125, 55, 105, 20);
+		choicePlatform.setBounds(125, 75, 105, 20);
 		choicePlatform.setFont(Fonts.fontReg);
 		choicePlatform.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choicePlatform);
@@ -94,12 +106,12 @@ public class SettingsGUI {
 		});
 		
 		JLabel labelLanguage = new JLabel(Language.getValue("m.language"));
-		labelLanguage.setBounds(15, 104, 95, 14);
+		labelLanguage.setBounds(15, 124, 95, 14);
 		labelLanguage.setFont(Fonts.fontReg);
 		settingsGUIFrame.getContentPane().add(labelLanguage);
 		
 		choiceLanguage = new JComboBox<String>();
-		choiceLanguage.setBounds(125, 100, 120, 20);
+		choiceLanguage.setBounds(125, 120, 120, 20);
 		choiceLanguage.setFont(Fonts.fontReg);
 		choiceLanguage.setFocusable(false);
 		settingsGUIFrame.getContentPane().add(choiceLanguage);
@@ -115,7 +127,7 @@ public class SettingsGUI {
 		});
 		
 		checkboxRebuilds = new JCheckBox(Language.getValue("m.rebuilds"));
-		checkboxRebuilds.setBounds(11, 141, 270, 23);
+		checkboxRebuilds.setBounds(11, 161, 270, 23);
 		checkboxRebuilds.setFont(Fonts.fontReg);
 		checkboxRebuilds.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
@@ -127,7 +139,7 @@ public class SettingsGUI {
 		});
 		
 		checkboxKeepOpen = new JCheckBox(Language.getValue("m.keep_open"));
-		checkboxKeepOpen.setBounds(11, 163, 270, 21);
+		checkboxKeepOpen.setBounds(11, 183, 270, 21);
 		checkboxKeepOpen.setFont(Fonts.fontReg);
 		checkboxKeepOpen.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxKeepOpen);
@@ -139,7 +151,7 @@ public class SettingsGUI {
 		});
 		
 		forceRebuildButton = new JButton(Language.getValue("b.force_rebuild"));
-		forceRebuildButton.setBounds(166, 185, 120, 23);
+		forceRebuildButton.setBounds(166, 205, 120, 23);
 		forceRebuildButton.setFont(Fonts.fontMed);
 		forceRebuildButton.setFocusPainted(false);
 		forceRebuildButton.setFocusable(false);
@@ -152,7 +164,7 @@ public class SettingsGUI {
 		});
 		
 		checkboxShortcut = new JCheckBox(Language.getValue("m.create_shortcut"));
-		checkboxShortcut.setBounds(11, 185, 139, 23);
+		checkboxShortcut.setBounds(11, 205, 139, 23);
 		checkboxShortcut.setFont(Fonts.fontReg);
 		checkboxShortcut.setFocusPainted(false);
 		checkboxShortcut.setToolTipText(Language.getValue("m.create_shortcut"));
@@ -165,23 +177,23 @@ public class SettingsGUI {
 		});
 		
 		JSeparator sepExtraTxt = new JSeparator();
-		sepExtraTxt.setBounds(10, 246, 272, 2);
+		sepExtraTxt.setBounds(10, 266, 272, 2);
 		settingsGUIFrame.getContentPane().add(sepExtraTxt);
 		
 		JLabel labelExtraTxt = new JLabel(Language.getValue("m.extratxt_settings"));
 		labelExtraTxt.setFont(Fonts.fontMed);
-		labelExtraTxt.setBounds(10, 226, 271, 14);
+		labelExtraTxt.setBounds(10, 246, 271, 14);
 		settingsGUIFrame.getContentPane().add(labelExtraTxt);
 		
 		JLabel labelMemory = new JLabel(Language.getValue("m.allocated_memory"));
 		labelMemory.setFont(Fonts.fontReg);
-		labelMemory.setBounds(15, 265, 124, 14);
+		labelMemory.setBounds(15, 285, 124, 14);
 		settingsGUIFrame.getContentPane().add(labelMemory);
 		
 		choiceMemory = new JComboBox<String>();
 		choiceMemory.setFont(Fonts.fontReg);
 		choiceMemory.setFocusable(false);
-		choiceMemory.setBounds(145, 261, 135, 20);
+		choiceMemory.setBounds(145, 281, 135, 20);
 		settingsGUIFrame.getContentPane().add(choiceMemory);
 		choiceMemory.addItem(Language.getValue("o.memory_default"));
 		choiceMemory.addItem(Language.getValue("o.memory_low"));
@@ -199,7 +211,7 @@ public class SettingsGUI {
 		
 		checkboxStringDeduplication = new JCheckBox(Language.getValue("m.use_string_deduplication"));
 		checkboxStringDeduplication.setFont(Fonts.fontReg);
-		checkboxStringDeduplication.setBounds(11, 295, 249, 23);
+		checkboxStringDeduplication.setBounds(11, 315, 249, 23);
 		checkboxStringDeduplication.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxStringDeduplication);
 		checkboxStringDeduplication.setSelected(Settings.gameUseStringDeduplication);
@@ -211,7 +223,7 @@ public class SettingsGUI {
 		
 		checkboxG1GC = new JCheckBox(Language.getValue("m.use_g1gc"));
 		checkboxG1GC.setFont(Fonts.fontReg);
-		checkboxG1GC.setBounds(11, 317, 249, 23);
+		checkboxG1GC.setBounds(11, 337, 249, 23);
 		checkboxG1GC.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxG1GC);
 		checkboxG1GC.setSelected(Settings.gameUseG1GC);
@@ -223,7 +235,7 @@ public class SettingsGUI {
 		
 		checkboxExplicitGC = new JCheckBox(Language.getValue("m.disable_explicit_gc"));
 		checkboxExplicitGC.setFont(Fonts.fontReg);
-		checkboxExplicitGC.setBounds(11, 339, 249, 23);
+		checkboxExplicitGC.setBounds(11, 359, 249, 23);
 		checkboxExplicitGC.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxExplicitGC);
 		checkboxExplicitGC.setSelected(Settings.gameDisableExplicitGC);
@@ -235,7 +247,7 @@ public class SettingsGUI {
 		
 		checkboxUndecorated = new JCheckBox(Language.getValue("m.undecorated_window"));
 		checkboxUndecorated.setFont(Fonts.fontReg);
-		checkboxUndecorated.setBounds(11, 361, 249, 23);
+		checkboxUndecorated.setBounds(11, 381, 249, 23);
 		checkboxUndecorated.setFocusPainted(false);
 		settingsGUIFrame.getContentPane().add(checkboxUndecorated);
 		checkboxUndecorated.setSelected(Settings.gameUndecoratedWindow);
@@ -247,7 +259,7 @@ public class SettingsGUI {
 		
 		JLabel labelArgumentsPane = new JLabel(Language.getValue("m.additional_args"));
 		labelArgumentsPane.setFont(Fonts.fontMed);
-		labelArgumentsPane.setBounds(13, 400, 271, 14);
+		labelArgumentsPane.setBounds(13, 420, 271, 14);
 		settingsGUIFrame.getContentPane().add(labelArgumentsPane);
 		
 		argumentsPane = new JEditorPane();
@@ -259,8 +271,88 @@ public class SettingsGUI {
 		JScrollPane scrollBar = new JScrollPane(argumentsPane);
 		scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollBar.setBounds(11, 421, 272, 85);
+		scrollBar.setBounds(11, 441, 272, 85);
 		settingsGUIFrame.getContentPane().add(scrollBar);
+		
+		JPanel titleBar = new JPanel();
+		titleBar.setBounds(0, 0, settingsGUIFrame.getWidth(), 20);
+		titleBar.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT);
+		settingsGUIFrame.getContentPane().add(titleBar);
+		
+		
+		/*
+		 * Based on Paul Samsotha's reply @ StackOverflow
+		 * link: https://stackoverflow.com/questions/24476496/drag-and-resize-undecorated-jframe
+		 */
+		titleBar.addMouseListener(new MouseAdapter() {
+		    public void mousePressed(MouseEvent me) {
+		    	
+		        pX = me.getX();
+		        pY = me.getY();
+		    }
+		});
+		titleBar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent me) {
+				
+		        pX = me.getX();
+		        pY = me.getY();
+		    }
+		
+		    @Override 
+		    public void mouseDragged(MouseEvent me) {
+		
+		    	settingsGUIFrame.setLocation(settingsGUIFrame.getLocation().x + me.getX() - pX,
+		    	settingsGUIFrame.getLocation().y + me.getY() - pY);
+		    }
+		});
+		titleBar.addMouseMotionListener(new MouseMotionListener() {
+			@Override
+			public void mouseDragged(MouseEvent me) {
+		
+				settingsGUIFrame.setLocation(settingsGUIFrame.getLocation().x + me.getX() - pX,
+				settingsGUIFrame.getLocation().y + me.getY() - pY);
+		    }
+		
+			@Override
+			public void mouseMoved(MouseEvent arg0) {
+				// Auto-generated method stub
+			}
+		});
+		titleBar.setLayout(null);
+		
+		JLabel windowTitle = new JLabel(Language.getValue("t.settings"));
+		windowTitle.setFont(Fonts.fontMed);
+		windowTitle.setBounds(10, 0, settingsGUIFrame.getWidth() - 100, 20);
+		titleBar.add(windowTitle);
+		
+		JButton closeButton = new JButton("x");
+		closeButton.setBounds(settingsGUIFrame.getWidth() - 22, 0, 20, 20);
+		closeButton.setFocusPainted(false);
+		closeButton.setFocusable(false);
+		closeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		closeButton.setFont(Fonts.fontMed);
+		titleBar.add(closeButton);
+		closeButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e)
+		    {
+		       settingsGUIFrame.dispose();
+		    }
+		});
+		
+		JButton minimizeButton = new JButton("_");
+		minimizeButton.setBounds(settingsGUIFrame.getWidth() - 42, 0, 20, 20);
+		minimizeButton.setFocusPainted(false);
+		minimizeButton.setFocusable(false);
+		minimizeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		minimizeButton.setFont(Fonts.fontMed);
+		titleBar.add(minimizeButton);
+		minimizeButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e)
+		    {
+		    	settingsGUIFrame.setState(Frame.ICONIFIED);
+		    }
+		});
 		
 		settingsGUIFrame.setLocationRelativeTo(null);
 		
