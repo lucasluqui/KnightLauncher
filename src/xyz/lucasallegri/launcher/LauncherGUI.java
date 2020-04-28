@@ -175,7 +175,7 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(playerCountLabel);
 		
 		JPanel titleBar = new JPanel();
-		titleBar.setBounds(0, 0, 745, 20);
+		titleBar.setBounds(0, 0, launcherGUIFrame.getWidth(), 20);
 		titleBar.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT);
 		launcherGUIFrame.getContentPane().add(titleBar);
 		
@@ -223,11 +223,11 @@ public class LauncherGUI {
 		
 		JLabel windowTitle = new JLabel(Language.getValue("t.main", LauncherConstants.VERSION));
 		windowTitle.setFont(Fonts.fontMed);
-		windowTitle.setBounds(10, 0, 500, 20);
+		windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 20);
 		titleBar.add(windowTitle);
 		
 		JButton closeButton = new JButton("x");
-		closeButton.setBounds(723, 0, 20, 20);
+		closeButton.setBounds(launcherGUIFrame.getWidth() - 22, 0, 20, 20);
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
 		closeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
@@ -241,7 +241,7 @@ public class LauncherGUI {
 		});
 		
 		JButton minimizeButton = new JButton("_");
-		minimizeButton.setBounds(703, 0, 20, 20);
+		minimizeButton.setBounds(launcherGUIFrame.getWidth() - 42, 0, 20, 20);
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
 		minimizeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
