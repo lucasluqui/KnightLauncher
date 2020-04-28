@@ -142,9 +142,9 @@ public class LauncherGUI {
 		 * you won't be able to see anything, throwing errors on Language.getValue()
 		 * during t.main and b.launch parsing. Java is fun :)
 		 */
-//		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
-//		tweetsJsp.setBounds(567, 75, 260, 297);
-//		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
+		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
+		tweetsJsp.setBounds(567, 75, 260, 297);
+		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
 		
 		launchProgressBar = new JProgressBar();
 		launchProgressBar.setBounds(0, 470, 850, 5);
