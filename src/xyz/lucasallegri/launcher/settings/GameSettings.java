@@ -15,7 +15,7 @@ public class GameSettings {
 		try {
 			new File("extra.txt").delete();
 			PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");
-			ProgressBar.setState(Language.getValue("m.gamesettings_loading"));
+			ProgressBar.setState(Language.getValue("m.applying"));
 			if(Settings.gameUseStringDeduplication) writer.println("-XX:+UseStringDeduplication");
 			if(Settings.gameUseG1GC) writer.println("-XX:+UseG1GC");
 			if(Settings.gameDisableExplicitGC) writer.println("-XX:+DisableExplicitGC");
@@ -24,7 +24,7 @@ public class GameSettings {
 			writer.println("-Xmx" + Settings.gameMemory + "M");
 			writer.println(Settings.gameAdditionalArgs);
 			writer.close();
-			ProgressBar.setState(Language.getValue("m.gamesettings_loaded"));
+			ProgressBar.setState("");
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			KnightLog.logException(e);
 		}

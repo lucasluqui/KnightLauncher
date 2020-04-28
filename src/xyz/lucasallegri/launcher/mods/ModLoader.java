@@ -87,19 +87,18 @@ public class ModLoader {
 		
 		LauncherGUI.launchButton.setEnabled(false);
 		ProgressBar.setBarMax(ModList.installedMods.size() + 1);
-		ProgressBar.setState(Language.getValue("m.mount_start"));
+		ProgressBar.setState(Language.getValue("m.mount"));
 		DiscordInstance.setPresence(Language.getValue("m.mount_start"));
 		
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
-			ProgressBar.setState(Language.getValue("m.mounting", ModList.installedMods.get(i).getDisplayName()));
 			Compressor.unzip("./mods/" + ModList.installedMods.get(i).getFileName(), "./rsrc/", SystemUtil.isMac());
 			KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
 		}
 		
 		modLoadFinished = true;
 		
-		ProgressBar.setState(Language.getValue("m.mount_finished"));
+		ProgressBar.setState("");
 		ProgressBar.setBarMax(1);
 		ProgressBar.setBarValue(1);
 		LauncherGUI.launchButton.setEnabled(true);
@@ -128,17 +127,16 @@ public class ModLoader {
 		String[] jarFiles = {"full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar"};
 		
 		ProgressBar.setBarMax(jarFiles.length + 1);
-		ProgressBar.setState(Language.getValue("m.rebuild_start"));
+		ProgressBar.setState(Language.getValue("m.clean"));
 		
 		for(int i = 0; i < jarFiles.length; i++) {
 			ProgressBar.setBarValue(i + 1);
-			ProgressBar.setState(Language.getValue("m.rebuilding", jarFiles[i]));
 			DiscordInstance.setPresence(Language.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(jarFiles.length)}));
 			Compressor.unzip("./rsrc/" + jarFiles[i], "./rsrc/", false);
 		}
 		
 		ProgressBar.setBarValue(jarFiles.length + 1);
-		ProgressBar.setState(Language.getValue("m.rebuild_complete"));
+		ProgressBar.setState("");
 		rebuildFiles = false;
 		LauncherGUI.launchButton.setEnabled(true);
 		LauncherGUI.settingsButton.setEnabled(true);
