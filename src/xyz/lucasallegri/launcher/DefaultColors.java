@@ -11,5 +11,6 @@ public class DefaultColors {
 	public static Color INTERFACE_PRIMARY_DARK = new Color(45, 48, 56);
 	public static Color INTERFACE_TITLEBAR_DARK = new Color(34, 36, 42);
 	public static Color INTERFACE_TITLEBAR_LIGHT = new Color(230, 230, 230);
+	public static Color DISCORD_PRIMARY = new Color(114, 137, 218);
 
 }

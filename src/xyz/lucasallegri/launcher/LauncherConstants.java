@@ -11,6 +11,7 @@ public class LauncherConstants {
 	public static final String VERSION_QUERY_URL = "https://aegis.lucasallegri.xyz/knightlauncher/version.txt";
 	public static final String RELEASES_URL = "https://github.com/lucas-allegri/KnightLauncher/releases";
 	public static final String TWEETS_URL = "https://aegis.lucasallegri.xyz/knightlauncher/tweets.txt";
+	public static final String BUG_REPORT_URL = "https://github.com/lucas-allegri/KnightLauncher/issues";
 	public static final String USER_DIR = System.getProperty("user.dir");
 	
 	

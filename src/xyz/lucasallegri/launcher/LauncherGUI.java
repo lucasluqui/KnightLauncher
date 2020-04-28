@@ -69,6 +69,8 @@ public class LauncherGUI {
 
 	private void initialize() {
 		
+		IconFontSwing.register(FontAwesome.getIconFont());
+		
 		launcherGUIFrame = new JFrame();
 		launcherGUIFrame.setTitle(Language.getValue("t.main", LauncherConstants.VERSION));
 		launcherGUIFrame.setResizable(false);
@@ -158,11 +160,10 @@ public class LauncherGUI {
 		launchState.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchState);
 		
-		IconFontSwing.register(FontAwesome.getIconFont());
-		Icon icon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 20, Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
+		Icon cloudIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 20, Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		updateButton = new JButton(Language.getValue("b.update_available"));
 		updateButton.setHorizontalAlignment(SwingConstants.CENTER);
-		updateButton.setIcon(icon);
+		updateButton.setIcon(cloudIcon);
 		updateButton.setFont(Fonts.fontMedIta);
 		updateButton.setFocusPainted(false);
 		updateButton.setFocusable(false);
@@ -259,6 +260,38 @@ public class LauncherGUI {
 		    public void actionPerformed(ActionEvent e)
 		    {
 		       launcherGUIFrame.setState(Frame.ICONIFIED);
+		    }
+		});
+		
+		Icon discordIcon = IconFontSwing.buildIcon(FontAwesome.SLIDESHARE, 16, DefaultColors.DISCORD_PRIMARY);
+		JButton discordButton = new JButton(discordIcon);
+		discordButton.setBounds(launcherGUIFrame.getWidth() - 67, 0, 20, 20);
+		discordButton.setToolTipText("Discord");
+		discordButton.setFocusPainted(false);
+		discordButton.setFocusable(false);
+		discordButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		discordButton.setFont(Fonts.fontMed);
+		titleBar.add(discordButton);
+		discordButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e)
+		    {
+		       DesktopUtil.openWebpage("https://discord.gg/RAf499a");
+		    }
+		});
+		
+		Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_RED : DefaultColors.DARK_RED);
+		JButton bugButton = new JButton(bugIcon);
+		bugButton.setBounds(launcherGUIFrame.getWidth() - 89, 0, 20, 20);
+		bugButton.setToolTipText("Report a Bug");
+		bugButton.setFocusPainted(false);
+		bugButton.setFocusable(false);
+		bugButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		bugButton.setFont(Fonts.fontMed);
+		titleBar.add(bugButton);
+		bugButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e)
+		    {
+		       DesktopUtil.openWebpage(LauncherConstants.BUG_REPORT_URL);
 		    }
 		});
 		
