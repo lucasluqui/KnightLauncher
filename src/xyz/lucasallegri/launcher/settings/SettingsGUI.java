@@ -70,7 +70,7 @@ public class SettingsGUI {
 	private void initialize() {
 		settingsGUIFrame = new JFrame();
 		settingsGUIFrame.setTitle(Language.getValue("t.settings"));
-		settingsGUIFrame.setBounds(100, 100, 310, 560);
+		settingsGUIFrame.setBounds(100, 100, 295, 545);
 		settingsGUIFrame.setResizable(false);
 		settingsGUIFrame.setUndecorated(true);
 		settingsGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
