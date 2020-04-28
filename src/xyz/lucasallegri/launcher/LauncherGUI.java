@@ -119,13 +119,13 @@ public class LauncherGUI {
 		});
 		
 		JLabel labelTweets = new JLabel("<html>" + Language.getValue("m.twitter_title") + "</html>");
-		labelTweets.setBounds(566, 36, 127, 28);
+		labelTweets.setBounds(567, 36, 127, 28);
 		labelTweets.setFont(Fonts.fontReg);
 		launcherGUIFrame.getContentPane().add(labelTweets);
 		
 		tweetsContainer = new JTextPane();
 		tweetsContainer.setText(Language.getValue("m.twitter_load"));
-		tweetsContainer.setBounds(566, 75, 260, 297);
+		tweetsContainer.setBounds(567, 75, 260, 297);
 		tweetsContainer.setEditable(false);
 		tweetsContainer.setContentType("text/html");
 		tweetsContainer.setFont(Fonts.fontReg);
@@ -140,7 +140,7 @@ public class LauncherGUI {
 		 * during t.main and b.launch parsing. Java is fun :)
 		 */
 		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
-		tweetsJsp.setBounds(566, 75, 260, 297);
+		tweetsJsp.setBounds(567, 75, 260, 297);
 		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
 		
 		launchProgressBar = new JProgressBar();
