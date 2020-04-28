@@ -37,6 +37,7 @@ public class SettingsProperties {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private static void fillWithBaseProp(Boolean alreadyExists) throws IOException {
 		String _alreadyExists = String.valueOf(alreadyExists);
 		String baseProp = 	"PROP_VER=" + PROP_VER + System.lineSeparator() +
