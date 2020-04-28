@@ -69,13 +69,13 @@ public class LauncherGUI {
 		launcherGUIFrame = new JFrame();
 		launcherGUIFrame.setTitle(Language.getValue("t.main", LauncherConstants.VERSION));
 		launcherGUIFrame.setResizable(false);
-		launcherGUIFrame.setBounds(100, 100, 745, 440);
+		launcherGUIFrame.setBounds(100, 100, 850, 475);
 		launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		launcherGUIFrame.setUndecorated(true);
 		launcherGUIFrame.getContentPane().setLayout(null);
 		
 		launchButton = new JButton(Language.getValue("b.launch").toUpperCase());
-		launchButton.setBounds(15, 377, 155, 48);
+		launchButton.setBounds(10, 411, 155, 48);
 		launchButton.setFont(Fonts.fontMedBig);
 		launchButton.setFocusPainted(false);
 		launchButton.setFocusable(false);
@@ -87,13 +87,13 @@ public class LauncherGUI {
 		});
 		
 		imageContainer = new JLabel("");
-		imageContainer.setBounds(10, 34, 515, 300);
+		imageContainer.setBounds(15, 36, 612, 336);
 		imageContainer.setFont(Fonts.fontRegBig);
 		imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
 		modButton = new JButton(Language.getValue("b.mods"));
-		modButton.setBounds(536, 402, 89, 23);
+		modButton.setBounds(169, 435, 89, 23);
 		modButton.setFont(Fonts.fontMed);
 		modButton.setFocusPainted(false);
 		modButton.setFocusable(false);
@@ -106,7 +106,7 @@ public class LauncherGUI {
 		});
 		
 		settingsButton = new JButton(Language.getValue("b.settings"));
-		settingsButton.setBounds(630, 402, 100, 23);
+		settingsButton.setBounds(263, 436, 100, 23);
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
@@ -119,13 +119,13 @@ public class LauncherGUI {
 		});
 		
 		JLabel labelTweets = new JLabel("<html>" + Language.getValue("m.twitter_title") + "</html>");
-		labelTweets.setBounds(545, 36, 127, 28);
+		labelTweets.setBounds(651, 36, 127, 28);
 		labelTweets.setFont(Fonts.fontReg);
 		launcherGUIFrame.getContentPane().add(labelTweets);
 		
 		tweetsContainer = new JTextPane();
 		tweetsContainer.setText(Language.getValue("m.twitter_load"));
-		tweetsContainer.setBounds(545, 72, 189, 261);
+		tweetsContainer.setBounds(651, 75, 189, 297);
 		tweetsContainer.setEditable(false);
 		tweetsContainer.setContentType("text/html");
 		tweetsContainer.setFont(Fonts.fontReg);
@@ -139,18 +139,19 @@ public class LauncherGUI {
 		 * you won't be able to see anything, throwing errors on Language.getValue()
 		 * during t.main and b.launch parsing. Java is fun :)
 		 */
-		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
-		tweetsJsp.setBounds(545, 72, 189, 261);
-		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
+//		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
+//		tweetsJsp.setBounds(545, 72, 189, 261);
+//		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
 		
 		launchProgressBar = new JProgressBar();
-		launchProgressBar.setBounds(180, 402, 346, 23);
+		launchProgressBar.setBounds(0, 470, 850, 5);
 		launchProgressBar.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchProgressBar);
 		
 		launchState = new JLabel("");
-		launchState.setBounds(181, 383, 345, 14);
-		launchState.setFont(Fonts.fontReg);
+		launchState.setHorizontalAlignment(SwingConstants.RIGHT);
+		launchState.setBounds(642, 443, 203, 23);
+		launchState.setFont(Fonts.fontRegBig);
 		launchState.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchState);
 		
@@ -160,7 +161,7 @@ public class LauncherGUI {
 		updateButton.setFocusable(false);
 		updateButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		updateButton.setVisible(false);
-		updateButton.setBounds(536, 372, 194, 25);
+		updateButton.setBounds(365, 438, 31, 20);
 		launcherGUIFrame.getContentPane().add(updateButton);
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
@@ -171,7 +172,7 @@ public class LauncherGUI {
 		playerCountLabel = new JLabel(Language.getValue("m.player_count_load"));
 		playerCountLabel.setFont(Fonts.fontReg);
 		playerCountLabel.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
-		playerCountLabel.setBounds(16, 355, 507, 14);
+		playerCountLabel.setBounds(12, 389, 507, 14);
 		launcherGUIFrame.getContentPane().add(playerCountLabel);
 		
 		JPanel titleBar = new JPanel();
