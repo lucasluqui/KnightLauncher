@@ -19,6 +19,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -26,6 +27,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.JPanel;
+import jiconfont.swing.IconFontSwing;
+import jiconfont.icons.font_awesome.FontAwesome;
 
 public class LauncherGUI {
 
@@ -139,9 +142,9 @@ public class LauncherGUI {
 		 * you won't be able to see anything, throwing errors on Language.getValue()
 		 * during t.main and b.launch parsing. Java is fun :)
 		 */
-		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
-		tweetsJsp.setBounds(567, 75, 260, 297);
-		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
+//		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
+//		tweetsJsp.setBounds(567, 75, 260, 297);
+//		LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
 		
 		launchProgressBar = new JProgressBar();
 		launchProgressBar.setBounds(0, 470, 850, 5);
@@ -155,13 +158,17 @@ public class LauncherGUI {
 		launchState.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchState);
 		
+		IconFontSwing.register(FontAwesome.getIconFont());
+		Icon icon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 20, Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		updateButton = new JButton(Language.getValue("b.update_available"));
+		updateButton.setHorizontalAlignment(SwingConstants.CENTER);
+		updateButton.setIcon(icon);
 		updateButton.setFont(Fonts.fontMedIta);
 		updateButton.setFocusPainted(false);
 		updateButton.setFocusable(false);
 		updateButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
 		updateButton.setVisible(false);
-		updateButton.setBounds(381, 434, 31, 25);
+		updateButton.setBounds(381, 434, 180, 25);
 		launcherGUIFrame.getContentPane().add(updateButton);
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
