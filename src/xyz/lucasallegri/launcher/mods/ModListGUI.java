@@ -77,7 +77,7 @@ public class ModListGUI {
 		modListGUIFrame.getContentPane().setLayout(null);
 		
 		modListContainer = new List();
-		modListContainer.setBounds(10, 34, 162, 326);
+		modListContainer.setBounds(10, 26, 162, 326);
 		modListContainer.setFont(Fonts.fontMed);
 		modListContainer.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_PRIMARY_DARK : Color.WHITE);
 		modListContainer.setForeground(Settings.launcherStyle.equals("dark") ? Color.WHITE : Color.BLACK);
@@ -99,13 +99,13 @@ public class ModListGUI {
 		
 		labelModCount = new JLabel(String.valueOf(ModList.installedMods.size()));
 		labelModCount.setHorizontalAlignment(SwingConstants.CENTER);
-		labelModCount.setBounds(178, 54, 188, 40);
+		labelModCount.setBounds(178, 44, 188, 40);
 		labelModCount.setFont(Fonts.fontMedGiant);
 		modListGUIFrame.getContentPane().add(labelModCount);
 		
 		labelModCountText = new JLabel(Language.getValue("m.mods_installed"));
 		labelModCountText.setHorizontalAlignment(SwingConstants.CENTER);
-		labelModCountText.setBounds(178, 103, 188, 14);
+		labelModCountText.setBounds(178, 93, 188, 14);
 		labelModCountText.setFont(Fonts.fontReg);
 		modListGUIFrame.getContentPane().add(labelModCountText);
 		
@@ -149,36 +149,36 @@ public class ModListGUI {
 		});
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(178, 140, 195, 2);
+		separator.setBounds(178, 130, 195, 2);
 		modListGUIFrame.getContentPane().add(separator);
 		
 		labelName = new JLabel("");
 		labelName.setFont(Fonts.fontMed);
 		labelName.setHorizontalAlignment(SwingConstants.CENTER);
-		labelName.setBounds(178, 158, 188, 14);
+		labelName.setBounds(178, 148, 188, 14);
 		modListGUIFrame.getContentPane().add(labelName);
 		
 		labelAuthor = new JLabel("");
 		labelAuthor.setFont(Fonts.fontReg);
 		labelAuthor.setHorizontalAlignment(SwingConstants.CENTER);
-		labelAuthor.setBounds(178, 175, 188, 14);
+		labelAuthor.setBounds(178, 165, 188, 14);
 		modListGUIFrame.getContentPane().add(labelAuthor);
 		
 		labelDescription = new JLabel("");
 		labelDescription.setFont(Fonts.fontReg);
 		labelDescription.setHorizontalAlignment(SwingConstants.LEADING);
 		labelDescription.setVerticalAlignment(SwingConstants.TOP);
-		labelDescription.setBounds(188, 206, 178, 70);
+		labelDescription.setBounds(188, 196, 178, 70);
 		modListGUIFrame.getContentPane().add(labelDescription);
 		
 		labelVersion = new JLabel("");
 		labelVersion.setFont(Fonts.fontReg);
-		labelVersion.setBounds(188, 284, 178, 14);
+		labelVersion.setBounds(188, 274, 178, 14);
 		modListGUIFrame.getContentPane().add(labelVersion);
 		
 		labelCompatibility = new JLabel("");
 		labelCompatibility.setFont(Fonts.fontReg);
-		labelCompatibility.setBounds(188, 305, 178, 14);
+		labelCompatibility.setBounds(188, 295, 178, 14);
 		modListGUIFrame.getContentPane().add(labelCompatibility);
 		
 		enableButton = new JButton(Language.getValue("b.enable"));
@@ -187,7 +187,7 @@ public class ModListGUI {
 		enableButton.setEnabled(false);
 		enableButton.setFocusable(false);
 		enableButton.setFocusPainted(false);
-		enableButton.setBounds(183, 336, 89, 23);
+		enableButton.setBounds(183, 326, 89, 23);
 		modListGUIFrame.getContentPane().add(enableButton);
 		
 		disableButton = new JButton(Language.getValue("b.disable"));
@@ -196,7 +196,7 @@ public class ModListGUI {
 		disableButton.setEnabled(false);
 		disableButton.setFocusable(false);
 		disableButton.setFocusPainted(false);
-		disableButton.setBounds(281, 336, 89, 23);
+		disableButton.setBounds(281, 326, 89, 23);
 		modListGUIFrame.getContentPane().add(disableButton);
 		
 		JPanel titleBar = new JPanel();
