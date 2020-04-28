@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.JMarsDarkTheme;
@@ -102,29 +101,23 @@ public class Boot {
 	}
 	
 	private static void setupLauncherStyle() {
-		
-		for( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels() ) {
-			if( "Windows".equals(info.getName()) ) {
-				try {
-					UIManager.setLookAndFeel(new MaterialLookAndFeel());
-					
-					switch(Settings.launcherStyle) {
-					case "dark":
-						MaterialLookAndFeel.changeTheme(new JMarsDarkTheme());
-						break;
-					case "light":
-						MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
-						break;
-					default:
-						MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
-						break;
-					}
-				} catch (UnsupportedLookAndFeelException e) {
-					KnightLog.logException(e);
-				}
+		try {
+			UIManager.setLookAndFeel(new MaterialLookAndFeel());
+			
+			switch(Settings.launcherStyle) {
+			case "dark":
+				MaterialLookAndFeel.changeTheme(new JMarsDarkTheme());
+				break;
+			case "light":
+				MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
+				break;
+			default:
+				MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
+				break;
 			}
+		} catch (UnsupportedLookAndFeelException e) {
+			KnightLog.logException(e);
 		}
-		
 	}
 	
 	private static void setupHTTPSProtocol() {
