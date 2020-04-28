@@ -6,6 +6,9 @@ import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.JMarsDarkTheme;
 import mdlaf.themes.MaterialLiteTheme;
@@ -101,6 +104,7 @@ public class Boot {
 	}
 	
 	private static void setupLauncherStyle() {
+		IconFontSwing.register(FontAwesome.getIconFont());
 		try {
 			UIManager.setLookAndFeel(new MaterialLookAndFeel());
 			

@@ -69,8 +69,6 @@ public class LauncherGUI {
 
 	private void initialize() {
 		
-		IconFontSwing.register(FontAwesome.getIconFont());
-		
 		launcherGUIFrame = new JFrame();
 		launcherGUIFrame.setTitle(Language.getValue("t.main", LauncherConstants.VERSION));
 		launcherGUIFrame.setResizable(false);
