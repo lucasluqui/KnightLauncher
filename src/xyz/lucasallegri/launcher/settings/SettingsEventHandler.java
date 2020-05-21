@@ -69,5 +69,10 @@ public class SettingsEventHandler {
 		SettingsProperties.setValue("game.memory", String.valueOf(SettingsGUI.parseSelectedMemoryAsInt()));
 		SettingsGUI.choiceMemory.setToolTipText((String)SettingsGUI.choiceMemory.getSelectedItem());
 	}
+	
+	public static void styleChangeEvent(ItemEvent event) {
+		Settings.launcherStyle = (String)SettingsGUI.choiceStyle.getSelectedItem();
+		SettingsProperties.setValue("launcher.style", (String)SettingsGUI.choiceStyle.getSelectedItem());
+	}
 
 }
