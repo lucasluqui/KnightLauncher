@@ -139,7 +139,7 @@ public class SettingsGUI {
 		settingsGUIFrame.getContentPane().add(choiceStyle);
 		choiceStyle.addItem(Language.getValue("o.dark"));
 		choiceStyle.addItem(Language.getValue("o.light"));
-		choiceStyle.setSelectedIndex(Settings.launcherStyle == "dark" ? 0 : 1);
+		choiceStyle.setSelectedIndex(Settings.launcherStyle.equals("dark") ? 0 : 1);
 		choiceStyle.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
