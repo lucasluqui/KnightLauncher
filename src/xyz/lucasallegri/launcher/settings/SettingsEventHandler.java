@@ -38,7 +38,7 @@ public class SettingsEventHandler {
 	public static void languageChangeEvent(ItemEvent event) {
 		Settings.lang = Language.getLangCode((String)SettingsGUI.choiceLanguage.getSelectedItem());
 		SettingsProperties.setValue("launcher.lang", Language.getLangCode((String)SettingsGUI.choiceLanguage.getSelectedItem()));
-		DialogWarning.pushTranslated("Changes will take effect upon restart.");
+		DialogWarning.pushTranslated(Language.getValue("m.prompt_restart_required"));
 	}
 	
 	public static void useStringDeduplicationChangeEvent(ActionEvent action) {
@@ -74,7 +74,7 @@ public class SettingsEventHandler {
 	
 	public static void styleChangeEvent(ItemEvent event) {
 		SettingsProperties.setValue("launcher.style", SettingsGUI.choiceStyle.getSelectedIndex() == 0 ? "dark" : "light");
-		DialogWarning.pushTranslated("Changes will take effect upon restart.");
+		DialogWarning.pushTranslated(Language.getValue("m.prompt_restart_required"));
 	}
 
 }
