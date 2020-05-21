@@ -5,13 +5,14 @@ import java.io.File;
 public class LauncherConstants {
 
 	public static final String VERSION = "1.2.7_1";
-	public static final String GET_MODS_URL = "https://sites.google.com/view/spiralknights-mods/mods";
 	public static final String LNK_FILE_NAME = "Knight Launcher";
-	public static final String EVENT_QUERY_URL = "https://aegis.lucasallegri.xyz/event";
-	public static final String VERSION_QUERY_URL = "https://aegis.lucasallegri.xyz/knightlauncher/version.txt";
-	public static final String RELEASES_URL = "https://github.com/lucas-allegri/KnightLauncher/releases";
-	public static final String TWEETS_URL = "https://aegis.lucasallegri.xyz/knightlauncher/tweets.txt";
-	public static final String BUG_REPORT_URL = "https://github.com/lucas-allegri/KnightLauncher/issues";
+	public static final String EVENT_QUERY_URL = "https://upsilonapi.lucasallegri.xyz/event";
+	public static final String VERSION_QUERY_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/version.txt";
+	public static final String RELEASES_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/releases.html";
+	public static final String TWEETS_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/tweets.txt";
+	public static final String BUG_REPORT_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/bug-report.html";
+	public static final String DISCORD_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/discord.html";
+	public static final String GET_MODS_URL = "https://upsilonapi.lucasallegri.xyz/get-mods.html";
 	public static final String USER_DIR = System.getProperty("user.dir");
 	
 	
