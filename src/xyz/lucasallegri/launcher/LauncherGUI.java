@@ -273,7 +273,7 @@ public class LauncherGUI {
 		discordButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
 		    {
-		       DesktopUtil.openWebpage("https://discord.gg/RAf499a");
+		       DesktopUtil.openWebpage(LauncherConstants.DISCORD_URL);
 		    }
 		});
 		
