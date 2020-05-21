@@ -280,7 +280,7 @@ public class LauncherGUI {
 		Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_RED : DefaultColors.DARK_RED);
 		JButton bugButton = new JButton(bugIcon);
 		bugButton.setBounds(launcherGUIFrame.getWidth() - 89, 0, 20, 20);
-		bugButton.setToolTipText("Report a Bug");
+		bugButton.setToolTipText(Language.getValue("b.bug_report"));
 		bugButton.setFocusPainted(false);
 		bugButton.setFocusable(false);
 		bugButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
