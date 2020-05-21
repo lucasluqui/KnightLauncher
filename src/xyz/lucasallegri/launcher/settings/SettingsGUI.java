@@ -128,6 +128,7 @@ public class SettingsGUI {
 		});
 		
 		JLabel labelStyle = new JLabel(Language.getValue("m.launcher_style"));
+		labelStyle.setFont(Fonts.fontReg);
 		labelStyle.setBounds(15, 169, 95, 14);
 		settingsGUIFrame.getContentPane().add(labelStyle);
 		
