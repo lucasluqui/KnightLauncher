@@ -71,7 +71,7 @@ public class SettingsEventHandler {
 	}
 	
 	public static void styleChangeEvent(ItemEvent event) {
-		Settings.launcherStyle = (String)SettingsGUI.choiceStyle.getSelectedItem();
+		Settings.launcherStyle = SettingsGUI.choiceStyle.getSelectedIndex() == 0 ? "dark" : "light";
 		SettingsProperties.setValue("launcher.style", (String)SettingsGUI.choiceStyle.getSelectedItem());
 	}
 
