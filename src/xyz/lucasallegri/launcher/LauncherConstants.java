@@ -4,7 +4,7 @@ import java.io.File;
 
 public class LauncherConstants {
 
-	public static final String VERSION = "1.2.8";
+	public static final String VERSION = "1.2.7_1";
 	public static final String LNK_FILE_NAME = "Knight Launcher";
 	public static final String EVENT_QUERY_URL = "https://upsilonapi.lucasallegri.xyz/event";
 	public static final String VERSION_QUERY_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/version.txt";
