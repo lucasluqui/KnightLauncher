@@ -26,6 +26,14 @@ public class SystemUtil {
 		return is64Bit;
 	}
 	
+	public static boolean isARM() {
+		boolean isARM = false;
+		if(System.getProperty("os.arch").contains("arm")) {
+			isARM = true;
+		}
+		return isARM;
+	}
+	
 	public static boolean hasValidJavaHome() {
 		return !System.getProperty("java.home").contains("jdk") && !System.getProperty("java.home").contains("12.");
 	}
