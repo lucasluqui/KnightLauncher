@@ -45,8 +45,13 @@ public class Boot {
 		Language.setup();
 		checkDirectories();
 		checkShortcut();
-		DiscordInstance.start();
 		Fonts.setup();
+		
+		if(SystemUtil.isARM()) {
+			KnightLog.log.warning("Won't initiate a Discord presence instance due to system architecture. (Possible ARM arch detected)");
+		} else {
+			DiscordInstance.start();
+		}
 	}
 	
 	public static void onBootEnd() {
