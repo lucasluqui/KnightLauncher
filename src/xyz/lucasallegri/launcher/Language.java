@@ -21,7 +21,7 @@ public class Language {
 			"Français",
 			"Japanese",
 			"Eesti",
-			"Russian"
+			"Русский"
 	};
 	
 	public static void setup() {
@@ -75,7 +75,7 @@ public class Language {
 		case "fr": return "Français";
 		case "jp": return "Japanese";
 		case "et-ee": return "Eesti";
-		case "ru": return "Russian";
+		case "ru": return "Русский";
 		}
 		return null;
 	}
@@ -89,7 +89,7 @@ public class Language {
 		case "Français": return "fr";
 		case "Japanese": return "jp";
 		case "Eesti": return "et-ee";
-		case "Russian": return "ru";
+		case "Русский": return "ru";
 		}
 		return null;
 	}
