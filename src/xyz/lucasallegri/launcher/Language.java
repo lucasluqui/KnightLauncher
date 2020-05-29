@@ -12,6 +12,7 @@ public class Language {
 	
 	private static Properties prop = new Properties();
 	private static InputStream propStream = null;
+	
 	public static String[] AVAILABLE_LANGUAGES = {
 			"English",
 			"Español",
@@ -19,7 +20,8 @@ public class Language {
 			"Português (Brasil)",
 			"Français",
 			"Japanese",
-			"Estonian"
+			"Estonian",
+			"Russian"
 	};
 	
 	public static void setup() {
@@ -73,6 +75,7 @@ public class Language {
 		case "fr": return "Français";
 		case "jp": return "Japanese";
 		case "et-ee": return "Estonian";
+		case "ru": return "Russian";
 		}
 		return null;
 	}
@@ -86,6 +89,7 @@ public class Language {
 		case "Français": return "fr";
 		case "Japanese": return "jp";
 		case "Estonian": return "et-ee";
+		case "Russian": return "ru";
 		}
 		return null;
 	}
