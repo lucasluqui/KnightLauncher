@@ -20,7 +20,7 @@ public class Language {
 			"Português (Brasil)",
 			"Français",
 			"Japanese",
-			"Estonian",
+			"Eesti",
 			"Russian"
 	};
 	
@@ -74,7 +74,7 @@ public class Language {
 		case "pt-br": return "Português (Brasil)";
 		case "fr": return "Français";
 		case "jp": return "Japanese";
-		case "et-ee": return "Estonian";
+		case "et-ee": return "Eesti";
 		case "ru": return "Russian";
 		}
 		return null;
@@ -88,7 +88,7 @@ public class Language {
 		case "Português (Brasil)": return "pt-br";
 		case "Français": return "fr";
 		case "Japanese": return "jp";
-		case "Estonian": return "et-ee";
+		case "Eesti": return "et-ee";
 		case "Russian": return "ru";
 		}
 		return null;
