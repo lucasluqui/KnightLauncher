@@ -70,7 +70,7 @@ public class Boot {
 	}
 	
 	/*
-	 * Checking if we're being ran inside the game's directory, "getdown.txt" should always be present if so.
+	 * Checking if we're being ran inside the game's directory, "getdown-pro.jar" should always be present if so.
 	 */
 	private static void checkStartLocation() {
 		if(!FileUtil.fileExists("getdown-pro.jar")) {
