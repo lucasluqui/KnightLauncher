@@ -86,6 +86,8 @@ public class ModLoader {
 	public static void mount() {
 		
 		LauncherGUI.launchButton.setEnabled(false);
+		ProgressBar.showBar(true);
+		ProgressBar.showState(true);
 		ProgressBar.setBarMax(ModList.installedMods.size() + 1);
 		ProgressBar.setState(Language.getValue("m.mount"));
 		DiscordInstance.setPresence(Language.getValue("m.mount_start"));
@@ -98,17 +100,13 @@ public class ModLoader {
 		
 		modLoadFinished = true;
 		
-		ProgressBar.setState("");
-		ProgressBar.setBarMax(1);
-		ProgressBar.setBarValue(1);
+		ProgressBar.showBar(false);
+		ProgressBar.showState(false);
 		LauncherGUI.launchButton.setEnabled(true);
 		
 	}
 	
 	public static void startFileRebuild() {
-		ProgressBar.showBar(true);
-		ProgressBar.showState(true);
-		
 		Thread rebuildThread = new Thread(new Runnable() {
 			public void run() {
 				rebuildFiles();
@@ -126,6 +124,8 @@ public class ModLoader {
 		
 		String[] jarFiles = {"full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar"};
 		
+		ProgressBar.showBar(true);
+		ProgressBar.showState(true);
 		ProgressBar.setBarMax(jarFiles.length + 1);
 		ProgressBar.setState(Language.getValue("m.clean"));
 		
@@ -143,7 +143,8 @@ public class ModLoader {
 		}
 		
 		ProgressBar.setBarValue(jarFiles.length + 1);
-		ProgressBar.setState("");
+		ProgressBar.showBar(false);
+		ProgressBar.showState(false);
 		rebuildFiles = false;
 		LauncherGUI.launchButton.setEnabled(true);
 		LauncherGUI.settingsButton.setEnabled(true);
