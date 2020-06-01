@@ -157,6 +157,7 @@ public class Boot {
 				
 				String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
 				Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 525, 305);
+				eventImage = ImageUtil.addRoundedCorners(eventImage, 25);
 				LauncherGUI.imageContainer.setIcon(new ImageIcon(eventImage));
 			}
 		});
