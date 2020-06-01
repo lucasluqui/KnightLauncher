@@ -62,5 +62,18 @@ public class ImageUtil {
 		
 		return output;
 	}
+	
+	 public static BufferedImage loadImageWithinJar(String fileName){
+
+		    BufferedImage buff = null;
+		    try {
+		        buff = ImageIO.read(ImageUtil.class.getResourceAsStream(fileName));
+		    } catch (IOException e) {
+		        // TODO Auto-generated catch block
+		        KnightLog.logException(e);
+		        return null;
+		    }
+		    return buff;
+		}
 
 }

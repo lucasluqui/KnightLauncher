@@ -1,8 +1,11 @@
 package xyz.lucasallegri.launcher;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -67,6 +70,7 @@ public class Boot {
 	private static void checkDirectories() {
 		FileUtil.createDir("mods");
 		FileUtil.createDir("KnightLauncher/logs/");
+		FileUtil.createDir("KnightLauncher/images/");
 	}
 	
 	/*
@@ -88,10 +92,13 @@ public class Boot {
 		if(SystemUtil.isWindows() && Settings.createShortcut
 				&& !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherConstants.LNK_FILE_NAME)) {
 			
+			BufferedImage bimg = ImageUtil.loadImageWithinJar("/img/icon-128.png");
+			ICOEncoder.write(bimg, new File(LauncherConstants.USER_DIR + "/KnightLauncher/images/icon-128.ico"));
+			
 			DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe", 
 										"-jar \"" + LauncherConstants.USER_DIR + "\\KnightLauncher.jar\"", 
 										LauncherConstants.USER_DIR, 
-										LauncherConstants.USER_DIR + "\\icon-128.ico", 
+										LauncherConstants.USER_DIR + "\\KnightLauncher\\images\\icon-128.ico", 
 										"Start KnightLauncher", 
 										LauncherConstants.LNK_FILE_NAME
 			);
