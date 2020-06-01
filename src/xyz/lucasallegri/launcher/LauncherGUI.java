@@ -6,6 +6,7 @@ import xyz.lucasallegri.launcher.mods.ModListGUI;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.logging.KnightLog;
+import xyz.lucasallegri.util.ColorUtil;
 import xyz.lucasallegri.util.DesktopUtil;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -132,7 +133,7 @@ public class LauncherGUI {
 		tweetsContainer.setEditable(false);
 		tweetsContainer.setContentType("text/html");
 		tweetsContainer.setFont(Fonts.fontReg);
-		tweetsContainer.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_PRIMARY_DARK : Color.WHITE);
+		tweetsContainer.setBackground(ColorUtil.getBackgroundColor());
 		tweetsContainer.setForeground(Color.WHITE);
 		launcherGUIFrame.getContentPane().add(tweetsContainer);
 		
@@ -158,14 +159,14 @@ public class LauncherGUI {
 		launchState.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchState);
 		
-		Icon cloudIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 20, Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
+		Icon cloudIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 20, ColorUtil.getGreenForegroundColor());
 		updateButton = new JButton(Language.getValue("b.update_available"));
 		updateButton.setHorizontalAlignment(SwingConstants.CENTER);
 		updateButton.setIcon(cloudIcon);
 		updateButton.setFont(Fonts.fontMedIta);
 		updateButton.setFocusPainted(false);
 		updateButton.setFocusable(false);
-		updateButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
+		updateButton.setForeground(ColorUtil.getGreenForegroundColor());
 		updateButton.setVisible(false);
 		updateButton.setBounds(381, 434, 180, 25);
 		launcherGUIFrame.getContentPane().add(updateButton);
@@ -177,13 +178,13 @@ public class LauncherGUI {
 		
 		playerCountLabel = new JLabel(Language.getValue("m.player_count_load"));
 		playerCountLabel.setFont(Fonts.fontReg);
-		playerCountLabel.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
+		playerCountLabel.setForeground(ColorUtil.getGreenForegroundColor());
 		playerCountLabel.setBounds(12, 389, 507, 14);
 		launcherGUIFrame.getContentPane().add(playerCountLabel);
 		
 		JPanel titleBar = new JPanel();
 		titleBar.setBounds(0, 0, launcherGUIFrame.getWidth(), 20);
-		titleBar.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT);
+		titleBar.setBackground(ColorUtil.getTitleBarColor());
 		launcherGUIFrame.getContentPane().add(titleBar);
 		
 		
@@ -237,7 +238,7 @@ public class LauncherGUI {
 		closeButton.setBounds(launcherGUIFrame.getWidth() - 22, 0, 20, 20);
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
-		closeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		closeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
 		closeButton.setFont(Fonts.fontMed);
 		titleBar.add(closeButton);
 		closeButton.addActionListener(new ActionListener() {
@@ -251,7 +252,7 @@ public class LauncherGUI {
 		minimizeButton.setBounds(launcherGUIFrame.getWidth() - 42, 0, 20, 20);
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
-		minimizeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		minimizeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
 		minimizeButton.setFont(Fonts.fontMed);
 		titleBar.add(minimizeButton);
 		minimizeButton.addActionListener(new ActionListener() {
@@ -267,7 +268,7 @@ public class LauncherGUI {
 		discordButton.setToolTipText("Discord");
 		discordButton.setFocusPainted(false);
 		discordButton.setFocusable(false);
-		discordButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		discordButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
 		discordButton.setFont(Fonts.fontMed);
 		titleBar.add(discordButton);
 		discordButton.addActionListener(new ActionListener() {
@@ -277,13 +278,13 @@ public class LauncherGUI {
 		    }
 		});
 		
-		Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_RED : DefaultColors.DARK_RED);
+		Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, ColorUtil.getRedForegroundColor());
 		JButton bugButton = new JButton(bugIcon);
 		bugButton.setBounds(launcherGUIFrame.getWidth() - 89, 0, 20, 20);
 		bugButton.setToolTipText(Language.getValue("b.bug_report"));
 		bugButton.setFocusPainted(false);
 		bugButton.setFocusable(false);
-		bugButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		bugButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
 		bugButton.setFont(Fonts.fontMed);
 		titleBar.add(bugButton);
 		bugButton.addActionListener(new ActionListener() {

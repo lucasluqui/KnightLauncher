@@ -12,7 +12,12 @@ public class ColorUtil {
 		return c;
 	}
 	
-	public static Color getNewsBackgroundColor() {
+	public static Color getForegroundColor() {
+		Color c = Settings.launcherStyle.equals("dark") ? Color.WHITE : Color.BLACK;
+		return c;
+	}
+	
+	public static Color getBackgroundColor() {
 		Color c = Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_PRIMARY_DARK : Color.WHITE;
 		return c;
 	}

@@ -28,6 +28,8 @@ import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
+import xyz.lucasallegri.util.ColorUtil;
+
 import java.awt.Choice;
 
 public class SettingsGUI {
@@ -297,7 +299,7 @@ public class SettingsGUI {
 		
 		JPanel titleBar = new JPanel();
 		titleBar.setBounds(0, 0, settingsGUIFrame.getWidth(), 20);
-		titleBar.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT);
+		titleBar.setBackground(ColorUtil.getTitleBarColor());
 		settingsGUIFrame.getContentPane().add(titleBar);
 		
 		
@@ -351,7 +353,7 @@ public class SettingsGUI {
 		closeButton.setBounds(settingsGUIFrame.getWidth() - 22, 0, 20, 20);
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
-		closeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		closeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
 		closeButton.setFont(Fonts.fontMed);
 		titleBar.add(closeButton);
 		closeButton.addActionListener(new ActionListener() {
@@ -365,7 +367,7 @@ public class SettingsGUI {
 		minimizeButton.setBounds(settingsGUIFrame.getWidth() - 42, 0, 20, 20);
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
-		minimizeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		minimizeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
 		minimizeButton.setFont(Fonts.fontMed);
 		titleBar.add(minimizeButton);
 		minimizeButton.addActionListener(new ActionListener() {

@@ -7,6 +7,7 @@ import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
+import xyz.lucasallegri.util.ColorUtil;
 import xyz.lucasallegri.util.DesktopUtil;
 import java.awt.List;
 import java.awt.event.ActionEvent;
@@ -79,8 +80,8 @@ public class ModListGUI {
 		modListContainer = new List();
 		modListContainer.setBounds(10, 26, 162, 326);
 		modListContainer.setFont(Fonts.fontMed);
-		modListContainer.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_PRIMARY_DARK : Color.WHITE);
-		modListContainer.setForeground(Settings.launcherStyle.equals("dark") ? Color.WHITE : Color.BLACK);
+		modListContainer.setBackground(ColorUtil.getBackgroundColor());
+		modListContainer.setForeground(ColorUtil.getForegroundColor());
 		modListContainer.setFocusable(false);
 		modListGUIFrame.getContentPane().add(modListContainer);
 		for(Mod mod : ModList.installedMods) { modListContainer.add(mod.getDisplayName()); }
@@ -183,7 +184,7 @@ public class ModListGUI {
 		
 		enableButton = new JButton(Language.getValue("b.enable"));
 		enableButton.setFont(Fonts.fontMed);
-		enableButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_GREEN : DefaultColors.DARK_GREEN);
+		enableButton.setForeground(ColorUtil.getGreenForegroundColor());
 		enableButton.setEnabled(false);
 		enableButton.setFocusable(false);
 		enableButton.setFocusPainted(false);
@@ -192,7 +193,7 @@ public class ModListGUI {
 		
 		disableButton = new JButton(Language.getValue("b.disable"));
 		disableButton.setFont(Fonts.fontMed);
-		disableButton.setForeground(Settings.launcherStyle.equals("dark") ? DefaultColors.BRIGHT_RED : DefaultColors.DARK_RED);
+		disableButton.setForeground(ColorUtil.getRedForegroundColor());
 		disableButton.setEnabled(false);
 		disableButton.setFocusable(false);
 		disableButton.setFocusPainted(false);
@@ -201,7 +202,7 @@ public class ModListGUI {
 		
 		JPanel titleBar = new JPanel();
 		titleBar.setBounds(0, 0, modListGUIFrame.getWidth(), 20);
-		titleBar.setBackground(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT);
+		titleBar.setBackground(ColorUtil.getTitleBarColor());
 		modListGUIFrame.getContentPane().add(titleBar);
 		
 		
@@ -255,7 +256,7 @@ public class ModListGUI {
 		closeButton.setBounds(modListGUIFrame.getWidth() - 22, 0, 20, 20);
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
-		closeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		closeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
 		closeButton.setFont(Fonts.fontMed);
 		titleBar.add(closeButton);
 		closeButton.addActionListener(new ActionListener() {
@@ -269,7 +270,7 @@ public class ModListGUI {
 		minimizeButton.setBounds(modListGUIFrame.getWidth() - 42, 0, 20, 20);
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
-		minimizeButton.setBorder(BorderFactory.createLineBorder(Settings.launcherStyle.equals("dark") ? DefaultColors.INTERFACE_TITLEBAR_DARK : DefaultColors.INTERFACE_TITLEBAR_LIGHT));
+		minimizeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
 		minimizeButton.setFont(Fonts.fontMed);
 		titleBar.add(minimizeButton);
 		minimizeButton.addActionListener(new ActionListener() {
