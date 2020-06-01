@@ -264,7 +264,7 @@ public class LauncherGUI {
 		
 		Icon discordIcon = IconFontSwing.buildIcon(FontAwesome.SLIDESHARE, 16, DefaultColors.DISCORD_PRIMARY);
 		JButton discordButton = new JButton(discordIcon);
-		discordButton.setBounds(launcherGUIFrame.getWidth() - 67, 0, 20, 20);
+		discordButton.setBounds(launcherGUIFrame.getWidth() - 67, 1, 18, 18);
 		discordButton.setToolTipText("Discord");
 		discordButton.setFocusPainted(false);
 		discordButton.setFocusable(false);
@@ -280,7 +280,7 @@ public class LauncherGUI {
 		
 		Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, ColorUtil.getRedForegroundColor());
 		JButton bugButton = new JButton(bugIcon);
-		bugButton.setBounds(launcherGUIFrame.getWidth() - 89, 0, 20, 20);
+		bugButton.setBounds(launcherGUIFrame.getWidth() - 89, 1, 18, 18);
 		bugButton.setToolTipText(Language.getValue("b.bug_report"));
 		bugButton.setFocusPainted(false);
 		bugButton.setFocusable(false);
