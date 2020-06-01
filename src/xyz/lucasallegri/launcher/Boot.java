@@ -15,6 +15,7 @@ import jiconfont.swing.IconFontSwing;
 import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.JMarsDarkTheme;
 import mdlaf.themes.MaterialLiteTheme;
+import net.sf.image4j.codec.ico.ICOEncoder;
 import xyz.lucasallegri.dialog.DialogError;
 import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.mods.ModList;
@@ -93,7 +94,11 @@ public class Boot {
 				&& !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherConstants.LNK_FILE_NAME)) {
 			
 			BufferedImage bimg = ImageUtil.loadImageWithinJar("/img/icon-128.png");
-			ICOEncoder.write(bimg, new File(LauncherConstants.USER_DIR + "/KnightLauncher/images/icon-128.ico"));
+			try {
+				ICOEncoder.write(bimg, new File(LauncherConstants.USER_DIR + "/KnightLauncher/images/icon-128.ico"));
+			} catch (IOException e) {
+				KnightLog.logException(e);
+			}
 			
 			DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe", 
 										"-jar \"" + LauncherConstants.USER_DIR + "\\KnightLauncher.jar\"", 
