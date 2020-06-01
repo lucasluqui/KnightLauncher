@@ -3,13 +3,11 @@ package xyz.lucasallegri.launcher;
 import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.LauncherEventHandler;
 import xyz.lucasallegri.launcher.mods.ModListGUI;
-import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
 import xyz.lucasallegri.util.DesktopUtil;
 import xyz.lucasallegri.util.ImageUtil;
-
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Frame;

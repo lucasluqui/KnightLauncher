@@ -16,25 +16,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import mdlaf.utils.MaterialBorders;
-import xyz.lucasallegri.launcher.DefaultColors;
 import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
-
-import java.awt.Choice;
 
 public class SettingsGUI {
 

@@ -1,11 +1,9 @@
 package xyz.lucasallegri.launcher.mods;
 
-import xyz.lucasallegri.launcher.DefaultColors;
 import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.LauncherGUI;
-import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
 import xyz.lucasallegri.util.DesktopUtil;
@@ -19,20 +17,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Frame;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import mdlaf.utils.MaterialBorders;
-
-import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
