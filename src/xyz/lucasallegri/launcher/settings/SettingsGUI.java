@@ -17,12 +17,16 @@ import javax.swing.JPanel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
+import mdlaf.utils.MaterialBorders;
 import xyz.lucasallegri.launcher.DefaultColors;
 import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.Language;
@@ -349,11 +353,12 @@ public class SettingsGUI {
 		windowTitle.setBounds(10, 0, settingsGUIFrame.getWidth() - 100, 20);
 		titleBar.add(windowTitle);
 		
-		JButton closeButton = new JButton("x");
+		Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_CLOSE_O, 14, ColorUtil.getForegroundColor());
+		JButton closeButton = new JButton(closeIcon);
 		closeButton.setBounds(settingsGUIFrame.getWidth() - 22, 0, 20, 20);
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
-		closeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
+		closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
 		closeButton.setFont(Fonts.fontMed);
 		titleBar.add(closeButton);
 		closeButton.addActionListener(new ActionListener() {
@@ -363,11 +368,12 @@ public class SettingsGUI {
 		    }
 		});
 		
-		JButton minimizeButton = new JButton("_");
+		Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 14, ColorUtil.getForegroundColor());
+		JButton minimizeButton = new JButton(minimizeIcon);
 		minimizeButton.setBounds(settingsGUIFrame.getWidth() - 42, 0, 20, 20);
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
-		minimizeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
+		minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
 		minimizeButton.setFont(Fonts.fontMed);
 		titleBar.add(minimizeButton);
 		minimizeButton.addActionListener(new ActionListener() {

@@ -27,7 +27,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
+import mdlaf.utils.MaterialBorders;
+
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 
@@ -252,11 +258,12 @@ public class ModListGUI {
 		windowTitle.setBounds(10, 0, modListGUIFrame.getWidth() - 100, 20);
 		titleBar.add(windowTitle);
 		
-		JButton closeButton = new JButton("x");
+		Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_CLOSE_O, 14, ColorUtil.getForegroundColor());
+		JButton closeButton = new JButton(closeIcon);
 		closeButton.setBounds(modListGUIFrame.getWidth() - 22, 0, 20, 20);
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
-		closeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
+		closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
 		closeButton.setFont(Fonts.fontMed);
 		titleBar.add(closeButton);
 		closeButton.addActionListener(new ActionListener() {
@@ -266,11 +273,12 @@ public class ModListGUI {
 		    }
 		});
 		
-		JButton minimizeButton = new JButton("_");
+		Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 14, ColorUtil.getForegroundColor());
+		JButton minimizeButton = new JButton(minimizeIcon);
 		minimizeButton.setBounds(modListGUIFrame.getWidth() - 42, 0, 20, 20);
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
-		minimizeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
+		minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
 		minimizeButton.setFont(Fonts.fontMed);
 		titleBar.add(minimizeButton);
 		minimizeButton.addActionListener(new ActionListener() {
