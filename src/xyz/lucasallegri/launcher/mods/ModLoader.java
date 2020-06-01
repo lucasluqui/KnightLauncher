@@ -129,10 +129,17 @@ public class ModLoader {
 		ProgressBar.setBarMax(jarFiles.length + 1);
 		ProgressBar.setState(Language.getValue("m.clean"));
 		
+		// Iterate through all 3 .jar files to clean up the game files.
 		for(int i = 0; i < jarFiles.length; i++) {
 			ProgressBar.setBarValue(i + 1);
 			DiscordInstance.setPresence(Language.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(jarFiles.length)}));
 			Compressor.unzip("./rsrc/" + jarFiles[i], "./rsrc/", false);
+		}
+		
+		// Check for decompiled configs (.xml) present in the configs folder and delete them on sight.
+		List<String> configs = FileUtil.fileNamesInDirectory(LauncherConstants.USER_DIR + "/rsrc/config", ".xml");
+		for(String config : configs) {
+			new File(LauncherConstants.USER_DIR + "/rsrc/config/" + config).delete();
 		}
 		
 		ProgressBar.setBarValue(jarFiles.length + 1);
