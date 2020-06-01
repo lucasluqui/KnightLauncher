@@ -170,7 +170,7 @@ public class LauncherGUI {
 		updateButton.setFocusable(false);
 		updateButton.setForeground(ColorUtil.getGreenForegroundColor());
 		updateButton.setVisible(false);
-		updateButton.setBounds(381, 434, 180, 25);
+		updateButton.setBounds(313, 434, 180, 25);
 		launcherGUIFrame.getContentPane().add(updateButton);
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
