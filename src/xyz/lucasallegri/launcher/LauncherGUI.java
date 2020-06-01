@@ -8,6 +8,8 @@ import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
 import xyz.lucasallegri.util.DesktopUtil;
+import xyz.lucasallegri.util.ImageUtil;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Frame;
@@ -77,6 +79,7 @@ public class LauncherGUI {
 		launcherGUIFrame.setBounds(100, 100, 850, 475);
 		launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		launcherGUIFrame.setUndecorated(true);
+		launcherGUIFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-128.png"));
 		launcherGUIFrame.getContentPane().setLayout(null);
 		
 		launchButton = new JButton(Language.getValue("b.launch").toUpperCase());
