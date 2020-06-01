@@ -29,6 +29,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.JPanel;
 import jiconfont.swing.IconFontSwing;
+import mdlaf.utils.MaterialBorders;
 import jiconfont.icons.font_awesome.FontAwesome;
 
 public class LauncherGUI {
@@ -109,8 +110,9 @@ public class LauncherGUI {
 			}
 		});
 		
-		settingsButton = new JButton(Language.getValue("b.settings"));
-		settingsButton.setBounds(273, 434, 100, 25);
+		Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
+		settingsButton = new JButton(settingsIcon);
+		settingsButton.setBounds(273, 434, 30, 25);
 		settingsButton.setFont(Fonts.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
@@ -234,11 +236,12 @@ public class LauncherGUI {
 		windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 20);
 		titleBar.add(windowTitle);
 		
-		JButton closeButton = new JButton("x");
+		Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_CLOSE_O, 14, ColorUtil.getForegroundColor());
+		JButton closeButton = new JButton(closeIcon);
 		closeButton.setBounds(launcherGUIFrame.getWidth() - 22, 0, 20, 20);
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
-		closeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
+		closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
 		closeButton.setFont(Fonts.fontMed);
 		titleBar.add(closeButton);
 		closeButton.addActionListener(new ActionListener() {
@@ -248,11 +251,12 @@ public class LauncherGUI {
 		    }
 		});
 		
-		JButton minimizeButton = new JButton("_");
+		Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 14, ColorUtil.getForegroundColor());
+		JButton minimizeButton = new JButton(minimizeIcon);
 		minimizeButton.setBounds(launcherGUIFrame.getWidth() - 42, 0, 20, 20);
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
-		minimizeButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
+		minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
 		minimizeButton.setFont(Fonts.fontMed);
 		titleBar.add(minimizeButton);
 		minimizeButton.addActionListener(new ActionListener() {
