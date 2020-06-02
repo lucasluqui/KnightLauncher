@@ -1,6 +1,6 @@
 <p align="center">
-    <img src="https://github.com/lucas-allegri/KnightLauncher/blob/master/assets/img/icon-92.png?raw=true"
-        height="92">
+    <img src="https://github.com/lucas-allegri/KnightLauncher/blob/master/assets/img/icon-128.png?raw=true"
+        height="128">
 </p>
 <h1 align="center">KnightLauncher</h1>
 <p align="center">
