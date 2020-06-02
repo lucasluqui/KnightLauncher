@@ -31,7 +31,8 @@ Thank you all for helping KnightLauncher, making it usable for everyone worldwid
 * Português (Brasil): Azuresh and Gugaarleo
 * Français: PtitKrugger
 * Japanese: Armin
-* Estonian: Thyrux
+* Eesti: Thyrux
+* Русский: Milliath Spooner
 
 Would you like to help translating? Seek for information in our Discord server.
 
