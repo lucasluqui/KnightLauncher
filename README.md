@@ -16,6 +16,8 @@
 Advanced game launcher for Spiral Knights.
 
 Still under heavy development, please open an issue in case you run into a bug!
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W4W11S2JU)
 ## Current features
 * Install and uninstall mods in an absurdly easy and noob-friendly way, without having to worry about game updates.
 * Reinstall your game without having to re-download anything, not a single file!
