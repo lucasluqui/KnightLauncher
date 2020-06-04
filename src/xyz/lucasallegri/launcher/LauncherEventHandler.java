@@ -9,6 +9,8 @@ import xyz.lucasallegri.util.ProcessUtil;
 import xyz.lucasallegri.util.SteamUtil;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LauncherEventHandler {
 	
@@ -24,12 +26,11 @@ public class LauncherEventHandler {
 					if(Settings.gamePlatform.startsWith("Steam")) {
 						try {
 							SteamUtil.startGameById("99900");
-							//ProcessUtil.startApplication(LauncherConstants.STANDALONE_CLIENT_ARGS);
 						} catch (Exception e) {
 							KnightLog.logException(e);
 						}
 					} else {
-						ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
+						ProcessUtil.startApplication(GameSettings.parsedClientArgs.toArray(new String[0]));
 					}
 					
 					if(Settings.keepOpen) {
