@@ -51,20 +51,20 @@ public class JVMPatcher {
 
 	private void initialize() {
 		jvmPatcherFrame = new JFrame();
-		jvmPatcherFrame.setTitle("Java VM Patcher");
+		jvmPatcherFrame.setTitle(Language.getValue("t.jvm_patcher"));
 		jvmPatcherFrame.setBounds(100, 100, 500, 250);
 		jvmPatcherFrame.setResizable(false);
 		jvmPatcherFrame.setUndecorated(true);
 		jvmPatcherFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		jvmPatcherFrame.getContentPane().setLayout(null);
 		
-		JLabel headerLabel = new JLabel("Getting everything ready, this will take a few minutes...");
+		JLabel headerLabel = new JLabel(Language.getValue("m.jvm_patcher_header"));
 		headerLabel.setBounds(10, 40, 480, 37);
 		headerLabel.setFont(Fonts.fontRegBig);
 		headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		jvmPatcherFrame.getContentPane().add(headerLabel);
 		
-		JLabel subHeaderLabel = new JLabel("We will make sure your game runs in 64-bit, please do not close this window.");
+		JLabel subHeaderLabel = new JLabel(Language.getValue("m.jvm_patcher_subheader"));
 		subHeaderLabel.setBounds(10, 65, 480, 37);
 		subHeaderLabel.setFont(Fonts.fontReg);
 		subHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -127,7 +127,7 @@ public class JVMPatcher {
 		});
 		titleBar.setLayout(null);
 		
-		JLabel windowTitle = new JLabel("Java VM Patcher");
+		JLabel windowTitle = new JLabel(Language.getValue("t.jvm_patcher"));
 		windowTitle.setFont(Fonts.fontMed);
 		windowTitle.setBounds(10, 0, jvmPatcherFrame.getWidth() - 100, 20);
 		titleBar.add(windowTitle);
@@ -149,11 +149,11 @@ public class JVMPatcher {
 	private static void patch() {
 		jvmPatcherProgressBar.setMaximum(4);
 		jvmPatcherProgressBar.setValue(1);
-		jvmPatcherState.setText("Downloading Java VM (approximately 74 MB)...");
+		jvmPatcherState.setText(Language.getValue("m.jvm_patcher_download", "74"));
 		downloadPackagedJVM();
 		
 		jvmPatcherProgressBar.setValue(2);
-		jvmPatcherState.setText("Deleting old Java VM...");
+		jvmPatcherState.setText(Language.getValue("m.jvm_patcher_delete"));
 		try {
 			FileUtils.deleteDirectory(new File(LauncherConstants.USER_DIR + "\\java_vm"));
 		} catch (IOException e) {
@@ -161,12 +161,12 @@ public class JVMPatcher {
 		}
 		
 		jvmPatcherProgressBar.setValue(3);
-		jvmPatcherState.setText("Extracting new Java VM...");
+		jvmPatcherState.setText(Language.getValue("m.jvm_patcher_extract"));
 		Compressor.unzip(LauncherConstants.USER_DIR + "\\jvm_pack.zip", LauncherConstants.USER_DIR, false);
 		new File(LauncherConstants.USER_DIR + "\\jvm_pack.zip").delete();
 		
 		jvmPatcherProgressBar.setValue(4);
-		jvmPatcherState.setText("Patching finished, booting into KnightLauncher...");
+		jvmPatcherState.setText(Language.getValue("m.jvm_patcher_finish"));
 		SettingsProperties.setValue("launcher.jvm_patched", "true");
 		ProcessUtil.startApplication(new String[] {"java", "-jar", LauncherConstants.USER_DIR + "\\KnightLauncher.jar"});
 		
