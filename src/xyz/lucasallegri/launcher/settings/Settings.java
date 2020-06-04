@@ -18,5 +18,6 @@ public class Settings {
 	public static String launcherStyle = "dark";
 	public static Boolean offlineMode = false;
 	public static Boolean isOutdated = false;
+	public static Boolean jvmPatched = false;
 
 }

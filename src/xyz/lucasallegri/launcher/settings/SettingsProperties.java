@@ -16,7 +16,7 @@ import xyz.lucasallegri.util.FileUtil;
 
 public class SettingsProperties {
 
-	private static final String PROP_VER = "8";
+	private static final String PROP_VER = "9";
 	
 	private static Properties prop = new Properties();
 	private static String propPath = LauncherConstants.USER_DIR + File.separator + "KnightLauncher.properties";
@@ -46,6 +46,7 @@ public class SettingsProperties {
 							"launcher.createShortcut=true" + System.lineSeparator() +
 							"launcher.lang=en" + System.lineSeparator() +
 							"launcher.style=dark" + System.lineSeparator() +
+							"launcher.jvm_patched=false" + System.lineSeparator() +
 							"modloader.lastModCount=0" + System.lineSeparator() +
 							"compressor.unzipMethod=safe" + System.lineSeparator() +
 							"compressor.extractBuffer=8196" + System.lineSeparator() +
@@ -99,6 +100,7 @@ public class SettingsProperties {
 		Settings.gameUndecoratedWindow = Boolean.parseBoolean(getValue("game.undecoratedWindow"));
 		Settings.gameAdditionalArgs = getValue("game.additionalArgs");
 		Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
+		Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));
 		KnightLog.log.info("Successfully loaded all settings from prop file.");
 	}
 	
