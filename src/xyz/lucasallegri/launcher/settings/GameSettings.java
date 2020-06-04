@@ -58,6 +58,7 @@ public class GameSettings {
 			parsedClientArgs.add(Settings.gameAdditionalArgs);
 			writer.println(Settings.gameAdditionalArgs);
 			
+			parsedClientArgs.add("com.threerings.projectx.client.ProjectXApp");
 			writer.close();
 			
 			ProgressBar.setBarValue(1);

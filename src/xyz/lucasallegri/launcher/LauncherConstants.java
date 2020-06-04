@@ -16,7 +16,7 @@ public class LauncherConstants {
 	public static final String USER_DIR = System.getProperty("user.dir");
 	
 	
-	public static final String[] STANDALONE_LAUNCHER_ARGS = {"java",
+	public static final String[] STANDALONE_LAUNCHER_ARGS = {".\\java_vm\\bin\\java.exe",
 			"-Dsun.java2d.d3d=false",
 			"-Dcheck_unpacked=true",
 			"-jar",
@@ -46,8 +46,7 @@ public class LauncherConstants {
 			"-Dorg.lwjgl.util.NoChecks=true",
 			"-Dsun.java2d.d3d=false",
 			"-Dappdir=" + USER_DIR + File.separator + ".",
-			"-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
-			"com.threerings.projectx.client.ProjectXApp",
+			"-Dresource_dir=" + USER_DIR + File.separator + "./rsrc"
 	};
 	
 }
