@@ -7,10 +7,8 @@ import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ProcessUtil;
 import xyz.lucasallegri.util.SteamUtil;
-
+import xyz.lucasallegri.util.SystemUtil;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LauncherEventHandler {
 	
@@ -30,7 +28,11 @@ public class LauncherEventHandler {
 							KnightLog.logException(e);
 						}
 					} else {
-						ProcessUtil.startApplication(GameSettings.parsedClientArgs.toArray(new String[0]));
+						if(SystemUtil.hasValidJavaHome()) {
+							ProcessUtil.startApplication(GameSettings.parsedClientArgs.toArray(new String[0]));
+						} else {
+							ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
+						}
 					}
 					
 					if(Settings.keepOpen) {
