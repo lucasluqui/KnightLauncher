@@ -3,11 +3,14 @@ package xyz.lucasallegri.launcher;
 import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.LauncherEventHandler;
 import xyz.lucasallegri.launcher.mods.ModListGUI;
+import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
 import xyz.lucasallegri.util.DesktopUtil;
 import xyz.lucasallegri.util.ImageUtil;
+import xyz.lucasallegri.util.SystemUtil;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Frame;
@@ -51,17 +54,21 @@ public class LauncherGUI {
 		
 		Boot.onBootStart();
 		
-		EventQueue.invokeLater(new Runnable() {
-			@SuppressWarnings("static-access")
-			public void run() {
-				try {
-					LauncherGUI window = new LauncherGUI();
-					window.launcherGUIFrame.setVisible(true);
-				} catch (Exception e) {
-					KnightLog.logException(e);
+		if(SystemUtil.is64Bit() && SystemUtil.isWindows() && !Settings.jvmPatched) {
+			JVMPatcher.compose();
+		} else {
+			EventQueue.invokeLater(new Runnable() {
+				@SuppressWarnings("static-access")
+				public void run() {
+					try {
+						LauncherGUI window = new LauncherGUI();
+						window.launcherGUIFrame.setVisible(true);
+					} catch (Exception e) {
+						KnightLog.logException(e);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	public LauncherGUI() {
