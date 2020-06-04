@@ -28,11 +28,7 @@ public class LauncherEventHandler {
 							KnightLog.logException(e);
 						}
 					} else {
-						if(SystemUtil.hasValidJavaHome()) {
-							ProcessUtil.startApplication(GameSettings.parsedClientArgs.toArray(new String[0]));
-						} else {
-							ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
-						}
+						ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
 					}
 					
 					if(Settings.keepOpen) {
