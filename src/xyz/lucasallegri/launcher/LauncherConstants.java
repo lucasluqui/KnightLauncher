@@ -12,7 +12,8 @@ public class LauncherConstants {
 	public static final String TWEETS_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/tweets.txt";
 	public static final String BUG_REPORT_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/bug-report.html";
 	public static final String DISCORD_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/discord.html";
-	public static final String GET_MODS_URL = "https://upsilonapi.lucasallegri.xyz/get-mods.html";
+	public static final String GET_MODS_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/get-mods.html";
+	public static final String JVM_DOWNLOAD_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/jvm-download.txt";
 	public static final String USER_DIR = System.getProperty("user.dir");
 	
 	
