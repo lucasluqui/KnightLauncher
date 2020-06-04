@@ -1,5 +1,6 @@
 package xyz.lucasallegri.launcher;
 
+import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.mods.ModLoader;
 import xyz.lucasallegri.launcher.settings.GameSettings;
 import xyz.lucasallegri.launcher.settings.Settings;
@@ -31,7 +32,12 @@ public class LauncherEventHandler {
 						ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
 					}
 					
-					if(!Settings.keepOpen) LauncherGUI.launcherGUIFrame.dispose();
+					if(Settings.keepOpen) {
+						DiscordInstance.setPresence(Language.getValue("presence.launch_ready"));
+					} else {
+						DiscordInstance.stop();
+						LauncherGUI.launcherGUIFrame.dispose();
+					}
 				}
 			}
 		});
