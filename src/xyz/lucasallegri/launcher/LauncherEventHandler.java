@@ -7,7 +7,6 @@ import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ProcessUtil;
 import xyz.lucasallegri.util.SteamUtil;
-import xyz.lucasallegri.util.SystemUtil;
 import java.awt.event.ActionEvent;
 
 public class LauncherEventHandler {
