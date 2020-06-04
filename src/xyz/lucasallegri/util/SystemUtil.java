@@ -35,7 +35,9 @@ public class SystemUtil {
 	}
 	
 	public static boolean hasValidJavaHome() {
-		return !System.getProperty("java.home").contains("jdk") && !System.getProperty("java.home").contains("12.");
+		return System.getProperty("java.home").contains("1.6") || 
+				System.getProperty("java.home").contains("1.7") ||
+				System.getProperty("java.home").contains("1.8");
 	}
 
 }
