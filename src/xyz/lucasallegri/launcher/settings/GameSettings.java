@@ -14,8 +14,6 @@ import xyz.lucasallegri.logging.KnightLog;
 
 public class GameSettings {
 	
-	public static List<String> parsedClientArgs = new ArrayList<String>();
-	
 	public static void load() {
 		try {
 			
@@ -28,37 +26,15 @@ public class GameSettings {
 			new File("extra.txt").delete();
 			PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");
 			
-			for(String arg : LauncherConstants.STANDALONE_CLIENT_ARGS) {
-				parsedClientArgs.add(arg);
-			}
+			if(Settings.gameUseStringDeduplication) writer.println("-XX:+UseStringDeduplication");
+			if(Settings.gameUseG1GC) writer.println("-XX:+UseG1GC");
+			if(Settings.gameDisableExplicitGC) writer.println("-XX:+DisableExplicitGC");
+			if(Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
 			
-			if(Settings.gameUseStringDeduplication) {
-				parsedClientArgs.add("-XX:+UseStringDeduplication");
-				writer.println("-XX:+UseStringDeduplication");
-			}
-			if(Settings.gameUseG1GC) {
-				parsedClientArgs.add("-XX:+UseG1GC");
-				writer.println("-XX:+UseG1GC");
-			}
-			if(Settings.gameDisableExplicitGC) {
-				parsedClientArgs.add("-XX:+DisableExplicitGC");
-				writer.println("-XX:+DisableExplicitGC");
-			}
-			if(Settings.gameUndecoratedWindow) {
-				parsedClientArgs.add("-Dorg.lwjgl.opengl.Window.undecorated=true");
-				writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
-			}
-			
-			parsedClientArgs.add("-Xms" + (Settings.gameMemory / 2) + "M");
 			writer.println("-Xms" + (Settings.gameMemory / 2) + "M");
-			
-			parsedClientArgs.add("-Xmx" + Settings.gameMemory + "M");
 			writer.println("-Xmx" + Settings.gameMemory + "M");
-			
-			parsedClientArgs.add(Settings.gameAdditionalArgs);
 			writer.println(Settings.gameAdditionalArgs);
 			
-			parsedClientArgs.add("com.threerings.projectx.client.ProjectXApp");
 			writer.close();
 			
 			ProgressBar.setBarValue(1);
