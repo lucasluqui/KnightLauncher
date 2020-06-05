@@ -400,7 +400,7 @@ public class SettingsGUI {
 		behaviorPanel.add(labelCleaning);
 		
 		JLabel labelCleaningExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
-		labelCleaningExplained.setBounds(25, 110, 400, 16);
+		labelCleaningExplained.setBounds(25, 110, 600, 16);
 		labelCleaningExplained.setFont(Fonts.fontReg);
 		behaviorPanel.add(labelCleaningExplained);
 		
@@ -413,18 +413,36 @@ public class SettingsGUI {
 		behaviorPanel.add(sep);
 		
 		JLabel labelKeepOpen = new JLabel(Language.getValue("m.keep_open"));
-		labelKeepOpen.setBounds(25, 160, 225, 18);
+		labelKeepOpen.setBounds(25, 155, 225, 18);
 		labelKeepOpen.setFont(Fonts.fontRegBig);
 		behaviorPanel.add(labelKeepOpen);
 		
 		JLabel labelKeepOpenExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
-		labelKeepOpenExplained.setBounds(25, 180, 400, 16);
+		labelKeepOpenExplained.setBounds(25, 175, 600, 16);
 		labelKeepOpenExplained.setFont(Fonts.fontReg);
 		behaviorPanel.add(labelKeepOpenExplained);
 		
 		JToggleButton switchKeepOpen = new JToggleButton("");
-		switchKeepOpen.setBounds(680, 165, 30, 23);
+		switchKeepOpen.setBounds(680, 160, 30, 23);
 		behaviorPanel.add(switchKeepOpen);
+		
+		JSeparator sep2 = new JSeparator();
+		sep2.setBounds(25, 205, 690, 16);
+		behaviorPanel.add(sep2);
+		
+		JLabel labelShortcut = new JLabel(Language.getValue("m.create_shortcut"));
+		labelShortcut.setBounds(25, 220, 225, 18);
+		labelShortcut.setFont(Fonts.fontRegBig);
+		behaviorPanel.add(labelShortcut);
+		
+		JLabel labelShortcutExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		labelShortcutExplained.setBounds(25, 240, 600, 16);
+		labelShortcutExplained.setFont(Fonts.fontReg);
+		behaviorPanel.add(labelShortcutExplained);
+		
+		JToggleButton switchShortcut = new JToggleButton("");
+		switchShortcut.setBounds(680, 225, 30, 23);
+		behaviorPanel.add(switchShortcut);
 		
 		return behaviorPanel;
 	}
