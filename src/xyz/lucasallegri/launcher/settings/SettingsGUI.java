@@ -84,22 +84,15 @@ public class SettingsGUI {
 		JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.setTabPlacement(JTabbedPane.LEFT);
 		tabbedPane.setBounds(-2, 20, 852, 455);
+		tabbedPane.setFont(Fonts.fontMedBig);
 		tabbedPane.addTab("Appearance", createAppearancePanel());
-		tabbedPane.addTab("Game", new JPanel());
-		tabbedPane.addTab("Mods", new JPanel());
+		tabbedPane.addTab("Behavior", new JPanel());
+		tabbedPane.addTab("Game", createGamePanel());
 		tabbedPane.addTab("Files", new JPanel());
-		tabbedPane.addTab("Connection", new JPanel());
+		tabbedPane.addTab("Mods", createModsPanel());
+		tabbedPane.addTab("Connection", createConnectionPanel());
 		settingsGUIFrame.getContentPane().add(tabbedPane);
 		
-//		JLabel labelLauncherSettings = new JLabel(Language.getValue("m.launcher_settings"));
-//		labelLauncherSettings.setFont(Fonts.fontMed);
-//		labelLauncherSettings.setBounds(10, 36, 271, 14);
-//		settingsGUIFrame.getContentPane().add(labelLauncherSettings);
-//		
-//		JSeparator sepLauncherSettings = new JSeparator();
-//		sepLauncherSettings.setBounds(10, 56, 272, 2);
-//		settingsGUIFrame.getContentPane().add(sepLauncherSettings);
-//		
 //		JLabel labelChoicePlatform = new JLabel(Language.getValue("m.platform"));
 //		labelChoicePlatform.setBounds(15, 79, 95, 14);
 //		labelChoicePlatform.setFont(Fonts.fontReg);
@@ -117,47 +110,6 @@ public class SettingsGUI {
 //			@Override
 //			public void itemStateChanged(ItemEvent event) {
 //				SettingsEventHandler.platformChangeEvent(event);
-//			}
-//		});
-//		
-//		JLabel labelLanguage = new JLabel(Language.getValue("m.language"));
-//		labelLanguage.setBounds(15, 124, 95, 14);
-//		labelLanguage.setFont(Fonts.fontReg);
-//		settingsGUIFrame.getContentPane().add(labelLanguage);
-//		
-//		choiceLanguage = new JComboBox<String>();
-//		choiceLanguage.setBounds(125, 120, 120, 20);
-//		choiceLanguage.setFont(Fonts.fontReg);
-//		choiceLanguage.setFocusable(false);
-//		settingsGUIFrame.getContentPane().add(choiceLanguage);
-//		for(String lang : Language.AVAILABLE_LANGUAGES) {
-//			choiceLanguage.addItem(lang);
-//		}
-//		choiceLanguage.setSelectedItem(Language.getLangName(Settings.lang));
-//		choiceLanguage.addItemListener(new ItemListener() {
-//			@Override
-//			public void itemStateChanged(ItemEvent event) {
-//				SettingsEventHandler.languageChangeEvent(event);
-//			}
-//		});
-//		
-//		JLabel labelStyle = new JLabel(Language.getValue("m.launcher_style"));
-//		labelStyle.setFont(Fonts.fontReg);
-//		labelStyle.setBounds(15, 169, 95, 14);
-//		settingsGUIFrame.getContentPane().add(labelStyle);
-//		
-//		choiceStyle = new JComboBox<String>();
-//		choiceStyle.setBounds(125, 165, 120, 20);
-//		choiceStyle.setFont(Fonts.fontReg);
-//		choiceStyle.setFocusable(false);
-//		settingsGUIFrame.getContentPane().add(choiceStyle);
-//		choiceStyle.addItem(Language.getValue("o.dark"));
-//		choiceStyle.addItem(Language.getValue("o.light"));
-//		choiceStyle.setSelectedIndex(Settings.launcherStyle.equals("dark") ? 0 : 1);
-//		choiceStyle.addItemListener(new ItemListener() {
-//			@Override
-//			public void itemStateChanged(ItemEvent event) {
-//				SettingsEventHandler.styleChangeEvent(event);
 //			}
 //		});
 //		
@@ -407,21 +359,121 @@ public class SettingsGUI {
 		headerLabel.setFont(Fonts.fontMedGiant);
 		appearancePanel.add(headerLabel);
 		
-		JLabel labelStyle = new JLabel(Language.getValue("m.launcher_style").toUpperCase());
-		labelStyle.setBounds(25, 74, 125, 14);
+		JLabel labelStyle = new JLabel(Language.getValue("m.launcher_style"));
+		labelStyle.setBounds(25, 90, 125, 18);
 		labelStyle.setFont(Fonts.fontRegBig);
 		appearancePanel.add(labelStyle);
 		
 		choiceStyle = new JComboBox<String>();
-		choiceStyle.setBounds(25, 99, 150, 20);
+		choiceStyle.setBounds(25, 115, 150, 20);
+		choiceStyle.setFocusable(false);
 		choiceStyle.setFont(Fonts.fontReg);
 		choiceStyle.addItem(Language.getValue("o.dark"));
 		choiceStyle.addItem(Language.getValue("o.light"));
 		appearancePanel.add(choiceStyle);
+		choiceStyle.setSelectedIndex(Settings.launcherStyle.equals("dark") ? 0 : 1);
+		choiceStyle.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				SettingsEventHandler.styleChangeEvent(event);
+			}
+		});
+		
+		JLabel labelLanguage = new JLabel(Language.getValue("m.language"));
+		labelLanguage.setBounds(225, 90, 125, 18);
+		labelLanguage.setFont(Fonts.fontRegBig);
+		appearancePanel.add(labelLanguage);
+		
+		choiceLanguage = new JComboBox<String>();
+		choiceLanguage.setBounds(225, 115, 150, 20);
+		choiceLanguage.setFocusable(false);
+		choiceLanguage.setFont(Fonts.fontReg);
+		for(String lang : Language.AVAILABLE_LANGUAGES) {
+			choiceLanguage.addItem(lang);
+		}
+		appearancePanel.add(choiceLanguage);
+		choiceLanguage.setSelectedItem(Language.getLangName(Settings.lang));
+		choiceLanguage.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				SettingsEventHandler.languageChangeEvent(event);
+			}
+		});
 		
 		return appearancePanel;
 	}
 	
+	protected JPanel createGamePanel() {
+		JPanel gamePanel = new JPanel();
+		gamePanel.setLayout(null);
+		
+		JLabel headerLabel = new JLabel("Game");
+		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		headerLabel.setBounds(25, 11, 450, 50);
+		headerLabel.setFont(Fonts.fontMedGiant);
+		gamePanel.add(headerLabel);
+		
+		JLabel labelStyle = new JLabel(Language.getValue("m.platform"));
+		labelStyle.setBounds(25, 90, 125, 18);
+		labelStyle.setFont(Fonts.fontRegBig);
+		gamePanel.add(labelStyle);
+		
+		choicePlatform = new JComboBox<String>();
+		choicePlatform.setBounds(25, 115, 150, 20);
+		choicePlatform.setFont(Fonts.fontReg);
+		choicePlatform.setFocusable(false);
+		gamePanel.add(choicePlatform);
+		choicePlatform.addItem(Language.getValue("o.steam"));
+		choicePlatform.addItem(Language.getValue("o.standalone"));
+		choicePlatform.setSelectedItem(Settings.gamePlatform);
+		choicePlatform.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				SettingsEventHandler.platformChangeEvent(event);
+			}
+		});
+		
+		return gamePanel;
+	}
+	
+	protected JPanel createModsPanel() {
+		JPanel modsPanel = new JPanel();
+		modsPanel.setLayout(null);
+		
+		JLabel headerLabel = new JLabel("Mods");
+		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		headerLabel.setBounds(25, 11, 450, 50);
+		headerLabel.setFont(Fonts.fontMedGiant);
+		modsPanel.add(headerLabel);
+		
+		JLabel soonLabel = new JLabel("Coming soon...");
+		soonLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		soonLabel.setBounds(25, 60, 450, 50);
+		soonLabel.setFont(Fonts.fontRegBig);
+		modsPanel.add(soonLabel);
+		
+		return modsPanel;
+	}
+	
+	protected JPanel createConnectionPanel() {
+		JPanel connectionPanel = new JPanel();
+		connectionPanel.setLayout(null);
+		
+		JLabel headerLabel = new JLabel("Connection");
+		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		headerLabel.setBounds(25, 11, 450, 50);
+		headerLabel.setFont(Fonts.fontMedGiant);
+		connectionPanel.add(headerLabel);
+		
+		JLabel soonLabel = new JLabel("Coming soon...");
+		soonLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		soonLabel.setBounds(25, 60, 450, 50);
+		soonLabel.setFont(Fonts.fontRegBig);
+		connectionPanel.add(soonLabel);
+		
+		return connectionPanel;
+	}
+ 	
 	public static int parseSelectedMemoryAsInt() {
 		switch(choiceMemory.getSelectedIndex()) {
 		case 0: return 512;
