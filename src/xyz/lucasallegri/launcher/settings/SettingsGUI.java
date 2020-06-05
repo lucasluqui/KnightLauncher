@@ -42,14 +42,14 @@ public class SettingsGUI {
 	public static JComboBox<String> choiceLanguage;
 	public static JComboBox<String> choiceStyle;
 	public static JComboBox<String> choiceMemory;
-	public static JCheckBox checkboxRebuilds;
-	public static JCheckBox checkboxKeepOpen;
+	public static JToggleButton switchCleaning;
+	public static JToggleButton switchKeepOpen;
+	public static JToggleButton switchShortcut;
 	public static JButton forceRebuildButton;
-	public static JCheckBox checkboxShortcut;
-	public static JCheckBox checkboxStringDeduplication;
-	public static JCheckBox checkboxG1GC;
-	public static JCheckBox checkboxExplicitGC;
-	public static JCheckBox checkboxUndecorated;
+	public static JToggleButton switchStringDedup;
+	public static JToggleButton switchUseG1GC;
+	public static JToggleButton switchExplicitGC;
+	public static JToggleButton switchUndecoratedWindow;
 	public static JEditorPane argumentsPane;
 	
 	int pY, pX;
@@ -90,6 +90,7 @@ public class SettingsGUI {
 		tabbedPane.addTab("Behavior", createBehaviorPanel());
 		tabbedPane.addTab("Game", createGamePanel());
 		tabbedPane.addTab("Files", createFilesPanel());
+		tabbedPane.addTab("Extra.txt", new JPanel());
 		tabbedPane.addTab("Mods", createModsPanel());
 		tabbedPane.addTab("Connection", createConnectionPanel());
 		settingsGUIFrame.getContentPane().add(tabbedPane);
@@ -404,7 +405,7 @@ public class SettingsGUI {
 		labelCleaningExplained.setFont(Fonts.fontReg);
 		behaviorPanel.add(labelCleaningExplained);
 		
-		JToggleButton switchCleaning = new JToggleButton("");
+		switchCleaning = new JToggleButton("");
 		switchCleaning.setBounds(680, 95, 30, 23);
 		behaviorPanel.add(switchCleaning);
 		
@@ -422,7 +423,7 @@ public class SettingsGUI {
 		labelKeepOpenExplained.setFont(Fonts.fontReg);
 		behaviorPanel.add(labelKeepOpenExplained);
 		
-		JToggleButton switchKeepOpen = new JToggleButton("");
+		switchKeepOpen = new JToggleButton("");
 		switchKeepOpen.setBounds(680, 160, 30, 23);
 		behaviorPanel.add(switchKeepOpen);
 		
@@ -440,7 +441,7 @@ public class SettingsGUI {
 		labelShortcutExplained.setFont(Fonts.fontReg);
 		behaviorPanel.add(labelShortcutExplained);
 		
-		JToggleButton switchShortcut = new JToggleButton("");
+		switchShortcut = new JToggleButton("");
 		switchShortcut.setBounds(680, 225, 30, 23);
 		behaviorPanel.add(switchShortcut);
 		
@@ -477,6 +478,30 @@ public class SettingsGUI {
 			}
 		});
 		
+		JLabel labelMemory = new JLabel(Language.getValue("m.allocated_memory"));
+		labelMemory.setBounds(225, 90, 125, 18);
+		labelMemory.setFont(Fonts.fontRegBig);
+		gamePanel.add(labelMemory);
+		
+		choiceMemory = new JComboBox<String>();
+		choiceMemory.setBounds(225, 115, 150, 20);
+		choiceMemory.setFocusable(false);
+		choiceMemory.setFont(Fonts.fontReg);
+		gamePanel.add(choiceMemory);
+		choiceMemory.addItem(Language.getValue("o.memory_default"));
+		choiceMemory.addItem(Language.getValue("o.memory_low"));
+		choiceMemory.addItem(Language.getValue("o.memory_med"));
+		choiceMemory.addItem(Language.getValue("o.memory_high"));
+		choiceMemory.addItem(Language.getValue("o.memory_flex"));
+		choiceMemory.setSelectedIndex(parseSelectedMemoryAsIndex());
+		choiceMemory.setToolTipText((String)choiceMemory.getSelectedItem());
+		choiceMemory.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				SettingsEventHandler.memoryChangeEvent(event);
+			}
+		});
+		
 		JSeparator sep = new JSeparator();
 		sep.setBounds(25, 180, 690, 16);
 		gamePanel.add(sep);
@@ -491,9 +516,16 @@ public class SettingsGUI {
 		labelStringDedupExplained.setFont(Fonts.fontReg);
 		gamePanel.add(labelStringDedupExplained);
 		
-		JToggleButton switchStringDedup = new JToggleButton("");
+		switchStringDedup = new JToggleButton("");
 		switchStringDedup.setBounds(680, 200, 30, 23);
+		switchStringDedup.setFocusPainted(false);
 		gamePanel.add(switchStringDedup);
+		switchStringDedup.setSelected(Settings.gameUseStringDeduplication);
+		switchStringDedup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.useStringDeduplicationChangeEvent(_action);
+			}
+		});
 		
 		JSeparator sep2 = new JSeparator();
 		sep2.setBounds(25, 245, 690, 16);
@@ -509,9 +541,16 @@ public class SettingsGUI {
 		labelUseG1GCExplained.setFont(Fonts.fontReg);
 		gamePanel.add(labelUseG1GCExplained);
 		
-		JToggleButton switchUseG1GC = new JToggleButton("");
+		switchUseG1GC = new JToggleButton("");
 		switchUseG1GC.setBounds(680, 265, 30, 23);
+		switchUseG1GC.setFocusPainted(false);
 		gamePanel.add(switchUseG1GC);
+		switchUseG1GC.setSelected(Settings.gameUseG1GC);
+		switchUseG1GC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.useG1GCChangeEvent(_action);
+			}
+		});
 		
 		JSeparator sep3 = new JSeparator();
 		sep3.setBounds(25, 310, 690, 16);
@@ -527,9 +566,16 @@ public class SettingsGUI {
 		labelExplicitGCExplained.setFont(Fonts.fontReg);
 		gamePanel.add(labelExplicitGCExplained);
 		
-		JToggleButton switchExplicitGC = new JToggleButton("");
+		switchExplicitGC = new JToggleButton("");
 		switchExplicitGC.setBounds(680, 330, 30, 23);
+		switchExplicitGC.setFocusPainted(false);
 		gamePanel.add(switchExplicitGC);
+		switchExplicitGC.setSelected(Settings.gameDisableExplicitGC);
+		switchExplicitGC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.disableExplicitGCChangeEvent(_action);
+			}
+		});
 		
 		JSeparator sep4 = new JSeparator();
 		sep4.setBounds(25, 375, 690, 16);
@@ -545,9 +591,16 @@ public class SettingsGUI {
 		labelUndecoratedWindowExplained.setFont(Fonts.fontReg);
 		gamePanel.add(labelUndecoratedWindowExplained);
 		
-		JToggleButton switchUndecoratedWindow = new JToggleButton("");
+		switchUndecoratedWindow = new JToggleButton("");
 		switchUndecoratedWindow.setBounds(680, 395, 30, 23);
+		switchUndecoratedWindow.setFocusPainted(false);
 		gamePanel.add(switchUndecoratedWindow);
+		switchUndecoratedWindow.setSelected(Settings.gameUndecoratedWindow);
+		switchUndecoratedWindow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.undecoratedWindowChangeEvent(_action);
+			}
+		});
 		
 		return gamePanel;
 	}

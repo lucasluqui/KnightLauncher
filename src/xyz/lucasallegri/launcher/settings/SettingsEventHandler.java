@@ -15,13 +15,13 @@ public class SettingsEventHandler {
 	}
 	
 	public static void rebuildsChangeEvent(ActionEvent event) {
-		Settings.doRebuilds = SettingsGUI.checkboxRebuilds.isSelected();
-		SettingsProperties.setValue("launcher.rebuilds", SettingsGUI.checkboxRebuilds.isSelected() ? "true" : "false");
+		Settings.doRebuilds = SettingsGUI.switchCleaning.isSelected();
+		SettingsProperties.setValue("launcher.rebuilds", SettingsGUI.switchCleaning.isSelected() ? "true" : "false");
 	}
 
 	public static void keepOpenChangeEvent(ActionEvent event) {
-		Settings.keepOpen = SettingsGUI.checkboxKeepOpen.isSelected();
-		SettingsProperties.setValue("launcher.keepOpen", SettingsGUI.checkboxKeepOpen.isSelected() ? "true" : "false");
+		Settings.keepOpen = SettingsGUI.switchKeepOpen.isSelected();
+		SettingsProperties.setValue("launcher.keepOpen", SettingsGUI.switchKeepOpen.isSelected() ? "true" : "false");
 	}
 	
 	public static void forceRebuildEvent() {
@@ -31,8 +31,8 @@ public class SettingsEventHandler {
 	}
 	
 	public static void createShortcutChangeEvent(ActionEvent event) {
-		Settings.createShortcut = SettingsGUI.checkboxShortcut.isSelected();
-		SettingsProperties.setValue("launcher.createShortcut", SettingsGUI.checkboxShortcut.isSelected() ? "true" : "false");
+		Settings.createShortcut = SettingsGUI.switchShortcut.isSelected();
+		SettingsProperties.setValue("launcher.createShortcut", SettingsGUI.switchShortcut.isSelected() ? "true" : "false");
 	}
 	
 	public static void languageChangeEvent(ItemEvent event) {
@@ -42,23 +42,23 @@ public class SettingsEventHandler {
 	}
 	
 	public static void useStringDeduplicationChangeEvent(ActionEvent action) {
-		Settings.gameUseStringDeduplication = SettingsGUI.checkboxStringDeduplication.isSelected();
-		SettingsProperties.setValue("game.useStringDeduplication", SettingsGUI.checkboxStringDeduplication.isSelected()  ? "true" : "false");
+		Settings.gameUseStringDeduplication = SettingsGUI.switchStringDedup.isSelected();
+		SettingsProperties.setValue("game.useStringDeduplication", SettingsGUI.switchStringDedup.isSelected()  ? "true" : "false");
 	}
 
 	public static void useG1GCChangeEvent(ActionEvent action) {
-		Settings.gameUseG1GC = SettingsGUI.checkboxG1GC.isSelected();
-		SettingsProperties.setValue("game.useG1GC", SettingsGUI.checkboxG1GC.isSelected()  ? "true" : "false");
+		Settings.gameUseG1GC = SettingsGUI.switchUseG1GC.isSelected();
+		SettingsProperties.setValue("game.useG1GC", SettingsGUI.switchUseG1GC.isSelected()  ? "true" : "false");
 	}
 	
 	public static void disableExplicitGCChangeEvent(ActionEvent action) {
-		Settings.gameDisableExplicitGC = SettingsGUI.checkboxExplicitGC.isSelected();
-		SettingsProperties.setValue("game.disableExplicitGC", SettingsGUI.checkboxExplicitGC.isSelected()  ? "true" : "false");
+		Settings.gameDisableExplicitGC = SettingsGUI.switchExplicitGC.isSelected();
+		SettingsProperties.setValue("game.disableExplicitGC", SettingsGUI.switchExplicitGC.isSelected()  ? "true" : "false");
 	}
 	
 	public static void undecoratedWindowChangeEvent(ActionEvent action) {
-		Settings.gameUndecoratedWindow = SettingsGUI.checkboxUndecorated.isSelected();
-		SettingsProperties.setValue("game.undecoratedWindow", SettingsGUI.checkboxUndecorated.isSelected()  ? "true" : "false");
+		Settings.gameUndecoratedWindow = SettingsGUI.switchUndecoratedWindow.isSelected();
+		SettingsProperties.setValue("game.undecoratedWindow", SettingsGUI.switchUndecoratedWindow.isSelected()  ? "true" : "false");
 	}
 	
 	public static void saveAdditionalArgs() {
