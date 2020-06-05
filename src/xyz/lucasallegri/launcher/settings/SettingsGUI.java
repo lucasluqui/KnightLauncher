@@ -89,7 +89,7 @@ public class SettingsGUI {
 		tabbedPane.addTab("Appearance", createAppearancePanel());
 		tabbedPane.addTab("Behavior", createBehaviorPanel());
 		tabbedPane.addTab("Game", createGamePanel());
-		tabbedPane.addTab("Files", new JPanel());
+		tabbedPane.addTab("Files", createFilesPanel());
 		tabbedPane.addTab("Mods", createModsPanel());
 		tabbedPane.addTab("Connection", createConnectionPanel());
 		settingsGUIFrame.getContentPane().add(tabbedPane);
@@ -457,27 +457,114 @@ public class SettingsGUI {
 		headerLabel.setFont(Fonts.fontMedGiant);
 		gamePanel.add(headerLabel);
 		
-		JLabel labelStyle = new JLabel(Language.getValue("m.platform"));
-		labelStyle.setBounds(25, 90, 125, 18);
-		labelStyle.setFont(Fonts.fontRegBig);
-		gamePanel.add(labelStyle);
+		JLabel labelStringDedup = new JLabel(Language.getValue("m.use_string_deduplication"));
+		labelStringDedup.setBounds(25, 90, 225, 18);
+		labelStringDedup.setFont(Fonts.fontRegBig);
+		gamePanel.add(labelStringDedup);
 		
-		choicePlatform = new JComboBox<String>();
-		choicePlatform.setBounds(25, 115, 150, 20);
-		choicePlatform.setFont(Fonts.fontReg);
-		choicePlatform.setFocusable(false);
-		gamePanel.add(choicePlatform);
-		choicePlatform.addItem(Language.getValue("o.steam"));
-		choicePlatform.addItem(Language.getValue("o.standalone"));
-		choicePlatform.setSelectedItem(Settings.gamePlatform);
-		choicePlatform.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent event) {
-				SettingsEventHandler.platformChangeEvent(event);
+		JLabel labelStringDedupExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		labelStringDedupExplained.setBounds(25, 110, 600, 16);
+		labelStringDedupExplained.setFont(Fonts.fontReg);
+		gamePanel.add(labelStringDedupExplained);
+		
+		JToggleButton switchStringDedup = new JToggleButton("");
+		switchStringDedup.setBounds(680, 95, 30, 23);
+		gamePanel.add(switchStringDedup);
+		
+		JSeparator sep = new JSeparator();
+		sep.setBounds(25, 140, 690, 16);
+		gamePanel.add(sep);
+		
+		JLabel labelUseG1GC = new JLabel(Language.getValue("m.use_g1gc"));
+		labelUseG1GC.setBounds(25, 155, 225, 18);
+		labelUseG1GC.setFont(Fonts.fontRegBig);
+		gamePanel.add(labelUseG1GC);
+		
+		JLabel labelUseG1GCExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		labelUseG1GCExplained.setBounds(25, 175, 600, 16);
+		labelUseG1GCExplained.setFont(Fonts.fontReg);
+		gamePanel.add(labelUseG1GCExplained);
+		
+		JToggleButton switchUseG1GC = new JToggleButton("");
+		switchUseG1GC.setBounds(680, 160, 30, 23);
+		gamePanel.add(switchUseG1GC);
+		
+		JSeparator sep2 = new JSeparator();
+		sep2.setBounds(25, 205, 690, 16);
+		gamePanel.add(sep2);
+		
+		JLabel labelExplicitGC = new JLabel(Language.getValue("m.disable_explicit_gc"));
+		labelExplicitGC.setBounds(25, 220, 225, 18);
+		labelExplicitGC.setFont(Fonts.fontRegBig);
+		gamePanel.add(labelExplicitGC);
+		
+		JLabel labelExplicitGCExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		labelExplicitGCExplained.setBounds(25, 240, 600, 16);
+		labelExplicitGCExplained.setFont(Fonts.fontReg);
+		gamePanel.add(labelExplicitGCExplained);
+		
+		JToggleButton switchExplicitGC = new JToggleButton("");
+		switchExplicitGC.setBounds(680, 225, 30, 23);
+		gamePanel.add(switchExplicitGC);
+		
+//		JLabel labelStyle = new JLabel(Language.getValue("m.platform"));
+//		labelStyle.setBounds(25, 90, 125, 18);
+//		labelStyle.setFont(Fonts.fontRegBig);
+//		gamePanel.add(labelStyle);
+//		
+//		choicePlatform = new JComboBox<String>();
+//		choicePlatform.setBounds(25, 115, 150, 20);
+//		choicePlatform.setFont(Fonts.fontReg);
+//		choicePlatform.setFocusable(false);
+//		gamePanel.add(choicePlatform);
+//		choicePlatform.addItem(Language.getValue("o.steam"));
+//		choicePlatform.addItem(Language.getValue("o.standalone"));
+//		choicePlatform.setSelectedItem(Settings.gamePlatform);
+//		choicePlatform.addItemListener(new ItemListener() {
+//			@Override
+//			public void itemStateChanged(ItemEvent event) {
+//				SettingsEventHandler.platformChangeEvent(event);
+//			}
+//		});
+		
+		return gamePanel;
+	}
+	
+	protected JPanel createFilesPanel() {
+		JPanel filesPanel = new JPanel();
+		filesPanel.setLayout(null);
+		
+		JLabel headerLabel = new JLabel("Files");
+		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		headerLabel.setBounds(25, 11, 450, 50);
+		headerLabel.setFont(Fonts.fontMedGiant);
+		filesPanel.add(headerLabel);
+		
+		JLabel labelFileClean = new JLabel(Language.getValue("b.force_rebuild"));
+		labelFileClean.setBounds(25, 90, 225, 18);
+		labelFileClean.setFont(Fonts.fontRegBig);
+		filesPanel.add(labelFileClean);
+		
+		JLabel labelFileCleanExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		labelFileCleanExplained.setBounds(25, 110, 600, 16);
+		labelFileCleanExplained.setFont(Fonts.fontReg);
+		filesPanel.add(labelFileCleanExplained);
+		
+		Icon startIcon = IconFontSwing.buildIcon(FontAwesome.SHARE, 16, ColorUtil.getForegroundColor());
+		JButton forceRebuildButton = new JButton(startIcon);
+		forceRebuildButton.setBounds(680, 95, 30, 23);
+		forceRebuildButton.setFocusPainted(false);
+		forceRebuildButton.setFocusable(false);
+		filesPanel.add(forceRebuildButton);
+		forceRebuildButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsGUI.settingsGUIFrame.setVisible(false);
+				LauncherGUI.launcherGUIFrame.setVisible(true);
+				SettingsEventHandler.forceRebuildEvent();
 			}
 		});
 		
-		return gamePanel;
+		return filesPanel;
 	}
 	
 	protected JPanel createModsPanel() {
