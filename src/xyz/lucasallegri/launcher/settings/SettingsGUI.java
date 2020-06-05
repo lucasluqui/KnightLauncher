@@ -1,7 +1,6 @@
 package xyz.lucasallegri.launcher.settings;
 
 import java.awt.EventQueue;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -14,7 +13,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -31,7 +29,6 @@ import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
-import javax.swing.border.EmptyBorder;
 import javax.swing.SwingConstants;
 import javax.swing.JToggleButton;
 
@@ -86,162 +83,14 @@ public class SettingsGUI {
 		tabbedPane.setTabPlacement(JTabbedPane.LEFT);
 		tabbedPane.setBounds(-2, 20, 852, 455);
 		tabbedPane.setFont(Fonts.fontMedBig);
-		tabbedPane.addTab("Appearance", createAppearancePanel());
-		tabbedPane.addTab("Behavior", createBehaviorPanel());
-		tabbedPane.addTab("Game", createGamePanel());
-		tabbedPane.addTab("Files", createFilesPanel());
-		tabbedPane.addTab("Extra.txt", new JPanel());
-		tabbedPane.addTab("Mods", createModsPanel());
-		tabbedPane.addTab("Connection", createConnectionPanel());
+		tabbedPane.addTab(Language.getValue("tab.appearance"), createAppearancePanel());
+		tabbedPane.addTab(Language.getValue("tab.behavior"), createBehaviorPanel());
+		tabbedPane.addTab(Language.getValue("tab.game"), createGamePanel());
+		tabbedPane.addTab(Language.getValue("tab.files"), createFilesPanel());
+		tabbedPane.addTab(Language.getValue("tab.extratxt"), createExtraPanel());
+		tabbedPane.addTab(Language.getValue("tab.mods"), createModsPanel());
+		tabbedPane.addTab(Language.getValue("tab.connection"), createConnectionPanel());
 		settingsGUIFrame.getContentPane().add(tabbedPane);
-		
-//		checkboxRebuilds = new JCheckBox(Language.getValue("m.rebuilds"));
-//		checkboxRebuilds.setBounds(11, 203, 270, 23);
-//		checkboxRebuilds.setFont(Fonts.fontReg);
-//		checkboxRebuilds.setFocusPainted(false);
-//		settingsGUIFrame.getContentPane().add(checkboxRebuilds);
-//		checkboxRebuilds.setSelected(Settings.doRebuilds);
-//		checkboxRebuilds.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent _action) {
-//				SettingsEventHandler.rebuildsChangeEvent(_action);
-//			}
-//		});
-//		
-//		checkboxKeepOpen = new JCheckBox(Language.getValue("m.keep_open"));
-//		checkboxKeepOpen.setBounds(11, 225, 270, 21);
-//		checkboxKeepOpen.setFont(Fonts.fontReg);
-//		checkboxKeepOpen.setFocusPainted(false);
-//		settingsGUIFrame.getContentPane().add(checkboxKeepOpen);
-//		checkboxKeepOpen.setSelected(Settings.keepOpen);
-//		checkboxKeepOpen.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent _action) {
-//				SettingsEventHandler.keepOpenChangeEvent(_action);
-//			}
-//		});
-//		
-//		forceRebuildButton = new JButton(Language.getValue("b.force_rebuild"));
-//		forceRebuildButton.setBounds(166, 247, 120, 23);
-//		forceRebuildButton.setFont(Fonts.fontMed);
-//		forceRebuildButton.setFocusPainted(false);
-//		forceRebuildButton.setFocusable(false);
-//		forceRebuildButton.setToolTipText(Language.getValue("b.force_rebuild"));
-//		settingsGUIFrame.getContentPane().add(forceRebuildButton);
-//		forceRebuildButton.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent _action) {
-//				SettingsEventHandler.forceRebuildEvent();
-//			}
-//		});
-//		
-//		checkboxShortcut = new JCheckBox(Language.getValue("m.create_shortcut"));
-//		checkboxShortcut.setBounds(11, 247, 139, 23);
-//		checkboxShortcut.setFont(Fonts.fontReg);
-//		checkboxShortcut.setFocusPainted(false);
-//		checkboxShortcut.setToolTipText(Language.getValue("m.create_shortcut"));
-//		settingsGUIFrame.getContentPane().add(checkboxShortcut);
-//		checkboxShortcut.setSelected(Settings.createShortcut);
-//		checkboxShortcut.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent _action) {
-//				SettingsEventHandler.createShortcutChangeEvent(_action);
-//			}
-//		});
-//		
-//		JSeparator sepExtraTxt = new JSeparator();
-//		sepExtraTxt.setBounds(10, 308, 272, 2);
-//		settingsGUIFrame.getContentPane().add(sepExtraTxt);
-//		
-//		JLabel labelExtraTxt = new JLabel(Language.getValue("m.extratxt_settings"));
-//		labelExtraTxt.setFont(Fonts.fontMed);
-//		labelExtraTxt.setBounds(10, 288, 271, 14);
-//		settingsGUIFrame.getContentPane().add(labelExtraTxt);
-//		
-//		JLabel labelMemory = new JLabel(Language.getValue("m.allocated_memory"));
-//		labelMemory.setFont(Fonts.fontReg);
-//		labelMemory.setBounds(15, 327, 124, 14);
-//		settingsGUIFrame.getContentPane().add(labelMemory);
-//		
-//		choiceMemory = new JComboBox<String>();
-//		choiceMemory.setFont(Fonts.fontReg);
-//		choiceMemory.setFocusable(false);
-//		choiceMemory.setBounds(145, 323, 135, 20);
-//		settingsGUIFrame.getContentPane().add(choiceMemory);
-//		choiceMemory.addItem(Language.getValue("o.memory_default"));
-//		choiceMemory.addItem(Language.getValue("o.memory_low"));
-//		choiceMemory.addItem(Language.getValue("o.memory_med"));
-//		choiceMemory.addItem(Language.getValue("o.memory_high"));
-//		choiceMemory.addItem(Language.getValue("o.memory_flex"));
-//		choiceMemory.setSelectedIndex(parseSelectedMemoryAsIndex());
-//		choiceMemory.setToolTipText((String)choiceMemory.getSelectedItem());
-//		choiceMemory.addItemListener(new ItemListener() {
-//			@Override
-//			public void itemStateChanged(ItemEvent event) {
-//				SettingsEventHandler.memoryChangeEvent(event);
-//			}
-//		});
-//		
-//		checkboxStringDeduplication = new JCheckBox(Language.getValue("m.use_string_deduplication"));
-//		checkboxStringDeduplication.setFont(Fonts.fontReg);
-//		checkboxStringDeduplication.setBounds(11, 357, 249, 23);
-//		checkboxStringDeduplication.setFocusPainted(false);
-//		settingsGUIFrame.getContentPane().add(checkboxStringDeduplication);
-//		checkboxStringDeduplication.setSelected(Settings.gameUseStringDeduplication);
-//		checkboxStringDeduplication.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent _action) {
-//				SettingsEventHandler.useStringDeduplicationChangeEvent(_action);
-//			}
-//		});
-//		
-//		checkboxG1GC = new JCheckBox(Language.getValue("m.use_g1gc"));
-//		checkboxG1GC.setFont(Fonts.fontReg);
-//		checkboxG1GC.setBounds(11, 379, 249, 23);
-//		checkboxG1GC.setFocusPainted(false);
-//		settingsGUIFrame.getContentPane().add(checkboxG1GC);
-//		checkboxG1GC.setSelected(Settings.gameUseG1GC);
-//		checkboxG1GC.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent _action) {
-//				SettingsEventHandler.useG1GCChangeEvent(_action);
-//			}
-//		});
-//		
-//		checkboxExplicitGC = new JCheckBox(Language.getValue("m.disable_explicit_gc"));
-//		checkboxExplicitGC.setFont(Fonts.fontReg);
-//		checkboxExplicitGC.setBounds(11, 401, 249, 23);
-//		checkboxExplicitGC.setFocusPainted(false);
-//		settingsGUIFrame.getContentPane().add(checkboxExplicitGC);
-//		checkboxExplicitGC.setSelected(Settings.gameDisableExplicitGC);
-//		checkboxExplicitGC.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent _action) {
-//				SettingsEventHandler.disableExplicitGCChangeEvent(_action);
-//			}
-//		});
-//		
-//		checkboxUndecorated = new JCheckBox(Language.getValue("m.undecorated_window"));
-//		checkboxUndecorated.setFont(Fonts.fontReg);
-//		checkboxUndecorated.setBounds(11, 423, 249, 23);
-//		checkboxUndecorated.setFocusPainted(false);
-//		settingsGUIFrame.getContentPane().add(checkboxUndecorated);
-//		checkboxUndecorated.setSelected(Settings.gameUndecoratedWindow);
-//		checkboxUndecorated.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent _action) {
-//				SettingsEventHandler.undecoratedWindowChangeEvent(_action);
-//			}
-//		});
-//		
-//		JLabel labelArgumentsPane = new JLabel(Language.getValue("m.additional_args"));
-//		labelArgumentsPane.setFont(Fonts.fontMed);
-//		labelArgumentsPane.setBounds(13, 462, 271, 14);
-//		settingsGUIFrame.getContentPane().add(labelArgumentsPane);
-//		
-//		argumentsPane = new JEditorPane();
-//		argumentsPane.setFont(Fonts.fontReg);
-//		argumentsPane.setBounds(11, 421, 255, 85);
-//		settingsGUIFrame.getContentPane().add(argumentsPane);
-//		argumentsPane.setText(Settings.gameAdditionalArgs);
-//		
-//		JScrollPane scrollBar = new JScrollPane(argumentsPane);
-//		scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-//		scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-//		scrollBar.setBounds(11, 483, 272, 85);
-//		settingsGUIFrame.getContentPane().add(scrollBar);
 		
 		JPanel titleBar = new JPanel();
 		titleBar.setBounds(0, 0, settingsGUIFrame.getWidth(), 20);
@@ -335,7 +184,7 @@ public class SettingsGUI {
 		JPanel appearancePanel = new JPanel();
 		appearancePanel.setLayout(null);
 		
-		JLabel headerLabel = new JLabel("Appearance");
+		JLabel headerLabel = new JLabel(Language.getValue("tab.appearance"));
 		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		headerLabel.setBounds(25, 11, 450, 50);
 		headerLabel.setFont(Fonts.fontMedGiant);
@@ -389,7 +238,7 @@ public class SettingsGUI {
 		JPanel behaviorPanel = new JPanel();
 		behaviorPanel.setLayout(null);
 		
-		JLabel headerLabel = new JLabel("Behavior");
+		JLabel headerLabel = new JLabel(Language.getValue("tab.behavior"));
 		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		headerLabel.setBounds(25, 11, 450, 50);
 		headerLabel.setFont(Fonts.fontMedGiant);
@@ -400,14 +249,21 @@ public class SettingsGUI {
 		labelCleaning.setFont(Fonts.fontRegBig);
 		behaviorPanel.add(labelCleaning);
 		
-		JLabel labelCleaningExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		JLabel labelCleaningExplained = new JLabel(Language.getValue("m.file_cleaning_explained"));
 		labelCleaningExplained.setBounds(25, 110, 600, 16);
 		labelCleaningExplained.setFont(Fonts.fontReg);
 		behaviorPanel.add(labelCleaningExplained);
 		
 		switchCleaning = new JToggleButton("");
 		switchCleaning.setBounds(680, 95, 30, 23);
+		switchCleaning.setFocusPainted(false);
 		behaviorPanel.add(switchCleaning);
+		switchCleaning.setSelected(Settings.doRebuilds);
+		switchCleaning.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.rebuildsChangeEvent(_action);
+			}
+		});
 		
 		JSeparator sep = new JSeparator();
 		sep.setBounds(25, 140, 690, 16);
@@ -418,14 +274,21 @@ public class SettingsGUI {
 		labelKeepOpen.setFont(Fonts.fontRegBig);
 		behaviorPanel.add(labelKeepOpen);
 		
-		JLabel labelKeepOpenExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		JLabel labelKeepOpenExplained = new JLabel(Language.getValue("m.keep_open_explained"));
 		labelKeepOpenExplained.setBounds(25, 175, 600, 16);
 		labelKeepOpenExplained.setFont(Fonts.fontReg);
 		behaviorPanel.add(labelKeepOpenExplained);
 		
 		switchKeepOpen = new JToggleButton("");
 		switchKeepOpen.setBounds(680, 160, 30, 23);
+		switchKeepOpen.setFocusPainted(false);
 		behaviorPanel.add(switchKeepOpen);
+		switchKeepOpen.setSelected(Settings.keepOpen);
+		switchKeepOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.keepOpenChangeEvent(_action);
+			}
+		});
 		
 		JSeparator sep2 = new JSeparator();
 		sep2.setBounds(25, 205, 690, 16);
@@ -436,14 +299,21 @@ public class SettingsGUI {
 		labelShortcut.setFont(Fonts.fontRegBig);
 		behaviorPanel.add(labelShortcut);
 		
-		JLabel labelShortcutExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		JLabel labelShortcutExplained = new JLabel(Language.getValue("m.create_shortcut_explained"));
 		labelShortcutExplained.setBounds(25, 240, 600, 16);
 		labelShortcutExplained.setFont(Fonts.fontReg);
 		behaviorPanel.add(labelShortcutExplained);
 		
 		switchShortcut = new JToggleButton("");
 		switchShortcut.setBounds(680, 225, 30, 23);
+		switchShortcut.setFocusPainted(false);
 		behaviorPanel.add(switchShortcut);
+		switchShortcut.setSelected(Settings.createShortcut);
+		switchShortcut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.createShortcutChangeEvent(_action);
+			}
+		});
 		
 		return behaviorPanel;
 	}
@@ -452,7 +322,7 @@ public class SettingsGUI {
 		JPanel gamePanel = new JPanel();
 		gamePanel.setLayout(null);
 		
-		JLabel headerLabel = new JLabel("Game");
+		JLabel headerLabel = new JLabel(Language.getValue("tab.game"));
 		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		headerLabel.setBounds(25, 11, 450, 50);
 		headerLabel.setFont(Fonts.fontMedGiant);
@@ -511,7 +381,7 @@ public class SettingsGUI {
 		labelStringDedup.setFont(Fonts.fontRegBig);
 		gamePanel.add(labelStringDedup);
 		
-		JLabel labelStringDedupExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		JLabel labelStringDedupExplained = new JLabel(Language.getValue("m.string_deduplication_explained"));
 		labelStringDedupExplained.setBounds(25, 215, 600, 16);
 		labelStringDedupExplained.setFont(Fonts.fontReg);
 		gamePanel.add(labelStringDedupExplained);
@@ -536,7 +406,7 @@ public class SettingsGUI {
 		labelUseG1GC.setFont(Fonts.fontRegBig);
 		gamePanel.add(labelUseG1GC);
 		
-		JLabel labelUseG1GCExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		JLabel labelUseG1GCExplained = new JLabel(Language.getValue("m.use_g1gc_explained"));
 		labelUseG1GCExplained.setBounds(25, 280, 600, 16);
 		labelUseG1GCExplained.setFont(Fonts.fontReg);
 		gamePanel.add(labelUseG1GCExplained);
@@ -561,7 +431,7 @@ public class SettingsGUI {
 		labelExplicitGC.setFont(Fonts.fontRegBig);
 		gamePanel.add(labelExplicitGC);
 		
-		JLabel labelExplicitGCExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		JLabel labelExplicitGCExplained = new JLabel(Language.getValue("m.explicit_gc_explained"));
 		labelExplicitGCExplained.setBounds(25, 345, 600, 16);
 		labelExplicitGCExplained.setFont(Fonts.fontReg);
 		gamePanel.add(labelExplicitGCExplained);
@@ -586,7 +456,7 @@ public class SettingsGUI {
 		labelUndecoratedWindow.setFont(Fonts.fontRegBig);
 		gamePanel.add(labelUndecoratedWindow);
 		
-		JLabel labelUndecoratedWindowExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		JLabel labelUndecoratedWindowExplained = new JLabel(Language.getValue("m.undecorated_window_explained"));
 		labelUndecoratedWindowExplained.setBounds(25, 410, 600, 16);
 		labelUndecoratedWindowExplained.setFont(Fonts.fontReg);
 		gamePanel.add(labelUndecoratedWindowExplained);
@@ -609,7 +479,7 @@ public class SettingsGUI {
 		JPanel filesPanel = new JPanel();
 		filesPanel.setLayout(null);
 		
-		JLabel headerLabel = new JLabel("Files");
+		JLabel headerLabel = new JLabel(Language.getValue("tab.files"));
 		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		headerLabel.setBounds(25, 11, 450, 50);
 		headerLabel.setFont(Fonts.fontMedGiant);
@@ -620,7 +490,7 @@ public class SettingsGUI {
 		labelFileClean.setFont(Fonts.fontRegBig);
 		filesPanel.add(labelFileClean);
 		
-		JLabel labelFileCleanExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		JLabel labelFileCleanExplained = new JLabel(Language.getValue("m.clean_files_explained"));
 		labelFileCleanExplained.setBounds(25, 110, 600, 16);
 		labelFileCleanExplained.setFont(Fonts.fontReg);
 		filesPanel.add(labelFileCleanExplained);
@@ -642,19 +512,49 @@ public class SettingsGUI {
 		return filesPanel;
 	}
 	
+	protected JPanel createExtraPanel() {
+		JPanel extraPanel = new JPanel();
+		extraPanel.setLayout(null);
+		
+		JLabel headerLabel = new JLabel(Language.getValue("tab.extratxt"));
+		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		headerLabel.setBounds(25, 11, 450, 50);
+		headerLabel.setFont(Fonts.fontMedGiant);
+		extraPanel.add(headerLabel);
+		
+		JLabel labelArguments = new JLabel(Language.getValue("m.extratxt_write_arguments"));
+		labelArguments.setBounds(25, 90, 600, 18);
+		labelArguments.setFont(Fonts.fontRegBig);
+		extraPanel.add(labelArguments);
+		
+		argumentsPane = new JEditorPane();
+		argumentsPane.setFont(Fonts.fontReg);
+		argumentsPane.setBounds(25, 120, 255, 85);
+		extraPanel.add(argumentsPane);
+		argumentsPane.setText(Settings.gameAdditionalArgs);
+		
+		JScrollPane scrollBar = new JScrollPane(argumentsPane);
+		scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollBar.setBounds(25, 120, 690, 305);
+		extraPanel.add(scrollBar);
+		
+		return extraPanel;
+	}
+	
 	protected JPanel createModsPanel() {
 		JPanel modsPanel = new JPanel();
 		modsPanel.setLayout(null);
 		
-		JLabel headerLabel = new JLabel("Mods");
+		JLabel headerLabel = new JLabel(Language.getValue("tab.mods"));
 		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		headerLabel.setBounds(25, 11, 450, 50);
 		headerLabel.setFont(Fonts.fontMedGiant);
 		modsPanel.add(headerLabel);
 		
-		JLabel soonLabel = new JLabel("Coming soon...");
+		JLabel soonLabel = new JLabel(Language.getValue("m.coming_soon"));
 		soonLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		soonLabel.setBounds(25, 60, 450, 50);
+		soonLabel.setBounds(25, 90, 450, 50);
 		soonLabel.setFont(Fonts.fontRegBig);
 		modsPanel.add(soonLabel);
 		
@@ -665,15 +565,15 @@ public class SettingsGUI {
 		JPanel connectionPanel = new JPanel();
 		connectionPanel.setLayout(null);
 		
-		JLabel headerLabel = new JLabel("Connection");
+		JLabel headerLabel = new JLabel(Language.getValue("tab.connection"));
 		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		headerLabel.setBounds(25, 11, 450, 50);
 		headerLabel.setFont(Fonts.fontMedGiant);
 		connectionPanel.add(headerLabel);
 		
-		JLabel soonLabel = new JLabel("Coming soon...");
+		JLabel soonLabel = new JLabel(Language.getValue("m.coming_soon"));
 		soonLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		soonLabel.setBounds(25, 60, 450, 50);
+		soonLabel.setBounds(25, 90, 450, 50);
 		soonLabel.setFont(Fonts.fontRegBig);
 		connectionPanel.add(soonLabel);
 		
