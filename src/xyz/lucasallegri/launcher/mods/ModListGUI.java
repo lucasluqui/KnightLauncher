@@ -189,6 +189,7 @@ public class ModListGUI {
 		enableButton.setFocusPainted(false);
 		enableButton.setBounds(183, 326, 89, 23);
 		modListGUIFrame.getContentPane().add(enableButton);
+		enableButton.setVisible(false);
 		
 		disableButton = new JButton(Language.getValue("b.disable"));
 		disableButton.setFont(Fonts.fontMed);
@@ -198,6 +199,7 @@ public class ModListGUI {
 		disableButton.setFocusPainted(false);
 		disableButton.setBounds(281, 326, 89, 23);
 		modListGUIFrame.getContentPane().add(disableButton);
+		disableButton.setVisible(false);
 		
 		JPanel titleBar = new JPanel();
 		titleBar.setBounds(0, 0, modListGUIFrame.getWidth(), 20);
