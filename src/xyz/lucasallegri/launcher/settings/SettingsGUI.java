@@ -191,7 +191,7 @@ public class SettingsGUI {
 		appearancePanel.add(headerLabel);
 		
 		JLabel labelStyle = new JLabel(Language.getValue("m.launcher_style"));
-		labelStyle.setBounds(25, 90, 125, 18);
+		labelStyle.setBounds(25, 90, 175, 18);
 		labelStyle.setFont(Fonts.fontRegBig);
 		appearancePanel.add(labelStyle);
 		
@@ -211,7 +211,7 @@ public class SettingsGUI {
 		});
 		
 		JLabel labelLanguage = new JLabel(Language.getValue("m.language"));
-		labelLanguage.setBounds(225, 90, 125, 18);
+		labelLanguage.setBounds(225, 90, 175, 18);
 		labelLanguage.setFont(Fonts.fontRegBig);
 		appearancePanel.add(labelLanguage);
 		
@@ -245,7 +245,7 @@ public class SettingsGUI {
 		behaviorPanel.add(headerLabel);
 		
 		JLabel labelCleaning = new JLabel(Language.getValue("m.rebuilds"));
-		labelCleaning.setBounds(25, 90, 225, 18);
+		labelCleaning.setBounds(25, 90, 350, 18);
 		labelCleaning.setFont(Fonts.fontRegBig);
 		behaviorPanel.add(labelCleaning);
 		
@@ -270,7 +270,7 @@ public class SettingsGUI {
 		behaviorPanel.add(sep);
 		
 		JLabel labelKeepOpen = new JLabel(Language.getValue("m.keep_open"));
-		labelKeepOpen.setBounds(25, 155, 225, 18);
+		labelKeepOpen.setBounds(25, 155, 350, 18);
 		labelKeepOpen.setFont(Fonts.fontRegBig);
 		behaviorPanel.add(labelKeepOpen);
 		
@@ -402,7 +402,7 @@ public class SettingsGUI {
 		gamePanel.add(sep2);
 		
 		JLabel labelUseG1GC = new JLabel(Language.getValue("m.use_g1gc"));
-		labelUseG1GC.setBounds(25, 260, 225, 18);
+		labelUseG1GC.setBounds(25, 260, 275, 18);
 		labelUseG1GC.setFont(Fonts.fontRegBig);
 		gamePanel.add(labelUseG1GC);
 		
@@ -427,7 +427,7 @@ public class SettingsGUI {
 		gamePanel.add(sep3);
 		
 		JLabel labelExplicitGC = new JLabel(Language.getValue("m.disable_explicit_gc"));
-		labelExplicitGC.setBounds(25, 325, 225, 18);
+		labelExplicitGC.setBounds(25, 325, 275, 18);
 		labelExplicitGC.setFont(Fonts.fontRegBig);
 		gamePanel.add(labelExplicitGC);
 		
@@ -486,7 +486,7 @@ public class SettingsGUI {
 		filesPanel.add(headerLabel);
 		
 		JLabel labelFileClean = new JLabel(Language.getValue("b.force_rebuild"));
-		labelFileClean.setBounds(25, 90, 225, 18);
+		labelFileClean.setBounds(25, 90, 275, 18);
 		labelFileClean.setFont(Fonts.fontRegBig);
 		filesPanel.add(labelFileClean);
 		
