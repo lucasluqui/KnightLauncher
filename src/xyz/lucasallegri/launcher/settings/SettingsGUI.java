@@ -33,6 +33,7 @@ import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
 import javax.swing.border.EmptyBorder;
 import javax.swing.SwingConstants;
+import javax.swing.JToggleButton;
 
 public class SettingsGUI {
 
@@ -86,33 +87,13 @@ public class SettingsGUI {
 		tabbedPane.setBounds(-2, 20, 852, 455);
 		tabbedPane.setFont(Fonts.fontMedBig);
 		tabbedPane.addTab("Appearance", createAppearancePanel());
-		tabbedPane.addTab("Behavior", new JPanel());
+		tabbedPane.addTab("Behavior", createBehaviorPanel());
 		tabbedPane.addTab("Game", createGamePanel());
 		tabbedPane.addTab("Files", new JPanel());
 		tabbedPane.addTab("Mods", createModsPanel());
 		tabbedPane.addTab("Connection", createConnectionPanel());
 		settingsGUIFrame.getContentPane().add(tabbedPane);
 		
-//		JLabel labelChoicePlatform = new JLabel(Language.getValue("m.platform"));
-//		labelChoicePlatform.setBounds(15, 79, 95, 14);
-//		labelChoicePlatform.setFont(Fonts.fontReg);
-//		settingsGUIFrame.getContentPane().add(labelChoicePlatform);
-//		
-//		choicePlatform = new JComboBox<String>();
-//		choicePlatform.setBounds(125, 75, 120, 20);
-//		choicePlatform.setFont(Fonts.fontReg);
-//		choicePlatform.setFocusable(false);
-//		settingsGUIFrame.getContentPane().add(choicePlatform);
-//		choicePlatform.addItem(Language.getValue("o.steam"));
-//		choicePlatform.addItem(Language.getValue("o.standalone"));
-//		choicePlatform.setSelectedItem(Settings.gamePlatform);
-//		choicePlatform.addItemListener(new ItemListener() {
-//			@Override
-//			public void itemStateChanged(ItemEvent event) {
-//				SettingsEventHandler.platformChangeEvent(event);
-//			}
-//		});
-//		
 //		checkboxRebuilds = new JCheckBox(Language.getValue("m.rebuilds"));
 //		checkboxRebuilds.setBounds(11, 203, 270, 23);
 //		checkboxRebuilds.setFont(Fonts.fontReg);
@@ -401,6 +382,51 @@ public class SettingsGUI {
 		});
 		
 		return appearancePanel;
+	}
+	
+	protected JPanel createBehaviorPanel() {
+		JPanel behaviorPanel = new JPanel();
+		behaviorPanel.setLayout(null);
+		
+		JLabel headerLabel = new JLabel("Behavior");
+		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		headerLabel.setBounds(25, 11, 450, 50);
+		headerLabel.setFont(Fonts.fontMedGiant);
+		behaviorPanel.add(headerLabel);
+		
+		JLabel labelCleaning = new JLabel(Language.getValue("m.rebuilds"));
+		labelCleaning.setBounds(25, 90, 225, 18);
+		labelCleaning.setFont(Fonts.fontRegBig);
+		behaviorPanel.add(labelCleaning);
+		
+		JLabel labelCleaningExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		labelCleaningExplained.setBounds(25, 110, 400, 16);
+		labelCleaningExplained.setFont(Fonts.fontReg);
+		behaviorPanel.add(labelCleaningExplained);
+		
+		JToggleButton switchCleaning = new JToggleButton("");
+		switchCleaning.setBounds(680, 95, 30, 23);
+		behaviorPanel.add(switchCleaning);
+		
+		JSeparator sep = new JSeparator();
+		sep.setBounds(25, 140, 690, 16);
+		behaviorPanel.add(sep);
+		
+		JLabel labelKeepOpen = new JLabel(Language.getValue("m.keep_open"));
+		labelKeepOpen.setBounds(25, 160, 225, 18);
+		labelKeepOpen.setFont(Fonts.fontRegBig);
+		behaviorPanel.add(labelKeepOpen);
+		
+		JLabel labelKeepOpenExplained = new JLabel("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		labelKeepOpenExplained.setBounds(25, 180, 400, 16);
+		labelKeepOpenExplained.setFont(Fonts.fontReg);
+		behaviorPanel.add(labelKeepOpenExplained);
+		
+		JToggleButton switchKeepOpen = new JToggleButton("");
+		switchKeepOpen.setBounds(680, 165, 30, 23);
+		behaviorPanel.add(switchKeepOpen);
+		
+		return behaviorPanel;
 	}
 	
 	protected JPanel createGamePanel() {
