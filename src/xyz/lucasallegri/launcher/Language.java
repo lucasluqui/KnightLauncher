@@ -15,12 +15,13 @@ public class Language {
 	
 	public static String[] AVAILABLE_LANGUAGES = {
 			"English",
-			"Español",
 			"Deutsch",
-			"Português (Brasil)",
-			"Français",
-			"Japanese",
+			"Español",
 			"Eesti",
+			"Français",
+			"Italiano",
+			"Japanese",
+			"Português (Brasil)",
 			"Русский"
 	};
 	
@@ -76,6 +77,7 @@ public class Language {
 		case "jp": return "Japanese";
 		case "et-ee": return "Eesti";
 		case "ru": return "Русский";
+		case "it": return "Italiano";
 		}
 		return null;
 	}
@@ -90,6 +92,7 @@ public class Language {
 		case "Japanese": return "jp";
 		case "Eesti": return "et-ee";
 		case "Русский": return "ru";
+		case "Italiano": return "it";
 		}
 		return null;
 	}
