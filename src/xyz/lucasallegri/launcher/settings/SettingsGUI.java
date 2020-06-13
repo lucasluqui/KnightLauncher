@@ -377,7 +377,7 @@ public class SettingsGUI {
 		gamePanel.add(sep);
 		
 		JLabel labelStringDedup = new JLabel(Language.getValue("m.use_string_deduplication"));
-		labelStringDedup.setBounds(25, 195, 225, 18);
+		labelStringDedup.setBounds(25, 195, 375, 18);
 		labelStringDedup.setFont(Fonts.fontRegBig);
 		gamePanel.add(labelStringDedup);
 		
