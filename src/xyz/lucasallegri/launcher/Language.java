@@ -80,7 +80,6 @@ public class Language {
 		case "ru": return "Русский";
 		case "it": return "Italiano";
 		case "pl": return "Polski";
-
 		}
 		return null;
 	}
