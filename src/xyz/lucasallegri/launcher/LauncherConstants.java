@@ -17,7 +17,7 @@ public class LauncherConstants {
 	public static final String USER_DIR = System.getProperty("user.dir");
 	
 	
-	public static final String[] STANDALONE_LAUNCHER_ARGS = {".\\java_vm\\bin\\java.exe",
+	public static final String[] STANDALONE_LAUNCHER_ARGS = {".\\java_vm\\bin\\java",
 			"-Dsun.java2d.d3d=false",
 			"-Dcheck_unpacked=true",
 			"-jar",
