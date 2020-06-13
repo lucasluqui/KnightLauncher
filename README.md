@@ -36,6 +36,7 @@ Thank you all for helping KnightLauncher, making it usable for everyone worldwid
 * Japanese: Armin
 * Eesti: Thyrux
 * Русский: Milliath Spooner and Puzovoz
+* Polski: Crowfunder
 
 Would you like to help translating? Seek for information in our Discord server.
 
