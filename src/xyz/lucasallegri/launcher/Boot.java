@@ -70,7 +70,7 @@ public class Boot {
 	 * Checking if we're being ran inside the game's directory, "getdown-pro.jar" should always be present if so.
 	 */
 	private static void checkStartLocation() {
-		if(!FileUtil.fileExists(LauncherConstants.USER_DIR + "\\getdown-pro.jar")) {
+		if(!FileUtil.fileExists("getdown-pro.jar")) {
 			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
 					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
 			DesktopUtil.openDir(SteamUtil.getGamePathWindows());
