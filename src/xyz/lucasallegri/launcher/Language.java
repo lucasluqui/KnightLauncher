@@ -21,9 +21,9 @@ public class Language {
 			"Français",
 			"Italiano",
 			"Japanese",
+			"Polski",
 			"Português (Brasil)",
-			"Русский",
-			"Polski"
+			"Русский"
 	};
 	
 	public static void setup() {
