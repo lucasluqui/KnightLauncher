@@ -22,7 +22,8 @@ public class Language {
 			"Italiano",
 			"Japanese",
 			"Português (Brasil)",
-			"Русский"
+			"Русский",
+			"Polski"
 	};
 	
 	public static void setup() {
@@ -78,6 +79,7 @@ public class Language {
 		case "et-ee": return "Eesti";
 		case "ru": return "Русский";
 		case "it": return "Italiano";
+		case "pl": return "Polski";
 		}
 		return null;
 	}
@@ -93,6 +95,7 @@ public class Language {
 		case "Eesti": return "et-ee";
 		case "Русский": return "ru";
 		case "Italiano": return "it";
+		case "Polski": return "pl";
 		}
 		return null;
 	}
