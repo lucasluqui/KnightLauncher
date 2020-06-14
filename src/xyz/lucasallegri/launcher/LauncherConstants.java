@@ -16,7 +16,16 @@ public class LauncherConstants {
 	public static final String JVM_DOWNLOAD_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/jvm-download.txt";
 	public static final String USER_DIR = System.getProperty("user.dir");
 	
-	public static final String[] STANDALONE_LAUNCHER_ARGS = {".\\java_vm\\bin\\java",
+	public static final String[] STANDALONE_LAUNCHER_ARGS = {".\\java_vm\\bin\\java.exe",
+			"-Dsun.java2d.d3d=false",
+			"-Dcheck_unpacked=true",
+			"-jar",
+			USER_DIR + File.separator + "getdown-pro.jar",
+			".",
+			"client"
+	};
+	
+	public static final String[] STANDALONE_LAUNCHER_ARGS_LINUX_MAC = {".\\java\\bin\\java",
 			"-Dsun.java2d.d3d=false",
 			"-Dcheck_unpacked=true",
 			"-jar",

@@ -7,6 +7,8 @@ import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ProcessUtil;
 import xyz.lucasallegri.util.SteamUtil;
+import xyz.lucasallegri.util.SystemUtil;
+
 import java.awt.event.ActionEvent;
 
 public class LauncherEventHandler {
@@ -21,13 +23,21 @@ public class LauncherEventHandler {
 				
 				if(ModLoader.modLoadFinished) {
 					if(Settings.gamePlatform.startsWith("Steam")) {
+						
 						try {
 							SteamUtil.startGameById("99900");
 						} catch (Exception e) {
 							KnightLog.logException(e);
 						}
+						
 					} else {
-						ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
+						
+						if(!SystemUtil.isWindows()) {
+							ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS_LINUX_MAC);
+						} else {
+							ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
+						}
+						
 					}
 					
 					if(Settings.keepOpen) {
