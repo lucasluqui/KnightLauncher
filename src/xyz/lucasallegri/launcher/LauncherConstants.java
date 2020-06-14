@@ -25,11 +25,11 @@ public class LauncherConstants {
 			"client"
 	};
 	
-	public static final String[] STANDALONE_LAUNCHER_ARGS_LINUX_MAC = {".\\java\\bin\\java",
+	public static final String[] STANDALONE_LAUNCHER_ARGS_LINUX_MAC = {"./java/bin/java",
 			"-Dsun.java2d.d3d=false",
 			"-Dcheck_unpacked=true",
 			"-jar",
-			USER_DIR + File.separator + "getdown-pro.jar",
+			"./getdown-pro.jar",
 			".",
 			"client"
 	};
