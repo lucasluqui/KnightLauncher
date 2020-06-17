@@ -20,6 +20,7 @@ import xyz.lucasallegri.launcher.mods.ModLoader;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
+import xyz.lucasallegri.util.Compressor;
 import xyz.lucasallegri.util.DesktopUtil;
 import xyz.lucasallegri.util.FileUtil;
 import xyz.lucasallegri.util.INetUtil;
@@ -174,7 +175,9 @@ public class Boot {
 	private static void setupIngameRPCModule() {
 		if(SystemUtil.isWindows() && SystemUtil.is64Bit()) {
 			try {
-				FileUtil.extractFileWithinJar("/modules/skdiscordrpc", "KnightLauncher/modules/skdiscordrpc");
+				FileUtil.extractFileWithinJar("/modules/skdiscordrpc/bundle.zip", "KnightLauncher/modules/skdiscordrpc/bundle.zip");
+				Compressor.unzip("KnightLauncher/modules/skdiscordrpc/bundle.zip", "KnightLauncher/modules/skdiscordrpc/", false);
+				new File("KnightLauncher/modules/skdiscordrpc/bundle.zip").delete();
 				SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
 				SettingsProperties.setValue("launcher.useIngameRPC", "true");
 			} catch (IOException e) {
