@@ -2,7 +2,7 @@
     <img src="https://github.com/lucas-allegri/KnightLauncher/blob/master/assets/img/icon-128.png?raw=true"
         height="128">
 </p>
-<h1 align="center">KnightLauncher</h1>
+<h1 align="center">Knight Launcher</h1>
 <p align="center">
     <a href="https://github.com/lucas-allegri/KnightLauncher/blob/master/LICENSE"><img alt="GitHub license"               src="https://img.shields.io/github/license/lucas-allegri/KnightLauncher?style=flat-square"></a>
     <a href="https://github.com/lucas-allegri/KnightLauncher/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/lucas-allegri/KnightLauncher?style=flat-square"></a>
@@ -37,6 +37,7 @@ Thank you all for helping KnightLauncher, making it usable for everyone worldwid
 * Eesti: Thyrux
 * Русский: Milliath Spooner and Puzovoz
 * Polski: Crowfunder
+* Italiano: Lawn and Kaos
 
 Would you like to help translating? Seek for information in our Discord server.
 
