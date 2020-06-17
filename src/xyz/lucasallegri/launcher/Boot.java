@@ -64,6 +64,7 @@ public class Boot {
 		FileUtil.createDir("mods");
 		FileUtil.createDir("KnightLauncher/logs/");
 		FileUtil.createDir("KnightLauncher/images/");
+		FileUtil.createDir("KnightLauncher/modules/");
 	}
 	
 	/*
