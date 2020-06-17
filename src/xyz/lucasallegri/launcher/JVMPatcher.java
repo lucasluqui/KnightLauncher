@@ -63,13 +63,13 @@ public class JVMPatcher {
 		jvmPatcherFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		jvmPatcherFrame.getContentPane().setLayout(null);
 		
-		headerLabel = new JLabel("Knight Launcher can automatically patch your game to use a 64-bit Java VM");
+		headerLabel = new JLabel(Language.getValue("m.jvm_patcher_confirm_header"));
 		headerLabel.setBounds(10, 40, 480, 37);
 		headerLabel.setFont(Fonts.fontRegBig);
 		headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		jvmPatcherFrame.getContentPane().add(headerLabel);
 		
-		subHeaderLabel = new JLabel("Would you like to do so? You can always restart this patcher from the Settings menu.");
+		subHeaderLabel = new JLabel(Language.getValue("m.jvm_patcher_confirm_subheader"));
 		subHeaderLabel.setBounds(10, 65, 480, 37);
 		subHeaderLabel.setFont(Fonts.fontReg);
 		subHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -85,7 +85,7 @@ public class JVMPatcher {
 		jvmPatcherProgressBar.setVisible(false);
 		jvmPatcherFrame.getContentPane().add(jvmPatcherProgressBar);
 		
-		buttonAccept = new JButton("Yes, start patching");
+		buttonAccept = new JButton(Language.getValue("b.jvm_patcher_accept"));
 		buttonAccept.setFocusPainted(false);
 		buttonAccept.setFocusable(false);
 		buttonAccept.setFont(Fonts.fontMed);
@@ -104,7 +104,7 @@ public class JVMPatcher {
 			}
 		});
 		
-		buttonDecline = new JButton("No thanks");
+		buttonDecline = new JButton(Language.getValue("b.jvm_patcher_decline"));
 		buttonDecline.setFocusPainted(false);
 		buttonDecline.setFocusable(false);
 		buttonDecline.setFont(Fonts.fontMed);
