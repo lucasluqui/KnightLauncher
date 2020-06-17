@@ -55,6 +55,8 @@ public class Boot {
 		ModLoader.checkInstalled();
 		if(Settings.doRebuilds && ModLoader.rebuildFiles) ModLoader.startFileRebuild();
 		
+		if(!Settings.ingameRPCSetup) setupIngameRPCModule();
+		
 		DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
 		
 		loadOnlineAssets();
@@ -167,6 +169,18 @@ public class Boot {
 			}
 		});
 		oassetsThread.start();
+	}
+	
+	private static void setupIngameRPCModule() {
+		if(SystemUtil.isWindows() && SystemUtil.is64Bit()) {
+			try {
+				FileUtil.extractFileWithinJar("/modules/skdiscordrpc", "KnightLauncher/modules/skdiscordrpc");
+				SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
+				SettingsProperties.setValue("launcher.useIngameRPC", "true");
+			} catch (IOException e) {
+				KnightLog.logException(e);
+			}
+		}
 	}
 
 }
