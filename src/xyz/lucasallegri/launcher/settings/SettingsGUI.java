@@ -258,7 +258,7 @@ public class SettingsGUI {
 		behaviorPanel.add(labelCleaningExplained);
 		
 		switchCleaning = new JToggleButton("");
-		switchCleaning.setBounds(680, 95, 30, 23);
+		switchCleaning.setBounds(790, 95, 30, 23);
 		switchCleaning.setFocusPainted(false);
 		behaviorPanel.add(switchCleaning);
 		switchCleaning.setSelected(Settings.doRebuilds);
@@ -269,7 +269,7 @@ public class SettingsGUI {
 		});
 		
 		JSeparator sep = new JSeparator();
-		sep.setBounds(25, 140, 690, 16);
+		sep.setBounds(25, 140, 800, 16);
 		behaviorPanel.add(sep);
 		
 		JLabel labelKeepOpen = new JLabel(Language.getValue("m.keep_open"));
@@ -283,7 +283,7 @@ public class SettingsGUI {
 		behaviorPanel.add(labelKeepOpenExplained);
 		
 		switchKeepOpen = new JToggleButton("");
-		switchKeepOpen.setBounds(680, 160, 30, 23);
+		switchKeepOpen.setBounds(790, 160, 30, 23);
 		switchKeepOpen.setFocusPainted(false);
 		behaviorPanel.add(switchKeepOpen);
 		switchKeepOpen.setSelected(Settings.keepOpen);
@@ -294,7 +294,7 @@ public class SettingsGUI {
 		});
 		
 		JSeparator sep2 = new JSeparator();
-		sep2.setBounds(25, 205, 690, 16);
+		sep2.setBounds(25, 205, 800, 16);
 		behaviorPanel.add(sep2);
 		
 		JLabel labelShortcut = new JLabel(Language.getValue("m.create_shortcut"));
@@ -308,7 +308,7 @@ public class SettingsGUI {
 		behaviorPanel.add(labelShortcutExplained);
 		
 		switchShortcut = new JToggleButton("");
-		switchShortcut.setBounds(680, 225, 30, 23);
+		switchShortcut.setBounds(790, 225, 30, 23);
 		switchShortcut.setFocusPainted(false);
 		behaviorPanel.add(switchShortcut);
 		switchShortcut.setSelected(Settings.createShortcut);
@@ -376,7 +376,7 @@ public class SettingsGUI {
 		});
 		
 		JSeparator sep = new JSeparator();
-		sep.setBounds(25, 140, 690, 16);
+		sep.setBounds(25, 140, 800, 16);
 		gamePanel.add(sep);
 		
 		JLabel labelStringDedup = new JLabel(Language.getValue("m.use_string_deduplication"));
@@ -390,7 +390,7 @@ public class SettingsGUI {
 		gamePanel.add(labelStringDedupExplained);
 		
 		switchStringDedup = new JToggleButton("");
-		switchStringDedup.setBounds(680, 160, 30, 23);
+		switchStringDedup.setBounds(790, 160, 30, 23);
 		switchStringDedup.setFocusPainted(false);
 		gamePanel.add(switchStringDedup);
 		switchStringDedup.setSelected(Settings.gameUseStringDeduplication);
@@ -401,7 +401,7 @@ public class SettingsGUI {
 		});
 		
 		JSeparator sep2 = new JSeparator();
-		sep2.setBounds(25, 205, 690, 16);
+		sep2.setBounds(25, 205, 800, 16);
 		gamePanel.add(sep2);
 		
 		JLabel labelUseG1GC = new JLabel(Language.getValue("m.use_g1gc"));
@@ -415,7 +415,7 @@ public class SettingsGUI {
 		gamePanel.add(labelUseG1GCExplained);
 		
 		switchUseG1GC = new JToggleButton("");
-		switchUseG1GC.setBounds(680, 225, 30, 23);
+		switchUseG1GC.setBounds(790, 225, 30, 23);
 		switchUseG1GC.setFocusPainted(false);
 		gamePanel.add(switchUseG1GC);
 		switchUseG1GC.setSelected(Settings.gameUseG1GC);
@@ -426,7 +426,7 @@ public class SettingsGUI {
 		});
 		
 		JSeparator sep3 = new JSeparator();
-		sep3.setBounds(25, 270, 690, 16);
+		sep3.setBounds(25, 270, 800, 16);
 		gamePanel.add(sep3);
 		
 		JLabel labelExplicitGC = new JLabel(Language.getValue("m.disable_explicit_gc"));
@@ -440,7 +440,7 @@ public class SettingsGUI {
 		gamePanel.add(labelExplicitGCExplained);
 		
 		switchExplicitGC = new JToggleButton("");
-		switchExplicitGC.setBounds(680, 290, 30, 23);
+		switchExplicitGC.setBounds(790, 290, 30, 23);
 		switchExplicitGC.setFocusPainted(false);
 		gamePanel.add(switchExplicitGC);
 		switchExplicitGC.setSelected(Settings.gameDisableExplicitGC);
@@ -451,7 +451,7 @@ public class SettingsGUI {
 		});
 		
 		JSeparator sep4 = new JSeparator();
-		sep4.setBounds(25, 335, 690, 16);
+		sep4.setBounds(25, 335, 800, 16);
 		gamePanel.add(sep4);
 		
 		JLabel labelUndecoratedWindow = new JLabel(Language.getValue("m.undecorated_window"));
@@ -465,7 +465,7 @@ public class SettingsGUI {
 		gamePanel.add(labelUndecoratedWindowExplained);
 		
 		switchUndecoratedWindow = new JToggleButton("");
-		switchUndecoratedWindow.setBounds(680, 355, 30, 23);
+		switchUndecoratedWindow.setBounds(790, 355, 30, 23);
 		switchUndecoratedWindow.setFocusPainted(false);
 		gamePanel.add(switchUndecoratedWindow);
 		switchUndecoratedWindow.setSelected(Settings.gameUndecoratedWindow);
@@ -500,7 +500,7 @@ public class SettingsGUI {
 		
 		Icon startIcon = IconFontSwing.buildIcon(FontAwesome.SHARE, 16, ColorUtil.getForegroundColor());
 		JButton forceRebuildButton = new JButton(startIcon);
-		forceRebuildButton.setBounds(680, 95, 30, 23);
+		forceRebuildButton.setBounds(790, 95, 30, 23);
 		forceRebuildButton.setFocusPainted(false);
 		forceRebuildButton.setFocusable(false);
 		filesPanel.add(forceRebuildButton);
@@ -539,7 +539,7 @@ public class SettingsGUI {
 		JScrollPane scrollBar = new JScrollPane(argumentsPane);
 		scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollBar.setBounds(25, 120, 690, 305);
+		scrollBar.setBounds(25, 120, 800, 265);
 		extraPanel.add(scrollBar);
 		
 		return extraPanel;
@@ -566,7 +566,7 @@ public class SettingsGUI {
 		ingameRPCPanel.add(labelUseIngameRPCExplained);
 		
 		switchUseIngameRPC = new JToggleButton("");
-		switchUseIngameRPC.setBounds(680, 95, 30, 23);
+		switchUseIngameRPC.setBounds(790, 95, 30, 23);
 		switchUseIngameRPC.setFocusPainted(false);
 		ingameRPCPanel.add(switchUseIngameRPC);
 		switchUseIngameRPC.setSelected(Settings.useIngameRPC);
