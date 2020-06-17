@@ -74,6 +74,7 @@ public class SettingsProperties {
 		Settings.gameAdditionalArgs = getValue("game.additionalArgs");
 		Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
 		Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));
+		Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
 		Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
 		KnightLog.log.info("Successfully loaded all settings from prop file.");
 	}
