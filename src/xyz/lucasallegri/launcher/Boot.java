@@ -183,6 +183,8 @@ public class Boot {
 			} catch (IOException e) {
 				KnightLog.logException(e);
 			}
+		} else {
+			SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
 		}
 	}
 
