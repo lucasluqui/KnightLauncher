@@ -9,11 +9,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+
+import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 
 public class FileUtil {
@@ -138,6 +143,12 @@ public class FileUtil {
         
         //convert StringBuilder to String and return
         return sbContent.toString();
+    }
+    
+    public static void extractFileWithinJar(String pathInside, String pathOutside) throws IOException {
+		URL filePath = FileUtil.class.getResource(pathInside);
+		File destPath = new File(pathOutside);
+		FileUtils.copyURLToFile(filePath, destPath);
     }
 
 }
