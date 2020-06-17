@@ -1,14 +1,12 @@
 package xyz.lucasallegri.launcher;
 
 import xyz.lucasallegri.dialog.DialogError;
-import xyz.lucasallegri.launcher.mods.ModListEventHandler;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
 import xyz.lucasallegri.util.Compressor;
 import xyz.lucasallegri.util.INetUtil;
 import xyz.lucasallegri.util.ProcessUtil;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
