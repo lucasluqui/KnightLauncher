@@ -54,7 +54,6 @@ public class JVMPatcher {
 
 	public JVMPatcher() {
 		initialize();
-		//initPatcher();
 	}
 
 	private void initialize() {
@@ -89,7 +88,10 @@ public class JVMPatcher {
 		jvmPatcherFrame.getContentPane().add(jvmPatcherProgressBar);
 		
 		buttonAccept = new JButton("Yes, start patching");
-		buttonAccept.setBounds(30, 200, 150, 23);
+		buttonAccept.setFocusPainted(false);
+		buttonAccept.setFocusable(false);
+		buttonAccept.setFont(Fonts.fontMed);
+		buttonAccept.setBounds(30, 200, 200, 23);
 		jvmPatcherFrame.getContentPane().add(buttonAccept);
 		buttonAccept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
@@ -105,14 +107,14 @@ public class JVMPatcher {
 		});
 		
 		buttonDecline = new JButton("No thanks");
-		buttonDecline.setBounds(380, 200, 89, 23);
+		buttonDecline.setFocusPainted(false);
+		buttonDecline.setFocusable(false);
+		buttonDecline.setFont(Fonts.fontMed);
+		buttonDecline.setBounds(360, 200, 110, 23);
 		jvmPatcherFrame.getContentPane().add(buttonDecline);
 		buttonDecline.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				SettingsProperties.setValue("launcher.jvm_patched", "true");
-				ProcessUtil.startApplication(new String[] {"java", "-jar", "KnightLauncher.jar"});
-				jvmPatcherFrame.dispose();
-				System.exit(1);
+				finish();
 			}
 		});
 		
@@ -203,11 +205,7 @@ public class JVMPatcher {
 		
 		jvmPatcherProgressBar.setValue(4);
 		jvmPatcherState.setText(Language.getValue("m.jvm_patcher_finish"));
-		SettingsProperties.setValue("launcher.jvm_patched", "true");
-		ProcessUtil.startApplication(new String[] {"java", "-jar", "KnightLauncher.jar"});
-		
-		jvmPatcherFrame.dispose();
-		System.exit(1);
+		finish();
 	}
 	
 	private static void downloadPackagedJVM() {
@@ -225,6 +223,13 @@ public class JVMPatcher {
 			KnightLog.logException(e);
 			System.exit(1);
 		}
+	}
+	
+	private static void finish() {
+		SettingsProperties.setValue("launcher.jvm_patched", "true");
+		ProcessUtil.startApplication(new String[] {"java", "-jar", LauncherConstants.USER_DIR + "\\KnightLauncher.jar"});
+		jvmPatcherFrame.dispose();
+		System.exit(1);
 	}
 }
 
