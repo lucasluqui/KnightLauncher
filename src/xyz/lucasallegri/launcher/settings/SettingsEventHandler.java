@@ -76,5 +76,10 @@ public class SettingsEventHandler {
 		SettingsProperties.setValue("launcher.style", SettingsGUI.choiceStyle.getSelectedIndex() == 0 ? "dark" : "light");
 		DialogWarning.pushTranslated(Language.getValue("m.prompt_restart_required"));
 	}
+	
+	public static void ingameRPCChangeEvent(ActionEvent action) {
+		Settings.useIngameRPC = SettingsGUI.switchUseIngameRPC.isSelected();
+		SettingsProperties.setValue("launcher.useIngameRPC", SettingsGUI.switchUseIngameRPC.isSelected()  ? "true" : "false");
+	}
 
 }
