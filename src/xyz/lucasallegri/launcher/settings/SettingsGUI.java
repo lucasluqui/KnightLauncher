@@ -29,6 +29,8 @@ import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
+import xyz.lucasallegri.util.SystemUtil;
+
 import javax.swing.SwingConstants;
 import javax.swing.JToggleButton;
 
@@ -47,6 +49,7 @@ public class SettingsGUI {
 	public static JToggleButton switchUseG1GC;
 	public static JToggleButton switchExplicitGC;
 	public static JToggleButton switchUndecoratedWindow;
+	public static JToggleButton switchUseIngameRPC;
 	public static JEditorPane argumentsPane;
 	
 	int pY, pX;
@@ -88,7 +91,7 @@ public class SettingsGUI {
 		tabbedPane.addTab(Language.getValue("tab.game"), createGamePanel());
 		tabbedPane.addTab(Language.getValue("tab.files"), createFilesPanel());
 		tabbedPane.addTab(Language.getValue("tab.extratxt"), createExtraPanel());
-		tabbedPane.addTab(Language.getValue("tab.mods"), createModsPanel());
+		if(SystemUtil.isWindows() && SystemUtil.is64Bit()) tabbedPane.addTab(Language.getValue("tab.ingame_rpc"), createIngameRPCPanel());
 		tabbedPane.addTab(Language.getValue("tab.connection"), createConnectionPanel());
 		settingsGUIFrame.getContentPane().add(tabbedPane);
 		
@@ -542,23 +545,38 @@ public class SettingsGUI {
 		return extraPanel;
 	}
 	
-	protected JPanel createModsPanel() {
-		JPanel modsPanel = new JPanel();
-		modsPanel.setLayout(null);
+	protected JPanel createIngameRPCPanel() {
+		JPanel ingameRPCPanel = new JPanel();
+		ingameRPCPanel.setLayout(null);
 		
-		JLabel headerLabel = new JLabel(Language.getValue("tab.mods"));
+		JLabel headerLabel = new JLabel(Language.getValue("tab.ingame_rpc"));
 		headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		headerLabel.setBounds(25, 11, 450, 50);
 		headerLabel.setFont(Fonts.fontMedGiant);
-		modsPanel.add(headerLabel);
+		ingameRPCPanel.add(headerLabel);
 		
-		JLabel soonLabel = new JLabel(Language.getValue("m.coming_soon"));
-		soonLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		soonLabel.setBounds(25, 90, 450, 50);
-		soonLabel.setFont(Fonts.fontRegBig);
-		modsPanel.add(soonLabel);
+		JLabel labelUseIngameRPC = new JLabel(Language.getValue("m.use_ingame_rpc"));
+		labelUseIngameRPC.setBounds(25, 90, 350, 18);
+		labelUseIngameRPC.setFont(Fonts.fontRegBig);
+		ingameRPCPanel.add(labelUseIngameRPC);
 		
-		return modsPanel;
+		JLabel labelUseIngameRPCExplained = new JLabel(Language.getValue("m.use_ingame_rpc_explained"));
+		labelUseIngameRPCExplained.setBounds(25, 110, 600, 16);
+		labelUseIngameRPCExplained.setFont(Fonts.fontReg);
+		ingameRPCPanel.add(labelUseIngameRPCExplained);
+		
+		switchUseIngameRPC = new JToggleButton("");
+		switchUseIngameRPC.setBounds(680, 95, 30, 23);
+		switchUseIngameRPC.setFocusPainted(false);
+		ingameRPCPanel.add(switchUseIngameRPC);
+		switchUseIngameRPC.setSelected(Settings.useIngameRPC);
+		switchUseIngameRPC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.ingameRPCChangeEvent(_action);
+			}
+		});
+		
+		return ingameRPCPanel;
 	}
 	
 	protected JPanel createConnectionPanel() {
