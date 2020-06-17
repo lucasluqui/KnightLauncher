@@ -15,7 +15,7 @@ import xyz.lucasallegri.util.FileUtil;
 
 public class SettingsProperties {
 
-	private static final String PROP_VER = "9";
+	private static final String PROP_VER = "10";
 	
 	private static Properties prop = new Properties();
 	private static String propPath = LauncherConstants.USER_DIR + File.separator + "KnightLauncher.properties";
@@ -33,31 +33,6 @@ public class SettingsProperties {
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
-	}
-	
-	@Deprecated
-	private static void fillWithBaseProp(Boolean alreadyExists) throws IOException {
-		String _alreadyExists = String.valueOf(alreadyExists);
-		String baseProp = 	"PROP_VER=" + PROP_VER + System.lineSeparator() +
-							"launcher.rebuilds=true"  + System.lineSeparator() +
-							"launcher.keepOpen=false" + System.lineSeparator() +
-							"launcher.createShortcut=true" + System.lineSeparator() +
-							"launcher.lang=en" + System.lineSeparator() +
-							"launcher.style=dark" + System.lineSeparator() +
-							"launcher.jvm_patched=false" + System.lineSeparator() +
-							"modloader.lastModCount=0" + System.lineSeparator() +
-							"compressor.unzipMethod=safe" + System.lineSeparator() +
-							"compressor.extractBuffer=8196" + System.lineSeparator() +
-							"game.platform=Steam" + System.lineSeparator() +
-							"game.useStringDeduplication=false" + System.lineSeparator() +
-							"game.useG1GC=false" + System.lineSeparator() +
-							"game.disableExplicitGC=false" + System.lineSeparator() +
-							"game.undecoratedWindow=false" + System.lineSeparator() +
-							"game.additionalArgs=" + System.lineSeparator() +
-							"game.memory=512";
-		BufferedWriter writer = new BufferedWriter(new FileWriter(propPath, true));
-		writer.append(baseProp);
-		writer.close();
 	}
 	
 	public static String getValue(String key) {
@@ -99,6 +74,7 @@ public class SettingsProperties {
 		Settings.gameAdditionalArgs = getValue("game.additionalArgs");
 		Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
 		Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));
+		Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
 		KnightLog.log.info("Successfully loaded all settings from prop file.");
 	}
 	

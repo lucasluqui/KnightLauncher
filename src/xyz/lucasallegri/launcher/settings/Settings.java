@@ -19,5 +19,6 @@ public class Settings {
 	public static Boolean offlineMode = false;
 	public static Boolean isOutdated = false;
 	public static Boolean jvmPatched = false;
+	public static Boolean useIngameRPC = true;
 
 }
