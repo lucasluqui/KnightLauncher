@@ -4,6 +4,7 @@ import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.mods.ModLoader;
 import xyz.lucasallegri.launcher.settings.GameSettings;
 import xyz.lucasallegri.launcher.settings.Settings;
+import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ProcessUtil;
 import xyz.lucasallegri.util.SteamUtil;
@@ -40,12 +41,10 @@ public class LauncherEventHandler {
 						
 					}
 					
-					if(Settings.keepOpen) {
-						DiscordInstance.setPresence(Language.getValue("presence.launch_ready"));
-					} else {
-						DiscordInstance.stop();
-						LauncherGUI.launcherGUIFrame.dispose();
-					}
+					DiscordInstance.stop();
+					if(Settings.useIngameRPC) ProcessUtil.startApplication(new String[] {".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe"});
+					if(!Settings.keepOpen) LauncherGUI.launcherGUIFrame.dispose();
+					
 				}
 			}
 		});
