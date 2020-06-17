@@ -1,12 +1,16 @@
 package xyz.lucasallegri.launcher;
 
 import xyz.lucasallegri.dialog.DialogError;
+import xyz.lucasallegri.launcher.mods.ModListEventHandler;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
 import xyz.lucasallegri.util.Compressor;
 import xyz.lucasallegri.util.INetUtil;
 import xyz.lucasallegri.util.ProcessUtil;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -21,10 +25,15 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
 import org.apache.commons.io.FileUtils;
+import javax.swing.JButton;
 
 public class JVMPatcher {
 
 	public static JFrame jvmPatcherFrame;
+	private static JLabel headerLabel;
+	private static JLabel subHeaderLabel;
+	private static JButton buttonAccept;
+	private static JButton buttonDecline;
 	private static JProgressBar jvmPatcherProgressBar;
 	private static JLabel jvmPatcherState;
 	
@@ -45,7 +54,7 @@ public class JVMPatcher {
 
 	public JVMPatcher() {
 		initialize();
-		initPatcher();
+		//initPatcher();
 	}
 
 	private void initialize() {
@@ -57,13 +66,13 @@ public class JVMPatcher {
 		jvmPatcherFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		jvmPatcherFrame.getContentPane().setLayout(null);
 		
-		JLabel headerLabel = new JLabel(Language.getValue("m.jvm_patcher_header"));
+		headerLabel = new JLabel("Knight Launcher can automatically patch your game to use a 64-bit Java VM");
 		headerLabel.setBounds(10, 40, 480, 37);
 		headerLabel.setFont(Fonts.fontRegBig);
 		headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		jvmPatcherFrame.getContentPane().add(headerLabel);
 		
-		JLabel subHeaderLabel = new JLabel(Language.getValue("m.jvm_patcher_subheader"));
+		subHeaderLabel = new JLabel("Would you like to do so? You can always restart this patcher from the Settings menu.");
 		subHeaderLabel.setBounds(10, 65, 480, 37);
 		subHeaderLabel.setFont(Fonts.fontReg);
 		subHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -76,8 +85,36 @@ public class JVMPatcher {
 		
 		jvmPatcherProgressBar = new JProgressBar();
 		jvmPatcherProgressBar.setBounds(10, 204, 480, 5);
-		jvmPatcherProgressBar.setVisible(true);
+		jvmPatcherProgressBar.setVisible(false);
 		jvmPatcherFrame.getContentPane().add(jvmPatcherProgressBar);
+		
+		buttonAccept = new JButton("Yes, start patching");
+		buttonAccept.setBounds(30, 200, 150, 23);
+		jvmPatcherFrame.getContentPane().add(buttonAccept);
+		buttonAccept.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				buttonAccept.setEnabled(false);
+				buttonAccept.setVisible(false);
+				buttonDecline.setEnabled(false);
+				buttonDecline.setVisible(false);
+				headerLabel.setText(Language.getValue("m.jvm_patcher_header"));
+				subHeaderLabel.setText(Language.getValue("m.jvm_patcher_subheader"));
+				jvmPatcherProgressBar.setVisible(true);
+				initPatcher();
+			}
+		});
+		
+		buttonDecline = new JButton("No thanks");
+		buttonDecline.setBounds(380, 200, 89, 23);
+		jvmPatcherFrame.getContentPane().add(buttonDecline);
+		buttonDecline.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsProperties.setValue("launcher.jvm_patched", "true");
+				ProcessUtil.startApplication(new String[] {"java", "-jar", "KnightLauncher.jar"});
+				jvmPatcherFrame.dispose();
+				System.exit(1);
+			}
+		});
 		
 		JPanel titleBar = new JPanel();
 		titleBar.setBounds(0, 0, jvmPatcherFrame.getWidth(), 20);
@@ -167,7 +204,7 @@ public class JVMPatcher {
 		jvmPatcherProgressBar.setValue(4);
 		jvmPatcherState.setText(Language.getValue("m.jvm_patcher_finish"));
 		SettingsProperties.setValue("launcher.jvm_patched", "true");
-		ProcessUtil.startApplication(new String[] {"java", "-jar", LauncherConstants.USER_DIR + "\\KnightLauncher.jar"});
+		ProcessUtil.startApplication(new String[] {"java", "-jar", "KnightLauncher.jar"});
 		
 		jvmPatcherFrame.dispose();
 		System.exit(1);
