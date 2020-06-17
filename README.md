@@ -22,7 +22,6 @@ Still under heavy development, please open an issue in case you run into a bug!
 * Install and uninstall mods in an absurdly easy and noob-friendly way, without having to worry about game updates.
 * Automatically patch your game to use a 64-bit Java VM.
 * Reinstall your game without having to re-download anything, not a single file!
-* Basic Discord RPC implementation, not yet reflecting what you're doing in-game, but will in the future.
 * Intuitive and user-friendly GUI for extra.txt configuring.
 * A Discord RPC integration that shows exactly what you're up to in the world of Cradle.
 
