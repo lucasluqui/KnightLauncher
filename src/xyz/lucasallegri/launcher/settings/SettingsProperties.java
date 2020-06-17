@@ -8,7 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.Properties;
+
+import org.apache.commons.io.FileUtils;
 
 import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.logging.KnightLog;
@@ -25,19 +28,18 @@ public class SettingsProperties {
 		try {
 			if(!FileUtil.fileExists(propPath)) {
 				FileUtil.createFile(propPath);
-				fillWithBaseProp(false);
+				FileUtil.extractFileWithinJar("/config/base.properties", propPath);
 			} else if(FileUtil.fileExists(propPath) && getValue("PROP_VER") != null
-					&& !getValue("PROP_VER").startsWith(PROP_VER)) {
+					&& !getValue("PROP_VER").equals(PROP_VER)) {
 				KnightLog.log.info("Old PROP_VER detected, resetting properties file.");
-				FileUtil.recreateFile(propPath);
-				fillWithBaseProp(true);
+				FileUtil.extractFileWithinJar("/config/base.properties", propPath);
 			}
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
 	}
 	
-	@SuppressWarnings("unused")
+	@Deprecated
 	private static void fillWithBaseProp(Boolean alreadyExists) throws IOException {
 		String _alreadyExists = String.valueOf(alreadyExists);
 		String baseProp = 	"PROP_VER=" + PROP_VER + System.lineSeparator() +
