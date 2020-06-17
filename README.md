@@ -24,9 +24,7 @@ Still under heavy development, please open an issue in case you run into a bug!
 * Reinstall your game without having to re-download anything, not a single file!
 * Basic Discord RPC implementation, not yet reflecting what you're doing in-game, but will in the future.
 * Intuitive and user-friendly GUI for extra.txt configuring.
-
-## Planned features
-* Enhanced Discord RPC integration that shows exactly what you're up to in the world of Cradle.
+* A Discord RPC integration that shows exactly what you're up to in the world of Cradle.
 
 ## Translators
 Thank you all for helping KnightLauncher, making it usable for everyone worldwide!
