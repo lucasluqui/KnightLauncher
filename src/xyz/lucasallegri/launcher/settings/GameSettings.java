@@ -4,11 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-
 import xyz.lucasallegri.launcher.Language;
-import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.logging.KnightLog;
 

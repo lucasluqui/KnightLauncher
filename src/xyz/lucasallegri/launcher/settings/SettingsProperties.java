@@ -8,11 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.Properties;
-
-import org.apache.commons.io.FileUtils;
-
 import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.FileUtil;

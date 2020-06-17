@@ -1,7 +1,6 @@
 package xyz.lucasallegri.launcher;
 
 import xyz.lucasallegri.dialog.DialogError;
-import xyz.lucasallegri.launcher.Fonts;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
