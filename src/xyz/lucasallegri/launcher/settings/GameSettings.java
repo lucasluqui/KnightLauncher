@@ -17,7 +17,7 @@ public class GameSettings {
 			ProgressBar.showState(true);
 			ProgressBar.setBarMax(1);
 			ProgressBar.setBarValue(0);
-			ProgressBar.setState(Language.getValue("m.applying"));
+			ProgressBar.setState(Language.getValue("m.apply"));
 			
 			new File("extra.txt").delete();
 			PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");
