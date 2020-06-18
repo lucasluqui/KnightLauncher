@@ -19,9 +19,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.swing.JFrame;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -272,7 +278,14 @@ public class LauncherGUI {
 		    }
 		});
 		
-		Icon discordIcon = IconFontSwing.buildIcon(FontAwesome.SLIDESHARE, 16, DefaultColors.DISCORD_PRIMARY);
+		InputStream discordImageStream = LauncherGUI.class.getResourceAsStream("/img/discord-16.png");
+		BufferedImage discordImage = null;
+		try {
+			discordImage = ImageIO.read(discordImageStream);
+		} catch (IOException e) {
+			KnightLog.logException(e);
+		}
+		ImageIcon discordIcon = new ImageIcon(discordImage);
 		JButton discordButton = new JButton(discordIcon);
 		discordButton.setBounds(launcherGUIFrame.getWidth() - 67, 1, 18, 18);
 		discordButton.setToolTipText("Discord");
