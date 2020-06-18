@@ -278,15 +278,7 @@ public class LauncherGUI {
 		    }
 		});
 		
-		InputStream discordImageStream = LauncherGUI.class.getResourceAsStream("/img/discord-16.png");
-		BufferedImage discordImage = null;
-		try {
-			discordImage = ImageIO.read(discordImageStream);
-		} catch (IOException e) {
-			KnightLog.logException(e);
-		}
-		ImageIcon discordIcon = new ImageIcon(discordImage);
-		JButton discordButton = new JButton(discordIcon);
+		JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/discord-16.png")));
 		discordButton.setBounds(launcherGUIFrame.getWidth() - 67, 1, 18, 18);
 		discordButton.setToolTipText("Discord");
 		discordButton.setFocusPainted(false);
