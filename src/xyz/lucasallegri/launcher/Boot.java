@@ -54,7 +54,7 @@ public class Boot {
 	public static void onBootEnd() {
 		
 		ModLoader.checkInstalled();
-		if(Settings.doRebuilds && ModLoader.rebuildFiles) ModLoader.startFileRebuild();
+		if(Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
 		
 		setupIngameRPCModule();
 		
