@@ -8,9 +8,12 @@ import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
+import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.logging.KnightLog;
 
 public class ImageUtil {
@@ -63,17 +66,28 @@ public class ImageUtil {
 		return output;
 	}
 	
-	 public static BufferedImage loadImageWithinJar(String fileName){
+	 public static BufferedImage loadImageWithinJar(String fileName) {
 
-		    BufferedImage buff = null;
-		    try {
-		        buff = ImageIO.read(ImageUtil.class.getResourceAsStream(fileName));
-		    } catch (IOException e) {
-		        // TODO Auto-generated catch block
-		        KnightLog.logException(e);
-		        return null;
-		    }
-		    return buff;
+	    BufferedImage buff = null;
+	    try {
+	        buff = ImageIO.read(ImageUtil.class.getResourceAsStream(fileName));
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	        KnightLog.logException(e);
+	        return null;
+	    }
+	    return buff;
+	}
+	 
+	public static ImageIcon imageStreamToIcon(InputStream imageStream) {
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(imageStream);
+		} catch (IOException e) {
+			KnightLog.logException(e);
 		}
+		ImageIcon icon = new ImageIcon(image);
+		return icon;
+	}
 
 }
