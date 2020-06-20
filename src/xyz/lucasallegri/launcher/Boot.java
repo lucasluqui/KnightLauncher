@@ -56,7 +56,7 @@ public class Boot {
 		ModLoader.checkInstalled();
 		if(Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
 		
-		setupIngameRPCModule();
+		if(Settings.useIngameRPC) setupIngameRPCModule();
 		
 		DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
 		
