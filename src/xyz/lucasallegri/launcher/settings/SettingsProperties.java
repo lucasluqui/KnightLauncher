@@ -21,7 +21,6 @@ public class SettingsProperties {
 	public static void setup() {
 		try {
 			if(!FileUtil.fileExists(propPath)) {
-				FileUtil.createFile(propPath);
 				FileUtil.extractFileWithinJar("/config/base.properties", propPath);
 			} else if(FileUtil.fileExists(propPath) && getValue("PROP_VER") != null
 					&& !getValue("PROP_VER").equals(PROP_VER)) {

@@ -37,12 +37,12 @@ public class Boot {
 		
 		try {
 			KnightLog.setup();
-			SettingsProperties.setup();
-			SettingsProperties.loadFromProp();
 		} catch (IOException ex) {
 			KnightLog.logException(ex);
 		}
 		
+		SettingsProperties.setup();
+		SettingsProperties.loadFromProp();
 		setupLauncherStyle();
 		Language.setup();
 		checkDirectories();
