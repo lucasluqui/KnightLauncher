@@ -179,12 +179,12 @@ public class Boot {
 				Compressor.unzip("KnightLauncher/modules/skdiscordrpc/bundle.zip", "KnightLauncher/modules/skdiscordrpc/", false);
 				new File("KnightLauncher/modules/skdiscordrpc/bundle.zip").delete();
 				SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
-				SettingsProperties.setValue("launcher.useIngameRPC", "true");
 			} catch (IOException e) {
 				KnightLog.logException(e);
 			}
 		} else {
 			SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
+			SettingsProperties.setValue("launcher.useIngameRPC", "false");
 		}
 	}
 
