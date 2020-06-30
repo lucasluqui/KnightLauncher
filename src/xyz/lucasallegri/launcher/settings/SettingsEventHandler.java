@@ -5,7 +5,9 @@ import java.awt.event.ItemEvent;
 
 import xyz.lucasallegri.dialog.DialogWarning;
 import xyz.lucasallegri.launcher.Language;
+import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.mods.ModLoader;
+import xyz.lucasallegri.util.ProcessUtil;
 
 public class SettingsEventHandler {
 	
@@ -80,6 +82,13 @@ public class SettingsEventHandler {
 	public static void ingameRPCChangeEvent(ActionEvent action) {
 		Settings.useIngameRPC = SettingsGUI.switchUseIngameRPC.isSelected();
 		SettingsProperties.setValue("launcher.useIngameRPC", SettingsGUI.switchUseIngameRPC.isSelected()  ? "true" : "false");
+	}
+	
+	public static void jvmPatchEvent(ActionEvent action) {
+		SettingsProperties.setValue("launcher.jvm_patched", "false");
+		ProcessUtil.startApplication(new String[] {"java", "-jar", LauncherConstants.USER_DIR + "\\KnightLauncher.jar"});
+		SettingsGUI.settingsGUIFrame.dispose();
+		System.exit(1);
 	}
 
 }

@@ -92,7 +92,7 @@ public class SettingsGUI {
 		tabbedPane.addTab(Language.getValue("tab.files"), createFilesPanel());
 		tabbedPane.addTab(Language.getValue("tab.extratxt"), createExtraPanel());
 		if(SystemUtil.isWindows() && SystemUtil.is64Bit()) tabbedPane.addTab(Language.getValue("tab.ingame_rpc"), createIngameRPCPanel());
-		tabbedPane.addTab(Language.getValue("tab.connection"), createConnectionPanel());
+		//tabbedPane.addTab(Language.getValue("tab.connection"), createConnectionPanel());
 		settingsGUIFrame.getContentPane().add(tabbedPane);
 		
 		JPanel titleBar = new JPanel();
@@ -509,6 +509,31 @@ public class SettingsGUI {
 				SettingsGUI.settingsGUIFrame.setVisible(false);
 				LauncherGUI.launcherGUIFrame.setVisible(true);
 				SettingsEventHandler.forceRebuildEvent();
+			}
+		});
+		
+		JSeparator sep = new JSeparator();
+		sep.setBounds(25, 140, 800, 16);
+		filesPanel.add(sep);
+		
+		JLabel labelJVMPatch = new JLabel("Patch a 64-bit Java VM");
+		labelJVMPatch.setBounds(25, 155, 350, 18);
+		labelJVMPatch.setFont(Fonts.fontRegBig);
+		filesPanel.add(labelJVMPatch);
+		
+		JLabel labelJVMPatchExplained = new JLabel("Automatically downloads and installs a 64-bit Java VM for your Spiral Knights installation.");
+		labelJVMPatchExplained.setBounds(25, 175, 600, 16);
+		labelJVMPatchExplained.setFont(Fonts.fontReg);
+		filesPanel.add(labelJVMPatchExplained);
+		
+		JButton jvmPatchButton = new JButton(startIcon);
+		jvmPatchButton.setBounds(790, 160, 30, 23);
+		jvmPatchButton.setFocusPainted(false);
+		jvmPatchButton.setFocusable(false);
+		filesPanel.add(jvmPatchButton);
+		jvmPatchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.jvmPatchEvent(_action);
 			}
 		});
 		
