@@ -18,33 +18,31 @@ public class LauncherEventHandler {
 		Thread launchThread = new Thread(new Runnable(){
 			public void run() {
 				
-				ModLoader.mount();
+				if(ModLoader.mountRequired) ModLoader.mount();
 				GameSettings.load();
 				
-				if(ModLoader.modLoadFinished) {
-					if(Settings.gamePlatform.startsWith("Steam")) {
-						
-						try {
-							SteamUtil.startGameById("99900");
-						} catch (Exception e) {
-							KnightLog.logException(e);
-						}
-						
-					} else {
-						
-						if(!SystemUtil.isWindows()) {
-							ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS_LINUX_MAC);
-						} else {
-							ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
-						}
-						
+				if(Settings.gamePlatform.startsWith("Steam")) {
+					
+					try {
+						SteamUtil.startGameById("99900");
+					} catch (Exception e) {
+						KnightLog.logException(e);
 					}
 					
-					DiscordInstance.stop();
-					if(Settings.useIngameRPC) ProcessUtil.startApplication(new String[] {".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe"});
-					if(!Settings.keepOpen) LauncherGUI.launcherGUIFrame.dispose();
+				} else {
+					
+					if(!SystemUtil.isWindows()) {
+						ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS_LINUX_MAC);
+					} else {
+						ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
+					}
 					
 				}
+				
+				DiscordInstance.stop();
+				if(Settings.useIngameRPC) ProcessUtil.startApplication(new String[] {".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe"});
+				if(!Settings.keepOpen) LauncherGUI.launcherGUIFrame.dispose();
+				
 			}
 		});
 		launchThread.start();

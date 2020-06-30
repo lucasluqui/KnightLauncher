@@ -20,7 +20,7 @@ import xyz.lucasallegri.util.SystemUtil;
 
 public class ModLoader {
 	
-	public static Boolean modLoadFinished = false;
+	public static Boolean mountRequired = false;
 	public static Boolean rebuildRequired = false;
 	
 	public static void checkInstalled() {
@@ -64,12 +64,14 @@ public class ModLoader {
 					new File(hashFilePath).delete();
 					FileUtil.writeFile(hashFilePath, hash);
 					rebuildRequired = true;
+					mountRequired = true;
 				} catch (IOException e) {
 					KnightLog.logException(e);
 				}
 			} else {
 				FileUtil.writeFile(hashFilePath, hash);
 				rebuildRequired = true;
+				mountRequired = true;
 			}
 		}
 		
@@ -79,6 +81,7 @@ public class ModLoader {
 		if(Integer.parseInt(SettingsProperties.getValue("modloader.lastModCount")) != ModList.installedMods.size()) {
 			SettingsProperties.setValue("modloader.lastModCount", Integer.toString(ModList.installedMods.size()));
 			rebuildRequired = true;
+			mountRequired = true;
 		}
 		
 	}
@@ -97,8 +100,6 @@ public class ModLoader {
 			Compressor.unzip("./mods/" + ModList.installedMods.get(i).getFileName(), "./rsrc/", SystemUtil.isMac());
 			KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
 		}
-		
-		modLoadFinished = true;
 		
 		ProgressBar.showBar(false);
 		ProgressBar.showState(false);
