@@ -14,6 +14,7 @@ public class LauncherConstants {
 	public static final String DISCORD_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/discord.html";
 	public static final String GET_MODS_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/get-mods.html";
 	public static final String JVM_DOWNLOAD_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/jvm-download.txt";
+	public static final String KOFI_URL = "https://ko-fi.com/lucasallegri";
 	public static final String USER_DIR = System.getProperty("user.dir");
 	
 	public static final String[] STANDALONE_LAUNCHER_ARGS = {".\\java_vm\\bin\\java.exe",
