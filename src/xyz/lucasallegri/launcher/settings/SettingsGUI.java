@@ -150,6 +150,7 @@ public class SettingsGUI {
 		Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_CLOSE_O, 14, ColorUtil.getForegroundColor());
 		JButton closeButton = new JButton(closeIcon);
 		closeButton.setBounds(settingsGUIFrame.getWidth() - 22, 0, 20, 20);
+		closeButton.setToolTipText("Close");
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
 		closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
@@ -165,6 +166,7 @@ public class SettingsGUI {
 		Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 14, ColorUtil.getForegroundColor());
 		JButton minimizeButton = new JButton(minimizeIcon);
 		minimizeButton.setBounds(settingsGUIFrame.getWidth() - 42, 0, 20, 20);
+		minimizeButton.setToolTipText("Minimize");
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
 		minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
