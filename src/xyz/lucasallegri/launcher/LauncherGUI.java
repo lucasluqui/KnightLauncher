@@ -156,6 +156,10 @@ public class LauncherGUI {
 		 * I have no idea why they're conflicting with it, but without doing so
 		 * you won't be able to see anything, throwing errors on Language.getValue()
 		 * during t.main and b.launch parsing. Java is fun :)
+		 * 
+		 * Of course you have to uncomment it before pushing any changes;
+		 * just a self reminder for myself...
+		 * 
 		 */
 		JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
 		tweetsJsp.setBounds(567, 75, 260, 297);
