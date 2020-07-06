@@ -208,7 +208,7 @@ public class JVMPatcher {
 	
 	private static void downloadPackagedJVM() {
 		String downloadUrl = INetUtil.getWebpageContent(LauncherConstants.JVM_DOWNLOAD_URL);
-		KnightLog.log.info(downloadUrl);
+		KnightLog.log.info("Downloading Java VM from: " + downloadUrl);
 		try {
 			FileUtils.copyURLToFile(
 					  new URL(downloadUrl), 
