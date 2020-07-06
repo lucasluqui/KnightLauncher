@@ -14,6 +14,7 @@ public class ModListEventHandler {
 		if(ModLoader.rebuildRequired && Settings.doRebuilds) { ModLoader.startFileRebuild(); }
 		ModListGUI.modListGUIFrame.dispose();
 		ModListGUI.compose();
+		ModLoader.mountRequired = true;
 		
 	}
 	

@@ -28,6 +28,7 @@ public class SettingsEventHandler {
 	
 	public static void forceRebuildEvent() {
 		
+		ModLoader.mountRequired = true;
 		ModLoader.startFileRebuild();
 		
 	}
