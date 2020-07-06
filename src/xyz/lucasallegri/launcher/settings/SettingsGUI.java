@@ -150,7 +150,7 @@ public class SettingsGUI {
 		Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_CLOSE_O, 14, ColorUtil.getForegroundColor());
 		JButton closeButton = new JButton(closeIcon);
 		closeButton.setBounds(settingsGUIFrame.getWidth() - 22, 0, 20, 20);
-		closeButton.setToolTipText("Close");
+		closeButton.setToolTipText(Language.getValue("b.close"));
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
 		closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
@@ -166,7 +166,7 @@ public class SettingsGUI {
 		Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 14, ColorUtil.getForegroundColor());
 		JButton minimizeButton = new JButton(minimizeIcon);
 		minimizeButton.setBounds(settingsGUIFrame.getWidth() - 42, 0, 20, 20);
-		minimizeButton.setToolTipText("Minimize");
+		minimizeButton.setToolTipText(Language.getValue("b.minimize"));
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
 		minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
@@ -518,12 +518,12 @@ public class SettingsGUI {
 		sep.setBounds(25, 140, 800, 16);
 		filesPanel.add(sep);
 		
-		JLabel labelJVMPatch = new JLabel("Patch a 64-bit Java VM");
+		JLabel labelJVMPatch = new JLabel(Language.getValue("m.force_jvm_patch"));
 		labelJVMPatch.setBounds(25, 155, 350, 18);
 		labelJVMPatch.setFont(Fonts.fontRegBig);
 		filesPanel.add(labelJVMPatch);
 		
-		JLabel labelJVMPatchExplained = new JLabel("Automatically downloads and installs a 64-bit Java VM for your Spiral Knights installation.");
+		JLabel labelJVMPatchExplained = new JLabel(Language.getValue("m.force_jvm_patch_explained"));
 		labelJVMPatchExplained.setBounds(25, 175, 600, 16);
 		labelJVMPatchExplained.setFont(Fonts.fontReg);
 		filesPanel.add(labelJVMPatchExplained);

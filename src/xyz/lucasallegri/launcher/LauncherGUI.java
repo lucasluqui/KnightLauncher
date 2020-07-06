@@ -255,7 +255,7 @@ public class LauncherGUI {
 		Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_CLOSE_O, 14, ColorUtil.getForegroundColor());
 		JButton closeButton = new JButton(closeIcon);
 		closeButton.setBounds(launcherGUIFrame.getWidth() - 22, 0, 20, 20);
-		closeButton.setToolTipText("Close");
+		closeButton.setToolTipText(Language.getValue("b.close"));
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
 		closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
@@ -271,7 +271,7 @@ public class LauncherGUI {
 		Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 14, ColorUtil.getForegroundColor());
 		JButton minimizeButton = new JButton(minimizeIcon);
 		minimizeButton.setBounds(launcherGUIFrame.getWidth() - 42, 0, 20, 20);
-		minimizeButton.setToolTipText("Minimize");
+		minimizeButton.setToolTipText(Language.getValue("b.minimize"));
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
 		minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
@@ -318,7 +318,7 @@ public class LauncherGUI {
 		Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.COFFEE, 16, DefaultColors.KOFI);
 		JButton kofiButton = new JButton(kofiIcon);
 		kofiButton.setBounds(launcherGUIFrame.getWidth() - 111, 1, 18, 18);
-		kofiButton.setToolTipText("Support me on Ko-fi");
+		kofiButton.setToolTipText(Language.getValue("b.kofi"));
 		kofiButton.setFocusPainted(false);
 		kofiButton.setFocusable(false);
 		kofiButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
