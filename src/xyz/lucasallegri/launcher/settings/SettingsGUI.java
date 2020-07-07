@@ -542,6 +542,7 @@ public class SettingsGUI {
 				SettingsEventHandler.jvmPatchEvent(_action);
 			}
 		});
+		jvmPatchButton.setEnabled(SystemUtil.is64Bit());
 		
 		return filesPanel;
 	}
