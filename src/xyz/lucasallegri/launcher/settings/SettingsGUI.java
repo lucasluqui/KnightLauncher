@@ -365,9 +365,11 @@ public class SettingsGUI {
 		gamePanel.add(choiceMemory);
 		choiceMemory.addItem(Language.getValue("o.memory_default"));
 		choiceMemory.addItem(Language.getValue("o.memory_low"));
-		choiceMemory.addItem(Language.getValue("o.memory_med"));
-		choiceMemory.addItem(Language.getValue("o.memory_high"));
-		choiceMemory.addItem(Language.getValue("o.memory_flex"));
+		if(SystemUtil.is64Bit()) {
+			choiceMemory.addItem(Language.getValue("o.memory_med"));
+			choiceMemory.addItem(Language.getValue("o.memory_high"));
+			choiceMemory.addItem(Language.getValue("o.memory_flex"));
+		}
 		choiceMemory.setSelectedIndex(parseSelectedMemoryAsIndex());
 		choiceMemory.setToolTipText((String)choiceMemory.getSelectedItem());
 		choiceMemory.addItemListener(new ItemListener() {
@@ -426,6 +428,7 @@ public class SettingsGUI {
 				SettingsEventHandler.useG1GCChangeEvent(_action);
 			}
 		});
+		switchUseG1GC.setEnabled(SystemUtil.is64Bit());
 		
 		JSeparator sep3 = new JSeparator();
 		sep3.setBounds(25, 270, 800, 16);
@@ -451,6 +454,7 @@ public class SettingsGUI {
 				SettingsEventHandler.disableExplicitGCChangeEvent(_action);
 			}
 		});
+		switchExplicitGC.setEnabled(SystemUtil.is64Bit());
 		
 		JSeparator sep4 = new JSeparator();
 		sep4.setBounds(25, 335, 800, 16);
