@@ -54,7 +54,6 @@ public class LauncherEventHandler {
 		Thread launchAltThread = new Thread(new Runnable(){
 			public void run() {
 				
-				if(ModLoader.mountRequired) ModLoader.mount();
 				Settings.gameMemory = 512;
 				GameSettings.load();
 					
