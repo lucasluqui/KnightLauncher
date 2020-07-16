@@ -33,7 +33,6 @@ public class Boot {
 	public static void onBootStart() {
 		
 		checkStartLocation();
-		setupHTTPSProtocol();
 		
 		try {
 			KnightLog.setup();
@@ -44,11 +43,13 @@ public class Boot {
 		SettingsProperties.setup();
 		SettingsProperties.loadFromProp();
 		setupLauncherStyle();
+		setupHTTPSProtocol();
 		Language.setup();
-		checkDirectories();
-		checkShortcut();
 		Fonts.setup();
 		DiscordInstance.start();
+		KeyboardController.start();
+		checkDirectories();
+		checkShortcut();
 	}
 	
 	public static void onBootEnd() {
