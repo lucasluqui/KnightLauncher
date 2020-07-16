@@ -363,12 +363,20 @@ public class SettingsGUI {
 		choiceMemory.setFocusable(false);
 		choiceMemory.setFont(Fonts.fontReg);
 		gamePanel.add(choiceMemory);
-		choiceMemory.addItem(Language.getValue("o.memory_default"));
-		choiceMemory.addItem(Language.getValue("o.memory_low"));
+		choiceMemory.addItem(Language.getValue("o.memory_256"));
+		choiceMemory.addItem(Language.getValue("o.memory_512"));
+		choiceMemory.addItem(Language.getValue("o.memory_768"));
+		choiceMemory.addItem(Language.getValue("o.memory_1024"));
+		choiceMemory.addItem(Language.getValue("o.memory_1536"));
+		choiceMemory.addItem(Language.getValue("o.memory_2048"));
+		choiceMemory.addItem(Language.getValue("o.memory_2560"));
+		choiceMemory.addItem(Language.getValue("o.memory_3072"));
 		if(SystemUtil.is64Bit()) {
-			choiceMemory.addItem(Language.getValue("o.memory_med"));
-			choiceMemory.addItem(Language.getValue("o.memory_high"));
-			choiceMemory.addItem(Language.getValue("o.memory_flex"));
+			choiceMemory.addItem(Language.getValue("o.memory_4096"));
+			choiceMemory.addItem(Language.getValue("o.memory_5120"));
+			choiceMemory.addItem(Language.getValue("o.memory_6144"));
+			choiceMemory.addItem(Language.getValue("o.memory_8192"));
+			choiceMemory.addItem(Language.getValue("o.memory_16384"));
 		}
 		choiceMemory.setSelectedIndex(parseSelectedMemoryAsIndex());
 		choiceMemory.setToolTipText((String)choiceMemory.getSelectedItem());
@@ -632,22 +640,38 @@ public class SettingsGUI {
  	
 	public static int parseSelectedMemoryAsInt() {
 		switch(choiceMemory.getSelectedIndex()) {
-		case 0: return 512;
-		case 1: return 1024;
-		case 2: return 2048;
-		case 3: return 4096;
-		case 4: return 8192;
+		case 0: return 256;
+		case 1: return 512;
+		case 2: return 768;
+		case 3: return 1024;
+		case 4: return 1536;
+		case 5: return 2048;
+		case 6: return 2560;
+		case 7: return 3072;
+		case 8: return 4096;
+		case 9: return 5120;
+		case 10: return 6144;
+		case 11: return 8192;
+		case 12: return 16384;
 		}
 		return 512;
 	}
 	
 	public static int parseSelectedMemoryAsIndex() {
 		switch(Settings.gameMemory) {
-		case 512: return 0;
-		case 1024: return 1;
-		case 2048: return 2;
-		case 4096: return 3;
-		case 8192: return 4;
+		case 256: return 0;
+		case 512: return 1;
+		case 768: return 2;
+		case 1024: return 3;
+		case 1536: return 4;
+		case 2048: return 5;
+		case 2560: return 6;
+		case 3072: return 7;
+		case 4096: return 8;
+		case 5120: return 9;
+		case 6144: return 10;
+		case 8192: return 11;
+		case 16384: return 12;
 		}
 		return 0;
 	}
