@@ -98,7 +98,7 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(launchButton);
 		launchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				if(KeyboardController.isShiftPressed()) {
+				if(KeyboardController.isShiftPressed() || KeyboardController.isAltPressed()) {
 					LauncherEventHandler.launchGameAltEvent(_action);
 				} else {
 					LauncherEventHandler.launchGameEvent(_action);
