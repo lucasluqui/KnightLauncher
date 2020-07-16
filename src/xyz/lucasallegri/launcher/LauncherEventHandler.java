@@ -48,5 +48,28 @@ public class LauncherEventHandler {
 		launchThread.start();
 		
 	}
+	
+	public static void launchGameAltEvent(ActionEvent action) {
+		
+		Thread launchAltThread = new Thread(new Runnable(){
+			public void run() {
+				
+				if(ModLoader.mountRequired) ModLoader.mount();
+				Settings.gameMemory = 512;
+				GameSettings.load();
+					
+				if(!SystemUtil.isWindows()) {
+					ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS_LINUX_MAC);
+				} else {
+					ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
+				}
+				
+				DiscordInstance.stop();
+				
+			}
+		});
+		launchAltThread.start();
+		
+	}
 
 }
