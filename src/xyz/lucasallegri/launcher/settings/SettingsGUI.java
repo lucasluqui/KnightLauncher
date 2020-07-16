@@ -354,7 +354,7 @@ public class SettingsGUI {
 		});
 		
 		JLabel labelMemory = new JLabel(Language.getValue("m.allocated_memory"));
-		labelMemory.setBounds(225, 70, 175, 18);
+		labelMemory.setBounds(225, 70, 275, 18);
 		labelMemory.setFont(Fonts.fontRegBig);
 		gamePanel.add(labelMemory);
 		
