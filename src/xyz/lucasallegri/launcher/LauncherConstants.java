@@ -4,18 +4,27 @@ import java.io.File;
 
 public class LauncherConstants {
 
-	public static final String VERSION = "1.3.4";
+	public static final String VERSION = "1.3.4.1";
 	public static final String LNK_FILE_NAME = "Knight Launcher";
+	public static final String GITHUB_API = "https://api.github.com/";
+	public static final String GITHUB_AUTHOR = "lucas-allegri/";
+	public static final String GITHUB_REPO = "KnightLauncher/";
+	public static final String GITHUB_MAIN_BRANCH = "master/";
 	public static final String EVENT_QUERY_URL = "https://upsilonapi.lucasallegri.xyz/event";
-	public static final String VERSION_QUERY_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/version.txt";
-	public static final String RELEASES_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/releases.html";
 	public static final String TWEETS_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/tweets.txt";
-	public static final String BUG_REPORT_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/bug-report.html";
-	public static final String DISCORD_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/discord.html";
-	public static final String GET_MODS_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/get-mods.html";
-	public static final String JVM_DOWNLOAD_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/jvm-download.txt";
+	public static final String DISCORD_URL = "https://discord.gg/RAf499a";
+	public static final String GET_MODS_URL = "https://sites.google.com/view/spiralknights-mods/home";
 	public static final String KOFI_URL = "https://ko-fi.com/lucasallegri";
 	public static final String USER_DIR = System.getProperty("user.dir");
+	
+	/*
+	 * Constants below will be set after pulling the data from the Internet.
+	 * Technically they're not contants but they'll be placed here temporarily,
+	 * or until I find where to move them to.
+	 */
+	
+	public static String LATEST_RELEASE = null;
+	public static String BUG_REPORT_URL = null;
 	
 	public static final String[] STANDALONE_LAUNCHER_ARGS = {".\\java_vm\\bin\\java.exe",
 			"-Dsun.java2d.d3d=false",
