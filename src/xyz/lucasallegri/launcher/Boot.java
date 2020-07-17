@@ -187,7 +187,11 @@ public class Boot {
 				}
 				
 				String tweets = null;
-				tweets = INetUtil.getWebpageContent(LauncherConstants.API_URL + "knightlauncher/tweets.txt");
+				tweets = INetUtil.getWebpageContent("https://gitcdn.link/repo/" 
+						+ LauncherConstants.GITHUB_AUTHOR + "/" 
+						+ LauncherConstants.GITHUB_REPO 
+						+ "/master/cdn/tweets.html"
+				);
 				if(tweets == null) {
 					LauncherGUI.tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
 				} else {
@@ -197,9 +201,17 @@ public class Boot {
 					LauncherGUI.tweetsContainer.setCaretPosition(0);
 				}
 				
-				String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
 				Image eventImage = null;
-				eventImage = ImageUtil.getImageFromURL(LauncherConstants.API_URL + "knightlauncher/event" + eventImageLang + ".png", 525, 305);
+				String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
+				eventImage = ImageUtil.getImageFromURL("https://gitcdn.link/repo/" 
+						+ LauncherConstants.GITHUB_AUTHOR + "/" 
+						+ LauncherConstants.GITHUB_REPO 
+						+ "/master/cdn/event_" 
+						+ eventImageLang 
+						+ ".png",
+						525,
+						305
+				);
 				if(eventImage == null) {
 					LauncherGUI.imageContainer.setText(Language.getValue("error.event_image_missing"));
 				} else {

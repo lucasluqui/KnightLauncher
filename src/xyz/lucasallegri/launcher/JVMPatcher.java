@@ -208,10 +208,10 @@ public class JVMPatcher {
 	
 	private static void downloadPackagedJVM() {
 		
-		String downloadUrl = "https://github.com/" 
-				+ LauncherConstants.GITHUB_AUTHOR 
-				+ "/" + LauncherConstants.GITHUB_REPO
-				+ "/raw/master/jvm/jvm_pack_windows.zip";
+		String downloadUrl = "https://gitcdn.link/repo/" 
+				+ LauncherConstants.GITHUB_AUTHOR + "/"
+				+ LauncherConstants.GITHUB_REPO
+				+ "/master/jvm/jvm_pack_windows.zip";
 		
 		KnightLog.log.info("Downloading Java VM from: " + downloadUrl);
 		try {
