@@ -114,14 +114,16 @@ public class Boot {
 		
 		String rawResponseRepo = INetUtil.getWebpageContent(
 				LauncherConstants.GITHUB_API
-				+ LauncherConstants.GITHUB_AUTHOR
+				+ "repos/"
+				+ LauncherConstants.GITHUB_AUTHOR + "/"
 				+ LauncherConstants.GITHUB_REPO
 				);
 		
 		String rawResponseReleases = INetUtil.getWebpageContent(
 				LauncherConstants.GITHUB_API
-				+ LauncherConstants.GITHUB_AUTHOR
-				+ LauncherConstants.GITHUB_REPO
+				+ "repos/"
+				+ LauncherConstants.GITHUB_AUTHOR + "/"
+				+ LauncherConstants.GITHUB_REPO + "/"
 				+ "releases/"
 				+ "latest"
 				);
