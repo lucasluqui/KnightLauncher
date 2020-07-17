@@ -13,8 +13,7 @@ public class LauncherConstants {
 	public static final String GITHUB_REPO = "KnightLauncher";
 	public static final String GITHUB_MAIN_BRANCH = "master";
 	
-	public static final String EVENT_QUERY_URL = "https://upsilonapi.lucasallegri.xyz/event";
-	public static final String TWEETS_URL = "https://upsilonapi.lucasallegri.xyz/knightlauncher/tweets.txt";
+	public static final String API_URL = "https://upsilonapi.lucasallegri.xyz/";
 	public static final String DISCORD_URL = "https://discord.gg/RAf499a";
 	public static final String GET_MODS_URL = "https://sites.google.com/view/spiralknights-mods/home";
 	public static final String KOFI_URL = "https://ko-fi.com/lucasallegri";

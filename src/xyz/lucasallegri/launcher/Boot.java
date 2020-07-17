@@ -187,7 +187,7 @@ public class Boot {
 				}
 				
 				String tweets = null;
-				tweets = INetUtil.getWebpageContent(LauncherConstants.TWEETS_URL);
+				tweets = INetUtil.getWebpageContent(LauncherConstants.API_URL + "knightlauncher/tweets.txt");
 				if(tweets == null) {
 					LauncherGUI.tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
 				} else {
@@ -199,7 +199,7 @@ public class Boot {
 				
 				String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
 				Image eventImage = null;
-				eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 525, 305);
+				eventImage = ImageUtil.getImageFromURL(LauncherConstants.API_URL + "knightlauncher/event" + eventImageLang + ".png", 525, 305);
 				if(eventImage == null) {
 					LauncherGUI.imageContainer.setText(Language.getValue("error.event_image_missing"));
 				} else {
