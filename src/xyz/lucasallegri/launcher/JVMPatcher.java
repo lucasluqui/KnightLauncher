@@ -207,7 +207,14 @@ public class JVMPatcher {
 	}
 	
 	private static void downloadPackagedJVM() {
-		String downloadUrl = INetUtil.getWebpageContent(LauncherConstants.JVM_DOWNLOAD_URL);
+		String downloadUrl = INetUtil.getWebpageContent(
+				"https://raw.githubusercontent.com/" 
+				+ LauncherConstants.GITHUB_AUTHOR 
+				+ LauncherConstants.GITHUB_REPO 
+				+ LauncherConstants.GITHUB_MAIN_BRANCH
+				+ "assets/jvm/jvm_pack_windows.zip"
+				);
+		
 		KnightLog.log.info("Downloading Java VM from: " + downloadUrl);
 		try {
 			FileUtils.copyURLToFile(

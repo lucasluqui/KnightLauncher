@@ -194,7 +194,13 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(updateButton);
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				DesktopUtil.openWebpage(LauncherConstants.RELEASES_URL);
+				DesktopUtil.openWebpage(
+						"https://github.com/" 
+						+ LauncherConstants.GITHUB_AUTHOR 
+						+ LauncherConstants.GITHUB_REPO 
+						+ "releases/tag/" 
+						+ LauncherConstants.LATEST_RELEASE
+				);
 			}
 		});
 		

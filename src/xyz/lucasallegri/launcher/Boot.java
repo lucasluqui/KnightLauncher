@@ -7,6 +7,9 @@ import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import org.json.JSONObject;
+
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import mdlaf.MaterialLookAndFeel;
@@ -107,11 +110,31 @@ public class Boot {
 		}
 	}
 	
+	private static void pullGithubData() {
+		
+		String rawResponseRepo = INetUtil.getWebpageContent(
+				LauncherConstants.GITHUB_API
+				+ LauncherConstants.GITHUB_AUTHOR
+				+ LauncherConstants.GITHUB_REPO
+				);
+		
+		String rawResponseReleases = INetUtil.getWebpageContent(
+				LauncherConstants.GITHUB_API
+				+ LauncherConstants.GITHUB_AUTHOR
+				+ LauncherConstants.GITHUB_REPO
+				+ "releases/"
+				+ "latest"
+				);
+		
+		JSONObject jsonRepo = new JSONObject(rawResponseRepo);
+		JSONObject jsonReleases = new JSONObject(rawResponseReleases);
+		
+		LauncherConstants.BUG_REPORT_URL = jsonRepo.getJSONObject("").getString("html_url") + "/issues";
+		LauncherConstants.LATEST_RELEASE = jsonReleases.getJSONObject("").getString("tag_name");
+	}
+	
 	private static void checkVersion() {
-		String latestVer = INetUtil.getWebpageContent(LauncherConstants.VERSION_QUERY_URL);
-		if(latestVer == null) {
-			Settings.offlineMode = true;
-		} else if (!latestVer.equalsIgnoreCase(LauncherConstants.VERSION)) {
+		if (!LauncherConstants.LATEST_RELEASE.equalsIgnoreCase(LauncherConstants.VERSION)) {
 			Settings.isOutdated = true;
 			LauncherGUI.updateButton.setVisible(true);
 		}
@@ -148,26 +171,39 @@ public class Boot {
 		Thread oassetsThread = new Thread(new Runnable() {
 			public void run() {
 				
+				pullGithubData();
 				checkVersion();
 				
-				if(Settings.offlineMode) {
+				String tweets = null;
+				tweets = INetUtil.getWebpageContent(LauncherConstants.TWEETS_URL);
+				if(tweets == null) {
 					LauncherGUI.tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
-					LauncherGUI.playerCountLabel.setText(Language.getValue("error.get_player_count"));
-					LauncherGUI.imageContainer.setText(Language.getValue("error.event_image_missing"));
+				} else {
+					String styledTweets = tweets.replaceFirst("FONT_FAMILY", LauncherGUI.tweetsContainer.getFont().getFamily())
+							.replaceFirst("COLOR", Settings.launcherStyle.equals("dark") ? "#ffffff" : "#000000");
+					LauncherGUI.tweetsContainer.setText(styledTweets);
+					LauncherGUI.tweetsContainer.setCaretPosition(0);
 				}
 				
-				String tweets = INetUtil.getWebpageContent(LauncherConstants.TWEETS_URL);
-				String styledTweets = tweets.replaceFirst("FONT_FAMILY", LauncherGUI.tweetsContainer.getFont().getFamily())
-											.replaceFirst("COLOR", Settings.launcherStyle.equals("dark") ? "#ffffff" : "#000000");
-				LauncherGUI.tweetsContainer.setText(styledTweets);
-				LauncherGUI.tweetsContainer.setCaretPosition(0);
-				
-				LauncherGUI.playerCountLabel.setText(Language.getValue("m.player_count", new String[] { SteamUtil.getCurrentPlayersApproximateTotal("99900"), SteamUtil.getCurrentPlayers("99900") }));
+				int steamPlayers = SteamUtil.getCurrentPlayers("99900");
+				if(steamPlayers == 0) {
+					LauncherGUI.playerCountLabel.setText(Language.getValue("error.get_player_count"));
+				} else {
+					int approximateTotalPlayers = Math.round(steamPlayers * 1.6f);
+					LauncherGUI.playerCountLabel.setText(Language.getValue("m.player_count", new String[] {
+							String.valueOf(approximateTotalPlayers), String.valueOf(steamPlayers)
+					}));
+				}
 				
 				String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
-				Image eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 525, 305);
-				eventImage = ImageUtil.addRoundedCorners(eventImage, 25);
-				LauncherGUI.imageContainer.setIcon(new ImageIcon(eventImage));
+				Image eventImage = null;
+				eventImage = ImageUtil.getImageFromURL(LauncherConstants.EVENT_QUERY_URL + eventImageLang + ".png", 525, 305);
+				if(eventImage == null) {
+					LauncherGUI.imageContainer.setText(Language.getValue("error.event_image_missing"));
+				} else {
+					eventImage = ImageUtil.addRoundedCorners(eventImage, 25);
+					LauncherGUI.imageContainer.setIcon(new ImageIcon(eventImage));
+				}
 			}
 		});
 		oassetsThread.start();
