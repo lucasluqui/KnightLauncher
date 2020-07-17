@@ -5,6 +5,7 @@ import xyz.lucasallegri.launcher.settings.SettingsProperties;
 import xyz.lucasallegri.logging.KnightLog;
 import xyz.lucasallegri.util.ColorUtil;
 import xyz.lucasallegri.util.Compressor;
+import xyz.lucasallegri.util.FileUtil;
 import xyz.lucasallegri.util.INetUtil;
 import xyz.lucasallegri.util.ProcessUtil;
 import java.awt.event.ActionEvent;
@@ -191,7 +192,9 @@ public class JVMPatcher {
 		jvmPatcherProgressBar.setValue(2);
 		jvmPatcherState.setText(Language.getValue("m.jvm_patcher_delete"));
 		try {
-			FileUtils.deleteDirectory(new File(LauncherConstants.USER_DIR + "\\java_vm"));
+			if(!FileUtil.fileExists(LauncherConstants.USER_DIR + "\\java_vm_unpatched")) {
+				FileUtils.moveDirectory(new File(LauncherConstants.USER_DIR + "\\java_vm"), new File(LauncherConstants.USER_DIR + "\\java_vm_unpatched"));
+			}
 		} catch (IOException e) {
 			KnightLog.logException(e);
 		}
