@@ -131,8 +131,8 @@ public class Boot {
 		JSONObject jsonRepo = new JSONObject(rawResponseRepo);
 		JSONObject jsonReleases = new JSONObject(rawResponseReleases);
 		
-		LauncherConstants.BUG_REPORT_URL = jsonRepo.getJSONObject("").getString("html_url") + "/issues";
-		LauncherConstants.LATEST_RELEASE = jsonReleases.getJSONObject("").getString("tag_name");
+		LauncherConstants.BUG_REPORT_URL = jsonRepo.getString("html_url") + "/issues";
+		LauncherConstants.LATEST_RELEASE = jsonReleases.getString("tag_name");
 	}
 	
 	private static void checkVersion() {
@@ -176,6 +176,16 @@ public class Boot {
 				pullGithubData();
 				checkVersion();
 				
+				int steamPlayers = SteamUtil.getCurrentPlayers("99900");
+				if(steamPlayers == 0) {
+					LauncherGUI.playerCountLabel.setText(Language.getValue("error.get_player_count"));
+				} else {
+					int approximateTotalPlayers = Math.round(steamPlayers * 1.6f);
+					LauncherGUI.playerCountLabel.setText(Language.getValue("m.player_count", new String[] {
+							String.valueOf(approximateTotalPlayers), String.valueOf(steamPlayers)
+					}));
+				}
+				
 				String tweets = null;
 				tweets = INetUtil.getWebpageContent(LauncherConstants.TWEETS_URL);
 				if(tweets == null) {
@@ -185,16 +195,6 @@ public class Boot {
 							.replaceFirst("COLOR", Settings.launcherStyle.equals("dark") ? "#ffffff" : "#000000");
 					LauncherGUI.tweetsContainer.setText(styledTweets);
 					LauncherGUI.tweetsContainer.setCaretPosition(0);
-				}
-				
-				int steamPlayers = SteamUtil.getCurrentPlayers("99900");
-				if(steamPlayers == 0) {
-					LauncherGUI.playerCountLabel.setText(Language.getValue("error.get_player_count"));
-				} else {
-					int approximateTotalPlayers = Math.round(steamPlayers * 1.6f);
-					LauncherGUI.playerCountLabel.setText(Language.getValue("m.player_count", new String[] {
-							String.valueOf(approximateTotalPlayers), String.valueOf(steamPlayers)
-					}));
 				}
 				
 				String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";

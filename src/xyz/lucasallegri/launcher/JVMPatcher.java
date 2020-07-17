@@ -207,21 +207,20 @@ public class JVMPatcher {
 	}
 	
 	private static void downloadPackagedJVM() {
-		String downloadUrl = INetUtil.getWebpageContent(
-				"https://raw.githubusercontent.com/" 
+		
+		String downloadUrl = "https://github.com/" 
 				+ LauncherConstants.GITHUB_AUTHOR 
-				+ LauncherConstants.GITHUB_REPO 
-				+ LauncherConstants.GITHUB_MAIN_BRANCH
-				+ "assets/jvm/jvm_pack_windows.zip"
-				);
+				+ "/" + LauncherConstants.GITHUB_REPO
+				+ "/raw/master/jvm/jvm_pack_windows.zip";
 		
 		KnightLog.log.info("Downloading Java VM from: " + downloadUrl);
 		try {
 			FileUtils.copyURLToFile(
-					  new URL(downloadUrl), 
-					  new File(LauncherConstants.USER_DIR + "\\jvm_pack.zip"), 
-					  0, 
-					  0);
+				new URL(downloadUrl),
+				new File(LauncherConstants.USER_DIR + "\\jvm_pack.zip"), 
+				0,
+				0
+			);
 		} catch (IOException e) {
 			DialogError.push("The Java VM download couldn't be initiated, will avoid patching on next boot.");
 			SettingsProperties.setValue("launcher.jvm_patched", "true");
