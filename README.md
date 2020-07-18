@@ -27,13 +27,13 @@ Advanced game launcher for Spiral Knights that supports automatic 64-bit Java VM
 ## Translators
 Thank you all for helping Knight Launcher, making it usable for everyone worldwide!
 * Deutsch: Deathkey and Airbee
-* Eesti: Thyrux
+* Eesti: [Thyrux](https://github.com/Thyrux)
 * Français: PtitKrugger
-* Italiano: Lawn and Kaos
+* Italiano: [Lawn](https://github.com/Foyylaroni) and Kaos
 * Japanese: Armin
-* Polski: Crowfunder
+* Polski: [Crowfunder](https://github.com/Crowfunder)
 * Português (Brasil): Azuresh and Gugaarleo
-* Русский: Milliath Spooner and Puzovoz
+* Русский: Milliath Spooner and [Puzovoz](https://github.com/Puzovoz)
 
 ## Discord
 We've built an amazing community on Discord focused on both helping newcomers get along with the launcher and giving a hand to current and aspiring modders.
