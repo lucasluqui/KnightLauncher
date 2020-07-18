@@ -25,15 +25,15 @@ Advanced game launcher for Spiral Knights that supports automatic 64-bit Java VM
 * Support for easily launching alt accounts without losing performance on your main Spiral Knights instance.
 
 ## Translators
-Thank you all for helping KnightLauncher, making it usable for everyone worldwide!
+Thank you all for helping Knight Launcher, making it usable for everyone worldwide!
 * Deutsch: Deathkey and Airbee
-* Português (Brasil): Azuresh and Gugaarleo
-* Français: PtitKrugger
-* Japanese: Armin
 * Eesti: Thyrux
-* Русский: Milliath Spooner and Puzovoz
-* Polski: Crowfunder
+* Français: PtitKrugger
 * Italiano: Lawn and Kaos
+* Japanese: Armin
+* Polski: Crowfunder
+* Português (Brasil): Azuresh and Gugaarleo
+* Русский: Milliath Spooner and Puzovoz
 
 ## Discord
 We've built an amazing community on Discord focused on both helping newcomers get along with the launcher and giving a hand to current and aspiring modders.
