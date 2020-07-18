@@ -187,11 +187,7 @@ public class Boot {
 				}
 				
 				String tweets = null;
-				tweets = INetUtil.getWebpageContent("https://gitcdn.link/repo/" 
-						+ LauncherConstants.GITHUB_AUTHOR + "/" 
-						+ LauncherConstants.GITHUB_REPO 
-						+ "/master/cdn/tweets.html"
-				);
+				tweets = INetUtil.getWebpageContent(LauncherConstants.CDN_URL + "tweets.html");
 				if(tweets == null) {
 					LauncherGUI.tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
 				} else {
@@ -203,15 +199,7 @@ public class Boot {
 				
 				Image eventImage = null;
 				String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
-				eventImage = ImageUtil.getImageFromURL("https://gitcdn.link/repo/" 
-						+ LauncherConstants.GITHUB_AUTHOR + "/" 
-						+ LauncherConstants.GITHUB_REPO 
-						+ "/master/cdn/event_" 
-						+ eventImageLang 
-						+ ".png",
-						525,
-						305
-				);
+				eventImage = ImageUtil.getImageFromURL(LauncherConstants.CDN_URL + "event_" + eventImageLang + ".png", 525, 305);
 				if(eventImage == null) {
 					LauncherGUI.imageContainer.setText(Language.getValue("error.event_image_missing"));
 				} else {
