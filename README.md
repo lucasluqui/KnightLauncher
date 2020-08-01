@@ -13,9 +13,7 @@
     <a href="https://discord.gg/RAf499a"><img alt="Discord" src="https://img.shields.io/discord/653349356459786240" target="_blank"></a>
 </p>
 
-Advanced game launcher for Spiral Knights.
-
-Still under heavy development, please open an issue in case you run into a bug!
+Advanced game launcher for Spiral Knights that supports automatic 64-bit Java VM installation, Discord integration & easier modding.
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W4W11S2JU)
 ## Current features
@@ -24,20 +22,33 @@ Still under heavy development, please open an issue in case you run into a bug!
 * Reinstall your game without having to re-download anything, not a single file!
 * Intuitive and user-friendly GUI for extra.txt configuring.
 * A Discord RPC integration that shows exactly what you're up to in the world of Cradle.
+* Support for easily launching alt accounts without losing performance on your main Spiral Knights instance.
 
 ## Translators
-Thank you all for helping KnightLauncher, making it usable for everyone worldwide!
+Thank you all for helping Knight Launcher, making it usable for everyone worldwide!
 * Deutsch: Deathkey and Airbee
-* Português (Brasil): Azuresh and Gugaarleo
+* Eesti: [Thyrux](https://github.com/Thyrux)
+* Español: [lucas-allegri](https://github.com/lucas-allegri) (that's me!)
 * Français: PtitKrugger
+* Italiano: [Lawn](https://github.com/Foyylaroni) and Kaos
 * Japanese: Armin
-* Eesti: Thyrux
-* Русский: Milliath Spooner and Puzovoz
-* Polski: Crowfunder
-* Italiano: Lawn and Kaos
+* Polski: [Crowfunder](https://github.com/Crowfunder)
+* Português (Brasil): Azuresh and Gugaarleo
+* Русский: Milliath Spooner and [Puzovoz](https://github.com/Puzovoz)
 
-Would you like to help translating? Seek for information in our Discord server.
+## Discord
+We've built an amazing community on Discord focused on both helping newcomers get along with the launcher and giving a hand to current and aspiring modders.
 
+Come join us! https://discord.gg/RAf499a
 
-You can join KnightLauncher's official Discord server for further assistance:
-https://discord.gg/RAf499a
+## Third Party Libraries
+The following open source libraries made Knight Launcher possible:
+
+- [Apache Commons IO](https://github.com/apache/commons-io)
+- [Image4J](https://github.com/imcdonagh/image4j)
+- [Zip4J](https://github.com/srikanth-lingala/zip4j)
+- [material-ui-swing](https://github.com/vincenzopalazzo/material-ui-swing)
+- [discord-rpc](https://github.com/Vatuu/discord-rpc)
+- [mslinks](https://github.com/DmitriiShamrikov/mslinks)
+- [org.json](https://github.com/eskatos/org.json-java)
+- [jIconFont](https://github.com/jIconFont)
