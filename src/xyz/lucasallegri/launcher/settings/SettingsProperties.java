@@ -65,7 +65,6 @@ public class SettingsProperties {
 		Settings.compressorExtractBuffer = Integer.parseInt(getValue("compressor.extractBuffer"));
 		Settings.gamePlatform = getValue("game.platform");
 		Settings.gameUseStringDeduplication = Boolean.parseBoolean(getValue("game.useStringDeduplication"));
-		Settings.gameUseG1GC = Boolean.parseBoolean(getValue("game.useG1GC"));
 		Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));
 		Settings.gameUndecoratedWindow = Boolean.parseBoolean(getValue("game.undecoratedWindow"));
 		Settings.gameAdditionalArgs = getValue("game.additionalArgs");
