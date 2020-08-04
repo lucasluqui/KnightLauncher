@@ -253,9 +253,9 @@ public class ModListGUI {
 		windowTitle.setBounds(10, 0, modListGUIFrame.getWidth() - 100, 20);
 		titleBar.add(windowTitle);
 		
-		Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_CLOSE_O, 14, ColorUtil.getForegroundColor());
+		Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 14, ColorUtil.getForegroundColor());
 		JButton closeButton = new JButton(closeIcon);
-		closeButton.setBounds(modListGUIFrame.getWidth() - 22, 0, 20, 20);
+		closeButton.setBounds(modListGUIFrame.getWidth() - 20, 1, 20, 21);
 		closeButton.setToolTipText(Language.getValue("b.close"));
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
@@ -269,9 +269,9 @@ public class ModListGUI {
 		    }
 		});
 		
-		Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 14, ColorUtil.getForegroundColor());
+		Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 14, ColorUtil.getForegroundColor());
 		JButton minimizeButton = new JButton(minimizeIcon);
-		minimizeButton.setBounds(modListGUIFrame.getWidth() - 42, 0, 20, 20);
+		minimizeButton.setBounds(modListGUIFrame.getWidth() - 40, 1, 20, 21);
 		minimizeButton.setToolTipText(Language.getValue("b.minimize"));
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
