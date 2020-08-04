@@ -440,18 +440,17 @@ public class SettingsGUI {
 		choiceGC = new JComboBox<String>();
 		choiceGC.setBounds(670, 225, 100, 20);
 		choiceGC.setFocusable(false);
-		choiceGC.setEnabled(false);
 		choiceGC.setFont(Fonts.fontReg);
 		gamePanel.add(choiceGC);
-		choiceGC.addItem("Serial GC");
-		choiceGC.addItem("G1GC");
+		choiceGC.addItem("G1");
+		choiceGC.addItem("Serial");
 		choiceGC.setSelectedIndex(0);
-//		choiceGC.addItemListener(new ItemListener() {
-//			@Override
-//			public void itemStateChanged(ItemEvent event) {
-//				SettingsEventHandler.choiceGCChangeEvent(event);
-//			}
-//		});
+		choiceGC.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				SettingsEventHandler.choiceGCChangeEvent(event);
+			}
+		});
 		
 		return gamePanel;
 	}

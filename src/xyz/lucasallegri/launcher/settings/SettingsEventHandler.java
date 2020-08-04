@@ -54,6 +54,10 @@ public class SettingsEventHandler {
 		SettingsProperties.setValue("game.disableExplicitGC", SettingsGUI.switchUseCustomGC.isSelected()  ? "true" : "false");
 	}
 	
+	public static void choiceGCChangeEvent(ItemEvent event) {
+		Settings.gameGarbageCollector = SettingsGUI.choiceGC.getSelectedIndex() == 0 ? "G1" : "Serial";
+	}
+	
 	public static void saveAdditionalArgs() {
 		Settings.gameAdditionalArgs = SettingsGUI.argumentsPane.getText();
 		SettingsProperties.setValue("game.additionalArgs", SettingsGUI.argumentsPane.getText());
