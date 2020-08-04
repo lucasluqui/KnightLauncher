@@ -79,8 +79,9 @@ public class Boot {
 	 */
 	private static void checkStartLocation() {
 		if(!FileUtil.fileExists("getdown-pro.jar")) {
-			DialogError.push("You need to place this .jar inside your Spiral Knights main directory."
-					+ System.lineSeparator() + SteamUtil.getGamePathWindows());
+			DialogError.push("The .jar file seems to be placed in the wrong directory."
+					+ System.lineSeparator() + "Try using the Batch (.bat) file for Windows or the Shell (.sh) file for Linux/MacOS."
+					+ System.lineSeparator() + "Detected Steam path: " + SteamUtil.getGamePathWindows());
 			DesktopUtil.openDir(SteamUtil.getGamePathWindows());
 			System.exit(1);
 		}
