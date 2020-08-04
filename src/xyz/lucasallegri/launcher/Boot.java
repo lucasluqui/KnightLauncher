@@ -59,8 +59,8 @@ public class Boot {
 		
 		ModLoader.checkInstalled();
 		if(Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
-		
-		if(Settings.useIngameRPC) setupIngameRPCModule();
+		if(Settings.useIngameRPC) Modules.setupIngameRPC();
+		if(!FileUtil.fileExists(LauncherConstants.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) Modules.setupSafeguard();
 		
 		DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
 		
@@ -209,22 +209,6 @@ public class Boot {
 			}
 		});
 		oassetsThread.start();
-	}
-	
-	private static void setupIngameRPCModule() {
-		if(SystemUtil.isWindows() && SystemUtil.is64Bit()) {
-			try {
-				FileUtil.extractFileWithinJar("/modules/skdiscordrpc/bundle.zip", "KnightLauncher/modules/skdiscordrpc/bundle.zip");
-				Compressor.unzip("KnightLauncher/modules/skdiscordrpc/bundle.zip", "KnightLauncher/modules/skdiscordrpc/", false);
-				new File("KnightLauncher/modules/skdiscordrpc/bundle.zip").delete();
-				SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
-			} catch (IOException e) {
-				KnightLog.logException(e);
-			}
-		} else {
-			SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
-			SettingsProperties.setValue("launcher.useIngameRPC", "false");
-		}
 	}
 
 }

@@ -10,6 +10,7 @@ import xyz.lucasallegri.discord.DiscordInstance;
 import xyz.lucasallegri.launcher.Language;
 import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.LauncherGUI;
+import xyz.lucasallegri.launcher.Modules;
 import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.launcher.settings.SettingsGUI;
 import xyz.lucasallegri.launcher.settings.SettingsProperties;
@@ -100,6 +101,10 @@ public class ModLoader {
 			Compressor.unzip("./mods/" + ModList.installedMods.get(i).getFileName(), "./rsrc/", SystemUtil.isMac());
 			KnightLog.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
 		}
+		
+		KnightLog.log.info("Extracting safeguard...");
+		Modules.setupSafeguard();
+		KnightLog.log.info("Extracted safeguard.");
 		
 		ProgressBar.showBar(false);
 		ProgressBar.showState(false);
