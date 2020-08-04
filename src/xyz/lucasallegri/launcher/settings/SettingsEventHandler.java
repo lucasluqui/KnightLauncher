@@ -49,19 +49,9 @@ public class SettingsEventHandler {
 		SettingsProperties.setValue("game.useStringDeduplication", SettingsGUI.switchStringDedup.isSelected()  ? "true" : "false");
 	}
 
-	public static void useG1GCChangeEvent(ActionEvent action) {
-		Settings.gameUseG1GC = SettingsGUI.switchUseG1GC.isSelected();
-		SettingsProperties.setValue("game.useG1GC", SettingsGUI.switchUseG1GC.isSelected()  ? "true" : "false");
-	}
-	
-	public static void disableExplicitGCChangeEvent(ActionEvent action) {
-		Settings.gameDisableExplicitGC = SettingsGUI.switchExplicitGC.isSelected();
-		SettingsProperties.setValue("game.disableExplicitGC", SettingsGUI.switchExplicitGC.isSelected()  ? "true" : "false");
-	}
-	
-	public static void undecoratedWindowChangeEvent(ActionEvent action) {
-		Settings.gameUndecoratedWindow = SettingsGUI.switchUndecoratedWindow.isSelected();
-		SettingsProperties.setValue("game.undecoratedWindow", SettingsGUI.switchUndecoratedWindow.isSelected()  ? "true" : "false");
+	public static void customGCChangeEvent(ActionEvent action) {
+		Settings.gameDisableExplicitGC = SettingsGUI.switchUseCustomGC.isSelected();
+		SettingsProperties.setValue("game.disableExplicitGC", SettingsGUI.switchUseCustomGC.isSelected()  ? "true" : "false");
 	}
 	
 	public static void saveAdditionalArgs() {

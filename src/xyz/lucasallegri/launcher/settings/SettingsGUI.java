@@ -41,14 +41,13 @@ public class SettingsGUI {
 	public static JComboBox<String> choiceLanguage;
 	public static JComboBox<String> choiceStyle;
 	public static JComboBox<String> choiceMemory;
+	public static JComboBox<String> choiceGC;
 	public static JToggleButton switchCleaning;
 	public static JToggleButton switchKeepOpen;
 	public static JToggleButton switchShortcut;
 	public static JButton forceRebuildButton;
 	public static JToggleButton switchStringDedup;
-	public static JToggleButton switchUseG1GC;
-	public static JToggleButton switchExplicitGC;
-	public static JToggleButton switchUndecoratedWindow;
+	public static JToggleButton switchUseCustomGC;
 	public static JToggleButton switchUseIngameRPC;
 	public static JEditorPane argumentsPane;
 	
@@ -416,78 +415,43 @@ public class SettingsGUI {
 		sep2.setBounds(25, 205, 800, 16);
 		gamePanel.add(sep2);
 		
-		JLabel labelUseG1GC = new JLabel(Language.getValue("m.use_g1gc"));
-		labelUseG1GC.setBounds(25, 220, 275, 18);
-		labelUseG1GC.setFont(Fonts.fontRegBig);
-		gamePanel.add(labelUseG1GC);
+		JLabel labelUseCustomGC = new JLabel("Use a different GC behavior");
+		labelUseCustomGC.setBounds(25, 220, 275, 18);
+		labelUseCustomGC.setFont(Fonts.fontRegBig);
+		gamePanel.add(labelUseCustomGC);
 		
-		JLabel labelUseG1GCExplained = new JLabel(Language.getValue("m.use_g1gc_explained"));
-		labelUseG1GCExplained.setBounds(25, 240, 600, 16);
-		labelUseG1GCExplained.setFont(Fonts.fontReg);
-		gamePanel.add(labelUseG1GCExplained);
+		JLabel labelUseCustomGCExplained = new JLabel("Change how Garbage Collection will be done on the game's Java VM, this will disable Explicit GC");
+		labelUseCustomGCExplained.setBounds(25, 240, 600, 16);
+		labelUseCustomGCExplained.setFont(Fonts.fontReg);
+		gamePanel.add(labelUseCustomGCExplained);
 		
-		switchUseG1GC = new JToggleButton("");
-		switchUseG1GC.setBounds(790, 225, 30, 23);
-		switchUseG1GC.setFocusPainted(false);
-		gamePanel.add(switchUseG1GC);
-		switchUseG1GC.setSelected(Settings.gameUseG1GC);
-		switchUseG1GC.addActionListener(new ActionListener() {
+		switchUseCustomGC = new JToggleButton("");
+		switchUseCustomGC.setBounds(790, 225, 30, 23);
+		switchUseCustomGC.setFocusPainted(false);
+		gamePanel.add(switchUseCustomGC);
+		switchUseCustomGC.setSelected(Settings.gameDisableExplicitGC);
+		switchUseCustomGC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				SettingsEventHandler.useG1GCChangeEvent(_action);
+				SettingsEventHandler.customGCChangeEvent(_action);
 			}
 		});
-		switchUseG1GC.setEnabled(SystemUtil.is64Bit());
+		switchUseCustomGC.setEnabled(SystemUtil.is64Bit());
 		
-		JSeparator sep3 = new JSeparator();
-		sep3.setBounds(25, 270, 800, 16);
-		gamePanel.add(sep3);
-		
-		JLabel labelExplicitGC = new JLabel(Language.getValue("m.disable_explicit_gc"));
-		labelExplicitGC.setBounds(25, 285, 275, 18);
-		labelExplicitGC.setFont(Fonts.fontRegBig);
-		gamePanel.add(labelExplicitGC);
-		
-		JLabel labelExplicitGCExplained = new JLabel(Language.getValue("m.explicit_gc_explained"));
-		labelExplicitGCExplained.setBounds(25, 305, 600, 16);
-		labelExplicitGCExplained.setFont(Fonts.fontReg);
-		gamePanel.add(labelExplicitGCExplained);
-		
-		switchExplicitGC = new JToggleButton("");
-		switchExplicitGC.setBounds(790, 290, 30, 23);
-		switchExplicitGC.setFocusPainted(false);
-		gamePanel.add(switchExplicitGC);
-		switchExplicitGC.setSelected(Settings.gameDisableExplicitGC);
-		switchExplicitGC.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent _action) {
-				SettingsEventHandler.disableExplicitGCChangeEvent(_action);
-			}
-		});
-		switchExplicitGC.setEnabled(SystemUtil.is64Bit());
-		
-		JSeparator sep4 = new JSeparator();
-		sep4.setBounds(25, 335, 800, 16);
-		gamePanel.add(sep4);
-		
-		JLabel labelUndecoratedWindow = new JLabel(Language.getValue("m.undecorated_window"));
-		labelUndecoratedWindow.setBounds(25, 350, 225, 18);
-		labelUndecoratedWindow.setFont(Fonts.fontRegBig);
-		gamePanel.add(labelUndecoratedWindow);
-		
-		JLabel labelUndecoratedWindowExplained = new JLabel(Language.getValue("m.undecorated_window_explained"));
-		labelUndecoratedWindowExplained.setBounds(25, 370, 600, 16);
-		labelUndecoratedWindowExplained.setFont(Fonts.fontReg);
-		gamePanel.add(labelUndecoratedWindowExplained);
-		
-		switchUndecoratedWindow = new JToggleButton("");
-		switchUndecoratedWindow.setBounds(790, 355, 30, 23);
-		switchUndecoratedWindow.setFocusPainted(false);
-		gamePanel.add(switchUndecoratedWindow);
-		switchUndecoratedWindow.setSelected(Settings.gameUndecoratedWindow);
-		switchUndecoratedWindow.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent _action) {
-				SettingsEventHandler.undecoratedWindowChangeEvent(_action);
-			}
-		});
+		choiceGC = new JComboBox<String>();
+		choiceGC.setBounds(670, 225, 100, 20);
+		choiceGC.setFocusable(false);
+		choiceGC.setEnabled(false);
+		choiceGC.setFont(Fonts.fontReg);
+		gamePanel.add(choiceGC);
+		choiceGC.addItem("Serial GC");
+		choiceGC.addItem("G1GC");
+		choiceGC.setSelectedIndex(0);
+//		choiceGC.addItemListener(new ItemListener() {
+//			@Override
+//			public void itemStateChanged(ItemEvent event) {
+//				SettingsEventHandler.choiceGCChangeEvent(event);
+//			}
+//		});
 		
 		return gamePanel;
 	}
@@ -675,4 +639,5 @@ public class SettingsGUI {
 		}
 		return 0;
 	}
+	
 }

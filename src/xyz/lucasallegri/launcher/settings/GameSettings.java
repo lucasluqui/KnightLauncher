@@ -23,8 +23,10 @@ public class GameSettings {
 			PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");
 			
 			if(Settings.gameUseStringDeduplication) writer.println("-XX:+UseStringDeduplication");
-			if(Settings.gameUseG1GC) writer.println("-XX:+UseG1GC");
-			if(Settings.gameDisableExplicitGC) writer.println("-XX:+DisableExplicitGC");
+			if(Settings.gameDisableExplicitGC) {
+				writer.println("-XX:+DisableExplicitGC");
+				writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+			}
 			if(Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
 			
 			writer.println("-Xms" + (Settings.gameMemory / 2) + "M");

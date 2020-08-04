@@ -11,9 +11,9 @@ public class Settings {
 	public static Integer compressorExtractBuffer = 8196;
 	public static Integer gameMemory = 512;
 	public static Boolean gameUseStringDeduplication = false;
-	public static Boolean gameUseG1GC = false;
 	public static Boolean gameDisableExplicitGC = false;
 	public static Boolean gameUndecoratedWindow = false;
+	public static String gameGarbageCollector = "Serial";
 	public static String gameAdditionalArgs = null;
 	public static String launcherStyle = "dark";
 	public static Boolean offlineMode = false;
