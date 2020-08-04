@@ -257,7 +257,7 @@ public class LauncherGUI {
 		});
 		titleBar.setLayout(null);
 		
-		JLabel windowTitle = new JLabel(Language.getValue("t.main", LauncherConstants.VERSION) + "    " + Language.getValue("t.powered_by"));
+		JLabel windowTitle = new JLabel(Language.getValue("t.main", LauncherConstants.VERSION));
 		windowTitle.setFont(Fonts.fontMed);
 		windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 20);
 		titleBar.add(windowTitle);
