@@ -13,7 +13,7 @@ import xyz.lucasallegri.util.FileUtil;
 
 public class SettingsProperties {
 
-	private static final String PROP_VER = "10";
+	private static final String PROP_VER = "11";
 	
 	private static Properties prop = new Properties();
 	private static String propPath = LauncherConstants.USER_DIR + File.separator + "KnightLauncher.properties";
