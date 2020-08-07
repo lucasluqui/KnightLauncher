@@ -71,6 +71,11 @@ public class SettingsEventHandler {
 		}
 	}
 	
+	public static void disableExplicitGCChangeEvent(ActionEvent action) {
+		Settings.gameDisableExplicitGC = SettingsGUI.switchExplicitGC.isSelected();
+		SettingsProperties.setValue("game.disableExplicitGC", SettingsGUI.switchStringDedup.isSelected()  ? "true" : "false");
+	}
+	
 	public static void saveAdditionalArgs() {
 		Settings.gameAdditionalArgs = SettingsGUI.argumentsPane.getText();
 		SettingsProperties.setValue("game.additionalArgs", SettingsGUI.argumentsPane.getText());

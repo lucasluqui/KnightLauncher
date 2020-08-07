@@ -47,6 +47,7 @@ public class SettingsGUI {
 	public static JToggleButton switchShortcut;
 	public static JButton forceRebuildButton;
 	public static JToggleButton switchStringDedup;
+	public static JToggleButton switchExplicitGC;
 	public static JToggleButton switchUseCustomGC;
 	public static JToggleButton switchUseIngameRPC;
 	public static JEditorPane argumentsPane;
@@ -453,6 +454,32 @@ public class SettingsGUI {
 			}
 		});
 		choiceGC.setEnabled(SystemUtil.is64Bit());
+		
+		JSeparator sep3 = new JSeparator();
+		sep3.setBounds(25, 270, 800, 16);
+		gamePanel.add(sep3);
+
+		JLabel labelExplicitGC = new JLabel(Language.getValue("m.disable_explicit_gc"));
+		labelExplicitGC.setBounds(25, 285, 275, 18);
+		labelExplicitGC.setFont(Fonts.fontRegBig);
+		gamePanel.add(labelExplicitGC);
+
+		JLabel labelExplicitGCExplained = new JLabel(Language.getValue("m.explicit_gc_explained"));
+		labelExplicitGCExplained.setBounds(25, 305, 600, 16);
+		labelExplicitGCExplained.setFont(Fonts.fontReg);
+		gamePanel.add(labelExplicitGCExplained);
+
+		switchExplicitGC = new JToggleButton("");
+		switchExplicitGC.setBounds(790, 290, 30, 23);
+		switchExplicitGC.setFocusPainted(false);
+		gamePanel.add(switchExplicitGC);
+		switchExplicitGC.setSelected(Settings.gameDisableExplicitGC);
+		switchExplicitGC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				SettingsEventHandler.disableExplicitGCChangeEvent(_action);
+			}
+		});
+		switchExplicitGC.setEnabled(SystemUtil.is64Bit());
 		
 		return gamePanel;
 	}
