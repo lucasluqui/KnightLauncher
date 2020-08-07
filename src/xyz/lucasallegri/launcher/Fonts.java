@@ -14,6 +14,8 @@ public class Fonts {
 	private static final String fontPathMedium = "/fonts/GoogleSans-Medium.ttf";
 	private static final String fontPathRegularJP = "/fonts/NotoSansJP-Regular.otf";
 	private static final String fontPathMediumJP = "/fonts/NotoSansJP-Medium.otf";
+	private static final String fontPathRegularAR = "/fonts/Lemonada-Regular.ttf";
+	private static final String fontPathMediumAR = "/fonts/Lemonada-Medium.ttf";
 	public static Font fontReg = null;
 	public static Font fontRegBig = null;
 	public static Font fontMed = null;
@@ -39,6 +41,13 @@ public class Fonts {
 			fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
 			fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
 			sizeMultiplier = 1.1f;
+		} else if(Settings.lang.equalsIgnoreCase("ar")) {
+			fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegularAR);
+			fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegularAR);
+			fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMediumAR);
+			fontMedItaIs = LauncherGUI.class.getResourceAsStream(fontPathMediumAR);
+			fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMediumAR);
+			fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMediumAR);
 		} else {
 			fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
 			fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
