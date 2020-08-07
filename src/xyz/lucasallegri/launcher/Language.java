@@ -15,6 +15,7 @@ public class Language {
 	
 	public static String[] AVAILABLE_LANGUAGES = {
 			"English",
+			"Arabic",
 			"Deutsch",
 			"Español",
 			"Eesti",
@@ -23,7 +24,7 @@ public class Language {
 			"Japanese",
 			"Polski",
 			"Português (Brasil)",
-			"Русский"
+			"Русский",
 	};
 	
 	public static void setup() {
@@ -80,6 +81,7 @@ public class Language {
 		case "ru": return "Русский";
 		case "it": return "Italiano";
 		case "pl": return "Polski";
+		case "ar": return "Arabic";
 		}
 		return null;
 	}
@@ -96,6 +98,7 @@ public class Language {
 		case "Русский": return "ru";
 		case "Italiano": return "it";
 		case "Polski": return "pl";
+		case "Arabic": return "ar";
 		}
 		return null;
 	}
