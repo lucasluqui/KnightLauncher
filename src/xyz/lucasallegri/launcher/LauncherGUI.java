@@ -196,8 +196,8 @@ public class LauncherGUI {
 			public void actionPerformed(ActionEvent _action) {
 				DesktopUtil.openWebpage(
 						"https://github.com/" 
-						+ LauncherConstants.GITHUB_AUTHOR 
-						+ LauncherConstants.GITHUB_REPO 
+						+ LauncherConstants.GITHUB_AUTHOR + "/"
+						+ LauncherConstants.GITHUB_REPO + "/" 
 						+ "releases/tag/" 
 						+ LauncherConstants.LATEST_RELEASE
 				);
