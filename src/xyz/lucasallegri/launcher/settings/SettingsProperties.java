@@ -67,6 +67,8 @@ public class SettingsProperties {
 		Settings.gameUseStringDeduplication = Boolean.parseBoolean(getValue("game.useStringDeduplication"));
 		Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));
 		Settings.gameUndecoratedWindow = Boolean.parseBoolean(getValue("game.undecoratedWindow"));
+		Settings.gameUseCustomGC = Boolean.parseBoolean(getValue("game.useCustomGC"));
+		Settings.gameGarbageCollector = getValue("game.garbageCollector");
 		Settings.gameAdditionalArgs = getValue("game.additionalArgs");
 		Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
 		Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));

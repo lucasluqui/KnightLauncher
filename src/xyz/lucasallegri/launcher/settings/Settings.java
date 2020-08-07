@@ -13,7 +13,8 @@ public class Settings {
 	public static Boolean gameUseStringDeduplication = false;
 	public static Boolean gameDisableExplicitGC = false;
 	public static Boolean gameUndecoratedWindow = false;
-	public static String gameGarbageCollector = "G1";
+	public static Boolean gameUseCustomGC = false;
+	public static String gameGarbageCollector = "ParallelOld";
 	public static String gameAdditionalArgs = null;
 	public static String launcherStyle = "dark";
 	public static Boolean offlineMode = false;

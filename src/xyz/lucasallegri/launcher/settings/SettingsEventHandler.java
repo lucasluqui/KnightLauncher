@@ -50,12 +50,25 @@ public class SettingsEventHandler {
 	}
 
 	public static void customGCChangeEvent(ActionEvent action) {
-		Settings.gameDisableExplicitGC = SettingsGUI.switchUseCustomGC.isSelected();
-		SettingsProperties.setValue("game.disableExplicitGC", SettingsGUI.switchUseCustomGC.isSelected()  ? "true" : "false");
+		Settings.gameUseCustomGC = SettingsGUI.switchUseCustomGC.isSelected();
+		SettingsProperties.setValue("game.useCustomGC", SettingsGUI.switchUseCustomGC.isSelected()  ? "true" : "false");
 	}
 	
 	public static void choiceGCChangeEvent(ItemEvent event) {
-		Settings.gameGarbageCollector = SettingsGUI.choiceGC.getSelectedIndex() == 0 ? "G1" : "Serial";
+		switch(SettingsGUI.choiceGC.getSelectedIndex()) {
+		case 0:
+			Settings.gameGarbageCollector = "ParallelOld";
+			SettingsProperties.setValue("game.garbageCollector", "ParallelOld");
+			break;
+		case 1:
+			Settings.gameGarbageCollector = "Serial";
+			SettingsProperties.setValue("game.garbageCollector", "Serial");
+			break;
+		case 2:
+			Settings.gameGarbageCollector = "G1";
+			SettingsProperties.setValue("game.garbageCollector", "G1");
+			break;
+		}
 	}
 	
 	public static void saveAdditionalArgs() {

@@ -420,7 +420,7 @@ public class SettingsGUI {
 		labelUseCustomGC.setFont(Fonts.fontRegBig);
 		gamePanel.add(labelUseCustomGC);
 		
-		JLabel labelUseCustomGCExplained = new JLabel("Change how Garbage Collection will be done on the game's Java VM, this will disable Explicit GC");
+		JLabel labelUseCustomGCExplained = new JLabel("Change how Garbage Collection will be done on the game's Java VM");
 		labelUseCustomGCExplained.setBounds(25, 240, 600, 16);
 		labelUseCustomGCExplained.setFont(Fonts.fontReg);
 		gamePanel.add(labelUseCustomGCExplained);
@@ -429,7 +429,7 @@ public class SettingsGUI {
 		switchUseCustomGC.setBounds(790, 225, 30, 23);
 		switchUseCustomGC.setFocusPainted(false);
 		gamePanel.add(switchUseCustomGC);
-		switchUseCustomGC.setSelected(Settings.gameDisableExplicitGC);
+		switchUseCustomGC.setSelected(Settings.gameUseCustomGC);
 		switchUseCustomGC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
 				SettingsEventHandler.customGCChangeEvent(_action);
@@ -442,8 +442,9 @@ public class SettingsGUI {
 		choiceGC.setFocusable(false);
 		choiceGC.setFont(Fonts.fontReg);
 		gamePanel.add(choiceGC);
-		choiceGC.addItem("G1");
+		choiceGC.addItem("ParallelOld");
 		choiceGC.addItem("Serial");
+		choiceGC.addItem("G1");
 		choiceGC.setSelectedIndex(0);
 		choiceGC.addItemListener(new ItemListener() {
 			@Override
@@ -451,6 +452,7 @@ public class SettingsGUI {
 				SettingsEventHandler.choiceGCChangeEvent(event);
 			}
 		});
+		choiceGC.setEnabled(SystemUtil.is64Bit());
 		
 		return gamePanel;
 	}
