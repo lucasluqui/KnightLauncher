@@ -445,7 +445,7 @@ public class SettingsGUI {
 		choiceGC.addItem("ParallelOld");
 		choiceGC.addItem("Serial");
 		choiceGC.addItem("G1");
-		choiceGC.setSelectedIndex(0);
+		choiceGC.setSelectedItem(Settings.gameGarbageCollector);
 		choiceGC.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
