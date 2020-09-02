@@ -2,14 +2,14 @@ package xyz.lucasallegri.dialog;
 
 import javax.swing.JOptionPane;
 
-import xyz.lucasallegri.launcher.Language;
+import xyz.lucasallegri.launcher.LanguageManager;
 
 public class DialogError {
 	
 	public static void push(String msg) {
 		JOptionPane.showMessageDialog(null,
 			    msg,
-			    "KnightLauncher Error",
+			    "Knight Launcher Error",
 			    JOptionPane.ERROR_MESSAGE
 			    );
 	}
@@ -17,7 +17,7 @@ public class DialogError {
 	public static void pushTranslated(String msg) {
 		JOptionPane.showMessageDialog(null,
 			    msg,
-			    Language.getValue("t.error"),
+			    LanguageManager.getValue("t.error"),
 			    JOptionPane.ERROR_MESSAGE
 			    );
 	}

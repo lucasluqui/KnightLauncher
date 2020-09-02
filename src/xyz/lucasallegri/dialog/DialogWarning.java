@@ -2,14 +2,14 @@ package xyz.lucasallegri.dialog;
 
 import javax.swing.JOptionPane;
 
-import xyz.lucasallegri.launcher.Language;
+import xyz.lucasallegri.launcher.LanguageManager;
 
 public class DialogWarning {
 	
 	public static void push(String msg) {
 		JOptionPane.showMessageDialog(null,
 			    msg,
-			    "KnightLauncher Warning",
+			    "Knight Launcher Warning",
 			    JOptionPane.WARNING_MESSAGE
 			    );
 	}
@@ -17,7 +17,7 @@ public class DialogWarning {
 	public static void pushTranslated(String msg) {
 		JOptionPane.showMessageDialog(null,
 			    msg,
-			    Language.getValue("t.warning"),
+			    LanguageManager.getValue("t.warning"),
 			    JOptionPane.WARNING_MESSAGE
 			    );
 	}
