@@ -31,7 +31,7 @@ import xyz.lucasallegri.util.ImageUtil;
 import xyz.lucasallegri.util.SteamUtil;
 import xyz.lucasallegri.util.SystemUtil;
 
-public class Boot {
+public class BootManager {
 	
 	public static void onBootStart() {
 		
@@ -47,8 +47,8 @@ public class Boot {
 		SettingsProperties.loadFromProp();
 		setupLauncherStyle();
 		setupHTTPSProtocol();
-		Language.setup();
-		Fonts.setup();
+		LanguageManager.setup();
+		FontManager.setup();
 		DiscordInstance.start();
 		KeyboardController.start();
 		checkDirectories();
@@ -62,7 +62,7 @@ public class Boot {
 		if(Settings.useIngameRPC) Modules.setupIngameRPC();
 		if(!FileUtil.fileExists(LauncherConstants.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) Modules.setupSafeguard();
 		
-		DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
+		DiscordInstance.setPresence(LanguageManager.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
 		
 		loadOnlineAssets();
 	}
@@ -179,10 +179,10 @@ public class Boot {
 				
 				int steamPlayers = SteamUtil.getCurrentPlayers("99900");
 				if(steamPlayers == 0) {
-					LauncherGUI.playerCountLabel.setText(Language.getValue("error.get_player_count"));
+					LauncherGUI.playerCountLabel.setText(LanguageManager.getValue("error.get_player_count"));
 				} else {
 					int approximateTotalPlayers = Math.round(steamPlayers * 1.6f);
-					LauncherGUI.playerCountLabel.setText(Language.getValue("m.player_count", new String[] {
+					LauncherGUI.playerCountLabel.setText(LanguageManager.getValue("m.player_count", new String[] {
 							String.valueOf(approximateTotalPlayers), String.valueOf(steamPlayers)
 					}));
 				}
@@ -190,7 +190,7 @@ public class Boot {
 				String tweets = null;
 				tweets = INetUtil.getWebpageContent(LauncherConstants.CDN_URL + "tweets.html");
 				if(tweets == null) {
-					LauncherGUI.tweetsContainer.setText(Language.getValue("error.tweets_retrieve"));
+					LauncherGUI.tweetsContainer.setText(LanguageManager.getValue("error.tweets_retrieve"));
 				} else {
 					String styledTweets = tweets.replaceFirst("FONT_FAMILY", LauncherGUI.tweetsContainer.getFont().getFamily())
 							.replaceFirst("COLOR", Settings.launcherStyle.equals("dark") ? "#ffffff" : "#000000");
@@ -202,7 +202,7 @@ public class Boot {
 				String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
 				eventImage = ImageUtil.getImageFromURL(LauncherConstants.CDN_URL + "event_" + eventImageLang + ".png", 525, 305);
 				if(eventImage == null) {
-					LauncherGUI.imageContainer.setText(Language.getValue("error.event_image_missing"));
+					LauncherGUI.imageContainer.setText(LanguageManager.getValue("error.event_image_missing"));
 				} else {
 					eventImage = ImageUtil.addRoundedCorners(eventImage, 25);
 					LauncherGUI.imageContainer.setIcon(new ImageIcon(eventImage));

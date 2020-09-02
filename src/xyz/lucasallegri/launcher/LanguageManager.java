@@ -8,7 +8,7 @@ import java.util.Properties;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 
-public class Language {
+public class LanguageManager {
 	
 	private static Properties prop = new Properties();
 	private static InputStream propStream = null;
@@ -28,7 +28,7 @@ public class Language {
 	};
 	
 	public static void setup() {
-		propStream = Language.class.getResourceAsStream("/lang/lang_" + Settings.lang + ".properties");
+		propStream = LanguageManager.class.getResourceAsStream("/lang/lang_" + Settings.lang + ".properties");
 	}
 	
 	public static String getValue(String key) {

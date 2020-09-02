@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import xyz.lucasallegri.launcher.Language;
+import xyz.lucasallegri.launcher.LanguageManager;
 import xyz.lucasallegri.launcher.ProgressBar;
 import xyz.lucasallegri.logging.KnightLog;
 
@@ -17,7 +17,7 @@ public class GameSettings {
 			ProgressBar.showState(true);
 			ProgressBar.setBarMax(1);
 			ProgressBar.setBarValue(0);
-			ProgressBar.setState(Language.getValue("m.apply"));
+			ProgressBar.setState(LanguageManager.getValue("m.apply"));
 			
 			new File("extra.txt").delete();
 			PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");

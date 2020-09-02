@@ -50,7 +50,7 @@ public class LauncherGUI {
 
 	public static void main(String[] args) {
 		
-		Boot.onBootStart();
+		BootManager.onBootStart();
 		
 		if(SystemUtil.is64Bit() && SystemUtil.isWindows() && !Settings.jvmPatched) {
 			JVMPatcher.compose();
@@ -71,7 +71,7 @@ public class LauncherGUI {
 
 	public LauncherGUI() {
 		initialize();
-		Boot.onBootEnd();
+		BootManager.onBootEnd();
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class LauncherGUI {
 	private void initialize() {
 		
 		launcherGUIFrame = new JFrame();
-		launcherGUIFrame.setTitle(Language.getValue("t.main", LauncherConstants.VERSION));
+		launcherGUIFrame.setTitle(LanguageManager.getValue("t.main", LauncherConstants.VERSION));
 		launcherGUIFrame.setResizable(false);
 		launcherGUIFrame.setBounds(100, 100, 850, 475);
 		launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -91,10 +91,10 @@ public class LauncherGUI {
 		Icon launchIcon = IconFontSwing.buildIcon(FontAwesome.PLAY_CIRCLE_O, 49, ColorUtil.getForegroundColor());
 		launchButton = new JButton(launchIcon);
 		launchButton.setBounds(21, 400, 52, 52);
-		launchButton.setFont(Fonts.fontMedBig);
+		launchButton.setFont(FontManager.fontMedBig);
 		launchButton.setFocusPainted(false);
 		launchButton.setFocusable(false);
-		launchButton.setToolTipText(Language.getValue("b.launch"));
+		launchButton.setToolTipText(LanguageManager.getValue("b.launch"));
 		launcherGUIFrame.getContentPane().add(launchButton);
 		launchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
@@ -108,17 +108,17 @@ public class LauncherGUI {
 		
 		imageContainer = new JLabel("");
 		imageContainer.setBounds(23, 48, 525, 305);
-		imageContainer.setFont(Fonts.fontRegBig);
+		imageContainer.setFont(FontManager.fontRegBig);
 		imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
 		Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, 16, ColorUtil.getForegroundColor());
 		modButton = new JButton(modsIcon);
 		modButton.setBounds(80, 401, 30, 25);
-		modButton.setFont(Fonts.fontMed);
+		modButton.setFont(FontManager.fontMed);
 		modButton.setFocusPainted(false);
 		modButton.setFocusable(false);
-		modButton.setToolTipText(Language.getValue("b.mods"));
+		modButton.setToolTipText(LanguageManager.getValue("b.mods"));
 		launcherGUIFrame.getContentPane().add(modButton);
 		modButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
@@ -129,10 +129,10 @@ public class LauncherGUI {
 		Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
 		settingsButton = new JButton(settingsIcon);
 		settingsButton.setBounds(80, 427, 30, 25);
-		settingsButton.setFont(Fonts.fontMed);
+		settingsButton.setFont(FontManager.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
-		settingsButton.setToolTipText(Language.getValue("b.settings"));
+		settingsButton.setToolTipText(LanguageManager.getValue("b.settings"));
 		launcherGUIFrame.getContentPane().add(settingsButton);
 		settingsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
@@ -140,17 +140,17 @@ public class LauncherGUI {
 			}
 		});
 		
-		JLabel labelTweets = new JLabel("<html>" + Language.getValue("m.twitter_title") + "</html>");
+		JLabel labelTweets = new JLabel("<html>" + LanguageManager.getValue("m.twitter_title") + "</html>");
 		labelTweets.setBounds(567, 36, 127, 28);
-		labelTweets.setFont(Fonts.fontReg);
+		labelTweets.setFont(FontManager.fontReg);
 		launcherGUIFrame.getContentPane().add(labelTweets);
 		
 		tweetsContainer = new JTextPane();
-		tweetsContainer.setText(Language.getValue("m.twitter_load"));
+		tweetsContainer.setText(LanguageManager.getValue("m.twitter_load"));
 		tweetsContainer.setBounds(567, 75, 260, 297);
 		tweetsContainer.setEditable(false);
 		tweetsContainer.setContentType("text/html");
-		tweetsContainer.setFont(Fonts.fontReg);
+		tweetsContainer.setFont(FontManager.fontReg);
 		tweetsContainer.setBackground(ColorUtil.getBackgroundColor());
 		tweetsContainer.setForeground(Color.WHITE);
 		launcherGUIFrame.getContentPane().add(tweetsContainer);
@@ -177,15 +177,15 @@ public class LauncherGUI {
 		launchState = new JLabel("");
 		launchState.setHorizontalAlignment(SwingConstants.RIGHT);
 		launchState.setBounds(638, 443, 203, 23);
-		launchState.setFont(Fonts.fontRegBig);
+		launchState.setFont(FontManager.fontRegBig);
 		launchState.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchState);
 		
 		Icon cloudIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 20, ColorUtil.getGreenForegroundColor());
-		updateButton = new JButton(Language.getValue("b.update_available"));
+		updateButton = new JButton(LanguageManager.getValue("b.update_available"));
 		updateButton.setHorizontalAlignment(SwingConstants.CENTER);
 		updateButton.setIcon(cloudIcon);
-		updateButton.setFont(Fonts.fontMedIta);
+		updateButton.setFont(FontManager.fontMedIta);
 		updateButton.setFocusPainted(false);
 		updateButton.setFocusable(false);
 		updateButton.setForeground(ColorUtil.getGreenForegroundColor());
@@ -204,8 +204,8 @@ public class LauncherGUI {
 			}
 		});
 		
-		playerCountLabel = new JLabel(Language.getValue("m.player_count_load"));
-		playerCountLabel.setFont(Fonts.fontReg);
+		playerCountLabel = new JLabel(LanguageManager.getValue("m.player_count_load"));
+		playerCountLabel.setFont(FontManager.fontReg);
 		playerCountLabel.setForeground(ColorUtil.getGreenForegroundColor());
 		playerCountLabel.setBounds(23, 378, 507, 14);
 		launcherGUIFrame.getContentPane().add(playerCountLabel);
@@ -257,19 +257,19 @@ public class LauncherGUI {
 		});
 		titleBar.setLayout(null);
 		
-		JLabel windowTitle = new JLabel(Language.getValue("t.main", LauncherConstants.VERSION));
-		windowTitle.setFont(Fonts.fontMed);
+		JLabel windowTitle = new JLabel(LanguageManager.getValue("t.main", LauncherConstants.VERSION));
+		windowTitle.setFont(FontManager.fontMed);
 		windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 20);
 		titleBar.add(windowTitle);
 		
 		Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 14, ColorUtil.getForegroundColor());
 		JButton closeButton = new JButton(closeIcon);
 		closeButton.setBounds(launcherGUIFrame.getWidth() - 18, 1, 20, 21);
-		closeButton.setToolTipText(Language.getValue("b.close"));
+		closeButton.setToolTipText(LanguageManager.getValue("b.close"));
 		closeButton.setFocusPainted(false);
 		closeButton.setFocusable(false);
 		closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
-		closeButton.setFont(Fonts.fontMed);
+		closeButton.setFont(FontManager.fontMed);
 		titleBar.add(closeButton);
 		closeButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
@@ -281,11 +281,11 @@ public class LauncherGUI {
 		Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 14, ColorUtil.getForegroundColor());
 		JButton minimizeButton = new JButton(minimizeIcon);
 		minimizeButton.setBounds(launcherGUIFrame.getWidth() - 38, 1, 20, 21);
-		minimizeButton.setToolTipText(Language.getValue("b.minimize"));
+		minimizeButton.setToolTipText(LanguageManager.getValue("b.minimize"));
 		minimizeButton.setFocusPainted(false);
 		minimizeButton.setFocusable(false);
 		minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
-		minimizeButton.setFont(Fonts.fontMed);
+		minimizeButton.setFont(FontManager.fontMed);
 		titleBar.add(minimizeButton);
 		minimizeButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
@@ -300,7 +300,7 @@ public class LauncherGUI {
 		discordButton.setFocusPainted(false);
 		discordButton.setFocusable(false);
 		discordButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
-		discordButton.setFont(Fonts.fontMed);
+		discordButton.setFont(FontManager.fontMed);
 		titleBar.add(discordButton);
 		discordButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
@@ -312,11 +312,11 @@ public class LauncherGUI {
 		Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, ColorUtil.getForegroundColor());
 		JButton bugButton = new JButton(bugIcon);
 		bugButton.setBounds(launcherGUIFrame.getWidth() - 89, 1, 18, 18);
-		bugButton.setToolTipText(Language.getValue("b.bug_report"));
+		bugButton.setToolTipText(LanguageManager.getValue("b.bug_report"));
 		bugButton.setFocusPainted(false);
 		bugButton.setFocusable(false);
 		bugButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
-		bugButton.setFont(Fonts.fontMed);
+		bugButton.setFont(FontManager.fontMed);
 		titleBar.add(bugButton);
 		bugButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
@@ -328,11 +328,11 @@ public class LauncherGUI {
 		Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.COFFEE, 16, DefaultColors.KOFI);
 		JButton kofiButton = new JButton(kofiIcon);
 		kofiButton.setBounds(launcherGUIFrame.getWidth() - 111, 1, 18, 18);
-		kofiButton.setToolTipText(Language.getValue("b.kofi"));
+		kofiButton.setToolTipText(LanguageManager.getValue("b.kofi"));
 		kofiButton.setFocusPainted(false);
 		kofiButton.setFocusable(false);
 		kofiButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
-		kofiButton.setFont(Fonts.fontMed);
+		kofiButton.setFont(FontManager.fontMed);
 		titleBar.add(kofiButton);
 		kofiButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)

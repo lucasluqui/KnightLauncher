@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
 import xyz.lucasallegri.dialog.DialogWarning;
-import xyz.lucasallegri.launcher.Language;
+import xyz.lucasallegri.launcher.LanguageManager;
 import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.mods.ModLoader;
 import xyz.lucasallegri.util.ProcessUtil;
@@ -39,9 +39,9 @@ public class SettingsEventHandler {
 	}
 	
 	public static void languageChangeEvent(ItemEvent event) {
-		Settings.lang = Language.getLangCode((String)SettingsGUI.choiceLanguage.getSelectedItem());
-		SettingsProperties.setValue("launcher.lang", Language.getLangCode((String)SettingsGUI.choiceLanguage.getSelectedItem()));
-		DialogWarning.pushTranslated(Language.getValue("m.prompt_restart_required"));
+		Settings.lang = LanguageManager.getLangCode((String)SettingsGUI.choiceLanguage.getSelectedItem());
+		SettingsProperties.setValue("launcher.lang", LanguageManager.getLangCode((String)SettingsGUI.choiceLanguage.getSelectedItem()));
+		DialogWarning.pushTranslated(LanguageManager.getValue("m.prompt_restart_required"));
 	}
 	
 	public static void useStringDeduplicationChangeEvent(ActionEvent action) {
@@ -89,7 +89,7 @@ public class SettingsEventHandler {
 	
 	public static void styleChangeEvent(ItemEvent event) {
 		SettingsProperties.setValue("launcher.style", SettingsGUI.choiceStyle.getSelectedIndex() == 0 ? "dark" : "light");
-		DialogWarning.pushTranslated(Language.getValue("m.prompt_restart_required"));
+		DialogWarning.pushTranslated(LanguageManager.getValue("m.prompt_restart_required"));
 	}
 	
 	public static void ingameRPCChangeEvent(ActionEvent action) {

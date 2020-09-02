@@ -7,7 +7,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import xyz.lucasallegri.discord.DiscordInstance;
-import xyz.lucasallegri.launcher.Language;
+import xyz.lucasallegri.launcher.LanguageManager;
 import xyz.lucasallegri.launcher.LauncherConstants;
 import xyz.lucasallegri.launcher.LauncherGUI;
 import xyz.lucasallegri.launcher.Modules;
@@ -93,8 +93,8 @@ public class ModLoader {
 		ProgressBar.showBar(true);
 		ProgressBar.showState(true);
 		ProgressBar.setBarMax(ModList.installedMods.size() + 1);
-		ProgressBar.setState(Language.getValue("m.mount"));
-		DiscordInstance.setPresence(Language.getValue("m.mount_start"));
+		ProgressBar.setState(LanguageManager.getValue("m.mount"));
+		DiscordInstance.setPresence(LanguageManager.getValue("m.mount_start"));
 		
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
@@ -133,12 +133,12 @@ public class ModLoader {
 		ProgressBar.showBar(true);
 		ProgressBar.showState(true);
 		ProgressBar.setBarMax(jarFiles.length + 1);
-		ProgressBar.setState(Language.getValue("m.clean"));
+		ProgressBar.setState(LanguageManager.getValue("m.clean"));
 		
 		// Iterate through all 3 .jar files to clean up the game files.
 		for(int i = 0; i < jarFiles.length; i++) {
 			ProgressBar.setBarValue(i + 1);
-			DiscordInstance.setPresence(Language.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(jarFiles.length)}));
+			DiscordInstance.setPresence(LanguageManager.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(jarFiles.length)}));
 			Compressor.unzip("./rsrc/" + jarFiles[i], "./rsrc/", false);
 		}
 		
@@ -155,7 +155,7 @@ public class ModLoader {
 		LauncherGUI.launchButton.setEnabled(true);
 		LauncherGUI.settingsButton.setEnabled(true);
 		try { SettingsGUI.forceRebuildButton.setEnabled(true); } catch(Exception e) {}
-		DiscordInstance.setPresence(Language.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
+		DiscordInstance.setPresence(LanguageManager.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
 	}
 
 }

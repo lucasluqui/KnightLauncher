@@ -57,28 +57,28 @@ public class JVMPatcher {
 
 	private void initialize() {
 		jvmPatcherFrame = new JFrame();
-		jvmPatcherFrame.setTitle(Language.getValue("t.jvm_patcher"));
+		jvmPatcherFrame.setTitle(LanguageManager.getValue("t.jvm_patcher"));
 		jvmPatcherFrame.setBounds(100, 100, 500, 250);
 		jvmPatcherFrame.setResizable(false);
 		jvmPatcherFrame.setUndecorated(true);
 		jvmPatcherFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		jvmPatcherFrame.getContentPane().setLayout(null);
 		
-		headerLabel = new JLabel(Language.getValue("m.jvm_patcher_confirm_header"));
+		headerLabel = new JLabel(LanguageManager.getValue("m.jvm_patcher_confirm_header"));
 		headerLabel.setBounds(10, 40, 480, 37);
-		headerLabel.setFont(Fonts.fontRegBig);
+		headerLabel.setFont(FontManager.fontRegBig);
 		headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		jvmPatcherFrame.getContentPane().add(headerLabel);
 		
-		subHeaderLabel = new JLabel(Language.getValue("m.jvm_patcher_confirm_subheader"));
+		subHeaderLabel = new JLabel(LanguageManager.getValue("m.jvm_patcher_confirm_subheader"));
 		subHeaderLabel.setBounds(10, 65, 480, 37);
-		subHeaderLabel.setFont(Fonts.fontReg);
+		subHeaderLabel.setFont(FontManager.fontReg);
 		subHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		jvmPatcherFrame.getContentPane().add(subHeaderLabel);
 		
 		jvmPatcherState = new JLabel("");
 		jvmPatcherState.setBounds(11, 180, 480, 15);
-		jvmPatcherState.setFont(Fonts.fontReg);
+		jvmPatcherState.setFont(FontManager.fontReg);
 		jvmPatcherFrame.getContentPane().add(jvmPatcherState);
 		
 		jvmPatcherProgressBar = new JProgressBar();
@@ -86,10 +86,10 @@ public class JVMPatcher {
 		jvmPatcherProgressBar.setVisible(false);
 		jvmPatcherFrame.getContentPane().add(jvmPatcherProgressBar);
 		
-		buttonAccept = new JButton(Language.getValue("b.jvm_patcher_accept"));
+		buttonAccept = new JButton(LanguageManager.getValue("b.jvm_patcher_accept"));
 		buttonAccept.setFocusPainted(false);
 		buttonAccept.setFocusable(false);
-		buttonAccept.setFont(Fonts.fontMed);
+		buttonAccept.setFont(FontManager.fontMed);
 		buttonAccept.setBounds(30, 200, 200, 23);
 		jvmPatcherFrame.getContentPane().add(buttonAccept);
 		buttonAccept.addActionListener(new ActionListener() {
@@ -98,17 +98,17 @@ public class JVMPatcher {
 				buttonAccept.setVisible(false);
 				buttonDecline.setEnabled(false);
 				buttonDecline.setVisible(false);
-				headerLabel.setText(Language.getValue("m.jvm_patcher_header"));
-				subHeaderLabel.setText(Language.getValue("m.jvm_patcher_subheader"));
+				headerLabel.setText(LanguageManager.getValue("m.jvm_patcher_header"));
+				subHeaderLabel.setText(LanguageManager.getValue("m.jvm_patcher_subheader"));
 				jvmPatcherProgressBar.setVisible(true);
 				initPatcher();
 			}
 		});
 		
-		buttonDecline = new JButton(Language.getValue("b.jvm_patcher_decline"));
+		buttonDecline = new JButton(LanguageManager.getValue("b.jvm_patcher_decline"));
 		buttonDecline.setFocusPainted(false);
 		buttonDecline.setFocusable(false);
-		buttonDecline.setFont(Fonts.fontMed);
+		buttonDecline.setFont(FontManager.fontMed);
 		buttonDecline.setBounds(360, 200, 110, 23);
 		jvmPatcherFrame.getContentPane().add(buttonDecline);
 		buttonDecline.addActionListener(new ActionListener() {
@@ -164,8 +164,8 @@ public class JVMPatcher {
 		});
 		titleBar.setLayout(null);
 		
-		JLabel windowTitle = new JLabel(Language.getValue("t.jvm_patcher"));
-		windowTitle.setFont(Fonts.fontMed);
+		JLabel windowTitle = new JLabel(LanguageManager.getValue("t.jvm_patcher"));
+		windowTitle.setFont(FontManager.fontMed);
 		windowTitle.setBounds(10, 0, jvmPatcherFrame.getWidth() - 100, 20);
 		titleBar.add(windowTitle);
 		
@@ -186,11 +186,11 @@ public class JVMPatcher {
 	private static void patch() {
 		jvmPatcherProgressBar.setMaximum(4);
 		jvmPatcherProgressBar.setValue(1);
-		jvmPatcherState.setText(Language.getValue("m.jvm_patcher_download", "74"));
+		jvmPatcherState.setText(LanguageManager.getValue("m.jvm_patcher_download", "74"));
 		downloadPackagedJVM();
 		
 		jvmPatcherProgressBar.setValue(2);
-		jvmPatcherState.setText(Language.getValue("m.jvm_patcher_delete"));
+		jvmPatcherState.setText(LanguageManager.getValue("m.jvm_patcher_delete"));
 		try {
 			if(!FileUtil.fileExists(LauncherConstants.USER_DIR + "\\java_vm_unpatched")) {
 				FileUtils.moveDirectory(new File(LauncherConstants.USER_DIR + "\\java_vm"), new File(LauncherConstants.USER_DIR + "\\java_vm_unpatched"));
@@ -200,12 +200,12 @@ public class JVMPatcher {
 		}
 		
 		jvmPatcherProgressBar.setValue(3);
-		jvmPatcherState.setText(Language.getValue("m.jvm_patcher_extract"));
+		jvmPatcherState.setText(LanguageManager.getValue("m.jvm_patcher_extract"));
 		Compressor.unzip(LauncherConstants.USER_DIR + "\\jvm_pack.zip", LauncherConstants.USER_DIR, false);
 		new File(LauncherConstants.USER_DIR + "\\jvm_pack.zip").delete();
 		
 		jvmPatcherProgressBar.setValue(4);
-		jvmPatcherState.setText(Language.getValue("m.jvm_patcher_finish"));
+		jvmPatcherState.setText(LanguageManager.getValue("m.jvm_patcher_finish"));
 		finish();
 	}
 	

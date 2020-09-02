@@ -8,7 +8,7 @@ import java.io.InputStream;
 import xyz.lucasallegri.launcher.settings.Settings;
 import xyz.lucasallegri.logging.KnightLog;
 
-public class Fonts {
+public class FontManager {
 	
 	private static final String fontPathRegular = "/fonts/GoogleSans-Regular.ttf";
 	private static final String fontPathMedium = "/fonts/GoogleSans-Medium.ttf";
