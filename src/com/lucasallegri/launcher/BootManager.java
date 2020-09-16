@@ -75,9 +75,7 @@ public class BootManager {
 		FileUtil.createDir("KnightLauncher/modules/");
 	}
 	
-	/*
-	 * Checking if we're being ran inside the game's directory, "getdown-pro.jar" should always be present if so.
-	 */
+	// Checking if we're being ran inside the game's directory, "getdown-pro.jar" should always be present if so.
 	private static void checkStartLocation() {
 		if(!FileUtil.fileExists("getdown-pro.jar")) {
 			DialogError.push("The .jar file seems to be placed in the wrong directory."
@@ -88,9 +86,7 @@ public class BootManager {
 		}
 	}
 	
-	/*
-	 * Create a shortcut to the application if there's none.
-	 */
+	// Create a shortcut to the application if there's none.
 	private static void checkShortcut() {
 		if(SystemUtil.isWindows() && Settings.createShortcut
 				&& !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherConstants.LNK_FILE_NAME)) {
@@ -114,12 +110,12 @@ public class BootManager {
 	
 	private static void pullGithubData() {
 		
-		String rawResponseRepo = INetUtil.getWebpageContent(
-				LauncherConstants.GITHUB_API
-				+ "repos/"
-				+ LauncherConstants.GITHUB_AUTHOR + "/"
-				+ LauncherConstants.GITHUB_REPO
-				);
+//		String rawResponseRepo = INetUtil.getWebpageContent(
+//				LauncherConstants.GITHUB_API
+//				+ "repos/"
+//				+ LauncherConstants.GITHUB_AUTHOR + "/"
+//				+ LauncherConstants.GITHUB_REPO
+//				);
 		
 		String rawResponseReleases = INetUtil.getWebpageContent(
 				LauncherConstants.GITHUB_API
@@ -130,10 +126,9 @@ public class BootManager {
 				+ "latest"
 				);
 		
-		JSONObject jsonRepo = new JSONObject(rawResponseRepo);
+//		JSONObject jsonRepo = new JSONObject(rawResponseRepo);
 		JSONObject jsonReleases = new JSONObject(rawResponseReleases);
 		
-		LauncherConstants.BUG_REPORT_URL = jsonRepo.getString("html_url") + "/issues";
 		LauncherConstants.LATEST_RELEASE = jsonReleases.getString("tag_name");
 	}
 	
