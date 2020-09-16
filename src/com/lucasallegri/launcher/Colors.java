@@ -2,7 +2,7 @@ package com.lucasallegri.launcher;
 
 import java.awt.Color;
 
-public class DefaultColors {
+public class Colors {
 	
 	public static Color DARK_RED = new Color(102, 0, 0);
 	public static Color DARK_GREEN = new Color(0, 102, 34);

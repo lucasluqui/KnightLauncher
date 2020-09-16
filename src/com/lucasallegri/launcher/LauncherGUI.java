@@ -313,7 +313,7 @@ public class LauncherGUI {
 		    }
 		});
 		
-		Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.COFFEE, 16, DefaultColors.KOFI);
+		Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.COFFEE, 16, Colors.KOFI);
 		JButton kofiButton = new JButton(kofiIcon);
 		kofiButton.setBounds(launcherGUIFrame.getWidth() - 111, 1, 18, 18);
 		kofiButton.setToolTipText(LanguageManager.getValue("b.kofi"));
