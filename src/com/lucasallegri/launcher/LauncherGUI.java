@@ -37,6 +37,7 @@ import jiconfont.icons.font_awesome.FontAwesome;
 
 public class LauncherGUI {
 
+	private static LauncherApp app;
 	public static JFrame launcherGUIFrame;
 	public static JButton launchButton;
 	public static JButton settingsButton;
@@ -50,30 +51,14 @@ public class LauncherGUI {
 	
 	int pX, pY;
 
-	public static void main(String[] args) {
-		
-		BootManager.onBootStart();
-		
-		if(SystemUtil.is64Bit() && SystemUtil.isWindows() && !Settings.jvmPatched) {
-			JVMPatcher.compose();
-		} else {
-			EventQueue.invokeLater(new Runnable() {
-				@SuppressWarnings("static-access")
-				public void run() {
-					try {
-						LauncherGUI window = new LauncherGUI();
-						window.launcherGUIFrame.setVisible(true);
-					} catch (Exception e) {
-						KnightLog.logException(e);
-					}
-				}
-			});
-		}
-	}
-
-	public LauncherGUI() {
+	@SuppressWarnings("static-access")
+	public LauncherGUI(LauncherApp app) {
 		initialize();
-		BootManager.onBootEnd();
+	}
+	
+	@SuppressWarnings("static-access")
+	public void switchVisibility() {
+		this.launcherGUIFrame.setVisible(this.launcherGUIFrame.isVisible() ? false : true);
 	}
 
 	/**
@@ -82,6 +67,7 @@ public class LauncherGUI {
 	private void initialize() {
 		
 		launcherGUIFrame = new JFrame();
+		launcherGUIFrame.setVisible(false);
 		launcherGUIFrame.setTitle(LanguageManager.getValue("t.main", LauncherConstants.VERSION));
 		launcherGUIFrame.setResizable(false);
 		launcherGUIFrame.setBounds(100, 100, 850, 475);
@@ -124,7 +110,7 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(modButton);
 		modButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				ModListGUI.compose();
+				app.mgui.switchVisibility();
 			}
 		});
 		
@@ -138,7 +124,7 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(settingsButton);
 		settingsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
-				SettingsGUI.compose();
+				app.sgui.switchVisibility();
 			}
 		});
 		

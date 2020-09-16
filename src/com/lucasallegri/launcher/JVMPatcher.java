@@ -39,25 +39,18 @@ public class JVMPatcher {
 	
 	int pY, pX;
 
-	public static void compose() {
-		EventQueue.invokeLater(new Runnable() {
-
-			public void run() {
-				try {
-					new JVMPatcher();
-				} catch (Exception e) {
-					KnightLog.logException(e);
-				}
-			}
-		});
-	}
-
-	public JVMPatcher() {
+	public JVMPatcher(LauncherApp app) {
 		initialize();
+	}
+	
+	@SuppressWarnings("static-access")
+	public void switchVisibility() {
+		this.jvmPatcherFrame.setVisible(this.jvmPatcherFrame.isVisible() ? false : true);
 	}
 
 	private void initialize() {
 		jvmPatcherFrame = new JFrame();
+		jvmPatcherFrame.setVisible(false);
 		jvmPatcherFrame.setTitle(LanguageManager.getValue("t.jvm_patcher"));
 		jvmPatcherFrame.setBounds(100, 100, 500, 250);
 		jvmPatcherFrame.setResizable(false);

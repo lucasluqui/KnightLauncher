@@ -29,6 +29,7 @@ import javax.swing.SwingConstants;
 
 import com.lucasallegri.launcher.FontManager;
 import com.lucasallegri.launcher.LanguageManager;
+import com.lucasallegri.launcher.LauncherApp;
 import com.lucasallegri.launcher.LauncherGUI;
 import com.lucasallegri.logging.KnightLog;
 import com.lucasallegri.util.ColorUtil;
@@ -38,6 +39,7 @@ import javax.swing.JToggleButton;
 
 public class SettingsGUI {
 
+	private static LauncherApp app;
 	public static JFrame settingsGUIFrame;
 	public static JComboBox<String> choicePlatform;
 	public static JComboBox<String> choiceLanguage;
@@ -56,27 +58,19 @@ public class SettingsGUI {
 	
 	int pY, pX;
 
-	public static void compose() {
-		EventQueue.invokeLater(new Runnable() {
-			@SuppressWarnings("static-access")
-			public void run() {
-				try {
-					SettingsGUI window = new SettingsGUI();
-					window.settingsGUIFrame.setVisible(true);
-				} catch (Exception e) {
-					KnightLog.logException(e);
-				}
-			}
-		});
+	@SuppressWarnings("static-access")
+	public SettingsGUI(LauncherApp app) {
+		initialize();
 	}
 
-	public SettingsGUI() {
-		LauncherGUI.launcherGUIFrame.setVisible(false);
-		initialize();
+	@SuppressWarnings("static-access")
+	public void switchVisibility() {
+		this.settingsGUIFrame.setVisible(this.settingsGUIFrame.isVisible() ? false : true);
 	}
 
 	private void initialize() {
 		settingsGUIFrame = new JFrame();
+		settingsGUIFrame.setVisible(false);
 		settingsGUIFrame.setTitle(LanguageManager.getValue("t.settings"));
 		settingsGUIFrame.setBounds(100, 100, 850, 475);
 		settingsGUIFrame.setResizable(false);
@@ -632,7 +626,7 @@ public class SettingsGUI {
 		return connectionPanel;
 	}
  	
-	public static int parseSelectedMemoryAsInt() {
+	protected static int parseSelectedMemoryAsInt() {
 		switch(choiceMemory.getSelectedIndex()) {
 		case 0: return 256;
 		case 1: return 512;
@@ -651,7 +645,7 @@ public class SettingsGUI {
 		return 512;
 	}
 	
-	public static int parseSelectedMemoryAsIndex() {
+	protected static int parseSelectedMemoryAsIndex() {
 		switch(Settings.gameMemory) {
 		case 256: return 0;
 		case 512: return 1;

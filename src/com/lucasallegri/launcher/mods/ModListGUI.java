@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 
 import com.lucasallegri.launcher.FontManager;
 import com.lucasallegri.launcher.LanguageManager;
+import com.lucasallegri.launcher.LauncherApp;
 import com.lucasallegri.launcher.LauncherConstants;
 import com.lucasallegri.launcher.LauncherGUI;
 import com.lucasallegri.logging.KnightLog;
@@ -34,6 +35,7 @@ import javax.swing.JSeparator;
 
 public class ModListGUI {
 
+	private static LauncherApp app;
 	public static JFrame modListGUIFrame;
 	public static List modListContainer;
 	public static JLabel labelModCount;
@@ -49,28 +51,18 @@ public class ModListGUI {
 	
 	int pY, pX;
 
-	public static void compose() {
-		EventQueue.invokeLater(new Runnable() {
-
-			@SuppressWarnings("static-access")
-			public void run() {
-				try {
-					ModListGUI window = new ModListGUI();
-					window.modListGUIFrame.setVisible(true);
-				} catch (Exception e) {
-					KnightLog.logException(e);
-				}
-			}
-		});
-	}
-
-	public ModListGUI() {
-		LauncherGUI.modButton.setEnabled(false);
+	public ModListGUI(LauncherApp app) {
 		initialize();
+	}
+	
+	@SuppressWarnings("static-access")
+	public void switchVisibility() {
+		this.modListGUIFrame.setVisible(this.modListGUIFrame.isVisible() ? false : true);
 	}
 
 	private void initialize() {
 		modListGUIFrame = new JFrame();
+		modListGUIFrame.setVisible(false);
 		modListGUIFrame.setTitle(LanguageManager.getValue("t.mods"));
 		modListGUIFrame.setBounds(100, 100, 385, 400);
 		modListGUIFrame.setResizable(false);
