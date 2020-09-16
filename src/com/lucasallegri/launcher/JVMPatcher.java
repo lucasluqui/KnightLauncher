@@ -23,7 +23,6 @@ import com.lucasallegri.logging.KnightLog;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.Compressor;
 import com.lucasallegri.util.FileUtil;
-import com.lucasallegri.util.INetUtil;
 import com.lucasallegri.util.ProcessUtil;
 
 import javax.swing.JButton;
