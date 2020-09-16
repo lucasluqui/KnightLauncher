@@ -1,0 +1,34 @@
+package com.lucasallegri.discord;
+
+import com.lucasallegri.launcher.LanguageManager;
+import com.lucasallegri.launcher.LauncherConstants;
+import com.lucasallegri.logging.KnightLog;
+
+import net.arikia.dev.drpc.DiscordEventHandlers;
+import net.arikia.dev.drpc.DiscordRPC;
+import net.arikia.dev.drpc.DiscordRichPresence;
+
+public class DiscordInstance {
+	
+	private static final String CLIENT_ID = "626524043209867274";
+	private static final DiscordEventHandlers EVENT_HANDLER = new DiscordEventHandlers();
+	
+	public static void start() {
+		DiscordRPC.discordInitialize(CLIENT_ID, EVENT_HANDLER, true);
+		setPresence(LanguageManager.getValue("presence.starting"));
+		KnightLog.log.info("DiscordInstance is now running.");
+	}
+	
+	public static void setPresence(String details) {
+		DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(LanguageManager.getValue("presence.using"));
+		presence.setDetails(details);
+		presence.setBigImage("icon-512", LanguageManager.getValue("presence.image_desc", LauncherConstants.VERSION));
+		DiscordRPC.discordUpdatePresence(presence.build());
+		KnightLog.log.info("Updating presence detail to: " + details);
+	}
+	
+	public static void stop() {
+		DiscordRPC.discordShutdown();
+	}
+
+}
