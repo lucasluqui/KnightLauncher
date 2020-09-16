@@ -13,7 +13,7 @@
     <a href="https://discord.gg/RAf499a"><img alt="Discord" src="https://img.shields.io/discord/653349356459786240" target="_blank"></a>
 </p>
 
-Advanced game launcher for Spiral Knights that supports automatic 64-bit Java VM installation, Discord integration & easier modding.
+Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM installation, Discord integration, easier modding & much more.
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W4W11S2JU)
 ## Current features
