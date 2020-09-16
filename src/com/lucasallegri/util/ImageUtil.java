@@ -13,7 +13,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 
 public class ImageUtil {
 	
@@ -27,7 +27,7 @@ public class ImageUtil {
 			image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 			
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 		
 		return image;
@@ -72,7 +72,7 @@ public class ImageUtil {
 	        buff = ImageIO.read(ImageUtil.class.getResourceAsStream(fileName));
 	    } catch (IOException e) {
 	        // TODO Auto-generated catch block
-	        KnightLog.logException(e);
+	        Logging.logException(e);
 	        return null;
 	    }
 	    return buff;
@@ -83,7 +83,7 @@ public class ImageUtil {
 		try {
 			image = ImageIO.read(imageStream);
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 		ImageIcon icon = new ImageIcon(image);
 		return icon;

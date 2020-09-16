@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 
 import com.lucasallegri.launcher.LanguageManager;
 import com.lucasallegri.launcher.ProgressBar;
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 
 public class GameSettings {
 	
@@ -38,7 +38,7 @@ public class GameSettings {
 			ProgressBar.showBar(false);
 			ProgressBar.showState(false);
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 	}
 

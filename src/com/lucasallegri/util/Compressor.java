@@ -14,7 +14,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import com.lucasallegri.launcher.settings.Settings;
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -43,7 +43,7 @@ public class Compressor {
 				break;
 			}
 		} catch(IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class Compressor {
 			InputStream inputStream = zipFile.getInputStream(fileHeader);
 			content = FileUtil.convertInputStreamToString(inputStream);
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 		return content;
 	}
@@ -113,7 +113,7 @@ public class Compressor {
 		try {
 			file = new FileInputStream(source);
 		} catch (FileNotFoundException ex) {
-			KnightLog.logException(ex);
+			Logging.logException(ex);
 		}
 	    ZipInputStream stream = new ZipInputStream(file);
 	    try {
@@ -129,12 +129,12 @@ public class Compressor {
 	            hash = new String(dis.getMessageDigest().digest());
 	        }
 	    } catch (NoSuchAlgorithmException | IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		} finally { 
 			try {
 				stream.close();
 			} catch (IOException e) {
-				KnightLog.logException(e);
+				Logging.logException(e);
 			}
 		}
 	    return hash;

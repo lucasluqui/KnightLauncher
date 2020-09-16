@@ -6,7 +6,7 @@ import com.lucasallegri.discord.DiscordInstance;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.GameSettings;
 import com.lucasallegri.launcher.settings.Settings;
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.ProcessUtil;
 import com.lucasallegri.util.SteamUtil;
 import com.lucasallegri.util.SystemUtil;
@@ -26,7 +26,7 @@ public class LauncherEventHandler {
 					try {
 						SteamUtil.startGameById("99900");
 					} catch (Exception e) {
-						KnightLog.logException(e);
+						Logging.logException(e);
 					}
 					
 				} else {

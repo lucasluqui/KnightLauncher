@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 import com.lucasallegri.launcher.LauncherConstants;
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.FileUtil;
 
 public class SettingsProperties {
@@ -25,11 +25,11 @@ public class SettingsProperties {
 				FileUtil.extractFileWithinJar("/config/base.properties", propPath);
 			} else if(FileUtil.fileExists(propPath) && getValue("PROP_VER") != null
 					&& !getValue("PROP_VER").equals(PROP_VER)) {
-				KnightLog.log.info("Old PROP_VER detected, resetting properties file.");
+				Logging.log.info("Old PROP_VER detected, resetting properties file.");
 				FileUtil.extractFileWithinJar("/config/base.properties", propPath);
 			}
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 	}
 	
@@ -38,10 +38,10 @@ public class SettingsProperties {
         try (InputStream is = new FileInputStream(propPath)) {
         	prop.load(is);
         	value = prop.getProperty(key);
-        	KnightLog.log.info("Request for prop key: " + key + ", reply value: " + value);
+        	Logging.log.info("Request for prop key: " + key + ", reply value: " + value);
             return value;
         } catch (IOException e) {
-        	KnightLog.logException(e);
+        	Logging.logException(e);
         }
 		return null;
 	}
@@ -50,9 +50,9 @@ public class SettingsProperties {
 		try (OutputStream os = new FileOutputStream(propPath)) {
 			prop.setProperty(key, value);
 			prop.store(new FileOutputStream(propPath), null);
-			KnightLog.log.info("Setting new key value: key=" + key + ",value=" + value);
+			Logging.log.info("Setting new key value: key=" + key + ",value=" + value);
 		} catch(IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 	}
 	
@@ -75,7 +75,7 @@ public class SettingsProperties {
 		Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));
 		Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
 		Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
-		KnightLog.log.info("Successfully loaded all settings from prop file.");
+		Logging.log.info("Successfully loaded all settings from prop file.");
 	}
 	
 }

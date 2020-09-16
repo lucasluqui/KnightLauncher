@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 
 public class FileUtil {
 	
@@ -30,7 +30,7 @@ public class FileUtil {
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 	}
 	
@@ -40,7 +40,7 @@ public class FileUtil {
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 	}
 	
@@ -91,7 +91,7 @@ public class FileUtil {
 	              new FileOutputStream(path), "utf-8"))) {
 			writer.write(content);
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 	}
 	

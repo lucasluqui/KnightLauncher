@@ -8,7 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 
 import mslinks.ShellLink;
 
@@ -28,7 +28,7 @@ public class DesktopUtil {
 	        try {
 	            desktop.browse(uri);
 	        } catch (Exception e) {
-	            KnightLog.logException(e);
+	            Logging.logException(e);
 	        }
 	    }
 	}
@@ -37,7 +37,7 @@ public class DesktopUtil {
 	    try {
 	        openWebpage(new URL(url).toURI());
 	    } catch (URISyntaxException | MalformedURLException e) {
-	        KnightLog.logException(e);
+	        Logging.logException(e);
 	    }
 	}
 	
@@ -54,7 +54,7 @@ public class DesktopUtil {
 		try {
 			sl.saveTo(getPathToDesktop() + "/" + name + ".lnk");
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 	}
 

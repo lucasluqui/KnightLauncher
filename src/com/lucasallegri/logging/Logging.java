@@ -13,7 +13,7 @@ import java.util.logging.SimpleFormatter;
 
 import com.lucasallegri.launcher.LauncherConstants;
 
-public class KnightLog {
+public class Logging {
 
 	public final static Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	public final static String curTime = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Calendar.getInstance().getTime());

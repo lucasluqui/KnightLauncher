@@ -2,7 +2,7 @@ package com.lucasallegri.util;
 
 import java.io.IOException;
 
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 
 public class ProcessUtil {
 	
@@ -11,7 +11,7 @@ public class ProcessUtil {
 		try {
 			final Process p = Runtime.getRuntime().exec(commandLine);
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 	}
 	
@@ -20,7 +20,7 @@ public class ProcessUtil {
 		try {
 			final Process p = Runtime.getRuntime().exec(args);
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 	}
 

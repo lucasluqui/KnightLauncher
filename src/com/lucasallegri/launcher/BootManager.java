@@ -16,7 +16,7 @@ import com.lucasallegri.launcher.mods.ModList;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.launcher.settings.SettingsProperties;
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.Compressor;
 import com.lucasallegri.util.DesktopUtil;
 import com.lucasallegri.util.FileUtil;
@@ -39,9 +39,9 @@ public class BootManager {
 		checkStartLocation();
 		
 		try {
-			KnightLog.setup();
+			Logging.setup();
 		} catch (IOException ex) {
-			KnightLog.logException(ex);
+			Logging.logException(ex);
 		}
 		
 		SettingsProperties.setup();
@@ -99,7 +99,7 @@ public class BootManager {
 			try {
 				ICOEncoder.write(bimg, new File(LauncherConstants.USER_DIR + "/KnightLauncher/images/icon-128.ico"));
 			} catch (IOException e) {
-				KnightLog.logException(e);
+				Logging.logException(e);
 			}
 			
 			DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe", 
@@ -161,7 +161,7 @@ public class BootManager {
 				break;
 			}
 		} catch (UnsupportedLookAndFeelException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 	}
 	

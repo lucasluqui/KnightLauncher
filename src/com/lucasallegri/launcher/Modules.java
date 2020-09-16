@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.lucasallegri.launcher.settings.SettingsProperties;
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.Compressor;
 import com.lucasallegri.util.FileUtil;
 import com.lucasallegri.util.SystemUtil;
@@ -19,7 +19,7 @@ public class Modules {
 				new File(LauncherConstants.USER_DIR + "KnightLauncher/modules/skdiscordrpc/bundle.zip").delete();
 				SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
 			} catch (IOException e) {
-				KnightLog.logException(e);
+				Logging.logException(e);
 			}
 		} else {
 			SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
@@ -32,7 +32,7 @@ public class Modules {
 			FileUtil.extractFileWithinJar("/modules/safeguard/bundle.zip", "KnightLauncher/modules/safeguard/bundle.zip");
 			Compressor.unzip("KnightLauncher/modules/safeguard/bundle.zip", "rsrc/", false);
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 		
 	}

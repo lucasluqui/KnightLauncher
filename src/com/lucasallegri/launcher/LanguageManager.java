@@ -6,7 +6,7 @@ import java.text.MessageFormat;
 import java.util.Properties;
 
 import com.lucasallegri.launcher.settings.Settings;
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 
 public class LanguageManager {
 	
@@ -37,7 +37,7 @@ public class LanguageManager {
 			prop.load(propStream);
 			value = prop.getProperty(key);
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 		if(value != null) return value.substring(1, value.length() - 1);
 		return key;
@@ -50,7 +50,7 @@ public class LanguageManager {
 			value = prop.getProperty(key);
 			if(value != null) value = MessageFormat.format(prop.getProperty(key), arg);
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 		if(value != null) return value.substring(1, value.length() - 1);
 		return key;
@@ -63,7 +63,7 @@ public class LanguageManager {
 			value = prop.getProperty(key);
 			if(value != null) value = MessageFormat.format(prop.getProperty(key), (Object[])args);
 		} catch (IOException e) {
-			KnightLog.logException(e);
+			Logging.logException(e);
 		}
 		if(value != null) return value.substring(1, value.length() - 1);
 		return key;

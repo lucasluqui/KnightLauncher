@@ -24,7 +24,7 @@ import com.lucasallegri.discord.DiscordInstance;
 import com.lucasallegri.launcher.mods.ModListGUI;
 import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.launcher.settings.SettingsGUI;
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.DesktopUtil;
 import com.lucasallegri.util.ImageUtil;

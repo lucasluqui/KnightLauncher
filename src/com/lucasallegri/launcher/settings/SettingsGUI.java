@@ -31,7 +31,7 @@ import com.lucasallegri.launcher.FontManager;
 import com.lucasallegri.launcher.LanguageManager;
 import com.lucasallegri.launcher.LauncherApp;
 import com.lucasallegri.launcher.LauncherGUI;
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.SystemUtil;
 

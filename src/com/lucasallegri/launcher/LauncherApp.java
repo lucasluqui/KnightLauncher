@@ -5,7 +5,7 @@ import java.awt.EventQueue;
 import com.lucasallegri.launcher.mods.ModListGUI;
 import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.launcher.settings.SettingsGUI;
-import com.lucasallegri.logging.KnightLog;
+import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.SystemUtil;
 
 public class LauncherApp {
@@ -39,7 +39,7 @@ public class LauncherApp {
 					lgui = new LauncherGUI(app);
 					lgui.switchVisibility();
 				} catch (Exception e) {
-					KnightLog.logException(e);
+					Logging.logException(e);
 				}
 			}
 		});
@@ -52,7 +52,7 @@ public class LauncherApp {
 				try {
 					sgui = new SettingsGUI(app);
 				} catch (Exception e) {
-					KnightLog.logException(e);
+					Logging.logException(e);
 				}
 			}
 		});
@@ -65,7 +65,7 @@ public class LauncherApp {
 				try {
 					mgui = new ModListGUI(app);
 				} catch (Exception e) {
-					KnightLog.logException(e);
+					Logging.logException(e);
 				}
 			}
 		});
@@ -78,7 +78,7 @@ public class LauncherApp {
 				try {
 					jvmPatcher = new JVMPatcher(app);
 				} catch (Exception e) {
-					KnightLog.logException(e);
+					Logging.logException(e);
 				}
 			}
 		});
