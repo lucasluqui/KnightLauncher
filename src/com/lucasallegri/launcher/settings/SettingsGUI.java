@@ -1,6 +1,5 @@
 package com.lucasallegri.launcher.settings;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -31,7 +30,6 @@ import com.lucasallegri.launcher.FontManager;
 import com.lucasallegri.launcher.LanguageManager;
 import com.lucasallegri.launcher.LauncherApp;
 import com.lucasallegri.launcher.LauncherGUI;
-import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.SystemUtil;
 
@@ -155,7 +153,7 @@ public class SettingsGUI {
 		closeButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
 		    {
-		       settingsGUIFrame.dispose();
+		       settingsGUIFrame.setVisible(false);
 		    }
 		});
 		

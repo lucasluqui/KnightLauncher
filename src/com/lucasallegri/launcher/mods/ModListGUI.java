@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.EventQueue;
 import java.awt.Frame;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,7 +21,6 @@ import com.lucasallegri.launcher.LanguageManager;
 import com.lucasallegri.launcher.LauncherApp;
 import com.lucasallegri.launcher.LauncherConstants;
 import com.lucasallegri.launcher.LauncherGUI;
-import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.DesktopUtil;
 
@@ -259,7 +257,7 @@ public class ModListGUI {
 		closeButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
 		    {
-		    	modListGUIFrame.dispose();
+		    	modListGUIFrame.setVisible(false);
 		    }
 		});
 		

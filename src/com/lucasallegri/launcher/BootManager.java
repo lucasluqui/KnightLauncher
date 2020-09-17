@@ -17,7 +17,6 @@ import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.launcher.settings.SettingsProperties;
 import com.lucasallegri.logging.Logging;
-import com.lucasallegri.util.Compressor;
 import com.lucasallegri.util.DesktopUtil;
 import com.lucasallegri.util.FileUtil;
 import com.lucasallegri.util.INetUtil;

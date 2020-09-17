@@ -1,7 +1,6 @@
 package com.lucasallegri.launcher;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,14 +20,9 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 
 import com.lucasallegri.discord.DiscordInstance;
-import com.lucasallegri.launcher.mods.ModListGUI;
-import com.lucasallegri.launcher.settings.Settings;
-import com.lucasallegri.launcher.settings.SettingsGUI;
-import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.DesktopUtil;
 import com.lucasallegri.util.ImageUtil;
-import com.lucasallegri.util.SystemUtil;
 
 import javax.swing.JPanel;
 import jiconfont.swing.IconFontSwing;
@@ -109,6 +103,7 @@ public class LauncherGUI {
 		modButton.setToolTipText(LanguageManager.getValue("b.mods"));
 		launcherGUIFrame.getContentPane().add(modButton);
 		modButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent _action) {
 				app.mgui.switchVisibility();
 			}
@@ -123,6 +118,7 @@ public class LauncherGUI {
 		settingsButton.setToolTipText(LanguageManager.getValue("b.settings"));
 		launcherGUIFrame.getContentPane().add(settingsButton);
 		settingsButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent _action) {
 				app.sgui.switchVisibility();
 			}
@@ -146,7 +142,7 @@ public class LauncherGUI {
 		/*
 		 * Comment the following three lines to preview this GUI with WindowBuilder
 		 * I have no idea why they're conflicting with it, but without doing so
-		 * you won't be able to see anything, throwing errors on Language.getValue()
+		 * you won't be able to see anything, throwing errors on LanguageManager.getValue()
 		 * during t.main and b.launch parsing. Java is fun :)
 		 * 
 		 * Of course you have to uncomment it before pushing any changes;
@@ -262,7 +258,8 @@ public class LauncherGUI {
 		closeButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e)
 		    {
-		       System.exit(0);
+		    	DiscordInstance.stop();
+		    	System.exit(0);
 		    }
 		});
 		
