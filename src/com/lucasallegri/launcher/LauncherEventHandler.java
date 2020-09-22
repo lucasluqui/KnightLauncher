@@ -32,9 +32,9 @@ public class LauncherEventHandler {
 				} else {
 					
 					if(!SystemUtil.isWindows()) {
-						ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS_LINUX_MAC);
+						ProcessUtil.startApplication(LauncherConstants.GETDOWN_ARGS);
 					} else {
-						ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
+						ProcessUtil.startApplication(LauncherConstants.GETDOWN_ARGS_WIN);
 					}
 					
 				}
@@ -53,14 +53,11 @@ public class LauncherEventHandler {
 		
 		Thread launchAltThread = new Thread(new Runnable(){
 			public void run() {
-				
-				Settings.gameMemory = 512;
-				GameSettings.load();
 					
 				if(!SystemUtil.isWindows()) {
-					ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS_LINUX_MAC);
+					ProcessUtil.startApplication(LauncherConstants.ALT_CLIENT);
 				} else {
-					ProcessUtil.startApplication(LauncherConstants.STANDALONE_LAUNCHER_ARGS);
+					ProcessUtil.startApplication(LauncherConstants.ALT_CLIENT_WIN);
 				}
 				
 				DiscordInstance.stop();
