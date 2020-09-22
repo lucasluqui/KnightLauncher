@@ -48,6 +48,7 @@ public class LauncherGUI {
 	@SuppressWarnings("static-access")
 	public LauncherGUI(LauncherApp app) {
 		initialize();
+		BootManager.onBootEnd();
 	}
 	
 	@SuppressWarnings("static-access")
@@ -88,7 +89,7 @@ public class LauncherGUI {
 			}
 		});
 		
-		imageContainer = new JLabel("");
+		imageContainer = new JLabel("Loading...");
 		imageContainer.setBounds(23, 48, 525, 305);
 		imageContainer.setFont(FontManager.fontRegBig);
 		imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -137,11 +138,11 @@ public class LauncherGUI {
 		tweetsContainer.setText(LanguageManager.getValue("m.twitter_load"));
 		tweetsContainer.setBounds(567, 75, 260, 297);
 		tweetsContainer.setEditable(false);
-		tweetsContainer.setContentType("text/html");
 		tweetsContainer.setFont(FontManager.fontReg);
 		tweetsContainer.setBackground(ColorUtil.getBackgroundColor());
 		tweetsContainer.setForeground(Color.WHITE);
 		launcherGUIFrame.getContentPane().add(tweetsContainer);
+		tweetsContainer.setCaretPosition(0);
 		
 		/*
 		 * Comment the following three lines to preview this GUI with WindowBuilder

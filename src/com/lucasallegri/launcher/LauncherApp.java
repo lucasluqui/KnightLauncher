@@ -27,8 +27,6 @@ public class LauncherApp {
 			app.composeSettingsGUI(app);
 			app.composeModListGUI(app);
 		}
-		
-		BootManager.onBootEnd();
 
 	}
 	

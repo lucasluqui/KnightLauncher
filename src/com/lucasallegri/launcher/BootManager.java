@@ -189,8 +189,8 @@ public class BootManager {
 				} else {
 					String styledTweets = tweets.replaceFirst("FONT_FAMILY", LauncherGUI.tweetsContainer.getFont().getFamily())
 							.replaceFirst("COLOR", Settings.launcherStyle.equals("dark") ? "#ffffff" : "#000000");
+					LauncherGUI.tweetsContainer.setContentType("text/html");
 					LauncherGUI.tweetsContainer.setText(styledTweets);
-					LauncherGUI.tweetsContainer.setCaretPosition(0);
 				}
 				
 				Image eventImage = null;
@@ -200,6 +200,7 @@ public class BootManager {
 					LauncherGUI.imageContainer.setText(LanguageManager.getValue("error.event_image_missing"));
 				} else {
 					eventImage = ImageUtil.addRoundedCorners(eventImage, 25);
+					LauncherGUI.imageContainer.setText("");
 					LauncherGUI.imageContainer.setIcon(new ImageIcon(eventImage));
 				}
 			}

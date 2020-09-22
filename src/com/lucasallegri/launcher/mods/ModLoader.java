@@ -122,9 +122,11 @@ public class ModLoader {
 	
 	private static void rebuildFiles() {
 		
-		LauncherGUI.launchButton.setEnabled(false);
-		LauncherGUI.settingsButton.setEnabled(false);
-		try { SettingsGUI.forceRebuildButton.setEnabled(false); } catch(Exception e) {}
+		try {
+			LauncherGUI.launchButton.setEnabled(false);
+			LauncherGUI.settingsButton.setEnabled(false);
+			SettingsGUI.forceRebuildButton.setEnabled(false); 
+		} catch(Exception e) {}
 		DiscordInstance.setPresence("Rebuilding...");
 		
 		String[] jarFiles = {"full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar"};
