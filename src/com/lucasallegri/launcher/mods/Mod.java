@@ -13,7 +13,6 @@ public class Mod {
 	protected final String DEFAULT_DESCRIPTION = "Hello, I'm a mod without description!";
 	protected final String DEFAULT_AUTHOR = "Someone, somewhere";
 	protected final String DEFAULT_VERSION = "Unknown";
-	protected final String DEFAULT_COMPATIBILITYVERSION = "Unknown";
 	
 	public Mod() {
 		this.displayName = null;
@@ -30,7 +29,6 @@ public class Mod {
 		this.description = DEFAULT_DESCRIPTION;
 		this.authorName = DEFAULT_AUTHOR;
 		this.version = DEFAULT_VERSION;
-		this.compatibilityVersion = DEFAULT_COMPATIBILITYVERSION;
 		this.fileName = fileName;
 		this.isEnabled = true;
 	}
@@ -65,14 +63,6 @@ public class Mod {
 	
 	public void setVersion(String _version) {
 		this.version = _version;
-	}
-	
-	public String getCompatibilityVersion() {
-		return this.compatibilityVersion;
-	}
-	
-	public void setCompatibilityVersion(String _compatibilityVersion) {
-		this.compatibilityVersion = _compatibilityVersion;
 	}
 	
 	public String getFileName() {
