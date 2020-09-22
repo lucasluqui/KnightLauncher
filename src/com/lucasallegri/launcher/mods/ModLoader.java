@@ -48,7 +48,6 @@ public class ModLoader {
 				mod.setDescription(modJson.getString("description"));
 				mod.setAuthor(modJson.getString("author"));
 				mod.setVersion(modJson.getString("version"));
-				mod.setCompatibilityVersion(modJson.getString("compatibility"));
 			}
 			ModList.installedMods.add(mod);
 			Logging.log.info(mod.toString());
