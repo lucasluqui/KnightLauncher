@@ -11,11 +11,14 @@ public class ModListEventHandler {
 	public static void refreshEvent(ActionEvent action) {
 		
 		ModLoader.checkInstalled();
-		if(ModLoader.rebuildRequired && Settings.doRebuilds) { ModLoader.startFileRebuild(); }
-//		ModListGUI.modListGUIFrame.dispose();
-//		ModListGUI.compose();
+		if (ModLoader.rebuildRequired && Settings.doRebuilds) { 
+			ModLoader.startFileRebuild();
+		}
+		ModListGUI.modListContainer.removeAll();
+		for (Mod mod : ModList.installedMods) { 
+			ModListGUI.modListContainer.add(mod.getDisplayName()); 
+		}
 		ModLoader.mountRequired = true;
-		
 	}
 	
 	public static void getModsEvent(ActionEvent action) {
