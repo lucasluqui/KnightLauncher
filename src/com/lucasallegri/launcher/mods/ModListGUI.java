@@ -82,7 +82,6 @@ public class ModListGUI {
 				labelName.setText(ModList.installedMods.get(modListContainer.getSelectedIndex()).getDisplayName());
 				labelDescription.setText("<html>" + ModList.installedMods.get(modListContainer.getSelectedIndex()).getDescription() + "</html>");
 				labelVersion.setText(LanguageManager.getValue("m.mod_version", ModList.installedMods.get(modListContainer.getSelectedIndex()).getVersion()));
-				labelCompatibility.setText(LanguageManager.getValue("m.mod_compatibility", ModList.installedMods.get(modListContainer.getSelectedIndex()).getCompatibilityVersion()));
 				labelAuthor.setText(LanguageManager.getValue("m.mod_author", ModList.installedMods.get(modListContainer.getSelectedIndex()).getAuthor()));
 				enableButton.setEnabled(true);
 				disableButton.setEnabled(true);
@@ -102,7 +101,7 @@ public class ModListGUI {
 		modListGUIFrame.getContentPane().add(labelModCountText);
 		
 		refreshButton = new JButton(LanguageManager.getValue("b.refresh"));
-		refreshButton.setBounds(9, 370, 89, 23);
+		refreshButton.setBounds(12, 365, 89, 23);
 		refreshButton.setFont(FontManager.fontMed);
 		refreshButton.setFocusPainted(false);
 		refreshButton.setFocusable(false);
@@ -115,7 +114,7 @@ public class ModListGUI {
 		});
 		
 		JButton modFolderButton = new JButton(LanguageManager.getValue("b.open_mods_folder"));
-		modFolderButton.setBounds(104, 370, 136, 23);
+		modFolderButton.setBounds(107, 365, 136, 23);
 		modFolderButton.setFont(FontManager.fontMed);
 		modFolderButton.setFocusPainted(false);
 		modFolderButton.setFocusable(false);
@@ -128,7 +127,7 @@ public class ModListGUI {
 		});
 		
 		JButton getModsButton = new JButton(LanguageManager.getValue("b.get_mods"));
-		getModsButton.setBounds(245, 370, 126, 23);
+		getModsButton.setBounds(248, 365, 126, 23);
 		getModsButton.setFont(FontManager.fontMed);
 		getModsButton.setFocusPainted(false);
 		getModsButton.setFocusable(false);
@@ -167,11 +166,6 @@ public class ModListGUI {
 		labelVersion.setFont(FontManager.fontReg);
 		labelVersion.setBounds(188, 274, 178, 14);
 		modListGUIFrame.getContentPane().add(labelVersion);
-		
-		labelCompatibility = new JLabel("");
-		labelCompatibility.setFont(FontManager.fontReg);
-		labelCompatibility.setBounds(188, 295, 178, 14);
-		modListGUIFrame.getContentPane().add(labelCompatibility);
 		
 		enableButton = new JButton(LanguageManager.getValue("b.enable"));
 		enableButton.setFont(FontManager.fontMed);
