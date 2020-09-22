@@ -18,6 +18,7 @@ public class ModListEventHandler {
 		for (Mod mod : ModList.installedMods) { 
 			ModListGUI.modListContainer.add(mod.getDisplayName()); 
 		}
+		ModListGUI.labelModCount.setText(Integer.toString(ModList.installedMods.size()));
 		ModLoader.mountRequired = true;
 	}
 	
