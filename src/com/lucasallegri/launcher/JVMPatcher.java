@@ -204,10 +204,8 @@ public class JVMPatcher {
 	
 	private static void downloadPackagedJVM() {
 		
-		String downloadUrl = "https://gitcdn.link/repo/" 
-				+ LauncherConstants.GITHUB_AUTHOR + "/"
-				+ LauncherConstants.GITHUB_REPO
-				+ "/master/jvm/jvm_pack_windows.zip";
+		String downloadUrl = LauncherConstants.LARGE_CDN_URL 
+				+ "jvm/windows/jvm_pack.zip";
 		
 		Logging.log.info("Downloading Java VM from: " + downloadUrl);
 		try {

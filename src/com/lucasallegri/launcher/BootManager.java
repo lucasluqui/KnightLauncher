@@ -88,7 +88,7 @@ public class BootManager {
 	// Create a shortcut to the application if there's none.
 	private static void checkShortcut() {
 		if(SystemUtil.isWindows() && Settings.createShortcut
-				&& !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherConstants.LNK_FILE_NAME)) {
+				&& !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherConstants.SHORTCUT_FILE_NAME)) {
 			
 			BufferedImage bimg = ImageUtil.loadImageWithinJar("/img/icon-128.png");
 			try {
@@ -102,7 +102,7 @@ public class BootManager {
 										LauncherConstants.USER_DIR, 
 										LauncherConstants.USER_DIR + "\\KnightLauncher\\images\\icon-128.ico", 
 										"Start KnightLauncher", 
-										LauncherConstants.LNK_FILE_NAME
+										LauncherConstants.SHORTCUT_FILE_NAME
 			);
 		}
 	}

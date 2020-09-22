@@ -4,10 +4,10 @@ import java.io.File;
 
 public class LauncherConstants {
 
-	public static final String VERSION = "1.3.6";
+	public static final String VERSION = "1.3.7";
 	public static String LATEST_RELEASE;
 	
-	public static final String LNK_FILE_NAME = "Knight Launcher";
+	public static final String SHORTCUT_FILE_NAME = "Knight Launcher";
 	
 	public static final String GITHUB_API = "https://api.github.com/";
 	public static final String GITHUB_AUTHOR = "lucas-allegri";
@@ -15,6 +15,7 @@ public class LauncherConstants {
 	public static final String GITHUB_MAIN_BRANCH = "master";
 	
 	public static final String CDN_URL = "https://knightlauncher-cdn.lucasallegri.com/";
+	public static final String LARGE_CDN_URL = "https://knightlauncher-large-cdn.lucasallegri.com/";
 	public static final String DISCORD_URL = "https://discord.gg/RAf499a";
 	public static final String GET_MODS_URL = "https://discord.gg/BZRyJrr";
 	public static final String KOFI_URL = "https://ko-fi.com/lucasallegri";
