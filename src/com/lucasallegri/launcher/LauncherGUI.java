@@ -95,8 +95,10 @@ public class LauncherGUI {
 		launcherGUIFrame.getContentPane().add(imageContainer);
 		
 		Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, 16, ColorUtil.getForegroundColor());
-		modButton = new JButton(modsIcon);
-		modButton.setBounds(80, 401, 30, 25);
+		modButton = new JButton(LanguageManager.getValue("b.mods"));
+		modButton.setIcon(modsIcon);
+		modButton.setBounds(80, 401, 100, 25);
+		modButton.setHorizontalAlignment(SwingConstants.LEFT);
 		modButton.setFont(FontManager.fontMed);
 		modButton.setFocusPainted(false);
 		modButton.setFocusable(false);
@@ -110,8 +112,10 @@ public class LauncherGUI {
 		});
 		
 		Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
-		settingsButton = new JButton(settingsIcon);
-		settingsButton.setBounds(80, 427, 30, 25);
+		settingsButton = new JButton(LanguageManager.getValue("b.settings"));
+		settingsButton.setIcon(settingsIcon);
+		settingsButton.setBounds(80, 427, 100, 25);
+		settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
 		settingsButton.setFont(FontManager.fontMed);
 		settingsButton.setFocusPainted(false);
 		settingsButton.setFocusable(false);
@@ -165,16 +169,16 @@ public class LauncherGUI {
 		launchState.setVisible(false);
 		launcherGUIFrame.getContentPane().add(launchState);
 		
-		Icon cloudIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 20, ColorUtil.getGreenForegroundColor());
+		Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 20, ColorUtil.getGreenForegroundColor());
 		updateButton = new JButton(LanguageManager.getValue("b.update_available"));
 		updateButton.setHorizontalAlignment(SwingConstants.CENTER);
-		updateButton.setIcon(cloudIcon);
+		updateButton.setIcon(updateIcon);
 		updateButton.setFont(FontManager.fontMedIta);
 		updateButton.setFocusPainted(false);
 		updateButton.setFocusable(false);
 		updateButton.setForeground(ColorUtil.getGreenForegroundColor());
 		updateButton.setVisible(false);
-		updateButton.setBounds(120, 427, 180, 25);
+		updateButton.setBounds(185, 427, 150, 25);
 		launcherGUIFrame.getContentPane().add(updateButton);
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
