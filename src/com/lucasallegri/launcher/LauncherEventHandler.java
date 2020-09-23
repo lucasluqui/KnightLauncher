@@ -55,9 +55,9 @@ public class LauncherEventHandler {
 			public void run() {
 					
 				if(!SystemUtil.isWindows()) {
-					ProcessUtil.startApplication(LauncherConstants.ALT_CLIENT);
+					ProcessUtil.startApplication(LauncherConstants.ALT_CLIENT_ARGS);
 				} else {
-					ProcessUtil.startApplication(LauncherConstants.ALT_CLIENT_WIN);
+					ProcessUtil.startApplication(LauncherConstants.ALT_CLIENT_ARGS_WIN);
 				}
 				
 				DiscordInstance.stop();

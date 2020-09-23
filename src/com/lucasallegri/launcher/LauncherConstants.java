@@ -42,36 +42,58 @@ public class LauncherConstants {
 			"client"
 	};
 	
-	public static final String[] ALT_CLIENT_WIN = {".\\java_vm\\bin\\java.exe",
-			"-classpath code/config.jar;code/projectx-config.jar;code/projectx-pcode.jar;code/lwjgl.jar;code/lwjgl_util.jar;code/jinput.jar;code/jutils.jar;code/jshortcut.jar;code/commons-beanutils.jar;code/commons-digester.jar;code/commons-logging.jar",
+	public static final String[] ALT_CLIENT_ARGS_WIN = {"./java_vm/bin/java",
+			"-classpath",
+			USER_DIR + File.separator + "./code/config.jar;" +
+			USER_DIR + File.separator + "./code/projectx-config.jar;" +
+			USER_DIR + File.separator + "./code/projectx-pcode.jar;" +
+			USER_DIR + File.separator + "./code/lwjgl.jar;" +
+			USER_DIR + File.separator + "./code/lwjgl_util.jar;" +
+			USER_DIR + File.separator + "./code/jinput.jar;" +
+			USER_DIR + File.separator + "./code/jutils.jar;" +
+			USER_DIR + File.separator + "./code/jshortcut.jar;" +
+			USER_DIR + File.separator + "./code/commons-beanutils.jar;" +
+			USER_DIR + File.separator + "./code/commons-digester.jar;" +
+			USER_DIR + File.separator + "./code/commons-logging.jar;",
 			"-Dcom.threerings.getdown=false",
-			"-XX:+AggressiveOpts",
-			"-XX:SoftRefLRUPolicyMSPerMB=10",
-			"-Djava.library.path=\\native",
-			"-Dorg.lwjgl.util.NoChecks=true",
-			"-Dsun.java2d.d3d=false",
-			"-Dappdir=\\spiral",
-			"-Dresource_dir=\\rsrc",
 			"-Xms256M",
 			"-Xmx512M",
+			"-XX:+AggressiveOpts",
+			"-XX:SoftRefLRUPolicyMSPerMB=10",
+			"-Djava.library.path=" + USER_DIR + File.separator + "./native",
+			"-Dorg.lwjgl.util.NoChecks=true",
+			"-Dsun.java2d.d3d=false",
+			"-Dappdir=" + USER_DIR + File.separator + ".",
+			"-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
 			"-XX:+UseStringDeduplication",
-			"com.threerings.projectx.client.ProjectXApp"
+			"com.threerings.projectx.client.ProjectXApp",
 	};
 	
-	public static final String[] ALT_CLIENT = {"./java/bin/java",
-			"-classpath ./code/config.jar:./code/projectx-config.jar:./code/projectx-pcode.jar:./code/lwjgl.jar:./code/lwjgl_util.jar:./code/jinput.jar:./code/jutils.jar:./code/jshortcut.jar:./code/commons-beanutils.jar:./code/commons-digester.jar:./code/commons-logging.jar",
+	public static final String[] ALT_CLIENT_ARGS = {"./java/bin/java",
+			"-classpath",
+			USER_DIR + File.separator + "./code/config.jar:" +
+			USER_DIR + File.separator + "./code/projectx-config.jar:" +
+			USER_DIR + File.separator + "./code/projectx-pcode.jar:" +
+			USER_DIR + File.separator + "./code/lwjgl.jar:" +
+			USER_DIR + File.separator + "./code/lwjgl_util.jar:" +
+			USER_DIR + File.separator + "./code/jinput.jar:" +
+			USER_DIR + File.separator + "./code/jutils.jar:" +
+			USER_DIR + File.separator + "./code/jshortcut.jar:" +
+			USER_DIR + File.separator + "./code/commons-beanutils.jar:" +
+			USER_DIR + File.separator + "./code/commons-digester.jar:" +
+			USER_DIR + File.separator + "./code/commons-logging.jar:",
 			"-Dcom.threerings.getdown=false",
-			"-XX:+AggressiveOpts",
-			"-XX:SoftRefLRUPolicyMSPerMB=10",
-			"-Djava.library.path=./native",
-			"-Dorg.lwjgl.util.NoChecks=true",
-			"-Dsun.java2d.d3d=false",
-			"-Dappdir=./spiral",
-			"-Dresource_dir=./rsrc",
 			"-Xms256M",
 			"-Xmx512M",
+			"-XX:+AggressiveOpts",
+			"-XX:SoftRefLRUPolicyMSPerMB=10",
+			"-Djava.library.path=" + USER_DIR + File.separator + "./native",
+			"-Dorg.lwjgl.util.NoChecks=true",
+			"-Dsun.java2d.d3d=false",
+			"-Dappdir=" + USER_DIR + File.separator + ".",
+			"-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
 			"-XX:+UseStringDeduplication",
-			"com.threerings.projectx.client.ProjectXApp"
+			"com.threerings.projectx.client.ProjectXApp",
 	};
 	
 }
