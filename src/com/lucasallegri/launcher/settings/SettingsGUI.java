@@ -154,6 +154,7 @@ public class SettingsGUI {
 		    public void actionPerformed(ActionEvent e)
 		    {
 		       settingsGUIFrame.setVisible(false);
+		       SettingsEventHandler.saveAdditionalArgs();
 		    }
 		});
 		
@@ -168,15 +169,6 @@ public class SettingsGUI {
 		titleBar.add(minimizeButton);
 		
 		settingsGUIFrame.setLocationRelativeTo(null);
-		
-		settingsGUIFrame.addWindowListener(new WindowAdapter() {
-		    @Override
-		    public void windowClosed(WindowEvent windowEvent) {
-		    	LauncherGUI.launcherGUIFrame.setVisible(true);
-		        SettingsEventHandler.saveAdditionalArgs();
-		    }
-		});
-		
 	}
 	
 	protected JPanel createAppearancePanel() {
