@@ -60,6 +60,7 @@ public class BootManager {
 		ModLoader.checkInstalled();
 		if(Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
 		if(Settings.useIngameRPC) Modules.setupIngameRPC();
+		if(!Settings.ucpSetup) Modules.setupUCP();
 		if(!FileUtil.fileExists(LauncherConstants.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) Modules.setupSafeguard();
 		
 		DiscordInstance.setPresence(LanguageManager.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
