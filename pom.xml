@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>KnightLauncher</groupId>
 	<artifactId>KnightLauncher</artifactId>
-	<version>1.3.7.1</version>
+	<version>1.4.0</version>
 	<name>KnightLauncher</name>
 	<description>Advanced game launcher for Spiral Knights</description>
 
