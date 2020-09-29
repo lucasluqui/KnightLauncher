@@ -38,10 +38,14 @@ public class Modules {
 	}
 	
 	public static void setupUCP() {
-		FileUtil.rename(new File("getdown.txt"), new File("getdown_unpatched.txt"));
 		try {
+			FileUtil.rename(new File("getdown.txt"), new File("getdown_unpatched.txt"));
 			FileUtil.extractFileWithinJar("/modules/ucp/getdown.txt", "getdown.txt");
+			SettingsProperties.setValue("launcher.ucpSetup", "true");
+			Logging.log.info("Successfully detoured base getdown to UCP.");
 		} catch (IOException e) {
+			FileUtil.rename(new File("getdown_unpatched.txt"), new File("getdown.txt"));
+			SettingsProperties.setValue("launcher.ucpSetup", "false");
 			Logging.logException(e);
 		}
 	}
