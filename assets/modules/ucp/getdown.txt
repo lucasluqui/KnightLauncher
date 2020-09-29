@@ -1,6 +1,6 @@
 # General information
 version = 20200506223706
-appbase = http://getdown.lucasallegri.com/spiral/ucp/client/%VERSION%
+appbase = http://getdown.lucasallegri.com/spiral/ucp/%VERSION%
 latest = http://getdown.lucasallegri.com/spiral/ucp/client/getdown.txt
 
 # fallback colors in case of image problems
