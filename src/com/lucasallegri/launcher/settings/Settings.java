@@ -22,5 +22,6 @@ public class Settings {
 	public static Boolean jvmPatched = false;
 	public static Boolean ingameRPCSetup = false;
 	public static Boolean useIngameRPC = true;
+	public static Boolean ucpSetup = false;
 
 }

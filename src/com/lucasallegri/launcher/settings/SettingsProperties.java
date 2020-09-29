@@ -14,7 +14,7 @@ import com.lucasallegri.util.FileUtil;
 
 public class SettingsProperties {
 
-	private static final String PROP_VER = "11";
+	private static final String PROP_VER = "12";
 	
 	private static Properties prop = new Properties();
 	private static String propPath = LauncherConstants.USER_DIR + File.separator + "KnightLauncher.properties";
@@ -75,6 +75,7 @@ public class SettingsProperties {
 		Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));
 		Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
 		Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
+		Settings.ucpSetup = Boolean.parseBoolean(getValue("launcher.ucpSetup"));
 		Logging.log.info("Successfully loaded all settings from prop file.");
 	}
 	
