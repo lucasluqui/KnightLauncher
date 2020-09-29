@@ -36,5 +36,14 @@ public class Modules {
 		}
 		
 	}
+	
+	public static void setupUCP() {
+		FileUtil.rename(new File("getdown.txt"), new File("getdown_unpatched.txt"));
+		try {
+			FileUtil.extractFileWithinJar("/modules/ucp/getdown.txt", "getdown.txt");
+		} catch (IOException e) {
+			Logging.logException(e);
+		}
+	}
 
 }
