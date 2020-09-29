@@ -25,7 +25,7 @@ IF EXIST *KnightLauncher* (
 
 :: Preparing installation info.
 ECHO Downloading...
-curl.exe https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest | findstr browser_download_url > temp 
+curl.exe -sSL https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest | findstr browser_download_url > temp 
 SET /P url=<temp
 DEL temp
 SET url=%url:"=%
