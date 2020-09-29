@@ -40,8 +40,8 @@ case $opt in
 
         # Downloading and installing new version.
         echo "Downloading..."
-        curl -s https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest | grep "browser_download_url" | cut -d : -f 2,3 | tr -d \" | wget --show-progress -qi -
-        filename=$(curl -s https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest | jq '.assets[0].name' | tr -d \")
+        curl -sSL https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest | grep "browser_download_url" | cut -d : -f 2,3 | tr -d \" | wget --show-progress -qi -
+        filename=$(curl -sSL https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest | jq '.assets[0].name' | tr -d \")
         echo -e "${GREEN}Successfully downloaded ${filename}${NONE}\nExtracting..."
         mv "${filename}" "${skpath}/${filename}"
         unzip "${skpath}/${filename}" -d "${skpath}"
