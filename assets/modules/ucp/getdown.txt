@@ -1,5 +1,5 @@
 # General information
-version = 20200506223706
+version = 20201019172329
 appbase = http://getdown.lucasallegri.com/spiral/ucp/%VERSION%
 latest = http://getdown.lucasallegri.com/spiral/ucp/client/getdown.txt
 
