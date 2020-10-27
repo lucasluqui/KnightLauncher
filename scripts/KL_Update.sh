@@ -29,7 +29,7 @@ case $opt in
         if [ -f "${skpath}/KnightLauncher.jar" ]; then
             echo -e "Detected other version installed, removing..."
             # Trying to kill running KnightLauncher instance, just in case.
-            kill $(pgrep java)
+            kill $(pgrep java) > /dev/null 2>&1
             if [ -f "${skpath}/KnightLauncher.properties" ]; then
                 mv "${skpath}/KnightLauncher.properties" "${skpath}/move.properties"
                 rm -v "${skpath}/"*KnightLauncher*
