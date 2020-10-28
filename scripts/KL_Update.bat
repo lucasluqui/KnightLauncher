@@ -17,6 +17,8 @@ IF /I %buff% NEQ true ( EXIT /b )
 :: Checking if other versions are installed, if there are - remove them retaining "KnightLauncher.properties".
 IF EXIST *KnightLauncher* ( 
     ECHO Detected other version installed, removing...
+    :: Trying to kill the KnightLauncher process just in case.
+    TASKKILL /IM javaw.exe
     IF EXIST KnightLauncher.properties ( REN KnightLauncher.properties move.properties)
     DEL *KnightLauncher*
     IF EXIST move.properties ( REN move.properties KnightLauncher.properties )
@@ -25,7 +27,7 @@ IF EXIST *KnightLauncher* (
 
 :: Preparing installation info.
 ECHO Downloading...
-curl.exe https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest | findstr browser_download_url > temp 
+curl.exe -sSL https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest | findstr browser_download_url > temp 
 SET /P url=<temp
 DEL temp
 SET url=%url:"=%
