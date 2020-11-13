@@ -29,8 +29,9 @@ public class GameSettings {
 				if(Settings.gameGarbageCollector.equals("ParallelOld")) {
 					writer.println("-XX:+UseParallelGC");
 					writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+				} else {
+					writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
 				}
-				writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
 			}
 			if(Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
 			
