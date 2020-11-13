@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import com.lucasallegri.launcher.LanguageManager;
 import com.lucasallegri.launcher.ProgressBar;
 import com.lucasallegri.logging.Logging;
+import com.lucasallegri.util.DateUtil;
+import com.lucasallegri.util.FileUtil;
 
 public class GameSettings {
 	
@@ -20,11 +22,14 @@ public class GameSettings {
 			ProgressBar.setBarValue(0);
 			ProgressBar.setState(LanguageManager.getValue("m.apply"));
 			
-			new File("extra.txt").delete();
+			// Rename the old extra.txt and start writing a new one.
+			String renamed = "extra_old_" + DateUtil.getDateAsString() + ".txt";
+			FileUtil.rename(new File("extra.txt"), new File(renamed));
 			PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");
 			
 			if(Settings.gameUseStringDeduplication) writer.println("-XX:+UseStringDeduplication");
 			if(Settings.gameDisableExplicitGC) writer.println("-XX:+DisableExplicitGC");
+			
 			if(Settings.gameUseCustomGC) {
 				if(Settings.gameGarbageCollector.equals("ParallelOld")) {
 					writer.println("-XX:+UseParallelGC");
@@ -33,10 +38,17 @@ public class GameSettings {
 					writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
 				}
 			}
+			
 			if(Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
 			
-			writer.println("-Xms" + (Settings.gameMemory / 2) + "M");
-			writer.println("-Xmx" + Settings.gameMemory + "M");
+			if(Settings.gameGarbageCollector.equals("G1")) {
+				writer.println("-Xms" + Settings.gameMemory + "M");
+				writer.println("-Xmx" + Settings.gameMemory + "M");
+			} else {
+				writer.println("-Xms" + (Settings.gameMemory / 2) + "M");
+				writer.println("-Xmx" + Settings.gameMemory + "M");
+			}
+			
 			writer.println(Settings.gameAdditionalArgs);
 			
 			writer.close();
