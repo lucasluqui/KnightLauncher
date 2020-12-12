@@ -8,8 +8,7 @@ import org.json.JSONObject;
 
 public class SteamUtil {
 
-    public static void startGameById(String id) throws Exception
-    {
+    public static void startGameById(int id) throws Exception {
         Desktop desktop = Desktop.getDesktop();
         URI steamProtocol = new URI("steam://run/" + id);
         desktop.browse(steamProtocol);

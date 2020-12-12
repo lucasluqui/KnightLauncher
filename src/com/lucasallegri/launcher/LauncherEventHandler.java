@@ -24,7 +24,7 @@ public class LauncherEventHandler {
 				if(Settings.gamePlatform.startsWith("Steam")) {
 					
 					try {
-						SteamUtil.startGameById("99900");
+						SteamUtil.startGameById(99900);
 					} catch (Exception e) {
 						Logging.logException(e);
 					}
