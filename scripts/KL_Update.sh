@@ -8,12 +8,8 @@ NONE="\033[0m"
 RED="\033[0;31m"
 
 # Checking if script was run inside Spiral Knights directory. If not, it asks for inputting game's main directory full path. Broken if somebody somehow has random "rsrc" and "scenes" folders in place where script is running. Too bad.
-if [ -d "rsrc" ]; then
-    if [ -d "scenes" ]; then
-        skpath=$(pwd)
-    else
-        read -p "Please enter the Spiral Knights main folder absolute path: " skpath
-    fi
+if [[ -d "rsrc" && -d "scenes" ]]; then
+    skpath=$(pwd)
 else
     read -p "Please enter the Spiral Knights main folder absolute path: " skpath
 fi
