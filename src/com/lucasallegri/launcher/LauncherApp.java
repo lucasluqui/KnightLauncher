@@ -2,8 +2,12 @@ package com.lucasallegri.launcher;
 
 import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -38,17 +42,11 @@ public class LauncherApp {
 	public static void main(String[] args) {
 		
 		checkStartLocation();
-		
-		try {
-			Logging.setup();
-		} catch (IOException ex) {
-			Logging.logException(ex);
-		}
-		
+		setupFileLogging();
+		setupHTTPSProtocol();
 		SettingsProperties.setup();
 		SettingsProperties.loadFromProp();
 		setupLauncherStyle();
-		setupHTTPSProtocol();
 		LanguageManager.setup();
 		FontManager.setup();
 		DiscordInstance.start();
@@ -124,7 +122,6 @@ public class LauncherApp {
 	
 	private static void checkDirectories() {
 		FileUtil.createDir("mods");
-		FileUtil.createDir("KnightLauncher/logs/");
 		FileUtil.createDir("KnightLauncher/images/");
 		FileUtil.createDir("KnightLauncher/modules/");
 	}
@@ -188,5 +185,23 @@ public class LauncherApp {
 		System.setProperty("http.agent", "Mozilla/5.0");
 		System.setProperty("https.agent", "Mozilla/5.0");
 	}
+	
+	private static void setupFileLogging() {
+		File logFile = new File("knightlauncher.log");
+		File oldLogFile = new File("old-knightlauncher.log");
+		
+		if(logFile.exists()) {
+			logFile.renameTo(oldLogFile);
+		}
+		
+		try {
+			PrintStream printStream = new PrintStream(new BufferedOutputStream(new FileOutputStream(logFile)), true);
+			System.setOut(printStream);
+			System.setErr(printStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 }
