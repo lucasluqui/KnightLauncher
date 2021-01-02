@@ -9,8 +9,8 @@ public class Mod {
 	protected String fileName;
 	protected Boolean isEnabled;
 	
-	protected final String DEFAULT_DESCRIPTION = "Hello, I'm a mod without description!";
-	protected final String DEFAULT_AUTHOR = "Someone, somewhere";
+	protected final String DEFAULT_DESCRIPTION = "No description found";
+	protected final String DEFAULT_AUTHOR = "Someone";
 	protected final String DEFAULT_VERSION = "Unknown";
 	
 	public Mod() {
