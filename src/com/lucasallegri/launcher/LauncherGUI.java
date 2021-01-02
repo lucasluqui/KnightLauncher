@@ -48,7 +48,6 @@ public class LauncherGUI {
 	@SuppressWarnings("static-access")
 	public LauncherGUI(LauncherApp app) {
 		initialize();
-		BootManager.onBootEnd();
 	}
 	
 	@SuppressWarnings("static-access")

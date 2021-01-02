@@ -65,7 +65,8 @@ public class LauncherApp {
 			app.composeSettingsGUI(app);
 			app.composeModListGUI(app);
 		}
-
+		
+		new PostInitRoutine(app);
 	}
 	
 	private LauncherGUI composeLauncherGUI(LauncherApp app) {

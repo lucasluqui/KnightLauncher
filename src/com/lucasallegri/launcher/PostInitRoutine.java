@@ -1,40 +1,23 @@
 package com.lucasallegri.launcher;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.json.JSONObject;
 
-import com.lucasallegri.dialog.DialogError;
 import com.lucasallegri.discord.DiscordInstance;
 import com.lucasallegri.launcher.mods.ModList;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.Settings;
-import com.lucasallegri.launcher.settings.SettingsProperties;
-import com.lucasallegri.logging.Logging;
-import com.lucasallegri.util.DesktopUtil;
 import com.lucasallegri.util.FileUtil;
 import com.lucasallegri.util.INetUtil;
 import com.lucasallegri.util.ImageUtil;
 import com.lucasallegri.util.SteamUtil;
-import com.lucasallegri.util.SystemUtil;
 
-import jiconfont.icons.font_awesome.FontAwesome;
-import jiconfont.swing.IconFontSwing;
-import mdlaf.MaterialLookAndFeel;
-import mdlaf.themes.JMarsDarkTheme;
-import mdlaf.themes.MaterialLiteTheme;
-import net.sf.image4j.codec.ico.ICOEncoder;
-
-public class BootManager {
+public class PostInitRoutine {
 	
-	public static void onBootEnd() {
-		
+	public PostInitRoutine(LauncherApp app) {
 		ModLoader.checkInstalled();
 		if(Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
 		if(Settings.useIngameRPC) Modules.setupIngameRPC();
@@ -44,29 +27,6 @@ public class BootManager {
 		DiscordInstance.setPresence(LanguageManager.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
 		
 		loadOnlineAssets();
-	}
-	
-	private static void pullGithubData() {
-		
-		String rawResponseReleases = INetUtil.getWebpageContent(
-				LauncherConstants.GITHUB_API
-				+ "repos/"
-				+ LauncherConstants.GITHUB_AUTHOR + "/"
-				+ LauncherConstants.GITHUB_REPO + "/"
-				+ "releases/"
-				+ "latest"
-				);
-		
-		JSONObject jsonReleases = new JSONObject(rawResponseReleases);
-		
-		LauncherConstants.LATEST_RELEASE = jsonReleases.getString("tag_name");
-	}
-	
-	private static void checkVersion() {
-		if (!LauncherConstants.LATEST_RELEASE.equalsIgnoreCase(LauncherConstants.VERSION)) {
-			Settings.isOutdated = true;
-			LauncherGUI.updateButton.setVisible(true);
-		}
 	}
 	
 	private static void loadOnlineAssets() {
@@ -110,6 +70,29 @@ public class BootManager {
 			}
 		});
 		oassetsThread.start();
+	}
+	
+	private static void pullGithubData() {
+		
+		String rawResponseReleases = INetUtil.getWebpageContent(
+				LauncherConstants.GITHUB_API
+				+ "repos/"
+				+ LauncherConstants.GITHUB_AUTHOR + "/"
+				+ LauncherConstants.GITHUB_REPO + "/"
+				+ "releases/"
+				+ "latest"
+				);
+		
+		JSONObject jsonReleases = new JSONObject(rawResponseReleases);
+		
+		LauncherConstants.LATEST_RELEASE = jsonReleases.getString("tag_name");
+	}
+	
+	private static void checkVersion() {
+		if (!LauncherConstants.LATEST_RELEASE.equalsIgnoreCase(LauncherConstants.VERSION)) {
+			Settings.isOutdated = true;
+			LauncherGUI.updateButton.setVisible(true);
+		}
 	}
 
 }
