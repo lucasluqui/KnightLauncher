@@ -25,7 +25,7 @@ public class DiscordInstance {
 		presence.setDetails(detail);
 		presence.setBigImage("icon-512", LanguageManager.getValue("presence.image_desc", LauncherConstants.VERSION));
 		DiscordRPC.discordUpdatePresence(presence.build());
-		log.format("Updating presence detail", new Object[] {"detail", detail});
+		log.info("Updating presence detail", new Object[] {"detail", detail});
 	}
 	
 	public static void stop() {
