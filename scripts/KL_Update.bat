@@ -4,7 +4,7 @@
 :: KnightLauncher gh: https://github.com/lucas-allegri/KnightLauncher
 
 :: Checking if script was run inside Spiral Knights directory. If not, it asks for inputting game's main directory full path. Broken if somebody somehow has random "rsrc" and "scenes" folders in place where script is running. Too bad.
-IF EXIST rsrc ( IF EXIST scenes ( SET gamepath="%cd%" ) ELSE ( SET /P gamepath=Please enter Spiral Knights' directory absolute path: ) )
+IF EXIST rsrc IF EXIST scenes IF EXIST code\projectx-pcode.jar ( SET gamepath="%cd%" ) ELSE ( SET /P gamepath=Please enter Spiral Knights' directory absolute path: )
 CD "%gamepath%"
 
 :: Simple asking for confirmation, just in case.
