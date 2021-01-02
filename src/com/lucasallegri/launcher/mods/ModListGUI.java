@@ -44,7 +44,6 @@ public class ModListGUI {
 	private JLabel labelName;
 	private JLabel labelDescription;
 	private JLabel labelVersion;
-	private JLabel labelCompatibility;
 	private JLabel labelAuthor;
 	
 	int pY, pX;
