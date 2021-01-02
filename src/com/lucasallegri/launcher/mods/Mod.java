@@ -6,7 +6,6 @@ public class Mod {
 	protected String description;
 	protected String authorName;
 	protected String version;
-	protected String compatibilityVersion;
 	protected String fileName;
 	protected Boolean isEnabled;
 	
@@ -19,7 +18,6 @@ public class Mod {
 		this.description = null;
 		this.authorName = null;
 		this.version = null;
-		this.compatibilityVersion = null;
 		this.fileName = null;
 		this.isEnabled = true;
 	}
@@ -83,7 +81,7 @@ public class Mod {
 	
 	@Override
 	public String toString() {
-		return "[Mod displayName="+this.displayName+",description="+this.description+",author="+this.authorName+",version="+this.version+",compatibility="+this.compatibilityVersion+",fileName="+this.fileName+",isEnabled="+this.isEnabled+"]";
+		return "[Mod displayName="+this.displayName+",description="+this.description+",author="+this.authorName+",version="+this.version+",fileName="+this.fileName+",isEnabled="+this.isEnabled+"]";
 	}
 
 }
