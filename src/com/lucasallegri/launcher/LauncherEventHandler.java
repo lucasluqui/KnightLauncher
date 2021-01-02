@@ -13,6 +13,8 @@ import com.lucasallegri.util.SystemUtil;
 
 public class LauncherEventHandler {
 	
+	private static final String[] RPC_COMMAND_LINE = new String[] {".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe"};
+	
 	public static void launchGameEvent(ActionEvent action) {
 		
 		Thread launchThread = new Thread(new Runnable(){
@@ -40,7 +42,7 @@ public class LauncherEventHandler {
 				}
 				
 				DiscordInstance.stop();
-				if(Settings.useIngameRPC) ProcessUtil.startApplication(new String[] {".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe"});
+				if(Settings.useIngameRPC) ProcessUtil.startApplication(RPC_COMMAND_LINE);
 				if(!Settings.keepOpen) LauncherGUI.launcherGUIFrame.dispose();
 				
 			}
