@@ -128,14 +128,14 @@ public class LauncherApp {
 	
 	// Checking if we're being ran inside the game's directory, "getdown-pro.jar" should always be present if so.
 	private static void checkStartLocation() {
-		if(!FileUtil.fileExists("getdown-pro.jar")) {
+		if(!FileUtil.fileExists(LauncherConstants.USER_DIR + File.separator + "getdown-pro.jar")) {
 			String errorMessage = "The .jar file seems to be placed in the wrong directory."
-					+ System.lineSeparator() + "Try using the Batch (.bat) file for Windows or the Shell (.sh) file for Linux/MacOS.";
+					+ System.lineSeparator() + "Try using the Batch (.bat) file for Windows or the Shell (.sh) file for Linux/OSX.";
 			if(SystemUtil.isWindows()) {
 				errorMessage += System.lineSeparator() + "Detected Steam path: " + SteamUtil.getGamePathWindows();
 			}
-			DialogError.push(errorMessage);
 			log.error(errorMessage);
+			DialogError.push(errorMessage);
 			if(SystemUtil.isWindows()) DesktopUtil.openDir(SteamUtil.getGamePathWindows());
 			System.exit(1);
 		}
