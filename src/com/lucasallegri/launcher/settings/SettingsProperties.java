@@ -39,7 +39,7 @@ public class SettingsProperties {
         try (InputStream is = new FileInputStream(propPath)) {
         	prop.load(is);
         	value = prop.getProperty(key);
-        	log.format("Request for prop key", new Object[] {"key", key, "value", value});
+        	log.info("Request for prop key", new Object[] {"key", key, "value", value});
             return value;
         } catch (IOException e) {
         	log.error(e);
@@ -51,7 +51,7 @@ public class SettingsProperties {
 		try (OutputStream os = new FileOutputStream(propPath)) {
 			prop.setProperty(key, value);
 			prop.store(new FileOutputStream(propPath), null);
-			log.format("Setting new key value", new Object[] {"key", key, "value", value});
+			log.info("Setting new key value", new Object[] {"key", key, "value", value});
 		} catch(IOException e) {
 			log.error(e);
 		}
