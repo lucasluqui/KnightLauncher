@@ -208,7 +208,7 @@ public class JVMPatcher {
 		String downloadUrl = LauncherConstants.LARGE_CDN_URL 
 				+ "jvm/windows/jvm_pack.zip";
 		
-		log.format("Downloading Java VM", new Object[] {"url", downloadUrl});
+		log.info("Downloading Java VM", new Object[] {"url", downloadUrl});
 		try {
 			FileUtils.copyURLToFile(
 				new URL(downloadUrl),

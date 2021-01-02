@@ -3,6 +3,7 @@ package com.lucasallegri.launcher.mods;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 import org.json.JSONObject;
 
@@ -51,7 +52,7 @@ public class ModLoader {
 				mod.setVersion(modJson.getString("version"));
 			}
 			ModList.installedMods.add(mod);
-			log.info(mod.toString());
+			log.info("A mod was found", new Object[] {"name", mod.displayName, "object", mod.toString()});
 			
 			/*
 			 * Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
@@ -99,7 +100,7 @@ public class ModLoader {
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
 			Compressor.unzip("./mods/" + ModList.installedMods.get(i).getFileName(), "./rsrc/", SystemUtil.isMac());
-			log.format("Mod mounted successfully", new Object[] {"mod", ModList.installedMods.get(i).getDisplayName()});
+			log.info("Mod mounted successfully", new Object[] {"mod", ModList.installedMods.get(i).getDisplayName()});
 		}
 		
 		log.info("Extracting safeguard...");
@@ -141,7 +142,12 @@ public class ModLoader {
 		for(int i = 0; i < jarFiles.length; i++) {
 			ProgressBar.setBarValue(i + 1);
 			DiscordInstance.setPresence(LanguageManager.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(jarFiles.length)}));
-			Compressor.unzip("./rsrc/" + jarFiles[i], "./rsrc/", false);
+			try {
+				FileUtil.unpackJar(new ZipFile("./rsrc/" + jarFiles[i]), new File("./rsrc/"), false);
+			} catch (IOException e) {
+				log.error(e);
+			}
+			//Compressor.unzip("./rsrc/" + jarFiles[i], "./rsrc/", false);
 		}
 		
 		// Check for decompiled configs (.xml) present in the configs folder and delete them on sight.
