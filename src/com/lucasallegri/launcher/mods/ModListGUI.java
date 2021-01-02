@@ -37,6 +37,7 @@ public class ModListGUI {
 	public static JFrame modListGUIFrame;
 	public static List modListContainer;
 	public static JLabel labelModCount;
+	public static JLabel labelForceApplyState;
 	private JLabel labelModCountText;
 	private JButton refreshButton;
 	private JButton forceApplyButton;
@@ -159,6 +160,11 @@ public class ModListGUI {
 				ModListEventHandler.forceApplyEvent(_action);
 			}
 		});
+		
+		labelForceApplyState = new JLabel("");
+		labelForceApplyState.setBounds(145, 460, 125, 25);
+		labelForceApplyState.setFont(FontManager.fontReg);
+		modListGUIFrame.getContentPane().add(labelForceApplyState);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(178, 130, 195, 2);

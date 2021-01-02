@@ -23,7 +23,9 @@ public class ModListEventHandler {
 	}
 	
 	public static void forceApplyEvent(ActionEvent action) {
+		ModListGUI.labelForceApplyState.setText("Applying...");
 		ModLoader.mount();
+		ModListGUI.labelForceApplyState.setText("Applied");
 	}
 	
 	public static void getModsEvent(ActionEvent action) {
