@@ -40,6 +40,12 @@
 			<artifactId>jiconfont-font_awesome</artifactId>
 			<version>4.7.0.1</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.samskivert</groupId>
+			<artifactId>samskivert</artifactId>
+			<version>1.9</version>
+		</dependency>
 
 	</dependencies>
 
