@@ -7,7 +7,7 @@ public class Settings {
 	public static Boolean doRebuilds = true;
 	public static Boolean keepOpen = false;
 	public static Boolean createShortcut = true;
-	public static String compressorUnzipMethod = "safe";
+	public static String compressorUnzipMethod = "4j";
 	public static Integer compressorExtractBuffer = 8196;
 	public static Integer gameMemory = 512;
 	public static Boolean gameUseStringDeduplication = false;
@@ -23,6 +23,5 @@ public class Settings {
 	public static Boolean ingameRPCSetup = false;
 	public static Boolean useIngameRPC = true;
 	public static Boolean ucpSetup = false;
-	public static Long lastLogCleanupTimestamp = 0L;
 
 }

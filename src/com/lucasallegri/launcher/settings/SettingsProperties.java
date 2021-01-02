@@ -77,7 +77,6 @@ public class SettingsProperties {
 		Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
 		Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
 		Settings.ucpSetup = Boolean.parseBoolean(getValue("launcher.ucpSetup"));
-		Settings.lastLogCleanupTimestamp = Long.parseLong(getValue("launcher.lastLogCleanupTimestamp"));
 		log.info("Successfully loaded all settings from prop file.");
 	}
 	

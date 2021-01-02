@@ -29,18 +29,18 @@ public class Compressor {
 	public static void unzip(String source, String dest, Boolean force4j) {
 		try {
 			switch(Settings.compressorUnzipMethod) {
-			case "safe":
+			case "custom":
 				if(force4j) {
 					unzip4j(source, dest);
 					break;
 				}
-				unzipSafe(source, dest);
+				unzipCustom(source, dest);
 				break;
 			case "4j":
 				unzip4j(source, dest);
 				break;
 			default:
-				unzipSafe(source, dest);
+				unzip4j(source, dest);
 				break;
 			}
 		} catch(IOException e) {
@@ -55,7 +55,7 @@ public class Compressor {
     }
 	
 	
-	public static void unzipSafe(String zipFilePath, String destDirectory) throws IOException {
+	public static void unzipCustom(String zipFilePath, String destDirectory) throws IOException {
         FileUtil.createDir(destDirectory);
         ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
         ZipEntry entry = zipIn.getNextEntry();
