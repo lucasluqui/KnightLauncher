@@ -41,8 +41,9 @@ public class LauncherApp {
 
 	public static void main(String[] args) {
 		
-		checkStartLocation();
 		setupFileLogging();
+		logVMInfo();
+		checkStartLocation();
 		setupHTTPSProtocol();
 		SettingsProperties.setup();
 		SettingsProperties.loadFromProp();
@@ -206,6 +207,18 @@ public class LauncherApp {
 			e.printStackTrace();
 		}
 	}
-
+	
+	private static void logVMInfo() {
+		log.info("------------ VM Info ------------");
+		log.info("OS Name: " + System.getProperty("os.name"));
+		log.info("OS Arch: " + System.getProperty("os.arch"));
+		log.info("OS Vers: " + System.getProperty("os.version"));
+		log.info("Java Home: " + System.getProperty("java.home"));
+		log.info("Java Vers: " + System.getProperty("java.version"));
+		log.info("User Name: " + System.getProperty("user.name"));
+		log.info("User Home: " + System.getProperty("user.home"));
+		log.info("Current Directory: " + System.getProperty("user.dir"));
+		log.info("---------------------------------");
+	}
 
 }
