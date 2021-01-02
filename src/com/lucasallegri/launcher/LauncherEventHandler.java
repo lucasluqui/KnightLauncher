@@ -34,17 +34,22 @@ public class LauncherEventHandler {
 					
 				} else {
 					
-					if(!SystemUtil.isWindows()) {
-						ProcessUtil.startApplication(LauncherConstants.GETDOWN_ARGS);
-					} else {
+					if(SystemUtil.isWindows()) {
 						ProcessUtil.startApplication(LauncherConstants.GETDOWN_ARGS_WIN);
+					} else {
+						ProcessUtil.startApplication(LauncherConstants.GETDOWN_ARGS);
 					}
 					
 				}
 				
+				log.info("Starting game", new Object[] {"platform", Settings.gamePlatform});
+				
 				DiscordInstance.stop();
 				if(Settings.useIngameRPC) ProcessUtil.startApplication(RPC_COMMAND_LINE);
-				if(!Settings.keepOpen) LauncherGUI.launcherGUIFrame.dispose();
+				if(!Settings.keepOpen) {
+					LauncherGUI.launcherGUIFrame.dispose();
+					System.exit(1);
+				}
 				
 			}
 		});
