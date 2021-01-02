@@ -6,10 +6,11 @@ import com.lucasallegri.discord.DiscordInstance;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.GameSettings;
 import com.lucasallegri.launcher.settings.Settings;
-import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.ProcessUtil;
 import com.lucasallegri.util.SteamUtil;
 import com.lucasallegri.util.SystemUtil;
+
+import static com.lucasallegri.launcher.Log.log;
 
 public class LauncherEventHandler {
 	
@@ -28,7 +29,7 @@ public class LauncherEventHandler {
 					try {
 						SteamUtil.startGameById(99900);
 					} catch (Exception e) {
-						Logging.logException(e);
+						log.error(e);
 					}
 					
 				} else {

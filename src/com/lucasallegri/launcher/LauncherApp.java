@@ -17,7 +17,6 @@ import com.lucasallegri.launcher.mods.ModListGUI;
 import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.launcher.settings.SettingsGUI;
 import com.lucasallegri.launcher.settings.SettingsProperties;
-import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.DesktopUtil;
 import com.lucasallegri.util.FileUtil;
 import com.lucasallegri.util.ImageUtil;
@@ -30,6 +29,8 @@ import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.JMarsDarkTheme;
 import mdlaf.themes.MaterialLiteTheme;
 import net.sf.image4j.codec.ico.ICOEncoder;
+
+import static com.lucasallegri.launcher.Log.log;
 
 public class LauncherApp {
 	
@@ -73,7 +74,7 @@ public class LauncherApp {
 					lgui = new LauncherGUI(app);
 					lgui.switchVisibility();
 				} catch (Exception e) {
-					Logging.logException(e);
+					log.error(e);
 				}
 			}
 		});
@@ -86,7 +87,7 @@ public class LauncherApp {
 				try {
 					sgui = new SettingsGUI(app);
 				} catch (Exception e) {
-					Logging.logException(e);
+					log.error(e);
 				}
 			}
 		});
@@ -99,7 +100,7 @@ public class LauncherApp {
 				try {
 					mgui = new ModListGUI(app);
 				} catch (Exception e) {
-					Logging.logException(e);
+					log.error(e);
 				}
 			}
 		});
@@ -112,7 +113,7 @@ public class LauncherApp {
 				try {
 					jvmPatcher = new JVMPatcher(app);
 				} catch (Exception e) {
-					Logging.logException(e);
+					log.error(e);
 				}
 			}
 		});
@@ -145,7 +146,7 @@ public class LauncherApp {
 			try {
 				ICOEncoder.write(bimg, new File(LauncherConstants.USER_DIR + "/KnightLauncher/images/icon-128.ico"));
 			} catch (IOException e) {
-				Logging.logException(e);
+				log.error(e);
 			}
 			
 			DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe", 
@@ -175,7 +176,7 @@ public class LauncherApp {
 				break;
 			}
 		} catch (UnsupportedLookAndFeelException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 	}
 	

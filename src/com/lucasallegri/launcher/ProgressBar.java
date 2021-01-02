@@ -1,12 +1,12 @@
 package com.lucasallegri.launcher;
 
-import com.lucasallegri.logging.Logging;
+import static com.lucasallegri.launcher.Log.log;
 
 public class ProgressBar {
 	
 	public static void setState(String newState) {
 		LauncherGUI.launchState.setText(newState);
-		Logging.log.info(newState);
+		log.info(newState);
 	}
 	
 	public static void setBarValue(int n) {

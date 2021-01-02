@@ -14,10 +14,11 @@ import com.lucasallegri.launcher.Modules;
 import com.lucasallegri.launcher.ProgressBar;
 import com.lucasallegri.launcher.settings.SettingsGUI;
 import com.lucasallegri.launcher.settings.SettingsProperties;
-import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.Compressor;
 import com.lucasallegri.util.FileUtil;
 import com.lucasallegri.util.SystemUtil;
+
+import static com.lucasallegri.launcher.mods.Log.log;
 
 public class ModLoader {
 	
@@ -50,7 +51,7 @@ public class ModLoader {
 				mod.setVersion(modJson.getString("version"));
 			}
 			ModList.installedMods.add(mod);
-			Logging.log.info(mod.toString());
+			log.info(mod.toString());
 			
 			/*
 			 * Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
@@ -66,7 +67,7 @@ public class ModLoader {
 					rebuildRequired = true;
 					mountRequired = true;
 				} catch (IOException e) {
-					Logging.logException(e);
+					log.error(e);
 				}
 			} else {
 				FileUtil.writeFile(hashFilePath, hash);
@@ -98,12 +99,12 @@ public class ModLoader {
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
 			Compressor.unzip("./mods/" + ModList.installedMods.get(i).getFileName(), "./rsrc/", SystemUtil.isMac());
-			Logging.log.info(ModList.installedMods.get(i).getDisplayName() + " was mounted successfully.");
+			log.format("Mod mounted successfully", new Object[] {"mod", ModList.installedMods.get(i).getDisplayName()});
 		}
 		
-		Logging.log.info("Extracting safeguard...");
+		log.info("Extracting safeguard...");
 		Modules.setupSafeguard();
-		Logging.log.info("Extracted safeguard.");
+		log.info("Extracted safeguard.");
 		
 		ProgressBar.showBar(false);
 		ProgressBar.showState(false);

@@ -33,8 +33,6 @@ import java.util.zip.ZipFile;
 
 import org.apache.commons.io.FileUtils;
 
-import com.lucasallegri.logging.Logging;
-
 import static com.lucasallegri.util.Log.log;
 
 public class FileUtil {
@@ -48,7 +46,7 @@ public class FileUtil {
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 	}
 	
@@ -58,7 +56,7 @@ public class FileUtil {
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 	}
 	
@@ -109,7 +107,7 @@ public class FileUtil {
 	              new FileOutputStream(path), "utf-8"))) {
 			writer.write(content);
 		} catch (IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 	}
 	

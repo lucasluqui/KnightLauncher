@@ -4,10 +4,11 @@ import java.io.File;
 import java.io.IOException;
 
 import com.lucasallegri.launcher.settings.SettingsProperties;
-import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.Compressor;
 import com.lucasallegri.util.FileUtil;
 import com.lucasallegri.util.SystemUtil;
+
+import static com.lucasallegri.launcher.Log.log;
 
 public class Modules {
 	
@@ -19,7 +20,7 @@ public class Modules {
 				new File(LauncherConstants.USER_DIR + "KnightLauncher/modules/skdiscordrpc/bundle.zip").delete();
 				SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
 			} catch (IOException e) {
-				Logging.logException(e);
+				log.error(e);
 			}
 		} else {
 			SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
@@ -32,7 +33,7 @@ public class Modules {
 			FileUtil.extractFileWithinJar("/modules/safeguard/bundle.zip", "KnightLauncher/modules/safeguard/bundle.zip");
 			Compressor.unzip("KnightLauncher/modules/safeguard/bundle.zip", "rsrc/", false);
 		} catch (IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 		
 	}
@@ -42,11 +43,11 @@ public class Modules {
 			FileUtil.rename(new File("getdown.txt"), new File("getdown_unpatched.txt"));
 			FileUtil.extractFileWithinJar("/modules/ucp/getdown.txt", "getdown.txt");
 			SettingsProperties.setValue("launcher.ucpSetup", "true");
-			Logging.log.info("Successfully detoured base getdown to UCP.");
+			log.info("Successfully detoured base getdown to UCP.");
 		} catch (IOException e) {
 			FileUtil.rename(new File("getdown_unpatched.txt"), new File("getdown.txt"));
 			SettingsProperties.setValue("launcher.ucpSetup", "false");
-			Logging.logException(e);
+			log.error(e);
 		}
 	}
 

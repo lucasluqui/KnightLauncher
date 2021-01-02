@@ -18,13 +18,14 @@ import org.apache.commons.io.FileUtils;
 
 import com.lucasallegri.dialog.DialogError;
 import com.lucasallegri.launcher.settings.SettingsProperties;
-import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.Compressor;
 import com.lucasallegri.util.FileUtil;
 import com.lucasallegri.util.ProcessUtil;
 
 import javax.swing.JButton;
+
+import static com.lucasallegri.launcher.Log.log;
 
 public class JVMPatcher {
 
@@ -189,7 +190,7 @@ public class JVMPatcher {
 				FileUtils.moveDirectory(new File(LauncherConstants.USER_DIR + "\\java_vm"), new File(LauncherConstants.USER_DIR + "\\java_vm_unpatched"));
 			}
 		} catch (IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 		
 		jvmPatcherProgressBar.setValue(3);
@@ -207,7 +208,7 @@ public class JVMPatcher {
 		String downloadUrl = LauncherConstants.LARGE_CDN_URL 
 				+ "jvm/windows/jvm_pack.zip";
 		
-		Logging.log.info("Downloading Java VM from: " + downloadUrl);
+		log.format("Downloading Java VM", new Object[] {"url", downloadUrl});
 		try {
 			FileUtils.copyURLToFile(
 				new URL(downloadUrl),
@@ -218,7 +219,7 @@ public class JVMPatcher {
 		} catch (IOException e) {
 			DialogError.push("The Java VM download couldn't be initiated, will avoid patching on next boot.");
 			SettingsProperties.setValue("launcher.jvm_patched", "true");
-			Logging.logException(e);
+			log.error(e);
 			System.exit(1);
 		}
 	}

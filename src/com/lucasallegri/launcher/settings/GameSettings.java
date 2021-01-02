@@ -7,9 +7,10 @@ import java.io.UnsupportedEncodingException;
 
 import com.lucasallegri.launcher.LanguageManager;
 import com.lucasallegri.launcher.ProgressBar;
-import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.DateUtil;
 import com.lucasallegri.util.FileUtil;
+
+import static com.lucasallegri.launcher.settings.Log.log;
 
 public class GameSettings {
 	
@@ -57,7 +58,7 @@ public class GameSettings {
 			ProgressBar.showBar(false);
 			ProgressBar.showState(false);
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 	}
 

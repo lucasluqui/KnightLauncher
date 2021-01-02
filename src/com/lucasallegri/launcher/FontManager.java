@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.lucasallegri.launcher.settings.Settings;
-import com.lucasallegri.logging.Logging;
+
+import static com.lucasallegri.launcher.Log.log;
 
 public class FontManager {
 	
@@ -81,7 +82,7 @@ public class FontManager {
 			fontMedGiant = fontMedGiant.deriveFont(40.0f * sizeMultiplier);
 			
 		} catch (FontFormatException | IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 		
 	}

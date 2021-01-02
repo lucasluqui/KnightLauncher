@@ -2,11 +2,12 @@ package com.lucasallegri.discord;
 
 import com.lucasallegri.launcher.LanguageManager;
 import com.lucasallegri.launcher.LauncherConstants;
-import com.lucasallegri.logging.Logging;
 
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
+
+import static com.lucasallegri.discord.Log.log;
 
 public class DiscordInstance {
 	
@@ -16,15 +17,15 @@ public class DiscordInstance {
 	public static void start() {
 		DiscordRPC.discordInitialize(CLIENT_ID, EVENT_HANDLER, true);
 		setPresence(LanguageManager.getValue("presence.starting"));
-		Logging.log.info("DiscordInstance is now running.");
+		log.info("DiscordInstance is now running.");
 	}
 	
-	public static void setPresence(String details) {
+	public static void setPresence(String detail) {
 		DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(LanguageManager.getValue("presence.using"));
-		presence.setDetails(details);
+		presence.setDetails(detail);
 		presence.setBigImage("icon-512", LanguageManager.getValue("presence.image_desc", LauncherConstants.VERSION));
 		DiscordRPC.discordUpdatePresence(presence.build());
-		Logging.log.info("Updating presence detail to: " + details);
+		log.format("Updating presence detail", new Object[] {"detail", detail});
 	}
 	
 	public static void stop() {

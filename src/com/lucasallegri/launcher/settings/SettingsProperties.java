@@ -9,8 +9,9 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 import com.lucasallegri.launcher.LauncherConstants;
-import com.lucasallegri.logging.Logging;
 import com.lucasallegri.util.FileUtil;
+
+import static com.lucasallegri.launcher.settings.Log.log;
 
 public class SettingsProperties {
 
@@ -25,11 +26,11 @@ public class SettingsProperties {
 				FileUtil.extractFileWithinJar("/config/base.properties", propPath);
 			} else if(FileUtil.fileExists(propPath) && getValue("PROP_VER") != null
 					&& !getValue("PROP_VER").equals(PROP_VER)) {
-				Logging.log.info("Old PROP_VER detected, resetting properties file.");
+				log.warning("Old PROP_VER detected, resetting properties file.");
 				FileUtil.extractFileWithinJar("/config/base.properties", propPath);
 			}
 		} catch (IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 	}
 	
@@ -38,10 +39,10 @@ public class SettingsProperties {
         try (InputStream is = new FileInputStream(propPath)) {
         	prop.load(is);
         	value = prop.getProperty(key);
-        	Logging.log.info("Request for prop key: " + key + ", reply value: " + value);
+        	log.format("Request for prop key", new Object[] {"key", key, "value", value});
             return value;
         } catch (IOException e) {
-        	Logging.logException(e);
+        	log.error(e);
         }
 		return null;
 	}
@@ -50,9 +51,9 @@ public class SettingsProperties {
 		try (OutputStream os = new FileOutputStream(propPath)) {
 			prop.setProperty(key, value);
 			prop.store(new FileOutputStream(propPath), null);
-			Logging.log.info("Setting new key value: key=" + key + ",value=" + value);
+			log.format("Setting new key value", new Object[] {"key", key, "value", value});
 		} catch(IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 	}
 	
@@ -77,7 +78,7 @@ public class SettingsProperties {
 		Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
 		Settings.ucpSetup = Boolean.parseBoolean(getValue("launcher.ucpSetup"));
 		Settings.lastLogCleanupTimestamp = Long.parseLong(getValue("launcher.lastLogCleanupTimestamp"));
-		Logging.log.info("Successfully loaded all settings from prop file.");
+		log.info("Successfully loaded all settings from prop file.");
 	}
 	
 }

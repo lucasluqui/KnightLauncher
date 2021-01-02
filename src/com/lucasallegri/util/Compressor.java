@@ -14,11 +14,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import com.lucasallegri.launcher.settings.Settings;
-import com.lucasallegri.logging.Logging;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
+
+import static com.lucasallegri.util.Log.log;
 
 public class Compressor {
 	
@@ -43,7 +44,7 @@ public class Compressor {
 				break;
 			}
 		} catch(IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 	}
 	
@@ -100,7 +101,7 @@ public class Compressor {
 			InputStream inputStream = zipFile.getInputStream(fileHeader);
 			content = FileUtil.convertInputStreamToString(inputStream);
 		} catch (IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 		return content;
 	}
@@ -112,8 +113,8 @@ public class Compressor {
 	    String hash = null;
 		try {
 			file = new FileInputStream(source);
-		} catch (FileNotFoundException ex) {
-			Logging.logException(ex);
+		} catch (FileNotFoundException e) {
+			log.error(e);
 		}
 	    ZipInputStream stream = new ZipInputStream(file);
 	    try {
@@ -129,12 +130,12 @@ public class Compressor {
 	            hash = new String(dis.getMessageDigest().digest());
 	        }
 	    } catch (NoSuchAlgorithmException | IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		} finally { 
 			try {
 				stream.close();
 			} catch (IOException e) {
-				Logging.logException(e);
+				log.error(e);
 			}
 		}
 	    return hash;

@@ -7,7 +7,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 
-import com.lucasallegri.logging.Logging;
+import static com.lucasallegri.util.Log.log;
 
 public class INetUtil {
 	
@@ -32,7 +32,7 @@ public class INetUtil {
 		    
 		    return sb.toString();
 		} catch (IOException e) {
-			Logging.logException(e);
+			log.error(e);
 		}
 		return null;
 	}
