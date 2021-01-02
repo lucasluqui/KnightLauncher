@@ -34,6 +34,7 @@ public class SystemUtil {
 		return isARM;
 	}
 	
+	@Deprecated
 	public static boolean hasValidJavaHome() {
 		return System.getProperty("java.home").contains("1.6") || 
 				System.getProperty("java.home").contains("1.7") ||
