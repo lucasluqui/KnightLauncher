@@ -502,31 +502,32 @@ public class SettingsGUI {
 			}
 		});
 		
-		JSeparator sep = new JSeparator();
-		sep.setBounds(25, 140, 800, 16);
-		filesPanel.add(sep);
-		
-		JLabel labelJVMPatch = new JLabel(LanguageManager.getValue("m.force_jvm_patch"));
-		labelJVMPatch.setBounds(25, 155, 350, 18);
-		labelJVMPatch.setFont(FontManager.fontRegBig);
-		filesPanel.add(labelJVMPatch);
-		
-		JLabel labelJVMPatchExplained = new JLabel(LanguageManager.getValue("m.force_jvm_patch_explained"));
-		labelJVMPatchExplained.setBounds(25, 175, 600, 16);
-		labelJVMPatchExplained.setFont(FontManager.fontReg);
-		filesPanel.add(labelJVMPatchExplained);
-		
-		JButton jvmPatchButton = new JButton(startIcon);
-		jvmPatchButton.setBounds(790, 160, 30, 23);
-		jvmPatchButton.setFocusPainted(false);
-		jvmPatchButton.setFocusable(false);
-		filesPanel.add(jvmPatchButton);
-		jvmPatchButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent _action) {
-				SettingsEventHandler.jvmPatchEvent(_action);
-			}
-		});
-		jvmPatchButton.setEnabled(SystemUtil.is64Bit());
+		if(SystemUtil.isWindows() && SystemUtil.is64Bit()) {
+			JSeparator sep = new JSeparator();
+			sep.setBounds(25, 140, 800, 16);
+			filesPanel.add(sep);
+			
+			JLabel labelJVMPatch = new JLabel(LanguageManager.getValue("m.force_jvm_patch"));
+			labelJVMPatch.setBounds(25, 155, 350, 18);
+			labelJVMPatch.setFont(FontManager.fontRegBig);
+			filesPanel.add(labelJVMPatch);
+			
+			JLabel labelJVMPatchExplained = new JLabel(LanguageManager.getValue("m.force_jvm_patch_explained"));
+			labelJVMPatchExplained.setBounds(25, 175, 600, 16);
+			labelJVMPatchExplained.setFont(FontManager.fontReg);
+			filesPanel.add(labelJVMPatchExplained);
+			
+			JButton jvmPatchButton = new JButton(startIcon);
+			jvmPatchButton.setBounds(790, 160, 30, 23);
+			jvmPatchButton.setFocusPainted(false);
+			jvmPatchButton.setFocusable(false);
+			filesPanel.add(jvmPatchButton);
+			jvmPatchButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent _action) {
+					SettingsEventHandler.jvmPatchEvent(_action);
+				}
+			});
+		}
 		
 		return filesPanel;
 	}
