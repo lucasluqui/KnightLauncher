@@ -22,6 +22,10 @@ public class ModListEventHandler {
 		ModLoader.mountRequired = true;
 	}
 	
+	public static void forceApplyEvent(ActionEvent action) {
+		ModLoader.mount();
+	}
+	
 	public static void getModsEvent(ActionEvent action) {
 		DesktopUtil.openWebpage(LauncherConstants.GET_MODS_URL);
 	}

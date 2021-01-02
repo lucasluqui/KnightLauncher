@@ -39,6 +39,7 @@ public class ModListGUI {
 	public static JLabel labelModCount;
 	private JLabel labelModCountText;
 	private JButton refreshButton;
+	private JButton forceApplyButton;
 	private JButton enableButton;
 	private JButton disableButton;
 	private JLabel labelName;
@@ -61,7 +62,7 @@ public class ModListGUI {
 		modListGUIFrame = new JFrame();
 		modListGUIFrame.setVisible(false);
 		modListGUIFrame.setTitle(LanguageManager.getValue("t.mods"));
-		modListGUIFrame.setBounds(100, 100, 385, 400);
+		modListGUIFrame.setBounds(100, 100, 385, 495);
 		modListGUIFrame.setResizable(false);
 		modListGUIFrame.setUndecorated(true);
 		modListGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -99,8 +100,16 @@ public class ModListGUI {
 		labelModCountText.setFont(FontManager.fontReg);
 		modListGUIFrame.getContentPane().add(labelModCountText);
 		
+		JLabel labelModMountAdviceText = new JLabel("");
+		labelModMountAdviceText.setFont(FontManager.fontReg);
+		labelModMountAdviceText.setHorizontalAlignment(SwingConstants.LEADING);
+		labelModMountAdviceText.setVerticalAlignment(SwingConstants.TOP);
+		labelModMountAdviceText.setBounds(12, 365, 365, 60);
+		modListGUIFrame.getContentPane().add(labelModMountAdviceText);
+		labelModMountAdviceText.setText("<html>Mods might not apply correctly after the UCP is applied, or when you first launch the game using Knight Launcher. If this happens, try to 'Force apply mods' a couple times and it should fix itself. We'll address this in a future update.</html>");
+		
 		refreshButton = new JButton(LanguageManager.getValue("b.refresh"));
-		refreshButton.setBounds(12, 365, 89, 23);
+		refreshButton.setBounds(12, 430, 89, 23);
 		refreshButton.setFont(FontManager.fontMed);
 		refreshButton.setFocusPainted(false);
 		refreshButton.setFocusable(false);
@@ -113,7 +122,7 @@ public class ModListGUI {
 		});
 		
 		JButton modFolderButton = new JButton(LanguageManager.getValue("b.open_mods_folder"));
-		modFolderButton.setBounds(107, 365, 136, 23);
+		modFolderButton.setBounds(107, 430, 136, 23);
 		modFolderButton.setFont(FontManager.fontMed);
 		modFolderButton.setFocusPainted(false);
 		modFolderButton.setFocusable(false);
@@ -126,7 +135,7 @@ public class ModListGUI {
 		});
 		
 		JButton getModsButton = new JButton(LanguageManager.getValue("b.get_mods"));
-		getModsButton.setBounds(248, 365, 126, 23);
+		getModsButton.setBounds(248, 430, 126, 23);
 		getModsButton.setFont(FontManager.fontMed);
 		getModsButton.setFocusPainted(false);
 		getModsButton.setFocusable(false);
@@ -135,6 +144,19 @@ public class ModListGUI {
 		getModsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent _action) {
 				ModListEventHandler.getModsEvent(_action);
+			}
+		});
+		
+		forceApplyButton = new JButton("Force apply mods");
+		forceApplyButton.setBounds(12, 460, 125, 23);
+		forceApplyButton.setFont(FontManager.fontMed);
+		forceApplyButton.setFocusPainted(false);
+		forceApplyButton.setFocusable(false);
+		forceApplyButton.setToolTipText("Force Apply Mods");
+		modListGUIFrame.getContentPane().add(forceApplyButton);
+		forceApplyButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent _action) {
+				ModListEventHandler.forceApplyEvent(_action);
 			}
 		});
 		
