@@ -24,7 +24,8 @@ public class LauncherConstants {
 	public static final String USER_DIR = System.getProperty("user.dir");
 	
 	
-	public static final String[] GETDOWN_ARGS_WIN = {".\\java_vm\\bin\\java.exe",
+	public static final String[] GETDOWN_ARGS_WIN = {
+			".\\java_vm\\bin\\java.exe",
 			"-Dsun.java2d.d3d=false",
 			"-Dcheck_unpacked=true",
 			"-jar",
@@ -33,7 +34,8 @@ public class LauncherConstants {
 			"client"
 	};
 	
-	public static final String[] GETDOWN_ARGS = {"./java/bin/java",
+	public static final String[] GETDOWN_ARGS = {
+			"./java/bin/java",
 			"-Dsun.java2d.d3d=false",
 			"-Dcheck_unpacked=true",
 			"-jar",
@@ -42,7 +44,8 @@ public class LauncherConstants {
 			"client"
 	};
 	
-	public static final String[] ALT_CLIENT_ARGS_WIN = {"./java_vm/bin/java",
+	public static final String[] ALT_CLIENT_ARGS_WIN = {
+			"./java_vm/bin/java",
 			"-classpath",
 			USER_DIR + File.separator + "./code/config.jar;" +
 			USER_DIR + File.separator + "./code/projectx-config.jar;" +
@@ -69,7 +72,8 @@ public class LauncherConstants {
 			"com.threerings.projectx.client.ProjectXApp",
 	};
 	
-	public static final String[] ALT_CLIENT_ARGS = {"./java/bin/java",
+	public static final String[] ALT_CLIENT_ARGS = {
+			"./java/bin/java",
 			"-classpath",
 			USER_DIR + File.separator + "./code/config.jar:" +
 			USER_DIR + File.separator + "./code/projectx-config.jar:" +
