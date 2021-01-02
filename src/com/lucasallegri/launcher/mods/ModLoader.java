@@ -95,7 +95,7 @@ public class ModLoader {
 		ProgressBar.showState(true);
 		ProgressBar.setBarMax(ModList.installedMods.size() + 1);
 		ProgressBar.setState(LanguageManager.getValue("m.mount"));
-		DiscordInstance.setPresence(LanguageManager.getValue("m.mount_start"));
+		DiscordInstance.setPresence(LanguageManager.getValue("m.mount"));
 		
 		for(int i = 0; i < ModList.installedMods.size(); i++) {
 			ProgressBar.setBarValue(i + 1);
@@ -129,13 +129,12 @@ public class ModLoader {
 			LauncherGUI.settingsButton.setEnabled(false);
 			SettingsGUI.forceRebuildButton.setEnabled(false); 
 		} catch(Exception e) {}
-		DiscordInstance.setPresence("Rebuilding...");
-		
 		String[] jarFiles = {"full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar"};
 		
 		ProgressBar.showBar(true);
 		ProgressBar.showState(true);
 		ProgressBar.setBarMax(jarFiles.length + 1);
+		DiscordInstance.setPresence(LanguageManager.getValue("m.clean"));
 		ProgressBar.setState(LanguageManager.getValue("m.clean"));
 		
 		// Iterate through all 3 .jar files to clean up the game files.
@@ -160,9 +159,11 @@ public class ModLoader {
 		ProgressBar.showBar(false);
 		ProgressBar.showState(false);
 		rebuildRequired = false;
-		LauncherGUI.launchButton.setEnabled(true);
-		LauncherGUI.settingsButton.setEnabled(true);
-		try { SettingsGUI.forceRebuildButton.setEnabled(true); } catch(Exception e) {}
+		try {
+			LauncherGUI.launchButton.setEnabled(true);
+			LauncherGUI.settingsButton.setEnabled(true);
+			SettingsGUI.forceRebuildButton.setEnabled(true);
+		} catch(Exception e) {}
 		DiscordInstance.setPresence(LanguageManager.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
 	}
 
