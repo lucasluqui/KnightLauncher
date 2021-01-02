@@ -52,7 +52,7 @@ public class LauncherApp {
 		DiscordInstance.start();
 		KeyboardController.start();
 		checkDirectories();
-		checkShortcut();
+		if(SystemUtil.isWindows()) checkShortcut();
 		
 		LauncherApp app = new LauncherApp();
 		
@@ -129,17 +129,21 @@ public class LauncherApp {
 	// Checking if we're being ran inside the game's directory, "getdown-pro.jar" should always be present if so.
 	private static void checkStartLocation() {
 		if(!FileUtil.fileExists("getdown-pro.jar")) {
-			DialogError.push("The .jar file seems to be placed in the wrong directory."
-					+ System.lineSeparator() + "Try using the Batch (.bat) file for Windows or the Shell (.sh) file for Linux/MacOS."
-					+ System.lineSeparator() + "Detected Steam path: " + SteamUtil.getGamePathWindows());
-			DesktopUtil.openDir(SteamUtil.getGamePathWindows());
+			String errorMessage = "The .jar file seems to be placed in the wrong directory."
+					+ System.lineSeparator() + "Try using the Batch (.bat) file for Windows or the Shell (.sh) file for Linux/MacOS.";
+			if(SystemUtil.isWindows()) {
+				errorMessage += System.lineSeparator() + "Detected Steam path: " + SteamUtil.getGamePathWindows();
+			}
+			DialogError.push(errorMessage);
+			log.error(errorMessage);
+			if(SystemUtil.isWindows()) DesktopUtil.openDir(SteamUtil.getGamePathWindows());
 			System.exit(1);
 		}
 	}
 	
 	// Create a shortcut to the application if there's none.
 	private static void checkShortcut() {
-		if(SystemUtil.isWindows() && Settings.createShortcut
+		if(Settings.createShortcut
 				&& !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherConstants.SHORTCUT_FILE_NAME)) {
 			
 			BufferedImage bimg = ImageUtil.loadImageWithinJar("/img/icon-128.png");
