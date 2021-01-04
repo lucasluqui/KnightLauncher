@@ -28,7 +28,6 @@ public class LauncherGUI {
 
   int pX, pY;
 
-  @SuppressWarnings("static-access")
   public LauncherGUI(LauncherApp app) {
     initialize();
   }
@@ -38,9 +37,7 @@ public class LauncherGUI {
     this.launcherGUIFrame.setVisible(!this.launcherGUIFrame.isVisible());
   }
 
-  /**
-   * @wbp.parser.entryPoint
-   */
+  /** @wbp.parser.entryPoint */
   private void initialize() {
 
     launcherGUIFrame = new JFrame();
