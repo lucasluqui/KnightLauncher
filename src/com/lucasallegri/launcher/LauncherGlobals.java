@@ -48,16 +48,16 @@ public class LauncherGlobals {
           "./java_vm/bin/java",
           "-classpath",
           USER_DIR + File.separator + "./code/config.jar;" +
-                  USER_DIR + File.separator + "./code/projectx-config.jar;" +
-                  USER_DIR + File.separator + "./code/projectx-pcode.jar;" +
-                  USER_DIR + File.separator + "./code/lwjgl.jar;" +
-                  USER_DIR + File.separator + "./code/lwjgl_util.jar;" +
-                  USER_DIR + File.separator + "./code/jinput.jar;" +
-                  USER_DIR + File.separator + "./code/jutils.jar;" +
-                  USER_DIR + File.separator + "./code/jshortcut.jar;" +
-                  USER_DIR + File.separator + "./code/commons-beanutils.jar;" +
-                  USER_DIR + File.separator + "./code/commons-digester.jar;" +
-                  USER_DIR + File.separator + "./code/commons-logging.jar;",
+          USER_DIR + File.separator + "./code/projectx-config.jar;" +
+          USER_DIR + File.separator + "./code/projectx-pcode.jar;" +
+          USER_DIR + File.separator + "./code/lwjgl.jar;" +
+          USER_DIR + File.separator + "./code/lwjgl_util.jar;" +
+          USER_DIR + File.separator + "./code/jinput.jar;" +
+          USER_DIR + File.separator + "./code/jutils.jar;" +
+          USER_DIR + File.separator + "./code/jshortcut.jar;" +
+          USER_DIR + File.separator + "./code/commons-beanutils.jar;" +
+          USER_DIR + File.separator + "./code/commons-digester.jar;" +
+          USER_DIR + File.separator + "./code/commons-logging.jar;",
           "-Dcom.threerings.getdown=false",
           "-Xms256M",
           "-Xmx512M",
@@ -76,16 +76,16 @@ public class LauncherGlobals {
           "./java/bin/java",
           "-classpath",
           USER_DIR + File.separator + "./code/config.jar:" +
-                  USER_DIR + File.separator + "./code/projectx-config.jar:" +
-                  USER_DIR + File.separator + "./code/projectx-pcode.jar:" +
-                  USER_DIR + File.separator + "./code/lwjgl.jar:" +
-                  USER_DIR + File.separator + "./code/lwjgl_util.jar:" +
-                  USER_DIR + File.separator + "./code/jinput.jar:" +
-                  USER_DIR + File.separator + "./code/jutils.jar:" +
-                  USER_DIR + File.separator + "./code/jshortcut.jar:" +
-                  USER_DIR + File.separator + "./code/commons-beanutils.jar:" +
-                  USER_DIR + File.separator + "./code/commons-digester.jar:" +
-                  USER_DIR + File.separator + "./code/commons-logging.jar:",
+          USER_DIR + File.separator + "./code/projectx-config.jar:" +
+          USER_DIR + File.separator + "./code/projectx-pcode.jar:" +
+          USER_DIR + File.separator + "./code/lwjgl.jar:" +
+          USER_DIR + File.separator + "./code/lwjgl_util.jar:" +
+          USER_DIR + File.separator + "./code/jinput.jar:" +
+          USER_DIR + File.separator + "./code/jutils.jar:" +
+          USER_DIR + File.separator + "./code/jshortcut.jar:" +
+          USER_DIR + File.separator + "./code/commons-beanutils.jar:" +
+          USER_DIR + File.separator + "./code/commons-digester.jar:" +
+          USER_DIR + File.separator + "./code/commons-logging.jar:",
           "-Dcom.threerings.getdown=false",
           "-Xms256M",
           "-Xmx512M",
