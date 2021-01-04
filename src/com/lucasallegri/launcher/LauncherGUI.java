@@ -166,7 +166,7 @@ public class LauncherGUI {
                         + LauncherGlobals.GITHUB_AUTHOR + "/"
                         + LauncherGlobals.GITHUB_REPO + "/"
                         + "releases/tag/"
-                        + LauncherGlobals.LATEST_RELEASE
+                        + LauncherGlobals._latestRelease
         );
       }
     });
