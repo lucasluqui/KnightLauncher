@@ -1,0 +1,20 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="KnightLauncher:jar">
+    <output-path>$PROJECT_DIR$/build/artifacts/KnightLauncher_jar</output-path>
+    <root id="archive" name="KnightLauncher.jar">
+      <element id="module-output" name="KnightLauncher" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/vatbub/mslinks/1.0.5/mslinks-1.0.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/code/discord-rpc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/code/image4j-0.7.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/code/commons-io-2.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/code/material-ui-swing-1.1.1-rc3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/16.0.3/annotations-16.0.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/samskivert/samskivert/1.9/samskivert-1.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/json/json/20180813/json-20180813.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont-swing/1.0.0/jiconfont-swing-1.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/lingala/zip4j/zip4j/2.5.0/zip4j-2.5.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont-font_awesome/4.7.0.1/jiconfont-font_awesome-4.7.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont/0.10.0/jiconfont-0.10.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
