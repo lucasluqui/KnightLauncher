@@ -37,11 +37,7 @@ public class KeyboardController {
     });
   }
 
-  public static Boolean isShiftPressed() {
-    return shiftPressed;
-  }
-  public static Boolean isAltPressed() {
-    return altPressed;
-  }
+  public static Boolean isShiftPressed() { return shiftPressed; }
+  public static Boolean isAltPressed() { return altPressed; }
 
 }
