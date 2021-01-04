@@ -47,7 +47,7 @@ public class ModLoader {
         mod.setVersion(modJson.getString("version"));
       }
       ModList.installedMods.add(mod);
-      log.info("A mod was found", new Object[]{"name", mod.displayName, "object", mod.toString()});
+      log.info("A mod was found", "name", mod.displayName, "object", mod.toString());
 
       /*
        * Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
