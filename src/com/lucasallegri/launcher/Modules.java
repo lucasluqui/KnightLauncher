@@ -17,7 +17,7 @@ public class Modules {
       try {
         FileUtil.extractFileWithinJar("/modules/skdiscordrpc/bundle.zip", "KnightLauncher/modules/skdiscordrpc/bundle.zip");
         Compressor.unzip("KnightLauncher/modules/skdiscordrpc/bundle.zip", "KnightLauncher/modules/skdiscordrpc/", false);
-        new File(LauncherConstants.USER_DIR + "KnightLauncher/modules/skdiscordrpc/bundle.zip").delete();
+        new File(LauncherGlobals.USER_DIR + "KnightLauncher/modules/skdiscordrpc/bundle.zip").delete();
         SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
       } catch (IOException e) {
         log.error(e);

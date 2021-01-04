@@ -1,7 +1,7 @@
 package com.lucasallegri.discord;
 
 import com.lucasallegri.launcher.LanguageManager;
-import com.lucasallegri.launcher.LauncherConstants;
+import com.lucasallegri.launcher.LauncherGlobals;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
@@ -22,7 +22,7 @@ public class DiscordInstance {
     public static void setPresence(String detail) {
         DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(LanguageManager.getValue("presence.using"));
         presence.setDetails(detail);
-        presence.setBigImage("icon-512", LanguageManager.getValue("presence.image_desc", LauncherConstants.VERSION));
+        presence.setBigImage("icon-512", LanguageManager.getValue("presence.image_desc", LauncherGlobals.VERSION));
         DiscordRPC.discordUpdatePresence(presence.build());
         log.info("Updating presence detail", "detail", detail);
     }

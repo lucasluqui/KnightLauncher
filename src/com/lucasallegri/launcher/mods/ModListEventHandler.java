@@ -2,7 +2,7 @@ package com.lucasallegri.launcher.mods;
 
 import com.lucasallegri.discord.DiscordInstance;
 import com.lucasallegri.launcher.LanguageManager;
-import com.lucasallegri.launcher.LauncherConstants;
+import com.lucasallegri.launcher.LauncherGlobals;
 import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.util.DesktopUtil;
 
@@ -32,7 +32,7 @@ public class ModListEventHandler {
   }
 
   public static void getModsEvent(ActionEvent action) {
-    DesktopUtil.openWebpage(LauncherConstants.GET_MODS_URL);
+    DesktopUtil.openWebpage(LauncherGlobals.GET_MODS_URL);
   }
 
 }

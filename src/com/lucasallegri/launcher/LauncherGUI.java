@@ -42,7 +42,7 @@ public class LauncherGUI {
 
     launcherGUIFrame = new JFrame();
     launcherGUIFrame.setVisible(false);
-    launcherGUIFrame.setTitle(LanguageManager.getValue("t.main", LauncherConstants.VERSION));
+    launcherGUIFrame.setTitle(LanguageManager.getValue("t.main", LauncherGlobals.VERSION));
     launcherGUIFrame.setResizable(false);
     launcherGUIFrame.setBounds(100, 100, 850, 475);
     launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -163,10 +163,10 @@ public class LauncherGUI {
       public void actionPerformed(ActionEvent _action) {
         DesktopUtil.openWebpage(
                 "https://github.com/"
-                        + LauncherConstants.GITHUB_AUTHOR + "/"
-                        + LauncherConstants.GITHUB_REPO + "/"
+                        + LauncherGlobals.GITHUB_AUTHOR + "/"
+                        + LauncherGlobals.GITHUB_REPO + "/"
                         + "releases/tag/"
-                        + LauncherConstants.LATEST_RELEASE
+                        + LauncherGlobals.LATEST_RELEASE
         );
       }
     });
@@ -224,7 +224,7 @@ public class LauncherGUI {
     });
     titleBar.setLayout(null);
 
-    JLabel windowTitle = new JLabel(LanguageManager.getValue("t.main", LauncherConstants.VERSION));
+    JLabel windowTitle = new JLabel(LanguageManager.getValue("t.main", LauncherGlobals.VERSION));
     windowTitle.setFont(FontManager.fontMed);
     windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 20);
     titleBar.add(windowTitle);
@@ -270,7 +270,7 @@ public class LauncherGUI {
     titleBar.add(discordButton);
     discordButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        DesktopUtil.openWebpage(LauncherConstants.DISCORD_URL);
+        DesktopUtil.openWebpage(LauncherGlobals.DISCORD_URL);
       }
     });
 
@@ -285,7 +285,7 @@ public class LauncherGUI {
     titleBar.add(bugButton);
     bugButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        DesktopUtil.openWebpage(LauncherConstants.BUG_REPORT_URL);
+        DesktopUtil.openWebpage(LauncherGlobals.BUG_REPORT_URL);
       }
     });
 
@@ -300,7 +300,7 @@ public class LauncherGUI {
     titleBar.add(kofiButton);
     kofiButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        DesktopUtil.openWebpage(LauncherConstants.KOFI_URL);
+        DesktopUtil.openWebpage(LauncherGlobals.KOFI_URL);
       }
     });
 

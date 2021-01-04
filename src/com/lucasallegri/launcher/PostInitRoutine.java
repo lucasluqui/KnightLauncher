@@ -20,7 +20,7 @@ public class PostInitRoutine {
     if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
     if (Settings.useIngameRPC) Modules.setupIngameRPC();
     if (!Settings.ucpSetup) Modules.setupUCP();
-    if (!FileUtil.fileExists(LauncherConstants.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip"))
+    if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip"))
       Modules.setupSafeguard();
 
     DiscordInstance.setPresence(LanguageManager.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
@@ -46,7 +46,7 @@ public class PostInitRoutine {
         }
 
         String tweets = null;
-        tweets = INetUtil.getWebpageContent(LauncherConstants.CDN_URL + "tweets.html");
+        tweets = INetUtil.getWebpageContent(LauncherGlobals.CDN_URL + "tweets.html");
         if (tweets == null) {
           LauncherGUI.tweetsContainer.setText(LanguageManager.getValue("error.tweets_retrieve"));
         } else {
@@ -58,7 +58,7 @@ public class PostInitRoutine {
 
         Image eventImage = null;
         String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
-        eventImage = ImageUtil.getImageFromURL(LauncherConstants.CDN_URL + "event_" + eventImageLang + ".png", 525, 305);
+        eventImage = ImageUtil.getImageFromURL(LauncherGlobals.CDN_URL + "event_" + eventImageLang + ".png", 525, 305);
         if (eventImage == null) {
           LauncherGUI.imageContainer.setText(LanguageManager.getValue("error.event_image_missing"));
         } else {
@@ -74,21 +74,21 @@ public class PostInitRoutine {
   private static void pullGithubData() {
 
     String rawResponseReleases = INetUtil.getWebpageContent(
-            LauncherConstants.GITHUB_API
+            LauncherGlobals.GITHUB_API
                     + "repos/"
-                    + LauncherConstants.GITHUB_AUTHOR + "/"
-                    + LauncherConstants.GITHUB_REPO + "/"
+                    + LauncherGlobals.GITHUB_AUTHOR + "/"
+                    + LauncherGlobals.GITHUB_REPO + "/"
                     + "releases/"
                     + "latest"
     );
 
     JSONObject jsonReleases = new JSONObject(rawResponseReleases);
 
-    LauncherConstants.LATEST_RELEASE = jsonReleases.getString("tag_name");
+    LauncherGlobals._latestRelease = jsonReleases.getString("tag_name");
   }
 
   private static void checkVersion() {
-    if (!LauncherConstants.LATEST_RELEASE.equalsIgnoreCase(LauncherConstants.VERSION)) {
+    if (!LauncherGlobals._latestRelease.equalsIgnoreCase(LauncherGlobals.VERSION)) {
       Settings.isOutdated = true;
       LauncherGUI.updateButton.setVisible(true);
     }

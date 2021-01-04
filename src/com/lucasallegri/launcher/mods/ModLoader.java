@@ -35,7 +35,7 @@ public class ModLoader {
     for (String file : rawFiles) {
       JSONObject modJson;
       try {
-        modJson = new JSONObject(Compressor.readFileInsideZip(LauncherConstants.USER_DIR + "/mods/" + file, "mod.json")).getJSONObject("mod");
+        modJson = new JSONObject(Compressor.readFileInsideZip(LauncherGlobals.USER_DIR + "/mods/" + file, "mod.json")).getJSONObject("mod");
       } catch (Exception e) {
         modJson = null;
       }
@@ -146,9 +146,9 @@ public class ModLoader {
     }
 
     // Check for decompiled configs (.xml) present in the configs folder and delete them on sight.
-    List<String> configs = FileUtil.fileNamesInDirectory(LauncherConstants.USER_DIR + "/rsrc/config", ".xml");
+    List<String> configs = FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/rsrc/config", ".xml");
     for (String config : configs) {
-      new File(LauncherConstants.USER_DIR + "/rsrc/config/" + config).delete();
+      new File(LauncherGlobals.USER_DIR + "/rsrc/config/" + config).delete();
     }
 
     ProgressBar.setBarValue(jarFiles.length + 1);

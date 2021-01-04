@@ -113,7 +113,7 @@ public class ModListGUI {
     modListGUIFrame.getContentPane().add(modFolderButton);
     modFolderButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent _action) {
-        DesktopUtil.openDir(LauncherConstants.USER_DIR + "/mods");
+        DesktopUtil.openDir(LauncherGlobals.USER_DIR + "/mods");
       }
     });
 

@@ -35,9 +35,9 @@ public class LauncherEventHandler {
         } else {
 
           if (SystemUtil.isWindows()) {
-            ProcessUtil.startApplication(LauncherConstants.GETDOWN_ARGS_WIN);
+            ProcessUtil.startApplication(LauncherGlobals.GETDOWN_ARGS_WIN);
           } else {
-            ProcessUtil.startApplication(LauncherConstants.GETDOWN_ARGS);
+            ProcessUtil.startApplication(LauncherGlobals.GETDOWN_ARGS);
           }
 
         }
@@ -63,9 +63,9 @@ public class LauncherEventHandler {
       public void run() {
 
         if (!SystemUtil.isWindows()) {
-          ProcessUtil.startApplication(LauncherConstants.ALT_CLIENT_ARGS);
+          ProcessUtil.startApplication(LauncherGlobals.ALT_CLIENT_ARGS);
         } else {
-          ProcessUtil.startApplication(LauncherConstants.ALT_CLIENT_ARGS_WIN);
+          ProcessUtil.startApplication(LauncherGlobals.ALT_CLIENT_ARGS_WIN);
         }
 
         DiscordInstance.stop();

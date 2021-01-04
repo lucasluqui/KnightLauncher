@@ -134,21 +134,21 @@ public class LauncherApp {
   // Create a shortcut to the application if there's none.
   private static void checkShortcut() {
     if (Settings.createShortcut
-            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherConstants.SHORTCUT_FILE_NAME)) {
+            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.SHORTCUT_FILE_NAME)) {
 
       BufferedImage bimg = ImageUtil.loadImageWithinJar("/img/icon-128.png");
       try {
-        ICOEncoder.write(bimg, new File(LauncherConstants.USER_DIR + "/KnightLauncher/images/icon-128.ico"));
+        ICOEncoder.write(bimg, new File(LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-128.ico"));
       } catch (IOException e) {
         log.error(e);
       }
 
       DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
-              "-jar \"" + LauncherConstants.USER_DIR + "\\KnightLauncher.jar\"",
-              LauncherConstants.USER_DIR,
-              LauncherConstants.USER_DIR + "\\KnightLauncher\\images\\icon-128.ico",
+              "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
+              LauncherGlobals.USER_DIR,
+              LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-128.ico",
               "Start KnightLauncher",
-              LauncherConstants.SHORTCUT_FILE_NAME
+              LauncherGlobals.SHORTCUT_FILE_NAME
       );
     }
   }

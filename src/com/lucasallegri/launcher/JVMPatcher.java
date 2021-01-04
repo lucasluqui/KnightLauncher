@@ -175,8 +175,8 @@ public class JVMPatcher {
     jvmPatcherProgressBar.setValue(2);
     jvmPatcherState.setText(LanguageManager.getValue("m.jvm_patcher_delete"));
     try {
-      if (!FileUtil.fileExists(LauncherConstants.USER_DIR + "\\java_vm_unpatched")) {
-        FileUtils.moveDirectory(new File(LauncherConstants.USER_DIR + "\\java_vm"), new File(LauncherConstants.USER_DIR + "\\java_vm_unpatched"));
+      if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "\\java_vm_unpatched")) {
+        FileUtils.moveDirectory(new File(LauncherGlobals.USER_DIR + "\\java_vm"), new File(LauncherGlobals.USER_DIR + "\\java_vm_unpatched"));
       }
     } catch (IOException e) {
       log.error(e);
@@ -184,8 +184,8 @@ public class JVMPatcher {
 
     jvmPatcherProgressBar.setValue(3);
     jvmPatcherState.setText(LanguageManager.getValue("m.jvm_patcher_extract"));
-    Compressor.unzip(LauncherConstants.USER_DIR + "\\jvm_pack.zip", LauncherConstants.USER_DIR, false);
-    new File(LauncherConstants.USER_DIR + "\\jvm_pack.zip").delete();
+    Compressor.unzip(LauncherGlobals.USER_DIR + "\\jvm_pack.zip", LauncherGlobals.USER_DIR, false);
+    new File(LauncherGlobals.USER_DIR + "\\jvm_pack.zip").delete();
 
     jvmPatcherProgressBar.setValue(4);
     jvmPatcherState.setText(LanguageManager.getValue("m.jvm_patcher_finish"));
@@ -194,14 +194,14 @@ public class JVMPatcher {
 
   private static void downloadPackagedJVM() {
 
-    String downloadUrl = LauncherConstants.LARGE_CDN_URL
+    String downloadUrl = LauncherGlobals.LARGE_CDN_URL
             + "jvm/windows/jvm_pack.zip";
 
     log.info("Downloading Java VM", "url", downloadUrl);
     try {
       FileUtils.copyURLToFile(
               new URL(downloadUrl),
-              new File(LauncherConstants.USER_DIR + "\\jvm_pack.zip"),
+              new File(LauncherGlobals.USER_DIR + "\\jvm_pack.zip"),
               0,
               0
       );
@@ -215,7 +215,7 @@ public class JVMPatcher {
 
   private static void finish() {
     SettingsProperties.setValue("launcher.jvm_patched", "true");
-    ProcessUtil.startApplication(new String[]{"java", "-jar", LauncherConstants.USER_DIR + "\\KnightLauncher.jar"});
+    ProcessUtil.startApplication(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar"});
     jvmPatcherFrame.dispose();
     System.exit(1);
   }

@@ -1,6 +1,6 @@
 package com.lucasallegri.launcher.settings;
 
-import com.lucasallegri.launcher.LauncherConstants;
+import com.lucasallegri.launcher.LauncherGlobals;
 import com.lucasallegri.util.FileUtil;
 
 import java.io.*;
@@ -13,7 +13,7 @@ public class SettingsProperties {
   private static final String PROP_VER = "12";
 
   private static final Properties prop = new Properties();
-  private static final String propPath = LauncherConstants.USER_DIR + File.separator + "KnightLauncher.properties";
+  private static final String propPath = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
 
   public static void setup() {
     try {

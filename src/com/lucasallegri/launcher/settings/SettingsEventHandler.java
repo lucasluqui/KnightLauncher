@@ -2,7 +2,7 @@ package com.lucasallegri.launcher.settings;
 
 import com.lucasallegri.dialog.DialogWarning;
 import com.lucasallegri.launcher.LanguageManager;
-import com.lucasallegri.launcher.LauncherConstants;
+import com.lucasallegri.launcher.LauncherGlobals;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.util.ProcessUtil;
 
@@ -99,7 +99,7 @@ public class SettingsEventHandler {
 
   public static void jvmPatchEvent(ActionEvent action) {
     SettingsProperties.setValue("launcher.jvm_patched", "false");
-    ProcessUtil.startApplication(new String[]{"java", "-jar", LauncherConstants.USER_DIR + "\\KnightLauncher.jar"});
+    ProcessUtil.startApplication(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar"});
     SettingsGUI.settingsGUIFrame.dispose();
     System.exit(1);
   }
