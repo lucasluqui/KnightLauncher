@@ -8,8 +8,8 @@ import com.samskivert.util.Logger;
 @SuppressWarnings("unused")
 public class Log {
 
-  /**
-   * The {@link Logger} reference.
-   */
-  public static Logger log = Logger.getLogger("com.lucasallegri");
+    /**
+     * The {@link Logger} reference.
+     */
+    public static Logger log = Logger.getLogger("com.lucasallegri");
 }
