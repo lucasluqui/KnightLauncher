@@ -19,7 +19,6 @@ public class PostInitRoutine {
     ModLoader.checkInstalled();
     if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
     if (Settings.useIngameRPC) Modules.setupIngameRPC();
-    if (!Settings.ucpSetup) Modules.setupUCP();
     if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip"))
       Modules.setupSafeguard();
 
