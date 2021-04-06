@@ -83,14 +83,6 @@ public class ModListGUI {
     labelModCountText.setFont(FontManager.fontReg);
     modListGUIFrame.getContentPane().add(labelModCountText);
 
-    JLabel labelModMountAdviceText = new JLabel("");
-    labelModMountAdviceText.setFont(FontManager.fontReg);
-    labelModMountAdviceText.setHorizontalAlignment(SwingConstants.LEADING);
-    labelModMountAdviceText.setVerticalAlignment(SwingConstants.TOP);
-    labelModMountAdviceText.setBounds(12, 365, 365, 60);
-    modListGUIFrame.getContentPane().add(labelModMountAdviceText);
-    labelModMountAdviceText.setText("<html>Mods might not apply correctly after the UCP is applied, or when you first launch the game using Knight Launcher. If this happens, try to 'Force apply mods' a couple times and it should fix itself. We'll address this in a future update.</html>");
-
     refreshButton = new JButton(LanguageManager.getValue("b.refresh"));
     refreshButton.setBounds(12, 430, 89, 23);
     refreshButton.setFont(FontManager.fontMed);
