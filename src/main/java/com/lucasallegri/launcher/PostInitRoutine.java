@@ -83,11 +83,11 @@ public class PostInitRoutine {
 
     JSONObject jsonReleases = new JSONObject(rawResponseReleases);
 
-    LauncherGlobals._latestRelease = jsonReleases.getString("tag_name");
+    LauncherGlobals.latestRelease = jsonReleases.getString("tag_name");
   }
 
   private static void checkVersion() {
-    if (!LauncherGlobals._latestRelease.equalsIgnoreCase(LauncherGlobals.VERSION)) {
+    if (!LauncherGlobals.latestRelease.equalsIgnoreCase(LauncherGlobals.VERSION)) {
       Settings.isOutdated = true;
       LauncherGUI.updateButton.setVisible(true);
     }
