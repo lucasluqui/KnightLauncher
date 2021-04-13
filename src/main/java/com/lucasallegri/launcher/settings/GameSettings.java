@@ -28,8 +28,8 @@ public class GameSettings {
        * This is useful if an user installs Knight Launcher and had already
        * made it's own extra.txt, this way it won't get deleted forever, just renamed.
        */
-      if(!FileUtil.fileExists("extra.txt.old")) {
-        FileUtil.rename(new File("extra.txt"), new File("extra.txt.old"));
+      if(!FileUtil.fileExists("old-extra.txt")) {
+        FileUtil.rename(new File("extra.txt"), new File("old-extra.txt"));
       }
       PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");
 
