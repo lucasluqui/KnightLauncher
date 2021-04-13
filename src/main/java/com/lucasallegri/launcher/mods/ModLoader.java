@@ -127,7 +127,7 @@ public class ModLoader {
     DiscordInstance.setPresence(LanguageManager.getValue("m.clean"));
     ProgressBar.setState(LanguageManager.getValue("m.clean"));
 
-    // Iterate through all 3 .jar files to clean up the game files.
+    // Iterate through all 3 bundles to clean up the game files.
     for (int i = 0; i < BUNDLES.length; i++) {
       ProgressBar.setBarValue(i + 1);
       DiscordInstance.setPresence(LanguageManager.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(BUNDLES.length)}));
@@ -138,7 +138,7 @@ public class ModLoader {
       }
     }
 
-    // Check for decompiled configs (.xml) present in the configs folder and delete them on sight.
+    // Check for .xml configs present in the configs folder and delete them.
     List<String> configs = FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/rsrc/config", ".xml");
     for (String config : configs) {
       new File(LauncherGlobals.USER_DIR + "/rsrc/config/" + config).delete();
