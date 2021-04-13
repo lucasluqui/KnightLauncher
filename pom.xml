@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>KnightLauncher</groupId>
   <artifactId>KnightLauncher</artifactId>
-  <version>1.5.1</version>
+  <version>1.5.2</version>
   <name>KnightLauncher</name>
   <description>Open source game launcher for Spiral Knights.</description>
 
