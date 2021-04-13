@@ -1,5 +1,11 @@
 package com.lucasallegri.launcher.mods;
 
+import com.lucasallegri.launcher.ProgressBar;
+import com.lucasallegri.util.Compressor;
+import com.lucasallegri.util.SystemUtil;
+
+import static com.lucasallegri.launcher.mods.Log.log;
+
 public class Mod {
 
   protected String displayName;
@@ -35,40 +41,40 @@ public class Mod {
     return this.displayName;
   }
 
-  public void setDisplayName(String _displayName) {
-    this.displayName = _displayName;
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
   }
 
   public String getDescription() {
     return this.description;
   }
 
-  public void setDescription(String _description) {
-    this.description = _description;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public String getAuthor() {
     return this.authorName;
   }
 
-  public void setAuthor(String _author) {
-    this.authorName = _author;
+  public void setAuthor(String author) {
+    this.authorName = author;
   }
 
   public String getVersion() {
     return this.version;
   }
 
-  public void setVersion(String _version) {
-    this.version = _version;
+  public void setVersion(String version) {
+    this.version = version;
   }
 
   public String getFileName() {
     return this.fileName;
   }
 
-  public void setFileName(String _fileName) {
-    this.fileName = _fileName;
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
   }
 
   public Boolean isEnabled() {
@@ -77,6 +83,15 @@ public class Mod {
 
   public void setEnabled(boolean enabled) {
     this.isEnabled = enabled;
+  }
+
+  public void mount() {
+    Compressor.unzip("./mods/" + this.fileName, "./rsrc/", SystemUtil.isMac());
+    log.info("Mod mounted successfully", "mod", this.displayName);
+  }
+
+  public void wasAdded() {
+    log.info("A mod was added", "object", this.toString());
   }
 
   @Override

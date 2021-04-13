@@ -28,14 +28,15 @@ public class Modules {
     }
   }
 
-  public static void setupSafeguard() {
+  public static void extractSafeguard() {
     try {
+      log.info("Extracting safeguard...");
       FileUtil.extractFileWithinJar("/modules/safeguard/bundle.zip", "KnightLauncher/modules/safeguard/bundle.zip");
       Compressor.unzip("KnightLauncher/modules/safeguard/bundle.zip", "rsrc/", false);
+      log.info("Extracted safeguard.");
     } catch (IOException e) {
       log.error(e);
     }
-
   }
 
 }
