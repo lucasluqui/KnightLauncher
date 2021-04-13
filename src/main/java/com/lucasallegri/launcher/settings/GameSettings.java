@@ -31,6 +31,7 @@ public class GameSettings {
       if(!FileUtil.fileExists("old-extra.txt")) {
         FileUtil.rename(new File("extra.txt"), new File("old-extra.txt"));
       }
+
       PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");
 
       if (Settings.gameUseStringDeduplication) writer.println("-XX:+UseStringDeduplication");
