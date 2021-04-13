@@ -53,3 +53,4 @@ The following open source libraries made Knight Launcher possible:
 - [mslinks](https://github.com/DmitriiShamrikov/mslinks)
 - [org.json](https://github.com/eskatos/org.json-java)
 - [jIconFont](https://github.com/jIconFont)
+- [samskivert](https://github.com/samskivert/samskivert)
