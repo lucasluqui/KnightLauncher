@@ -23,9 +23,14 @@ public class GameSettings {
       ProgressBar.setBarValue(0);
       ProgressBar.setState(LanguageManager.getValue("m.apply"));
 
-      // Rename the old extra.txt and start writing a new one.
-      String renamed = "extra_old_" + DateUtil.getDateAsString() + ".txt";
-      FileUtil.rename(new File("extra.txt"), new File(renamed));
+      /**
+       * Back up the current extra.txt if there's no back up already.
+       * This is useful if an user installs Knight Launcher and had already
+       * made it's own extra.txt, this way it won't get deleted forever, just renamed.
+       */
+      if(!FileUtil.fileExists("extra.txt.old")) {
+        FileUtil.rename(new File("extra.txt"), new File("extra.txt.old"));
+      }
       PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");
 
       if (Settings.gameUseStringDeduplication) writer.println("-XX:+UseStringDeduplication");
@@ -46,12 +51,11 @@ public class GameSettings {
         writer.println("-Xms" + Settings.gameMemory + "M");
         writer.println("-Xmx" + Settings.gameMemory + "M");
       } else {
-        writer.println("-Xms" + (Settings.gameMemory / 2) + "M");
+        writer.println("-Xms512M");
         writer.println("-Xmx" + Settings.gameMemory + "M");
       }
 
       writer.println(Settings.gameAdditionalArgs);
-
       writer.close();
 
       ProgressBar.setBarValue(1);
