@@ -14,7 +14,9 @@ public class JarMod extends Mod {
     this.fileName = fileName;
   }
 
-  public void mount () {}
+  public void mount () {
+    log.info("Jar Mod mounted successfully", "mod", this.displayName);
+  }
 
   public void wasAdded() {
     log.info("A jar mod was added", "object", this.toString());
