@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import javax.swing.*;
 import java.awt.*;
 
+import static com.lucasallegri.launcher.Log.log;
+
 public class PostInitRoutine {
 
   public PostInitRoutine(LauncherApp app) {
@@ -42,7 +44,7 @@ public class PostInitRoutine {
         }));
       }
 
-      String tweets = null;
+      String tweets;
       tweets = INetUtil.getWebpageContent(LauncherGlobals.CDN_URL + "tweets.html");
       if (tweets == null) {
         LauncherGUI.tweetsContainer.setText(Locale.getValue("error.tweets_retrieve"));
@@ -53,7 +55,7 @@ public class PostInitRoutine {
         LauncherGUI.tweetsContainer.setText(styledTweets);
       }
 
-      Image eventImage = null;
+      Image eventImage;
       String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
       eventImage = ImageUtil.getImageFromURL(LauncherGlobals.CDN_URL + "event_" + eventImageLang + ".png", 525, 305);
       if (eventImage == null) {
@@ -78,9 +80,13 @@ public class PostInitRoutine {
                     + "latest"
     );
 
-    JSONObject jsonReleases = new JSONObject(rawResponseReleases);
+    if(rawResponseReleases != null) {
+      JSONObject jsonReleases = new JSONObject(rawResponseReleases);
 
-    LauncherGlobals.latestRelease = jsonReleases.getString("tag_name");
+      LauncherGlobals.latestRelease = jsonReleases.getString("tag_name");
+    } else {
+      log.error("Received no response from GitHub. Possible downtime?");
+    }
   }
 
   private static void checkVersion() {
