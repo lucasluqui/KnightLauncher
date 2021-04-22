@@ -31,6 +31,20 @@ public class LauncherApp {
 
   public static void main(String[] args) {
 
+    LauncherApp app = new LauncherApp();
+
+    if (SystemUtil.is64Bit() && SystemUtil.isWindows() && !Settings.jvmPatched) {
+      jvmPatcher = app.composeJVMPatcher(app);
+    } else {
+      lgui = app.composeLauncherGUI(app);
+      sgui = app.composeSettingsGUI(app);
+      mgui = app.composeModListGUI(app);
+    }
+
+    new PostInitRoutine(app);
+  }
+
+  public LauncherApp () {
     setupFileLogging();
     logVMInfo();
     checkStartLocation();
@@ -44,68 +58,48 @@ public class LauncherApp {
     KeyboardController.start();
     checkDirectories();
     if (SystemUtil.isWindows()) checkShortcut();
-
-    LauncherApp app = new LauncherApp();
-
-    if (SystemUtil.is64Bit() && SystemUtil.isWindows() && !Settings.jvmPatched) {
-      app.composeJVMPatcher(app);
-    } else {
-      app.composeLauncherGUI(app);
-      app.composeSettingsGUI(app);
-      app.composeModListGUI(app);
-    }
-
-    new PostInitRoutine(app);
   }
 
   private LauncherGUI composeLauncherGUI(LauncherApp app) {
-    EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          lgui = new LauncherGUI(app);
-          lgui.switchVisibility();
-        } catch (Exception e) {
-          log.error(e);
-        }
+    EventQueue.invokeLater(() -> {
+      try {
+        lgui = new LauncherGUI(app);
+        lgui.switchVisibility();
+      } catch (Exception e) {
+        log.error(e);
       }
     });
     return lgui;
   }
 
   private SettingsGUI composeSettingsGUI(LauncherApp app) {
-    EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          sgui = new SettingsGUI(app);
-        } catch (Exception e) {
-          log.error(e);
-        }
+    EventQueue.invokeLater(() -> {
+      try {
+        sgui = new SettingsGUI(app);
+      } catch (Exception e) {
+        log.error(e);
       }
     });
     return sgui;
   }
 
   private ModListGUI composeModListGUI(LauncherApp app) {
-    EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          mgui = new ModListGUI(app);
-        } catch (Exception e) {
-          log.error(e);
-        }
+    EventQueue.invokeLater(() -> {
+      try {
+        mgui = new ModListGUI(app);
+      } catch (Exception e) {
+        log.error(e);
       }
     });
     return mgui;
   }
 
   private JVMPatcher composeJVMPatcher(LauncherApp app) {
-    EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          jvmPatcher = new JVMPatcher(app);
-        } catch (Exception e) {
-          log.error(e);
-        }
+    EventQueue.invokeLater(() -> {
+      try {
+        jvmPatcher = new JVMPatcher(app);
+      } catch (Exception e) {
+        log.error(e);
       }
     });
     return jvmPatcher;
@@ -166,9 +160,6 @@ public class LauncherApp {
       switch (Settings.launcherStyle) {
         case "dark":
           MaterialLookAndFeel.changeTheme(new JMarsDarkTheme());
-          break;
-        case "light":
-          MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
           break;
         default:
           MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
