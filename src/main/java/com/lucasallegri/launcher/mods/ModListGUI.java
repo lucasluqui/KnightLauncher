@@ -28,8 +28,6 @@ public class ModListGUI extends BaseGUI {
   private JLabel labelVersion;
   private JLabel labelAuthor;
 
-  int pY, pX;
-
   public ModListGUI(LauncherApp app) {
     super();
     this.app = app;

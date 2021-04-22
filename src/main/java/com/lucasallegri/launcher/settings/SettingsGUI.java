@@ -29,8 +29,6 @@ public class SettingsGUI extends BaseGUI {
   public static JToggleButton switchUseIngameRPC;
   public static JEditorPane argumentsPane;
 
-  int pY, pX;
-
   @SuppressWarnings("static-access")
   public SettingsGUI(LauncherApp app) {
     super();
