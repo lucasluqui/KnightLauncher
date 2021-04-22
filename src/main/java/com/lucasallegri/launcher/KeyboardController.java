@@ -10,30 +10,26 @@ public class KeyboardController {
 
   public static void start() {
 
-    KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+    KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(ke -> {
+      switch (ke.getID()) {
 
-      @Override
-      public boolean dispatchKeyEvent(KeyEvent ke) {
-        switch (ke.getID()) {
+        case KeyEvent.KEY_PRESSED:
+          if (ke.getKeyCode() == KeyEvent.VK_SHIFT) {
+            shiftPressed = true;
+          } else if (ke.getKeyCode() == KeyEvent.VK_ALT) {
+            altPressed = true;
+          }
+          break;
 
-          case KeyEvent.KEY_PRESSED:
-            if (ke.getKeyCode() == KeyEvent.VK_SHIFT) {
-              shiftPressed = true;
-            } else if (ke.getKeyCode() == KeyEvent.VK_ALT) {
-              altPressed = true;
-            }
-            break;
-
-          case KeyEvent.KEY_RELEASED:
-            if (ke.getKeyCode() == KeyEvent.VK_SHIFT) {
-              shiftPressed = false;
-            } else if (ke.getKeyCode() == KeyEvent.VK_ALT) {
-              altPressed = false;
-            }
-            break;
-        }
-        return false;
+        case KeyEvent.KEY_RELEASED:
+          if (ke.getKeyCode() == KeyEvent.VK_SHIFT) {
+            shiftPressed = false;
+          } else if (ke.getKeyCode() == KeyEvent.VK_ALT) {
+            altPressed = false;
+          }
+          break;
       }
+      return false;
     });
   }
 

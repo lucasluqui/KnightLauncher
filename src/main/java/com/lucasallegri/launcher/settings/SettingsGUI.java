@@ -1,9 +1,6 @@
 package com.lucasallegri.launcher.settings;
 
-import com.lucasallegri.launcher.FontManager;
-import com.lucasallegri.launcher.Locale;
-import com.lucasallegri.launcher.LauncherApp;
-import com.lucasallegri.launcher.LauncherGUI;
+import com.lucasallegri.launcher.*;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.SystemUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -13,9 +10,9 @@ import mdlaf.utils.MaterialBorders;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class SettingsGUI {
+public class SettingsGUI extends BaseGUI {
 
-  private static LauncherApp app;
+  private final LauncherApp app;
   public static JFrame settingsGUIFrame;
   public static JComboBox<String> choicePlatform;
   public static JComboBox<String> choiceLanguage;
@@ -36,6 +33,8 @@ public class SettingsGUI {
 
   @SuppressWarnings("static-access")
   public SettingsGUI(LauncherApp app) {
+    super();
+    this.app = app;
     initialize();
   }
 

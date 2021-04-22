@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class LauncherGUI {
+public class LauncherGUI extends BaseGUI {
 
   private final LauncherApp app;
   public static JFrame launcherGUIFrame;
@@ -25,9 +25,8 @@ public class LauncherGUI {
   public static JLabel imageContainer;
   public static JLabel playerCountLabel;
 
-  int pX, pY;
-
   public LauncherGUI(LauncherApp app) {
+    super();
     this.app = app;
     initialize();
   }

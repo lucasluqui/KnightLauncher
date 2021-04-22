@@ -11,9 +11,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class ModListGUI {
+public class ModListGUI extends BaseGUI {
 
-  private static LauncherApp app;
+  private final LauncherApp app;
   public static JFrame modListGUIFrame;
   public static List modListContainer;
   public static JLabel labelModCount;
@@ -31,6 +31,8 @@ public class ModListGUI {
   int pY, pX;
 
   public ModListGUI(LauncherApp app) {
+    super();
+    this.app = app;
     initialize();
   }
 

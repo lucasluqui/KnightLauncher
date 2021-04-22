@@ -16,8 +16,9 @@ import java.net.URL;
 
 import static com.lucasallegri.launcher.Log.log;
 
-public class JVMPatcher {
+public class JVMPatcher extends BaseGUI {
 
+  private final LauncherApp app;
   public static JFrame jvmPatcherFrame;
   private static JLabel headerLabel;
   private static JLabel subHeaderLabel;
@@ -26,9 +27,9 @@ public class JVMPatcher {
   private static JProgressBar jvmPatcherProgressBar;
   private static JLabel jvmPatcherState;
 
-  int pY, pX;
-
   public JVMPatcher(LauncherApp app) {
+    super();
+    this.app = app;
     initialize();
   }
 
