@@ -1,12 +1,10 @@
 package com.lucasallegri.launcher.mods;
 
-import com.lucasallegri.discord.DiscordInstance;
 import com.lucasallegri.launcher.*;
 import com.lucasallegri.launcher.settings.SettingsGUI;
 import com.lucasallegri.launcher.settings.SettingsProperties;
 import com.lucasallegri.util.Compressor;
 import com.lucasallegri.util.FileUtil;
-import com.lucasallegri.util.SystemUtil;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -92,8 +90,8 @@ public class ModLoader {
     ProgressBar.showBar(true);
     ProgressBar.showState(true);
     ProgressBar.setBarMax(ModList.installedMods.size() + 1);
-    ProgressBar.setState(LanguageManager.getValue("m.mount"));
-    DiscordInstance.setPresence(LanguageManager.getValue("m.mount"));
+    ProgressBar.setState(Locale.getValue("m.mount"));
+    LauncherApp.getRPC().setPresence(Locale.getValue("m.mount"));
 
     for (int i = 0; i < ModList.installedMods.size(); i++) {
       ProgressBar.setBarValue(i + 1);
@@ -124,13 +122,13 @@ public class ModLoader {
     ProgressBar.showBar(true);
     ProgressBar.showState(true);
     ProgressBar.setBarMax(BUNDLES.length + 1);
-    DiscordInstance.setPresence(LanguageManager.getValue("m.clean"));
-    ProgressBar.setState(LanguageManager.getValue("m.clean"));
+    LauncherApp.getRPC().setPresence(Locale.getValue("m.clean"));
+    ProgressBar.setState(Locale.getValue("m.clean"));
 
     // Iterate through all 3 bundles to clean up the game files.
     for (int i = 0; i < BUNDLES.length; i++) {
       ProgressBar.setBarValue(i + 1);
-      DiscordInstance.setPresence(LanguageManager.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(BUNDLES.length)}));
+      LauncherApp.getRPC().setPresence(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(BUNDLES.length)}));
       try {
         FileUtil.unpackJar(new ZipFile("./rsrc/" + BUNDLES[i]), new File("./rsrc/"), false);
       } catch (IOException e) {
@@ -155,7 +153,7 @@ public class ModLoader {
       SettingsGUI.forceRebuildButton.setEnabled(true);
     } catch (Exception ignored) {}
 
-    DiscordInstance.setPresence(LanguageManager.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
+    LauncherApp.getRPC().setPresence(Locale.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
   }
 
   public static void extractSafeguard() {

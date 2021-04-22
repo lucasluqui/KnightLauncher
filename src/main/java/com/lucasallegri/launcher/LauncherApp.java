@@ -1,7 +1,7 @@
 package com.lucasallegri.launcher;
 
 import com.lucasallegri.dialog.DialogError;
-import com.lucasallegri.discord.DiscordInstance;
+import com.lucasallegri.discord.DiscordRPCInstance;
 import com.lucasallegri.launcher.mods.ModListGUI;
 import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.launcher.settings.SettingsGUI;
@@ -27,6 +27,7 @@ public class LauncherApp {
   protected static SettingsGUI sgui;
   protected static ModListGUI mgui;
   protected static JVMPatcher jvmPatcher;
+  protected static DiscordRPCInstance rpc = new DiscordRPCInstance(LauncherGlobals.RPC_CLIENT_ID);
 
   public static void main(String[] args) {
 
@@ -37,9 +38,9 @@ public class LauncherApp {
     SettingsProperties.setup();
     SettingsProperties.loadFromProp();
     setupLauncherStyle();
-    LanguageManager.setup();
+    Locale.setup();
     FontManager.setup();
-    DiscordInstance.start();
+    rpc.start();
     KeyboardController.start();
     checkDirectories();
     if (SystemUtil.isWindows()) checkShortcut();
@@ -108,6 +109,10 @@ public class LauncherApp {
       }
     });
     return jvmPatcher;
+  }
+
+  public static DiscordRPCInstance getRPC() {
+    return rpc;
   }
 
   private static void checkDirectories() {

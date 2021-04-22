@@ -1,6 +1,5 @@
 package com.lucasallegri.launcher;
 
-import com.lucasallegri.discord.DiscordInstance;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.DesktopUtil;
 import com.lucasallegri.util.ImageUtil;
@@ -42,7 +41,7 @@ public class LauncherGUI {
 
     launcherGUIFrame = new JFrame();
     launcherGUIFrame.setVisible(false);
-    launcherGUIFrame.setTitle(LanguageManager.getValue("t.main", LauncherGlobals.VERSION));
+    launcherGUIFrame.setTitle(Locale.getValue("t.main", LauncherGlobals.VERSION));
     launcherGUIFrame.setResizable(false);
     launcherGUIFrame.setBounds(100, 100, 850, 475);
     launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,7 +55,7 @@ public class LauncherGUI {
     launchButton.setFont(FontManager.fontMedBig);
     launchButton.setFocusPainted(false);
     launchButton.setFocusable(false);
-    launchButton.setToolTipText(LanguageManager.getValue("b.launch"));
+    launchButton.setToolTipText(Locale.getValue("b.launch"));
     launcherGUIFrame.getContentPane().add(launchButton);
     launchButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent _action) {
@@ -75,14 +74,14 @@ public class LauncherGUI {
     launcherGUIFrame.getContentPane().add(imageContainer);
 
     Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, 16, ColorUtil.getForegroundColor());
-    modButton = new JButton(LanguageManager.getValue("b.mods"));
+    modButton = new JButton(Locale.getValue("b.mods"));
     modButton.setIcon(modsIcon);
     modButton.setBounds(80, 401, 100, 25);
     modButton.setHorizontalAlignment(SwingConstants.LEFT);
     modButton.setFont(FontManager.fontMed);
     modButton.setFocusPainted(false);
     modButton.setFocusable(false);
-    modButton.setToolTipText(LanguageManager.getValue("b.mods"));
+    modButton.setToolTipText(Locale.getValue("b.mods"));
     launcherGUIFrame.getContentPane().add(modButton);
     modButton.addActionListener(new ActionListener() {
       @SuppressWarnings("static-access")
@@ -92,14 +91,14 @@ public class LauncherGUI {
     });
 
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
-    settingsButton = new JButton(LanguageManager.getValue("b.settings"));
+    settingsButton = new JButton(Locale.getValue("b.settings"));
     settingsButton.setIcon(settingsIcon);
     settingsButton.setBounds(80, 427, 100, 25);
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
     settingsButton.setFont(FontManager.fontMed);
     settingsButton.setFocusPainted(false);
     settingsButton.setFocusable(false);
-    settingsButton.setToolTipText(LanguageManager.getValue("b.settings"));
+    settingsButton.setToolTipText(Locale.getValue("b.settings"));
     launcherGUIFrame.getContentPane().add(settingsButton);
     settingsButton.addActionListener(new ActionListener() {
       @SuppressWarnings("static-access")
@@ -108,13 +107,13 @@ public class LauncherGUI {
       }
     });
 
-    JLabel labelTweets = new JLabel("<html>" + LanguageManager.getValue("m.twitter_title") + "</html>");
+    JLabel labelTweets = new JLabel("<html>" + Locale.getValue("m.twitter_title") + "</html>");
     labelTweets.setBounds(567, 36, 127, 28);
     labelTweets.setFont(FontManager.fontReg);
     launcherGUIFrame.getContentPane().add(labelTweets);
 
     tweetsContainer = new JTextPane();
-    tweetsContainer.setText(LanguageManager.getValue("m.twitter_load"));
+    tweetsContainer.setText(Locale.getValue("m.twitter_load"));
     tweetsContainer.setBounds(567, 75, 260, 297);
     tweetsContainer.setEditable(false);
     tweetsContainer.setFont(FontManager.fontReg);
@@ -149,7 +148,7 @@ public class LauncherGUI {
     launcherGUIFrame.getContentPane().add(launchState);
 
     Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 20, ColorUtil.getGreenForegroundColor());
-    updateButton = new JButton(LanguageManager.getValue("b.update_available"));
+    updateButton = new JButton(Locale.getValue("b.update_available"));
     updateButton.setHorizontalAlignment(SwingConstants.CENTER);
     updateButton.setIcon(updateIcon);
     updateButton.setFont(FontManager.fontMedIta);
@@ -171,7 +170,7 @@ public class LauncherGUI {
       }
     });
 
-    playerCountLabel = new JLabel(LanguageManager.getValue("m.player_count_load"));
+    playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
     playerCountLabel.setFont(FontManager.fontReg);
     playerCountLabel.setForeground(ColorUtil.getGreenForegroundColor());
     playerCountLabel.setBounds(23, 378, 507, 14);
@@ -224,7 +223,7 @@ public class LauncherGUI {
     });
     titleBar.setLayout(null);
 
-    JLabel windowTitle = new JLabel(LanguageManager.getValue("t.main", LauncherGlobals.VERSION));
+    JLabel windowTitle = new JLabel(Locale.getValue("t.main", LauncherGlobals.VERSION));
     windowTitle.setFont(FontManager.fontMed);
     windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 20);
     titleBar.add(windowTitle);
@@ -232,7 +231,7 @@ public class LauncherGUI {
     Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 14, ColorUtil.getForegroundColor());
     JButton closeButton = new JButton(closeIcon);
     closeButton.setBounds(launcherGUIFrame.getWidth() - 18, 1, 20, 21);
-    closeButton.setToolTipText(LanguageManager.getValue("b.close"));
+    closeButton.setToolTipText(Locale.getValue("b.close"));
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
     closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
@@ -240,7 +239,7 @@ public class LauncherGUI {
     titleBar.add(closeButton);
     closeButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        DiscordInstance.stop();
+        LauncherApp.getRPC().stop();
         System.exit(0);
       }
     });
@@ -248,7 +247,7 @@ public class LauncherGUI {
     Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 14, ColorUtil.getForegroundColor());
     JButton minimizeButton = new JButton(minimizeIcon);
     minimizeButton.setBounds(launcherGUIFrame.getWidth() - 38, 1, 20, 21);
-    minimizeButton.setToolTipText(LanguageManager.getValue("b.minimize"));
+    minimizeButton.setToolTipText(Locale.getValue("b.minimize"));
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
     minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
@@ -277,7 +276,7 @@ public class LauncherGUI {
     Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, ColorUtil.getForegroundColor());
     JButton bugButton = new JButton(bugIcon);
     bugButton.setBounds(launcherGUIFrame.getWidth() - 89, 1, 18, 18);
-    bugButton.setToolTipText(LanguageManager.getValue("b.bug_report"));
+    bugButton.setToolTipText(Locale.getValue("b.bug_report"));
     bugButton.setFocusPainted(false);
     bugButton.setFocusable(false);
     bugButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
@@ -292,7 +291,7 @@ public class LauncherGUI {
     Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.COFFEE, 16, Colors.KOFI);
     JButton kofiButton = new JButton(kofiIcon);
     kofiButton.setBounds(launcherGUIFrame.getWidth() - 111, 1, 18, 18);
-    kofiButton.setToolTipText(LanguageManager.getValue("b.kofi"));
+    kofiButton.setToolTipText(Locale.getValue("b.kofi"));
     kofiButton.setFocusPainted(false);
     kofiButton.setFocusable(false);
     kofiButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
@@ -309,7 +308,7 @@ public class LauncherGUI {
     launcherGUIFrame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent windowEvent) {
-        DiscordInstance.stop();
+        LauncherApp.getRPC().stop();
       }
     });
 

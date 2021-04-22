@@ -1,6 +1,5 @@
 package com.lucasallegri.launcher;
 
-import com.lucasallegri.discord.DiscordInstance;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.GameSettings;
 import com.lucasallegri.launcher.settings.Settings;
@@ -44,7 +43,7 @@ public class LauncherEventHandler {
 
         log.info("Starting game", "platform", Settings.gamePlatform);
 
-        DiscordInstance.stop();
+        LauncherApp.getRPC().stop();
         if (Settings.useIngameRPC) ProcessUtil.startApplication(RPC_COMMAND_LINE);
         if (!Settings.keepOpen) {
           LauncherGUI.launcherGUIFrame.dispose();
@@ -68,7 +67,7 @@ public class LauncherEventHandler {
           ProcessUtil.startApplication(LauncherGlobals.ALT_CLIENT_ARGS_WIN);
         }
 
-        DiscordInstance.stop();
+        LauncherApp.getRPC().stop();
 
       }
     });
