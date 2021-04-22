@@ -91,7 +91,7 @@ public class ModLoader {
     ProgressBar.showState(true);
     ProgressBar.setBarMax(ModList.installedMods.size() + 1);
     ProgressBar.setState(Locale.getValue("m.mount"));
-    LauncherApp.getRPC().setPresence(Locale.getValue("m.mount"));
+    LauncherApp.getRPC().setDetails(Locale.getValue("m.mount"));
 
     for (int i = 0; i < ModList.installedMods.size(); i++) {
       ProgressBar.setBarValue(i + 1);
@@ -122,13 +122,13 @@ public class ModLoader {
     ProgressBar.showBar(true);
     ProgressBar.showState(true);
     ProgressBar.setBarMax(BUNDLES.length + 1);
-    LauncherApp.getRPC().setPresence(Locale.getValue("m.clean"));
+    LauncherApp.getRPC().setDetails(Locale.getValue("m.clean"));
     ProgressBar.setState(Locale.getValue("m.clean"));
 
     // Iterate through all 3 bundles to clean up the game files.
     for (int i = 0; i < BUNDLES.length; i++) {
       ProgressBar.setBarValue(i + 1);
-      LauncherApp.getRPC().setPresence(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(BUNDLES.length)}));
+      LauncherApp.getRPC().setDetails(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(BUNDLES.length)}));
       try {
         FileUtil.unpackJar(new ZipFile("./rsrc/" + BUNDLES[i]), new File("./rsrc/"), false);
       } catch (IOException e) {
@@ -153,7 +153,7 @@ public class ModLoader {
       SettingsGUI.forceRebuildButton.setEnabled(true);
     } catch (Exception ignored) {}
 
-    LauncherApp.getRPC().setPresence(Locale.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
+    LauncherApp.getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
   }
 
   public static void extractSafeguard() {

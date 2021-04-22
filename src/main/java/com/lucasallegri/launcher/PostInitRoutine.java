@@ -22,7 +22,7 @@ public class PostInitRoutine {
       ModLoader.extractSafeguard();
     }
 
-    LauncherApp.getRPC().setPresence(Locale.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
+    LauncherApp.getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
     loadOnlineAssets();
   }
 

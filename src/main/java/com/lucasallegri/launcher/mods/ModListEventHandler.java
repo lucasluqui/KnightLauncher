@@ -28,7 +28,7 @@ public class ModListEventHandler {
     ModListGUI.labelForceApplyState.setText("Applying...");
     ModLoader.mount();
     ModListGUI.labelForceApplyState.setText("Applied");
-    LauncherApp.getRPC().setPresence(Locale.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
+    LauncherApp.getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
   }
 
   public static void getModsEvent(ActionEvent action) {

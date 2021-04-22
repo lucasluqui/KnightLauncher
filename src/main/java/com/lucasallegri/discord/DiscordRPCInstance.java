@@ -11,12 +11,17 @@ import static com.lucasallegri.discord.Log.log;
 public class DiscordRPCInstance {
 
     /**
-     * ID of this Discord RPC Instance.
+     * Client ID of this Discord RPC Instance.
      * <br>Example: "123456789123456"
      *
      * <br>Must be a String.
      */
     private final String clientId;
+
+    /**
+     * Presence's current details field.
+     */
+    private String details;
 
     private final DiscordEventHandlers EVENT_HANDLER = new DiscordEventHandlers();
 
@@ -26,11 +31,20 @@ public class DiscordRPCInstance {
 
     public void start() {
         DiscordRPC.discordInitialize(this.clientId, EVENT_HANDLER, true);
-        setPresence(Locale.getValue("presence.starting"));
-        log.info("DiscordInstance is now running.");
+        setDetails(Locale.getValue("presence.starting"));
+        log.info("Discord RPC Instance is now running.");
     }
 
-    public void setPresence(String details) {
+    public void setDetails(String details) {
+        this.details = details;
+        updatePresenceDetails(details);
+    }
+
+    public String getDetails() {
+        return this.details;
+    }
+
+    private void updatePresenceDetails(String details) {
         DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(Locale.getValue("presence.using"));
         presence.setDetails(details);
         presence.setBigImage("icon-512", Locale.getValue("presence.image_desc", LauncherGlobals.VERSION));
