@@ -13,7 +13,7 @@ import java.awt.event.*;
 
 public class LauncherGUI {
 
-  private static LauncherApp app;
+  private final LauncherApp app;
   public static JFrame launcherGUIFrame;
   public static JButton launchButton;
   public static JButton settingsButton;
@@ -28,6 +28,7 @@ public class LauncherGUI {
   int pX, pY;
 
   public LauncherGUI(LauncherApp app) {
+    this.app = app;
     initialize();
   }
 
@@ -37,6 +38,7 @@ public class LauncherGUI {
   }
 
   /** @wbp.parser.entryPoint */
+  @SuppressWarnings("static-access")
   private void initialize() {
 
     launcherGUIFrame = new JFrame();
@@ -57,13 +59,11 @@ public class LauncherGUI {
     launchButton.setFocusable(false);
     launchButton.setToolTipText(Locale.getValue("b.launch"));
     launcherGUIFrame.getContentPane().add(launchButton);
-    launchButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        if (KeyboardController.isShiftPressed() || KeyboardController.isAltPressed()) {
-          LauncherEventHandler.launchGameAltEvent(_action);
-        } else {
-          LauncherEventHandler.launchGameEvent(_action);
-        }
+    launchButton.addActionListener(action -> {
+      if (KeyboardController.isShiftPressed() || KeyboardController.isAltPressed()) {
+        LauncherEventHandler.launchGameAltEvent(action);
+      } else {
+        LauncherEventHandler.launchGameEvent(action);
       }
     });
 
@@ -83,12 +83,7 @@ public class LauncherGUI {
     modButton.setFocusable(false);
     modButton.setToolTipText(Locale.getValue("b.mods"));
     launcherGUIFrame.getContentPane().add(modButton);
-    modButton.addActionListener(new ActionListener() {
-      @SuppressWarnings("static-access")
-      public void actionPerformed(ActionEvent _action) {
-        app.mgui.switchVisibility();
-      }
-    });
+    modButton.addActionListener(action -> app.mgui.switchVisibility());
 
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
     settingsButton = new JButton(Locale.getValue("b.settings"));
@@ -100,12 +95,7 @@ public class LauncherGUI {
     settingsButton.setFocusable(false);
     settingsButton.setToolTipText(Locale.getValue("b.settings"));
     launcherGUIFrame.getContentPane().add(settingsButton);
-    settingsButton.addActionListener(new ActionListener() {
-      @SuppressWarnings("static-access")
-      public void actionPerformed(ActionEvent _action) {
-        app.sgui.switchVisibility();
-      }
-    });
+    settingsButton.addActionListener(action -> app.sgui.switchVisibility());
 
     JLabel labelTweets = new JLabel("<html>" + Locale.getValue("m.twitter_title") + "</html>");
     labelTweets.setBounds(567, 36, 127, 28);
@@ -158,17 +148,13 @@ public class LauncherGUI {
     updateButton.setVisible(false);
     updateButton.setBounds(185, 427, 150, 25);
     launcherGUIFrame.getContentPane().add(updateButton);
-    updateButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        DesktopUtil.openWebpage(
-                "https://github.com/"
-                        + LauncherGlobals.GITHUB_AUTHOR + "/"
-                        + LauncherGlobals.GITHUB_REPO + "/"
-                        + "releases/tag/"
-                        + LauncherGlobals.latestRelease
-        );
-      }
-    });
+    updateButton.addActionListener(action -> DesktopUtil.openWebpage(
+            "https://github.com/"
+                    + LauncherGlobals.GITHUB_AUTHOR + "/"
+                    + LauncherGlobals.GITHUB_REPO + "/"
+                    + "releases/tag/"
+                    + LauncherGlobals.latestRelease
+    ));
 
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
     playerCountLabel.setFont(FontManager.fontReg);
@@ -237,11 +223,9 @@ public class LauncherGUI {
     closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
     closeButton.setFont(FontManager.fontMed);
     titleBar.add(closeButton);
-    closeButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        LauncherApp.getRPC().stop();
-        System.exit(0);
-      }
+    closeButton.addActionListener(e -> {
+      LauncherApp.getRPC().stop();
+      System.exit(0);
     });
 
     Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 14, ColorUtil.getForegroundColor());
@@ -253,11 +237,7 @@ public class LauncherGUI {
     minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
     minimizeButton.setFont(FontManager.fontMed);
     titleBar.add(minimizeButton);
-    minimizeButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        launcherGUIFrame.setState(Frame.ICONIFIED);
-      }
-    });
+    minimizeButton.addActionListener(e -> launcherGUIFrame.setState(Frame.ICONIFIED));
 
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/discord-16.png")));
     discordButton.setBounds(launcherGUIFrame.getWidth() - 67, 1, 18, 18);
@@ -267,11 +247,7 @@ public class LauncherGUI {
     discordButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
     discordButton.setFont(FontManager.fontMed);
     titleBar.add(discordButton);
-    discordButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        DesktopUtil.openWebpage(LauncherGlobals.DISCORD_URL);
-      }
-    });
+    discordButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.DISCORD_URL));
 
     Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, ColorUtil.getForegroundColor());
     JButton bugButton = new JButton(bugIcon);
@@ -282,11 +258,7 @@ public class LauncherGUI {
     bugButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
     bugButton.setFont(FontManager.fontMed);
     titleBar.add(bugButton);
-    bugButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        DesktopUtil.openWebpage(LauncherGlobals.BUG_REPORT_URL);
-      }
-    });
+    bugButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.BUG_REPORT_URL));
 
     Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.COFFEE, 16, Colors.KOFI);
     JButton kofiButton = new JButton(kofiIcon);
@@ -297,11 +269,7 @@ public class LauncherGUI {
     kofiButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
     kofiButton.setFont(FontManager.fontMed);
     titleBar.add(kofiButton);
-    kofiButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        DesktopUtil.openWebpage(LauncherGlobals.KOFI_URL);
-      }
-    });
+    kofiButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.KOFI_URL));
 
     launcherGUIFrame.setLocationRelativeTo(null);
 
