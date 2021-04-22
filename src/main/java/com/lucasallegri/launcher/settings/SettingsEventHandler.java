@@ -8,6 +8,7 @@ import com.lucasallegri.util.ProcessUtil;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
+import java.io.File;
 
 public class SettingsEventHandler {
 
@@ -27,10 +28,8 @@ public class SettingsEventHandler {
   }
 
   public static void forceRebuildEvent() {
-
     ModLoader.mountRequired = true;
     ModLoader.startFileRebuild();
-
   }
 
   public static void createShortcutChangeEvent(ActionEvent event) {
@@ -99,7 +98,7 @@ public class SettingsEventHandler {
 
   public static void jvmPatchEvent(ActionEvent action) {
     SettingsProperties.setValue("launcher.jvm_patched", "false");
-    ProcessUtil.startApplication(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar"});
+    ProcessUtil.startApplication(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.pathSeparator + "KnightLauncher.jar" });
     SettingsGUI.settingsGUIFrame.dispose();
     System.exit(1);
   }
