@@ -1,6 +1,9 @@
 package com.lucasallegri.launcher.mods;
 
 import com.lucasallegri.launcher.*;
+import com.lucasallegri.launcher.mods.data.JarMod;
+import com.lucasallegri.launcher.mods.data.Mod;
+import com.lucasallegri.launcher.mods.data.ZipMod;
 import com.lucasallegri.launcher.settings.SettingsGUI;
 import com.lucasallegri.launcher.settings.SettingsProperties;
 import com.lucasallegri.util.Compressor;
@@ -27,8 +30,8 @@ public class ModLoader {
     if (ModList.installedMods.size() > 0) ModList.installedMods.clear();
 
     // Append all .zip and .jar files inside the mod folder into an ArrayList.
-    List<String> rawFiles = FileUtil.fileNamesInDirectory("mods/", ".zip");
-    rawFiles.addAll(FileUtil.fileNamesInDirectory("mods/", ".jar"));
+    List<String> rawFiles = FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/mods/", ".zip");
+    rawFiles.addAll(FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/mods/", ".jar"));
 
     for (String file : rawFiles) {
       JSONObject modJson;
@@ -37,19 +40,27 @@ public class ModLoader {
       } catch (Exception e) {
         modJson = null;
       }
-      Mod mod = new Mod(file);
-      if (modJson != null) {
+
+      Mod mod = null;
+      if (file.endsWith("zip")) {
+        mod = new ZipMod(file);
+      } else if (file.endsWith("jar")) {
+        mod = new JarMod(file);
+      }
+
+      if (mod != null && modJson != null) {
         mod.setDisplayName(modJson.getString("name"));
         mod.setDescription(modJson.getString("description"));
         mod.setAuthor(modJson.getString("author"));
         mod.setVersion(modJson.getString("version"));
       }
+
       ModList.installedMods.add(mod);
       mod.wasAdded();
 
       // Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
-      String hash = Compressor.getZipHash("mods/" + file);
-      String hashFilePath = "mods/" + mod.getFileName() + ".hash";
+      String hash = Compressor.getZipHash(LauncherGlobals.USER_DIR + "/mods/" + file);
+      String hashFilePath = LauncherGlobals.USER_DIR + "/mods/" + mod.getFileName() + ".hash";
 
       if (FileUtil.fileExists(hashFilePath)) {
         try {
@@ -130,7 +141,7 @@ public class ModLoader {
       ProgressBar.setBarValue(i + 1);
       LauncherApp.getRPC().setDetails(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(BUNDLES.length)}));
       try {
-        FileUtil.unpackJar(new ZipFile("./rsrc/" + BUNDLES[i]), new File("./rsrc/"), false);
+        FileUtil.unpackJar(new ZipFile(LauncherGlobals.USER_DIR + "/rsrc/" + BUNDLES[i]), new File(LauncherGlobals.USER_DIR + "/rsrc/"), false);
       } catch (IOException e) {
         log.error(e);
       }
@@ -159,8 +170,8 @@ public class ModLoader {
   public static void extractSafeguard() {
     try {
       log.info("Extracting safeguard...");
-      FileUtil.extractFileWithinJar("/modules/safeguard/bundle.zip", "KnightLauncher/modules/safeguard/bundle.zip");
-      Compressor.unzip("KnightLauncher/modules/safeguard/bundle.zip", "rsrc/", false);
+      FileUtil.extractFileWithinJar("/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip");
+      Compressor.unzip(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/rsrc/", false);
       log.info("Extracted safeguard.");
     } catch (IOException e) {
       log.error(e);

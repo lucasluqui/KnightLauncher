@@ -3,6 +3,8 @@ package com.lucasallegri.launcher.mods;
 import com.lucasallegri.launcher.Locale;
 import com.lucasallegri.launcher.LauncherApp;
 import com.lucasallegri.launcher.LauncherGlobals;
+import com.lucasallegri.launcher.mods.data.Mod;
+import com.lucasallegri.launcher.mods.data.ZipMod;
 import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.util.DesktopUtil;
 

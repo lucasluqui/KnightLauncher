@@ -1,12 +1,6 @@
-package com.lucasallegri.launcher.mods;
+package com.lucasallegri.launcher.mods.data;
 
-import com.lucasallegri.launcher.ProgressBar;
-import com.lucasallegri.util.Compressor;
-import com.lucasallegri.util.SystemUtil;
-
-import static com.lucasallegri.launcher.mods.Log.log;
-
-public class Mod {
+public abstract class Mod {
 
   protected String displayName;
   protected String description;
@@ -19,21 +13,10 @@ public class Mod {
   protected final String DEFAULT_AUTHOR = "Someone";
   protected final String DEFAULT_VERSION = "Unknown";
 
-  public Mod() {
-    this.displayName = null;
-    this.description = null;
-    this.authorName = null;
-    this.version = null;
-    this.fileName = null;
-    this.isEnabled = true;
-  }
-
-  public Mod(String fileName) {
-    this.displayName = fileName;
+  protected Mod () {
     this.description = DEFAULT_DESCRIPTION;
     this.authorName = DEFAULT_AUTHOR;
     this.version = DEFAULT_VERSION;
-    this.fileName = fileName;
     this.isEnabled = true;
   }
 
@@ -85,14 +68,8 @@ public class Mod {
     this.isEnabled = enabled;
   }
 
-  public void mount() {
-    Compressor.unzip("./mods/" + this.fileName, "./rsrc/", SystemUtil.isMac());
-    log.info("Mod mounted successfully", "mod", this.displayName);
-  }
-
-  public void wasAdded() {
-    log.info("A mod was added", "object", this.toString());
-  }
+  public abstract void mount();
+  public abstract void wasAdded();
 
   @Override
   public String toString() {

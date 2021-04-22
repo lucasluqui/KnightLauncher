@@ -1,5 +1,7 @@
 package com.lucasallegri.launcher.mods;
 
+import com.lucasallegri.launcher.mods.data.Mod;
+
 import java.util.ArrayList;
 import java.util.List;
 

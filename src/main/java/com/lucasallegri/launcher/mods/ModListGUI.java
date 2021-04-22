@@ -1,6 +1,8 @@
 package com.lucasallegri.launcher.mods;
 
 import com.lucasallegri.launcher.*;
+import com.lucasallegri.launcher.mods.data.Mod;
+import com.lucasallegri.launcher.mods.data.ZipMod;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.DesktopUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
