@@ -125,6 +125,25 @@ IF /I %opt% EQU y ( SET buff=true )
 IF /I %opt% EQU yes ( SET buff=true )
 IF /I %buff% NEQ true ( EXIT /b )
 
+:: Check if Java is properly installed. Download and install if it's not.
+SETLOCAL EnableDelayedExpansion
+:JavaCheck
+javaw >nul 2>&1!
+IF "%errorlevel%" EQU "9009" (
+    ECHO You need Java installed on your machine to use KnightLauncher.
+    ECHO Downloading...
+    SET javafname=jre_kl.exe
+    SET javaurl="https://javadl.oracle.com/webapps/download/AutoDL?BundleId=245057_d3c52aa6bfa54d3ca74e617f18309292"
+    ECHO --------------------------------------------------------------------------------
+    curl.exe !javaurl! -o !javafname! -L
+    ECHO --------------------------------------------------------------------------------
+    ECHO Success. Please proceed with the installation.
+    !javafname!
+    DEL !javafname!
+    GOTO JavaCheck
+)
+SETLOCAL DisableDelayedExpansion
+
 :: Checking if other versions are installed, if there are - remove them retaining "KnightLauncher.properties".
 :: Also trying to kill the KnightLauncher process just in case.
 IF EXIST *KnightLauncher* ( 
@@ -150,7 +169,11 @@ SET /P filename=<temp2
 DEL temp
 DEL temp2
 
-:: Downloading and installing new version. NOTE: If "tar" fails - update to Windows 10, or update your Windows 10. Build 17063 at least.
+:: Downloading, installing and running the new version.
+:: NOTE: If "tar" fails - update to Windows 10, or update your Windows 10. Build 17063 at least.
+ECHO --------------------------------------------------------------------------------
 curl.exe %url% -o %filename% -L
+ECHO --------------------------------------------------------------------------------
 tar -xf %filename%  & DEL %filename%
 ECHO Success!
+KnightLauncher_windows.bat
