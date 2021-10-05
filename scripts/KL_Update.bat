@@ -118,6 +118,7 @@ IF NOT EXIST %gamepath%\rsrc IF NOT EXIST %gamepath%\scenes IF NOT EXIST %gamepa
 
 :: Simple asking for confirmation, just in case.
 %gamepath:~1,2%
+SET buff=false
 CD "%gamepath%"
 ECHO KnightLauncher will be installed/updated in this folder: %gamepath%
 SET /P opt=Would you like to proceed? (Y/N) 
@@ -127,20 +128,20 @@ IF /I %buff% NEQ true ( EXIT /b )
 
 :: Check if Java is properly installed. Download and install if it's not.
 SETLOCAL EnableDelayedExpansion
-:JavaCheck
 javaw >nul 2>&1!
 IF "%errorlevel%" EQU "9009" (
     ECHO You need Java installed on your machine to use KnightLauncher.
     ECHO Downloading...
     SET javafname=jre_kl.exe
-    SET javaurl="https://javadl.oracle.com/webapps/download/AutoDL?BundleId=245057_d3c52aa6bfa54d3ca74e617f18309292"
+    SET javaurl="https://javadl.oracle.com/webapps/download/AutoDL?BundleId=245058_d3c52aa6bfa54d3ca74e617f18309292"
     ECHO --------------------------------------------------------------------------------
     curl.exe !javaurl! -o !javafname! -L
     ECHO --------------------------------------------------------------------------------
-    ECHO Success. Please proceed with the installation.
+    ECHO Success. Please proceed with the installation. The script will restart itself.
+    PING -n 4 127.0.0.1>nul
     !javafname!
     DEL !javafname!
-    GOTO JavaCheck
+    START KL_Update.bat & EXIT
 )
 SETLOCAL DisableDelayedExpansion
 
