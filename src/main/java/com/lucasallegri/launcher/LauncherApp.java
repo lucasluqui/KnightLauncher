@@ -1,6 +1,6 @@
 package com.lucasallegri.launcher;
 
-import com.lucasallegri.dialog.DialogError;
+import com.lucasallegri.dialog.DialogWarning;
 import com.lucasallegri.discord.DiscordInstance;
 import com.lucasallegri.launcher.mods.ModListGUI;
 import com.lucasallegri.launcher.settings.Settings;
@@ -119,15 +119,16 @@ public class LauncherApp {
   // Checking if we're being ran inside the game's directory, "getdown-pro.jar" should always be present if so.
   private static void checkStartLocation() {
     if (!FileUtil.fileExists("./getdown-pro.jar")) {
-      String errorMessage = "The .jar file seems to be placed in the wrong directory."
-              + System.lineSeparator() + "Try using the Batch (.bat) file for Windows or the Shell (.sh) file for Linux/OSX.";
+      String pathWarning = "The .jar file appears to be placed in the wrong directory. " +
+              "In some cases this is due to a false positive and can be ignored. Knight Launcher will attempt to launch normally."
+              + System.lineSeparator() + "If this persists try using the Batch (KnightLauncher_windows.bat) file for Windows " +
+              "or the Shell (KnightLauncher_mac_linux.sh) file for OSX/Linux.";
       if (SystemUtil.isWindows()) {
-        errorMessage += System.lineSeparator() + "Detected Steam path: " + SteamUtil.getGamePathWindows();
+        pathWarning += System.lineSeparator() + "Additionally, we've detected the following Steam path: " + SteamUtil.getGamePathWindows();
       }
-      log.error(errorMessage);
-      DialogError.push(errorMessage);
-      if (SystemUtil.isWindows()) DesktopUtil.openDir(SteamUtil.getGamePathWindows());
-      System.exit(1);
+      log.warning(pathWarning);
+      DialogWarning.push(pathWarning);
+      //if (SystemUtil.isWindows()) DesktopUtil.openDir(SteamUtil.getGamePathWindows());
     }
   }
 
