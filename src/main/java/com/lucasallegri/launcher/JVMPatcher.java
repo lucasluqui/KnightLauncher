@@ -206,7 +206,8 @@ public class JVMPatcher {
     String downloadUrl = LauncherGlobals.LARGE_CDN_URL
             + "jvm/windows/jvm_pack.zip";
 
-    while(_downloadAttempts <= 3) {
+    boolean downloadCompleted = false;
+    while(_downloadAttempts <= 3 && !downloadCompleted) {
       _downloadAttempts++;
       log.info("Downloading Java VM", "url", downloadUrl, "attempts", _downloadAttempts);
       try {
@@ -216,6 +217,7 @@ public class JVMPatcher {
                 0,
                 0
         );
+        downloadCompleted = true;
       } catch (IOException e) {
         // Just keep retrying.
         log.error(e);
