@@ -25,6 +25,7 @@ public class JVMPatcher {
   private static JButton buttonDecline;
   private static JProgressBar jvmPatcherProgressBar;
   private static JLabel jvmPatcherState;
+  private static int _downloadAttempts = 0;
 
   int pY, pX;
 
@@ -170,7 +171,14 @@ public class JVMPatcher {
     jvmPatcherProgressBar.setMaximum(4);
     jvmPatcherProgressBar.setValue(1);
     jvmPatcherState.setText(LanguageManager.getValue("m.jvm_patcher_download", "74"));
+
     downloadPackagedJVM();
+    if(_downloadAttempts > 3) {
+      DialogError.push("The Java VM download couldn't be initiated after 3 attempts." +
+              "Knight Launcher will boot without patching but be aware game performance might not be the best." +
+              "You can manually restart this patcher heading to the 'Files' tab within launcher's settings.");
+      finish();
+    }
 
     jvmPatcherProgressBar.setValue(2);
     jvmPatcherState.setText(LanguageManager.getValue("m.jvm_patcher_delete"));
@@ -193,23 +201,23 @@ public class JVMPatcher {
   }
 
   private static void downloadPackagedJVM() {
-
     String downloadUrl = LauncherGlobals.LARGE_CDN_URL
             + "jvm/windows/jvm_pack.zip";
 
-    log.info("Downloading Java VM", "url", downloadUrl);
-    try {
-      FileUtils.copyURLToFile(
-              new URL(downloadUrl),
-              new File(LauncherGlobals.USER_DIR + "\\jvm_pack.zip"),
-              0,
-              0
-      );
-    } catch (IOException e) {
-      DialogError.push("The Java VM download couldn't be initiated, will avoid patching on next boot.");
-      SettingsProperties.setValue("launcher.jvm_patched", "true");
-      log.error(e);
-      System.exit(1);
+    while(_downloadAttempts <= 3) {
+      _downloadAttempts++;
+      log.info("Downloading Java VM", "url", downloadUrl, "attempts", _downloadAttempts);
+      try {
+        FileUtils.copyURLToFile(
+                new URL(downloadUrl),
+                new File(LauncherGlobals.USER_DIR + "\\jvm_pack.zip"),
+                0,
+                0
+        );
+      } catch (IOException e) {
+        // Just keep retrying.
+        log.error(e);
+      }
     }
   }
 
