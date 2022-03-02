@@ -17,11 +17,11 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W4W11S2JU)
 ## Current features
-* Install and uninstall mods in an absurdly easy and noob-friendly way, without having to worry about game updates.
+* Install and uninstall mods in an easy and noob friendly way without having to worry about game updates.
 * Automatically patch your game to use a 64-bit Java VM.
 * Reinstall your game without having to re-download anything, not a single file!
-* Intuitive and user-friendly GUI for extra.txt configuring.
-* A Discord RPC integration that shows exactly what you're up to in the world of Cradle.
+* Intuitive and user friendly GUI for extra.txt configuring.
+* Discord RPC integration that shows exactly what you're up to in the world of Cradle.
 * Support for easily launching alt accounts without losing performance on your main Spiral Knights instance.
 
 ## Translators
@@ -29,7 +29,6 @@ Thank you all for helping Knight Launcher, making it usable for everyone worldwi
 * Arabic: Scyila
 * Deutsch: Deathkey and Airbee
 * Eesti: [Thyrux](https://github.com/Thyrux)
-* Español: [lucas-allegri](https://github.com/lucas-allegri) (that's me!)
 * Français: PtitKrugger
 * Italiano: [Lawn](https://github.com/Foyylaroni) and Kaos
 * Japanese: Armin
@@ -43,7 +42,7 @@ We've built an amazing community on Discord focused on both helping newcomers ge
 Come join us! https://discord.gg/RAf499a
 
 ## Third Party Libraries
-The following open source libraries made Knight Launcher possible:
+The following open source libraries were used to develop Knight Launcher:
 
 - [Apache Commons IO](https://github.com/apache/commons-io)
 - [Image4J](https://github.com/imcdonagh/image4j)
