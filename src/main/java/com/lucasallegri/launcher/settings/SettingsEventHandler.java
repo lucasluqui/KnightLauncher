@@ -1,13 +1,14 @@
 package com.lucasallegri.launcher.settings;
 
 import com.lucasallegri.dialog.DialogWarning;
-import com.lucasallegri.launcher.LanguageManager;
+import com.lucasallegri.launcher.Locale;
 import com.lucasallegri.launcher.LauncherGlobals;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.util.ProcessUtil;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
+import java.io.File;
 
 public class SettingsEventHandler {
 
@@ -27,10 +28,8 @@ public class SettingsEventHandler {
   }
 
   public static void forceRebuildEvent() {
-
     ModLoader.mountRequired = true;
     ModLoader.startFileRebuild();
-
   }
 
   public static void createShortcutChangeEvent(ActionEvent event) {
@@ -39,9 +38,9 @@ public class SettingsEventHandler {
   }
 
   public static void languageChangeEvent(ItemEvent event) {
-    Settings.lang = LanguageManager.getLangCode((String) SettingsGUI.choiceLanguage.getSelectedItem());
-    SettingsProperties.setValue("launcher.lang", LanguageManager.getLangCode((String) SettingsGUI.choiceLanguage.getSelectedItem()));
-    DialogWarning.pushTranslated(LanguageManager.getValue("m.prompt_restart_required"));
+    Settings.lang = Locale.getLangCode((String) SettingsGUI.choiceLanguage.getSelectedItem());
+    SettingsProperties.setValue("launcher.lang", Locale.getLangCode((String) SettingsGUI.choiceLanguage.getSelectedItem()));
+    DialogWarning.pushTranslated(Locale.getValue("m.prompt_restart_required"));
   }
 
   public static void useStringDeduplicationChangeEvent(ActionEvent action) {
@@ -89,7 +88,7 @@ public class SettingsEventHandler {
 
   public static void styleChangeEvent(ItemEvent event) {
     SettingsProperties.setValue("launcher.style", SettingsGUI.choiceStyle.getSelectedIndex() == 0 ? "dark" : "light");
-    DialogWarning.pushTranslated(LanguageManager.getValue("m.prompt_restart_required"));
+    DialogWarning.pushTranslated(Locale.getValue("m.prompt_restart_required"));
   }
 
   public static void ingameRPCChangeEvent(ActionEvent action) {
@@ -99,7 +98,7 @@ public class SettingsEventHandler {
 
   public static void jvmPatchEvent(ActionEvent action) {
     SettingsProperties.setValue("launcher.jvm_patched", "false");
-    ProcessUtil.startApplication(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar"});
+    ProcessUtil.startApplication(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.pathSeparator + "KnightLauncher.jar" });
     SettingsGUI.settingsGUIFrame.dispose();
     System.exit(1);
   }

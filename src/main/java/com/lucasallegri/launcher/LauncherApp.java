@@ -1,7 +1,7 @@
 package com.lucasallegri.launcher;
 
 import com.lucasallegri.dialog.DialogWarning;
-import com.lucasallegri.discord.DiscordInstance;
+import com.lucasallegri.discord.DiscordRPCInstance;
 import com.lucasallegri.launcher.mods.ModListGUI;
 import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.launcher.settings.SettingsGUI;
@@ -27,9 +27,24 @@ public class LauncherApp {
   protected static SettingsGUI sgui;
   protected static ModListGUI mgui;
   protected static JVMPatcher jvmPatcher;
+  protected static DiscordRPCInstance rpc = new DiscordRPCInstance(LauncherGlobals.RPC_CLIENT_ID);
 
   public static void main(String[] args) {
 
+    LauncherApp app = new LauncherApp();
+
+    if (SystemUtil.is64Bit() && SystemUtil.isWindows() && !Settings.jvmPatched) {
+      jvmPatcher = app.composeJVMPatcher(app);
+    } else {
+      lgui = app.composeLauncherGUI(app);
+      sgui = app.composeSettingsGUI(app);
+      mgui = app.composeModListGUI(app);
+    }
+
+    new PostInitRoutine(app);
+  }
+
+  public LauncherApp () {
     setupFileLogging();
     logVMInfo();
     checkStartLocation();
@@ -37,77 +52,61 @@ public class LauncherApp {
     SettingsProperties.setup();
     SettingsProperties.loadFromProp();
     setupLauncherStyle();
-    LanguageManager.setup();
+    Locale.setup();
     FontManager.setup();
-    DiscordInstance.start();
+    rpc.start();
     KeyboardController.start();
     checkDirectories();
     if (SystemUtil.isWindows()) checkShortcut();
-
-    LauncherApp app = new LauncherApp();
-
-    if (SystemUtil.is64Bit() && SystemUtil.isWindows() && !Settings.jvmPatched) {
-      app.composeJVMPatcher(app);
-    } else {
-      app.composeLauncherGUI(app);
-      app.composeSettingsGUI(app);
-      app.composeModListGUI(app);
-    }
-
-    new PostInitRoutine(app);
   }
 
   private LauncherGUI composeLauncherGUI(LauncherApp app) {
-    EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          lgui = new LauncherGUI(app);
-          lgui.switchVisibility();
-        } catch (Exception e) {
-          log.error(e);
-        }
+    EventQueue.invokeLater(() -> {
+      try {
+        lgui = new LauncherGUI(app);
+        lgui.switchVisibility();
+      } catch (Exception e) {
+        log.error(e);
       }
     });
     return lgui;
   }
 
   private SettingsGUI composeSettingsGUI(LauncherApp app) {
-    EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          sgui = new SettingsGUI(app);
-        } catch (Exception e) {
-          log.error(e);
-        }
+    EventQueue.invokeLater(() -> {
+      try {
+        sgui = new SettingsGUI(app);
+      } catch (Exception e) {
+        log.error(e);
       }
     });
     return sgui;
   }
 
   private ModListGUI composeModListGUI(LauncherApp app) {
-    EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          mgui = new ModListGUI(app);
-        } catch (Exception e) {
-          log.error(e);
-        }
+    EventQueue.invokeLater(() -> {
+      try {
+        mgui = new ModListGUI(app);
+      } catch (Exception e) {
+        log.error(e);
       }
     });
     return mgui;
   }
 
   private JVMPatcher composeJVMPatcher(LauncherApp app) {
-    EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          jvmPatcher = new JVMPatcher(app);
-        } catch (Exception e) {
-          log.error(e);
-        }
+    EventQueue.invokeLater(() -> {
+      try {
+        jvmPatcher = new JVMPatcher(app);
+      } catch (Exception e) {
+        log.error(e);
       }
     });
     return jvmPatcher;
+  }
+
+  public static DiscordRPCInstance getRPC() {
+    return rpc;
   }
 
   private static void checkDirectories() {
@@ -162,9 +161,6 @@ public class LauncherApp {
       switch (Settings.launcherStyle) {
         case "dark":
           MaterialLookAndFeel.changeTheme(new JMarsDarkTheme());
-          break;
-        case "light":
-          MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
           break;
         default:
           MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());

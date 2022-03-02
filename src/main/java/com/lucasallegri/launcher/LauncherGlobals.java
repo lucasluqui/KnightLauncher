@@ -24,6 +24,8 @@ public class LauncherGlobals {
 
   public static final String USER_DIR = System.getProperty("user.dir");
 
+  public static final String RPC_CLIENT_ID = "626524043209867274";
+
 
   public static final String[] GETDOWN_ARGS = {
           "./java/bin/java",

@@ -1,8 +1,7 @@
 package com.lucasallegri.launcher.settings;
 
-import com.lucasallegri.launcher.LanguageManager;
+import com.lucasallegri.launcher.Locale;
 import com.lucasallegri.launcher.ProgressBar;
-import com.lucasallegri.util.DateUtil;
 import com.lucasallegri.util.FileUtil;
 
 import java.io.File;
@@ -21,7 +20,7 @@ public class GameSettings {
       ProgressBar.showState(true);
       ProgressBar.setBarMax(1);
       ProgressBar.setBarValue(0);
-      ProgressBar.setState(LanguageManager.getValue("m.apply"));
+      ProgressBar.setState(Locale.getValue("m.apply"));
 
       /**
        * Back up the current extra.txt if there's no back up already.

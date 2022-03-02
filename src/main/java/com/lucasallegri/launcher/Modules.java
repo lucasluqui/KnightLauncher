@@ -15,8 +15,8 @@ public class Modules {
   public static void setupIngameRPC() {
     if (SystemUtil.isWindows() && SystemUtil.is64Bit()) {
       try {
-        FileUtil.extractFileWithinJar("/modules/skdiscordrpc/bundle.zip", "KnightLauncher/modules/skdiscordrpc/bundle.zip");
-        Compressor.unzip("KnightLauncher/modules/skdiscordrpc/bundle.zip", "KnightLauncher/modules/skdiscordrpc/", false);
+        FileUtil.extractFileWithinJar(LauncherGlobals.USER_DIR + "/modules/skdiscordrpc/bundle.zip", LauncherGlobals.USER_DIR + "KnightLauncher/modules/skdiscordrpc/bundle.zip");
+        Compressor.unzip(LauncherGlobals.USER_DIR + "KnightLauncher/modules/skdiscordrpc/bundle.zip", LauncherGlobals.USER_DIR + "KnightLauncher/modules/skdiscordrpc/", false);
         new File(LauncherGlobals.USER_DIR + "KnightLauncher/modules/skdiscordrpc/bundle.zip").delete();
         SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
       } catch (IOException e) {

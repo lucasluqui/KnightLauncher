@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import static com.lucasallegri.launcher.Log.log;
 
-public class LanguageManager {
+public class Locale {
 
   private static final Properties prop = new Properties();
   private static InputStream propStream = null;
@@ -29,7 +29,7 @@ public class LanguageManager {
   };
 
   public static void setup() {
-    propStream = LanguageManager.class.getResourceAsStream("/lang/lang_" + Settings.lang + ".properties");
+    propStream = Locale.class.getResourceAsStream("/lang/lang_" + Settings.lang + ".properties");
   }
 
   public static String getValue(String key) {
