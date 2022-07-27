@@ -13,7 +13,7 @@
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="Maven: com.github.vatbub:mslinks:1.0.5" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:16.0.3" level="project" />
-    <orderEntry type="library" name="Maven: net.lingala.zip4j:zip4j:2.5.0" level="project" />
+    <orderEntry type="library" name="Maven: net.lingala.zip4j:zip4j:2.9.1" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20180813" level="project" />
     <orderEntry type="library" name="Maven: com.github.jiconfont:jiconfont-swing:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.jiconfont:jiconfont:0.10.0" level="project" />

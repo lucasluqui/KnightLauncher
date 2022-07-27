@@ -6,7 +6,7 @@ public class LauncherGlobals {
 
   public static String latestRelease = null;
 
-  public static final String VERSION = "1.6-DEV";
+  public static final String VERSION = "1.6.0";
 
   public static final String SHORTCUT_FILE_NAME = "Knight Launcher";
 
@@ -15,8 +15,8 @@ public class LauncherGlobals {
   public static final String GITHUB_REPO = "KnightLauncher";
   public static final String GITHUB_MAIN_BRANCH = "master";
 
-  public static final String CDN_URL = "https://knightlauncher-cdn.lucasallegri.com/knightlauncher/v1/";
-  public static final String LARGE_CDN_URL = "https://knightlauncher-large-cdn.lucasallegri.com/knightlauncher/v1/";
+  public static final String CDN_URL = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
+  public static final String LARGE_CDN_URL = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
   public static final String DISCORD_URL = "https://discord.gg/RAf499a";
   public static final String GET_MODS_URL = "https://discord.gg/BZRyJrr";
   public static final String KOFI_URL = "https://ko-fi.com/lucasallegri";
