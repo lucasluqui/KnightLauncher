@@ -11,6 +11,11 @@ import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 import static com.lucasallegri.launcher.Log.log;
 
@@ -31,8 +36,8 @@ public class PostInitRoutine {
   private static void loadOnlineAssets() {
     Thread oassetsThread = new Thread(() -> {
 
-      pullGithubData();
       checkVersion();
+      getProjectXVersion();
 
       int steamPlayers = SteamUtil.getCurrentPlayers("99900");
       if (steamPlayers == 0) {
@@ -69,7 +74,7 @@ public class PostInitRoutine {
     oassetsThread.start();
   }
 
-  private static void pullGithubData() {
+  private static void checkVersion() {
 
     String rawResponseReleases = INetUtil.getWebpageContent(
             LauncherGlobals.GITHUB_API
@@ -83,17 +88,29 @@ public class PostInitRoutine {
     if(rawResponseReleases != null) {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
 
-      LauncherGlobals.latestRelease = jsonReleases.getString("tag_name");
+      String latestRelease = jsonReleases.getString("tag_name");
+      if (latestRelease.equalsIgnoreCase(LauncherGlobals.VERSION)) {
+        Settings.isOutdated = true;
+        LauncherGUI.updateButton.setVisible(true);
+      }
     } else {
       log.error("Received no response from GitHub. Possible downtime?");
     }
   }
 
-  private static void checkVersion() {
-    if (!LauncherGlobals.latestRelease.equalsIgnoreCase(LauncherGlobals.VERSION)) {
-      Settings.isOutdated = true;
-      LauncherGUI.updateButton.setVisible(true);
+  private static void getProjectXVersion() {
+    InputStream stream = new ByteArrayInputStream((
+            INetUtil.getWebpageContent("http://gamemedia2.spiralknights.com/spiral/client/getdown.txt"))
+            .getBytes(StandardCharsets.UTF_8));
+    Properties prop = new Properties();
+    try {
+      prop.load(stream);
+    } catch (IOException e) {
+      log.error(e);
     }
+
+    LauncherApp.projectXVersion = prop.getProperty("version");
+    log.info("Latest ProjectX version updated", LauncherApp.projectXVersion);
   }
 
 }

@@ -28,6 +28,7 @@ public class LauncherApp {
   protected static ModListGUI mgui;
   protected static JVMPatcher jvmPatcher;
   protected static DiscordRPCInstance rpc = new DiscordRPCInstance(LauncherGlobals.RPC_CLIENT_ID);
+  public static String projectXVersion = null;
 
   public static void main(String[] args) {
 
