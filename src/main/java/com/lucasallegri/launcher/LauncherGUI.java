@@ -147,13 +147,6 @@ public class LauncherGUI extends BaseGUI {
     updateButton.setVisible(false);
     updateButton.setBounds(185, 427, 150, 25);
     launcherGUIFrame.getContentPane().add(updateButton);
-    updateButton.addActionListener(action -> DesktopUtil.openWebpage(
-            "https://github.com/"
-                    + LauncherGlobals.GITHUB_AUTHOR + "/"
-                    + LauncherGlobals.GITHUB_REPO + "/"
-                    + "releases/tag/"
-                    + LauncherGlobals.latestRelease
-    ));
 
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
     playerCountLabel.setFont(FontManager.fontReg);

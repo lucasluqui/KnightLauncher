@@ -3,10 +3,7 @@ package com.lucasallegri.launcher;
 import com.lucasallegri.launcher.mods.ModList;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.Settings;
-import com.lucasallegri.util.FileUtil;
-import com.lucasallegri.util.INetUtil;
-import com.lucasallegri.util.ImageUtil;
-import com.lucasallegri.util.SteamUtil;
+import com.lucasallegri.util.*;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -91,6 +88,13 @@ public class PostInitRoutine {
       String latestRelease = jsonReleases.getString("tag_name");
       if (latestRelease.equalsIgnoreCase(LauncherGlobals.VERSION)) {
         Settings.isOutdated = true;
+        LauncherGUI.updateButton.addActionListener(action -> DesktopUtil.openWebpage(
+                "https://github.com/"
+                        + LauncherGlobals.GITHUB_AUTHOR + "/"
+                        + LauncherGlobals.GITHUB_REPO + "/"
+                        + "releases/tag/"
+                        + latestRelease
+        ));
         LauncherGUI.updateButton.setVisible(true);
       }
     } else {
