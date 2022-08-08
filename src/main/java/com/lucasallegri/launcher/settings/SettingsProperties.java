@@ -2,6 +2,8 @@ package com.lucasallegri.launcher.settings;
 
 import com.lucasallegri.launcher.LauncherGlobals;
 import com.lucasallegri.util.FileUtil;
+import com.lucasallegri.util.SteamUtil;
+import com.lucasallegri.util.SystemUtil;
 
 import java.io.*;
 import java.util.Properties;
@@ -52,7 +54,7 @@ public class SettingsProperties {
     }
   }
 
-  public static void loadFromProp() {
+  public static void load() {
     Settings.doRebuilds = Boolean.parseBoolean(getValue("launcher.rebuilds"));
     Settings.keepOpen = Boolean.parseBoolean(getValue("launcher.keepOpen"));
     Settings.createShortcut = Boolean.parseBoolean(getValue("launcher.createShortcut"));
@@ -72,6 +74,13 @@ public class SettingsProperties {
     Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
     Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
     log.info("Successfully loaded all settings from prop file.");
+    finishLoading();
+  }
+
+  private static void finishLoading() {
+    if(SystemUtil.isWindows() && SteamUtil.getGamePathWindows() == null) {
+      setValue("game.platform", "Standalone");
+    }
   }
 
 }

@@ -2,6 +2,7 @@ package com.lucasallegri.launcher.settings;
 
 import com.lucasallegri.launcher.*;
 import com.lucasallegri.util.ColorUtil;
+import com.lucasallegri.util.SteamUtil;
 import com.lucasallegri.util.SystemUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -306,6 +307,9 @@ public class SettingsGUI extends BaseGUI {
     gamePanel.add(choicePlatform);
     choicePlatform.addItem(Locale.getValue("o.steam"));
     choicePlatform.addItem(Locale.getValue("o.standalone"));
+    if(SystemUtil.isWindows() && SteamUtil.getGamePathWindows() == null) {
+      choicePlatform.removeItem(Locale.getValue("o.steam"));
+    }
     choicePlatform.setSelectedItem(Settings.gamePlatform);
     choicePlatform.addItemListener(new ItemListener() {
       @Override

@@ -51,7 +51,7 @@ public class LauncherApp {
     checkStartLocation();
     setupHTTPSProtocol();
     SettingsProperties.setup();
-    SettingsProperties.loadFromProp();
+    SettingsProperties.load();
     setupLauncherStyle();
     Locale.setup();
     FontManager.setup();
