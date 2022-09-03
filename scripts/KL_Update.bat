@@ -11,6 +11,7 @@ SET regkeys[1]="HKEY_CURRENT_USER\SOFTWARE\Grey Havens\Spiral Knights"
 SET regkeys[2]="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam"
 SET api_url="https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest"
 SET download_url="https://github.com/lucas-allegri/KnightLauncher/releases/download/"
+SET filename=KnightLauncher.zip
 SET javaurl="https://javadl.oracle.com/webapps/download/AutoDL?BundleId=245057_d3c52aa6bfa54d3ca74e617f18309292"
 SET javafname=jre_kl.exe
 SET separator=--------------------------------------------------------------------------------
@@ -182,12 +183,6 @@ SET /P url=<temp
 DEL temp
 SET url=%url:"=%
 SET url=%url:      browser_download_url: =%
-SET filename=%url:https://github.com/lucas-allegri/KnightLauncher/releases/download/=%
-ECHO %filename% > temp
-(FOR /F "tokens=1,* delims=/" %%a IN (temp) DO ECHO %%b) > temp2
-SET /P filename=<temp2
-DEL temp
-DEL temp2
 
 :: Downloading, installing and running the new version.
 :: NOTE: If "tar" fails - update to Windows 10, or update your Windows 10. Build 17063 at least.
