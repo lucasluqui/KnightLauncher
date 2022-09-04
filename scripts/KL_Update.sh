@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # by Crowfunder
 # my gh: https://github.com/Crowfunder
-# KnightLauncher gh: https://github.com/lucas-allegri/KnightLauncher
+# KnightLauncher gh: https://github.com/lucasluqui/KnightLauncher
 
 GREEN="\033[0;32m"
 NONE="\033[0m"
@@ -39,7 +39,7 @@ case $opt in
 
         # Downloading and installing new version.
         echo "Downloading..."
-        curl -sSL https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest | grep "browser_download_url" | cut -d : -f 2,3 | tr -d \" | wget --show-progress -O "${filename}" -qi -
+        curl -sSL https://api.github.com/repos/lucasluqui/KnightLauncher/releases/latest | grep "browser_download_url" | cut -d : -f 2,3 | tr -d \" | wget --show-progress -O "${filename}" -qi -
         echo -e "${GREEN}Successfully downloaded ${filename}${NONE}\nExtracting..."
         mv "${filename}" "${skpath}/${filename}"
         unzip "${skpath}/${filename}" -d "${skpath}"
