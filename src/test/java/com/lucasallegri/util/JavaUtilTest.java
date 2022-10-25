@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 public class JavaUtilTest {
 
-  private final String PATH = "\"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Spiral Knights\\java_vm\\bin\\java.exe\"";
+  private final String PATH = System.getProperty("sun.boot.library.path") + "\\java.exe";
 
   @Test
   public void determineJVMArch() throws Exception {
