@@ -2,7 +2,9 @@ package com.lucasallegri.launcher;
 
 import com.lucasallegri.dialog.DialogWarning;
 import com.lucasallegri.discord.DiscordRPCInstance;
+import com.lucasallegri.launcher.mods.ModList;
 import com.lucasallegri.launcher.mods.ModListGUI;
+import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.launcher.settings.SettingsGUI;
 import com.lucasallegri.launcher.settings.SettingsProperties;
@@ -13,11 +15,16 @@ import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.JMarsDarkTheme;
 import mdlaf.themes.MaterialLiteTheme;
 import net.sf.image4j.codec.ico.ICOEncoder;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Objects;
+import java.util.Properties;
 
 import static com.lucasallegri.launcher.Log.log;
 
@@ -159,13 +166,10 @@ public class LauncherApp {
     try {
       UIManager.setLookAndFeel(new MaterialLookAndFeel());
 
-      switch (Settings.launcherStyle) {
-        case "dark":
-          MaterialLookAndFeel.changeTheme(new JMarsDarkTheme());
-          break;
-        default:
-          MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
-          break;
+      if ("dark".equals(Settings.launcherStyle)) {
+        MaterialLookAndFeel.changeTheme(new JMarsDarkTheme());
+      } else {
+        MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
       }
     } catch (UnsupportedLookAndFeelException e) {
       log.error(e);
@@ -187,7 +191,7 @@ public class LauncherApp {
     }
 
     try {
-      PrintStream printStream = new PrintStream(new BufferedOutputStream(new FileOutputStream(logFile)), true);
+      PrintStream printStream = new PrintStream(new BufferedOutputStream(Files.newOutputStream(logFile.toPath())), true);
       System.setOut(printStream);
       System.setErr(printStream);
     } catch (IOException e) {
@@ -223,6 +227,105 @@ public class LauncherApp {
     }
 
     return true;
+  }
+
+  private static void postInitialization(LauncherApp app) {
+    ModLoader.checkInstalled();
+    if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
+    if (Settings.useIngameRPC) Modules.setupIngameRPC();
+    if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
+      ModLoader.extractSafeguard();
+    }
+
+    getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
+    app.loadOnlineAssets();
+  }
+
+  private void loadOnlineAssets() {
+    Thread onlineAssetsThread = new Thread(() -> {
+
+      checkVersion();
+      getProjectXVersion();
+
+      int steamPlayers = SteamUtil.getCurrentPlayers("99900");
+      if (steamPlayers == 0) {
+        LauncherGUI.playerCountLabel.setText(Locale.getValue("error.get_player_count"));
+      } else {
+        int approximateTotalPlayers = Math.round(steamPlayers * 1.6f);
+        LauncherGUI.playerCountLabel.setText(Locale.getValue("m.player_count", new String[]{
+            String.valueOf(approximateTotalPlayers), String.valueOf(steamPlayers)
+        }));
+      }
+
+      String tweets;
+      tweets = INetUtil.getWebpageContent(LauncherGlobals.CDN_URL + "tweets.html");
+      if (tweets == null) {
+        LauncherGUI.tweetsContainer.setText(Locale.getValue("error.tweets_retrieve"));
+      } else {
+        String styledTweets = tweets.replaceFirst("FONT_FAMILY", LauncherGUI.tweetsContainer.getFont().getFamily())
+            .replaceFirst("COLOR", Settings.launcherStyle.equals("dark") ? "#ffffff" : "#000000");
+        LauncherGUI.tweetsContainer.setContentType("text/html");
+        LauncherGUI.tweetsContainer.setText(styledTweets);
+      }
+
+      Image eventImage;
+      String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
+      eventImage = ImageUtil.getImageFromURL(LauncherGlobals.CDN_URL + "event_" + eventImageLang + ".png", 525, 305);
+      if (eventImage == null) {
+        LauncherGUI.imageContainer.setText(Locale.getValue("error.event_image_missing"));
+      } else {
+        eventImage = ImageUtil.addRoundedCorners(eventImage, 25);
+        LauncherGUI.imageContainer.setText("");
+        LauncherGUI.imageContainer.setIcon(new ImageIcon(eventImage));
+      }
+    });
+    onlineAssetsThread.start();
+  }
+
+  private void checkVersion() {
+
+    String rawResponseReleases = INetUtil.getWebpageContent(
+        LauncherGlobals.GITHUB_API
+            + "repos/"
+            + LauncherGlobals.GITHUB_AUTHOR + "/"
+            + LauncherGlobals.GITHUB_REPO + "/"
+            + "releases/"
+            + "latest"
+    );
+
+    if(rawResponseReleases != null) {
+      JSONObject jsonReleases = new JSONObject(rawResponseReleases);
+
+      String latestRelease = jsonReleases.getString("tag_name");
+      if (latestRelease.equalsIgnoreCase(LauncherGlobals.VERSION)) {
+        Settings.isOutdated = true;
+        LauncherGUI.updateButton.addActionListener(action -> DesktopUtil.openWebpage(
+            "https://github.com/"
+                + LauncherGlobals.GITHUB_AUTHOR + "/"
+                + LauncherGlobals.GITHUB_REPO + "/"
+                + "releases/tag/"
+                + latestRelease
+        ));
+        LauncherGUI.updateButton.setVisible(true);
+      }
+    } else {
+      log.error("Received no response from GitHub. Possible downtime?");
+    }
+  }
+
+  private void getProjectXVersion() {
+    InputStream stream = new ByteArrayInputStream((
+        Objects.requireNonNull(INetUtil.getWebpageContent("http://gamemedia2.spiralknights.com/spiral/client/getdown.txt")))
+        .getBytes(StandardCharsets.UTF_8));
+    Properties prop = new Properties();
+    try {
+      prop.load(stream);
+    } catch (IOException e) {
+      log.error(e);
+    }
+
+    LauncherApp.projectXVersion = prop.getProperty("version");
+    log.info("Latest ProjectX version updated", LauncherApp.projectXVersion);
   }
 
 }
