@@ -31,47 +31,24 @@ public class ProcessUtil {
     }
   }
 
-  public static String runAndCapture(String[] command) {
+  public static String[] runAndCapture(String[] command) {
     Process process = null;
     try {
       process = new ProcessBuilder(command).start();
-      return IOUtils.toString(process.getErrorStream(), Charset.defaultCharset());
+
+      // Capture both streams and send them back. Ideally we'd only pass stdout but Java likes
+      // sending important stuff through stderr like -version.
+      String stdout = IOUtils.toString(process.getInputStream(), Charset.defaultCharset());
+      String stderr = IOUtils.toString(process.getErrorStream(), Charset.defaultCharset());
+      return new String[] {stdout, stderr};
     } catch (IOException e) {
       log.error(e);
     } finally {
+
+      // No need to keep the process active.
       if(process != null) process.destroy();
     }
-    return null;
-  }
-
-  public static ArrayList<String> runAsBatchAndCapture(String command) {
-    FileUtil.createFile("output-capture-aabb.bat");
-    FileUtil.writeFile("output-capture-aabb.bat", command + " >output.tmp 2>&1");
-    ArrayList<String> output = new ArrayList<>();
-    Process process = null;
-    try {
-      process = new ProcessBuilder("output-capture-aabb.bat").start();
-      System.out.println(FileUtil.readFile("output.tmp"));
-      String stdout = IOUtils.toString(process.getInputStream(), Charset.defaultCharset());
-      System.out.println(stdout);
-      InputStream is = process.getInputStream();
-      BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-      String line;
-      while ((line = reader.readLine()) != null) {
-        output.add(line);
-      }
-      process.waitFor();
-    } catch (IOException | InterruptedException e) {
-      log.error(e);
-    } finally {
-      if(process != null) process.destroy();
-      //FileUtil.deleteFile("output-capture-aabb.bat");
-      //FileUtil.deleteFile("output.tmp");
-    }
-    //FileUtil.deleteFile("output-capture-aabb.bat");
-    //FileUtil.deleteFile("output.tmp");
-    return output;
+    return new String[1];
   }
 
 }
