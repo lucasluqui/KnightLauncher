@@ -10,8 +10,6 @@ public class JavaUtilTest {
 
   @Test
   public void determineJVMArch() throws Exception {
-    int arch = JavaUtil.determineJVMArch(PATH);
-    System.out.println(arch);
-    assertNotEquals("Cannot determine Java VM architecture", 0, arch);
+    assertNotEquals("Cannot determine Java VM architecture", 0, JavaUtil.determineJVMArch(PATH));
   }
 }
