@@ -1,5 +1,14 @@
 package com.lucasallegri.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.lucasallegri.util.Log.log;
+
 public class SystemUtil {
 
   private static final String OS = System.getProperty("os.name").toLowerCase();
