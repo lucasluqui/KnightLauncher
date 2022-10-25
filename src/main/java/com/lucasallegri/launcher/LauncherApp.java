@@ -34,7 +34,7 @@ public class LauncherApp {
 
     LauncherApp app = new LauncherApp();
 
-    if (SystemUtil.is64Bit() && SystemUtil.isWindows() && !Settings.jvmPatched) {
+    if (app.requiresJVMPatch()) {
       jvmPatcher = app.composeJVMPatcher(app);
     } else {
       lgui = app.composeLauncherGUI(app);
@@ -42,7 +42,7 @@ public class LauncherApp {
       mgui = app.composeModListGUI(app);
     }
 
-    new PostInitRoutine(app);
+    postInitialization(app);
   }
 
   public LauncherApp () {
@@ -110,14 +110,14 @@ public class LauncherApp {
     return rpc;
   }
 
-  private static void checkDirectories() {
+  private void checkDirectories() {
     FileUtil.createDir("mods");
     FileUtil.createDir("KnightLauncher/images/");
     FileUtil.createDir("KnightLauncher/modules/");
   }
 
   // Checking if we're being ran inside the game's directory, "getdown-pro.jar" should always be present if so.
-  private static void checkStartLocation() {
+  private void checkStartLocation() {
     if (!FileUtil.fileExists("./getdown-pro.jar")) {
       String pathWarning = "The .jar file appears to be placed in the wrong directory. " +
               "In some cases this is due to a false positive and can be ignored. Knight Launcher will attempt to launch normally."
@@ -133,7 +133,7 @@ public class LauncherApp {
   }
 
   // Create a shortcut to the application if there's none.
-  private static void checkShortcut() {
+  private void checkShortcut() {
     if (Settings.createShortcut
             && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.SHORTCUT_FILE_NAME)) {
 
@@ -154,7 +154,7 @@ public class LauncherApp {
     }
   }
 
-  private static void setupLauncherStyle() {
+  private void setupLauncherStyle() {
     IconFontSwing.register(FontAwesome.getIconFont());
     try {
       UIManager.setLookAndFeel(new MaterialLookAndFeel());
@@ -172,13 +172,13 @@ public class LauncherApp {
     }
   }
 
-  private static void setupHTTPSProtocol() {
+  private void setupHTTPSProtocol() {
     System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
     System.setProperty("http.agent", "Mozilla/5.0");
     System.setProperty("https.agent", "Mozilla/5.0");
   }
 
-  private static void setupFileLogging() {
+  private void setupFileLogging() {
     File logFile = new File("knightlauncher.log");
     File oldLogFile = new File("old-knightlauncher.log");
 
@@ -195,7 +195,7 @@ public class LauncherApp {
     }
   }
 
-  private static void logVMInfo() {
+  private void logVMInfo() {
     log.info("------------ VM Info ------------");
     log.info("OS Name: " + System.getProperty("os.name"));
     log.info("OS Arch: " + System.getProperty("os.arch"));
@@ -206,6 +206,23 @@ public class LauncherApp {
     log.info("User Home: " + System.getProperty("user.home"));
     log.info("Current Directory: " + System.getProperty("user.dir"));
     log.info("---------------------------------");
+  }
+
+  private boolean requiresJVMPatch() {
+    // You need a 64-bit system to begin with.
+    if(!SystemUtil.is64Bit()) return false;
+
+    // Currently Java VM patching is only supported on Windows systems.
+    if(!SystemUtil.isWindows()) return false;
+
+    // Check if there's already a 64-bit Java VM in the game's directory.
+    if(JavaUtil.determineJVMArch(LauncherGlobals.USER_DIR + "\".\\java_vm\\bin\\java.exe\"") == 64) {
+      Settings.jvmPatched = true;
+      SettingsProperties.setValue("launcher.jvm_patched", "true");
+      return false;
+    }
+
+    return true;
   }
 
 }
