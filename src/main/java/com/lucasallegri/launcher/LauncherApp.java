@@ -117,8 +117,16 @@ public class LauncherApp {
   }
 
   private void checkDirectories() {
+    // Stores /rsrc (.zip) mods.
     FileUtil.createDir("mods");
+
+    // Stores /code (.jar) mods.
+    FileUtil.createDir("code-mods");
+
+    // Miscellaneous image assets for the launcher to use.
     FileUtil.createDir("KnightLauncher/images/");
+
+    // External modules necessary for extra functionality (eg. RPC)
     FileUtil.createDir("KnightLauncher/modules/");
   }
 
