@@ -13,21 +13,16 @@ import static com.lucasallegri.util.Log.log;
 
 public class ProcessUtil {
 
-  @SuppressWarnings("unused")
-  public static void startApplication(String commandLine) {
+  public static void run(String[] command, boolean keepAlive) {
+    Process process = null;
     try {
-      final Process p = Runtime.getRuntime().exec(commandLine);
+      process = Runtime.getRuntime().exec(command);
     } catch (IOException e) {
       log.error(e);
-    }
-  }
+    } finally {
 
-  @SuppressWarnings("unused")
-  public static void startApplication(String[] args) {
-    try {
-      final Process p = Runtime.getRuntime().exec(args);
-    } catch (IOException e) {
-      log.error(e);
+      // No need to keep the process alive.
+      if (process != null && !keepAlive) process.destroy();
     }
   }
 

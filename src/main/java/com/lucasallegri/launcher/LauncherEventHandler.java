@@ -31,9 +31,9 @@ public class LauncherEventHandler {
       } else {
 
         if (SystemUtil.isWindows()) {
-          ProcessUtil.startApplication(LauncherGlobals.GETDOWN_ARGS_WIN);
+          ProcessUtil.run(LauncherGlobals.GETDOWN_ARGS_WIN, true);
         } else {
-          ProcessUtil.startApplication(LauncherGlobals.GETDOWN_ARGS);
+          ProcessUtil.run(LauncherGlobals.GETDOWN_ARGS, true);
         }
 
       }
@@ -41,7 +41,7 @@ public class LauncherEventHandler {
       log.info("Starting game", "platform", Settings.gamePlatform);
 
       LauncherApp.getRPC().stop();
-      if (Settings.useIngameRPC) ProcessUtil.startApplication(RPC_COMMAND_LINE);
+      if (Settings.useIngameRPC) ProcessUtil.run(RPC_COMMAND_LINE, true);
       if (!Settings.keepOpen) {
         LauncherGUI.launcherGUIFrame.dispose();
         System.exit(1);
@@ -57,9 +57,9 @@ public class LauncherEventHandler {
     Thread launchAltThread = new Thread(() -> {
 
       if (!SystemUtil.isWindows()) {
-        ProcessUtil.startApplication(LauncherGlobals.ALT_CLIENT_ARGS);
+        ProcessUtil.run(LauncherGlobals.ALT_CLIENT_ARGS, true);
       } else {
-        ProcessUtil.startApplication(LauncherGlobals.ALT_CLIENT_ARGS_WIN);
+        ProcessUtil.run(LauncherGlobals.ALT_CLIENT_ARGS_WIN, true);
       }
 
       LauncherApp.getRPC().stop();

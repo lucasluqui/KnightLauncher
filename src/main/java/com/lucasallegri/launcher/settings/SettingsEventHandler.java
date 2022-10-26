@@ -98,7 +98,7 @@ public class SettingsEventHandler {
 
   public static void jvmPatchEvent(ActionEvent action) {
     SettingsProperties.setValue("launcher.jvm_patched", "false");
-    ProcessUtil.startApplication(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.pathSeparator + "KnightLauncher.jar" });
+    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.pathSeparator + "KnightLauncher.jar" }, true);
     SettingsGUI.settingsGUIFrame.dispose();
     System.exit(1);
   }
