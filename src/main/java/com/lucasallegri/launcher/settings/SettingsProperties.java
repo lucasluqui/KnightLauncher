@@ -12,7 +12,7 @@ import static com.lucasallegri.launcher.settings.Log.log;
 
 public class SettingsProperties {
 
-  private static final String PROP_VER = "12";
+  private static final String PROP_VER = "13";
 
   private static final Properties _prop = new Properties();
   private static final String _propPath = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
