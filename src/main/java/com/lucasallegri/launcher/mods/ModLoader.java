@@ -31,7 +31,7 @@ public class ModLoader {
 
     // Append all .zip and .jar files inside the mod folder into an ArrayList.
     List<String> rawFiles = FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/mods/", ".zip");
-    rawFiles.addAll(FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/mods/", ".jar"));
+    rawFiles.addAll(FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/code-mods/", ".jar"));
 
     for (String file : rawFiles) {
       JSONObject modJson;
