@@ -6,7 +6,7 @@ import com.lucasallegri.util.SteamUtil;
 import com.lucasallegri.util.SystemUtil;
 
 import java.io.*;
-import java.util.Properties;
+import java.util.*;
 
 import static com.lucasallegri.launcher.settings.Log.log;
 
@@ -16,6 +16,7 @@ public class SettingsProperties {
 
   private static final Properties _prop = new Properties();
   private static final String _propPath = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
+  private static HashMap<String, Object> migrationMap = new HashMap<>();
 
   public static void setup() {
     try {
@@ -23,11 +24,15 @@ public class SettingsProperties {
         FileUtil.extractFileWithinJar("/config/base.properties", _propPath);
       } else if (FileUtil.fileExists(_propPath) && getValue("PROP_VER") != null
               && !getValue("PROP_VER").equals(PROP_VER)) {
-        log.warning("Old PROP_VER detected, resetting properties file.");
+        log.warning("Old PROP_VER detected, beginning migration...");
+        migrationMap = getAllKeyValues();
         FileUtil.extractFileWithinJar("/config/base.properties", _propPath);
+        migrate();
       }
     } catch (IOException e) {
       log.error(e);
+    } finally {
+      load();
     }
   }
 
@@ -52,6 +57,20 @@ public class SettingsProperties {
     } catch (IOException e) {
       log.error(e);
     }
+  }
+
+  private static HashMap<String, Object> getAllKeyValues() {
+    HashMap<String, Object> keyValues = new HashMap<>();
+    try (InputStream is = new FileInputStream(_propPath)) {
+      _prop.load(is);
+      for(String key : _prop.stringPropertyNames()) {
+        keyValues.put(key, getValue(key));
+      }
+      return keyValues;
+    } catch (IOException e) {
+      log.error(e);
+    }
+    return null;
   }
 
   public static void load() {
@@ -80,6 +99,12 @@ public class SettingsProperties {
   private static void finishLoading() {
     if(SystemUtil.isWindows() && SteamUtil.getGamePathWindows() == null) {
       setValue("game.platform", "Standalone");
+    }
+  }
+
+  private static void migrate() {
+    for(String key : migrationMap.keySet()) {
+      setValue(key, (String) migrationMap.get(key));
     }
   }
 
