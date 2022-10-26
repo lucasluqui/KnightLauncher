@@ -19,7 +19,7 @@ import static com.lucasallegri.launcher.mods.Log.log;
 
 public class ModLoader {
 
-  private static final String[] BUNDLES = { "full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar" };
+  private static final String[] RSRC_BUNDLES = { "full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar" };
 
   public static Boolean mountRequired = false;
   public static Boolean rebuildRequired = false;
@@ -132,16 +132,16 @@ public class ModLoader {
 
     ProgressBar.showBar(true);
     ProgressBar.showState(true);
-    ProgressBar.setBarMax(BUNDLES.length + 1);
+    ProgressBar.setBarMax(RSRC_BUNDLES.length + 1);
     LauncherApp.getRPC().setDetails(Locale.getValue("m.clean"));
     ProgressBar.setState(Locale.getValue("m.clean"));
 
     // Iterate through all 3 bundles to clean up the game files.
-    for (int i = 0; i < BUNDLES.length; i++) {
+    for (int i = 0; i < RSRC_BUNDLES.length; i++) {
       ProgressBar.setBarValue(i + 1);
-      LauncherApp.getRPC().setDetails(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(BUNDLES.length)}));
+      LauncherApp.getRPC().setDetails(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(RSRC_BUNDLES.length)}));
       try {
-        FileUtil.unpackJar(new ZipFile(LauncherGlobals.USER_DIR + "/rsrc/" + BUNDLES[i]), new File(LauncherGlobals.USER_DIR + "/rsrc/"), false);
+        FileUtil.unpackJar(new ZipFile(LauncherGlobals.USER_DIR + "/rsrc/" + RSRC_BUNDLES[i]), new File(LauncherGlobals.USER_DIR + "/rsrc/"), false);
       } catch (IOException e) {
         log.error(e);
       }
@@ -153,7 +153,7 @@ public class ModLoader {
       new File(LauncherGlobals.USER_DIR + "/rsrc/config/" + config).delete();
     }
 
-    ProgressBar.setBarValue(BUNDLES.length + 1);
+    ProgressBar.setBarValue(RSRC_BUNDLES.length + 1);
     ProgressBar.showBar(false);
     ProgressBar.showState(false);
     rebuildRequired = false;
