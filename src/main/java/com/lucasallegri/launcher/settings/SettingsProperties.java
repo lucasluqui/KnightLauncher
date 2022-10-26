@@ -74,11 +74,15 @@ public class SettingsProperties {
   }
 
   public static void load() {
+    Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));
+    Settings.launcherStyle = getValue("launcher.style");
+    Settings.lang = getValue("launcher.lang");
     Settings.doRebuilds = Boolean.parseBoolean(getValue("launcher.rebuilds"));
     Settings.keepOpen = Boolean.parseBoolean(getValue("launcher.keepOpen"));
     Settings.createShortcut = Boolean.parseBoolean(getValue("launcher.createShortcut"));
-    Settings.lang = getValue("launcher.lang");
-    Settings.launcherStyle = getValue("launcher.style");
+    Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
+    Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
+    Settings.allowModding = Boolean.parseBoolean(getValue("launcher.allowModding"));
     Settings.compressorUnzipMethod = getValue("compressor.unzipMethod");
     Settings.compressorExtractBuffer = Integer.parseInt(getValue("compressor.extractBuffer"));
     Settings.gamePlatform = getValue("game.platform");
@@ -87,11 +91,11 @@ public class SettingsProperties {
     Settings.gameUndecoratedWindow = Boolean.parseBoolean(getValue("game.undecoratedWindow"));
     Settings.gameUseCustomGC = Boolean.parseBoolean(getValue("game.useCustomGC"));
     Settings.gameGarbageCollector = getValue("game.garbageCollector");
-    Settings.gameAdditionalArgs = getValue("game.additionalArgs");
     Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
-    Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));
-    Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
-    Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
+    Settings.gameEndpoint = getValue("game.endpoint");
+    Settings.gamePort = Integer.parseInt(getValue("game.port"));
+    Settings.gamePublicKey = getValue("game.publicKey");
+    Settings.gameAdditionalArgs = getValue("game.additionalArgs");
     log.info("Successfully loaded all settings from prop file.");
     finishLoading();
   }
