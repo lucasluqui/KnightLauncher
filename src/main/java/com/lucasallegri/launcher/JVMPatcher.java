@@ -51,19 +51,19 @@ public class JVMPatcher extends BaseGUI {
 
     headerLabel = new JLabel(Locale.getValue("m.jvm_patcher_confirm_header"));
     headerLabel.setBounds(10, 40, 480, 37);
-    headerLabel.setFont(FontManager.fontRegBig);
+    headerLabel.setFont(Fonts.fontRegBig);
     headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
     jvmPatcherFrame.getContentPane().add(headerLabel);
 
     subHeaderLabel = new JLabel(Locale.getValue("m.jvm_patcher_confirm_subheader"));
     subHeaderLabel.setBounds(10, 65, 480, 37);
-    subHeaderLabel.setFont(FontManager.fontReg);
+    subHeaderLabel.setFont(Fonts.fontReg);
     subHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
     jvmPatcherFrame.getContentPane().add(subHeaderLabel);
 
     jvmPatcherState = new JLabel("");
     jvmPatcherState.setBounds(11, 180, 480, 15);
-    jvmPatcherState.setFont(FontManager.fontReg);
+    jvmPatcherState.setFont(Fonts.fontReg);
     jvmPatcherFrame.getContentPane().add(jvmPatcherState);
 
     jvmPatcherProgressBar = new JProgressBar();
@@ -74,7 +74,7 @@ public class JVMPatcher extends BaseGUI {
     buttonAccept = new JButton(Locale.getValue("b.jvm_patcher_accept"));
     buttonAccept.setFocusPainted(false);
     buttonAccept.setFocusable(false);
-    buttonAccept.setFont(FontManager.fontMed);
+    buttonAccept.setFont(Fonts.fontMed);
     buttonAccept.setBounds(30, 200, 200, 23);
     jvmPatcherFrame.getContentPane().add(buttonAccept);
     buttonAccept.addActionListener(new ActionListener() {
@@ -93,7 +93,7 @@ public class JVMPatcher extends BaseGUI {
     buttonDecline = new JButton(Locale.getValue("b.jvm_patcher_decline"));
     buttonDecline.setFocusPainted(false);
     buttonDecline.setFocusable(false);
-    buttonDecline.setFont(FontManager.fontMed);
+    buttonDecline.setFont(Fonts.fontMed);
     buttonDecline.setBounds(360, 200, 110, 23);
     jvmPatcherFrame.getContentPane().add(buttonDecline);
     buttonDecline.addActionListener(new ActionListener() {
@@ -150,7 +150,7 @@ public class JVMPatcher extends BaseGUI {
     titleBar.setLayout(null);
 
     JLabel windowTitle = new JLabel(Locale.getValue("t.jvm_patcher"));
-    windowTitle.setFont(FontManager.fontMed);
+    windowTitle.setFont(Fonts.fontMed);
     windowTitle.setBounds(10, 0, jvmPatcherFrame.getWidth() - 100, 20);
     titleBar.add(windowTitle);
 

@@ -8,7 +8,7 @@ import java.io.InputStream;
 
 import static com.lucasallegri.launcher.Log.log;
 
-public class FontManager {
+public class Fonts {
 
   private static final String fontPathRegular = "/fonts/GoogleSans-Regular.ttf";
   private static final String fontPathMedium = "/fonts/GoogleSans-Medium.ttf";

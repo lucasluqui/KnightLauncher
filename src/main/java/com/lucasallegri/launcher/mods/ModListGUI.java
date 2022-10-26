@@ -2,7 +2,6 @@ package com.lucasallegri.launcher.mods;
 
 import com.lucasallegri.launcher.*;
 import com.lucasallegri.launcher.mods.data.Mod;
-import com.lucasallegri.launcher.mods.data.ZipMod;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.DesktopUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -53,7 +52,7 @@ public class ModListGUI extends BaseGUI {
 
     modListContainer = new List();
     modListContainer.setBounds(10, 26, 162, 326);
-    modListContainer.setFont(FontManager.fontMed);
+    modListContainer.setFont(Fonts.fontMed);
     modListContainer.setBackground(ColorUtil.getBackgroundColor());
     modListContainer.setForeground(ColorUtil.getForegroundColor());
     modListContainer.setFocusable(false);
@@ -86,18 +85,18 @@ public class ModListGUI extends BaseGUI {
     labelModCount = new JLabel(String.valueOf(ModList.installedMods.size()));
     labelModCount.setHorizontalAlignment(SwingConstants.CENTER);
     labelModCount.setBounds(178, 44, 188, 40);
-    labelModCount.setFont(FontManager.fontMedGiant);
+    labelModCount.setFont(Fonts.fontMedGiant);
     modListGUIFrame.getContentPane().add(labelModCount);
 
     labelModCountText = new JLabel(Locale.getValue("m.mods_installed"));
     labelModCountText.setHorizontalAlignment(SwingConstants.CENTER);
     labelModCountText.setBounds(178, 93, 188, 14);
-    labelModCountText.setFont(FontManager.fontReg);
+    labelModCountText.setFont(Fonts.fontReg);
     modListGUIFrame.getContentPane().add(labelModCountText);
 
     refreshButton = new JButton(Locale.getValue("b.refresh"));
     refreshButton.setBounds(12, 430, 89, 23);
-    refreshButton.setFont(FontManager.fontMed);
+    refreshButton.setFont(Fonts.fontMed);
     refreshButton.setFocusPainted(false);
     refreshButton.setFocusable(false);
     refreshButton.setToolTipText(Locale.getValue("b.refresh"));
@@ -110,7 +109,7 @@ public class ModListGUI extends BaseGUI {
 
     JButton modFolderButton = new JButton(Locale.getValue("b.open_mods_folder"));
     modFolderButton.setBounds(107, 430, 136, 23);
-    modFolderButton.setFont(FontManager.fontMed);
+    modFolderButton.setFont(Fonts.fontMed);
     modFolderButton.setFocusPainted(false);
     modFolderButton.setFocusable(false);
     modFolderButton.setToolTipText(Locale.getValue("b.open_mods_folder"));
@@ -123,7 +122,7 @@ public class ModListGUI extends BaseGUI {
 
     JButton getModsButton = new JButton(Locale.getValue("b.get_mods"));
     getModsButton.setBounds(248, 430, 126, 23);
-    getModsButton.setFont(FontManager.fontMed);
+    getModsButton.setFont(Fonts.fontMed);
     getModsButton.setFocusPainted(false);
     getModsButton.setFocusable(false);
     getModsButton.setToolTipText(Locale.getValue("b.get_mods"));
@@ -136,7 +135,7 @@ public class ModListGUI extends BaseGUI {
 
     forceApplyButton = new JButton("Force apply");
     forceApplyButton.setBounds(12, 360, 125, 23);
-    forceApplyButton.setFont(FontManager.fontMed);
+    forceApplyButton.setFont(Fonts.fontMed);
     forceApplyButton.setFocusPainted(false);
     forceApplyButton.setFocusable(false);
     forceApplyButton.setToolTipText("Force apply");
@@ -149,7 +148,7 @@ public class ModListGUI extends BaseGUI {
 
     labelForceApplyState = new JLabel("");
     labelForceApplyState.setBounds(145, 358, 125, 25);
-    labelForceApplyState.setFont(FontManager.fontReg);
+    labelForceApplyState.setFont(Fonts.fontReg);
     modListGUIFrame.getContentPane().add(labelForceApplyState);
 
     JSeparator separator = new JSeparator();
@@ -157,31 +156,31 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.getContentPane().add(separator);
 
     labelName = new JLabel("");
-    labelName.setFont(FontManager.fontMed);
+    labelName.setFont(Fonts.fontMed);
     labelName.setHorizontalAlignment(SwingConstants.CENTER);
     labelName.setBounds(178, 148, 188, 14);
     modListGUIFrame.getContentPane().add(labelName);
 
     labelAuthor = new JLabel("");
-    labelAuthor.setFont(FontManager.fontReg);
+    labelAuthor.setFont(Fonts.fontReg);
     labelAuthor.setHorizontalAlignment(SwingConstants.CENTER);
     labelAuthor.setBounds(178, 165, 188, 14);
     modListGUIFrame.getContentPane().add(labelAuthor);
 
     labelDescription = new JLabel("");
-    labelDescription.setFont(FontManager.fontReg);
+    labelDescription.setFont(Fonts.fontReg);
     labelDescription.setHorizontalAlignment(SwingConstants.LEADING);
     labelDescription.setVerticalAlignment(SwingConstants.TOP);
     labelDescription.setBounds(188, 196, 178, 70);
     modListGUIFrame.getContentPane().add(labelDescription);
 
     labelVersion = new JLabel("");
-    labelVersion.setFont(FontManager.fontReg);
+    labelVersion.setFont(Fonts.fontReg);
     labelVersion.setBounds(188, 274, 178, 14);
     modListGUIFrame.getContentPane().add(labelVersion);
 
     enableButton = new JButton(Locale.getValue("b.enable"));
-    enableButton.setFont(FontManager.fontMed);
+    enableButton.setFont(Fonts.fontMed);
     enableButton.setForeground(ColorUtil.getGreenForegroundColor());
     enableButton.setEnabled(false);
     enableButton.setFocusable(false);
@@ -191,7 +190,7 @@ public class ModListGUI extends BaseGUI {
     enableButton.setVisible(false);
 
     disableButton = new JButton(Locale.getValue("b.disable"));
-    disableButton.setFont(FontManager.fontMed);
+    disableButton.setFont(Fonts.fontMed);
     disableButton.setForeground(ColorUtil.getRedForegroundColor());
     disableButton.setEnabled(false);
     disableButton.setFocusable(false);
@@ -248,7 +247,7 @@ public class ModListGUI extends BaseGUI {
     titleBar.setLayout(null);
 
     JLabel windowTitle = new JLabel(Locale.getValue("t.mods"));
-    windowTitle.setFont(FontManager.fontMed);
+    windowTitle.setFont(Fonts.fontMed);
     windowTitle.setBounds(10, 0, modListGUIFrame.getWidth() - 100, 20);
     titleBar.add(windowTitle);
 
@@ -259,7 +258,7 @@ public class ModListGUI extends BaseGUI {
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
     closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
-    closeButton.setFont(FontManager.fontMed);
+    closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -274,7 +273,7 @@ public class ModListGUI extends BaseGUI {
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
     minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
-    minimizeButton.setFont(FontManager.fontMed);
+    minimizeButton.setFont(Fonts.fontMed);
     titleBar.add(minimizeButton);
     minimizeButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {

@@ -61,7 +61,7 @@ public class LauncherApp {
     SettingsProperties.load();
     setupLauncherStyle();
     Locale.setup();
-    FontManager.setup();
+    Fonts.setup();
     rpc.start();
     KeyboardController.start();
     checkDirectories();

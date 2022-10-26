@@ -55,7 +55,7 @@ public class SettingsGUI extends BaseGUI {
     JTabbedPane tabbedPane = new JTabbedPane();
     tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
     tabbedPane.setBounds(-2, 20, 852, 455);
-    tabbedPane.setFont(FontManager.fontMedBig);
+    tabbedPane.setFont(Fonts.fontMedBig);
     tabbedPane.addTab(Locale.getValue("tab.appearance"), createAppearancePanel());
     tabbedPane.addTab(Locale.getValue("tab.behavior"), createBehaviorPanel());
     tabbedPane.addTab(Locale.getValue("tab.game"), createGamePanel());
@@ -114,7 +114,7 @@ public class SettingsGUI extends BaseGUI {
     titleBar.setLayout(null);
 
     JLabel windowTitle = new JLabel(Locale.getValue("t.settings"));
-    windowTitle.setFont(FontManager.fontMed);
+    windowTitle.setFont(Fonts.fontMed);
     windowTitle.setBounds(10, 0, settingsGUIFrame.getWidth() - 100, 20);
     titleBar.add(windowTitle);
 
@@ -125,7 +125,7 @@ public class SettingsGUI extends BaseGUI {
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
     closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
-    closeButton.setFont(FontManager.fontMed);
+    closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -141,7 +141,7 @@ public class SettingsGUI extends BaseGUI {
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
     minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
-    minimizeButton.setFont(FontManager.fontMed);
+    minimizeButton.setFont(Fonts.fontMed);
     titleBar.add(minimizeButton);
 
     settingsGUIFrame.setLocationRelativeTo(null);
@@ -154,18 +154,18 @@ public class SettingsGUI extends BaseGUI {
     JLabel headerLabel = new JLabel(Locale.getValue("tab.appearance"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(FontManager.fontMedGiant);
+    headerLabel.setFont(Fonts.fontMedGiant);
     appearancePanel.add(headerLabel);
 
     JLabel labelStyle = new JLabel(Locale.getValue("m.launcher_style"));
     labelStyle.setBounds(25, 90, 175, 18);
-    labelStyle.setFont(FontManager.fontRegBig);
+    labelStyle.setFont(Fonts.fontRegBig);
     appearancePanel.add(labelStyle);
 
     choiceStyle = new JComboBox<String>();
     choiceStyle.setBounds(25, 115, 150, 20);
     choiceStyle.setFocusable(false);
-    choiceStyle.setFont(FontManager.fontReg);
+    choiceStyle.setFont(Fonts.fontReg);
     choiceStyle.addItem(Locale.getValue("o.dark"));
     choiceStyle.addItem(Locale.getValue("o.light"));
     appearancePanel.add(choiceStyle);
@@ -179,13 +179,13 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel labelLanguage = new JLabel(Locale.getValue("m.language"));
     labelLanguage.setBounds(225, 90, 175, 18);
-    labelLanguage.setFont(FontManager.fontRegBig);
+    labelLanguage.setFont(Fonts.fontRegBig);
     appearancePanel.add(labelLanguage);
 
     choiceLanguage = new JComboBox<String>();
     choiceLanguage.setBounds(225, 115, 150, 20);
     choiceLanguage.setFocusable(false);
-    choiceLanguage.setFont(FontManager.fontReg);
+    choiceLanguage.setFont(Fonts.fontReg);
     for (String lang : Locale.AVAILABLE_LANGUAGES) {
       choiceLanguage.addItem(lang);
     }
@@ -208,17 +208,17 @@ public class SettingsGUI extends BaseGUI {
     JLabel headerLabel = new JLabel(Locale.getValue("tab.behavior"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(FontManager.fontMedGiant);
+    headerLabel.setFont(Fonts.fontMedGiant);
     behaviorPanel.add(headerLabel);
 
     JLabel labelCleaning = new JLabel(Locale.getValue("m.rebuilds"));
     labelCleaning.setBounds(25, 90, 350, 18);
-    labelCleaning.setFont(FontManager.fontRegBig);
+    labelCleaning.setFont(Fonts.fontRegBig);
     behaviorPanel.add(labelCleaning);
 
     JLabel labelCleaningExplained = new JLabel(Locale.getValue("m.file_cleaning_explained"));
     labelCleaningExplained.setBounds(25, 110, 600, 16);
-    labelCleaningExplained.setFont(FontManager.fontReg);
+    labelCleaningExplained.setFont(Fonts.fontReg);
     behaviorPanel.add(labelCleaningExplained);
 
     switchCleaning = new JToggleButton("");
@@ -238,12 +238,12 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel labelKeepOpen = new JLabel(Locale.getValue("m.keep_open"));
     labelKeepOpen.setBounds(25, 155, 350, 18);
-    labelKeepOpen.setFont(FontManager.fontRegBig);
+    labelKeepOpen.setFont(Fonts.fontRegBig);
     behaviorPanel.add(labelKeepOpen);
 
     JLabel labelKeepOpenExplained = new JLabel(Locale.getValue("m.keep_open_explained"));
     labelKeepOpenExplained.setBounds(25, 175, 600, 16);
-    labelKeepOpenExplained.setFont(FontManager.fontReg);
+    labelKeepOpenExplained.setFont(Fonts.fontReg);
     behaviorPanel.add(labelKeepOpenExplained);
 
     switchKeepOpen = new JToggleButton("");
@@ -263,12 +263,12 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel labelShortcut = new JLabel(Locale.getValue("m.create_shortcut"));
     labelShortcut.setBounds(25, 220, 225, 18);
-    labelShortcut.setFont(FontManager.fontRegBig);
+    labelShortcut.setFont(Fonts.fontRegBig);
     behaviorPanel.add(labelShortcut);
 
     JLabel labelShortcutExplained = new JLabel(Locale.getValue("m.create_shortcut_explained"));
     labelShortcutExplained.setBounds(25, 240, 600, 16);
-    labelShortcutExplained.setFont(FontManager.fontReg);
+    labelShortcutExplained.setFont(Fonts.fontReg);
     behaviorPanel.add(labelShortcutExplained);
 
     switchShortcut = new JToggleButton("");
@@ -292,17 +292,17 @@ public class SettingsGUI extends BaseGUI {
     JLabel headerLabel = new JLabel(Locale.getValue("tab.game"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(FontManager.fontMedGiant);
+    headerLabel.setFont(Fonts.fontMedGiant);
     gamePanel.add(headerLabel);
 
     JLabel labelStyle = new JLabel(Locale.getValue("m.platform"));
     labelStyle.setBounds(25, 70, 125, 18);
-    labelStyle.setFont(FontManager.fontRegBig);
+    labelStyle.setFont(Fonts.fontRegBig);
     gamePanel.add(labelStyle);
 
     choicePlatform = new JComboBox<String>();
     choicePlatform.setBounds(25, 95, 150, 20);
-    choicePlatform.setFont(FontManager.fontReg);
+    choicePlatform.setFont(Fonts.fontReg);
     choicePlatform.setFocusable(false);
     gamePanel.add(choicePlatform);
     choicePlatform.addItem(Locale.getValue("o.steam"));
@@ -320,13 +320,13 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel labelMemory = new JLabel(Locale.getValue("m.allocated_memory"));
     labelMemory.setBounds(225, 70, 275, 18);
-    labelMemory.setFont(FontManager.fontRegBig);
+    labelMemory.setFont(Fonts.fontRegBig);
     gamePanel.add(labelMemory);
 
     choiceMemory = new JComboBox<String>();
     choiceMemory.setBounds(225, 95, 150, 20);
     choiceMemory.setFocusable(false);
-    choiceMemory.setFont(FontManager.fontReg);
+    choiceMemory.setFont(Fonts.fontReg);
     gamePanel.add(choiceMemory);
     choiceMemory.addItem(Locale.getValue("o.memory_256"));
     choiceMemory.addItem(Locale.getValue("o.memory_512"));
@@ -358,12 +358,12 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel labelStringDedup = new JLabel(Locale.getValue("m.use_string_deduplication"));
     labelStringDedup.setBounds(25, 155, 375, 18);
-    labelStringDedup.setFont(FontManager.fontRegBig);
+    labelStringDedup.setFont(Fonts.fontRegBig);
     gamePanel.add(labelStringDedup);
 
     JLabel labelStringDedupExplained = new JLabel(Locale.getValue("m.string_deduplication_explained"));
     labelStringDedupExplained.setBounds(25, 175, 600, 16);
-    labelStringDedupExplained.setFont(FontManager.fontReg);
+    labelStringDedupExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelStringDedupExplained);
 
     switchStringDedup = new JToggleButton("");
@@ -383,12 +383,12 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel labelUseCustomGC = new JLabel("Use a different GC behavior");
     labelUseCustomGC.setBounds(25, 220, 275, 18);
-    labelUseCustomGC.setFont(FontManager.fontRegBig);
+    labelUseCustomGC.setFont(Fonts.fontRegBig);
     gamePanel.add(labelUseCustomGC);
 
     JLabel labelUseCustomGCExplained = new JLabel("Change how Garbage Collection will be done on the game's Java VM");
     labelUseCustomGCExplained.setBounds(25, 240, 600, 16);
-    labelUseCustomGCExplained.setFont(FontManager.fontReg);
+    labelUseCustomGCExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelUseCustomGCExplained);
 
     switchUseCustomGC = new JToggleButton("");
@@ -406,7 +406,7 @@ public class SettingsGUI extends BaseGUI {
     choiceGC = new JComboBox<String>();
     choiceGC.setBounds(670, 225, 100, 20);
     choiceGC.setFocusable(false);
-    choiceGC.setFont(FontManager.fontReg);
+    choiceGC.setFont(Fonts.fontReg);
     gamePanel.add(choiceGC);
     choiceGC.addItem("ParallelOld");
     choiceGC.addItem("Serial");
@@ -426,12 +426,12 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel labelExplicitGC = new JLabel(Locale.getValue("m.disable_explicit_gc"));
     labelExplicitGC.setBounds(25, 285, 275, 18);
-    labelExplicitGC.setFont(FontManager.fontRegBig);
+    labelExplicitGC.setFont(Fonts.fontRegBig);
     gamePanel.add(labelExplicitGC);
 
     JLabel labelExplicitGCExplained = new JLabel(Locale.getValue("m.explicit_gc_explained"));
     labelExplicitGCExplained.setBounds(25, 305, 600, 16);
-    labelExplicitGCExplained.setFont(FontManager.fontReg);
+    labelExplicitGCExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelExplicitGCExplained);
 
     switchExplicitGC = new JToggleButton("");
@@ -456,17 +456,17 @@ public class SettingsGUI extends BaseGUI {
     JLabel headerLabel = new JLabel(Locale.getValue("tab.files"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(FontManager.fontMedGiant);
+    headerLabel.setFont(Fonts.fontMedGiant);
     filesPanel.add(headerLabel);
 
     JLabel labelFileClean = new JLabel(Locale.getValue("b.force_rebuild"));
     labelFileClean.setBounds(25, 90, 275, 18);
-    labelFileClean.setFont(FontManager.fontRegBig);
+    labelFileClean.setFont(Fonts.fontRegBig);
     filesPanel.add(labelFileClean);
 
     JLabel labelFileCleanExplained = new JLabel(Locale.getValue("m.clean_files_explained"));
     labelFileCleanExplained.setBounds(25, 110, 600, 16);
-    labelFileCleanExplained.setFont(FontManager.fontReg);
+    labelFileCleanExplained.setFont(Fonts.fontReg);
     filesPanel.add(labelFileCleanExplained);
 
     Icon startIcon = IconFontSwing.buildIcon(FontAwesome.SHARE, 16, ColorUtil.getForegroundColor());
@@ -490,12 +490,12 @@ public class SettingsGUI extends BaseGUI {
 
       JLabel labelJVMPatch = new JLabel(Locale.getValue("m.force_jvm_patch"));
       labelJVMPatch.setBounds(25, 155, 350, 18);
-      labelJVMPatch.setFont(FontManager.fontRegBig);
+      labelJVMPatch.setFont(Fonts.fontRegBig);
       filesPanel.add(labelJVMPatch);
 
       JLabel labelJVMPatchExplained = new JLabel(Locale.getValue("m.force_jvm_patch_explained"));
       labelJVMPatchExplained.setBounds(25, 175, 600, 16);
-      labelJVMPatchExplained.setFont(FontManager.fontReg);
+      labelJVMPatchExplained.setFont(Fonts.fontReg);
       filesPanel.add(labelJVMPatchExplained);
 
       JButton jvmPatchButton = new JButton(startIcon);
@@ -520,16 +520,16 @@ public class SettingsGUI extends BaseGUI {
     JLabel headerLabel = new JLabel(Locale.getValue("tab.extratxt"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(FontManager.fontMedGiant);
+    headerLabel.setFont(Fonts.fontMedGiant);
     extraPanel.add(headerLabel);
 
     JLabel labelArguments = new JLabel(Locale.getValue("m.extratxt_write_arguments"));
     labelArguments.setBounds(25, 90, 600, 18);
-    labelArguments.setFont(FontManager.fontRegBig);
+    labelArguments.setFont(Fonts.fontRegBig);
     extraPanel.add(labelArguments);
 
     argumentsPane = new JEditorPane();
-    argumentsPane.setFont(FontManager.fontReg);
+    argumentsPane.setFont(Fonts.fontReg);
     argumentsPane.setBounds(25, 125, 363, 265);
     extraPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
@@ -550,17 +550,17 @@ public class SettingsGUI extends BaseGUI {
     JLabel headerLabel = new JLabel(Locale.getValue("tab.ingame_rpc"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(FontManager.fontMedGiant);
+    headerLabel.setFont(Fonts.fontMedGiant);
     ingameRPCPanel.add(headerLabel);
 
     JLabel labelUseIngameRPC = new JLabel(Locale.getValue("m.use_ingame_rpc"));
     labelUseIngameRPC.setBounds(25, 90, 350, 18);
-    labelUseIngameRPC.setFont(FontManager.fontRegBig);
+    labelUseIngameRPC.setFont(Fonts.fontRegBig);
     ingameRPCPanel.add(labelUseIngameRPC);
 
     JLabel labelUseIngameRPCExplained = new JLabel(Locale.getValue("m.use_ingame_rpc_explained"));
     labelUseIngameRPCExplained.setBounds(25, 110, 600, 16);
-    labelUseIngameRPCExplained.setFont(FontManager.fontReg);
+    labelUseIngameRPCExplained.setFont(Fonts.fontReg);
     ingameRPCPanel.add(labelUseIngameRPCExplained);
 
     switchUseIngameRPC = new JToggleButton("");
@@ -584,13 +584,13 @@ public class SettingsGUI extends BaseGUI {
     JLabel headerLabel = new JLabel(Locale.getValue("tab.connection"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(FontManager.fontMedGiant);
+    headerLabel.setFont(Fonts.fontMedGiant);
     connectionPanel.add(headerLabel);
 
     JLabel soonLabel = new JLabel(Locale.getValue("m.coming_soon"));
     soonLabel.setHorizontalAlignment(SwingConstants.LEFT);
     soonLabel.setBounds(25, 90, 450, 50);
-    soonLabel.setFont(FontManager.fontRegBig);
+    soonLabel.setFont(Fonts.fontRegBig);
     connectionPanel.add(soonLabel);
 
     return connectionPanel;
