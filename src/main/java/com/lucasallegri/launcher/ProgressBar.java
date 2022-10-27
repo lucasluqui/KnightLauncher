@@ -33,11 +33,11 @@ public class ProgressBar {
     LauncherGUI.launchProgressBar.setMaximum(n);
   }
 
-  public static void showState(boolean show) {
+  private static void showState(boolean show) {
     LauncherGUI.launchState.setVisible(show);
   }
 
-  public static void showBar(boolean show) {
+  private static void showBar(boolean show) {
     LauncherGUI.launchProgressBar.setVisible(show);
   }
 
