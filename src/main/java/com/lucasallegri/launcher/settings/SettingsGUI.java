@@ -63,7 +63,7 @@ public class SettingsGUI extends BaseGUI {
     tabbedPane.addTab(Locale.getValue("tab.extratxt"), createExtraPanel());
     if (SystemUtil.isWindows() && SystemUtil.is64Bit())
       tabbedPane.addTab(Locale.getValue("tab.ingame_rpc"), createIngameRPCPanel());
-    //tabbedPane.addTab(Language.getValue("tab.connection"), createConnectionPanel());
+    tabbedPane.addTab(Locale.getValue("tab.connection"), createConnectionPanel());
     settingsGUIFrame.getContentPane().add(tabbedPane);
 
     JPanel titleBar = new JPanel();

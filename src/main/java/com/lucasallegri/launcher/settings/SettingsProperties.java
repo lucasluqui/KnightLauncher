@@ -14,9 +14,10 @@ public class SettingsProperties {
 
   private static final String PROP_VER = "13";
 
-  private static final Properties _prop = new Properties();
+  private static Properties _prop = new Properties();
   private static final String _propPath = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
   private static HashMap<String, Object> migrationMap = new HashMap<>();
+  private static boolean migrationOngoing = false;
 
   public static void setup() {
     try {
@@ -26,6 +27,7 @@ public class SettingsProperties {
               && !getValue("PROP_VER").equals(PROP_VER)) {
         log.warning("Old PROP_VER detected, beginning migration...");
         migrationMap = getAllKeyValues();
+        FileUtil.deleteFile(_propPath);
         FileUtil.extractFileWithinJar("/config/base.properties", _propPath);
         migrate();
       }
@@ -50,7 +52,8 @@ public class SettingsProperties {
   }
 
   public static void setValue(String key, String value) {
-    try (OutputStream os = new FileOutputStream(_propPath)) {
+    try (InputStream is = new FileInputStream(_propPath)) {
+      if(migrationOngoing) _prop.load(is);
       _prop.setProperty(key, value);
       _prop.store(new FileOutputStream(_propPath), null);
       log.info("Setting new key value", "key", key, "value", value);
@@ -107,9 +110,15 @@ public class SettingsProperties {
   }
 
   private static void migrate() {
+    migrationOngoing = true;
     for(String key : migrationMap.keySet()) {
+      if(key.equals("PROP_VER")) continue;
       setValue(key, (String) migrationMap.get(key));
     }
+
+    // Successfully migrated to newer PROP_VER.
+    setValue("PROP_VER", PROP_VER);
+    migrationOngoing = false;
   }
 
 }
