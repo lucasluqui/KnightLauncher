@@ -103,4 +103,9 @@ public class SettingsEventHandler {
     System.exit(1);
   }
 
+  public static void saveConnectionSettings() {
+    SettingsProperties.setValue("game.endpoint", Settings.gameEndpoint);
+    SettingsProperties.setValue("game.port", String.valueOf(Settings.gamePort));
+    SettingsProperties.setValue("game.gamePublicKey", Settings.gamePublicKey);
+  }
 }

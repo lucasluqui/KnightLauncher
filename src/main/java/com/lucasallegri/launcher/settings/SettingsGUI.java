@@ -131,6 +131,7 @@ public class SettingsGUI extends BaseGUI {
       public void actionPerformed(ActionEvent e) {
         settingsGUIFrame.setVisible(false);
         SettingsEventHandler.saveAdditionalArgs();
+        SettingsEventHandler.saveConnectionSettings();
       }
     });
 
@@ -296,12 +297,12 @@ public class SettingsGUI extends BaseGUI {
     gamePanel.add(headerLabel);
 
     JLabel labelStyle = new JLabel(Locale.getValue("m.platform"));
-    labelStyle.setBounds(25, 70, 125, 18);
+    labelStyle.setBounds(25, 90, 125, 18);
     labelStyle.setFont(Fonts.fontRegBig);
     gamePanel.add(labelStyle);
 
     choicePlatform = new JComboBox<String>();
-    choicePlatform.setBounds(25, 95, 150, 20);
+    choicePlatform.setBounds(25, 115, 150, 20);
     choicePlatform.setFont(Fonts.fontReg);
     choicePlatform.setFocusable(false);
     gamePanel.add(choicePlatform);
@@ -319,12 +320,12 @@ public class SettingsGUI extends BaseGUI {
     });
 
     JLabel labelMemory = new JLabel(Locale.getValue("m.allocated_memory"));
-    labelMemory.setBounds(225, 70, 275, 18);
+    labelMemory.setBounds(225, 90, 275, 18);
     labelMemory.setFont(Fonts.fontRegBig);
     gamePanel.add(labelMemory);
 
     choiceMemory = new JComboBox<String>();
-    choiceMemory.setBounds(225, 95, 150, 20);
+    choiceMemory.setBounds(225, 115, 150, 20);
     choiceMemory.setFocusable(false);
     choiceMemory.setFont(Fonts.fontReg);
     gamePanel.add(choiceMemory);
@@ -353,21 +354,21 @@ public class SettingsGUI extends BaseGUI {
     });
 
     JSeparator sep = new JSeparator();
-    sep.setBounds(25, 140, 800, 16);
+    sep.setBounds(25, 160, 800, 16);
     gamePanel.add(sep);
 
     JLabel labelStringDedup = new JLabel(Locale.getValue("m.use_string_deduplication"));
-    labelStringDedup.setBounds(25, 155, 375, 18);
+    labelStringDedup.setBounds(25, 175, 375, 18);
     labelStringDedup.setFont(Fonts.fontRegBig);
     gamePanel.add(labelStringDedup);
 
     JLabel labelStringDedupExplained = new JLabel(Locale.getValue("m.string_deduplication_explained"));
-    labelStringDedupExplained.setBounds(25, 175, 600, 16);
+    labelStringDedupExplained.setBounds(25, 195, 600, 16);
     labelStringDedupExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelStringDedupExplained);
 
     switchStringDedup = new JToggleButton("");
-    switchStringDedup.setBounds(790, 160, 30, 23);
+    switchStringDedup.setBounds(790, 180, 30, 23);
     switchStringDedup.setFocusPainted(false);
     gamePanel.add(switchStringDedup);
     switchStringDedup.setSelected(Settings.gameUseStringDeduplication);
@@ -378,21 +379,21 @@ public class SettingsGUI extends BaseGUI {
     });
 
     JSeparator sep2 = new JSeparator();
-    sep2.setBounds(25, 205, 800, 16);
+    sep2.setBounds(25, 225, 800, 16);
     gamePanel.add(sep2);
 
     JLabel labelUseCustomGC = new JLabel("Use a different GC behavior");
-    labelUseCustomGC.setBounds(25, 220, 275, 18);
+    labelUseCustomGC.setBounds(25, 240, 275, 18);
     labelUseCustomGC.setFont(Fonts.fontRegBig);
     gamePanel.add(labelUseCustomGC);
 
     JLabel labelUseCustomGCExplained = new JLabel("Change how Garbage Collection will be done on the game's Java VM");
-    labelUseCustomGCExplained.setBounds(25, 240, 600, 16);
+    labelUseCustomGCExplained.setBounds(25, 260, 600, 16);
     labelUseCustomGCExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelUseCustomGCExplained);
 
     switchUseCustomGC = new JToggleButton("");
-    switchUseCustomGC.setBounds(790, 225, 30, 23);
+    switchUseCustomGC.setBounds(790, 245, 30, 23);
     switchUseCustomGC.setFocusPainted(false);
     gamePanel.add(switchUseCustomGC);
     switchUseCustomGC.setSelected(Settings.gameUseCustomGC);
@@ -404,7 +405,7 @@ public class SettingsGUI extends BaseGUI {
     switchUseCustomGC.setEnabled(SystemUtil.is64Bit());
 
     choiceGC = new JComboBox<String>();
-    choiceGC.setBounds(670, 225, 100, 20);
+    choiceGC.setBounds(670, 245, 100, 20);
     choiceGC.setFocusable(false);
     choiceGC.setFont(Fonts.fontReg);
     gamePanel.add(choiceGC);
@@ -421,21 +422,21 @@ public class SettingsGUI extends BaseGUI {
     choiceGC.setEnabled(SystemUtil.is64Bit());
 
     JSeparator sep3 = new JSeparator();
-    sep3.setBounds(25, 270, 800, 16);
+    sep3.setBounds(25, 290, 800, 16);
     gamePanel.add(sep3);
 
     JLabel labelExplicitGC = new JLabel(Locale.getValue("m.disable_explicit_gc"));
-    labelExplicitGC.setBounds(25, 285, 275, 18);
+    labelExplicitGC.setBounds(25, 305, 275, 18);
     labelExplicitGC.setFont(Fonts.fontRegBig);
     gamePanel.add(labelExplicitGC);
 
     JLabel labelExplicitGCExplained = new JLabel(Locale.getValue("m.explicit_gc_explained"));
-    labelExplicitGCExplained.setBounds(25, 305, 600, 16);
+    labelExplicitGCExplained.setBounds(25, 325, 600, 16);
     labelExplicitGCExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelExplicitGCExplained);
 
     switchExplicitGC = new JToggleButton("");
-    switchExplicitGC.setBounds(790, 290, 30, 23);
+    switchExplicitGC.setBounds(790, 310, 30, 23);
     switchExplicitGC.setFocusPainted(false);
     gamePanel.add(switchExplicitGC);
     switchExplicitGC.setSelected(Settings.gameDisableExplicitGC);
@@ -587,7 +588,7 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setFont(Fonts.fontMedGiant);
     connectionPanel.add(headerLabel);
 
-    JLabel soonLabel = new JLabel(Locale.getValue("m.coming_soon"));
+    JLabel soonLabel = new JLabel(Locale.getValue("Under development"));
     soonLabel.setHorizontalAlignment(SwingConstants.LEFT);
     soonLabel.setBounds(25, 90, 450, 50);
     soonLabel.setFont(Fonts.fontRegBig);
