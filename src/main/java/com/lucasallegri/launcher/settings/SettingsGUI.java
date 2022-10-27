@@ -60,10 +60,10 @@ public class SettingsGUI extends BaseGUI {
     tabbedPane.addTab(Locale.getValue("tab.behavior"), createBehaviorPanel());
     tabbedPane.addTab(Locale.getValue("tab.game"), createGamePanel());
     tabbedPane.addTab(Locale.getValue("tab.files"), createFilesPanel());
-    tabbedPane.addTab(Locale.getValue("tab.extratxt"), createExtraPanel());
-    if (SystemUtil.isWindows() && SystemUtil.is64Bit())
-      tabbedPane.addTab(Locale.getValue("tab.ingame_rpc"), createIngameRPCPanel());
     tabbedPane.addTab(Locale.getValue("tab.connection"), createConnectionPanel());
+    if (SystemUtil.isWindows() && SystemUtil.is64Bit())
+      tabbedPane.addTab(Locale.getValue("Discord"), createDiscordPanel());
+    tabbedPane.addTab(Locale.getValue("tab.extratxt"), createExtraPanel());
     settingsGUIFrame.getContentPane().add(tabbedPane);
 
     JPanel titleBar = new JPanel();
@@ -544,11 +544,11 @@ public class SettingsGUI extends BaseGUI {
     return extraPanel;
   }
 
-  protected JPanel createIngameRPCPanel() {
+  protected JPanel createDiscordPanel() {
     JPanel ingameRPCPanel = new JPanel();
     ingameRPCPanel.setLayout(null);
 
-    JLabel headerLabel = new JLabel(Locale.getValue("tab.ingame_rpc"));
+    JLabel headerLabel = new JLabel(Locale.getValue("Discord"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 50);
     headerLabel.setFont(Fonts.fontMedGiant);
