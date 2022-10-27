@@ -240,9 +240,10 @@ public class LauncherApp {
     ModLoader.checkInstalled();
     if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
     if (Settings.useIngameRPC) Modules.setupIngameRPC();
-    if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
+    if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\safeguard\\bundle.zip")) {
       ModLoader.extractSafeguard();
     }
+    Modules.setupJarExe();
 
     getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
     app.loadOnlineAssets();
