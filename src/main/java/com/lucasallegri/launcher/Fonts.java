@@ -55,6 +55,7 @@ public class Fonts {
       fontMedItaIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
       fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
       fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
+      sizeMultiplier = 1.2f;
     }
 
     try {
