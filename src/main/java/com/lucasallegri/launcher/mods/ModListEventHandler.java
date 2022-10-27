@@ -49,6 +49,8 @@ public class ModListEventHandler {
         disabledMods.equals("") ? mod.getFileName() : disabledMods + "," + mod.getFileName());
     mod.setEnabled(false);
     ModListGUI.updateModList();
+    ModLoader.mountRequired = true;
+    ModLoader.rebuildRequired = true;
   }
 
   public static void enableMod(Mod mod) {
@@ -70,5 +72,7 @@ public class ModListEventHandler {
     SettingsProperties.setValue("modloader.disabledMods", disabledMods);
     mod.setEnabled(true);
     ModListGUI.updateModList();
+    ModLoader.mountRequired = true;
+    ModLoader.rebuildRequired = true;
   }
 }

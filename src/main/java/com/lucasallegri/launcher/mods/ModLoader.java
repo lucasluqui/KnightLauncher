@@ -104,6 +104,7 @@ public class ModLoader {
   public static void mount() {
 
     LauncherGUI.launchButton.setEnabled(false);
+    if(rebuildRequired) startFileRebuild();
     ProgressBar.showBar(true);
     ProgressBar.showState(true);
     ProgressBar.setBarMax(getEnabledModCount() + 1);
@@ -121,6 +122,7 @@ public class ModLoader {
     // Make sure no cheat mod slips in.
     extractSafeguard();
 
+    mountRequired = false;
     ProgressBar.showBar(false);
     ProgressBar.showState(false);
     LauncherGUI.launchButton.setEnabled(true);
