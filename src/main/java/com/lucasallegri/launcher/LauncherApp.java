@@ -244,7 +244,7 @@ public class LauncherApp {
       ModLoader.extractSafeguard();
     }
 
-    getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
+    getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
     app.loadOnlineAssets();
   }
 

@@ -12,12 +12,15 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.ZipFile;
 
 import static com.lucasallegri.launcher.mods.Log.log;
 
 public class ModLoader {
+
+  private static final LinkedList<Mod> modList = new LinkedList<>();
 
   private static final String[] RSRC_BUNDLES = { "full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar" };
 
@@ -27,7 +30,7 @@ public class ModLoader {
   public static void checkInstalled() {
 
     // Clean the list in case something remains in it.
-    if (ModList.installedMods.size() > 0) ModList.installedMods.clear();
+    if (getModCount() > 0) clearModList();
 
     // Append all .zip and .jar files inside the mod folder into an ArrayList.
     List<String> rawFiles = FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/mods/", ".zip");
@@ -55,7 +58,7 @@ public class ModLoader {
         mod.setVersion(modJson.getString("version"));
       }
 
-      ModList.installedMods.add(mod);
+      addMod(mod);
       mod.wasAdded();
 
       // Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
@@ -88,11 +91,14 @@ public class ModLoader {
     }
 
     // Check if there's a new or removed mod since last execution, rebuild will be needed in that case.
-    if (Integer.parseInt(SettingsProperties.getValue("modloader.lastModCount")) != ModList.installedMods.size()) {
-      SettingsProperties.setValue("modloader.lastModCount", Integer.toString(ModList.installedMods.size()));
+    if (Integer.parseInt(SettingsProperties.getValue("modloader.lastModCount")) != getModCount()) {
+      SettingsProperties.setValue("modloader.lastModCount", Integer.toString(getModCount()));
       rebuildRequired = true;
       mountRequired = true;
     }
+
+    // Finally lets see which have been set as disabled.
+    parseDisabledMods();
   }
 
   public static void mount() {
@@ -100,13 +106,16 @@ public class ModLoader {
     LauncherGUI.launchButton.setEnabled(false);
     ProgressBar.showBar(true);
     ProgressBar.showState(true);
-    ProgressBar.setBarMax(ModList.installedMods.size() + 1);
+    ProgressBar.setBarMax(getEnabledModCount() + 1);
     ProgressBar.setState(Locale.getValue("m.mount"));
     LauncherApp.getRPC().setDetails(Locale.getValue("m.mount"));
+    LinkedList<Mod> localList = getModList();
 
-    for (int i = 0; i < ModList.installedMods.size(); i++) {
-      ProgressBar.setBarValue(i + 1);
-      ModList.installedMods.get(i).mount();
+    for (int i = 0; i < getModCount(); i++) {
+      if(localList.get(i).isEnabled()) {
+        localList.get(i).mount();
+        ProgressBar.setBarValue(i + 1);
+      }
     }
 
     // Make sure no cheat mod slips in.
@@ -164,7 +173,7 @@ public class ModLoader {
       SettingsGUI.forceRebuildButton.setEnabled(true);
     } catch (Exception ignored) {}
 
-    LauncherApp.getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModList.installedMods.size())));
+    LauncherApp.getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(getEnabledModCount())));
   }
 
   public static void extractSafeguard() {
@@ -176,6 +185,49 @@ public class ModLoader {
     } catch (IOException e) {
       log.error(e);
     }
+  }
+
+  private static void addMod(Mod mod) {
+    if(mod.isEnabled()) modList.add(mod);
+  }
+
+  private static int getModCount() {
+    return modList.size();
+  }
+
+  public static int getEnabledModCount() {
+    int count = 0;
+    for(Mod mod : modList) {
+      if(mod.isEnabled()) count++;
+    }
+    return count;
+  }
+
+  public static LinkedList<Mod> getModList() {
+    // We don't want to return the actual object so let's clone it.
+    return new LinkedList<>(modList);
+  }
+
+  private static void clearModList() {
+    modList.clear();
+  }
+
+  private static void parseDisabledMods() {
+    String rawString = SettingsProperties.getValue("modloader.disabledMods");
+
+    // No mods to parse as disabled, nothing to do.
+    if(rawString.equals("")) return;
+
+    String[] fileNames = rawString.split(",");
+    for(Mod mod : modList) {
+      for(int i = 0; i < fileNames.length; i++) {
+        if(mod.getFileName().equals(fileNames[i])) {
+          mod.setEnabled(false);
+          break;
+        }
+      }
+    }
+    ModListGUI.updateModList();
   }
 
 }
