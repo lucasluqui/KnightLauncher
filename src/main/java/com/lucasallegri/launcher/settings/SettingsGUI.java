@@ -2,6 +2,7 @@ package com.lucasallegri.launcher.settings;
 
 import com.lucasallegri.launcher.*;
 import com.lucasallegri.util.ColorUtil;
+import com.lucasallegri.util.JavaUtil;
 import com.lucasallegri.util.SteamUtil;
 import com.lucasallegri.util.SystemUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -498,6 +499,11 @@ public class SettingsGUI extends BaseGUI {
       labelJVMPatchExplained.setBounds(25, 175, 600, 16);
       labelJVMPatchExplained.setFont(Fonts.fontReg);
       filesPanel.add(labelJVMPatchExplained);
+
+      JLabel labelJVMData = new JLabel("Installed Java VM: " + JavaUtil.currentJVMData());
+      labelJVMData.setBounds(25, 195, 600, 16);
+      labelJVMData.setFont(Fonts.fontMed);
+      filesPanel.add(labelJVMData);
 
       JButton jvmPatchButton = new JButton(startIcon);
       jvmPatchButton.setBounds(790, 160, 30, 23);
