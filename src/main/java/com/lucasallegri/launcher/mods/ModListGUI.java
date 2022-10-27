@@ -101,8 +101,8 @@ public class ModListGUI extends BaseGUI {
     refreshButton.setToolTipText(Locale.getValue("b.refresh"));
     modListGUIFrame.getContentPane().add(refreshButton);
     refreshButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        ModListEventHandler.refreshEvent(_action);
+      public void actionPerformed(ActionEvent action) {
+        ModListEventHandler.refreshEvent(action);
       }
     });
 
@@ -312,9 +312,11 @@ public class ModListGUI extends BaseGUI {
   }
 
   public static void updateModList() {
+    int idx = modListContainer.getSelectedIndex();
     modListContainer.removeAll();
     for (Mod mod : ModLoader.getModList()) {
       modListContainer.add(mod.isEnabled() ? "(✓) " + mod.getDisplayName(): "(X) " + mod.getDisplayName());
     }
+    modListContainer.select(idx);
   }
 }

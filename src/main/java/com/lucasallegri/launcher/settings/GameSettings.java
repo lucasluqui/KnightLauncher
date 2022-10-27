@@ -16,8 +16,7 @@ public class GameSettings {
   public static void load() {
     try {
 
-      ProgressBar.showBar(true);
-      ProgressBar.showState(true);
+      ProgressBar.startTask();
       ProgressBar.setBarMax(1);
       ProgressBar.setBarValue(0);
       ProgressBar.setState(Locale.getValue("m.apply"));
@@ -58,12 +57,17 @@ public class GameSettings {
       writer.println(Settings.gameAdditionalArgs);
       writer.close();
 
+      loadConnectionSettings();
+
       ProgressBar.setBarValue(1);
-      ProgressBar.showBar(false);
-      ProgressBar.showState(false);
+      ProgressBar.finishTask();
     } catch (FileNotFoundException | UnsupportedEncodingException e) {
       log.error(e);
     }
+  }
+
+  private static void loadConnectionSettings() {
+
   }
 
 }

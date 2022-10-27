@@ -23,12 +23,8 @@ public class ModListEventHandler {
     if (ModLoader.rebuildRequired && Settings.doRebuilds) {
       ModLoader.startFileRebuild();
     }
-    ModListGUI.modListContainer.removeAll();
-    for (Mod mod : ModLoader.getModList()) {
-      ModListGUI.modListContainer.add(mod.getDisplayName());
-    }
-    ModListGUI.labelModCount.setText(Integer.toString(ModLoader.getEnabledModCount()));
-    ModLoader.mountRequired = true;
+    ModListGUI.labelModCount.setText(Integer.toString(ModLoader.getModCount()));
+    ModLoader.mount();
     ModListGUI.updateModList();
   }
 

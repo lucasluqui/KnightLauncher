@@ -105,8 +105,7 @@ public class ModLoader {
 
     LauncherGUI.launchButton.setEnabled(false);
     if(rebuildRequired) startFileRebuild();
-    ProgressBar.showBar(true);
-    ProgressBar.showState(true);
+    ProgressBar.startTask();
     ProgressBar.setBarMax(getEnabledModCount() + 1);
     ProgressBar.setState(Locale.getValue("m.mount"));
     LauncherApp.getRPC().setDetails(Locale.getValue("m.mount"));
@@ -123,8 +122,7 @@ public class ModLoader {
     extractSafeguard();
 
     mountRequired = false;
-    ProgressBar.showBar(false);
-    ProgressBar.showState(false);
+    ProgressBar.finishTask();
     LauncherGUI.launchButton.setEnabled(true);
   }
 
@@ -141,8 +139,7 @@ public class ModLoader {
     } catch (Exception ignored) {}
 
 
-    ProgressBar.showBar(true);
-    ProgressBar.showState(true);
+    ProgressBar.startTask();
     ProgressBar.setBarMax(RSRC_BUNDLES.length + 1);
     LauncherApp.getRPC().setDetails(Locale.getValue("m.clean"));
     ProgressBar.setState(Locale.getValue("m.clean"));
@@ -165,8 +162,7 @@ public class ModLoader {
     }
 
     ProgressBar.setBarValue(RSRC_BUNDLES.length + 1);
-    ProgressBar.showBar(false);
-    ProgressBar.showState(false);
+    ProgressBar.finishTask();
     rebuildRequired = false;
 
     try {
@@ -193,7 +189,7 @@ public class ModLoader {
     if(mod.isEnabled()) modList.add(mod);
   }
 
-  private static int getModCount() {
+  public static int getModCount() {
     return modList.size();
   }
 
