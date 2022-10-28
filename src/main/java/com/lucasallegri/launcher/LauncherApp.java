@@ -309,7 +309,7 @@ public class LauncherApp {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
 
       String latestRelease = jsonReleases.getString("tag_name");
-      if (latestRelease.equalsIgnoreCase(LauncherGlobals.VERSION)) {
+      if (!latestRelease.equalsIgnoreCase(LauncherGlobals.VERSION)) {
         Settings.isOutdated = true;
         LauncherGUI.updateButton.addActionListener(action -> DesktopUtil.openWebpage(
             "https://github.com/"
