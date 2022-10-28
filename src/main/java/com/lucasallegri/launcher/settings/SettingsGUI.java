@@ -1,6 +1,7 @@
 package com.lucasallegri.launcher.settings;
 
 import com.lucasallegri.launcher.*;
+import com.lucasallegri.launcher.mods.ModListEventHandler;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.JavaUtil;
 import com.lucasallegri.util.SteamUtil;
@@ -10,6 +11,7 @@ import jiconfont.swing.IconFontSwing;
 import mdlaf.utils.MaterialBorders;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class SettingsGUI extends BaseGUI {
@@ -30,6 +32,11 @@ public class SettingsGUI extends BaseGUI {
   public static JToggleButton switchUseCustomGC;
   public static JToggleButton switchUseIngameRPC;
   public static JEditorPane argumentsPane;
+  public static JTextField serverAddressTextField;
+  public static JTextField portTextField;
+  public static JTextField publicKeyTextField;
+  public static JTextField getdownURLTextField;
+  public static JCheckBox understoodCheckBox;
 
   @SuppressWarnings("static-access")
   public SettingsGUI(LauncherApp app) {
@@ -501,8 +508,8 @@ public class SettingsGUI extends BaseGUI {
       filesPanel.add(labelJVMPatchExplained);
 
       JLabel labelJVMData = new JLabel("Installed Java VM: " + JavaUtil.currentJVMData());
-      labelJVMData.setBounds(25, 195, 600, 16);
-      labelJVMData.setFont(Fonts.fontMed);
+      labelJVMData.setBounds(25, 210, 600, 16);
+      labelJVMData.setFont(Fonts.fontMedIta);
       filesPanel.add(labelJVMData);
 
       JButton jvmPatchButton = new JButton(startIcon);
@@ -536,7 +543,7 @@ public class SettingsGUI extends BaseGUI {
     extraPanel.add(labelArguments);
 
     argumentsPane = new JEditorPane();
-    argumentsPane.setFont(Fonts.fontReg);
+    argumentsPane.setFont(Fonts.fontMed);
     argumentsPane.setBounds(25, 125, 363, 265);
     extraPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
@@ -594,11 +601,112 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setFont(Fonts.fontMedGiant);
     connectionPanel.add(headerLabel);
 
-    JLabel soonLabel = new JLabel(Locale.getValue("Under development"));
-    soonLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    soonLabel.setBounds(25, 90, 450, 50);
-    soonLabel.setFont(Fonts.fontRegBig);
-    connectionPanel.add(soonLabel);
+    JLabel serverAddressLabel = new JLabel("Server Address");
+    serverAddressLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    serverAddressLabel.setBounds(25, 70, 450, 50);
+    serverAddressLabel.setFont(Fonts.fontReg);
+    connectionPanel.add(serverAddressLabel);
+
+    serverAddressTextField = new JTextField();
+    serverAddressTextField.setFont(Fonts.fontMed);
+    serverAddressTextField.setBounds(25, 105, 250, 25);
+    connectionPanel.add(serverAddressTextField);
+    serverAddressTextField.setText(Settings.gameEndpoint);
+
+    JLabel portLabel = new JLabel("Port");
+    portLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    portLabel.setBounds(280, 70, 450, 50);
+    portLabel.setFont(Fonts.fontReg);
+    connectionPanel.add(portLabel);
+
+    portTextField = new JTextField();
+    portTextField.setFont(Fonts.fontMed);
+    portTextField.setBounds(280, 105, 55, 25);
+    connectionPanel.add(portTextField);
+    portTextField.setText(String.valueOf(Settings.gamePort));
+
+    JLabel publicKeyLabel = new JLabel("Public Key");
+    publicKeyLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    publicKeyLabel.setBounds(25, 125, 450, 50);
+    publicKeyLabel.setFont(Fonts.fontReg);
+    connectionPanel.add(publicKeyLabel);
+
+    publicKeyTextField = new JTextField();
+    publicKeyTextField.setFont(Fonts.fontMed);
+    publicKeyTextField.setBounds(25, 160, 355, 25);
+
+    JScrollBar publicKeyScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
+    JPanel publicKeyPanel = new JPanel();
+    publicKeyPanel.setLayout(new BoxLayout(publicKeyPanel, BoxLayout.Y_AXIS));
+    BoundedRangeModel publicKeyBRM = publicKeyTextField.getHorizontalVisibility();
+    publicKeyScrollBar.setModel(publicKeyBRM);
+    publicKeyPanel.add(publicKeyTextField);
+    publicKeyPanel.add(publicKeyScrollBar);
+    publicKeyPanel.setBounds(25, 160, 355, 25);
+
+    connectionPanel.add(publicKeyPanel);
+    publicKeyTextField.setText(Settings.gamePublicKey);
+
+    JLabel getdownURLLabel = new JLabel("Getdown URL");
+    getdownURLLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    getdownURLLabel.setBounds(25, 180, 450, 50);
+    getdownURLLabel.setFont(Fonts.fontReg);
+    connectionPanel.add(getdownURLLabel);
+
+    getdownURLTextField = new JTextField();
+    getdownURLTextField.setFont(Fonts.fontMed);
+    getdownURLTextField.setBounds(25, 215, 355, 25);
+
+    JScrollBar getdownURLScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
+    JPanel getdownURLPanel = new JPanel();
+    getdownURLPanel.setLayout(new BoxLayout(getdownURLPanel, BoxLayout.Y_AXIS));
+    BoundedRangeModel getdownURLBRM = getdownURLTextField.getHorizontalVisibility();
+    getdownURLScrollBar.setModel(getdownURLBRM);
+    getdownURLPanel.add(getdownURLTextField);
+    getdownURLPanel.add(getdownURLScrollBar);
+    getdownURLPanel.setBounds(25, 215, 355, 25);
+
+    connectionPanel.add(getdownURLPanel);
+    getdownURLTextField.setText(Settings.gameGetdownFullURL);
+
+    JButton resetButton = new JButton("Reset values to default");
+    resetButton.setFont(Fonts.fontMed);
+    resetButton.setBounds(400, 215, 180, 23);
+    resetButton.setFocusPainted(false);
+    resetButton.setFocusable(false);
+    resetButton.setToolTipText("Reset values to default");
+    connectionPanel.add(resetButton);
+    resetButton.addActionListener(action -> SettingsEventHandler.resetButtonEvent(action));
+
+    JLabel noticeLabel = new JLabel("<html>* Note: The modifiable values presented above are merely future proofing for when, inevitably, the official game servers shut down." +
+        "<br>This, provided the values given are valid, will allow you to route your client's traffic through another server and continue playing.<br>" +
+        "Private servers are against Spiral Knights' Terms of Service and Knight Launcher will not grant any type of support while official servers<br>" +
+        "remain active.</html>");
+    noticeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    noticeLabel.setBounds(25, 255, 800, 100);
+    noticeLabel.setFont(Fonts.fontReg);
+    connectionPanel.add(noticeLabel);
+
+    understoodCheckBox = new JCheckBox("I understand");
+    understoodCheckBox.setBounds(25, 350, 125, 25);
+    understoodCheckBox.setFont(Fonts.fontMed);
+    understoodCheckBox.addActionListener(action -> SettingsEventHandler.understoodCheckBoxChangeEvent(action));
+    connectionPanel.add(understoodCheckBox);
+
+    if(Settings.connectionOverwriteAgreed) {
+      serverAddressTextField.setEnabled(true);
+      portTextField.setEnabled(true);
+      publicKeyTextField.setEnabled(true);
+      getdownURLTextField.setEnabled(true);
+      understoodCheckBox.setEnabled(false);
+      understoodCheckBox.setSelected(true);
+      understoodCheckBox.setVisible(false);
+    } else {
+      serverAddressTextField.setEnabled(false);
+      portTextField.setEnabled(false);
+      publicKeyTextField.setEnabled(false);
+      getdownURLTextField.setEnabled(false);
+    }
 
     return connectionPanel;
   }

@@ -12,7 +12,7 @@ import static com.lucasallegri.launcher.settings.Log.log;
 
 public class SettingsProperties {
 
-  private static final String PROP_VER = "13";
+  private static final String PROP_VER = "15";
 
   private static Properties _prop = new Properties();
   private static final String _propPath = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
@@ -86,6 +86,7 @@ public class SettingsProperties {
     Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
     Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
     Settings.allowModding = Boolean.parseBoolean(getValue("launcher.allowModding"));
+    Settings.connectionOverwriteAgreed = Boolean.parseBoolean(getValue("launcher.connectionOverwriteAgreed"));
     Settings.compressorUnzipMethod = getValue("compressor.unzipMethod");
     Settings.compressorExtractBuffer = Integer.parseInt(getValue("compressor.extractBuffer"));
     Settings.gamePlatform = getValue("game.platform");
@@ -98,6 +99,8 @@ public class SettingsProperties {
     Settings.gameEndpoint = getValue("game.endpoint");
     Settings.gamePort = Integer.parseInt(getValue("game.port"));
     Settings.gamePublicKey = getValue("game.publicKey");
+    Settings.gameGetdownURL = getValue("game.getdownURL");
+    Settings.gameGetdownFullURL = getValue("game.getdownFullURL");
     Settings.gameAdditionalArgs = getValue("game.additionalArgs");
     log.info("Successfully loaded all settings from prop file.");
     finishLoading();
