@@ -43,6 +43,8 @@ public class LauncherApp {
 
     if (app.requiresJVMPatch()) {
       jvmPatcher = app.composeJVMPatcher(app);
+    } else if(args.length > 0 && args[0].equals("forceJVMPatch")) {
+      jvmPatcher = app.composeJVMPatcher(app);
     } else {
       lgui = app.composeLauncherGUI(app);
       sgui = app.composeSettingsGUI(app);
