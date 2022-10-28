@@ -21,6 +21,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Objects;
@@ -324,18 +326,24 @@ public class LauncherApp {
   }
 
   private void getProjectXVersion() {
-    InputStream stream = new ByteArrayInputStream((
-        Objects.requireNonNull(INetUtil.getWebpageContent("http://gamemedia2.spiralknights.com/spiral/client/getdown.txt")))
-        .getBytes(StandardCharsets.UTF_8));
+    URL url = null;
+    try {
+      url = new URL(Settings.gameGetdownFullURL + "getdown.txt");
+    } catch (MalformedURLException e) {
+      log.error(e);
+    }
+    //InputStream stream = new ByteArrayInputStream((
+    //    Objects.requireNonNull(INetUtil.getWebpageContent("http://gamemedia2.spiralknights.com/spiral/client/getdown.txt")))
+    //    .getBytes(StandardCharsets.UTF_8));
     Properties prop = new Properties();
     try {
-      prop.load(stream);
+      prop.load(url.openStream());
     } catch (IOException e) {
       log.error(e);
     }
 
     LauncherApp.projectXVersion = prop.getProperty("version");
-    log.info("Latest ProjectX version updated", LauncherApp.projectXVersion);
+    log.info("Latest ProjectX version updated", "version", LauncherApp.projectXVersion);
   }
 
 }
