@@ -544,14 +544,14 @@ public class SettingsGUI extends BaseGUI {
 
     argumentsPane = new JEditorPane();
     argumentsPane.setFont(Fonts.fontMed);
-    argumentsPane.setBounds(25, 125, 363, 265);
+    argumentsPane.setBounds(25, 125, 323, 175);
     extraPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
 
     JScrollPane scrollBar = new JScrollPane(argumentsPane);
     scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollBar.setBounds(25, 125, 380, 265);
+    scrollBar.setBounds(25, 125, 340, 175);
     extraPanel.add(scrollBar);
 
     return extraPanel;
