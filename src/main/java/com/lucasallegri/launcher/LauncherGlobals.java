@@ -9,16 +9,17 @@ public class LauncherGlobals {
   public static final String SHORTCUT_FILE_NAME = "Knight Launcher";
 
   public static final String GITHUB_API = "https://api.github.com/";
-  public static final String GITHUB_AUTHOR = "lucas-allegri";
+  public static final String GITHUB_AUTHOR = "lucasluqui";
   public static final String GITHUB_REPO = "KnightLauncher";
   public static final String GITHUB_MAIN_BRANCH = "master";
 
-  public static final String CDN_URL = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
-  public static final String LARGE_CDN_URL = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
+  public static final String CDN_URL_V1 = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
+  public static final String LARGE_CDN_URL_V1 = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
+  public static final String JAVA_REDISTRIBUTABLES_URL = "https://lucasallegri.b-cdn.net/knightlauncher/v2/java/windows/{version}/redist.zip";
   public static final String DISCORD_URL = "https://discord.gg/RAf499a";
-  public static final String GET_MODS_URL = "https://discord.gg/BZRyJrr";
+  public static final String GET_MODS_URL = "https://discord.gg/fAR8qtrat2";
   public static final String KOFI_URL = "https://ko-fi.com/lucasallegri";
-  public static final String BUG_REPORT_URL = "https://github.com/lucas-allegri/KnightLauncher/issues";
+  public static final String BUG_REPORT_URL = "https://github.com/lucasluqui/KnightLauncher/issues";
 
   public static final String USER_DIR = System.getProperty("user.dir");
 

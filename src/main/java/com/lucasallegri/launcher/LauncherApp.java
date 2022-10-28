@@ -268,7 +268,7 @@ public class LauncherApp {
       }
 
       String tweets;
-      tweets = INetUtil.getWebpageContent(LauncherGlobals.CDN_URL + "tweets.html");
+      tweets = INetUtil.getWebpageContent(LauncherGlobals.CDN_URL_V1 + "tweets.html");
       if (tweets == null) {
         LauncherGUI.tweetsContainer.setText(Locale.getValue("error.tweets_retrieve"));
       } else {
@@ -280,7 +280,7 @@ public class LauncherApp {
 
       Image eventImage;
       String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
-      eventImage = ImageUtil.getImageFromURL(LauncherGlobals.CDN_URL + "event_" + eventImageLang + ".png", 525, 305);
+      eventImage = ImageUtil.getImageFromURL(LauncherGlobals.CDN_URL_V1 + "event_" + eventImageLang + ".png", 525, 305);
       if (eventImage == null) {
         LauncherGUI.imageContainer.setText(Locale.getValue("error.event_image_missing"));
       } else {
