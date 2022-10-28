@@ -180,7 +180,7 @@ public class ModListGUI extends BaseGUI {
 
     enableButton = new JButton(Locale.getValue("b.enable"));
     enableButton.setFont(Fonts.fontMed);
-    enableButton.setForeground(ColorUtil.getGreenForegroundColor());
+    enableButton.setForeground(Colors.MID_GREEN);
     enableButton.setEnabled(false);
     enableButton.setFocusable(false);
     enableButton.setFocusPainted(false);
@@ -200,7 +200,7 @@ public class ModListGUI extends BaseGUI {
 
     disableButton = new JButton(Locale.getValue("b.disable"));
     disableButton.setFont(Fonts.fontMed);
-    disableButton.setForeground(ColorUtil.getRedForegroundColor());
+    disableButton.setForeground(Colors.MID_RED);
     disableButton.setEnabled(false);
     disableButton.setFocusable(false);
     disableButton.setFocusPainted(false);

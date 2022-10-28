@@ -332,9 +332,6 @@ public class LauncherApp {
     } catch (MalformedURLException e) {
       log.error(e);
     }
-    //InputStream stream = new ByteArrayInputStream((
-    //    Objects.requireNonNull(INetUtil.getWebpageContent("http://gamemedia2.spiralknights.com/spiral/client/getdown.txt")))
-    //    .getBytes(StandardCharsets.UTF_8));
     Properties prop = new Properties();
     try {
       prop.load(url.openStream());
