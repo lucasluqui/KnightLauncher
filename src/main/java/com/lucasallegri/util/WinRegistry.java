@@ -48,25 +48,25 @@ public class WinRegistry {
 
   static {
     try {
-      regOpenKey = userClass.getDeclaredMethod("WindowsRegOpenKey", int.class, byte[].class, int.class);
+      regOpenKey = userClass.getDeclaredMethod("WindowsRegOpenKey", long.class, byte[].class, int.class);
       regOpenKey.setAccessible(true);
-      regCloseKey = userClass.getDeclaredMethod("WindowsRegCloseKey", int.class);
+      regCloseKey = userClass.getDeclaredMethod("WindowsRegCloseKey", long.class);
       regCloseKey.setAccessible(true);
-      regQueryValueEx = userClass.getDeclaredMethod("WindowsRegQueryValueEx", int.class, byte[].class);
+      regQueryValueEx = userClass.getDeclaredMethod("WindowsRegQueryValueEx", long.class, byte[].class);
       regQueryValueEx.setAccessible(true);
-      regEnumValue = userClass.getDeclaredMethod("WindowsRegEnumValue", int.class, int.class, int.class);
+      regEnumValue = userClass.getDeclaredMethod("WindowsRegEnumValue", long.class, int.class, int.class);
       regEnumValue.setAccessible(true);
-      regQueryInfoKey = userClass.getDeclaredMethod("WindowsRegQueryInfoKey1", int.class);
+      regQueryInfoKey = userClass.getDeclaredMethod("WindowsRegQueryInfoKey1", long.class);
       regQueryInfoKey.setAccessible(true);
-      regEnumKeyEx = userClass.getDeclaredMethod("WindowsRegEnumKeyEx", int.class, int.class, int.class);
+      regEnumKeyEx = userClass.getDeclaredMethod("WindowsRegEnumKeyEx", long.class, int.class, int.class);
       regEnumKeyEx.setAccessible(true);
-      regCreateKeyEx = userClass.getDeclaredMethod("WindowsRegCreateKeyEx", int.class, byte[].class);
+      regCreateKeyEx = userClass.getDeclaredMethod("WindowsRegCreateKeyEx", long.class, byte[].class);
       regCreateKeyEx.setAccessible(true);
-      regSetValueEx = userClass.getDeclaredMethod("WindowsRegSetValueEx", int.class, byte[].class, byte[].class);
+      regSetValueEx = userClass.getDeclaredMethod("WindowsRegSetValueEx", long.class, byte[].class, byte[].class);
       regSetValueEx.setAccessible(true);
-      regDeleteValue = userClass.getDeclaredMethod("WindowsRegDeleteValue", int.class, byte[].class);
+      regDeleteValue = userClass.getDeclaredMethod("WindowsRegDeleteValue", long.class, byte[].class);
       regDeleteValue.setAccessible(true);
-      regDeleteKey = userClass.getDeclaredMethod("WindowsRegDeleteKey", int.class, byte[].class);
+      regDeleteKey = userClass.getDeclaredMethod("WindowsRegDeleteKey", long.class, byte[].class);
       regDeleteKey.setAccessible(true);
     } catch (Exception e) {
       e.printStackTrace();
