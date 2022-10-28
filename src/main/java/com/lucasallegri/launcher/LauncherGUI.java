@@ -53,7 +53,7 @@ public class LauncherGUI extends BaseGUI {
     Icon launchIcon = IconFontSwing.buildIcon(FontAwesome.PLAY_CIRCLE_O, 49, ColorUtil.getForegroundColor());
     launchButton = new JButton(launchIcon);
     launchButton.setBounds(21, 400, 52, 52);
-    launchButton.setFont(FontManager.fontMedBig);
+    launchButton.setFont(Fonts.fontMedBig);
     launchButton.setFocusPainted(false);
     launchButton.setFocusable(false);
     launchButton.setToolTipText(Locale.getValue("b.launch"));
@@ -68,7 +68,7 @@ public class LauncherGUI extends BaseGUI {
 
     imageContainer = new JLabel("Loading...");
     imageContainer.setBounds(23, 48, 525, 305);
-    imageContainer.setFont(FontManager.fontRegBig);
+    imageContainer.setFont(Fonts.fontRegBig);
     imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
     launcherGUIFrame.getContentPane().add(imageContainer);
 
@@ -77,7 +77,7 @@ public class LauncherGUI extends BaseGUI {
     modButton.setIcon(modsIcon);
     modButton.setBounds(80, 401, 100, 25);
     modButton.setHorizontalAlignment(SwingConstants.LEFT);
-    modButton.setFont(FontManager.fontMed);
+    modButton.setFont(Fonts.fontMed);
     modButton.setFocusPainted(false);
     modButton.setFocusable(false);
     modButton.setToolTipText(Locale.getValue("b.mods"));
@@ -89,23 +89,23 @@ public class LauncherGUI extends BaseGUI {
     settingsButton.setIcon(settingsIcon);
     settingsButton.setBounds(80, 427, 100, 25);
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
-    settingsButton.setFont(FontManager.fontMed);
+    settingsButton.setFont(Fonts.fontMed);
     settingsButton.setFocusPainted(false);
     settingsButton.setFocusable(false);
     settingsButton.setToolTipText(Locale.getValue("b.settings"));
     launcherGUIFrame.getContentPane().add(settingsButton);
     settingsButton.addActionListener(action -> app.sgui.switchVisibility());
 
-    JLabel labelTweets = new JLabel("<html>" + Locale.getValue("m.twitter_title") + "</html>");
-    labelTweets.setBounds(567, 36, 127, 28);
-    labelTweets.setFont(FontManager.fontReg);
+    JLabel labelTweets = new JLabel("<html>Latest on <b>@SpiralKnights</b></html>");
+    labelTweets.setBounds(567, 36, 170, 35);
+    labelTweets.setFont(Fonts.fontReg);
     launcherGUIFrame.getContentPane().add(labelTweets);
 
     tweetsContainer = new JTextPane();
     tweetsContainer.setText(Locale.getValue("m.twitter_load"));
     tweetsContainer.setBounds(567, 75, 260, 297);
     tweetsContainer.setEditable(false);
-    tweetsContainer.setFont(FontManager.fontReg);
+    tweetsContainer.setFont(Fonts.fontReg);
     tweetsContainer.setBackground(ColorUtil.getBackgroundColor());
     tweetsContainer.setForeground(Color.WHITE);
     launcherGUIFrame.getContentPane().add(tweetsContainer);
@@ -132,7 +132,7 @@ public class LauncherGUI extends BaseGUI {
     launchState = new JLabel("");
     launchState.setHorizontalAlignment(SwingConstants.RIGHT);
     launchState.setBounds(638, 443, 203, 23);
-    launchState.setFont(FontManager.fontRegBig);
+    launchState.setFont(Fonts.fontRegBig);
     launchState.setVisible(false);
     launcherGUIFrame.getContentPane().add(launchState);
 
@@ -140,25 +140,18 @@ public class LauncherGUI extends BaseGUI {
     updateButton = new JButton(Locale.getValue("b.update_available"));
     updateButton.setHorizontalAlignment(SwingConstants.CENTER);
     updateButton.setIcon(updateIcon);
-    updateButton.setFont(FontManager.fontMedIta);
+    updateButton.setFont(Fonts.fontMedIta);
     updateButton.setFocusPainted(false);
     updateButton.setFocusable(false);
     updateButton.setForeground(ColorUtil.getGreenForegroundColor());
     updateButton.setVisible(false);
     updateButton.setBounds(185, 427, 150, 25);
     launcherGUIFrame.getContentPane().add(updateButton);
-    updateButton.addActionListener(action -> DesktopUtil.openWebpage(
-            "https://github.com/"
-                    + LauncherGlobals.GITHUB_AUTHOR + "/"
-                    + LauncherGlobals.GITHUB_REPO + "/"
-                    + "releases/tag/"
-                    + LauncherGlobals.latestRelease
-    ));
 
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
-    playerCountLabel.setFont(FontManager.fontReg);
+    playerCountLabel.setFont(Fonts.fontReg);
     playerCountLabel.setForeground(ColorUtil.getGreenForegroundColor());
-    playerCountLabel.setBounds(23, 378, 507, 14);
+    playerCountLabel.setBounds(23, 375, 507, 18);
     launcherGUIFrame.getContentPane().add(playerCountLabel);
 
     JPanel titleBar = new JPanel();
@@ -209,7 +202,7 @@ public class LauncherGUI extends BaseGUI {
     titleBar.setLayout(null);
 
     JLabel windowTitle = new JLabel(Locale.getValue("t.main", LauncherGlobals.VERSION));
-    windowTitle.setFont(FontManager.fontMed);
+    windowTitle.setFont(Fonts.fontMed);
     windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 20);
     titleBar.add(windowTitle);
 
@@ -220,7 +213,7 @@ public class LauncherGUI extends BaseGUI {
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
     closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
-    closeButton.setFont(FontManager.fontMed);
+    closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(e -> {
       LauncherApp.getRPC().stop();
@@ -234,7 +227,7 @@ public class LauncherGUI extends BaseGUI {
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
     minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
-    minimizeButton.setFont(FontManager.fontMed);
+    minimizeButton.setFont(Fonts.fontMed);
     titleBar.add(minimizeButton);
     minimizeButton.addActionListener(e -> launcherGUIFrame.setState(Frame.ICONIFIED));
 
@@ -244,7 +237,7 @@ public class LauncherGUI extends BaseGUI {
     discordButton.setFocusPainted(false);
     discordButton.setFocusable(false);
     discordButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
-    discordButton.setFont(FontManager.fontMed);
+    discordButton.setFont(Fonts.fontMed);
     titleBar.add(discordButton);
     discordButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.DISCORD_URL));
 
@@ -255,7 +248,7 @@ public class LauncherGUI extends BaseGUI {
     bugButton.setFocusPainted(false);
     bugButton.setFocusable(false);
     bugButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
-    bugButton.setFont(FontManager.fontMed);
+    bugButton.setFont(Fonts.fontMed);
     titleBar.add(bugButton);
     bugButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.BUG_REPORT_URL));
 
@@ -266,7 +259,7 @@ public class LauncherGUI extends BaseGUI {
     kofiButton.setFocusPainted(false);
     kofiButton.setFocusable(false);
     kofiButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
-    kofiButton.setFont(FontManager.fontMed);
+    kofiButton.setFont(Fonts.fontMed);
     titleBar.add(kofiButton);
     kofiButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.KOFI_URL));
 

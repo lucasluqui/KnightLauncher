@@ -15,9 +15,9 @@ public class Modules {
   public static void setupIngameRPC() {
     if (SystemUtil.isWindows() && SystemUtil.is64Bit()) {
       try {
-        FileUtil.extractFileWithinJar(LauncherGlobals.USER_DIR + "/modules/skdiscordrpc/bundle.zip", LauncherGlobals.USER_DIR + "KnightLauncher/modules/skdiscordrpc/bundle.zip");
-        Compressor.unzip(LauncherGlobals.USER_DIR + "KnightLauncher/modules/skdiscordrpc/bundle.zip", LauncherGlobals.USER_DIR + "KnightLauncher/modules/skdiscordrpc/", false);
-        new File(LauncherGlobals.USER_DIR + "KnightLauncher/modules/skdiscordrpc/bundle.zip").delete();
+        FileUtil.extractFileWithinJar("/modules/skdiscordrpc/bundle.zip", LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip");
+        Compressor.unzip(LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip", LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\", false);
+        FileUtil.deleteFile(LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip");
         SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
       } catch (IOException e) {
         log.error(e);
@@ -25,6 +25,14 @@ public class Modules {
     } else {
       SettingsProperties.setValue("launcher.ingameRPCSetup", "true");
       SettingsProperties.setValue("launcher.useIngameRPC", "false");
+    }
+  }
+
+  public static void setupJarExe() {
+    try {
+      FileUtil.extractFileWithinJar("/modules/jarexe/jar.exe", LauncherGlobals.USER_DIR + "\\java_vm\\bin\\jar.exe");
+    } catch (IOException e) {
+      log.error(e);
     }
   }
 

@@ -32,23 +32,30 @@ public class FileUtil {
     new File(path).mkdirs();
   }
 
-  public static void createFile(String path) {
+  public static boolean createFile(String path) {
     File file = new File(path);
     try {
-      file.createNewFile();
+      return file.createNewFile();
     } catch (IOException e) {
       log.error(e);
     }
+    return false;
   }
 
-  public static void recreateFile(String path) {
+  public static boolean deleteFile(String path) {
+    File file = new File(path);
+    return file.delete();
+  }
+
+  public static boolean recreateFile(String path) {
     File file = new File(path);
     file.delete();
     try {
-      file.createNewFile();
+      return file.createNewFile();
     } catch (IOException e) {
       log.error(e);
     }
+    return false;
   }
 
   public static void rename(File old, File dest) {

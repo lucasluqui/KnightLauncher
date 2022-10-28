@@ -2,7 +2,7 @@ package com.lucasallegri.launcher.mods;
 
 import com.lucasallegri.launcher.*;
 import com.lucasallegri.launcher.mods.data.Mod;
-import com.lucasallegri.launcher.mods.data.ZipMod;
+import com.lucasallegri.launcher.settings.SettingsEventHandler;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.DesktopUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -45,7 +45,7 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame = new JFrame();
     modListGUIFrame.setVisible(false);
     modListGUIFrame.setTitle(Locale.getValue("t.mods"));
-    modListGUIFrame.setBounds(100, 100, 385, 495);
+    modListGUIFrame.setBounds(100, 100, 385, 460);
     modListGUIFrame.setResizable(false);
     modListGUIFrame.setUndecorated(true);
     modListGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -53,54 +53,62 @@ public class ModListGUI extends BaseGUI {
 
     modListContainer = new List();
     modListContainer.setBounds(10, 26, 162, 326);
-    modListContainer.setFont(FontManager.fontMed);
+    modListContainer.setFont(Fonts.fontMed);
     modListContainer.setBackground(ColorUtil.getBackgroundColor());
     modListContainer.setForeground(ColorUtil.getForegroundColor());
     modListContainer.setFocusable(false);
     modListGUIFrame.getContentPane().add(modListContainer);
-    for (Mod mod : ModList.installedMods) {
-      modListContainer.add(mod.getDisplayName());
-    }
+    updateModList();
     modListContainer.addItemListener(new ItemListener() {
       @Override
       public void itemStateChanged(ItemEvent event) {
-        labelName.setText(ModList.installedMods.get(modListContainer.getSelectedIndex()).getDisplayName());
-        labelDescription.setText("<html>" + ModList.installedMods.get(modListContainer.getSelectedIndex()).getDescription() + "</html>");
-        labelVersion.setText(Locale.getValue("m.mod_version", ModList.installedMods.get(modListContainer.getSelectedIndex()).getVersion()));
-        labelAuthor.setText(Locale.getValue("m.mod_author", ModList.installedMods.get(modListContainer.getSelectedIndex()).getAuthor()));
-        enableButton.setEnabled(true);
-        disableButton.setEnabled(true);
+        Mod currentMod = ModLoader.getModList().get(modListContainer.getSelectedIndex());
+        labelName.setText(currentMod.getDisplayName());
+        labelDescription.setText("<html>" + currentMod.getDescription() + "</html>");
+        labelVersion.setText(Locale.getValue("m.mod_version", currentMod.getVersion()));
+        labelAuthor.setText(Locale.getValue("m.mod_author", currentMod.getAuthor()));
+        if(currentMod.isEnabled()) {
+          enableButton.setVisible(false);
+          enableButton.setVisible(false);
+          disableButton.setVisible(true);
+          disableButton.setEnabled(true);
+        } else {
+          enableButton.setVisible(true);
+          enableButton.setEnabled(true);
+          disableButton.setVisible(false);
+          disableButton.setEnabled(false);
+        }
       }
     });
 
-    labelModCount = new JLabel(String.valueOf(ModList.installedMods.size()));
+    labelModCount = new JLabel(String.valueOf(ModLoader.getModList().size()));
     labelModCount.setHorizontalAlignment(SwingConstants.CENTER);
     labelModCount.setBounds(178, 44, 188, 40);
-    labelModCount.setFont(FontManager.fontMedGiant);
+    labelModCount.setFont(Fonts.fontMedGiant);
     modListGUIFrame.getContentPane().add(labelModCount);
 
     labelModCountText = new JLabel(Locale.getValue("m.mods_installed"));
     labelModCountText.setHorizontalAlignment(SwingConstants.CENTER);
     labelModCountText.setBounds(178, 93, 188, 14);
-    labelModCountText.setFont(FontManager.fontReg);
+    labelModCountText.setFont(Fonts.fontReg);
     modListGUIFrame.getContentPane().add(labelModCountText);
 
     refreshButton = new JButton(Locale.getValue("b.refresh"));
     refreshButton.setBounds(12, 430, 89, 23);
-    refreshButton.setFont(FontManager.fontMed);
+    refreshButton.setFont(Fonts.fontMed);
     refreshButton.setFocusPainted(false);
     refreshButton.setFocusable(false);
     refreshButton.setToolTipText(Locale.getValue("b.refresh"));
     modListGUIFrame.getContentPane().add(refreshButton);
     refreshButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        ModListEventHandler.refreshEvent(_action);
+      public void actionPerformed(ActionEvent action) {
+        ModListEventHandler.refreshEvent(action);
       }
     });
 
     JButton modFolderButton = new JButton(Locale.getValue("b.open_mods_folder"));
     modFolderButton.setBounds(107, 430, 136, 23);
-    modFolderButton.setFont(FontManager.fontMed);
+    modFolderButton.setFont(Fonts.fontMed);
     modFolderButton.setFocusPainted(false);
     modFolderButton.setFocusable(false);
     modFolderButton.setToolTipText(Locale.getValue("b.open_mods_folder"));
@@ -113,7 +121,7 @@ public class ModListGUI extends BaseGUI {
 
     JButton getModsButton = new JButton(Locale.getValue("b.get_mods"));
     getModsButton.setBounds(248, 430, 126, 23);
-    getModsButton.setFont(FontManager.fontMed);
+    getModsButton.setFont(Fonts.fontMed);
     getModsButton.setFocusPainted(false);
     getModsButton.setFocusable(false);
     getModsButton.setToolTipText(Locale.getValue("b.get_mods"));
@@ -124,12 +132,12 @@ public class ModListGUI extends BaseGUI {
       }
     });
 
-    forceApplyButton = new JButton("Force apply mods");
-    forceApplyButton.setBounds(12, 460, 125, 23);
-    forceApplyButton.setFont(FontManager.fontMed);
+    forceApplyButton = new JButton("Force apply");
+    forceApplyButton.setBounds(12, 360, 125, 23);
+    forceApplyButton.setFont(Fonts.fontMed);
     forceApplyButton.setFocusPainted(false);
     forceApplyButton.setFocusable(false);
-    forceApplyButton.setToolTipText("Force Apply Mods");
+    forceApplyButton.setToolTipText("Force apply");
     modListGUIFrame.getContentPane().add(forceApplyButton);
     forceApplyButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent _action) {
@@ -138,8 +146,8 @@ public class ModListGUI extends BaseGUI {
     });
 
     labelForceApplyState = new JLabel("");
-    labelForceApplyState.setBounds(145, 460, 125, 25);
-    labelForceApplyState.setFont(FontManager.fontReg);
+    labelForceApplyState.setBounds(145, 358, 125, 25);
+    labelForceApplyState.setFont(Fonts.fontReg);
     modListGUIFrame.getContentPane().add(labelForceApplyState);
 
     JSeparator separator = new JSeparator();
@@ -147,48 +155,68 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.getContentPane().add(separator);
 
     labelName = new JLabel("");
-    labelName.setFont(FontManager.fontMed);
+    labelName.setFont(Fonts.fontMed);
     labelName.setHorizontalAlignment(SwingConstants.CENTER);
     labelName.setBounds(178, 148, 188, 14);
     modListGUIFrame.getContentPane().add(labelName);
 
     labelAuthor = new JLabel("");
-    labelAuthor.setFont(FontManager.fontReg);
+    labelAuthor.setFont(Fonts.fontReg);
     labelAuthor.setHorizontalAlignment(SwingConstants.CENTER);
     labelAuthor.setBounds(178, 165, 188, 14);
     modListGUIFrame.getContentPane().add(labelAuthor);
 
     labelDescription = new JLabel("");
-    labelDescription.setFont(FontManager.fontReg);
+    labelDescription.setFont(Fonts.fontReg);
     labelDescription.setHorizontalAlignment(SwingConstants.LEADING);
     labelDescription.setVerticalAlignment(SwingConstants.TOP);
     labelDescription.setBounds(188, 196, 178, 70);
     modListGUIFrame.getContentPane().add(labelDescription);
 
     labelVersion = new JLabel("");
-    labelVersion.setFont(FontManager.fontReg);
+    labelVersion.setFont(Fonts.fontReg);
     labelVersion.setBounds(188, 274, 178, 14);
     modListGUIFrame.getContentPane().add(labelVersion);
 
     enableButton = new JButton(Locale.getValue("b.enable"));
-    enableButton.setFont(FontManager.fontMed);
-    enableButton.setForeground(ColorUtil.getGreenForegroundColor());
+    enableButton.setFont(Fonts.fontMed);
+    enableButton.setForeground(Colors.MID_GREEN);
     enableButton.setEnabled(false);
     enableButton.setFocusable(false);
     enableButton.setFocusPainted(false);
     enableButton.setBounds(183, 326, 89, 23);
     modListGUIFrame.getContentPane().add(enableButton);
     enableButton.setVisible(false);
+    enableButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        int idx = modListContainer.getSelectedIndex();
+        ModListEventHandler.enableMod(ModLoader.getModList().get(idx));
+        modListContainer.select(idx);
+        enableButton.setVisible(false);
+        disableButton.setVisible(true);
+        disableButton.setEnabled(true);
+      }
+    });
 
     disableButton = new JButton(Locale.getValue("b.disable"));
-    disableButton.setFont(FontManager.fontMed);
-    disableButton.setForeground(ColorUtil.getRedForegroundColor());
+    disableButton.setFont(Fonts.fontMed);
+    disableButton.setForeground(Colors.MID_RED);
     disableButton.setEnabled(false);
     disableButton.setFocusable(false);
     disableButton.setFocusPainted(false);
-    disableButton.setBounds(281, 326, 89, 23);
+    disableButton.setBounds(183, 326, 89, 23);
     modListGUIFrame.getContentPane().add(disableButton);
     disableButton.setVisible(false);
+    disableButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        int idx = modListContainer.getSelectedIndex();
+        ModListEventHandler.disableMod(ModLoader.getModList().get(idx));
+        modListContainer.select(idx);
+        disableButton.setVisible(false);
+        enableButton.setVisible(true);
+        enableButton.setEnabled(true);
+      }
+    });
 
     JPanel titleBar = new JPanel();
     titleBar.setBounds(0, 0, modListGUIFrame.getWidth(), 20);
@@ -238,7 +266,7 @@ public class ModListGUI extends BaseGUI {
     titleBar.setLayout(null);
 
     JLabel windowTitle = new JLabel(Locale.getValue("t.mods"));
-    windowTitle.setFont(FontManager.fontMed);
+    windowTitle.setFont(Fonts.fontMed);
     windowTitle.setBounds(10, 0, modListGUIFrame.getWidth() - 100, 20);
     titleBar.add(windowTitle);
 
@@ -249,7 +277,7 @@ public class ModListGUI extends BaseGUI {
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
     closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
-    closeButton.setFont(FontManager.fontMed);
+    closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -264,7 +292,7 @@ public class ModListGUI extends BaseGUI {
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
     minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
-    minimizeButton.setFont(FontManager.fontMed);
+    minimizeButton.setFont(Fonts.fontMed);
     titleBar.add(minimizeButton);
     minimizeButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -281,5 +309,14 @@ public class ModListGUI extends BaseGUI {
       }
     });
 
+  }
+
+  public static void updateModList() {
+    int idx = modListContainer.getSelectedIndex();
+    modListContainer.removeAll();
+    for (Mod mod : ModLoader.getModList()) {
+      modListContainer.add(mod.isEnabled() ? "(✓) " + mod.getDisplayName(): "(X) " + mod.getDisplayName());
+    }
+    modListContainer.select(idx);
   }
 }

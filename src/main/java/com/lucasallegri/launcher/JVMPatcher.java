@@ -1,6 +1,7 @@
 package com.lucasallegri.launcher;
 
 import com.lucasallegri.dialog.DialogError;
+import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.launcher.settings.SettingsProperties;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.Compressor;
@@ -26,6 +27,7 @@ public class JVMPatcher extends BaseGUI {
   private static JButton buttonDecline;
   private static JProgressBar jvmPatcherProgressBar;
   private static JLabel jvmPatcherState;
+  private static JComboBox<String> javaVersionComboBox;
   private static int _downloadAttempts = 0;
 
   public JVMPatcher(LauncherApp app) {
@@ -49,32 +51,49 @@ public class JVMPatcher extends BaseGUI {
     jvmPatcherFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     jvmPatcherFrame.getContentPane().setLayout(null);
 
-    headerLabel = new JLabel(Locale.getValue("m.jvm_patcher_confirm_header"));
-    headerLabel.setBounds(10, 40, 480, 37);
-    headerLabel.setFont(FontManager.fontRegBig);
-    headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    headerLabel = new JLabel("We can automatically patch your game to use a 64-bit Java VM");
+    headerLabel.setBounds(25, 30, 480, 37);
+    headerLabel.setFont(Fonts.fontMed);
+    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     jvmPatcherFrame.getContentPane().add(headerLabel);
 
-    subHeaderLabel = new JLabel(Locale.getValue("m.jvm_patcher_confirm_subheader"));
-    subHeaderLabel.setBounds(10, 65, 480, 37);
-    subHeaderLabel.setFont(FontManager.fontReg);
-    subHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    subHeaderLabel = new JLabel("You can always restart this patcher from the Settings menu");
+    subHeaderLabel.setBounds(25, 55, 480, 37);
+    subHeaderLabel.setFont(Fonts.fontReg);
+    subHeaderLabel.setHorizontalAlignment(SwingConstants.LEFT);
     jvmPatcherFrame.getContentPane().add(subHeaderLabel);
 
+    JLabel javaVersionSelectLabel = new JLabel("Java version to install:");
+    javaVersionSelectLabel.setBounds(25, 115, 150, 37);
+    javaVersionSelectLabel.setFont(Fonts.fontMed);
+    javaVersionSelectLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    jvmPatcherFrame.getContentPane().add(javaVersionSelectLabel);
+
+    javaVersionComboBox = new JComboBox<>();
+    javaVersionComboBox.setBounds(175, 123, 250, 20);
+    javaVersionComboBox.setFocusable(false);
+    javaVersionComboBox.setFont(Fonts.fontReg);
+    jvmPatcherFrame.add(javaVersionComboBox);
+
+    javaVersionComboBox.addItem("Java 7 (7u80) (Recommended)");
+    javaVersionComboBox.addItem("Java 8 (8u202)");
+    javaVersionComboBox.addItem("Java 8 (8u251)");
+    javaVersionComboBox.setSelectedIndex(0);
+
     jvmPatcherState = new JLabel("");
-    jvmPatcherState.setBounds(11, 180, 480, 15);
-    jvmPatcherState.setFont(FontManager.fontReg);
+    jvmPatcherState.setBounds(26, 180, 450, 15);
+    jvmPatcherState.setFont(Fonts.fontReg);
     jvmPatcherFrame.getContentPane().add(jvmPatcherState);
 
     jvmPatcherProgressBar = new JProgressBar();
-    jvmPatcherProgressBar.setBounds(10, 204, 480, 5);
+    jvmPatcherProgressBar.setBounds(25, 204, 450, 5);
     jvmPatcherProgressBar.setVisible(false);
     jvmPatcherFrame.getContentPane().add(jvmPatcherProgressBar);
 
-    buttonAccept = new JButton(Locale.getValue("b.jvm_patcher_accept"));
+    buttonAccept = new JButton("Yes, patch now");
     buttonAccept.setFocusPainted(false);
     buttonAccept.setFocusable(false);
-    buttonAccept.setFont(FontManager.fontMed);
+    buttonAccept.setFont(Fonts.fontMed);
     buttonAccept.setBounds(30, 200, 200, 23);
     jvmPatcherFrame.getContentPane().add(buttonAccept);
     buttonAccept.addActionListener(new ActionListener() {
@@ -83,8 +102,10 @@ public class JVMPatcher extends BaseGUI {
         buttonAccept.setVisible(false);
         buttonDecline.setEnabled(false);
         buttonDecline.setVisible(false);
-        headerLabel.setText(Locale.getValue("m.jvm_patcher_header"));
-        subHeaderLabel.setText(Locale.getValue("m.jvm_patcher_subheader"));
+        javaVersionSelectLabel.setVisible(false);
+        javaVersionComboBox.setVisible(false);
+        headerLabel.setText("This will take a few minutes...");
+        subHeaderLabel.setText("Please do not close this window.");
         jvmPatcherProgressBar.setVisible(true);
         initPatcher();
       }
@@ -93,7 +114,7 @@ public class JVMPatcher extends BaseGUI {
     buttonDecline = new JButton(Locale.getValue("b.jvm_patcher_decline"));
     buttonDecline.setFocusPainted(false);
     buttonDecline.setFocusable(false);
-    buttonDecline.setFont(FontManager.fontMed);
+    buttonDecline.setFont(Fonts.fontMed);
     buttonDecline.setBounds(360, 200, 110, 23);
     jvmPatcherFrame.getContentPane().add(buttonDecline);
     buttonDecline.addActionListener(new ActionListener() {
@@ -150,7 +171,7 @@ public class JVMPatcher extends BaseGUI {
     titleBar.setLayout(null);
 
     JLabel windowTitle = new JLabel(Locale.getValue("t.jvm_patcher"));
-    windowTitle.setFont(FontManager.fontMed);
+    windowTitle.setFont(Fonts.fontMed);
     windowTitle.setBounds(10, 0, jvmPatcherFrame.getWidth() - 100, 20);
     titleBar.add(windowTitle);
 
@@ -204,8 +225,13 @@ public class JVMPatcher extends BaseGUI {
   }
 
   private static void downloadPackagedJVM() {
-    String downloadUrl = LauncherGlobals.LARGE_CDN_URL
-            + "jvm/windows/jvm_pack.zip";
+    String downloadUrl = LauncherGlobals.JAVA_REDISTRIBUTABLES_URL.replace("{version}", "7u80");
+
+    switch(javaVersionComboBox.getSelectedIndex()) {
+      case 0: downloadUrl = LauncherGlobals.JAVA_REDISTRIBUTABLES_URL.replace("{version}", "7u80"); break;
+      case 1: downloadUrl = LauncherGlobals.JAVA_REDISTRIBUTABLES_URL.replace("{version}", "8u202"); break;
+      case 2: downloadUrl = LauncherGlobals.JAVA_REDISTRIBUTABLES_URL.replace("{version}", "8u251"); break;
+    }
 
     boolean downloadCompleted = false;
     while(_downloadAttempts <= 3 && !downloadCompleted) {
@@ -228,7 +254,8 @@ public class JVMPatcher extends BaseGUI {
 
   private static void finish() {
     SettingsProperties.setValue("launcher.jvm_patched", "true");
-    ProcessUtil.startApplication(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar"});
+    Modules.setupJarExe();
+    ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar"}, true);
     jvmPatcherFrame.dispose();
     System.exit(1);
   }

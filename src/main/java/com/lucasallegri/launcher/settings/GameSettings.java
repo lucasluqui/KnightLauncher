@@ -1,13 +1,14 @@
 package com.lucasallegri.launcher.settings;
 
+import com.lucasallegri.launcher.LauncherGlobals;
 import com.lucasallegri.launcher.Locale;
 import com.lucasallegri.launcher.ProgressBar;
 import com.lucasallegri.util.FileUtil;
+import com.lucasallegri.util.ProcessUtil;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.Properties;
 
 import static com.lucasallegri.launcher.settings.Log.log;
 
@@ -16,8 +17,7 @@ public class GameSettings {
   public static void load() {
     try {
 
-      ProgressBar.showBar(true);
-      ProgressBar.showState(true);
+      ProgressBar.startTask();
       ProgressBar.setBarMax(1);
       ProgressBar.setBarValue(0);
       ProgressBar.setState(Locale.getValue("m.apply"));
@@ -58,12 +58,44 @@ public class GameSettings {
       writer.println(Settings.gameAdditionalArgs);
       writer.close();
 
+      loadConnectionSettings();
+
       ProgressBar.setBarValue(1);
-      ProgressBar.showBar(false);
-      ProgressBar.showState(false);
+      ProgressBar.finishTask();
     } catch (FileNotFoundException | UnsupportedEncodingException e) {
       log.error(e);
     }
+  }
+
+  private static void loadConnectionSettings() {
+    try {
+      FileUtil.extractFileWithinJar("/config/deployment.properties", LauncherGlobals.USER_DIR + "\\deployment.properties");
+    } catch (IOException e) {
+      log.error(e);
+    }
+    Properties properties = new Properties();
+    try {
+      properties.load(Files.newInputStream(new File(LauncherGlobals.USER_DIR + "\\deployment.properties").toPath()));
+    } catch (IOException e) {
+      log.error(e);
+    }
+
+    properties.setProperty("server_host", Settings.gameEndpoint);
+    properties.setProperty("server_ports", String.valueOf(Settings.gamePort));
+    properties.setProperty("datagram_ports", String.valueOf(Settings.gamePort));
+    properties.setProperty("key.public", Settings.gamePublicKey);
+    properties.setProperty("client_root_url", Settings.gameGetdownURL);
+
+    try {
+      properties.store(Files.newOutputStream(new File(LauncherGlobals.USER_DIR + "\\deployment.properties").toPath()), null);
+    } catch (IOException e) {
+      log.error(e);
+    }
+
+    String[] capture = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", LauncherGlobals.USER_DIR + "\\java_vm\\bin\\jar.exe", "uf", "code\\config.jar", "deployment.properties"});
+    log.info("stdout", capture[0], "stderr", capture[1]);
+    FileUtil.deleteFile(LauncherGlobals.USER_DIR + "\\deployment.properties");
+
   }
 
 }

@@ -19,7 +19,7 @@ public class ZipMod extends Mod {
   }
 
   public void mount() {
-    Compressor.unzip(LauncherGlobals.USER_DIR + "mods/" + this.fileName, LauncherGlobals.USER_DIR + "rsrc/", SystemUtil.isMac());
+    Compressor.unzip(LauncherGlobals.USER_DIR + "/mods/" + this.fileName, LauncherGlobals.USER_DIR + "/rsrc/", SystemUtil.isMac());
     log.info("Zip Mod mounted successfully", "mod", this.displayName);
   }
 

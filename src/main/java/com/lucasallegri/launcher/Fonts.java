@@ -8,7 +8,7 @@ import java.io.InputStream;
 
 import static com.lucasallegri.launcher.Log.log;
 
-public class FontManager {
+public class Fonts {
 
   private static final String fontPathRegular = "/fonts/GoogleSans-Regular.ttf";
   private static final String fontPathMedium = "/fonts/GoogleSans-Medium.ttf";
@@ -55,6 +55,7 @@ public class FontManager {
       fontMedItaIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
       fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
       fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
+      sizeMultiplier = 1.2f;
     }
 
     try {
