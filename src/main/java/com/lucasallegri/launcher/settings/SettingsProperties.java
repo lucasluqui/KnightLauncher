@@ -107,7 +107,7 @@ public class SettingsProperties {
   }
 
   private static void finishLoading() {
-    if(SystemUtil.isWindows() && SteamUtil.getGamePathWindows() == null) {
+    if(SystemUtil.isWindows() && !SteamUtil.isRunningInSteamapps()) {
       setValue("game.platform", "Standalone");
     }
   }

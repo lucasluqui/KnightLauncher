@@ -1,5 +1,6 @@
 package com.lucasallegri.util;
 
+import com.lucasallegri.launcher.LauncherGlobals;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -30,6 +31,10 @@ public class SteamUtil {
     JSONObject jsonResponse = new JSONObject(rawResponse);
     String currentPlayers = String.valueOf(jsonResponse.getJSONObject("response").getInt("player_count"));
     return Integer.parseInt(currentPlayers);
+  }
+
+  public static boolean isRunningInSteamapps() {
+    return System.getProperty("user.dir").contains("steamapps");
   }
 
 }

@@ -316,7 +316,7 @@ public class SettingsGUI extends BaseGUI {
     gamePanel.add(choicePlatform);
     choicePlatform.addItem(Locale.getValue("o.steam"));
     choicePlatform.addItem(Locale.getValue("o.standalone"));
-    if(SystemUtil.isWindows() && SteamUtil.getGamePathWindows() == null) {
+    if(SystemUtil.isWindows() && !SteamUtil.isRunningInSteamapps()) {
       choicePlatform.removeItem(Locale.getValue("o.steam"));
     }
     choicePlatform.setSelectedItem(Settings.gamePlatform);
