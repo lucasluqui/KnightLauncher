@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # by Crowfunder
 # my gh: https://github.com/Crowfunder
-# KnightLauncher gh: https://github.com/lucas-allegri/KnightLauncher
+# KnightLauncher gh: https://github.com/lucasluqui/KnightLauncher
 
 GREEN="\033[0;32m"
 NONE="\033[0m"
 RED="\033[0;31m"
+filename=KnightLauncher.zip
 
 # Checking if script was run inside Spiral Knights directory. If not, it asks for inputting game's main directory full path. Broken if somebody somehow has random "rsrc" and "scenes" folders in place where script is running. Too bad.
 if [[ -d "rsrc" && -d "scenes" && -f "code/projectx-pcode.jar" ]]; then
@@ -38,8 +39,7 @@ case $opt in
 
         # Downloading and installing new version.
         echo "Downloading..."
-        curl -sSL https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest | grep "browser_download_url" | cut -d : -f 2,3 | tr -d \" | wget --show-progress -qi -
-        filename=$(curl -sSL https://api.github.com/repos/lucas-allegri/KnightLauncher/releases/latest | jq '.assets[0].name' | tr -d \")
+        curl -sSL https://api.github.com/repos/lucasluqui/KnightLauncher/releases/latest | grep "browser_download_url" | cut -d : -f 2,3 | tr -d \" | wget --show-progress -O "${filename}" -qi -
         echo -e "${GREEN}Successfully downloaded ${filename}${NONE}\nExtracting..."
         mv "${filename}" "${skpath}/${filename}"
         unzip "${skpath}/${filename}" -d "${skpath}"
