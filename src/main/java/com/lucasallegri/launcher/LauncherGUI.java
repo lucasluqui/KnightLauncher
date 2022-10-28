@@ -96,8 +96,8 @@ public class LauncherGUI extends BaseGUI {
     launcherGUIFrame.getContentPane().add(settingsButton);
     settingsButton.addActionListener(action -> app.sgui.switchVisibility());
 
-    JLabel labelTweets = new JLabel("<html>" + Locale.getValue("m.twitter_title") + "</html>");
-    labelTweets.setBounds(567, 36, 127, 28);
+    JLabel labelTweets = new JLabel("<html>Latest on <b>@SpiralKnights</b></html>");
+    labelTweets.setBounds(567, 36, 170, 35);
     labelTweets.setFont(Fonts.fontReg);
     launcherGUIFrame.getContentPane().add(labelTweets);
 
@@ -151,7 +151,7 @@ public class LauncherGUI extends BaseGUI {
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
     playerCountLabel.setFont(Fonts.fontReg);
     playerCountLabel.setForeground(ColorUtil.getGreenForegroundColor());
-    playerCountLabel.setBounds(23, 378, 507, 14);
+    playerCountLabel.setBounds(23, 375, 507, 18);
     launcherGUIFrame.getContentPane().add(playerCountLabel);
 
     JPanel titleBar = new JPanel();
