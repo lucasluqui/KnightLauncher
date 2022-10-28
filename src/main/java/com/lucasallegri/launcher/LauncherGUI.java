@@ -145,7 +145,7 @@ public class LauncherGUI extends BaseGUI {
     updateButton.setFocusable(false);
     updateButton.setForeground(ColorUtil.getGreenForegroundColor());
     updateButton.setVisible(false);
-    updateButton.setBounds(185, 427, 150, 25);
+    updateButton.setBounds(185, 427, 165, 25);
     launcherGUIFrame.getContentPane().add(updateButton);
 
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
