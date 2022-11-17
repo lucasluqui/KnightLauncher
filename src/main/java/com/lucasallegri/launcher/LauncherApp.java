@@ -230,8 +230,9 @@ public class LauncherApp {
     // Currently Java VM patching is only supported on Windows systems.
     if(!SystemUtil.isWindows()) return false;
 
-    // Check if there's already a 64-bit Java VM in the game's directory.
-    if(JavaUtil.determineJVMArch(LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe") == 64) {
+    // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by Knight Launcher.
+    if(JavaUtil.determineJVMArch(LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe") == 64 ||
+    Settings.jvmPatched) {
       Settings.jvmPatched = true;
       SettingsProperties.setValue("launcher.jvm_patched", "true");
       return false;
