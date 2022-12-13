@@ -2,7 +2,6 @@ package com.lucasallegri.launcher;
 
 import com.lucasallegri.dialog.DialogWarning;
 import com.lucasallegri.discord.DiscordRPCInstance;
-import com.lucasallegri.launcher.mods.ModList;
 import com.lucasallegri.launcher.mods.ModListGUI;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.Settings;
@@ -23,15 +22,14 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Objects;
 import java.util.Properties;
 
 import static com.lucasallegri.launcher.Log.log;
 
 public class LauncherApp {
 
+  private String[] _args = null;
   protected static LauncherGUI lgui;
   protected static SettingsGUI sgui;
   protected static ModListGUI mgui;
@@ -42,10 +40,9 @@ public class LauncherApp {
   public static void main(String[] args) {
 
     LauncherApp app = new LauncherApp();
+    app._args = args;
 
     if (app.requiresJVMPatch()) {
-      jvmPatcher = app.composeJVMPatcher(app);
-    } else if(args.length > 0 && args[0].equals("forceJVMPatch")) {
       jvmPatcher = app.composeJVMPatcher(app);
     } else {
       lgui = app.composeLauncherGUI(app);
@@ -224,6 +221,10 @@ public class LauncherApp {
   }
 
   private boolean requiresJVMPatch() {
+
+    // First of all see if we're being forced to patch.
+    if(_args.length > 0 && _args[0].equals("forceJVMPatch")) return true;
+
     // You need a 64-bit system to begin with.
     if(!SystemUtil.is64Bit()) return false;
 
