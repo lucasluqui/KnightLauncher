@@ -50,7 +50,7 @@ public class LauncherApp {
       mgui = app.composeModListGUI(app);
     }
 
-    postInitialization(app);
+    app.postInitialization();
   }
 
   public LauncherApp () {
@@ -242,7 +242,7 @@ public class LauncherApp {
     return true;
   }
 
-  private static void postInitialization(LauncherApp app) {
+  private void postInitialization() {
     ModLoader.checkInstalled();
     if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
     if (Settings.useIngameRPC) Modules.setupIngameRPC();
@@ -252,7 +252,7 @@ public class LauncherApp {
     Modules.setupJarExe();
 
     getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
-    app.loadOnlineAssets();
+    loadOnlineAssets();
   }
 
   private void loadOnlineAssets() {
