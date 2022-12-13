@@ -1,5 +1,6 @@
 package com.lucasallegri.launcher;
 
+import com.lucasallegri.discord.DiscordRPC;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.DesktopUtil;
 import com.lucasallegri.util.ImageUtil;
@@ -216,7 +217,7 @@ public class LauncherGUI extends BaseGUI {
     closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(e -> {
-      LauncherApp.getRPC().stop();
+      DiscordRPC.getInstance().stop();
       System.exit(0);
     });
 
@@ -268,7 +269,7 @@ public class LauncherGUI extends BaseGUI {
     launcherGUIFrame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent windowEvent) {
-        LauncherApp.getRPC().stop();
+        DiscordRPC.getInstance().stop();
       }
     });
 

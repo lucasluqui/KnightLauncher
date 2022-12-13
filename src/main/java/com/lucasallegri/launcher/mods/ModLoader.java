@@ -1,5 +1,6 @@
 package com.lucasallegri.launcher.mods;
 
+import com.lucasallegri.discord.DiscordRPC;
 import com.lucasallegri.launcher.*;
 import com.lucasallegri.launcher.mods.data.JarMod;
 import com.lucasallegri.launcher.mods.data.Mod;
@@ -108,7 +109,7 @@ public class ModLoader {
     ProgressBar.startTask();
     ProgressBar.setBarMax(getEnabledModCount() + 1);
     ProgressBar.setState(Locale.getValue("m.mount"));
-    LauncherApp.getRPC().setDetails(Locale.getValue("m.mount"));
+    DiscordRPC.getInstance().setDetails(Locale.getValue("m.mount"));
     LinkedList<Mod> localList = getModList();
 
     for (int i = 0; i < getModCount(); i++) {
@@ -141,13 +142,13 @@ public class ModLoader {
 
     ProgressBar.startTask();
     ProgressBar.setBarMax(RSRC_BUNDLES.length + 1);
-    LauncherApp.getRPC().setDetails(Locale.getValue("m.clean"));
+    DiscordRPC.getInstance().setDetails(Locale.getValue("m.clean"));
     ProgressBar.setState(Locale.getValue("m.clean"));
 
     // Iterate through all 3 bundles to clean up the game files.
     for (int i = 0; i < RSRC_BUNDLES.length; i++) {
       ProgressBar.setBarValue(i + 1);
-      LauncherApp.getRPC().setDetails(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(RSRC_BUNDLES.length)}));
+      DiscordRPC.getInstance().setDetails(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(RSRC_BUNDLES.length)}));
       try {
         FileUtil.unpackJar(new ZipFile(LauncherGlobals.USER_DIR + "/rsrc/" + RSRC_BUNDLES[i]), new File(LauncherGlobals.USER_DIR + "/rsrc/"), false);
       } catch (IOException e) {
@@ -171,7 +172,7 @@ public class ModLoader {
       SettingsGUI.forceRebuildButton.setEnabled(true);
     } catch (Exception ignored) {}
 
-    LauncherApp.getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(getEnabledModCount())));
+    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(getEnabledModCount())));
   }
 
   public static void extractSafeguard() {

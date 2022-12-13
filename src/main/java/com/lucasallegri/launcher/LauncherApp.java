@@ -1,7 +1,7 @@
 package com.lucasallegri.launcher;
 
 import com.lucasallegri.dialog.DialogWarning;
-import com.lucasallegri.discord.DiscordRPCInstance;
+import com.lucasallegri.discord.DiscordRPC;
 import com.lucasallegri.launcher.mods.ModListGUI;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.Settings;
@@ -34,7 +34,6 @@ public class LauncherApp {
   protected static SettingsGUI sgui;
   protected static ModListGUI mgui;
   protected static JVMPatcher jvmPatcher;
-  protected static DiscordRPCInstance rpc = new DiscordRPCInstance(LauncherGlobals.RPC_CLIENT_ID);
   public static String projectXVersion = null;
 
   public static void main(String[] args) {
@@ -62,7 +61,7 @@ public class LauncherApp {
     setupLauncherStyle();
     Locale.setup();
     Fonts.setup();
-    rpc.start();
+    DiscordRPC.getInstance().start();
     KeyboardController.start();
     checkDirectories();
     if (SystemUtil.isWindows()) checkShortcut();
@@ -111,10 +110,6 @@ public class LauncherApp {
       }
     });
     return jvmPatcher;
-  }
-
-  public static DiscordRPCInstance getRPC() {
-    return rpc;
   }
 
   private void checkDirectories() {
@@ -251,7 +246,7 @@ public class LauncherApp {
     }
     Modules.setupJarExe();
 
-    getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
+    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
     loadOnlineAssets();
   }
 

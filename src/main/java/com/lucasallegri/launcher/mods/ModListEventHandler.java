@@ -1,5 +1,6 @@
 package com.lucasallegri.launcher.mods;
 
+import com.lucasallegri.discord.DiscordRPC;
 import com.lucasallegri.launcher.Locale;
 import com.lucasallegri.launcher.LauncherApp;
 import com.lucasallegri.launcher.LauncherGlobals;
@@ -32,7 +33,7 @@ public class ModListEventHandler {
     ModListGUI.labelForceApplyState.setText("Applying...");
     ModLoader.mount();
     ModListGUI.labelForceApplyState.setText("Applied");
-    LauncherApp.getRPC().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
+    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
   }
 
   public static void getModsEvent(ActionEvent action) {
