@@ -97,7 +97,7 @@ public class LauncherGUI extends BaseGUI {
     launcherGUIFrame.getContentPane().add(settingsButton);
     settingsButton.addActionListener(action -> app.sgui.switchVisibility());
 
-    JLabel labelTweets = new JLabel("<html>Latest on <b>@SpiralKnights</b></html>");
+    JLabel labelTweets = new JLabel("<html>" + Locale.getValue("m.twitter_title") + "</html>");
     labelTweets.setBounds(567, 36, 170, 35);
     labelTweets.setFont(Fonts.fontReg);
     launcherGUIFrame.getContentPane().add(labelTweets);

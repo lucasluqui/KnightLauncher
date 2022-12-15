@@ -38,6 +38,8 @@ public class SettingsEventHandler {
   }
 
   public static void languageChangeEvent(ItemEvent event) {
+    if(event.getStateChange() == ItemEvent.SELECTED)
+      return; // Prevent triggering 2 times
     Settings.lang = Locale.getLangCode((String) SettingsGUI.choiceLanguage.getSelectedItem());
     SettingsProperties.setValue("launcher.lang", Locale.getLangCode((String) SettingsGUI.choiceLanguage.getSelectedItem()));
     DialogWarning.pushTranslated(Locale.getValue("m.prompt_restart_required"));
@@ -87,6 +89,8 @@ public class SettingsEventHandler {
   }
 
   public static void styleChangeEvent(ItemEvent event) {
+    if(event.getStateChange() == ItemEvent.SELECTED)
+      return; // Prevent triggering 2 times
     SettingsProperties.setValue("launcher.style", SettingsGUI.choiceStyle.getSelectedIndex() == 0 ? "dark" : "light");
     DialogWarning.pushTranslated(Locale.getValue("m.prompt_restart_required"));
   }
