@@ -3,18 +3,20 @@ package com.lucasallegri.bootstrap;
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.zip.ZipFile;
@@ -33,6 +35,7 @@ public class ProjectXBootstrap {
   private static final String MANIFEST_PATH = "META-INF/MANIFEST.MF";
   private static final String MAIN_CLASS_KEY = "Main-Class:";
   private static final String NAME_KEY = "Name:";
+  private static final Properties configs = new Properties();
 
   public static void main(String[] args) throws Exception {
     System.setProperty("com.threerings.io.enumPolicy", "ORDINAL");
@@ -42,6 +45,10 @@ public class ProjectXBootstrap {
     }
     // X.dM("projectx.log");
     invokeMethod("com.threerings.util.X", "dM", null, new Object[]{"projectx.log"});
+
+    loadConfigs();
+
+    loadConnectionSettings();
 
     loadJarMods();
 
@@ -70,10 +77,49 @@ public class ProjectXBootstrap {
     invokeMethod("com.threerings.projectx.client.ProjectXApp", "startup", app, new Object[0]);
   }
 
+  static void loadConfigs() throws Exception {
+    InputStream is = Files.newInputStream(Paths.get(USER_DIR + File.separator + "KnightLauncher.properties"));
+    configs.load(is);
+    is.close();
+  }
+
+  static void loadConnectionSettings() throws Exception {
+    // com.threerings.projectx.util.DeploymentConfig
+    Field configField = Class.forName("com.threerings.projectx.util.a").getDeclaredField("akf");
+    configField.setAccessible(true);
+    Object config = configField.get(null);
+    // com.samskivert.util.Config
+    Field propsField = Class.forName("com.samskivert.util.m").getDeclaredField("AQ");
+    propsField.setAccessible(true);
+    // deployment.properties
+    Properties properties = (Properties) propsField.get(config);
+    // Replace connection settings
+    Map<String, String> mapping = new HashMap<>();
+    mapping.put("server_host", "game.endpoint");
+    mapping.put("server_ports", "game.port");
+    mapping.put("datagram_ports", "game.port");
+    mapping.put("key.public", "game.publicKey");
+    mapping.put("client_root_url", "game.getdownURL");
+    for (Map.Entry<String, String> e : mapping.entrySet()) {
+      String newConf = configs.getProperty(e.getValue());
+      if (newConf == null) {
+        continue;
+      }
+      newConf = newConf.trim();
+      String oldConf = properties.getProperty(e.getKey());
+      if (newConf.length() > 0 && !newConf.equals(oldConf)) {
+        properties.setProperty(e.getKey(), newConf);
+        System.out.println("[deployment.properties] Replace [" + e.getKey() + "] '" + oldConf + "' -> '" + newConf + "'");
+      } else {
+        System.out.println("[deployment.properties] No change [" + e.getKey() + "] '" + oldConf + "'");
+      }
+    }
+  }
+
   static void loadJarMods() {
     // Read disabled jar mods from KnightLauncher.properties
     Set<String> disabledJarMods = new HashSet<>();
-    String disabledJarModsString = getConfigValue("modloader.disabledMods");
+    String disabledJarModsString = configs.getProperty("modloader.disabledMods");
     if (disabledJarModsString != null && disabledJarModsString.length() > 0) {
       for (String disabledJarMod : disabledJarModsString.split(",")) {
         disabledJarMod = disabledJarMod.trim();
@@ -182,18 +228,6 @@ public class ProjectXBootstrap {
       e.printStackTrace();
       return null;
     }
-  }
-
-  static String getConfigValue(String key) {
-    Properties _prop = new Properties();
-    String value;
-    try (InputStream is = Files.newInputStream(Paths.get(System.getProperty("user.dir") + File.separator + "KnightLauncher.properties"))) {
-      _prop.load(is);
-      value = _prop.getProperty(key);
-      return value;
-    } catch (IOException ignored) {
-    }
-    return null;
   }
 
   static Object invokeMethod(String className, String methodName, Object object, Object[] args) throws Exception {
