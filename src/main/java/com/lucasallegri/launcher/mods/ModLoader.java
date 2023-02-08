@@ -34,22 +34,23 @@ public class ModLoader {
     if (getModCount() > 0) clearModList();
 
     // Append all .zip and .jar files inside the mod folder into an ArrayList.
-    List<String> rawFiles = FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/mods/", ".zip");
-    rawFiles.addAll(FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/code-mods/", ".jar"));
+    List<File> rawFiles = FileUtil.filesInDirectory(LauncherGlobals.USER_DIR + "/mods/", ".zip");
+    rawFiles.addAll(FileUtil.filesInDirectory(LauncherGlobals.USER_DIR + "/code-mods/", ".jar"));
 
-    for (String file : rawFiles) {
+    for (File file : rawFiles) {
       JSONObject modJson;
       try {
-        modJson = new JSONObject(Compressor.readFileInsideZip(LauncherGlobals.USER_DIR + "/mods/" + file, "mod.json")).getJSONObject("mod");
+        modJson = new JSONObject(Compressor.readFileInsideZip(file.getAbsolutePath(), "mod.json")).getJSONObject("mod");
       } catch (Exception e) {
         modJson = null;
       }
 
+      String fileName = file.getName();
       Mod mod = null;
-      if (file.endsWith("zip")) {
-        mod = new ZipMod(file);
-      } else if (file.endsWith("jar")) {
-        mod = new JarMod(file);
+      if (fileName.endsWith("zip")) {
+        mod = new ZipMod(fileName);
+      } else if (fileName.endsWith("jar")) {
+        mod = new JarMod(fileName);
       }
 
       if (mod != null && modJson != null) {
@@ -63,8 +64,8 @@ public class ModLoader {
       mod.wasAdded();
 
       // Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
-      String hash = Compressor.getZipHash(LauncherGlobals.USER_DIR + "/mods/" + file);
-      String hashFilePath = LauncherGlobals.USER_DIR + "/mods/" + mod.getFileName() + ".hash";
+      String hash = Compressor.getZipHash(file.getAbsolutePath());
+      String hashFilePath = file.getAbsolutePath() + ".hash";
 
       if (FileUtil.fileExists(hashFilePath)) {
         try {
@@ -124,6 +125,7 @@ public class ModLoader {
 
     mountRequired = false;
     ProgressBar.finishTask();
+    LauncherDigester.doDigest();
     LauncherGUI.launchButton.setEnabled(true);
   }
 
