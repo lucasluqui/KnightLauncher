@@ -312,6 +312,9 @@ public class ModListGUI extends BaseGUI {
   }
 
   public static void updateModList() {
+    if (modListContainer == null) {
+      return;
+    }
     int idx = modListContainer.getSelectedIndex();
     modListContainer.removeAll();
     for (Mod mod : ModLoader.getModList()) {
