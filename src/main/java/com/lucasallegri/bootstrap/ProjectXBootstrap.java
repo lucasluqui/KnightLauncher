@@ -200,13 +200,23 @@ public class ProjectXBootstrap {
         modName = jar.getName();
       }
       System.out.println("Mod '" + modName + "' initializing");
+      Class<?> clazz = null;
       try {
-        Class.forName(className);
-        System.out.println("Mod '" + modName + "' initialized");
+        clazz = Class.forName(className);
       } catch (Exception e) {
         System.out.println("Failed to load mod '" + modName + "'");
         e.printStackTrace();
       }
+      if (clazz != null) {
+        try {
+          Method method = clazz.getDeclaredMethod("mount");
+          method.setAccessible(true);
+          method.invoke(null);
+        } catch (Exception e) {
+          System.out.println("Mod '" + modName + "' does not define `mount` method");
+        }
+      }
+      System.out.println("Mod '" + modName + "' initialized");
     }
   }
 
