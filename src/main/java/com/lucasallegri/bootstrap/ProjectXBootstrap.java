@@ -7,15 +7,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -149,8 +150,6 @@ public class ProjectXBootstrap {
     if (jars.isEmpty()) {
       return;
     }
-    // Load mods in filename order
-    jars.sort(Comparator.comparing(File::getName));
     loadJars(jars);
     loadClasses(jars);
   }
@@ -180,6 +179,7 @@ public class ProjectXBootstrap {
   }
 
   static void loadClasses(List<File> jars) {
+    Map<String, Class<?>> classes = new LinkedHashMap<>();
     for (File jar : jars) {
       String manifest = readZip(jar, MANIFEST_PATH);
       if (manifest == null || manifest.length() == 0) {
@@ -202,24 +202,36 @@ public class ProjectXBootstrap {
       if (modName == null) {
         modName = jar.getName();
       }
-      System.out.println("Mod '" + modName + "' initializing");
-      Class<?> clazz = null;
       try {
-        clazz = Class.forName(className);
+        Class<?> clazz = Class.forName(className);
+        classes.put(modName, clazz);
+        System.out.println("Loaded class '" + className + "' from '" + jar.getName() + "'");
       } catch (Exception e) {
-        System.out.println("Failed to load mod '" + modName + "'");
+        System.out.println("Failed to load class '" + className + "' from '" + jar.getName() + "'");
         e.printStackTrace();
       }
-      if (clazz != null) {
-        try {
-          Method method = clazz.getDeclaredMethod("mount");
-          method.setAccessible(true);
-          method.invoke(null);
-        } catch (Exception e) {
-          System.out.println("Mod '" + modName + "' does not define `mount` method");
-        }
+    }
+    if (!classes.isEmpty()) {
+      mountMods(classes);
+    }
+  }
+
+  static void mountMods(Map<String, Class<?>> classes) {
+    for (Map.Entry<String, Class<?>> entry : classes.entrySet()) {
+      String modName = entry.getKey();
+      Class<?> clazz = entry.getValue();
+      try {
+        System.out.println("Mounting mod '" + modName + "'");
+        Method method = clazz.getDeclaredMethod("mount");
+        method.setAccessible(true);
+        method.invoke(null);
+        System.out.println("Mounted mod '" + modName + "'");
+      } catch (NoSuchMethodException e) {
+        System.out.println("Failed to mount mod '" + modName + "', it does not define `mount` method");
+      } catch (IllegalAccessException | InvocationTargetException e) {
+        System.out.println("Failed to mount mod '" + modName + "': " + e.getMessage());
+        e.printStackTrace();
       }
-      System.out.println("Mod '" + modName + "' initialized");
     }
   }
 
