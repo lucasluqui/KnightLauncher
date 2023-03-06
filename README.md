@@ -27,6 +27,7 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 ## Translators
 Thank you all for helping Knight Launcher, making it usable for everyone worldwide!
 * Arabic: Scyila
+* Chinese: [yihleego](https://github.com/yihleego)
 * Deutsch: Deathkey and Airbee
 * Eesti: [Thyrux](https://github.com/Thyrux)
 * Français: PtitKrugger
