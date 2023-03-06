@@ -294,6 +294,8 @@ public class LauncherApp {
 
   private void checkVersion() {
 
+    if (LauncherGlobals.VERSION.contains("dev")) return;
+
     String rawResponseReleases = INetUtil.getWebpageContent(
         LauncherGlobals.GITHUB_API
             + "repos/"
