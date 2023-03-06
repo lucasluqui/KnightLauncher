@@ -9,7 +9,7 @@ public class JavaUtilTest {
   private final String PATH = System.getProperty("sun.boot.library.path") + "\\java.exe";
 
   @Test
-  public void determineJVMArch() throws Exception {
-    assertNotEquals("Cannot determine Java VM architecture", 0, JavaUtil.determineJVMArch(PATH));
+  public void getJVMArch() throws Exception {
+    assertNotEquals("Cannot determine Java VM architecture", 0, JavaUtil.getJVMArch(PATH));
   }
 }

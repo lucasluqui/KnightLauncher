@@ -3,6 +3,7 @@ package com.lucasallegri.launcher;
 import com.lucasallegri.launcher.settings.SettingsProperties;
 import com.lucasallegri.util.Compressor;
 import com.lucasallegri.util.FileUtil;
+import com.lucasallegri.util.JavaUtil;
 import com.lucasallegri.util.SystemUtil;
 
 import java.io.File;
@@ -28,9 +29,14 @@ public class Modules {
     }
   }
 
-  public static void setupJarExe() {
+  public static void setupJarCommandLine() {
     try {
-      FileUtil.extractFileWithinJar("/modules/jarexe/jar.exe", LauncherGlobals.USER_DIR + "\\java_vm\\bin\\jar.exe");
+      int vmArch = JavaUtil.getJVMArch(SystemUtil.isWindows() ? LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe" : LauncherGlobals.USER_DIR + "\\java\\bin\\java");
+      if (SystemUtil.isWindows()) {
+        FileUtil.extractFileWithinJar("/modules/jarcmd/jar-" + vmArch + ".exe", LauncherGlobals.USER_DIR + "\\java_vm\\bin\\jar.exe");
+      } else {
+          FileUtil.extractFileWithinJar(vmArch == 64 ? "/modules/jarcmd/jar-amd64" : "/modules/jarcmd/jar-i386", LauncherGlobals.USER_DIR + "\\java\\bin\\jar");
+      }
     } catch (IOException e) {
       log.error(e);
     }

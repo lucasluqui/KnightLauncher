@@ -227,7 +227,7 @@ public class LauncherApp {
     if(!SystemUtil.isWindows()) return false;
 
     // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by Knight Launcher.
-    if(JavaUtil.determineJVMArch(LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe") == 64 ||
+    if(JavaUtil.getJVMArch(LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe") == 64 ||
     Settings.jvmPatched) {
       Settings.jvmPatched = true;
       SettingsProperties.setValue("launcher.jvm_patched", "true");
@@ -244,7 +244,8 @@ public class LauncherApp {
     if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\safeguard\\bundle.zip")) {
       ModLoader.extractSafeguard();
     }
-    Modules.setupJarExe();
+
+    Modules.setupJarCommandLine();
 
     DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
     loadOnlineAssets();

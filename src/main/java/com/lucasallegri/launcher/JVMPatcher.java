@@ -254,7 +254,7 @@ public class JVMPatcher extends BaseGUI {
 
   private static void finish() {
     SettingsProperties.setValue("launcher.jvm_patched", "true");
-    Modules.setupJarExe();
+    Modules.setupJarCommandLine();
     ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar"}, true);
     jvmPatcherFrame.dispose();
     System.exit(1);

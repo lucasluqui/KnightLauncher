@@ -5,6 +5,7 @@ import com.lucasallegri.launcher.Locale;
 import com.lucasallegri.launcher.ProgressBar;
 import com.lucasallegri.util.FileUtil;
 import com.lucasallegri.util.ProcessUtil;
+import com.lucasallegri.util.SystemUtil;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -92,10 +93,14 @@ public class GameSettings {
       log.error(e);
     }
 
-    String[] capture = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", LauncherGlobals.USER_DIR + "\\java_vm\\bin\\jar.exe", "uf", "code\\config.jar", "deployment.properties"});
-    log.info("stdout", capture[0], "stderr", capture[1]);
+    String[] outputCapture = null;
+    if(SystemUtil.isWindows()) {
+      outputCapture = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", LauncherGlobals.USER_DIR + "\\java_vm\\bin\\jar.exe", "uf", "code\\config.jar", "deployment.properties" });
+    } else {
+      outputCapture = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", LauncherGlobals.USER_DIR + "\\java\\bin\\jar", "uf", "code\\config.jar", "deployment.properties" });
+    }
+    log.debug("Connection settings capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
     FileUtil.deleteFile(LauncherGlobals.USER_DIR + "\\deployment.properties");
-
   }
 
 }

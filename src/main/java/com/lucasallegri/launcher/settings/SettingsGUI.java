@@ -499,7 +499,7 @@ public class SettingsGUI extends BaseGUI {
       labelJVMPatchExplained.setFont(Fonts.fontReg);
       filesPanel.add(labelJVMPatchExplained);
 
-      JLabel labelJVMData = new JLabel("Installed Java VM: " + JavaUtil.currentJVMData());
+      JLabel labelJVMData = new JLabel("Installed Java VM: " + JavaUtil.getGameJVMData());
       labelJVMData.setBounds(25, 210, 600, 16);
       labelJVMData.setFont(Fonts.fontMedIta);
       filesPanel.add(labelJVMData);

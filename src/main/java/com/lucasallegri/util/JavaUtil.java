@@ -12,8 +12,13 @@ import static com.lucasallegri.launcher.settings.Log.log;
 
 public class JavaUtil {
 
-  public static int determineJVMArch(String path) {
-    String[] output = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", path, "-version"});
+  public static int getJVMArch(String path) {
+    String[] output;
+    if (SystemUtil.isWindows()) {
+      output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", path, "-version" });
+    } else {
+      output = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", path, "-version" });
+    }
 
     // We got no output, so we can't do any checks.
     if(output[1].isEmpty()) return 0;
@@ -25,14 +30,15 @@ public class JavaUtil {
     return 32;
   }
 
-  public static String currentJVMData() {
-    if(!FileUtil.fileExists(System.getProperty("user.dir") + "\\java_vm\\release")) {
+  public static String getGameJVMData() {
+    String path = System.getProperty("user.dir") + (SystemUtil.isWindows() ? "\\java_vm\\release" : "\\java\\release");
+    if(!FileUtil.fileExists(path)) {
       return "Unknown Java VM";
     }
 
     Properties releaseFile = new Properties();
     try {
-      releaseFile.load(Files.newInputStream(new File(LauncherGlobals.USER_DIR + "\\java_vm\\release").toPath()));
+      releaseFile.load(Files.newInputStream(new File(path).toPath()));
     } catch (IOException e) {
       log.error(e);
     }
