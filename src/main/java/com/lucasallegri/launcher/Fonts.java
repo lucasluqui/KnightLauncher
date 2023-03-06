@@ -16,10 +16,6 @@ public class Fonts {
   private static final String fontPathMediumJP = "/fonts/NotoSansJP-Medium.otf";
   private static final String fontPathRegularAR = "/fonts/Lemonada-Regular.ttf";
   private static final String fontPathMediumAR = "/fonts/Lemonada-Medium.ttf";
-  private static final String fontPathRegularZHCN = "/fonts/NotoSansSC-Regular.otf";
-  private static final String fontPathMediumZHCN = "/fonts/NotoSansSC-Medium.otf";
-  private static final String fontPathRegularZHTR = "/fonts/NotoSansTC-Regular.otf";
-  private static final String fontPathMediumZHTR = "/fonts/NotoSansTC-Medium.otf";
   public static Font fontReg = null;
   public static Font fontRegBig = null;
   public static Font fontMed = null;
@@ -52,22 +48,16 @@ public class Fonts {
       fontMedItaIs = LauncherGUI.class.getResourceAsStream(fontPathMediumAR);
       fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMediumAR);
       fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMediumAR);
-    } else if (Settings.lang.equalsIgnoreCase("zh-hans")) {
-      fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegularZHCN);
-      fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegularZHCN);
-      fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMediumZHCN);
-      fontMedItaIs = LauncherGUI.class.getResourceAsStream(fontPathMediumZHCN);
-      fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMediumZHCN);
-      fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMediumZHCN);
-      sizeMultiplier = 1.2f;
-    } else if (Settings.lang.equalsIgnoreCase("zh-hant")) {
-      fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegularZHTR);
-      fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegularZHTR);
-      fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMediumZHTR);
-      fontMedItaIs = LauncherGUI.class.getResourceAsStream(fontPathMediumZHTR);
-      fontMedBigIs = LauncherGUI.class.getResourceAsStream(fontPathMediumZHTR);
-      fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMediumZHTR);
-      sizeMultiplier = 1.2f;
+    } else if (Settings.lang.equalsIgnoreCase("zh-hans")
+        || Settings.lang.equalsIgnoreCase("zh-hant")) {
+      // Use OS default fonts
+      fontReg = new Font(null);
+      fontRegBig = new Font(null);
+      fontMed = new Font(null);
+      fontMedIta = new Font(null);
+      fontMedBig = new Font(null);
+      fontMedGiant = new Font(null);
+      return;
     } else {
       fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
       fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
