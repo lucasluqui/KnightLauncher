@@ -92,6 +92,21 @@ public class FileUtil {
     return fileNames;
   }
 
+  public static List<File> filesInDirectory(String dir, String ext) {
+
+    File folder = new File(dir);
+    File[] fileList = folder.listFiles();
+    List<File> files = new ArrayList<File>();
+
+    for (int i = 0; i < fileList.length; i++) {
+      if (fileList[i].isDirectory() == false && fileList[i].toString().endsWith(ext)) {
+        files.add(fileList[i]);
+      }
+    }
+
+    return files;
+  }
+
   public static boolean fileExists(String path) {
     File file = new File(path);
     return file.exists();

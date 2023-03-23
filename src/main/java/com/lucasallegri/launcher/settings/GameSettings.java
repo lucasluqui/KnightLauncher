@@ -59,8 +59,6 @@ public class GameSettings {
       writer.println(Settings.gameAdditionalArgs);
       writer.close();
 
-      loadConnectionSettings();
-
       ProgressBar.setBarValue(1);
       ProgressBar.finishTask();
     } catch (FileNotFoundException | UnsupportedEncodingException e) {
@@ -68,6 +66,11 @@ public class GameSettings {
     }
   }
 
+  /**
+   * @see com.lucasallegri.bootstrap.ProjectXBootstrap
+   * @deprecated No longer use the way of modifying files.
+   */
+  @Deprecated
   private static void loadConnectionSettings() {
     try {
       FileUtil.extractFileWithinJar("/config/deployment.properties", LauncherGlobals.USER_DIR + "\\deployment.properties");

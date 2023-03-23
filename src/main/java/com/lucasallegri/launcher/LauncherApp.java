@@ -64,6 +64,7 @@ public class LauncherApp {
     DiscordRPC.getInstance().start();
     KeyboardController.start();
     checkDirectories();
+    LauncherDigester.doDigest();
     if (SystemUtil.isWindows()) checkShortcut();
   }
 
