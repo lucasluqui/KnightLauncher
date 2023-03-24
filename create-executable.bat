@@ -27,7 +27,7 @@ if '%errorlevel%' NEQ '0' (
     pushd "%CD%"
     CD /D "%~dp0"
 
-:: Name of the entry point file (without extension)
+:: Name of the entry point file
 set ENTRY_POINT_NAME=run.py
 
 :: Name of the distributable
@@ -36,8 +36,8 @@ set DIST_NAME=KnightLauncher
 :: Activate virtual environment
 call .\venv\Scripts\activate.bat
 
-:: Create installer
+:: Create executable
 pyinstaller %ENTRY_POINT_NAME% --onefile --noconsole --clean --name=%DIST_NAME% --icon=".\resources\image\icon-256.ico"
 
 :: Debug
-pause
+:: pause
