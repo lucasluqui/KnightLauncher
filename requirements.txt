@@ -1,3 +1,4 @@
 PyQt6==6.4.2
 qt6-tools==6.1.0.1.2
 qt-material==2.14
+pyinstaller==5.9.0
