@@ -6,7 +6,7 @@
   <artifactId>KnightLauncher</artifactId>
   <version>1.7.4_dev</version>
   <name>KnightLauncher</name>
-  <description>Open source game launcher for Spiral Knights.</description>
+  <description>Open source game launcher for a certain game.</description>
 
   <dependencies>
 
