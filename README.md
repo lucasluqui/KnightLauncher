@@ -1,10 +1,9 @@
 <p align="center">
-    <img src="https://github.com/lucas-allegri/KnightLauncher/blob/master/assets/img/icon-128.png?raw=true"
-        height="128">
+    <img src="https://github.com/lucas-allegri/KnightLauncher/blob/master/assets/img/icon-128.png?raw=true" height="128">
 </p>
 <h1 align="center">Knight Launcher</h1>
 <p align="center">
-    <a href="https://github.com/lucas-allegri/KnightLauncher/blob/master/LICENSE"><img alt="GitHub license"               src="https://img.shields.io/github/license/lucas-allegri/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/lucas-allegri/KnightLauncher/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/lucas-allegri/KnightLauncher?style=flat-square"></a>
     <a href="https://github.com/lucas-allegri/KnightLauncher/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/lucas-allegri/KnightLauncher?style=flat-square"></a>
     <a href="https://github.com/lucas-allegri/KnightLauncher/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/lucas-allegri/KnightLauncher?style=flat-square"></a>
 </p>
@@ -13,7 +12,7 @@
     <a href="https://discord.gg/RAf499a"><img alt="Discord" src="https://img.shields.io/discord/653349356459786240" target="_blank"></a>
 </p>
 
-Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM installation, Discord integration, easier modding & much more.
+Open source game launcher for a certain game. Supports automatic 64-bit Java VM installation, Discord integration, easier modding & much more.
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W4W11S2JU)
 ## Current features
@@ -21,8 +20,8 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 * Automatically patch your game to use a 64-bit Java VM.
 * Reinstall your game without having to re-download anything, not a single file!
 * Intuitive and user friendly GUI for extra.txt configuring.
-* Discord RPC integration that shows exactly what you're up to in the world of Cradle.
-* Support for easily launching alt accounts without losing performance on your main Spiral Knights instance.
+* Discord RPC integration that shows exactly what you're up to in-game.
+* Support for easily launching alt accounts without losing performance on your main instance.
 
 ## Translators
 Thank you all for helping Knight Launcher, making it usable for everyone worldwide!
