@@ -43,7 +43,7 @@ public class LauncherGUI extends BaseGUI {
 
     launcherGUIFrame = new JFrame();
     launcherGUIFrame.setVisible(false);
-    launcherGUIFrame.setTitle(Locale.getValue("t.main", LauncherGlobals.VERSION));
+    launcherGUIFrame.setTitle(Locale.getValue("t.main", LauncherGlobals.LAUNCHER_VERSION));
     launcherGUIFrame.setResizable(false);
     launcherGUIFrame.setBounds(100, 100, 850, 475);
     launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -202,7 +202,7 @@ public class LauncherGUI extends BaseGUI {
     });
     titleBar.setLayout(null);
 
-    JLabel windowTitle = new JLabel(Locale.getValue("t.main", LauncherGlobals.VERSION));
+    JLabel windowTitle = new JLabel(Locale.getValue("t.main", LauncherGlobals.LAUNCHER_VERSION));
     windowTitle.setFont(Fonts.fontMed);
     windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 20);
     titleBar.add(windowTitle);
@@ -240,7 +240,7 @@ public class LauncherGUI extends BaseGUI {
     discordButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
     discordButton.setFont(Fonts.fontMed);
     titleBar.add(discordButton);
-    discordButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.DISCORD_URL));
+    discordButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_DISCORD));
 
     Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, ColorUtil.getForegroundColor());
     JButton bugButton = new JButton(bugIcon);
@@ -251,7 +251,7 @@ public class LauncherGUI extends BaseGUI {
     bugButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
     bugButton.setFont(Fonts.fontMed);
     titleBar.add(bugButton);
-    bugButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.BUG_REPORT_URL));
+    bugButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_BUG_REPORT));
 
     Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.COFFEE, 16, Colors.KOFI);
     JButton kofiButton = new JButton(kofiIcon);
@@ -262,7 +262,7 @@ public class LauncherGUI extends BaseGUI {
     kofiButton.setBorder(BorderFactory.createLineBorder(ColorUtil.getTitleBarColor()));
     kofiButton.setFont(Fonts.fontMed);
     titleBar.add(kofiButton);
-    kofiButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.KOFI_URL));
+    kofiButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_KOFI));
 
     launcherGUIFrame.setLocationRelativeTo(null);
 
