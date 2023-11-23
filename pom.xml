@@ -13,7 +13,7 @@
     <dependency>
       <groupId>com.github.vatbub</groupId>
       <artifactId>mslinks</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.6.2</version>
     </dependency>
 
     <dependency>
@@ -25,13 +25,13 @@
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20180813</version>
+      <version>20230227</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.jiconfont</groupId>
       <artifactId>jiconfont-swing</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
@@ -48,7 +48,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
 
