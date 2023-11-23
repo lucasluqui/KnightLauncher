@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Maven: junit:junit:4.13.1" type="java-imported" external-system-id="Maven">
+    <properties groupId="junit" artifactId="junit" version="4.13.1" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.13.1/junit-4.13.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.13.1/junit-4.13.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.13.1/junit-4.13.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

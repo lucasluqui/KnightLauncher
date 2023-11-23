@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Maven: net.lingala.zip4j:zip4j:2.11.5" type="java-imported" external-system-id="Maven">
+    <properties groupId="net.lingala.zip4j" artifactId="zip4j" version="2.11.5" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/net/lingala/zip4j/zip4j/2.11.5/zip4j-2.11.5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/net/lingala/zip4j/zip4j/2.11.5/zip4j-2.11.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/net/lingala/zip4j/zip4j/2.11.5/zip4j-2.11.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
