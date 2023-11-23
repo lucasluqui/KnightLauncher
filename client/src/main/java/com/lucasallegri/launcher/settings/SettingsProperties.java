@@ -22,13 +22,13 @@ public class SettingsProperties {
   public static void setup() {
     try {
       if (!FileUtil.fileExists(_propPath)) {
-        FileUtil.extractFileWithinJar("/config/base.properties", _propPath);
+        FileUtil.extractFileWithinJar("/config/client-base.properties", _propPath);
       } else if (FileUtil.fileExists(_propPath) && getValue("PROP_VER") != null
               && !getValue("PROP_VER").equals(PROP_VER)) {
         log.warning("Old PROP_VER detected, beginning migration...");
         migrationMap = getAllKeyValues();
         FileUtil.deleteFile(_propPath);
-        FileUtil.extractFileWithinJar("/config/base.properties", _propPath);
+        FileUtil.extractFileWithinJar("/config/client-base.properties", _propPath);
         migrate();
       }
     } catch (IOException e) {
