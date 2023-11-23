@@ -55,7 +55,7 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
+    <sourceDirectory>client/src/main/java</sourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
