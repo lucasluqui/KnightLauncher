@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Maven: org.json:json:20230227" type="java-imported" external-system-id="Maven">
+    <properties groupId="org.json" artifactId="json" version="20230227" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/json/json/20230227/json-20230227.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/json/json/20230227/json-20230227-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/json/json/20230227/json-20230227-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
