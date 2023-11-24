@@ -114,7 +114,7 @@ public class LauncherGUI extends BaseGUI {
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
     settingsButton = new JButton(Locale.getValue("b.settings"));
     settingsButton.setIcon(settingsIcon);
-    settingsButton.setBounds(15, 320, 125, 35);
+    settingsButton.setBounds(28, 320, 125, 35);
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
     settingsButton.setFont(Fonts.fontMed);
     settingsButton.setFocusPainted(false);
@@ -131,9 +131,13 @@ public class LauncherGUI extends BaseGUI {
       launcherGUIFrame.add(layeredSettingsPane);
       layeredSettingsPane.setVisible(true);
 
-      layeredReturnButton = new JButton("Ret");
-      layeredReturnButton.setBounds(265, 40, 25, 25);
+      layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
+      layeredReturnButton.setBounds(255, 40, 25, 25);
       layeredReturnButton.setVisible(true);
+      layeredReturnButton.setFocusable(false);
+      layeredReturnButton.setFocusPainted(false);
+      layeredReturnButton.setBorder(null);
+      layeredReturnButton.setBackground(new Color(56, 60, 71));
       layeredReturnButton.addActionListener(l -> {
         layeredSettingsPane.setVisible(false);
         layeredModsPane.setVisible(false);
@@ -147,7 +151,7 @@ public class LauncherGUI extends BaseGUI {
     Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, 16, ColorUtil.getForegroundColor());
     modButton = new JButton(Locale.getValue("b.mods"));
     modButton.setIcon(modsIcon);
-    modButton.setBounds(15, 360, 125, 35);
+    modButton.setBounds(28, 360, 125, 35);
     modButton.setHorizontalAlignment(SwingConstants.LEFT);
     modButton.setFont(Fonts.fontMed);
     modButton.setFocusPainted(false);
@@ -165,9 +169,13 @@ public class LauncherGUI extends BaseGUI {
       launcherGUIFrame.add(layeredModsPane);
       layeredModsPane.setVisible(true);
 
-      layeredReturnButton = new JButton("Ret");
-      layeredReturnButton.setBounds(265, 40, 25, 25);
+      layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
+      layeredReturnButton.setBounds(255, 40, 25, 25);
       layeredReturnButton.setVisible(true);
+      layeredReturnButton.setFocusable(false);
+      layeredReturnButton.setFocusPainted(false);
+      layeredReturnButton.setBorder(null);
+      layeredReturnButton.setBackground(new Color(56, 60, 71));
       layeredReturnButton.addActionListener(l -> {
         layeredSettingsPane.setVisible(false);
         layeredModsPane.setVisible(false);
@@ -188,11 +196,11 @@ public class LauncherGUI extends BaseGUI {
     updateButton.setBackground(new Color(34, 197, 94));
     updateButton.setForeground(Color.WHITE);
     updateButton.setVisible(false);
-    updateButton.setBounds(15, 400, 125, 35);
+    updateButton.setBounds(28, 400, 125, 35);
     sidePane.add(updateButton);
 
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
-    discordButton.setBounds(15, 465, 35, 35);
+    discordButton.setBounds(66, 465, 35, 35);
     discordButton.setToolTipText("Discord");
     discordButton.setFocusPainted(false);
     discordButton.setFocusable(false);
@@ -203,7 +211,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, Color.WHITE);
     JButton bugButton = new JButton(bugIcon);
-    bugButton.setBounds(55, 465, 35, 35);
+    bugButton.setBounds(106, 465, 35, 35);
     bugButton.setToolTipText(Locale.getValue("b.bug_report"));
     bugButton.setFocusPainted(false);
     bugButton.setFocusable(false);
@@ -214,7 +222,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.COFFEE, 16, Color.WHITE);
     JButton kofiButton = new JButton(kofiIcon);
-    kofiButton.setBounds(95, 465, 35, 35);
+    kofiButton.setBounds(146, 465, 35, 35);
     kofiButton.setToolTipText(Locale.getValue("b.kofi"));
     kofiButton.setFocusPainted(false);
     kofiButton.setFocusable(false);
