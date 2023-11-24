@@ -1,6 +1,7 @@
 package com.lucasallegri.launcher;
 
 import com.lucasallegri.discord.DiscordRPC;
+import com.lucasallegri.launcher.mods.ModListGUI;
 import com.lucasallegri.launcher.settings.SettingsGUI;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.ImageUtil;
@@ -17,7 +18,9 @@ public class LauncherGUI extends BaseGUI {
   private final LauncherApp app;
   public static JFrame launcherGUIFrame;
   public static JPanel mainPane;
-  public static JTabbedPane layeredSettingsPane;
+  public static JTabbedPane layeredSettingsPane = new JTabbedPane();
+  public static JPanel layeredModsPane = new JPanel();
+  public static JButton layeredReturnButton;
   public static JButton launchButton;
   public static JButton settingsButton;
   public static JButton modButton;
@@ -80,21 +83,23 @@ public class LauncherGUI extends BaseGUI {
     settingsButton.setToolTipText(Locale.getValue("b.settings"));
     settingsButton.addActionListener(action -> {
       mainPane.setVisible(false);
+      layeredModsPane.setVisible(false);
 
       layeredSettingsPane = SettingsGUI.tabbedPane;
       layeredSettingsPane.setBounds(250, 75, 800, 550);
       launcherGUIFrame.add(layeredSettingsPane);
       layeredSettingsPane.setVisible(true);
 
-      JButton returnButton = new JButton("Ret");
-      returnButton.setBounds(265, 40, 25, 25);
-      returnButton.addActionListener(l -> {
+      layeredReturnButton = new JButton("Ret");
+      layeredReturnButton.setBounds(265, 40, 25, 25);
+      layeredReturnButton.setVisible(true);
+      layeredReturnButton.addActionListener(l -> {
         layeredSettingsPane.setVisible(false);
+        layeredModsPane.setVisible(false);
         mainPane.setVisible(true);
-        returnButton.setVisible(false);
+        layeredReturnButton.setVisible(false);
       });
-      returnButton.setVisible(true);
-      launcherGUIFrame.add(returnButton);
+      launcherGUIFrame.add(layeredReturnButton);
     });
     sidePane.add(settingsButton);
 
@@ -106,11 +111,30 @@ public class LauncherGUI extends BaseGUI {
     modButton.setFont(Fonts.fontMed);
     modButton.setFocusPainted(false);
     modButton.setFocusable(false);
-    modButton.setEnabled(true);
+    modButton.setEnabled(false);
     modButton.setBackground(new Color(107, 114, 128));
     modButton.setForeground(Color.WHITE);
     modButton.setToolTipText(Locale.getValue("b.mods"));
-    modButton.addActionListener(action -> app.mgui.switchVisibility());
+    modButton.addActionListener(action -> {
+      mainPane.setVisible(false);
+      layeredSettingsPane.setVisible(false);
+
+      layeredModsPane = ModListGUI.modListPanel;
+      layeredModsPane.setBounds(250, 75, 800, 550);
+      launcherGUIFrame.add(layeredModsPane);
+      layeredModsPane.setVisible(true);
+
+      layeredReturnButton = new JButton("Ret");
+      layeredReturnButton.setBounds(265, 40, 25, 25);
+      layeredReturnButton.setVisible(true);
+      layeredReturnButton.addActionListener(l -> {
+        layeredSettingsPane.setVisible(false);
+        layeredModsPane.setVisible(false);
+        mainPane.setVisible(true);
+        layeredReturnButton.setVisible(false);
+      });
+      launcherGUIFrame.add(layeredReturnButton);
+    });
     sidePane.add(modButton);
 
     Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 20, ColorUtil.getGreenForegroundColor());
