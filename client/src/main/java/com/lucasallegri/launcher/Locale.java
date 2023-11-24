@@ -25,7 +25,7 @@ public class Locale {
           "Japanese",
           "Polski",
           "Português (Brasil)",
-          "Русский",
+          "Russian",
           "Chinese (Simplified)",
           "Chinese (Traditional)",
   };
@@ -89,7 +89,7 @@ public class Locale {
       case "et-ee":
         return "Eesti";
       case "ru":
-        return "Русский";
+        return "Russian";
       case "it":
         return "Italiano";
       case "pl":
@@ -120,7 +120,7 @@ public class Locale {
         return "jp";
       case "Eesti":
         return "et-ee";
-      case "Русский":
+      case "Russian":
         return "ru";
       case "Italiano":
         return "it";

@@ -16,12 +16,14 @@ public class Fonts {
   private static final String fontPathMediumJP = "/fonts/NotoSansJP-Medium.otf";
   private static final String fontPathRegularAR = "/fonts/Lemonada-Regular.ttf";
   private static final String fontPathMediumAR = "/fonts/Lemonada-Medium.ttf";
+  private static final String fontPathCodeRegular = "/fonts/SourceCodePro-Regular.ttf";
   public static Font fontReg = null;
   public static Font fontRegBig = null;
   public static Font fontMed = null;
   public static Font fontMedIta = null;
   public static Font fontMedBig = null;
   public static Font fontMedGiant = null;
+  public static Font fontCodeReg = null;
   private static float sizeMultiplier = 1.0f;
 
   public static void setup() {
@@ -32,6 +34,7 @@ public class Fonts {
     InputStream fontMedItaIs;
     InputStream fontMedBigIs;
     InputStream fontMedGiantIs;
+    InputStream fontCodeRegIs;
 
     if (Settings.lang.equalsIgnoreCase("jp")) {
       fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
@@ -68,6 +71,8 @@ public class Fonts {
       sizeMultiplier = 1.2f;
     }
 
+    fontCodeRegIs = LauncherGUI.class.getResourceAsStream(fontPathCodeRegular);
+
     try {
 
       fontReg = Font.createFont(Font.TRUETYPE_FONT, fontRegIs);
@@ -90,6 +95,9 @@ public class Fonts {
 
       fontMedGiant = Font.createFont(Font.TRUETYPE_FONT, fontMedGiantIs);
       fontMedGiant = fontMedGiant.deriveFont(40.0f * sizeMultiplier);
+
+      fontCodeReg = Font.createFont(Font.TRUETYPE_FONT, fontCodeRegIs);
+      fontCodeReg = fontCodeReg.deriveFont(12.0f * sizeMultiplier);
 
     } catch (FontFormatException | IOException e) {
       log.error(e);

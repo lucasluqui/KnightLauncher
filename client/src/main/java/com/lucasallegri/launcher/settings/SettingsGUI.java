@@ -22,14 +22,14 @@ public class SettingsGUI extends BaseGUI {
   public static JComboBox<String> choiceStyle;
   public static JComboBox<String> choiceMemory;
   public static JComboBox<String> choiceGC;
-  public static JToggleButton switchCleaning;
-  public static JToggleButton switchKeepOpen;
-  public static JToggleButton switchShortcut;
+  public static JCheckBox switchCleaning;
+  public static JCheckBox switchKeepOpen;
+  public static JCheckBox switchShortcut;
   public static JButton forceRebuildButton;
-  public static JToggleButton switchStringDedup;
-  public static JToggleButton switchExplicitGC;
-  public static JToggleButton switchUseCustomGC;
-  public static JToggleButton switchUseIngameRPC;
+  public static JCheckBox switchStringDedup;
+  public static JCheckBox switchExplicitGC;
+  public static JCheckBox switchUseCustomGC;
+  public static JCheckBox switchUseIngameRPC;
   public static JEditorPane argumentsPane;
   public static JTextField serverAddressTextField;
   public static JTextField portTextField;
@@ -166,33 +166,13 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setFont(Fonts.fontMedGiant);
     appearancePanel.add(headerLabel);
 
-    JLabel labelStyle = new JLabel(Locale.getValue("m.launcher_style"));
-    labelStyle.setBounds(25, 90, 175, 18);
-    labelStyle.setFont(Fonts.fontRegBig);
-    appearancePanel.add(labelStyle);
-
-    choiceStyle = new JComboBox<String>();
-    choiceStyle.setBounds(25, 115, 150, 20);
-    choiceStyle.setFocusable(false);
-    choiceStyle.setFont(Fonts.fontReg);
-    choiceStyle.addItem(Locale.getValue("o.dark"));
-    choiceStyle.addItem(Locale.getValue("o.light"));
-    appearancePanel.add(choiceStyle);
-    choiceStyle.setSelectedIndex(Settings.launcherStyle.equals("dark") ? 0 : 1);
-    choiceStyle.addItemListener(new ItemListener() {
-      @Override
-      public void itemStateChanged(ItemEvent event) {
-        SettingsEventHandler.styleChangeEvent(event);
-      }
-    });
-
     JLabel labelLanguage = new JLabel(Locale.getValue("m.language"));
-    labelLanguage.setBounds(225, 90, 175, 18);
+    labelLanguage.setBounds(25, 90, 175, 18);
     labelLanguage.setFont(Fonts.fontRegBig);
     appearancePanel.add(labelLanguage);
 
     choiceLanguage = new JComboBox<String>();
-    choiceLanguage.setBounds(225, 115, 150, 20);
+    choiceLanguage.setBounds(25, 115, 150, 20);
     choiceLanguage.setFocusable(false);
     choiceLanguage.setFont(Fonts.fontReg);
     for (String lang : Locale.AVAILABLE_LANGUAGES) {
@@ -231,8 +211,8 @@ public class SettingsGUI extends BaseGUI {
     labelCleaningExplained.setFont(Fonts.fontReg);
     behaviorPanel.add(labelCleaningExplained);
 
-    switchCleaning = new JToggleButton("");
-    switchCleaning.setBounds(790, 95, 30, 23);
+    switchCleaning = new JCheckBox("");
+    switchCleaning.setBounds(590, 95, 30, 23);
     switchCleaning.setFocusPainted(false);
     behaviorPanel.add(switchCleaning);
     switchCleaning.setSelected(Settings.doRebuilds);
@@ -243,7 +223,7 @@ public class SettingsGUI extends BaseGUI {
     });
 
     JSeparator sep = new JSeparator();
-    sep.setBounds(25, 140, 800, 16);
+    sep.setBounds(25, 140, 600, 16);
     behaviorPanel.add(sep);
 
     JLabel labelKeepOpen = new JLabel(Locale.getValue("m.keep_open"));
@@ -256,8 +236,8 @@ public class SettingsGUI extends BaseGUI {
     labelKeepOpenExplained.setFont(Fonts.fontReg);
     behaviorPanel.add(labelKeepOpenExplained);
 
-    switchKeepOpen = new JToggleButton("");
-    switchKeepOpen.setBounds(790, 160, 30, 23);
+    switchKeepOpen = new JCheckBox("");
+    switchKeepOpen.setBounds(590, 160, 30, 23);
     switchKeepOpen.setFocusPainted(false);
     behaviorPanel.add(switchKeepOpen);
     switchKeepOpen.setSelected(Settings.keepOpen);
@@ -268,7 +248,7 @@ public class SettingsGUI extends BaseGUI {
     });
 
     JSeparator sep2 = new JSeparator();
-    sep2.setBounds(25, 205, 800, 16);
+    sep2.setBounds(25, 205, 600, 16);
     behaviorPanel.add(sep2);
 
     JLabel labelShortcut = new JLabel(Locale.getValue("m.create_shortcut"));
@@ -281,8 +261,8 @@ public class SettingsGUI extends BaseGUI {
     labelShortcutExplained.setFont(Fonts.fontReg);
     behaviorPanel.add(labelShortcutExplained);
 
-    switchShortcut = new JToggleButton("");
-    switchShortcut.setBounds(790, 225, 30, 23);
+    switchShortcut = new JCheckBox("");
+    switchShortcut.setBounds(590, 225, 30, 23);
     switchShortcut.setFocusPainted(false);
     behaviorPanel.add(switchShortcut);
     switchShortcut.setSelected(Settings.createShortcut);
@@ -363,27 +343,6 @@ public class SettingsGUI extends BaseGUI {
       }
     });
 
-    //JLabel labelStringDedup = new JLabel(Locale.getValue("m.use_string_deduplication"));
-    //labelStringDedup.setBounds(25, 175, 375, 18);
-    //labelStringDedup.setFont(Fonts.fontRegBig);
-    //gamePanel.add(labelStringDedup);
-
-    //JLabel labelStringDedupExplained = new JLabel(Locale.getValue("m.string_deduplication_explained"));
-    //labelStringDedupExplained.setBounds(25, 195, 600, 16);
-    //labelStringDedupExplained.setFont(Fonts.fontReg);
-    //gamePanel.add(labelStringDedupExplained);
-
-    //switchStringDedup = new JToggleButton("");
-    //switchStringDedup.setBounds(790, 180, 30, 23);
-    //switchStringDedup.setFocusPainted(false);
-    //gamePanel.add(switchStringDedup);
-    //switchStringDedup.setSelected(Settings.gameUseStringDeduplication);
-    //switchStringDedup.addActionListener(new ActionListener() {
-    //  public void actionPerformed(ActionEvent _action) {
-    //    SettingsEventHandler.useStringDeduplicationChangeEvent(_action);
-    //  }
-    //});
-
     JLabel labelUseCustomGC = new JLabel("Use a different GC behavior");
     labelUseCustomGC.setBounds(25, 175, 375, 18);
     labelUseCustomGC.setFont(Fonts.fontRegBig);
@@ -394,8 +353,8 @@ public class SettingsGUI extends BaseGUI {
     labelUseCustomGCExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelUseCustomGCExplained);
 
-    switchUseCustomGC = new JToggleButton("");
-    switchUseCustomGC.setBounds(790, 180, 30, 23);
+    switchUseCustomGC = new JCheckBox("");
+    switchUseCustomGC.setBounds(590, 180, 30, 23);
     switchUseCustomGC.setFocusPainted(false);
     gamePanel.add(switchUseCustomGC);
     switchUseCustomGC.setSelected(Settings.gameUseCustomGC);
@@ -407,7 +366,7 @@ public class SettingsGUI extends BaseGUI {
     switchUseCustomGC.setEnabled(SystemUtil.is64Bit());
 
     choiceGC = new JComboBox<String>();
-    choiceGC.setBounds(670, 180, 100, 20);
+    choiceGC.setBounds(475, 180, 100, 20);
     choiceGC.setFocusable(false);
     choiceGC.setFont(Fonts.fontReg);
     gamePanel.add(choiceGC);
@@ -424,7 +383,7 @@ public class SettingsGUI extends BaseGUI {
     choiceGC.setEnabled(SystemUtil.is64Bit());
 
     JSeparator sep2 = new JSeparator();
-    sep2.setBounds(25, 225, 800, 16);
+    sep2.setBounds(25, 225, 600, 16);
     gamePanel.add(sep2);
 
     JLabel labelExplicitGC = new JLabel(Locale.getValue("m.disable_explicit_gc"));
@@ -437,8 +396,8 @@ public class SettingsGUI extends BaseGUI {
     labelExplicitGCExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelExplicitGCExplained);
 
-    switchExplicitGC = new JToggleButton("");
-    switchExplicitGC.setBounds(790, 245, 30, 23);
+    switchExplicitGC = new JCheckBox("");
+    switchExplicitGC.setBounds(590, 245, 30, 23);
     switchExplicitGC.setFocusPainted(false);
     gamePanel.add(switchExplicitGC);
     switchExplicitGC.setSelected(Settings.gameDisableExplicitGC);
@@ -475,7 +434,7 @@ public class SettingsGUI extends BaseGUI {
 
     Icon startIcon = IconFontSwing.buildIcon(FontAwesome.SHARE, 16, ColorUtil.getForegroundColor());
     JButton forceRebuildButton = new JButton(startIcon);
-    forceRebuildButton.setBounds(790, 95, 30, 23);
+    forceRebuildButton.setBounds(590, 95, 30, 23);
     forceRebuildButton.setFocusPainted(false);
     forceRebuildButton.setFocusable(false);
     filesPanel.add(forceRebuildButton);
@@ -489,7 +448,7 @@ public class SettingsGUI extends BaseGUI {
 
     if (SystemUtil.isWindows() && SystemUtil.is64Bit()) {
       JSeparator sep = new JSeparator();
-      sep.setBounds(25, 140, 800, 16);
+      sep.setBounds(25, 140, 600, 16);
       filesPanel.add(sep);
 
       JLabel labelJVMPatch = new JLabel(Locale.getValue("m.force_jvm_patch"));
@@ -508,7 +467,7 @@ public class SettingsGUI extends BaseGUI {
       filesPanel.add(labelJVMData);
 
       JButton jvmPatchButton = new JButton(startIcon);
-      jvmPatchButton.setBounds(790, 160, 30, 23);
+      jvmPatchButton.setBounds(590, 160, 30, 23);
       jvmPatchButton.setFocusPainted(false);
       jvmPatchButton.setFocusable(false);
       filesPanel.add(jvmPatchButton);
@@ -539,15 +498,15 @@ public class SettingsGUI extends BaseGUI {
     extraPanel.add(labelArguments);
 
     argumentsPane = new JEditorPane();
-    argumentsPane.setFont(Fonts.fontMed);
-    argumentsPane.setBounds(25, 125, 323, 175);
+    argumentsPane.setFont(Fonts.fontCodeReg);
+    argumentsPane.setBounds(25, 125, 615, 300);
     extraPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
 
     JScrollPane scrollBar = new JScrollPane(argumentsPane);
     scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollBar.setBounds(25, 125, 340, 175);
+    scrollBar.setBounds(25, 125, 632, 300);
     extraPanel.add(scrollBar);
 
     return extraPanel;
@@ -574,8 +533,8 @@ public class SettingsGUI extends BaseGUI {
     labelUseIngameRPCExplained.setFont(Fonts.fontReg);
     ingameRPCPanel.add(labelUseIngameRPCExplained);
 
-    switchUseIngameRPC = new JToggleButton("");
-    switchUseIngameRPC.setBounds(790, 95, 30, 23);
+    switchUseIngameRPC = new JCheckBox("");
+    switchUseIngameRPC.setBounds(590, 95, 30, 23);
     switchUseIngameRPC.setFocusPainted(false);
     ingameRPCPanel.add(switchUseIngameRPC);
     switchUseIngameRPC.setSelected(Settings.useIngameRPC);
@@ -606,7 +565,7 @@ public class SettingsGUI extends BaseGUI {
     connectionPanel.add(serverAddressLabel);
 
     serverAddressTextField = new JTextField();
-    serverAddressTextField.setFont(Fonts.fontMed);
+    serverAddressTextField.setFont(Fonts.fontCodeReg);
     serverAddressTextField.setBounds(25, 105, 250, 25);
     connectionPanel.add(serverAddressTextField);
     serverAddressTextField.setText(Settings.gameEndpoint);
@@ -618,7 +577,7 @@ public class SettingsGUI extends BaseGUI {
     connectionPanel.add(portLabel);
 
     portTextField = new JTextField();
-    portTextField.setFont(Fonts.fontMed);
+    portTextField.setFont(Fonts.fontCodeReg);
     portTextField.setBounds(280, 105, 55, 25);
     connectionPanel.add(portTextField);
     portTextField.setText(String.valueOf(Settings.gamePort));
@@ -630,8 +589,8 @@ public class SettingsGUI extends BaseGUI {
     connectionPanel.add(publicKeyLabel);
 
     publicKeyTextField = new JTextField();
-    publicKeyTextField.setFont(Fonts.fontMed);
-    publicKeyTextField.setBounds(25, 160, 355, 25);
+    publicKeyTextField.setFont(Fonts.fontCodeReg);
+    publicKeyTextField.setBounds(25, 160, 355, 30);
 
     JScrollBar publicKeyScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
     JPanel publicKeyPanel = new JPanel();
@@ -640,7 +599,7 @@ public class SettingsGUI extends BaseGUI {
     publicKeyScrollBar.setModel(publicKeyBRM);
     publicKeyPanel.add(publicKeyTextField);
     publicKeyPanel.add(publicKeyScrollBar);
-    publicKeyPanel.setBounds(25, 160, 355, 25);
+    publicKeyPanel.setBounds(25, 160, 355, 30);
 
     connectionPanel.add(publicKeyPanel);
     publicKeyTextField.setText(Settings.gamePublicKey);
@@ -652,8 +611,8 @@ public class SettingsGUI extends BaseGUI {
     connectionPanel.add(getdownURLLabel);
 
     getdownURLTextField = new JTextField();
-    getdownURLTextField.setFont(Fonts.fontMed);
-    getdownURLTextField.setBounds(25, 215, 355, 25);
+    getdownURLTextField.setFont(Fonts.fontCodeReg);
+    getdownURLTextField.setBounds(25, 215, 355, 30);
 
     JScrollBar getdownURLScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
     JPanel getdownURLPanel = new JPanel();
@@ -662,7 +621,7 @@ public class SettingsGUI extends BaseGUI {
     getdownURLScrollBar.setModel(getdownURLBRM);
     getdownURLPanel.add(getdownURLTextField);
     getdownURLPanel.add(getdownURLScrollBar);
-    getdownURLPanel.setBounds(25, 215, 355, 25);
+    getdownURLPanel.setBounds(25, 215, 355, 30);
 
     connectionPanel.add(getdownURLPanel);
     getdownURLTextField.setText(Settings.gameGetdownFullURL);
@@ -676,35 +635,10 @@ public class SettingsGUI extends BaseGUI {
     connectionPanel.add(resetButton);
     resetButton.addActionListener(action -> SettingsEventHandler.resetButtonEvent(action));
 
-    JLabel noticeLabel = new JLabel("<html>* Note: The modifiable values presented above are merely future proofing for when, inevitably, the official game servers shut down." +
-        "<br>This, provided the values given are valid, will allow you to route your client's traffic through another server and continue playing.<br>" +
-        "Private servers are against Spiral Knights' Terms of Service and Knight Launcher will not grant any type of support while official servers<br>" +
-        "remain active.</html>");
-    noticeLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    noticeLabel.setBounds(25, 255, 500, 100);
-    noticeLabel.setFont(Fonts.fontReg);
-    //connectionPanel.add(noticeLabel);
-
-    understoodCheckBox = new JCheckBox("I understand");
-    understoodCheckBox.setBounds(25, 350, 125, 25);
-    understoodCheckBox.setFont(Fonts.fontMed);
-    understoodCheckBox.addActionListener(action -> SettingsEventHandler.understoodCheckBoxChangeEvent(action));
-    connectionPanel.add(understoodCheckBox);
-
-    if(Settings.connectionOverwriteAgreed) {
-      serverAddressTextField.setEnabled(true);
-      portTextField.setEnabled(true);
-      publicKeyTextField.setEnabled(true);
-      getdownURLTextField.setEnabled(true);
-      understoodCheckBox.setEnabled(false);
-      understoodCheckBox.setSelected(true);
-      understoodCheckBox.setVisible(false);
-    } else {
-      serverAddressTextField.setEnabled(false);
-      portTextField.setEnabled(false);
-      publicKeyTextField.setEnabled(false);
-      getdownURLTextField.setEnabled(false);
-    }
+    serverAddressTextField.setEnabled(true);
+    portTextField.setEnabled(true);
+    publicKeyTextField.setEnabled(true);
+    getdownURLTextField.setEnabled(true);
 
     return connectionPanel;
   }
