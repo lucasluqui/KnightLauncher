@@ -156,7 +156,7 @@ public class LauncherGUI extends BaseGUI {
     modButton.setFont(Fonts.fontMed);
     modButton.setFocusPainted(false);
     modButton.setFocusable(false);
-    modButton.setEnabled(false);
+    modButton.setEnabled(true);
     modButton.setBackground(new Color(107, 114, 128));
     modButton.setForeground(Color.WHITE);
     modButton.setToolTipText(Locale.getValue("b.mods"));
