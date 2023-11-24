@@ -25,81 +25,97 @@ public class LauncherGlobals {
 
   public static final String RPC_CLIENT_ID = "626524043209867274";
 
+  public static final String[] GETDOWN_ARGS;
+  public static final String[] GETDOWN_ARGS_WIN;
+  public static final String[] ALT_CLIENT_ARGS;
+  public static final String[] ALT_CLIENT_ARGS_WIN;
 
-  public static final String[] GETDOWN_ARGS = {
-          "./java/bin/java",
-          "-Dsun.java2d.d3d=false",
-          "-Dcheck_unpacked=true",
-          "-jar",
-          "./getdown-pro.jar",
-          ".",
-          "client"
-  };
+  static {
 
-  public static final String[] GETDOWN_ARGS_WIN = {
-          ".\\java_vm\\bin\\java.exe",
-          "-Dsun.java2d.d3d=false",
-          "-Dcheck_unpacked=true",
-          "-jar",
-          USER_DIR + File.separator + "getdown-pro.jar",
-          ".",
-          "client"
-  };
+    String javaPath;
+    if (new File(USER_DIR + File.separator + "./java/bin/java").exists()) {
+      javaPath = "./java/bin/java";
+    } else {
+      javaPath = "./java_vm/bin/java";
+    }
 
-  public static final String[] ALT_CLIENT_ARGS = {
-          "./java/bin/java",
-          "-classpath",
-          USER_DIR + File.separator + "./code/config.jar:" +
-                  USER_DIR + File.separator + "./code/projectx-config.jar:" +
-                  USER_DIR + File.separator + "./code/projectx-pcode.jar:" +
-                  USER_DIR + File.separator + "./code/lwjgl.jar:" +
-                  USER_DIR + File.separator + "./code/lwjgl_util.jar:" +
-                  USER_DIR + File.separator + "./code/jinput.jar:" +
-                  USER_DIR + File.separator + "./code/jutils.jar:" +
-                  USER_DIR + File.separator + "./code/jshortcut.jar:" +
-                  USER_DIR + File.separator + "./code/commons-beanutils.jar:" +
-                  USER_DIR + File.separator + "./code/commons-digester.jar:" +
-                  USER_DIR + File.separator + "./code/commons-logging.jar:",
-          "-Dcom.threerings.getdown=false",
-          "-Xms256M",
-          "-Xmx512M",
-          "-XX:+AggressiveOpts",
-          "-XX:SoftRefLRUPolicyMSPerMB=10",
-          "-Djava.library.path=" + USER_DIR + File.separator + "./native",
-          "-Dorg.lwjgl.util.NoChecks=true",
-          "-Dsun.java2d.d3d=false",
-          "-Dappdir=" + USER_DIR + File.separator + ".",
-          "-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
-          "-XX:+UseStringDeduplication",
-          "com.threerings.projectx.client.ProjectXApp",
-  };
+    GETDOWN_ARGS = new String[]{
+        javaPath,
+        "-Dsun.java2d.d3d=false",
+        "-Dcheck_unpacked=true",
+        "-jar",
+        "./getdown-pro.jar",
+        ".",
+        "client"
+    };
 
-  public static final String[] ALT_CLIENT_ARGS_WIN = {
-          "./java_vm/bin/java",
-          "-classpath",
-          USER_DIR + File.separator + "./code/config.jar;" +
-          USER_DIR + File.separator + "./code/projectx-config.jar;" +
-          USER_DIR + File.separator + "./code/projectx-pcode.jar;" +
-          USER_DIR + File.separator + "./code/lwjgl.jar;" +
-          USER_DIR + File.separator + "./code/lwjgl_util.jar;" +
-          USER_DIR + File.separator + "./code/jinput.jar;" +
-          USER_DIR + File.separator + "./code/jutils.jar;" +
-          USER_DIR + File.separator + "./code/jshortcut.jar;" +
-          USER_DIR + File.separator + "./code/commons-beanutils.jar;" +
-          USER_DIR + File.separator + "./code/commons-digester.jar;" +
-          USER_DIR + File.separator + "./code/commons-logging.jar;",
-          "-Dcom.threerings.getdown=false",
-          "-Xms256M",
-          "-Xmx512M",
-          "-XX:+AggressiveOpts",
-          "-XX:SoftRefLRUPolicyMSPerMB=10",
-          "-Djava.library.path=" + USER_DIR + File.separator + "./native",
-          "-Dorg.lwjgl.util.NoChecks=true",
-          "-Dsun.java2d.d3d=false",
-          "-Dappdir=" + USER_DIR + File.separator + ".",
-          "-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
-          "-XX:+UseStringDeduplication",
-          "com.threerings.projectx.client.ProjectXApp",
-  };
+    GETDOWN_ARGS_WIN = new String[]{
+        javaPath,
+        "-Dsun.java2d.d3d=false",
+        "-Dcheck_unpacked=true",
+        "-jar",
+        USER_DIR + File.separator + "getdown-pro.jar",
+        ".",
+        "client"
+    };
+
+    ALT_CLIENT_ARGS = new String[]{
+        javaPath,
+        "-classpath",
+        USER_DIR + File.separator + "./code/config.jar:" +
+            USER_DIR + File.separator + "./code/projectx-config.jar:" +
+            USER_DIR + File.separator + "./code/projectx-pcode.jar:" +
+            USER_DIR + File.separator + "./code/lwjgl.jar:" +
+            USER_DIR + File.separator + "./code/lwjgl_util.jar:" +
+            USER_DIR + File.separator + "./code/jinput.jar:" +
+            USER_DIR + File.separator + "./code/jutils.jar:" +
+            USER_DIR + File.separator + "./code/jshortcut.jar:" +
+            USER_DIR + File.separator + "./code/commons-beanutils.jar:" +
+            USER_DIR + File.separator + "./code/commons-digester.jar:" +
+            USER_DIR + File.separator + "./code/commons-logging.jar:" +
+            USER_DIR + File.separator + "./KnightLauncher.jar:",
+        "-Dcom.threerings.getdown=false",
+        "-Xms256M",
+        "-Xmx512M",
+        "-XX:+AggressiveOpts",
+        "-XX:SoftRefLRUPolicyMSPerMB=10",
+        "-Djava.library.path=" + USER_DIR + File.separator + "./native",
+        "-Dorg.lwjgl.util.NoChecks=true",
+        "-Dsun.java2d.d3d=false",
+        "-Dappdir=" + USER_DIR + File.separator + ".",
+        "-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
+        "-XX:+UseStringDeduplication",
+        "com.lucasallegri.bootstrap.ProjectXBootstrap",
+    };
+
+    ALT_CLIENT_ARGS_WIN = new String[]{
+        javaPath,
+        "-classpath",
+        USER_DIR + File.separator + "./code/config.jar;" +
+            USER_DIR + File.separator + "./code/projectx-config.jar;" +
+            USER_DIR + File.separator + "./code/projectx-pcode.jar;" +
+            USER_DIR + File.separator + "./code/lwjgl.jar;" +
+            USER_DIR + File.separator + "./code/lwjgl_util.jar;" +
+            USER_DIR + File.separator + "./code/jinput.jar;" +
+            USER_DIR + File.separator + "./code/jutils.jar;" +
+            USER_DIR + File.separator + "./code/jshortcut.jar;" +
+            USER_DIR + File.separator + "./code/commons-beanutils.jar;" +
+            USER_DIR + File.separator + "./code/commons-digester.jar;" +
+            USER_DIR + File.separator + "./code/commons-logging.jar;" +
+            USER_DIR + File.separator + "./KnightLauncher.jar;",
+        "-Dcom.threerings.getdown=false",
+        "-Xms256M",
+        "-Xmx512M",
+        "-XX:+AggressiveOpts",
+        "-XX:SoftRefLRUPolicyMSPerMB=10",
+        "-Djava.library.path=" + USER_DIR + File.separator + "./native",
+        "-Dorg.lwjgl.util.NoChecks=true",
+        "-Dsun.java2d.d3d=false",
+        "-Dappdir=" + USER_DIR + File.separator + ".",
+        "-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
+        "-XX:+UseStringDeduplication",
+        "com.lucasallegri.bootstrap.ProjectXBootstrap",
+    };
+  }
 
 }
