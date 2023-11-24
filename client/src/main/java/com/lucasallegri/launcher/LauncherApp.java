@@ -59,7 +59,7 @@ public class LauncherApp {
     setupLauncherStyle();
     Locale.setup();
     Fonts.setup();
-    DiscordRPC.getInstance().start();
+    if (!SystemUtil.isARM()) DiscordRPC.getInstance().start();
     KeyboardController.start();
     checkDirectories();
     if (SystemUtil.isWindows()) checkShortcut();
