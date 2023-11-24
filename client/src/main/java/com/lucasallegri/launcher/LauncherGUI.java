@@ -1,5 +1,6 @@
 package com.lucasallegri.launcher;
 
+import com.lucasallegri.dialog.DialogWarning;
 import com.lucasallegri.discord.DiscordRPC;
 import com.lucasallegri.launcher.mods.ModListGUI;
 import com.lucasallegri.launcher.settings.SettingsGUI;
@@ -167,6 +168,21 @@ public class LauncherGUI extends BaseGUI {
         LauncherEventHandler.launchGameEvent();
       }
     });
+
+    String launchTooltipText = "Keep ALT or SHIFT pressed while launching to launch in alt account mode and save computing resources for your main instance.";
+    Icon launchTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 16, Color.WHITE);
+    JButton launchTooltipButton = new JButton();
+    launchTooltipButton.setIcon(launchTooltipButtonIcon);
+    launchTooltipButton.setBounds(550, 425, 16, 16);
+    launchTooltipButton.setEnabled(true);
+    launchTooltipButton.setFocusable(false);
+    launchTooltipButton.setFocusPainted(false);
+    launchTooltipButton.setForeground(Color.WHITE);
+    launchTooltipButton.setToolTipText(launchTooltipText);
+    launchTooltipButton.addActionListener(l -> {
+      DialogWarning.push(launchTooltipText);
+    });
+    mainPane.add(launchTooltipButton);
 
     /*
     imageContainer = new JLabel("Loading...");
