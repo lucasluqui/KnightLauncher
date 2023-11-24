@@ -6,14 +6,13 @@ import com.lucasallegri.util.FileUtil;
 import com.lucasallegri.util.JavaUtil;
 import com.lucasallegri.util.SystemUtil;
 
-import java.io.File;
 import java.io.IOException;
 
 import static com.lucasallegri.launcher.Log.log;
 
-public class Modules {
+public class ModuleLoader {
 
-  public static void setupIngameRPC() {
+  public static void loadIngameRPC() {
     if (SystemUtil.isWindows() && SystemUtil.is64Bit()) {
       try {
         FileUtil.extractFileWithinJar("/modules/skdiscordrpc/bundle.zip", LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip");
@@ -29,7 +28,7 @@ public class Modules {
     }
   }
 
-  public static void setupJarCommandLine() {
+  public static void loadJarCommandLine() {
     try {
       int vmArch = JavaUtil.getJVMArch(SystemUtil.isWindows() ? LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe" : LauncherGlobals.USER_DIR + "\\java\\bin\\java");
       if (SystemUtil.isWindows()) {

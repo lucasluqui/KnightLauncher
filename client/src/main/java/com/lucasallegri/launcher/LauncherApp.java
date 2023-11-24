@@ -238,12 +238,12 @@ public class LauncherApp {
   private void postInitialization() {
     ModLoader.checkInstalled();
     if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
-    if (Settings.useIngameRPC) Modules.setupIngameRPC();
+    if (Settings.useIngameRPC) ModuleLoader.loadIngameRPC();
     if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\safeguard\\bundle.zip")) {
       ModLoader.extractSafeguard();
     }
 
-    Modules.setupJarCommandLine();
+    ModuleLoader.loadJarCommandLine();
 
     DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
     loadOnlineAssets();

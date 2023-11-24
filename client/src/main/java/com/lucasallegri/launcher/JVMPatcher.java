@@ -1,7 +1,6 @@
 package com.lucasallegri.launcher;
 
 import com.lucasallegri.dialog.DialogError;
-import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.launcher.settings.SettingsProperties;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.Compressor;
@@ -254,7 +253,7 @@ public class JVMPatcher extends BaseGUI {
 
   private static void finish() {
     SettingsProperties.setValue("launcher.jvm_patched", "true");
-    Modules.setupJarCommandLine();
+    ModuleLoader.loadJarCommandLine();
     ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar"}, true);
     jvmPatcherFrame.dispose();
     System.exit(1);
