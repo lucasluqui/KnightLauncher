@@ -104,7 +104,6 @@ public class LauncherGUI extends BaseGUI {
     serverPicker.setRequestFocusEnabled(false);
     sidePane.add(serverPicker);
     serverPicker.addItem("Official");
-    serverPicker.addItem("Thetya (Beta Build)");
 
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
     playerCountLabel.setFont(Fonts.fontReg);
