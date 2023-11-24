@@ -11,6 +11,12 @@
   <dependencies>
 
     <dependency>
+      <groupId>com.formdev</groupId>
+      <artifactId>flatlaf</artifactId>
+      <version>3.2.5</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.github.vatbub</groupId>
       <artifactId>mslinks</artifactId>
       <!-- do not update, requires newer jdk -->

@@ -2,12 +2,10 @@ package com.lucasallegri.launcher.mods;
 
 import com.lucasallegri.launcher.*;
 import com.lucasallegri.launcher.mods.data.Mod;
-import com.lucasallegri.launcher.settings.SettingsEventHandler;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.DesktopUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
-import mdlaf.utils.MaterialBorders;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +15,7 @@ public class ModListGUI extends BaseGUI {
 
   private final LauncherApp app;
   public static JFrame modListGUIFrame;
+  public static JPanel modListPanel;
   public static List modListContainer;
   public static JLabel labelModCount;
   public static JLabel labelForceApplyState;
@@ -50,6 +49,7 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.setUndecorated(true);
     modListGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     modListGUIFrame.getContentPane().setLayout(null);
+    modListPanel = (JPanel) modListGUIFrame.getContentPane();
 
     modListContainer = new List();
     modListContainer.setBounds(10, 26, 162, 326);
@@ -276,7 +276,6 @@ public class ModListGUI extends BaseGUI {
     closeButton.setToolTipText(Locale.getValue("b.close"));
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
-    closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
     closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(new ActionListener() {
@@ -291,7 +290,6 @@ public class ModListGUI extends BaseGUI {
     minimizeButton.setToolTipText(Locale.getValue("b.minimize"));
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
-    minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
     minimizeButton.setFont(Fonts.fontMed);
     titleBar.add(minimizeButton);
     minimizeButton.addActionListener(new ActionListener() {

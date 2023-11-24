@@ -10,8 +10,8 @@ import static com.lucasallegri.launcher.Log.log;
 
 public class Fonts {
 
-  private static final String fontPathRegular = "/fonts/GoogleSans-Regular.ttf";
-  private static final String fontPathMedium = "/fonts/GoogleSans-Medium.ttf";
+  private static final String fontPathRegular = "/fonts/Figtree-Regular.ttf";
+  private static final String fontPathMedium = "/fonts/Figtree-SemiBold.ttf";
   private static final String fontPathRegularJP = "/fonts/NotoSansJP-Regular.otf";
   private static final String fontPathMediumJP = "/fonts/NotoSansJP-Medium.otf";
   private static final String fontPathRegularAR = "/fonts/Lemonada-Regular.ttf";

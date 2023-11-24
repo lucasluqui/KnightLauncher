@@ -1,21 +1,23 @@
 package com.lucasallegri.launcher;
 
 import com.lucasallegri.discord.DiscordRPC;
+import com.lucasallegri.launcher.settings.SettingsGUI;
 import com.lucasallegri.util.ColorUtil;
-import com.lucasallegri.util.DesktopUtil;
 import com.lucasallegri.util.ImageUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
-import mdlaf.utils.MaterialBorders;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 public class LauncherGUI extends BaseGUI {
 
   private final LauncherApp app;
   public static JFrame launcherGUIFrame;
+  public static JPanel mainPane;
+  public static JTabbedPane layeredSettingsPane;
   public static JButton launchButton;
   public static JButton settingsButton;
   public static JButton modButton;
@@ -45,97 +47,71 @@ public class LauncherGUI extends BaseGUI {
     launcherGUIFrame.setVisible(false);
     launcherGUIFrame.setTitle(Locale.getValue("t.main", LauncherGlobals.LAUNCHER_VERSION));
     launcherGUIFrame.setResizable(false);
-    launcherGUIFrame.setBounds(100, 100, 850, 475);
+    launcherGUIFrame.setBounds(100, 100, 1050, 550);
     launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     launcherGUIFrame.setUndecorated(true);
     launcherGUIFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-128.png"));
+    launcherGUIFrame.getContentPane().setBackground(new Color(56, 60, 71));
     launcherGUIFrame.getContentPane().setLayout(null);
 
-    Icon launchIcon = IconFontSwing.buildIcon(FontAwesome.PLAY_CIRCLE_O, 49, ColorUtil.getForegroundColor());
-    launchButton = new JButton(launchIcon);
-    launchButton.setBounds(21, 400, 52, 52);
-    launchButton.setFont(Fonts.fontMedBig);
-    launchButton.setFocusPainted(false);
-    launchButton.setFocusable(false);
-    launchButton.setToolTipText(Locale.getValue("b.launch"));
-    launcherGUIFrame.getContentPane().add(launchButton);
-    launchButton.addActionListener(action -> {
-      if (KeyboardController.isShiftPressed() || KeyboardController.isAltPressed()) {
-        LauncherEventHandler.launchGameAltEvent();
-      } else {
-        LauncherEventHandler.launchGameEvent();
-      }
-    });
+    JPanel sidePane = new JPanel();
+    sidePane.setBackground(new Color(45, 48, 57));
+    sidePane.setVisible(true);
+    sidePane.setLayout(null);
+    sidePane.setBounds(0, 35, 250, 550);
+    launcherGUIFrame.getContentPane().add(sidePane);
 
-    imageContainer = new JLabel("Loading...");
-    imageContainer.setBounds(23, 48, 525, 305);
-    imageContainer.setFont(Fonts.fontRegBig);
-    imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
-    launcherGUIFrame.getContentPane().add(imageContainer);
-
-    Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, 16, ColorUtil.getForegroundColor());
-    modButton = new JButton(Locale.getValue("b.mods"));
-    modButton.setIcon(modsIcon);
-    modButton.setBounds(80, 401, 100, 25);
-    modButton.setHorizontalAlignment(SwingConstants.LEFT);
-    modButton.setFont(Fonts.fontMed);
-    modButton.setFocusPainted(false);
-    modButton.setFocusable(false);
-    modButton.setToolTipText(Locale.getValue("b.mods"));
-    launcherGUIFrame.getContentPane().add(modButton);
-    modButton.addActionListener(action -> app.mgui.switchVisibility());
+    mainPane = new JPanel();
+    mainPane.setLayout(null);
+    mainPane.setBackground(new Color(56, 60, 71));
+    mainPane.setBounds(250, 35, 800, 550);
+    launcherGUIFrame.getContentPane().add(mainPane);
 
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
     settingsButton = new JButton(Locale.getValue("b.settings"));
     settingsButton.setIcon(settingsIcon);
-    settingsButton.setBounds(80, 427, 100, 25);
+    settingsButton.setBounds(15, 385, 125, 35);
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
     settingsButton.setFont(Fonts.fontMed);
     settingsButton.setFocusPainted(false);
     settingsButton.setFocusable(false);
+    settingsButton.setBackground(new Color(107, 114, 128));
+    settingsButton.setForeground(Color.WHITE);
     settingsButton.setToolTipText(Locale.getValue("b.settings"));
-    launcherGUIFrame.getContentPane().add(settingsButton);
-    settingsButton.addActionListener(action -> app.sgui.switchVisibility());
+    settingsButton.addActionListener(action -> {
+      mainPane.setVisible(false);
 
-    JLabel labelTweets = new JLabel("<html>" + Locale.getValue("m.twitter_title") + "</html>");
-    labelTweets.setBounds(567, 36, 170, 35);
-    labelTweets.setFont(Fonts.fontReg);
-    launcherGUIFrame.getContentPane().add(labelTweets);
+      layeredSettingsPane = SettingsGUI.tabbedPane;
+      layeredSettingsPane.setBounds(250, 75, 800, 550);
+      launcherGUIFrame.add(layeredSettingsPane);
+      layeredSettingsPane.setVisible(true);
 
-    tweetsContainer = new JTextPane();
-    tweetsContainer.setText(Locale.getValue("m.twitter_load"));
-    tweetsContainer.setBounds(567, 75, 260, 297);
-    tweetsContainer.setEditable(false);
-    tweetsContainer.setFont(Fonts.fontReg);
-    tweetsContainer.setBackground(ColorUtil.getBackgroundColor());
-    tweetsContainer.setForeground(Color.WHITE);
-    launcherGUIFrame.getContentPane().add(tweetsContainer);
-    tweetsContainer.setCaretPosition(0);
+      JButton returnButton = new JButton("Ret");
+      returnButton.setBounds(265, 40, 25, 25);
+      returnButton.addActionListener(l -> {
+        layeredSettingsPane.setVisible(false);
+        mainPane.setVisible(true);
+        returnButton.setVisible(false);
+      });
+      returnButton.setVisible(true);
+      launcherGUIFrame.add(returnButton);
+    });
+    sidePane.add(settingsButton);
 
-    /*
-     * Comment the following three lines to preview this GUI with WindowBuilder
-     * I have no idea why they're conflicting with it, but without doing so
-     * you won't be able to see anything, throwing errors on LanguageManager.getValue()
-     * during t.main and b.launch parsing. Java is fun :)
-     *
-     * Of course you have to uncomment it before pushing any changes;
-     * just a self reminder for myself...
-     */
-    JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
-    tweetsJsp.setBounds(567, 75, 260, 297);
-    LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
-
-    launchProgressBar = new JProgressBar();
-    launchProgressBar.setBounds(0, 470, 850, 5);
-    launchProgressBar.setVisible(false);
-    launcherGUIFrame.getContentPane().add(launchProgressBar);
-
-    launchState = new JLabel("");
-    launchState.setHorizontalAlignment(SwingConstants.RIGHT);
-    launchState.setBounds(638, 443, 203, 23);
-    launchState.setFont(Fonts.fontRegBig);
-    launchState.setVisible(false);
-    launcherGUIFrame.getContentPane().add(launchState);
+    Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, 16, ColorUtil.getForegroundColor());
+    modButton = new JButton(Locale.getValue("b.mods"));
+    modButton.setIcon(modsIcon);
+    modButton.setBounds(15, 425, 125, 35);
+    modButton.setHorizontalAlignment(SwingConstants.LEFT);
+    modButton.setFont(Fonts.fontMed);
+    modButton.setFocusPainted(false);
+    modButton.setFocusable(false);
+    modButton.setEnabled(true);
+    modButton.setBackground(new Color(107, 114, 128));
+    modButton.setForeground(Color.WHITE);
+    modButton.setToolTipText(Locale.getValue("b.mods"));
+    modButton.addActionListener(action -> app.mgui.switchVisibility());
+    sidePane.add(modButton);
 
     Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 20, ColorUtil.getGreenForegroundColor());
     updateButton = new JButton(Locale.getValue("b.update_available"));
@@ -146,8 +122,87 @@ public class LauncherGUI extends BaseGUI {
     updateButton.setFocusable(false);
     updateButton.setForeground(ColorUtil.getGreenForegroundColor());
     updateButton.setVisible(false);
-    updateButton.setBounds(185, 427, 165, 25);
-    launcherGUIFrame.getContentPane().add(updateButton);
+    updateButton.setBounds(0, 427, 165, 25);
+    sidePane.add(updateButton);
+
+    //Icon launchIcon = IconFontSwing.buildIcon(FontAwesome.PLAY_CIRCLE_O, 49, ColorUtil.getForegroundColor());
+    launchButton = new JButton("Play Now");
+    launchButton.setBounds(572, 423, 200, 66);
+    launchButton.setFont(Fonts.fontMedBig);
+    launchButton.setFocusPainted(false);
+    launchButton.setFocusable(false);
+    launchButton.setBackground(new Color(0, 133, 255));
+    launchButton.setForeground(Color.WHITE);
+    //launchButton.setIcon(launchIcon);
+    launchButton.setToolTipText("Play Now");
+    mainPane.add(launchButton);
+    launchButton.addActionListener(action -> {
+      if (KeyboardController.isShiftPressed() || KeyboardController.isAltPressed()) {
+        LauncherEventHandler.launchGameAltEvent();
+      } else {
+        LauncherEventHandler.launchGameEvent();
+      }
+    });
+
+    /*
+    imageContainer = new JLabel("Loading...");
+    imageContainer.setBounds(23, 48, 525, 305);
+    imageContainer.setFont(Fonts.fontRegBig);
+    imageContainer.setHorizontalAlignment(SwingConstants.CENTER);
+    launcherGUIFrame.getContentPane().add(imageContainer);
+    */
+
+    /*
+    JLabel labelTweets = new JLabel("<html>" + Locale.getValue("m.twitter_title") + "</html>");
+    labelTweets.setBounds(567, 36, 170, 35);
+    labelTweets.setFont(Fonts.fontReg);
+    launcherGUIFrame.getContentPane().add(labelTweets);
+    */
+
+    /*
+    tweetsContainer = new JTextPane();
+    tweetsContainer.setText(Locale.getValue("m.twitter_load"));
+    tweetsContainer.setBounds(567, 75, 260, 297);
+    tweetsContainer.setEditable(false);
+    tweetsContainer.setFont(Fonts.fontReg);
+    tweetsContainer.setBackground(ColorUtil.getBackgroundColor());
+    tweetsContainer.setForeground(Color.WHITE);
+    launcherGUIFrame.getContentPane().add(tweetsContainer);
+    tweetsContainer.setCaretPosition(0);
+    */
+
+    /*
+     * Comment the following three lines to preview this GUI with WindowBuilder
+     * I have no idea why they're conflicting with it, but without doing so
+     * you won't be able to see anything, throwing errors on LanguageManager.getValue()
+     * during t.main and b.launch parsing. Java is fun :)
+     *
+     * Of course you have to uncomment it before pushing any changes;
+     * just a self reminder for myself...
+     */
+    /*
+    JScrollPane tweetsJsp = new JScrollPane(tweetsContainer);
+    tweetsJsp.setBounds(567, 75, 260, 297);
+    LauncherGUI.launcherGUIFrame.getContentPane().add(tweetsJsp);
+    */
+
+    launchProgressBar = new JProgressBar();
+    launchProgressBar.setBounds(30, 450, 510, 25);
+    launchProgressBar.setVisible(false);
+    mainPane.add(launchProgressBar);
+
+    launchState = new JLabel("");
+    launchState.setHorizontalAlignment(SwingConstants.LEFT);
+    launchState.setBounds(30, 420, 510, 25);
+    launchState.setFont(Fonts.fontRegBig);
+    launchState.setVisible(false);
+    mainPane.add(launchState);
+
+    JLabel infoPane = new JLabel();
+    BufferedImage infoPaneBackgroundImage = ImageUtil.loadImageWithinJar("/img/infopane.png");
+    infoPane.setBounds(50, 40, 700, 340);
+    infoPane.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(infoPaneBackgroundImage, 25)));
+    mainPane.add(infoPane);
 
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
     playerCountLabel.setFont(Fonts.fontReg);
@@ -156,7 +211,7 @@ public class LauncherGUI extends BaseGUI {
     launcherGUIFrame.getContentPane().add(playerCountLabel);
 
     JPanel titleBar = new JPanel();
-    titleBar.setBounds(0, 0, launcherGUIFrame.getWidth(), 20);
+    titleBar.setBounds(0, 0, launcherGUIFrame.getWidth(), 35);
     titleBar.setBackground(ColorUtil.getTitleBarColor());
     launcherGUIFrame.getContentPane().add(titleBar);
 
@@ -202,18 +257,21 @@ public class LauncherGUI extends BaseGUI {
     });
     titleBar.setLayout(null);
 
+    /*
     JLabel windowTitle = new JLabel(Locale.getValue("t.main", LauncherGlobals.LAUNCHER_VERSION));
     windowTitle.setFont(Fonts.fontMed);
-    windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 20);
+    windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 35);
     titleBar.add(windowTitle);
+     */
 
-    Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 14, ColorUtil.getForegroundColor());
+    Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 20, ColorUtil.getForegroundColor());
     JButton closeButton = new JButton(closeIcon);
-    closeButton.setBounds(launcherGUIFrame.getWidth() - 18, 1, 20, 21);
+    closeButton.setBounds(launcherGUIFrame.getWidth() - 38, 3, 29, 29);
     closeButton.setToolTipText(Locale.getValue("b.close"));
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
-    closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
+    closeButton.setBackground(null);
+    closeButton.setBorder(null);
     closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(e -> {
@@ -221,19 +279,21 @@ public class LauncherGUI extends BaseGUI {
       System.exit(0);
     });
 
-    Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 14, ColorUtil.getForegroundColor());
+    Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 20, ColorUtil.getForegroundColor());
     JButton minimizeButton = new JButton(minimizeIcon);
-    minimizeButton.setBounds(launcherGUIFrame.getWidth() - 38, 1, 20, 21);
+    minimizeButton.setBounds(launcherGUIFrame.getWidth() - 71, 3, 29, 29);
     minimizeButton.setToolTipText(Locale.getValue("b.minimize"));
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
-    minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
+    minimizeButton.setBackground(null);
+    minimizeButton.setBorder(null);
     minimizeButton.setFont(Fonts.fontMed);
     titleBar.add(minimizeButton);
     minimizeButton.addActionListener(e -> launcherGUIFrame.setState(Frame.ICONIFIED));
 
+    /*
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/discord-16.png")));
-    discordButton.setBounds(launcherGUIFrame.getWidth() - 67, 1, 18, 18);
+    discordButton.setBounds(launcherGUIFrame.getWidth() - 67, 1, 33, 33);
     discordButton.setToolTipText("Discord");
     discordButton.setFocusPainted(false);
     discordButton.setFocusable(false);
@@ -244,7 +304,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, ColorUtil.getForegroundColor());
     JButton bugButton = new JButton(bugIcon);
-    bugButton.setBounds(launcherGUIFrame.getWidth() - 89, 1, 18, 18);
+    bugButton.setBounds(launcherGUIFrame.getWidth() - 89, 1, 33, 33);
     bugButton.setToolTipText(Locale.getValue("b.bug_report"));
     bugButton.setFocusPainted(false);
     bugButton.setFocusable(false);
@@ -255,7 +315,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.COFFEE, 16, Colors.KOFI);
     JButton kofiButton = new JButton(kofiIcon);
-    kofiButton.setBounds(launcherGUIFrame.getWidth() - 111, 1, 18, 18);
+    kofiButton.setBounds(launcherGUIFrame.getWidth() - 111, 1, 33, 33);
     kofiButton.setToolTipText(Locale.getValue("b.kofi"));
     kofiButton.setFocusPainted(false);
     kofiButton.setFocusable(false);
@@ -263,6 +323,7 @@ public class LauncherGUI extends BaseGUI {
     kofiButton.setFont(Fonts.fontMed);
     titleBar.add(kofiButton);
     kofiButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_KOFI));
+     */
 
     launcherGUIFrame.setLocationRelativeTo(null);
 

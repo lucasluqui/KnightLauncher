@@ -1,5 +1,6 @@
 package com.lucasallegri.launcher;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.lucasallegri.dialog.DialogWarning;
 import com.lucasallegri.discord.DiscordRPC;
 import com.lucasallegri.launcher.mods.ModListGUI;
@@ -10,9 +11,6 @@ import com.lucasallegri.launcher.settings.SettingsProperties;
 import com.lucasallegri.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
-import mdlaf.MaterialLookAndFeel;
-import mdlaf.themes.JMarsDarkTheme;
-import mdlaf.themes.MaterialLiteTheme;
 import net.sf.image4j.codec.ico.ICOEncoder;
 import org.json.JSONObject;
 
@@ -165,15 +163,12 @@ public class LauncherApp {
   }
 
   private void setupLauncherStyle() {
+    System.setProperty("awt.useSystemAAFontSettings", "on");
+    System.setProperty("swing.aatext", "true");
+
     IconFontSwing.register(FontAwesome.getIconFont());
     try {
-      UIManager.setLookAndFeel(new MaterialLookAndFeel());
-
-      if ("dark".equals(Settings.launcherStyle)) {
-        MaterialLookAndFeel.changeTheme(new JMarsDarkTheme());
-      } else {
-        MaterialLookAndFeel.changeTheme(new MaterialLiteTheme());
-      }
+      UIManager.setLookAndFeel(new FlatDarkLaf());
     } catch (UnsupportedLookAndFeelException e) {
       log.error(e);
     }
@@ -200,6 +195,8 @@ public class LauncherApp {
     } catch (IOException e) {
       e.printStackTrace();
     }
+
+    log.info("Knight Launcher started. Running version: " + LauncherGlobals.LAUNCHER_VERSION);
   }
 
   private void logVMInfo() {

@@ -1,14 +1,12 @@
 package com.lucasallegri.launcher.settings;
 
 import com.lucasallegri.launcher.*;
-import com.lucasallegri.launcher.mods.ModListEventHandler;
 import com.lucasallegri.util.ColorUtil;
 import com.lucasallegri.util.JavaUtil;
 import com.lucasallegri.util.SteamUtil;
 import com.lucasallegri.util.SystemUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
-import mdlaf.utils.MaterialBorders;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +16,7 @@ public class SettingsGUI extends BaseGUI {
 
   private final LauncherApp app;
   public static JFrame settingsGUIFrame;
+  public static JTabbedPane tabbedPane;
   public static JComboBox<String> choicePlatform;
   public static JComboBox<String> choiceLanguage;
   public static JComboBox<String> choiceStyle;
@@ -60,10 +59,11 @@ public class SettingsGUI extends BaseGUI {
     settingsGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     settingsGUIFrame.getContentPane().setLayout(null);
 
-    JTabbedPane tabbedPane = new JTabbedPane();
+    tabbedPane = new JTabbedPane();
     tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
     tabbedPane.setBounds(-2, 20, 852, 455);
     tabbedPane.setFont(Fonts.fontMedBig);
+    tabbedPane.setTabPlacement(JTabbedPane.LEFT);
     tabbedPane.addTab(Locale.getValue("tab.appearance"), createAppearancePanel());
     tabbedPane.addTab(Locale.getValue("tab.behavior"), createBehaviorPanel());
     tabbedPane.addTab(Locale.getValue("tab.game"), createGamePanel());
@@ -72,6 +72,7 @@ public class SettingsGUI extends BaseGUI {
     if (SystemUtil.isWindows() && SystemUtil.is64Bit())
       tabbedPane.addTab(Locale.getValue("Discord"), createDiscordPanel());
     tabbedPane.addTab(Locale.getValue("tab.extratxt"), createExtraPanel());
+    tabbedPane.setBackground(new Color(56, 60, 71));
     settingsGUIFrame.getContentPane().add(tabbedPane);
 
     JPanel titleBar = new JPanel();
@@ -132,7 +133,6 @@ public class SettingsGUI extends BaseGUI {
     closeButton.setToolTipText(Locale.getValue("b.close"));
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
-    closeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
     closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(new ActionListener() {
@@ -149,7 +149,6 @@ public class SettingsGUI extends BaseGUI {
     minimizeButton.setToolTipText(Locale.getValue("b.minimize"));
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
-    minimizeButton.setBorder(MaterialBorders.roundedLineColorBorder(ColorUtil.getTitleBarColor(), 0));
     minimizeButton.setFont(Fonts.fontMed);
     titleBar.add(minimizeButton);
 
@@ -159,6 +158,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createAppearancePanel() {
     JPanel appearancePanel = new JPanel();
     appearancePanel.setLayout(null);
+    appearancePanel.setBackground(new Color(56, 60, 71));
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.appearance"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -213,6 +213,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createBehaviorPanel() {
     JPanel behaviorPanel = new JPanel();
     behaviorPanel.setLayout(null);
+    behaviorPanel.setBackground(new Color(56, 60, 71));
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.behavior"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -297,6 +298,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createGamePanel() {
     JPanel gamePanel = new JPanel();
     gamePanel.setLayout(null);
+    gamePanel.setBackground(new Color(56, 60, 71));
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.game"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -453,6 +455,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createFilesPanel() {
     JPanel filesPanel = new JPanel();
     filesPanel.setLayout(null);
+    filesPanel.setBackground(new Color(56, 60, 71));
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.files"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -522,6 +525,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createExtraPanel() {
     JPanel extraPanel = new JPanel();
     extraPanel.setLayout(null);
+    extraPanel.setBackground(new Color(56, 60, 71));
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.extratxt"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -552,6 +556,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createDiscordPanel() {
     JPanel ingameRPCPanel = new JPanel();
     ingameRPCPanel.setLayout(null);
+    ingameRPCPanel.setBackground(new Color(56, 60, 71));
 
     JLabel headerLabel = new JLabel(Locale.getValue("Discord"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -586,6 +591,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createConnectionPanel() {
     JPanel connectionPanel = new JPanel();
     connectionPanel.setLayout(null);
+    connectionPanel.setBackground(new Color(56, 60, 71));
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.connection"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -675,9 +681,9 @@ public class SettingsGUI extends BaseGUI {
         "Private servers are against Spiral Knights' Terms of Service and Knight Launcher will not grant any type of support while official servers<br>" +
         "remain active.</html>");
     noticeLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    noticeLabel.setBounds(25, 255, 800, 100);
+    noticeLabel.setBounds(25, 255, 500, 100);
     noticeLabel.setFont(Fonts.fontReg);
-    connectionPanel.add(noticeLabel);
+    //connectionPanel.add(noticeLabel);
 
     understoodCheckBox = new JCheckBox("I understand");
     understoodCheckBox.setBounds(25, 350, 125, 25);
