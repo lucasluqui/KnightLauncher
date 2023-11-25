@@ -71,11 +71,7 @@ public class ModListGUI extends BaseGUI {
     refreshButton.setBorder(null);
     refreshButton.setToolTipText(Locale.getValue("b.refresh"));
     modListGUIFrame.getContentPane().add(refreshButton);
-    refreshButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent action) {
-        ModListEventHandler.refreshEvent(action);
-      }
-    });
+    refreshButton.addActionListener(ModListEventHandler::refreshEvent);
 
     JLabel enabledLabel = new JLabel("Enabled");
     enabledLabel.setBounds(638, 86, 100, 25);

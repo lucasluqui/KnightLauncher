@@ -10,6 +10,7 @@ import com.lucasallegri.launcher.settings.Settings;
 import com.lucasallegri.launcher.settings.SettingsProperties;
 import com.lucasallegri.util.DesktopUtil;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +20,6 @@ import java.util.List;
 public class ModListEventHandler {
 
   public static void refreshEvent(ActionEvent action) {
-
     ModLoader.checkInstalled();
     if (ModLoader.rebuildRequired && Settings.doRebuilds) {
       ModLoader.startFileRebuild();
