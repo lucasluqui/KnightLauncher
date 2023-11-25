@@ -9,7 +9,6 @@ import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 public class ModListGUI extends BaseGUI {
@@ -85,11 +84,7 @@ public class ModListGUI extends BaseGUI {
     modFolderButton.setFocusable(false);
     modFolderButton.setToolTipText(Locale.getValue("b.open_mods_folder"));
     modListGUIFrame.getContentPane().add(modFolderButton);
-    modFolderButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        DesktopUtil.openDir(LauncherGlobals.USER_DIR + "/mods");
-      }
-    });
+    modFolderButton.addActionListener(action -> DesktopUtil.openDir(LauncherGlobals.USER_DIR + "/mods"));
 
     JButton getModsButton = new JButton(Locale.getValue("b.get_mods"));
     getModsButton.setBounds(620, 35, 150, 25);
@@ -98,11 +93,7 @@ public class ModListGUI extends BaseGUI {
     getModsButton.setFocusable(false);
     getModsButton.setToolTipText(Locale.getValue("b.get_mods"));
     modListGUIFrame.getContentPane().add(getModsButton);
-    getModsButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        ModListEventHandler.getModsEvent(_action);
-      }
-    });
+    getModsButton.addActionListener(ModListEventHandler::getModsEvent);
 
     forceApplyButton = new JButton("Force apply");
     forceApplyButton.setBounds(310, 35, 150, 25);
@@ -111,11 +102,7 @@ public class ModListGUI extends BaseGUI {
     forceApplyButton.setFocusable(false);
     forceApplyButton.setToolTipText("Force apply");
     modListGUIFrame.getContentPane().add(forceApplyButton);
-    forceApplyButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        ModListEventHandler.forceApplyEvent(_action);
-      }
-    });
+    forceApplyButton.addActionListener(ModListEventHandler::forceApplyEvent);
 
     labelForceApplyState = new JLabel("");
     labelForceApplyState.setBounds(310, 20, 150, 25);
