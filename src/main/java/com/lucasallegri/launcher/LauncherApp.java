@@ -145,7 +145,7 @@ public class LauncherApp {
   // Create a shortcut to the application if there's none.
   private void checkShortcut() {
     if (Settings.createShortcut
-            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.SHORTCUT_FILE_NAME)) {
+            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME)) {
 
       BufferedImage bimg = ImageUtil.loadImageWithinJar("/img/icon-128.png");
       try {
@@ -159,7 +159,7 @@ public class LauncherApp {
               LauncherGlobals.USER_DIR,
               LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-128.ico",
               "Start KnightLauncher",
-              LauncherGlobals.SHORTCUT_FILE_NAME
+              LauncherGlobals.LAUNCHER_NAME
       );
     }
   }
@@ -294,7 +294,7 @@ public class LauncherApp {
 
   private void checkVersion() {
 
-    if (LauncherGlobals.VERSION.contains("dev")) return;
+    if (LauncherGlobals.LAUNCHER_VERSION.contains("dev")) return;
 
     String rawResponseReleases = INetUtil.getWebpageContent(
         LauncherGlobals.GITHUB_API
@@ -309,7 +309,7 @@ public class LauncherApp {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
 
       String latestRelease = jsonReleases.getString("tag_name");
-      if (!latestRelease.equalsIgnoreCase(LauncherGlobals.VERSION)) {
+      if (!latestRelease.equalsIgnoreCase(LauncherGlobals.LAUNCHER_VERSION) && !latestRelease.contains("PRE")) {
         Settings.isOutdated = true;
         LauncherGUI.updateButton.addActionListener(action -> DesktopUtil.openWebpage(
             "https://github.com/"

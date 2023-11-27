@@ -46,7 +46,7 @@ public class DiscordRPC {
   private void updatePresenceDetails(String details) {
     DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(Locale.getValue("presence.using"));
     presence.setDetails(details);
-    presence.setBigImage("icon-512", Locale.getValue("presence.image_desc", LauncherGlobals.VERSION));
+    presence.setBigImage("icon-512", Locale.getValue("presence.image_desc", LauncherGlobals.LAUNCHER_VERSION));
     net.arikia.dev.drpc.DiscordRPC.discordUpdatePresence(presence.build());
     log.info("Updating presence detail", "detail", details);
   }

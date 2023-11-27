@@ -225,12 +225,12 @@ public class JVMPatcher extends BaseGUI {
   }
 
   private static void downloadPackagedJVM() {
-    String downloadUrl = LauncherGlobals.JAVA_REDISTRIBUTABLES_URL.replace("{version}", "7u80");
+    String downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "7u80");
 
     switch(javaVersionComboBox.getSelectedIndex()) {
-      case 0: downloadUrl = LauncherGlobals.JAVA_REDISTRIBUTABLES_URL.replace("{version}", "7u80"); break;
-      case 1: downloadUrl = LauncherGlobals.JAVA_REDISTRIBUTABLES_URL.replace("{version}", "8u202"); break;
-      case 2: downloadUrl = LauncherGlobals.JAVA_REDISTRIBUTABLES_URL.replace("{version}", "8u251"); break;
+      case 0: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "7u80"); break;
+      case 1: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "8u202"); break;
+      case 2: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "8u251"); break;
     }
 
     boolean downloadCompleted = false;

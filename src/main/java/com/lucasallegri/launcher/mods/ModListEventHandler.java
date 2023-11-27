@@ -37,7 +37,7 @@ public class ModListEventHandler {
   }
 
   public static void getModsEvent(ActionEvent action) {
-    DesktopUtil.openWebpage(LauncherGlobals.GET_MODS_URL);
+    DesktopUtil.openWebpage(LauncherGlobals.URL_GET_MODS);
   }
 
   public static void disableMod(Mod mod) {
