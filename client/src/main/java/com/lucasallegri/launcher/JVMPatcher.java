@@ -74,7 +74,7 @@ public class JVMPatcher extends BaseGUI {
     javaVersionComboBox.setFont(Fonts.fontReg);
     jvmPatcherFrame.add(javaVersionComboBox);
 
-    javaVersionComboBox.addItem("Java 7 (7u80) (Recommended)");
+    //javaVersionComboBox.addItem("Java 7 (7u80) (Recommended)");
     javaVersionComboBox.addItem("Java 8 (8u202)");
     javaVersionComboBox.addItem("Java 8 (8u251)");
     javaVersionComboBox.setSelectedIndex(0);
@@ -227,9 +227,9 @@ public class JVMPatcher extends BaseGUI {
     String downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "7u80");
 
     switch(javaVersionComboBox.getSelectedIndex()) {
-      case 0: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "7u80"); break;
-      case 1: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "8u202"); break;
-      case 2: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "8u251"); break;
+      //case 0: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "7u80"); break;
+      case 0: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "8u202"); break;
+      case 1: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "8u251"); break;
     }
 
     boolean downloadCompleted = false;
