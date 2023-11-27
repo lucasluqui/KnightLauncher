@@ -154,7 +154,7 @@ public class ModListGUI extends BaseGUI {
 
       JLabel modFooter = new JLabel();
       modFooter.setText("v" + mod.getVersion() + ", author: " + mod.getAuthor());
-      modFooter.setFont(Fonts.fontReg);
+      modFooter.setFont(Fonts.fontRegSmall);
       modFooter.setBounds(75, 25, 400, 55);
       modPane.add(modFooter);
 
