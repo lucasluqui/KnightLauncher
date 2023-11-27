@@ -118,6 +118,9 @@ public class LauncherApp {
     // Stores /code (.jar) mods.
     FileUtil.createDir("code-mods");
 
+    // Stores clients for third-party servers.
+    FileUtil.createDir("thirdparty");
+
     // Miscellaneous image assets for the launcher to use.
     FileUtil.createDir("KnightLauncher/images/");
 
@@ -221,8 +224,8 @@ public class LauncherApp {
     // You need a 64-bit system to begin with.
     if(!SystemUtil.is64Bit()) return false;
 
-    // Currently Java VM patching is only supported on Windows systems.
-    if(!SystemUtil.isWindows()) return false;
+    // Currently Java VM patching is only supported on Windows systems and Linux installs through Steam.
+    if(!SystemUtil.isWindows() && !(SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam"))) return false;
 
     // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by Knight Launcher.
     if(JavaUtil.getJVMArch(LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe") == 64 ||

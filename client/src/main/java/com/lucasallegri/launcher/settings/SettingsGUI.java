@@ -442,7 +442,7 @@ public class SettingsGUI extends BaseGUI {
       }
     });
 
-    if (SystemUtil.isWindows() && SystemUtil.is64Bit()) {
+    if ( (SystemUtil.isWindows() && SystemUtil.is64Bit()) || (SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam")) ) {
       JSeparator sep = new JSeparator();
       sep.setBounds(25, 140, 600, 16);
       filesPanel.add(sep);
