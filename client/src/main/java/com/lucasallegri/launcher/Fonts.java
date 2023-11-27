@@ -17,6 +17,7 @@ public class Fonts {
   private static final String fontPathRegularAR = "/fonts/Lemonada-Regular.ttf";
   private static final String fontPathMediumAR = "/fonts/Lemonada-Medium.ttf";
   private static final String fontPathCodeRegular = "/fonts/SourceCodePro-Regular.ttf";
+  public static Font fontRegSmall = null;
   public static Font fontReg = null;
   public static Font fontRegBig = null;
   public static Font fontMed = null;
@@ -28,6 +29,7 @@ public class Fonts {
 
   public static void setup() {
 
+    InputStream fontRegSmallIs;
     InputStream fontRegIs;
     InputStream fontRegBigIs;
     InputStream fontMedIs;
@@ -37,6 +39,7 @@ public class Fonts {
     InputStream fontCodeRegIs;
 
     if (Settings.lang.equalsIgnoreCase("jp")) {
+      fontRegSmallIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
       fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
       fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
       fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
@@ -45,6 +48,7 @@ public class Fonts {
       fontMedGiantIs = LauncherGUI.class.getResourceAsStream(fontPathMediumJP);
       sizeMultiplier = 1.1f;
     } else if (Settings.lang.equalsIgnoreCase("ar")) {
+      fontRegSmallIs = LauncherGUI.class.getResourceAsStream(fontPathRegularAR);
       fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegularAR);
       fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegularAR);
       fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMediumAR);
@@ -54,6 +58,7 @@ public class Fonts {
     } else if (Settings.lang.equalsIgnoreCase("zh-hans")
         || Settings.lang.equalsIgnoreCase("zh-hant")) {
       // Use OS default fonts
+      fontRegSmall = new Font(null);
       fontReg = new Font(null);
       fontRegBig = new Font(null);
       fontMed = new Font(null);
@@ -62,6 +67,7 @@ public class Fonts {
       fontMedGiant = new Font(null);
       return;
     } else {
+      fontRegSmallIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
       fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
       fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegular);
       fontMedIs = LauncherGUI.class.getResourceAsStream(fontPathMedium);
@@ -74,6 +80,10 @@ public class Fonts {
     fontCodeRegIs = LauncherGUI.class.getResourceAsStream(fontPathCodeRegular);
 
     try {
+
+      fontRegSmall = Font.createFont(Font.TRUETYPE_FONT, fontRegSmallIs);
+      fontRegSmall = fontRegSmall.deriveFont(9.0f * sizeMultiplier);
+      fontRegSmall = fontRegSmall.deriveFont(Font.ITALIC);
 
       fontReg = Font.createFont(Font.TRUETYPE_FONT, fontRegIs);
       fontReg = fontReg.deriveFont(11.0f * sizeMultiplier);
