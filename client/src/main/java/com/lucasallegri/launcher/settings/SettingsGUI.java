@@ -11,6 +11,7 @@ import jiconfont.swing.IconFontSwing;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Hashtable;
 
 public class SettingsGUI extends BaseGUI {
 
@@ -314,33 +315,28 @@ public class SettingsGUI extends BaseGUI {
     labelMemory.setFont(Fonts.fontRegBig);
     gamePanel.add(labelMemory);
 
-    choiceMemory = new JComboBox<String>();
-    choiceMemory.setBounds(225, 115, 150, 20);
-    choiceMemory.setFocusable(false);
-    choiceMemory.setFont(Fonts.fontReg);
-    gamePanel.add(choiceMemory);
-    choiceMemory.addItem(Locale.getValue("o.memory_256"));
-    choiceMemory.addItem(Locale.getValue("o.memory_512"));
-    choiceMemory.addItem(Locale.getValue("o.memory_768"));
-    choiceMemory.addItem(Locale.getValue("o.memory_1024"));
-    choiceMemory.addItem(Locale.getValue("o.memory_1536"));
-    choiceMemory.addItem(Locale.getValue("o.memory_2048"));
-    choiceMemory.addItem(Locale.getValue("o.memory_2560"));
-    choiceMemory.addItem(Locale.getValue("o.memory_3072"));
-    if (SystemUtil.is64Bit()) {
-      choiceMemory.addItem(Locale.getValue("o.memory_4096"));
-      choiceMemory.addItem(Locale.getValue("o.memory_5120"));
-      choiceMemory.addItem(Locale.getValue("o.memory_6144"));
-      choiceMemory.addItem(Locale.getValue("o.memory_8192"));
-      choiceMemory.addItem(Locale.getValue("o.memory_16384"));
-    }
-    choiceMemory.setSelectedIndex(parseSelectedMemoryAsIndex());
-    choiceMemory.setToolTipText((String) choiceMemory.getSelectedItem());
-    choiceMemory.addItemListener(new ItemListener() {
-      @Override
-      public void itemStateChanged(ItemEvent event) {
-        SettingsEventHandler.memoryChangeEvent(event);
-      }
+    // Make sure the currently selected game memory does not exceed the max.
+    Settings.gameMemory = Math.min(Settings.gameMemory, getMaxAllowedMemoryAlloc());
+    SettingsEventHandler.memoryChangeEvent(Settings.gameMemory);
+
+    JSlider memorySlider = new JSlider(JSlider.HORIZONTAL, 256, getMaxAllowedMemoryAlloc(), Settings.gameMemory);
+    memorySlider.setBounds(215, 105, 350, 40);
+    memorySlider.setFocusable(false);
+    memorySlider.setFont(Fonts.fontReg);
+    memorySlider.setPaintTicks(true);
+    memorySlider.setMinorTickSpacing(256);
+    memorySlider.setSnapToTicks(true);
+    gamePanel.add(memorySlider);
+
+    JLabel memoryValue = new JLabel();
+    memoryValue.setBounds(220, 135, 350, 25);
+    memoryValue.setFont(Fonts.fontReg);
+    memoryValue.setText(Locale.getValue("o.memory_" + Settings.gameMemory));
+    gamePanel.add(memoryValue);
+
+    memorySlider.addChangeListener(l -> {
+      memoryValue.setText(Locale.getValue("o.memory_" + memorySlider.getValue()));
+      SettingsEventHandler.memoryChangeEvent(memorySlider.getValue());
     });
 
     JLabel labelUseCustomGC = new JLabel("Use a different GC behavior");
@@ -643,68 +639,14 @@ public class SettingsGUI extends BaseGUI {
     return connectionPanel;
   }
 
-  protected static int parseSelectedMemoryAsInt() {
-    switch (choiceMemory.getSelectedIndex()) {
-      case 0:
-        return 256;
-      case 1:
-        return 512;
-      case 2:
-        return 768;
-      case 3:
-        return 1024;
-      case 4:
-        return 1536;
-      case 5:
-        return 2048;
-      case 6:
-        return 2560;
-      case 7:
-        return 3072;
-      case 8:
-        return 4096;
-      case 9:
-        return 5120;
-      case 10:
-        return 6144;
-      case 11:
-        return 8192;
-      case 12:
-        return 16384;
-    }
-    return 512;
-  }
+  private int getMaxAllowedMemoryAlloc() {
+    int MAX_ALLOWED_MEMORY_64_BIT = 8196;
+    int MAX_ALLOWED_MEMORY_32_BIT = 1024;
 
-  protected static int parseSelectedMemoryAsIndex() {
-    switch (Settings.gameMemory) {
-      case 256:
-        return 0;
-      case 512:
-        return 1;
-      case 768:
-        return 2;
-      case 1024:
-        return 3;
-      case 1536:
-        return 4;
-      case 2048:
-        return 5;
-      case 2560:
-        return 6;
-      case 3072:
-        return 7;
-      case 4096:
-        return 8;
-      case 5120:
-        return 9;
-      case 6144:
-        return 10;
-      case 8192:
-        return 11;
-      case 16384:
-        return 12;
+    if (JavaUtil.getJVMArch(LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe") == 64) {
+      return MAX_ALLOWED_MEMORY_64_BIT;
+    } else {
+      return MAX_ALLOWED_MEMORY_32_BIT;
     }
-    return 0;
   }
-
 }

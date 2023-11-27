@@ -82,11 +82,11 @@ public class SettingsEventHandler {
     SettingsProperties.setValue("game.additionalArgs", SettingsGUI.argumentsPane.getText());
   }
 
-  public static void memoryChangeEvent(ItemEvent event) {
-    Settings.gameMemory = SettingsGUI.parseSelectedMemoryAsInt();
-    SettingsProperties.setValue("game.memory", String.valueOf(SettingsGUI.parseSelectedMemoryAsInt()));
-    SettingsGUI.choiceMemory.setToolTipText((String) SettingsGUI.choiceMemory.getSelectedItem());
+  public static void memoryChangeEvent(int memory) {
+    Settings.gameMemory = memory;
+    SettingsProperties.setValue("game.memory", String.valueOf(memory));
   }
+
 
   public static void styleChangeEvent(ItemEvent event) {
     if(event.getStateChange() == ItemEvent.SELECTED)
