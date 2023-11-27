@@ -15,6 +15,7 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/lingala/zip4j/zip4j/2.5.0/zip4j-2.5.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont-font_awesome/4.7.0.1/jiconfont-font_awesome-4.7.0.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont/0.10.0/jiconfont-0.10.0.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/assets" />
     </root>
   </artifact>
 </component>
