@@ -123,6 +123,7 @@ public class ModListGUI extends BaseGUI {
     scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     scrollBar.setBounds(27, 120, 750, 340);
     scrollBar.setBorder(null);
+    scrollBar.getVerticalScrollBar().setUnitIncrement(16);
     modListGUIFrame.getContentPane().add(scrollBar);
   }
 
