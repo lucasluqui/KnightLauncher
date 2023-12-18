@@ -73,6 +73,7 @@ public class SettingsGUI extends BaseGUI {
     if (SystemUtil.isWindows() && SystemUtil.is64Bit())
       tabbedPane.addTab(Locale.getValue("Discord"), createDiscordPanel());
     tabbedPane.addTab(Locale.getValue("tab.extratxt"), createExtraPanel());
+    tabbedPane.addTab(Locale.getValue("tab.spiralview"), createSpiralviewPanel());
     tabbedPane.setBackground(new Color(56, 60, 71));
     settingsGUIFrame.getContentPane().add(tabbedPane);
 
@@ -637,6 +638,28 @@ public class SettingsGUI extends BaseGUI {
     getdownURLTextField.setEnabled(true);
 
     return connectionPanel;
+  }
+
+  protected JPanel createSpiralviewPanel() {
+    JPanel spiralviewPanel = new JPanel();
+    spiralviewPanel.setLayout(null);
+    spiralviewPanel.setBackground(new Color(56, 60, 71));
+
+    JLabel headerLabel = new JLabel(Locale.getValue("tab.spiralview"));
+    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    headerLabel.setBounds(25, 11, 450, 50);
+    headerLabel.setFont(Fonts.fontMedGiant);
+    spiralviewPanel.add(headerLabel);
+
+    JButton modelEditorButton = new JButton("Start Model Viewer");
+    modelEditorButton.setFont(Fonts.fontMed);
+    modelEditorButton.setBounds(400, 215, 180, 23);
+    modelEditorButton.setFocusPainted(false);
+    modelEditorButton.setFocusable(false);
+    spiralviewPanel.add(modelEditorButton);
+    //modelEditorButton.addActionListener(action -> SettingsEventHandler.startModelViewer(action));
+
+    return spiralviewPanel;
   }
 
   private int getMaxAllowedMemoryAlloc() {
