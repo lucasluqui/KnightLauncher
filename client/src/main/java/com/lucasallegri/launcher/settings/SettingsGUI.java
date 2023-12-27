@@ -73,7 +73,7 @@ public class SettingsGUI extends BaseGUI {
     if (SystemUtil.isWindows() && SystemUtil.is64Bit())
       tabbedPane.addTab(Locale.getValue("Discord"), createDiscordPanel());
     tabbedPane.addTab(Locale.getValue("tab.extratxt"), createExtraPanel());
-    tabbedPane.addTab(Locale.getValue("tab.spiralview"), createSpiralviewPanel());
+    //tabbedPane.addTab(Locale.getValue("tab.spiralview"), createSpiralviewPanel());
     tabbedPane.setBackground(new Color(56, 60, 71));
     settingsGUIFrame.getContentPane().add(tabbedPane);
 
