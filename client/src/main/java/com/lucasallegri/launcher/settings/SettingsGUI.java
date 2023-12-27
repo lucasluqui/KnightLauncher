@@ -137,13 +137,7 @@ public class SettingsGUI extends BaseGUI {
     closeButton.setFocusable(false);
     closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
-    closeButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        settingsGUIFrame.setVisible(false);
-        SettingsEventHandler.saveAdditionalArgs();
-        SettingsEventHandler.saveConnectionSettings();
-      }
-    });
+    closeButton.addActionListener(e -> settingsGUIFrame.setVisible(false));
 
     Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 14, ColorUtil.getForegroundColor());
     JButton minimizeButton = new JButton(minimizeIcon);
@@ -564,6 +558,9 @@ public class SettingsGUI extends BaseGUI {
     serverAddressTextField = new JTextField();
     serverAddressTextField.setFont(Fonts.fontCodeReg);
     serverAddressTextField.setBounds(25, 105, 250, 25);
+    serverAddressTextField.addActionListener(e -> {
+      SettingsEventHandler.saveConnectionSettings();
+    });
     connectionPanel.add(serverAddressTextField);
     serverAddressTextField.setText(Settings.gameEndpoint);
 

@@ -4,6 +4,7 @@ import com.lucasallegri.discord.DiscordRPC;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.GameSettings;
 import com.lucasallegri.launcher.settings.Settings;
+import com.lucasallegri.launcher.settings.SettingsEventHandler;
 import com.lucasallegri.util.ProcessUtil;
 import com.lucasallegri.util.SteamUtil;
 import com.lucasallegri.util.SystemUtil;
@@ -19,6 +20,8 @@ public class LauncherEventHandler {
     Thread launchThread = new Thread(() -> {
 
       if (ModLoader.mountRequired) ModLoader.mount();
+      SettingsEventHandler.saveAdditionalArgs();
+      SettingsEventHandler.saveConnectionSettings();
       GameSettings.load();
 
       if (Settings.gamePlatform.startsWith("Steam")) {
