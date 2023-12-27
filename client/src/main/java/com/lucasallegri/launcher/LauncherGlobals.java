@@ -13,8 +13,9 @@ public class LauncherGlobals {
   public static final String GITHUB_REPO = "KnightLauncher";
   public static final String GITHUB_BRANCH = "master";
 
-  public static final String CDN_URL_V1 = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
-  public static final String CDN_LARGE_URL_V1 = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
+  public static final String URL_CDN_V1 = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
+  public static final String URL_CDN_LARGE_V1 = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
+  public static final String URL_CDN_V2 = "https://lucasallegri.b-cdn.net/knightlauncher/v2/";
   public static final String URL_JAVA_REDISTRIBUTABLES = "https://lucasallegri.b-cdn.net/knightlauncher/v2/java/windows/{version}/redist.zip";
   public static final String URL_DISCORD = "https://discord.gg/RAf499a";
   public static final String URL_GET_MODS = "https://discord.gg/fAR8qtrat2";

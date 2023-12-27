@@ -268,27 +268,27 @@ public class LauncherApp {
         }));
       }
 
-      String tweets;
-      tweets = INetUtil.getWebpageContent(LauncherGlobals.CDN_URL_V1 + "tweets.html");
-      if (tweets == null) {
-        LauncherGUI.tweetsContainer.setText(Locale.getValue("error.tweets_retrieve"));
-      } else {
-        String styledTweets = tweets.replaceFirst("FONT_FAMILY", LauncherGUI.tweetsContainer.getFont().getFamily())
-            .replaceFirst("COLOR", Settings.launcherStyle.equals("dark") ? "#ffffff" : "#000000");
-        LauncherGUI.tweetsContainer.setContentType("text/html");
-        LauncherGUI.tweetsContainer.setText(styledTweets);
-      }
+      //String tweets;
+      //tweets = INetUtil.getWebpageContent(LauncherGlobals.URL_CDN_V1 + "tweets.html");
+      //if (tweets == null) {
+      //  LauncherGUI.tweetsContainer.setText(Locale.getValue("error.tweets_retrieve"));
+      //} else {
+      //  String styledTweets = tweets.replaceFirst("FONT_FAMILY", LauncherGUI.tweetsContainer.getFont().getFamily())
+      //      .replaceFirst("COLOR", Settings.launcherStyle.equals("dark") ? "#ffffff" : "#000000");
+      //  LauncherGUI.tweetsContainer.setContentType("text/html");
+      //  LauncherGUI.tweetsContainer.setText(styledTweets);
+      //}
 
-      Image eventImage;
-      String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
-      eventImage = ImageUtil.getImageFromURL(LauncherGlobals.CDN_URL_V1 + "event_" + eventImageLang + ".png", 525, 305);
-      if (eventImage == null) {
-        LauncherGUI.imageContainer.setText(Locale.getValue("error.event_image_missing"));
-      } else {
-        eventImage = ImageUtil.addRoundedCorners(eventImage, 25);
-        LauncherGUI.imageContainer.setText("");
-        LauncherGUI.imageContainer.setIcon(new ImageIcon(eventImage));
-      }
+      //Image eventImage;
+      //String eventImageLang = Settings.lang.startsWith("es") ? "es" : "en";
+      //eventImage = ImageUtil.getImageFromURL(LauncherGlobals.URL_CDN_V1 + "event_" + eventImageLang + ".png", 525, 305);
+      //if (eventImage == null) {
+      //  LauncherGUI.imageContainer.setText(Locale.getValue("error.event_image_missing"));
+      //} else {
+      //  eventImage = ImageUtil.addRoundedCorners(eventImage, 25);
+      //  LauncherGUI.imageContainer.setText("");
+      //  LauncherGUI.imageContainer.setIcon(new ImageIcon(eventImage));
+      //}
     });
     onlineAssetsThread.start();
   }
