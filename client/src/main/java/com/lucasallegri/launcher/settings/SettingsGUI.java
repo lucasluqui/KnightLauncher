@@ -684,8 +684,13 @@ public class SettingsGUI extends BaseGUI {
     serversPanel.add(betaCodeTextField);
 
     JButton betaCodeButton = new JButton("Activate");
-    betaCodeButton.setBounds(300, 105, 75, 25);
+    betaCodeButton.setFont(Fonts.fontMed);
+    betaCodeButton.setFocusPainted(false);
+    betaCodeButton.setFocusable(false);
+    betaCodeButton.setToolTipText("Activate");
+    betaCodeButton.setBounds(295, 105, 75, 25);
     serversPanel.add(betaCodeButton);
+    //betaCodeButton.addActionListener(action -> /* notify flamingo and add to properties file */ );
 
     return serversPanel;
   }
