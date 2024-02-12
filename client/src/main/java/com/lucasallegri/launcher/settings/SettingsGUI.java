@@ -37,6 +37,7 @@ public class SettingsGUI extends BaseGUI {
   public static JTextField publicKeyTextField;
   public static JTextField getdownURLTextField;
   public static JCheckBox understoodCheckBox;
+  public static JTextField betaCodeTextField;
 
   @SuppressWarnings("static-access")
   public SettingsGUI(LauncherApp app) {
@@ -70,6 +71,7 @@ public class SettingsGUI extends BaseGUI {
     tabbedPane.addTab(Locale.getValue("tab.game"), createGamePanel());
     tabbedPane.addTab(Locale.getValue("tab.files"), createFilesPanel());
     tabbedPane.addTab(Locale.getValue("tab.connection"), createConnectionPanel());
+    tabbedPane.addTab(Locale.getValue("tab.servers"), createServersPanel());
     if (SystemUtil.isWindows() && SystemUtil.is64Bit())
       tabbedPane.addTab(Locale.getValue("Discord"), createDiscordPanel());
     tabbedPane.addTab(Locale.getValue("tab.extratxt"), createExtraPanel());
@@ -657,6 +659,34 @@ public class SettingsGUI extends BaseGUI {
     //modelEditorButton.addActionListener(action -> SettingsEventHandler.startModelViewer(action));
 
     return spiralviewPanel;
+  }
+
+  protected JPanel createServersPanel() {
+    JPanel serversPanel = new JPanel();
+    serversPanel.setLayout(null);
+    serversPanel.setBackground(new Color(56, 60, 71));
+
+    JLabel headerLabel = new JLabel(Locale.getValue("tab.servers"));
+    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    headerLabel.setBounds(25, 11, 450, 50);
+    headerLabel.setFont(Fonts.fontMedGiant);
+    serversPanel.add(headerLabel);
+
+    JLabel betaCodeLabel = new JLabel("Activate a Beta code");
+    betaCodeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    betaCodeLabel.setBounds(25, 70, 450, 50);
+    betaCodeLabel.setFont(Fonts.fontReg);
+    serversPanel.add(betaCodeLabel);
+
+    betaCodeTextField = new JTextField();
+    betaCodeTextField.setFont(Fonts.fontCodeReg);
+    betaCodeTextField.setBounds(25, 105, 250, 25);
+    serversPanel.add(betaCodeTextField);
+
+    JButton betaCodeButton = new JButton("Activate");
+    betaCodeButton.setBounds(300, 105, 75, 25);
+
+    return serversPanel;
   }
 
   private int getMaxAllowedMemoryAlloc() {
