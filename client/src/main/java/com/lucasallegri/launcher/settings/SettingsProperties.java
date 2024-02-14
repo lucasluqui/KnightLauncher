@@ -85,8 +85,6 @@ public class SettingsProperties {
     Settings.createShortcut = Boolean.parseBoolean(getValue("launcher.createShortcut"));
     Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
     Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
-    Settings.allowModding = Boolean.parseBoolean(getValue("launcher.allowModding"));
-    Settings.connectionOverwriteAgreed = Boolean.parseBoolean(getValue("launcher.connectionOverwriteAgreed"));
     Settings.compressorUnzipMethod = getValue("compressor.unzipMethod");
     Settings.compressorExtractBuffer = Integer.parseInt(getValue("compressor.extractBuffer"));
     Settings.gamePlatform = getValue("game.platform");
