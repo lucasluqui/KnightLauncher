@@ -59,25 +59,8 @@ public class SystemUtil {
     }
 
     if(isUnix()) {
-      try {
-        String command = "/bin/bash -c echo \"$(fdisk --list)$(lshw -short)\" | md5sum | cut --delimiter=' ' --fields=1";
-        StringBuffer output = new StringBuffer();
-
-        Process SerNumProcess = Runtime.getRuntime().exec(command);
-        BufferedReader sNumReader = new BufferedReader(new InputStreamReader(SerNumProcess.getInputStream()));
-
-        String line = "";
-        while ((line = sNumReader.readLine()) != null) {
-          output.append(line + "\n");
-        }
-
-        machineId = output.toString().trim();
-
-        SerNumProcess.waitFor();
-        sNumReader.close();
-      } catch (Exception e) {
-        log.error(e);
-      }
+       machineId = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", "cat /etc/machine-id" })[0];
+       machineId = machineId.trim();
     }
 
     if(isMac()) {
