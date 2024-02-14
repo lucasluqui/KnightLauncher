@@ -11,7 +11,6 @@ import jiconfont.swing.IconFontSwing;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Hashtable;
 
 public class SettingsGUI extends BaseGUI {
 
@@ -21,7 +20,6 @@ public class SettingsGUI extends BaseGUI {
   public static JComboBox<String> choicePlatform;
   public static JComboBox<String> choiceLanguage;
   public static JComboBox<String> choiceStyle;
-  public static JComboBox<String> choiceMemory;
   public static JComboBox<String> choiceGC;
   public static JCheckBox switchCleaning;
   public static JCheckBox switchKeepOpen;
@@ -36,7 +34,6 @@ public class SettingsGUI extends BaseGUI {
   public static JTextField portTextField;
   public static JTextField publicKeyTextField;
   public static JTextField getdownURLTextField;
-  public static JCheckBox understoodCheckBox;
   public static JTextField betaCodeTextField;
 
   @SuppressWarnings("static-access")
@@ -66,14 +63,10 @@ public class SettingsGUI extends BaseGUI {
     tabbedPane.setBounds(-2, 20, 852, 455);
     tabbedPane.setFont(Fonts.fontMedBig);
     tabbedPane.setTabPlacement(JTabbedPane.LEFT);
-    tabbedPane.addTab(Locale.getValue("tab.appearance"), createAppearancePanel());
-    tabbedPane.addTab(Locale.getValue("tab.behavior"), createBehaviorPanel());
+    tabbedPane.addTab(Locale.getValue("tab.launcher"), createLauncherPanel());
     tabbedPane.addTab(Locale.getValue("tab.game"), createGamePanel());
-    tabbedPane.addTab(Locale.getValue("tab.files"), createFilesPanel());
-    tabbedPane.addTab(Locale.getValue("tab.connection"), createConnectionPanel());
     tabbedPane.addTab(Locale.getValue("tab.servers"), createServersPanel());
-    if (SystemUtil.isWindows() && SystemUtil.is64Bit())
-      tabbedPane.addTab(Locale.getValue("Discord"), createDiscordPanel());
+    tabbedPane.addTab(Locale.getValue("tab.connection"), createConnectionPanel());
     tabbedPane.addTab(Locale.getValue("tab.extratxt"), createExtraPanel());
     //tabbedPane.addTab(Locale.getValue("tab.spiralview"), createSpiralviewPanel());
     tabbedPane.setBackground(new Color(56, 60, 71));
@@ -153,21 +146,21 @@ public class SettingsGUI extends BaseGUI {
     settingsGUIFrame.setLocationRelativeTo(null);
   }
 
-  protected JPanel createAppearancePanel() {
-    JPanel appearancePanel = new JPanel();
-    appearancePanel.setLayout(null);
-    appearancePanel.setBackground(new Color(56, 60, 71));
+  protected JPanel createLauncherPanel() {
+    JPanel launcherPanel = new JPanel();
+    launcherPanel.setLayout(null);
+    launcherPanel.setBackground(new Color(56, 60, 71));
 
-    JLabel headerLabel = new JLabel(Locale.getValue("tab.appearance"));
+    JLabel headerLabel = new JLabel(Locale.getValue("tab.launcher"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 50);
     headerLabel.setFont(Fonts.fontMedGiant);
-    appearancePanel.add(headerLabel);
+    launcherPanel.add(headerLabel);
 
     JLabel labelLanguage = new JLabel(Locale.getValue("m.language"));
     labelLanguage.setBounds(25, 90, 175, 18);
     labelLanguage.setFont(Fonts.fontRegBig);
-    appearancePanel.add(labelLanguage);
+    launcherPanel.add(labelLanguage);
 
     choiceLanguage = new JComboBox<String>();
     choiceLanguage.setBounds(25, 115, 150, 20);
@@ -176,7 +169,7 @@ public class SettingsGUI extends BaseGUI {
     for (String lang : Locale.AVAILABLE_LANGUAGES) {
       choiceLanguage.addItem(lang);
     }
-    appearancePanel.add(choiceLanguage);
+    launcherPanel.add(choiceLanguage);
     choiceLanguage.setSelectedItem(Locale.getLangName(Settings.lang));
     choiceLanguage.addItemListener(new ItemListener() {
       @Override
@@ -185,92 +178,89 @@ public class SettingsGUI extends BaseGUI {
       }
     });
 
-    return appearancePanel;
-  }
-
-  protected JPanel createBehaviorPanel() {
-    JPanel behaviorPanel = new JPanel();
-    behaviorPanel.setLayout(null);
-    behaviorPanel.setBackground(new Color(56, 60, 71));
-
-    JLabel headerLabel = new JLabel(Locale.getValue("tab.behavior"));
-    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(Fonts.fontMedGiant);
-    behaviorPanel.add(headerLabel);
-
     JLabel labelCleaning = new JLabel(Locale.getValue("m.rebuilds"));
-    labelCleaning.setBounds(25, 90, 350, 18);
+    labelCleaning.setBounds(25, 175, 350, 18);
     labelCleaning.setFont(Fonts.fontRegBig);
-    behaviorPanel.add(labelCleaning);
+    launcherPanel.add(labelCleaning);
 
     JLabel labelCleaningExplained = new JLabel(Locale.getValue("m.file_cleaning_explained"));
-    labelCleaningExplained.setBounds(25, 110, 600, 16);
+    labelCleaningExplained.setBounds(25, 195, 600, 16);
     labelCleaningExplained.setFont(Fonts.fontReg);
-    behaviorPanel.add(labelCleaningExplained);
+    launcherPanel.add(labelCleaningExplained);
 
     switchCleaning = new JCheckBox("");
-    switchCleaning.setBounds(590, 95, 30, 23);
+    switchCleaning.setBounds(590, 180, 30, 23);
     switchCleaning.setFocusPainted(false);
-    behaviorPanel.add(switchCleaning);
+    launcherPanel.add(switchCleaning);
     switchCleaning.setSelected(Settings.doRebuilds);
-    switchCleaning.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        SettingsEventHandler.rebuildsChangeEvent(_action);
-      }
-    });
+    switchCleaning.addActionListener(action -> SettingsEventHandler.rebuildsChangeEvent(action));
 
     JSeparator sep = new JSeparator();
-    sep.setBounds(25, 140, 600, 16);
-    behaviorPanel.add(sep);
+    sep.setBounds(25, 225, 600, 16);
+    launcherPanel.add(sep);
 
     JLabel labelKeepOpen = new JLabel(Locale.getValue("m.keep_open"));
-    labelKeepOpen.setBounds(25, 155, 350, 18);
+    labelKeepOpen.setBounds(25, 240, 350, 18);
     labelKeepOpen.setFont(Fonts.fontRegBig);
-    behaviorPanel.add(labelKeepOpen);
+    launcherPanel.add(labelKeepOpen);
 
     JLabel labelKeepOpenExplained = new JLabel(Locale.getValue("m.keep_open_explained"));
-    labelKeepOpenExplained.setBounds(25, 175, 600, 16);
+    labelKeepOpenExplained.setBounds(25, 260, 600, 16);
     labelKeepOpenExplained.setFont(Fonts.fontReg);
-    behaviorPanel.add(labelKeepOpenExplained);
+    launcherPanel.add(labelKeepOpenExplained);
 
     switchKeepOpen = new JCheckBox("");
-    switchKeepOpen.setBounds(590, 160, 30, 23);
+    switchKeepOpen.setBounds(590, 245, 30, 23);
     switchKeepOpen.setFocusPainted(false);
-    behaviorPanel.add(switchKeepOpen);
+    launcherPanel.add(switchKeepOpen);
     switchKeepOpen.setSelected(Settings.keepOpen);
-    switchKeepOpen.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        SettingsEventHandler.keepOpenChangeEvent(_action);
-      }
-    });
+    switchKeepOpen.addActionListener(action -> SettingsEventHandler.keepOpenChangeEvent(action));
 
     JSeparator sep2 = new JSeparator();
-    sep2.setBounds(25, 205, 600, 16);
-    behaviorPanel.add(sep2);
+    sep2.setBounds(25, 290, 600, 16);
+    launcherPanel.add(sep2);
 
     JLabel labelShortcut = new JLabel(Locale.getValue("m.create_shortcut"));
-    labelShortcut.setBounds(25, 220, 225, 18);
+    labelShortcut.setBounds(25, 305, 225, 18);
     labelShortcut.setFont(Fonts.fontRegBig);
-    behaviorPanel.add(labelShortcut);
+    launcherPanel.add(labelShortcut);
 
     JLabel labelShortcutExplained = new JLabel(Locale.getValue("m.create_shortcut_explained"));
-    labelShortcutExplained.setBounds(25, 240, 600, 16);
+    labelShortcutExplained.setBounds(25, 325, 600, 16);
     labelShortcutExplained.setFont(Fonts.fontReg);
-    behaviorPanel.add(labelShortcutExplained);
+    launcherPanel.add(labelShortcutExplained);
 
     switchShortcut = new JCheckBox("");
-    switchShortcut.setBounds(590, 225, 30, 23);
+    switchShortcut.setBounds(590, 310, 30, 23);
     switchShortcut.setFocusPainted(false);
-    behaviorPanel.add(switchShortcut);
+    launcherPanel.add(switchShortcut);
     switchShortcut.setSelected(Settings.createShortcut);
-    switchShortcut.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        SettingsEventHandler.createShortcutChangeEvent(_action);
-      }
-    });
+    switchShortcut.addActionListener(action -> SettingsEventHandler.createShortcutChangeEvent(action));
 
-    return behaviorPanel;
+    if(SystemUtil.isWindows() && SystemUtil.is64Bit()) {
+      JSeparator sepDiscord = new JSeparator();
+      sepDiscord.setBounds(25, 355, 600, 16);
+      launcherPanel.add(sepDiscord);
+
+      JLabel labelUseIngameRPC = new JLabel(Locale.getValue("m.use_ingame_rpc"));
+      labelUseIngameRPC.setBounds(25, 370, 350, 18);
+      labelUseIngameRPC.setFont(Fonts.fontRegBig);
+      launcherPanel.add(labelUseIngameRPC);
+
+      JLabel labelUseIngameRPCExplained = new JLabel(Locale.getValue("m.use_ingame_rpc_explained"));
+      labelUseIngameRPCExplained.setBounds(25, 390, 600, 16);
+      labelUseIngameRPCExplained.setFont(Fonts.fontReg);
+      launcherPanel.add(labelUseIngameRPCExplained);
+
+      switchUseIngameRPC = new JCheckBox("");
+      switchUseIngameRPC.setBounds(590, 375, 30, 23);
+      switchUseIngameRPC.setFocusPainted(false);
+      launcherPanel.add(switchUseIngameRPC);
+      switchUseIngameRPC.setSelected(Settings.useIngameRPC);
+      switchUseIngameRPC.addActionListener(action -> SettingsEventHandler.ingameRPCChangeEvent(action));
+    }
+
+    return launcherPanel;
   }
 
   protected JPanel createGamePanel() {
@@ -401,77 +391,60 @@ public class SettingsGUI extends BaseGUI {
     });
     switchExplicitGC.setEnabled(SystemUtil.is64Bit());
 
-    return gamePanel;
-  }
-
-  protected JPanel createFilesPanel() {
-    JPanel filesPanel = new JPanel();
-    filesPanel.setLayout(null);
-    filesPanel.setBackground(new Color(56, 60, 71));
-
-    JLabel headerLabel = new JLabel(Locale.getValue("tab.files"));
-    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(Fonts.fontMedGiant);
-    filesPanel.add(headerLabel);
+    JSeparator sep3 = new JSeparator();
+    sep3.setBounds(25, 290, 600, 16);
+    gamePanel.add(sep3);
 
     JLabel labelFileClean = new JLabel(Locale.getValue("b.force_rebuild"));
-    labelFileClean.setBounds(25, 90, 275, 18);
+    labelFileClean.setBounds(25, 305, 275, 18);
     labelFileClean.setFont(Fonts.fontRegBig);
-    filesPanel.add(labelFileClean);
+    gamePanel.add(labelFileClean);
 
     JLabel labelFileCleanExplained = new JLabel(Locale.getValue("m.clean_files_explained"));
-    labelFileCleanExplained.setBounds(25, 110, 600, 16);
+    labelFileCleanExplained.setBounds(25, 325, 600, 16);
     labelFileCleanExplained.setFont(Fonts.fontReg);
-    filesPanel.add(labelFileCleanExplained);
+    gamePanel.add(labelFileCleanExplained);
 
     Icon startIcon = IconFontSwing.buildIcon(FontAwesome.SHARE, 16, ColorUtil.getForegroundColor());
     JButton forceRebuildButton = new JButton(startIcon);
-    forceRebuildButton.setBounds(590, 95, 30, 23);
+    forceRebuildButton.setBounds(590, 310, 30, 23);
     forceRebuildButton.setFocusPainted(false);
     forceRebuildButton.setFocusable(false);
-    filesPanel.add(forceRebuildButton);
-    forceRebuildButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        SettingsGUI.settingsGUIFrame.setVisible(false);
-        LauncherGUI.launcherGUIFrame.setVisible(true);
-        SettingsEventHandler.forceRebuildEvent();
-      }
+    gamePanel.add(forceRebuildButton);
+    forceRebuildButton.addActionListener(action -> {
+      SettingsGUI.settingsGUIFrame.setVisible(false);
+      LauncherGUI.launcherGUIFrame.setVisible(true);
+      SettingsEventHandler.forceRebuildEvent();
     });
 
-    if ( (SystemUtil.isWindows() && SystemUtil.is64Bit()) || (SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam")) ) {
-      JSeparator sep = new JSeparator();
-      sep.setBounds(25, 140, 600, 16);
-      filesPanel.add(sep);
+    JSeparator sep4 = new JSeparator();
+    sep4.setBounds(25, 355, 600, 16);
+    gamePanel.add(sep4);
 
-      JLabel labelJVMPatch = new JLabel(Locale.getValue("m.force_jvm_patch"));
-      labelJVMPatch.setBounds(25, 155, 350, 18);
-      labelJVMPatch.setFont(Fonts.fontRegBig);
-      filesPanel.add(labelJVMPatch);
+    JLabel labelJVMPatch = new JLabel(Locale.getValue("m.force_jvm_patch"));
+    labelJVMPatch.setBounds(25, 370, 350, 18);
+    labelJVMPatch.setFont(Fonts.fontRegBig);
+    gamePanel.add(labelJVMPatch);
 
-      JLabel labelJVMPatchExplained = new JLabel(Locale.getValue("m.force_jvm_patch_explained"));
-      labelJVMPatchExplained.setBounds(25, 175, 600, 16);
-      labelJVMPatchExplained.setFont(Fonts.fontReg);
-      filesPanel.add(labelJVMPatchExplained);
+    JLabel labelJVMPatchExplained = new JLabel(Locale.getValue("m.force_jvm_patch_explained"));
+    labelJVMPatchExplained.setBounds(25, 390, 600, 16);
+    labelJVMPatchExplained.setFont(Fonts.fontReg);
+    gamePanel.add(labelJVMPatchExplained);
 
-      JLabel labelJVMData = new JLabel("Installed Java VM: " + JavaUtil.getGameJVMData());
-      labelJVMData.setBounds(25, 210, 600, 16);
-      labelJVMData.setFont(Fonts.fontMedIta);
-      filesPanel.add(labelJVMData);
+    JLabel labelJVMData = new JLabel("Installed Java VM: " + JavaUtil.getGameJVMData());
+    labelJVMData.setBounds(25, 425, 600, 16);
+    labelJVMData.setFont(Fonts.fontMedIta);
+    gamePanel.add(labelJVMData);
 
-      JButton jvmPatchButton = new JButton(startIcon);
-      jvmPatchButton.setBounds(590, 160, 30, 23);
-      jvmPatchButton.setFocusPainted(false);
-      jvmPatchButton.setFocusable(false);
-      filesPanel.add(jvmPatchButton);
-      jvmPatchButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent _action) {
-          SettingsEventHandler.jvmPatchEvent(_action);
-        }
-      });
-    }
+    JButton jvmPatchButton = new JButton(startIcon);
+    jvmPatchButton.setBounds(590, 375, 30, 23);
+    jvmPatchButton.setFocusPainted(false);
+    jvmPatchButton.setFocusable(false);
+    jvmPatchButton.setEnabled( ( ( SystemUtil.isWindows() && SystemUtil.is64Bit() ) || ( SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam") ) ) );
+    gamePanel.add(jvmPatchButton);
+    jvmPatchButton.addActionListener(action -> SettingsEventHandler.jvmPatchEvent(action));
 
-    return filesPanel;
+    return gamePanel;
   }
 
   protected JPanel createExtraPanel() {
@@ -503,41 +476,6 @@ public class SettingsGUI extends BaseGUI {
     extraPanel.add(scrollBar);
 
     return extraPanel;
-  }
-
-  protected JPanel createDiscordPanel() {
-    JPanel ingameRPCPanel = new JPanel();
-    ingameRPCPanel.setLayout(null);
-    ingameRPCPanel.setBackground(new Color(56, 60, 71));
-
-    JLabel headerLabel = new JLabel(Locale.getValue("Discord"));
-    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(Fonts.fontMedGiant);
-    ingameRPCPanel.add(headerLabel);
-
-    JLabel labelUseIngameRPC = new JLabel(Locale.getValue("m.use_ingame_rpc"));
-    labelUseIngameRPC.setBounds(25, 90, 350, 18);
-    labelUseIngameRPC.setFont(Fonts.fontRegBig);
-    ingameRPCPanel.add(labelUseIngameRPC);
-
-    JLabel labelUseIngameRPCExplained = new JLabel(Locale.getValue("m.use_ingame_rpc_explained"));
-    labelUseIngameRPCExplained.setBounds(25, 110, 600, 16);
-    labelUseIngameRPCExplained.setFont(Fonts.fontReg);
-    ingameRPCPanel.add(labelUseIngameRPCExplained);
-
-    switchUseIngameRPC = new JCheckBox("");
-    switchUseIngameRPC.setBounds(590, 95, 30, 23);
-    switchUseIngameRPC.setFocusPainted(false);
-    ingameRPCPanel.add(switchUseIngameRPC);
-    switchUseIngameRPC.setSelected(Settings.useIngameRPC);
-    switchUseIngameRPC.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        SettingsEventHandler.ingameRPCChangeEvent(_action);
-      }
-    });
-
-    return ingameRPCPanel;
   }
 
   protected JPanel createConnectionPanel() {
