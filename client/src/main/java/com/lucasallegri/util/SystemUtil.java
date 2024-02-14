@@ -50,4 +50,75 @@ public class SystemUtil {
             System.getProperty("java.home").contains("1.8");
   }
 
+  public static String getMachineId() {
+    String machineId = null;
+
+    if(isWindows()) {
+      try {
+        String command = "wmic csproduct get UUID";
+        StringBuffer output = new StringBuffer();
+
+        Process SerNumProcess = Runtime.getRuntime().exec(command);
+        BufferedReader sNumReader = new BufferedReader(new InputStreamReader(SerNumProcess.getInputStream()));
+
+        String line = "";
+        while ((line = sNumReader.readLine()) != null) {
+          output.append(line + "\n");
+        }
+        machineId = output.toString().substring(output.indexOf("\n"), output.length()).trim();
+
+        SerNumProcess.waitFor();
+        sNumReader.close();
+      } catch (Exception e) {
+        log.error(e);
+      }
+    }
+
+    if(isUnix()) {
+      try {
+        String command = "echo \"$(fdisk --list)$(lshw -short)\" | md5sum | cut --delimiter=' ' --fields=1";
+        StringBuffer output = new StringBuffer();
+
+        Process SerNumProcess = Runtime.getRuntime().exec(command);
+        BufferedReader sNumReader = new BufferedReader(new InputStreamReader(SerNumProcess.getInputStream()));
+
+        String line = "";
+        while ((line = sNumReader.readLine()) != null) {
+          output.append(line + "\n");
+        }
+
+        machineId = output.toString().trim();
+
+        SerNumProcess.waitFor();
+        sNumReader.close();
+      } catch (Exception e) {
+        log.error(e);
+      }
+    }
+
+    if(isMac()) {
+      try {
+        String command = "system_profiler SPHardwareDataType | awk '/UUID/ { print $3; }'";
+        StringBuffer output = new StringBuffer();
+
+        Process SerNumProcess = Runtime.getRuntime().exec(command);
+        BufferedReader sNumReader = new BufferedReader(new InputStreamReader(SerNumProcess.getInputStream()));
+
+        String line = "";
+        while ((line = sNumReader.readLine()) != null) {
+          output.append(line + "\n");
+        }
+
+        machineId = output.toString().substring(output.indexOf("UUID: "), output.length()).replace("UUID: ", "");
+
+        SerNumProcess.waitFor();
+        sNumReader.close();
+      } catch (Exception e) {
+        log.error(e);
+      }
+    }
+
+    return machineId;
+  }
+
 }
