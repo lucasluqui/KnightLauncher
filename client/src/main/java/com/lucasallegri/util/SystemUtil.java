@@ -54,29 +54,13 @@ public class SystemUtil {
     String machineId = null;
 
     if(isWindows()) {
-      try {
-        String command = "wmic csproduct get UUID";
-        StringBuffer output = new StringBuffer();
-
-        Process SerNumProcess = Runtime.getRuntime().exec(command);
-        BufferedReader sNumReader = new BufferedReader(new InputStreamReader(SerNumProcess.getInputStream()));
-
-        String line = "";
-        while ((line = sNumReader.readLine()) != null) {
-          output.append(line + "\n");
-        }
-        machineId = output.toString().substring(output.indexOf("\n"), output.length()).trim();
-
-        SerNumProcess.waitFor();
-        sNumReader.close();
-      } catch (Exception e) {
-        log.error(e);
-      }
+      machineId = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "wmic csproduct get UUID" })[0];
+      machineId = machineId.substring(machineId.indexOf("\n")).trim();
     }
 
     if(isUnix()) {
       try {
-        String command = "echo \"$(fdisk --list)$(lshw -short)\" | md5sum | cut --delimiter=' ' --fields=1";
+        String command = "/bin/bash -c echo \"$(fdisk --list)$(lshw -short)\" | md5sum | cut --delimiter=' ' --fields=1";
         StringBuffer output = new StringBuffer();
 
         Process SerNumProcess = Runtime.getRuntime().exec(command);
