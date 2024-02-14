@@ -127,7 +127,26 @@ public class SettingsEventHandler {
     SettingsGUI.getdownURLTextField.setText("http://gamemedia2.spiralknights.com/spiral/client/");
   }
 
-  public static void addBetaCode(String code) {
-    // notify flamingo
+  public static int addBetaCode(String code) {
+    // Get the currently loaded codes
+    String codes = SettingsProperties.getValue("launcher.betaCodes");
+
+    // This beta code was already added. We return '2' indicating duplicate.
+    if(codes != null && codes.contains(code)) return 2;
+
+    // Check if there's any codes to properly format the codes string
+    if(codes.equalsIgnoreCase("")) {
+      codes += code;
+    } else {
+      codes += "," + code;
+    }
+
+    // Successfully added a new beta code, update the properties file.
+    SettingsProperties.setValue("launcher.betaCodes", codes);
+
+    // TODO: Notify and request new servers list from flamingo.
+
+    // Return 1 indicating success.
+    return 1;
   }
 }

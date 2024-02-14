@@ -683,6 +683,13 @@ public class SettingsGUI extends BaseGUI {
     betaCodeTextField.setBounds(25, 105, 250, 25);
     serversPanel.add(betaCodeTextField);
 
+    JLabel betaCodeResultLabel = new JLabel("");
+    betaCodeResultLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    betaCodeResultLabel.setBounds(25, 135, 450, 50);
+    betaCodeResultLabel.setFont(Fonts.fontReg);
+    betaCodeResultLabel.setVisible(false);
+    serversPanel.add(betaCodeResultLabel);
+
     JButton betaCodeButton = new JButton("Activate");
     betaCodeButton.setFont(Fonts.fontMed);
     betaCodeButton.setFocusPainted(false);
@@ -690,7 +697,17 @@ public class SettingsGUI extends BaseGUI {
     betaCodeButton.setToolTipText("Activate");
     betaCodeButton.setBounds(295, 105, 80, 25);
     serversPanel.add(betaCodeButton);
-    betaCodeButton.addActionListener(action -> SettingsEventHandler.addBetaCode(betaCodeTextField.getText()));
+    betaCodeButton.addActionListener(action -> {
+      int result = SettingsEventHandler.addBetaCode(betaCodeTextField.getText());
+
+      if(result == 2) {
+        betaCodeResultLabel.setText("This code was already activated.");
+      } else if (result == 1) {
+        betaCodeResultLabel.setText("Successfully activated beta code. (Check servers list)");
+      }
+
+      betaCodeResultLabel.setVisible(true);
+    });
 
     return serversPanel;
   }
