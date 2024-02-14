@@ -65,7 +65,7 @@ public class SettingsGUI extends BaseGUI {
     tabbedPane.setTabPlacement(JTabbedPane.LEFT);
     tabbedPane.addTab(Locale.getValue("tab.launcher"), createLauncherPanel());
     tabbedPane.addTab(Locale.getValue("tab.game"), createGamePanel());
-    tabbedPane.addTab(Locale.getValue("tab.servers"), createServersPanel());
+    tabbedPane.addTab(Locale.getValue("tab.betas"), createBetasPanel());
     tabbedPane.addTab(Locale.getValue("tab.connection"), createConnectionPanel());
     tabbedPane.addTab(Locale.getValue("tab.extratxt"), createExtraPanel());
     //tabbedPane.addTab(Locale.getValue("tab.spiralview"), createSpiralviewPanel());
@@ -605,34 +605,34 @@ public class SettingsGUI extends BaseGUI {
     return spiralviewPanel;
   }
 
-  protected JPanel createServersPanel() {
-    JPanel serversPanel = new JPanel();
-    serversPanel.setLayout(null);
-    serversPanel.setBackground(new Color(56, 60, 71));
+  protected JPanel createBetasPanel() {
+    JPanel betasPanel = new JPanel();
+    betasPanel.setLayout(null);
+    betasPanel.setBackground(new Color(56, 60, 71));
 
-    JLabel headerLabel = new JLabel(Locale.getValue("tab.servers"));
+    JLabel headerLabel = new JLabel(Locale.getValue("tab.betas"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 50);
     headerLabel.setFont(Fonts.fontMedGiant);
-    serversPanel.add(headerLabel);
+    betasPanel.add(headerLabel);
 
     JLabel betaCodeLabel = new JLabel("Activate a Beta code");
     betaCodeLabel.setHorizontalAlignment(SwingConstants.LEFT);
     betaCodeLabel.setBounds(25, 70, 450, 50);
     betaCodeLabel.setFont(Fonts.fontReg);
-    serversPanel.add(betaCodeLabel);
+    betasPanel.add(betaCodeLabel);
 
     betaCodeTextField = new JTextField();
     betaCodeTextField.setFont(Fonts.fontCodeReg);
     betaCodeTextField.setBounds(25, 105, 250, 25);
-    serversPanel.add(betaCodeTextField);
+    betasPanel.add(betaCodeTextField);
 
     JLabel betaCodeResultLabel = new JLabel("");
     betaCodeResultLabel.setHorizontalAlignment(SwingConstants.LEFT);
     betaCodeResultLabel.setBounds(25, 135, 450, 50);
     betaCodeResultLabel.setFont(Fonts.fontReg);
     betaCodeResultLabel.setVisible(false);
-    serversPanel.add(betaCodeResultLabel);
+    betasPanel.add(betaCodeResultLabel);
 
     JButton betaCodeButton = new JButton("Activate");
     betaCodeButton.setFont(Fonts.fontMed);
@@ -640,7 +640,7 @@ public class SettingsGUI extends BaseGUI {
     betaCodeButton.setFocusable(false);
     betaCodeButton.setToolTipText("Activate");
     betaCodeButton.setBounds(295, 105, 80, 25);
-    serversPanel.add(betaCodeButton);
+    betasPanel.add(betaCodeButton);
     betaCodeButton.addActionListener(action -> {
       int result = SettingsEventHandler.addBetaCode(betaCodeTextField.getText());
 
@@ -653,7 +653,7 @@ public class SettingsGUI extends BaseGUI {
       betaCodeResultLabel.setVisible(true);
     });
 
-    return serversPanel;
+    return betasPanel;
   }
 
   private int getMaxAllowedMemoryAlloc() {
