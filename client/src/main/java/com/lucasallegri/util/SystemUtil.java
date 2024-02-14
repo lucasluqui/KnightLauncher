@@ -63,6 +63,7 @@ public class SystemUtil {
        machineId = machineId.trim();
     }
 
+    // TODO: Verify this even works on Mac systems.
     if(isMac()) {
       try {
         String command = "system_profiler SPHardwareDataType | awk '/UUID/ { print $3; }'";
