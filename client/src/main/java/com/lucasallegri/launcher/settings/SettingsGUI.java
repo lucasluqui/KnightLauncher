@@ -440,9 +440,15 @@ public class SettingsGUI extends BaseGUI {
     jvmPatchButton.setBounds(590, 375, 30, 23);
     jvmPatchButton.setFocusPainted(false);
     jvmPatchButton.setFocusable(false);
-    jvmPatchButton.setEnabled( ( ( SystemUtil.isWindows() && SystemUtil.is64Bit() ) || ( SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam") ) ) );
+    jvmPatchButton.setEnabled(false);
+    jvmPatchButton.setToolTipText("Your system does not support a 64-bit Java VM.");
     gamePanel.add(jvmPatchButton);
     jvmPatchButton.addActionListener(action -> SettingsEventHandler.jvmPatchEvent(action));
+
+    if(((SystemUtil.isWindows() && SystemUtil.is64Bit() ) || ( SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam")))) {
+      jvmPatchButton.setEnabled(true);
+      jvmPatchButton.setToolTipText(null);
+    }
 
     return gamePanel;
   }
