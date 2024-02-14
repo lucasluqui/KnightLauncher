@@ -128,6 +128,9 @@ public class SettingsEventHandler {
   }
 
   public static int addBetaCode(String code) {
+
+    // TODO: Ask flamingo if this is valid code and case it's not return 0.
+
     // Get the currently loaded codes
     String codes = SettingsProperties.getValue("launcher.betaCodes");
 
