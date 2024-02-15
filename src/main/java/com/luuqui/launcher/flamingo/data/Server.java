@@ -24,6 +24,10 @@ public class Server {
 
   public String sourceCodeUrl;
 
+  public String announceType;
+
+  public String announceContent;
+
   public int enabled;
 
 }
