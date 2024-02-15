@@ -267,7 +267,7 @@ public class LauncherGUI extends BaseGUI {
     Icon launchTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 16, Color.WHITE);
     JButton launchTooltipButton = new JButton();
     launchTooltipButton.setIcon(launchTooltipButtonIcon);
-    launchTooltipButton.setBounds(550, 425, 16, 16);
+    launchTooltipButton.setBounds(552, 424, 16, 16);
     launchTooltipButton.setEnabled(true);
     launchTooltipButton.setFocusable(false);
     launchTooltipButton.setFocusPainted(false);
