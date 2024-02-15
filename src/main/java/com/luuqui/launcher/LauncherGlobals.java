@@ -8,7 +8,7 @@ public class LauncherGlobals {
 
   public static final String LAUNCHER_NAME = "Knight Launcher";
 
-  public static final String FLAMINGO_ENDPOINT = "http://flamingo.lucasallegri.net";
+  public static final String FLAMINGO_ENDPOINT = "http://flamingo.luuqui.com";
 
   public static final String GITHUB_API = "https://api.github.com/";
   public static final String GITHUB_AUTHOR = "lucasluqui";
