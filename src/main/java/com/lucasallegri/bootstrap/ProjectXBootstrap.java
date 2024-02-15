@@ -1,4 +1,4 @@
-package com.luuqui.bootstrap;
+package com.lucasallegri.bootstrap;
 
 import javax.swing.*;
 import java.io.BufferedReader;

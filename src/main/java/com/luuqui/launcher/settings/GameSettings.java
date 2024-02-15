@@ -1,5 +1,6 @@
 package com.luuqui.launcher.settings;
 
+import com.lucasallegri.bootstrap.ProjectXBootstrap;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.ProgressBar;
@@ -67,7 +68,7 @@ public class GameSettings {
   }
 
   /**
-   * @see com.luuqui.bootstrap.ProjectXBootstrap
+   * @see ProjectXBootstrap
    * @deprecated No longer use the way of modifying files.
    */
   @Deprecated
