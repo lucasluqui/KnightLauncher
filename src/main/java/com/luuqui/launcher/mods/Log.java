@@ -11,5 +11,5 @@ public class Log {
   /**
    * The {@link Logger} reference.
    */
-  public static Logger log = Logger.getLogger("com.lucasallegri.launcher.mods");
+  public static Logger log = Logger.getLogger("com.luuqui.launcher.mods");
 }
