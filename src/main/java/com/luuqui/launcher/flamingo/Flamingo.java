@@ -19,7 +19,7 @@ public class Flamingo {
 
     try {
       JSONObject response = RequestUtil.makeRequest("GET", LauncherGlobals.FLAMINGO_ENDPOINT + "/server-list/", new String[]{ "machineId=" + SystemUtil.getHashedMachineId() });
-      log.info("Got server list from flamingo: " + response);
+      log.info("Got server list from flamingo");
 
       // we got an empty server list. we return the empty servers list object.
       if(response.toString().equalsIgnoreCase("{}")) return servers;
