@@ -66,8 +66,7 @@ public class SettingsGUI extends BaseGUI {
     tabbedPane.addTab(Locale.getValue("tab.launcher"), createLauncherPanel());
     tabbedPane.addTab(Locale.getValue("tab.game"), createGamePanel());
     tabbedPane.addTab(Locale.getValue("tab.betas"), createBetasPanel());
-    tabbedPane.addTab(Locale.getValue("tab.connection"), createConnectionPanel());
-    tabbedPane.addTab(Locale.getValue("tab.extratxt"), createExtraPanel());
+    tabbedPane.addTab(Locale.getValue("tab.advanced"), createAdvancedPanel());
     //tabbedPane.addTab(Locale.getValue("tab.spiralview"), createSpiralviewPanel());
     tabbedPane.setBackground(new Color(56, 60, 71));
     settingsGUIFrame.getContentPane().add(tabbedPane);
@@ -453,35 +452,129 @@ public class SettingsGUI extends BaseGUI {
     return gamePanel;
   }
 
-  protected JPanel createExtraPanel() {
-    JPanel extraPanel = new JPanel();
-    extraPanel.setLayout(null);
-    extraPanel.setBackground(new Color(56, 60, 71));
+  protected JPanel createAdvancedPanel() {
+    JPanel advancedPanel = new JPanel();
+    advancedPanel.setLayout(null);
+    advancedPanel.setBackground(new Color(56, 60, 71));
 
-    JLabel headerLabel = new JLabel(Locale.getValue("tab.extratxt"));
+    JLabel headerLabel = new JLabel(Locale.getValue("tab.advanced"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 50);
     headerLabel.setFont(Fonts.fontMedGiant);
-    extraPanel.add(headerLabel);
+    advancedPanel.add(headerLabel);
 
-    JLabel labelArguments = new JLabel(Locale.getValue("m.extratxt_write_arguments"));
+    JLabel labelArguments = new JLabel(Locale.getValue("m.extratxt_write_arguments") + " (Extra.txt)");
     labelArguments.setBounds(25, 90, 600, 18);
     labelArguments.setFont(Fonts.fontRegBig);
-    extraPanel.add(labelArguments);
+    advancedPanel.add(labelArguments);
 
     argumentsPane = new JEditorPane();
     argumentsPane.setFont(Fonts.fontCodeReg);
-    argumentsPane.setBounds(25, 125, 615, 300);
-    extraPanel.add(argumentsPane);
+    argumentsPane.setBounds(25, 125, 615, 100);
+    advancedPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
 
     JScrollPane scrollBar = new JScrollPane(argumentsPane);
     scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollBar.setBounds(25, 125, 632, 300);
-    extraPanel.add(scrollBar);
+    scrollBar.setBounds(25, 125, 632, 100);
+    advancedPanel.add(scrollBar);
 
-    return extraPanel;
+    JSeparator sep = new JSeparator();
+    sep.setBounds(25, 245, 600, 16);
+    advancedPanel.add(sep);
+
+    JLabel labelConnectionSettings = new JLabel("Connection Settings");
+    labelConnectionSettings.setBounds(25, 260, 600, 18);
+    labelConnectionSettings.setFont(Fonts.fontRegBig);
+    advancedPanel.add(labelConnectionSettings);
+
+    JLabel serverAddressLabel = new JLabel("Server Address");
+    serverAddressLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    serverAddressLabel.setBounds(25, 275, 450, 50);
+    serverAddressLabel.setFont(Fonts.fontReg);
+    advancedPanel.add(serverAddressLabel);
+
+    serverAddressTextField = new JTextField();
+    serverAddressTextField.setFont(Fonts.fontCodeReg);
+    serverAddressTextField.setBounds(25, 310, 250, 25);
+    serverAddressTextField.addActionListener(e -> {
+      SettingsEventHandler.saveConnectionSettings();
+    });
+    advancedPanel.add(serverAddressTextField);
+    serverAddressTextField.setText(Settings.gameEndpoint);
+
+    JLabel portLabel = new JLabel("Port");
+    portLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    portLabel.setBounds(280, 275, 450, 50);
+    portLabel.setFont(Fonts.fontReg);
+    advancedPanel.add(portLabel);
+
+    portTextField = new JTextField();
+    portTextField.setFont(Fonts.fontCodeReg);
+    portTextField.setBounds(280, 310, 55, 25);
+    advancedPanel.add(portTextField);
+    portTextField.setText(String.valueOf(Settings.gamePort));
+
+    JLabel publicKeyLabel = new JLabel("Public Key");
+    publicKeyLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    publicKeyLabel.setBounds(25, 330, 450, 50);
+    publicKeyLabel.setFont(Fonts.fontReg);
+    advancedPanel.add(publicKeyLabel);
+
+    publicKeyTextField = new JTextField();
+    publicKeyTextField.setFont(Fonts.fontCodeReg);
+    publicKeyTextField.setBounds(25, 365, 355, 30);
+
+    JScrollBar publicKeyScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
+    JPanel publicKeyPanel = new JPanel();
+    publicKeyPanel.setLayout(new BoxLayout(publicKeyPanel, BoxLayout.Y_AXIS));
+    BoundedRangeModel publicKeyBRM = publicKeyTextField.getHorizontalVisibility();
+    publicKeyScrollBar.setModel(publicKeyBRM);
+    publicKeyPanel.add(publicKeyTextField);
+    publicKeyPanel.add(publicKeyScrollBar);
+    publicKeyPanel.setBounds(25, 365, 355, 30);
+
+    advancedPanel.add(publicKeyPanel);
+    publicKeyTextField.setText(Settings.gamePublicKey);
+
+    JLabel getdownURLLabel = new JLabel("Getdown URL");
+    getdownURLLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    getdownURLLabel.setBounds(25, 385, 450, 50);
+    getdownURLLabel.setFont(Fonts.fontReg);
+    advancedPanel.add(getdownURLLabel);
+
+    getdownURLTextField = new JTextField();
+    getdownURLTextField.setFont(Fonts.fontCodeReg);
+    getdownURLTextField.setBounds(25, 420, 355, 30);
+
+    JScrollBar getdownURLScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
+    JPanel getdownURLPanel = new JPanel();
+    getdownURLPanel.setLayout(new BoxLayout(getdownURLPanel, BoxLayout.Y_AXIS));
+    BoundedRangeModel getdownURLBRM = getdownURLTextField.getHorizontalVisibility();
+    getdownURLScrollBar.setModel(getdownURLBRM);
+    getdownURLPanel.add(getdownURLTextField);
+    getdownURLPanel.add(getdownURLScrollBar);
+    getdownURLPanel.setBounds(25, 420, 355, 30);
+
+    advancedPanel.add(getdownURLPanel);
+    getdownURLTextField.setText(Settings.gameGetdownFullURL);
+
+    JButton resetButton = new JButton("Reset values to default");
+    resetButton.setFont(Fonts.fontMed);
+    resetButton.setBounds(400, 420, 180, 23);
+    resetButton.setFocusPainted(false);
+    resetButton.setFocusable(false);
+    resetButton.setToolTipText("Reset values to default");
+    advancedPanel.add(resetButton);
+    resetButton.addActionListener(action -> SettingsEventHandler.resetButtonEvent(action));
+
+    serverAddressTextField.setEnabled(true);
+    portTextField.setEnabled(true);
+    publicKeyTextField.setEnabled(true);
+    getdownURLTextField.setEnabled(true);
+
+    return advancedPanel;
   }
 
   protected JPanel createConnectionPanel() {
