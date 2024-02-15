@@ -88,7 +88,7 @@ public class LauncherGlobals {
         "-Dappdir=" + USER_DIR + File.separator + ".",
         "-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
         "-XX:+UseStringDeduplication",
-        "com.lucasallegri.bootstrap.ProjectXBootstrap",
+        "com.luuqui.bootstrap.ProjectXBootstrap",
     };
 
     ALT_CLIENT_ARGS_WIN = new String[]{
@@ -117,7 +117,7 @@ public class LauncherGlobals {
         "-Dappdir=" + USER_DIR + File.separator + ".",
         "-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
         "-XX:+UseStringDeduplication",
-        "com.lucasallegri.bootstrap.ProjectXBootstrap",
+        "com.luuqui.bootstrap.ProjectXBootstrap",
     };
   }
 
