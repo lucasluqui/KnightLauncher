@@ -12,6 +12,7 @@ import com.luuqui.util.ProcessUtil;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 
 public class SettingsEventHandler {
@@ -134,9 +135,12 @@ public class SettingsEventHandler {
   public static void updateAboutTab(Status status) {
     if(status.version != null) {
       long uptime = System.currentTimeMillis() - status.uptime;
-      SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
-      Date date = new Date(uptime);
-      String uptimeString = simpleDateFormat.format(date);
+      String uptimeString = Duration.ofMillis(uptime)
+        .toString()
+        .replace( "PT" , "" )
+        .replace( "H" , " hours " )
+        .replace( "M" , " minutes " );
+      uptimeString = uptimeString.substring(0, uptimeString.length() - 8);
 
       SettingsGUI.labelFlamingoStatus.setText("Flamingo status: Online");
       SettingsGUI.labelFlamingoVersion.setText("Flamingo version: " + status.version);
