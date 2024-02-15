@@ -19,8 +19,8 @@ public class LauncherDigester {
   public static final String MAGIC_HEAD = "# Customized by KnightLauncher";
   public static final String GETDOWN_PROJECTXAPP_CLASS = "class = com.threerings.projectx.client.ProjectXApp";
   public static final String GETDOWN_PROJECTXAPP_CLIENT_CLASS = "client.class = com.threerings.projectx.client.ProjectXApp";
-  public static final String GETDOWN_BOOTSTRAP_CLASS = "class = com.lucasallegri.bootstrap.ProjectXBootstrap";
-  public static final String GETDOWN_BOOTSTRAP_CLIENT_CLASS = "client.class = com.lucasallegri.bootstrap.ProjectXBootstrap";
+  public static final String GETDOWN_BOOTSTRAP_CLASS = "class = com.luuqui.bootstrap.ProjectXBootstrap";
+  public static final String GETDOWN_BOOTSTRAP_CLIENT_CLASS = "client.class = com.luuqui.bootstrap.ProjectXBootstrap";
   public static final String GETDOWN_KL_JAR = "code = KnightLauncher.jar";
 
   public static void doDigest() {
