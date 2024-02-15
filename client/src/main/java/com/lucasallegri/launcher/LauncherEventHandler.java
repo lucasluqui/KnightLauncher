@@ -1,6 +1,7 @@
 package com.lucasallegri.launcher;
 
 import com.lucasallegri.discord.DiscordRPC;
+import com.lucasallegri.launcher.flamingo.data.Server;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.launcher.settings.GameSettings;
 import com.lucasallegri.launcher.settings.Settings;
@@ -8,6 +9,8 @@ import com.lucasallegri.launcher.settings.SettingsEventHandler;
 import com.lucasallegri.util.ProcessUtil;
 import com.lucasallegri.util.SteamUtil;
 import com.lucasallegri.util.SystemUtil;
+
+import java.util.List;
 
 import static com.lucasallegri.launcher.Log.log;
 
@@ -70,6 +73,15 @@ public class LauncherEventHandler {
 
     });
     launchAltThread.start();
+
+  }
+
+  public static void updateServerList(List<Server> servers) {
+    for(Server server : servers) {
+      String name = server.name;
+      if(server.beta == 1) name += " (Beta)";
+      LauncherGUI.serverList.addItem(name);
+    }
 
   }
 

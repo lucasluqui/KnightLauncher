@@ -32,6 +32,7 @@ public class LauncherGUI extends BaseGUI {
   public static JProgressBar launchProgressBar;
   public static JLabel imageContainer;
   public static JLabel playerCountLabel;
+  public static JComboBox serverList;
 
   public LauncherGUI(LauncherApp app) {
     super();
@@ -92,18 +93,18 @@ public class LauncherGUI extends BaseGUI {
     launcherVersion.setBounds(0, 150, 250, 25);
     sidePane.add(launcherVersion);
 
-    JLabel serverPickerLabel = new JLabel("Server");
-    serverPickerLabel.setFont(Fonts.fontMed);
-    serverPickerLabel.setBounds(28, 210, 80, 20);
-    sidePane.add(serverPickerLabel);
+    JLabel serverListLabel = new JLabel("Server");
+    serverListLabel.setFont(Fonts.fontMed);
+    serverListLabel.setBounds(28, 210, 80, 20);
+    sidePane.add(serverListLabel);
 
-    JComboBox serverPicker = new JComboBox();
-    serverPicker.setBounds(73, 210, 150, 20);
-    serverPicker.setFont(Fonts.fontReg);
-    serverPicker.setFocusable(false);
-    serverPicker.setRequestFocusEnabled(false);
-    sidePane.add(serverPicker);
-    serverPicker.addItem("Official");
+    serverList = new JComboBox<String>();
+    serverList.setBounds(73, 210, 150, 20);
+    serverList.setFont(Fonts.fontReg);
+    serverList.setFocusable(false);
+    serverList.setRequestFocusEnabled(false);
+    sidePane.add(serverList);
+    serverList.addItem("Official");
 
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
     playerCountLabel.setFont(Fonts.fontReg);

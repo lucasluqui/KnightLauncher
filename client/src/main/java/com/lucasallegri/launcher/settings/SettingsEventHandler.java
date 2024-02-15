@@ -1,8 +1,10 @@
 package com.lucasallegri.launcher.settings;
 
 import com.lucasallegri.dialog.DialogWarning;
+import com.lucasallegri.launcher.LauncherEventHandler;
 import com.lucasallegri.launcher.Locale;
 import com.lucasallegri.launcher.LauncherGlobals;
+import com.lucasallegri.launcher.flamingo.Flamingo;
 import com.lucasallegri.launcher.mods.ModLoader;
 import com.lucasallegri.util.ProcessUtil;
 
@@ -127,15 +129,49 @@ public class SettingsEventHandler {
     SettingsGUI.getdownURLTextField.setText("http://gamemedia2.spiralknights.com/spiral/client/");
   }
 
-  public static int addBetaCode(String code) {
-
-    // TODO: Ask flamingo if this is valid code and case it's not return 0.
+  // returns:
+  // 0 = some failure
+  // 1 = success
+  // 2 = duplicate (local)
+  // 3 = already used (other)
+  // 4 = already used (same machine id)
+  // 5 = not exist
+  public static int activateBetaCode(String code) {
 
     // Get the currently loaded codes
     String codes = SettingsProperties.getValue("launcher.betaCodes");
 
-    // This beta code was already added. We return '2' indicating duplicate.
+    // This beta code is already present in local properties. We return '2' indicating duplicate.
     if(codes != null && codes.contains(code)) return 2;
+
+    String response = Flamingo.activateBetaCode(code);
+
+    // someone already activated this code.
+    if(response.equalsIgnoreCase("already_used")) return 3;
+
+    // this machine id already activated this code, we add it anyways to avoid further requests from this machine.
+    if(response.equalsIgnoreCase("already_used_same")) {
+      addBetaCode(code);
+      return 4;
+    }
+
+    // this code does not exist.
+    if(response.equalsIgnoreCase("not_exists")) return 5;
+
+    // the code was successfully activated, we update the server list and return a success code to the GUI.
+    if(response.equalsIgnoreCase("success")) {
+      addBetaCode(code);
+      LauncherEventHandler.updateServerList(Flamingo.getServerList());
+      return 1;
+    }
+
+    // Return 0 indicating some sort of failure.
+    return 0;
+  }
+
+  private static void addBetaCode(String code) {
+    // Get the currently loaded codes
+    String codes = SettingsProperties.getValue("launcher.betaCodes");
 
     // Check if there's any codes to properly format the codes string
     if(codes.equalsIgnoreCase("")) {
@@ -146,10 +182,5 @@ public class SettingsEventHandler {
 
     // Successfully added a new beta code, update the properties file.
     SettingsProperties.setValue("launcher.betaCodes", codes);
-
-    // TODO: Notify and request new servers list from flamingo.
-
-    // Return 1 indicating success.
-    return 1;
   }
 }

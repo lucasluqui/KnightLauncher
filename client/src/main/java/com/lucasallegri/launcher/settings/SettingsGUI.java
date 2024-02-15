@@ -629,7 +629,7 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel betaCodeResultLabel = new JLabel("");
     betaCodeResultLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    betaCodeResultLabel.setBounds(25, 135, 450, 50);
+    betaCodeResultLabel.setBounds(25, 125, 450, 50);
     betaCodeResultLabel.setFont(Fonts.fontReg);
     betaCodeResultLabel.setVisible(false);
     betasPanel.add(betaCodeResultLabel);
@@ -642,12 +642,15 @@ public class SettingsGUI extends BaseGUI {
     betaCodeButton.setBounds(295, 105, 80, 25);
     betasPanel.add(betaCodeButton);
     betaCodeButton.addActionListener(action -> {
-      int result = SettingsEventHandler.addBetaCode(betaCodeTextField.getText());
+      int result = SettingsEventHandler.activateBetaCode(betaCodeTextField.getText());
 
-      if(result == 2) {
-        betaCodeResultLabel.setText("This code was already activated.");
-      } else if (result == 1) {
-        betaCodeResultLabel.setText("Successfully activated beta code. (Check servers list)");
+      switch(result) {
+        case 0: betaCodeResultLabel.setText("An unexpected error has occurred."); break;
+        case 1: betaCodeResultLabel.setText("Successfully activated Beta code. (Check server list)"); break;
+        case 2: betaCodeResultLabel.setText("You already activated this Beta code."); break;
+        case 3: betaCodeResultLabel.setText("This Beta code was already activated."); break;
+        case 4: betaCodeResultLabel.setText("You already activated this Beta code."); break;
+        case 5: betaCodeResultLabel.setText("This Beta code does not exist."); break;
       }
 
       betaCodeResultLabel.setVisible(true);
