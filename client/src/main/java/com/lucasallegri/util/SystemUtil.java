@@ -1,11 +1,10 @@
 package com.lucasallegri.util;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.UUID;
 
 import static com.lucasallegri.util.Log.log;
 
@@ -50,7 +49,7 @@ public class SystemUtil {
             System.getProperty("java.home").contains("1.8");
   }
 
-  public static String getMachineId() {
+  private static String getMachineId() {
     String machineId = null;
 
     if(isWindows()) {
@@ -60,7 +59,7 @@ public class SystemUtil {
 
     if(isUnix()) {
        machineId = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", "cat /etc/machine-id" })[0];
-       machineId = machineId.trim();
+       machineId = machineId.replaceAll("\\r|\\n", "").trim();
     }
 
     // TODO: Verify this even works on Mac systems.
@@ -87,6 +86,22 @@ public class SystemUtil {
     }
 
     return machineId;
+  }
+
+  public static String getHashedMachineId() {
+    String machineId = getMachineId();
+    String hashedMachineId = null;
+
+    try {
+      MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+      messageDigest.update(machineId.getBytes(StandardCharsets.UTF_8));
+      UUID uuid = UUID.nameUUIDFromBytes(messageDigest.digest());
+      hashedMachineId = uuid.toString();
+    } catch (Exception e) {
+      log.error(e);
+    }
+
+    return hashedMachineId;
   }
 
 }

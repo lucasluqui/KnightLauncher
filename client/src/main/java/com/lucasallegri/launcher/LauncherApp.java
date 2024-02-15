@@ -250,7 +250,6 @@ public class LauncherApp {
 
     DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
     loadOnlineAssets();
-    log.info(SystemUtil.getMachineId());
   }
 
   private void loadOnlineAssets() {
