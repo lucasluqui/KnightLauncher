@@ -1,0 +1,15 @@
+package com.luuqui.util;
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+public class JavaUtilTest {
+
+  private final String PATH = System.getProperty("sun.boot.library.path") + "\\java.exe";
+
+  @Test
+  public void getJVMArch() throws Exception {
+    assertNotEquals("Cannot determine Java VM architecture", 0, JavaUtil.getJVMArch(PATH));
+  }
+}
