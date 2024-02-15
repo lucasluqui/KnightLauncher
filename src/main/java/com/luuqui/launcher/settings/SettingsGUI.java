@@ -152,7 +152,7 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.launcher"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    headerLabel.setBounds(25, 11, 450, 50);
+    headerLabel.setBounds(25, 11, 450, 60);
     headerLabel.setFont(Fonts.fontMedGiant);
     launcherPanel.add(headerLabel);
 
@@ -269,7 +269,7 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.game"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    headerLabel.setBounds(25, 11, 450, 50);
+    headerLabel.setBounds(25, 11, 450, 60);
     headerLabel.setFont(Fonts.fontMedGiant);
     gamePanel.add(headerLabel);
 
@@ -452,6 +452,60 @@ public class SettingsGUI extends BaseGUI {
     return gamePanel;
   }
 
+  protected JPanel createBetasPanel() {
+    JPanel betasPanel = new JPanel();
+    betasPanel.setLayout(null);
+    betasPanel.setBackground(new Color(56, 60, 71));
+
+    JLabel headerLabel = new JLabel(Locale.getValue("tab.betas"));
+    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    headerLabel.setBounds(25, 11, 450, 60);
+    headerLabel.setFont(Fonts.fontMedGiant);
+    betasPanel.add(headerLabel);
+
+    JLabel betaCodeLabel = new JLabel("Activate a Beta code");
+    betaCodeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    betaCodeLabel.setBounds(25, 70, 450, 50);
+    betaCodeLabel.setFont(Fonts.fontReg);
+    betasPanel.add(betaCodeLabel);
+
+    betaCodeTextField = new JTextField();
+    betaCodeTextField.setFont(Fonts.fontCodeReg);
+    betaCodeTextField.setBounds(25, 105, 250, 25);
+    betasPanel.add(betaCodeTextField);
+
+    JLabel betaCodeResultLabel = new JLabel("");
+    betaCodeResultLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    betaCodeResultLabel.setBounds(25, 125, 450, 50);
+    betaCodeResultLabel.setFont(Fonts.fontReg);
+    betaCodeResultLabel.setVisible(false);
+    betasPanel.add(betaCodeResultLabel);
+
+    JButton betaCodeButton = new JButton("Activate");
+    betaCodeButton.setFont(Fonts.fontMed);
+    betaCodeButton.setFocusPainted(false);
+    betaCodeButton.setFocusable(false);
+    betaCodeButton.setToolTipText("Activate");
+    betaCodeButton.setBounds(295, 105, 80, 25);
+    betasPanel.add(betaCodeButton);
+    betaCodeButton.addActionListener(action -> {
+      int result = SettingsEventHandler.activateBetaCode(betaCodeTextField.getText());
+
+      switch(result) {
+        case 0: betaCodeResultLabel.setText("An unexpected error has occurred."); break;
+        case 1: betaCodeResultLabel.setText("Successfully activated Beta code. (Check server list)"); break;
+        case 2: betaCodeResultLabel.setText("You already activated this Beta code."); break;
+        case 3: betaCodeResultLabel.setText("This Beta code was already activated."); break;
+        case 4: betaCodeResultLabel.setText("You already activated this Beta code."); break;
+        case 5: betaCodeResultLabel.setText("This Beta code does not exist."); break;
+      }
+
+      betaCodeResultLabel.setVisible(true);
+    });
+
+    return betasPanel;
+  }
+
   protected JPanel createAdvancedPanel() {
     JPanel advancedPanel = new JPanel();
     advancedPanel.setLayout(null);
@@ -459,7 +513,7 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.advanced"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    headerLabel.setBounds(25, 11, 450, 50);
+    headerLabel.setBounds(25, 11, 450, 60);
     headerLabel.setFont(Fonts.fontMedGiant);
     advancedPanel.add(headerLabel);
 
@@ -577,105 +631,6 @@ public class SettingsGUI extends BaseGUI {
     return advancedPanel;
   }
 
-  protected JPanel createConnectionPanel() {
-    JPanel connectionPanel = new JPanel();
-    connectionPanel.setLayout(null);
-    connectionPanel.setBackground(new Color(56, 60, 71));
-
-    JLabel headerLabel = new JLabel(Locale.getValue("tab.connection"));
-    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(Fonts.fontMedGiant);
-    connectionPanel.add(headerLabel);
-
-    JLabel serverAddressLabel = new JLabel("Server Address");
-    serverAddressLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    serverAddressLabel.setBounds(25, 70, 450, 50);
-    serverAddressLabel.setFont(Fonts.fontReg);
-    connectionPanel.add(serverAddressLabel);
-
-    serverAddressTextField = new JTextField();
-    serverAddressTextField.setFont(Fonts.fontCodeReg);
-    serverAddressTextField.setBounds(25, 105, 250, 25);
-    serverAddressTextField.addActionListener(e -> {
-      SettingsEventHandler.saveConnectionSettings();
-    });
-    connectionPanel.add(serverAddressTextField);
-    serverAddressTextField.setText(Settings.gameEndpoint);
-
-    JLabel portLabel = new JLabel("Port");
-    portLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    portLabel.setBounds(280, 70, 450, 50);
-    portLabel.setFont(Fonts.fontReg);
-    connectionPanel.add(portLabel);
-
-    portTextField = new JTextField();
-    portTextField.setFont(Fonts.fontCodeReg);
-    portTextField.setBounds(280, 105, 55, 25);
-    connectionPanel.add(portTextField);
-    portTextField.setText(String.valueOf(Settings.gamePort));
-
-    JLabel publicKeyLabel = new JLabel("Public Key");
-    publicKeyLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    publicKeyLabel.setBounds(25, 125, 450, 50);
-    publicKeyLabel.setFont(Fonts.fontReg);
-    connectionPanel.add(publicKeyLabel);
-
-    publicKeyTextField = new JTextField();
-    publicKeyTextField.setFont(Fonts.fontCodeReg);
-    publicKeyTextField.setBounds(25, 160, 355, 30);
-
-    JScrollBar publicKeyScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
-    JPanel publicKeyPanel = new JPanel();
-    publicKeyPanel.setLayout(new BoxLayout(publicKeyPanel, BoxLayout.Y_AXIS));
-    BoundedRangeModel publicKeyBRM = publicKeyTextField.getHorizontalVisibility();
-    publicKeyScrollBar.setModel(publicKeyBRM);
-    publicKeyPanel.add(publicKeyTextField);
-    publicKeyPanel.add(publicKeyScrollBar);
-    publicKeyPanel.setBounds(25, 160, 355, 30);
-
-    connectionPanel.add(publicKeyPanel);
-    publicKeyTextField.setText(Settings.gamePublicKey);
-
-    JLabel getdownURLLabel = new JLabel("Getdown URL");
-    getdownURLLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    getdownURLLabel.setBounds(25, 180, 450, 50);
-    getdownURLLabel.setFont(Fonts.fontReg);
-    connectionPanel.add(getdownURLLabel);
-
-    getdownURLTextField = new JTextField();
-    getdownURLTextField.setFont(Fonts.fontCodeReg);
-    getdownURLTextField.setBounds(25, 215, 355, 30);
-
-    JScrollBar getdownURLScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
-    JPanel getdownURLPanel = new JPanel();
-    getdownURLPanel.setLayout(new BoxLayout(getdownURLPanel, BoxLayout.Y_AXIS));
-    BoundedRangeModel getdownURLBRM = getdownURLTextField.getHorizontalVisibility();
-    getdownURLScrollBar.setModel(getdownURLBRM);
-    getdownURLPanel.add(getdownURLTextField);
-    getdownURLPanel.add(getdownURLScrollBar);
-    getdownURLPanel.setBounds(25, 215, 355, 30);
-
-    connectionPanel.add(getdownURLPanel);
-    getdownURLTextField.setText(Settings.gameGetdownFullURL);
-
-    JButton resetButton = new JButton("Reset values to default");
-    resetButton.setFont(Fonts.fontMed);
-    resetButton.setBounds(400, 215, 180, 23);
-    resetButton.setFocusPainted(false);
-    resetButton.setFocusable(false);
-    resetButton.setToolTipText("Reset values to default");
-    connectionPanel.add(resetButton);
-    resetButton.addActionListener(action -> SettingsEventHandler.resetButtonEvent(action));
-
-    serverAddressTextField.setEnabled(true);
-    portTextField.setEnabled(true);
-    publicKeyTextField.setEnabled(true);
-    getdownURLTextField.setEnabled(true);
-
-    return connectionPanel;
-  }
-
   protected JPanel createSpiralviewPanel() {
     JPanel spiralviewPanel = new JPanel();
     spiralviewPanel.setLayout(null);
@@ -696,60 +651,6 @@ public class SettingsGUI extends BaseGUI {
     //modelEditorButton.addActionListener(action -> SettingsEventHandler.startModelViewer(action));
 
     return spiralviewPanel;
-  }
-
-  protected JPanel createBetasPanel() {
-    JPanel betasPanel = new JPanel();
-    betasPanel.setLayout(null);
-    betasPanel.setBackground(new Color(56, 60, 71));
-
-    JLabel headerLabel = new JLabel(Locale.getValue("tab.betas"));
-    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(Fonts.fontMedGiant);
-    betasPanel.add(headerLabel);
-
-    JLabel betaCodeLabel = new JLabel("Activate a Beta code");
-    betaCodeLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    betaCodeLabel.setBounds(25, 70, 450, 50);
-    betaCodeLabel.setFont(Fonts.fontReg);
-    betasPanel.add(betaCodeLabel);
-
-    betaCodeTextField = new JTextField();
-    betaCodeTextField.setFont(Fonts.fontCodeReg);
-    betaCodeTextField.setBounds(25, 105, 250, 25);
-    betasPanel.add(betaCodeTextField);
-
-    JLabel betaCodeResultLabel = new JLabel("");
-    betaCodeResultLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    betaCodeResultLabel.setBounds(25, 125, 450, 50);
-    betaCodeResultLabel.setFont(Fonts.fontReg);
-    betaCodeResultLabel.setVisible(false);
-    betasPanel.add(betaCodeResultLabel);
-
-    JButton betaCodeButton = new JButton("Activate");
-    betaCodeButton.setFont(Fonts.fontMed);
-    betaCodeButton.setFocusPainted(false);
-    betaCodeButton.setFocusable(false);
-    betaCodeButton.setToolTipText("Activate");
-    betaCodeButton.setBounds(295, 105, 80, 25);
-    betasPanel.add(betaCodeButton);
-    betaCodeButton.addActionListener(action -> {
-      int result = SettingsEventHandler.activateBetaCode(betaCodeTextField.getText());
-
-      switch(result) {
-        case 0: betaCodeResultLabel.setText("An unexpected error has occurred."); break;
-        case 1: betaCodeResultLabel.setText("Successfully activated Beta code. (Check server list)"); break;
-        case 2: betaCodeResultLabel.setText("You already activated this Beta code."); break;
-        case 3: betaCodeResultLabel.setText("This Beta code was already activated."); break;
-        case 4: betaCodeResultLabel.setText("You already activated this Beta code."); break;
-        case 5: betaCodeResultLabel.setText("This Beta code does not exist."); break;
-      }
-
-      betaCodeResultLabel.setVisible(true);
-    });
-
-    return betasPanel;
   }
 
   private int getMaxAllowedMemoryAlloc() {
