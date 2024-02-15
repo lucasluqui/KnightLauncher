@@ -5,11 +5,14 @@ import com.luuqui.launcher.LauncherEventHandler;
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.flamingo.Flamingo;
+import com.luuqui.launcher.flamingo.data.Status;
 import com.luuqui.launcher.mods.ModLoader;
 import com.luuqui.util.ProcessUtil;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SettingsEventHandler {
 
@@ -126,6 +129,19 @@ public class SettingsEventHandler {
     SettingsGUI.portTextField.setText("47624");
     SettingsGUI.publicKeyTextField.setText("a5ed0dc3892b9472cfb668e236064e989e95945dad18f3d7e7d8e474d6e03de38bc044c3429b9ca649d0881d601c0eb8ffebc3756f0503f73a8ca1760943ea0e8921ad6f8102026586db3133844bbadbcfcfc666d23982d7684511fbf6cd8bb1d02a14270d0854098d16fe88f99c05825b0fe1b6fd497709106f2c418796aaf7aab7c92f26fcd9fbb3c43df48075fed8dd931273a7b0a333c8de5967797874c1944aed65b47f0792b273a529ac22a2dce08dad04eeebeeff67c7bc99b97682bff488038b28e24f4b5eea77ed966caede52f2c1ecf2b403110a9765daa81ddf718129a040823bead3a0bdca70ef6d08f483757a6d3b6e01fbbcb32006b7872bcd#10001");
     SettingsGUI.getdownURLTextField.setText("http://gamemedia2.spiralknights.com/spiral/client/");
+  }
+
+  public static void updateAboutTab(Status status) {
+    if(status.version != null) {
+      long uptime = System.currentTimeMillis() - status.uptime;
+      SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+      Date date = new Date(uptime);
+      String uptimeString = simpleDateFormat.format(date);
+
+      SettingsGUI.labelFlamingoStatus.setText("Flamingo status: Online");
+      SettingsGUI.labelFlamingoVersion.setText("Flamingo version: " + status.version);
+      SettingsGUI.labelFlamingoUptime.setText("Flamingo uptime: " + uptimeString);
+    }
   }
 
   // returns:

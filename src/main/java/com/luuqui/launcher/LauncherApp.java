@@ -7,6 +7,7 @@ import com.luuqui.launcher.flamingo.Flamingo;
 import com.luuqui.launcher.mods.ModListGUI;
 import com.luuqui.launcher.mods.ModLoader;
 import com.luuqui.launcher.settings.Settings;
+import com.luuqui.launcher.settings.SettingsEventHandler;
 import com.luuqui.launcher.settings.SettingsGUI;
 import com.luuqui.launcher.settings.SettingsProperties;
 import com.luuqui.util.*;
@@ -259,6 +260,7 @@ public class LauncherApp {
       LauncherEventHandler.updateServerList(Flamingo.getServerList());
       checkVersion();
       getProjectXVersion();
+      SettingsEventHandler.updateAboutTab(Flamingo.getStatus());
 
       int steamPlayers = SteamUtil.getCurrentPlayers("99900");
       if (steamPlayers == 0) {

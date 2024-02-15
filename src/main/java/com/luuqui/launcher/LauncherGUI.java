@@ -238,7 +238,7 @@ public class LauncherGUI extends BaseGUI {
     infoPane.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(infoPaneBackgroundImage, 25)));
     mainPane.add(infoPane);
 
-    JLabel infoPaneLoading = new JLabel(Locale.getValue("m.coming_soon"));
+    JLabel infoPaneLoading = new JLabel("This server is not currently announcing anything.");
     infoPaneLoading.setBounds(50, 40, 700, 340);
     infoPaneLoading.setFont(Fonts.fontMedBig);
     infoPaneLoading.setHorizontalAlignment(SwingConstants.CENTER);

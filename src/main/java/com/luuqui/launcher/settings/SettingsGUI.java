@@ -35,6 +35,9 @@ public class SettingsGUI extends BaseGUI {
   public static JTextField publicKeyTextField;
   public static JTextField getdownURLTextField;
   public static JTextField betaCodeTextField;
+  public static JLabel labelFlamingoStatus;
+  public static JLabel labelFlamingoVersion;
+  public static JLabel labelFlamingoUptime;
 
   @SuppressWarnings("static-access")
   public SettingsGUI(LauncherApp app) {
@@ -63,11 +66,13 @@ public class SettingsGUI extends BaseGUI {
     tabbedPane.setBounds(-2, 20, 852, 455);
     tabbedPane.setFont(Fonts.fontMedBig);
     tabbedPane.setTabPlacement(JTabbedPane.LEFT);
+    tabbedPane.setFocusable(false);
     tabbedPane.addTab(Locale.getValue("tab.launcher"), createLauncherPanel());
     tabbedPane.addTab(Locale.getValue("tab.game"), createGamePanel());
     tabbedPane.addTab(Locale.getValue("tab.betas"), createBetasPanel());
-    tabbedPane.addTab(Locale.getValue("tab.advanced"), createAdvancedPanel());
     //tabbedPane.addTab(Locale.getValue("tab.spiralview"), createSpiralviewPanel());
+    tabbedPane.addTab(Locale.getValue("tab.advanced"), createAdvancedPanel());
+    tabbedPane.addTab(Locale.getValue("tab.about"), createAboutPanel());
     tabbedPane.setBackground(new Color(56, 60, 71));
     settingsGUIFrame.getContentPane().add(tabbedPane);
 
@@ -506,6 +511,28 @@ public class SettingsGUI extends BaseGUI {
     return betasPanel;
   }
 
+  protected JPanel createSpiralviewPanel() {
+    JPanel spiralviewPanel = new JPanel();
+    spiralviewPanel.setLayout(null);
+    spiralviewPanel.setBackground(new Color(56, 60, 71));
+
+    JLabel headerLabel = new JLabel(Locale.getValue("tab.spiralview"));
+    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    headerLabel.setBounds(25, 11, 450, 50);
+    headerLabel.setFont(Fonts.fontMedGiant);
+    spiralviewPanel.add(headerLabel);
+
+    JButton modelEditorButton = new JButton("Start Model Viewer");
+    modelEditorButton.setFont(Fonts.fontMed);
+    modelEditorButton.setBounds(400, 215, 180, 23);
+    modelEditorButton.setFocusPainted(false);
+    modelEditorButton.setFocusable(false);
+    spiralviewPanel.add(modelEditorButton);
+    //modelEditorButton.addActionListener(action -> SettingsEventHandler.startModelViewer(action));
+
+    return spiralviewPanel;
+  }
+
   protected JPanel createAdvancedPanel() {
     JPanel advancedPanel = new JPanel();
     advancedPanel.setLayout(null);
@@ -631,26 +658,33 @@ public class SettingsGUI extends BaseGUI {
     return advancedPanel;
   }
 
-  protected JPanel createSpiralviewPanel() {
-    JPanel spiralviewPanel = new JPanel();
-    spiralviewPanel.setLayout(null);
-    spiralviewPanel.setBackground(new Color(56, 60, 71));
+  protected JPanel createAboutPanel() {
+    JPanel aboutPanel = new JPanel();
+    aboutPanel.setLayout(null);
+    aboutPanel.setBackground(new Color(56, 60, 71));
 
-    JLabel headerLabel = new JLabel(Locale.getValue("tab.spiralview"));
+    JLabel headerLabel = new JLabel(Locale.getValue("tab.about"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    headerLabel.setBounds(25, 11, 450, 50);
+    headerLabel.setBounds(25, 11, 450, 60);
     headerLabel.setFont(Fonts.fontMedGiant);
-    spiralviewPanel.add(headerLabel);
+    aboutPanel.add(headerLabel);
 
-    JButton modelEditorButton = new JButton("Start Model Viewer");
-    modelEditorButton.setFont(Fonts.fontMed);
-    modelEditorButton.setBounds(400, 215, 180, 23);
-    modelEditorButton.setFocusPainted(false);
-    modelEditorButton.setFocusable(false);
-    spiralviewPanel.add(modelEditorButton);
-    //modelEditorButton.addActionListener(action -> SettingsEventHandler.startModelViewer(action));
+    labelFlamingoStatus = new JLabel("Flamingo status: Offline");
+    labelFlamingoStatus.setBounds(25, 90, 600, 18);
+    labelFlamingoStatus.setFont(Fonts.fontRegBig);
+    aboutPanel.add(labelFlamingoStatus);
 
-    return spiralviewPanel;
+    labelFlamingoVersion = new JLabel("Flamingo version: N/A");
+    labelFlamingoVersion.setBounds(25, 110, 600, 18);
+    labelFlamingoVersion.setFont(Fonts.fontRegBig);
+    aboutPanel.add(labelFlamingoVersion);
+
+    labelFlamingoUptime = new JLabel("Flamingo uptime: N/A");
+    labelFlamingoUptime.setBounds(25, 130, 600, 18);
+    labelFlamingoUptime.setFont(Fonts.fontRegBig);
+    aboutPanel.add(labelFlamingoUptime);
+
+    return aboutPanel;
   }
 
   private int getMaxAllowedMemoryAlloc() {
