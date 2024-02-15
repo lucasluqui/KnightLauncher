@@ -2,6 +2,7 @@ package com.luuqui.util;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
@@ -13,6 +14,21 @@ public class ProcessUtil {
     Process process = null;
     try {
       process = Runtime.getRuntime().exec(command);
+    } catch (IOException e) {
+      log.error(e);
+    } finally {
+
+      // No need to keep the process alive.
+      if (process != null && !keepAlive) process.destroy();
+    }
+  }
+
+  public static void runFromDirectory(String[] command, String workDir, boolean keepAlive) {
+    ProcessBuilder pb = new ProcessBuilder(command);
+    pb.directory(new File(workDir));
+    Process process = null;
+    try {
+      process = pb.start();
     } catch (IOException e) {
       log.error(e);
     } finally {

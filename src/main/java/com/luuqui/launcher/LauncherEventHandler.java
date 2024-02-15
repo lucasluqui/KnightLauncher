@@ -142,7 +142,7 @@ public class LauncherEventHandler {
         ProgressBar.setState("Starting " + LauncherApp.selectedServer.name + "...");
         ProgressBar.setBarValue(2);
 
-        ProcessUtil.run(getThirdPartyClientStartCommand(selectedServer), true);
+        ProcessUtil.runFromDirectory(getThirdPartyClientStartCommand(selectedServer), LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName,true);
 
         ProgressBar.finishTask();
       }
