@@ -4,7 +4,7 @@ import java.io.File;
 
 public class LauncherGlobals {
 
-  public static final String LAUNCHER_VERSION = "2.0-PRE3";
+  public static final String LAUNCHER_VERSION = "2.0-PRE4";
 
   public static final String LAUNCHER_NAME = "Knight Launcher";
 
@@ -88,7 +88,7 @@ public class LauncherGlobals {
         "-Dappdir=" + USER_DIR + File.separator + ".",
         "-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
         "-XX:+UseStringDeduplication",
-        "com.luuqui.bootstrap.ProjectXBootstrap",
+        "com.lucasallegri.bootstrap.ProjectXBootstrap",
     };
 
     ALT_CLIENT_ARGS_WIN = new String[]{
@@ -117,7 +117,7 @@ public class LauncherGlobals {
         "-Dappdir=" + USER_DIR + File.separator + ".",
         "-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
         "-XX:+UseStringDeduplication",
-        "com.luuqui.bootstrap.ProjectXBootstrap",
+        "com.lucasallegri.bootstrap.ProjectXBootstrap",
     };
   }
 
