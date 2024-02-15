@@ -30,4 +30,12 @@ public class Server {
 
   public int enabled;
 
+  public Server() {}
+
+  public Server(String name) {
+    this.name = name;
+    this.beta = 0;
+    this.enabled = 1;
+  }
+
 }

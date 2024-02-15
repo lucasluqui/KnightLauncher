@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.luuqui.dialog.DialogWarning;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.flamingo.Flamingo;
+import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mods.ModListGUI;
 import com.luuqui.launcher.mods.ModLoader;
 import com.luuqui.launcher.settings.Settings;
@@ -23,6 +24,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import static com.luuqui.launcher.Log.log;
@@ -35,6 +37,8 @@ public class LauncherApp {
   protected static ModListGUI mgui;
   protected static JVMPatcher jvmPatcher;
   public static String projectXVersion = null;
+  public static java.util.List<Server> serverList = new ArrayList<>();
+  public static Server selectedServer = null;
 
   public static void main(String[] args) {
 
@@ -262,18 +266,20 @@ public class LauncherApp {
       getProjectXVersion();
       SettingsEventHandler.updateAboutTab(Flamingo.getStatus());
 
-      int steamPlayers = SteamUtil.getCurrentPlayers("99900");
-      if (steamPlayers == 0) {
-        LauncherGUI.playerCountLabel.setText(Locale.getValue("error.get_player_count"));
-      } else {
-        int approximateTotalPlayers = Math.round(steamPlayers * 1.6f);
-        LauncherGUI.playerCountLabel.setText(Locale.getValue("m.player_count", new String[]{
-            String.valueOf(approximateTotalPlayers), String.valueOf(steamPlayers)
-        }));
-      }
-
     });
     onlineAssetsThread.start();
+  }
+
+  protected static String getSteamPlayerCountString() {
+    int steamPlayers = SteamUtil.getCurrentPlayers("99900");
+    if (steamPlayers == 0) {
+      return Locale.getValue("error.get_player_count");
+    } else {
+      int approximateTotalPlayers = Math.round(steamPlayers * 1.6f);
+      return Locale.getValue("m.player_count", new String[]{
+        String.valueOf(approximateTotalPlayers), String.valueOf(steamPlayers)
+      });
+    }
   }
 
   private void checkVersion() {

@@ -104,6 +104,7 @@ public class LauncherGUI extends BaseGUI {
     serverList.setFocusable(false);
     serverList.setRequestFocusEnabled(false);
     sidePane.add(serverList);
+    serverList.addActionListener(action -> LauncherEventHandler.selectedServerChanged(action));
     serverList.addItem("Official");
 
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
