@@ -140,7 +140,7 @@ public class SettingsEventHandler {
         .replace( "PT" , "" )
         .replace( "H" , " hours " )
         .replace( "M" , " minutes " );
-      uptimeString = uptimeString.substring(0, uptimeString.length() - 8);
+      uptimeString = uptimeString.substring(0, uptimeString.length() - 7);
 
       SettingsGUI.labelFlamingoStatus.setText("Flamingo status: Online");
       SettingsGUI.labelFlamingoVersion.setText("Flamingo version: " + status.version);
