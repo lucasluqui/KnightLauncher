@@ -1,19 +1,24 @@
 package com.luuqui.launcher.settings;
 
 import com.luuqui.dialog.DialogWarning;
+import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.LauncherEventHandler;
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.flamingo.Flamingo;
 import com.luuqui.launcher.flamingo.data.Status;
 import com.luuqui.launcher.mods.ModLoader;
+import com.luuqui.util.FileUtil;
 import com.luuqui.util.ProcessUtil;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class SettingsEventHandler {
 
@@ -130,6 +135,34 @@ public class SettingsEventHandler {
     SettingsGUI.portTextField.setText("47624");
     SettingsGUI.publicKeyTextField.setText("a5ed0dc3892b9472cfb668e236064e989e95945dad18f3d7e7d8e474d6e03de38bc044c3429b9ca649d0881d601c0eb8ffebc3756f0503f73a8ca1760943ea0e8921ad6f8102026586db3133844bbadbcfcfc666d23982d7684511fbf6cd8bb1d02a14270d0854098d16fe88f99c05825b0fe1b6fd497709106f2c418796aaf7aab7c92f26fcd9fbb3c43df48075fed8dd931273a7b0a333c8de5967797874c1944aed65b47f0792b273a529ac22a2dce08dad04eeebeeff67c7bc99b97682bff488038b28e24f4b5eea77ed966caede52f2c1ecf2b403110a9765daa81ddf718129a040823bead3a0bdca70ef6d08f483757a6d3b6e01fbbcb32006b7872bcd#10001");
     SettingsGUI.getdownURLTextField.setText("http://gamemedia2.spiralknights.com/spiral/client/");
+  }
+
+  public static void copyLauncherLogEvent(ActionEvent action) {
+    List<File> files = new ArrayList<>();
+    files.add(new File(LauncherGlobals.USER_DIR + "\\knightlauncher.log"));
+    FileUtil.copyFileToClipboard(files);
+  }
+
+  public static void copyGameLogEvent(ActionEvent action) {
+    List<File> files = new ArrayList<>();
+    String path = LauncherGlobals.USER_DIR;
+
+    if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
+      path += "\\thirdparty\\" + LauncherApp.getSanitizedServerName(LauncherApp.selectedServer.name);
+    }
+
+    File getdownLog = new File(path + "\\launcher.log");
+    files.add(getdownLog);
+
+    File gameLog = new File(path + "\\projectx.log");
+    files.add(gameLog);
+
+    File oldGameLog = new File(path + "\\old-projectx.log");
+    files.add(oldGameLog);
+
+    files.removeIf(file -> !FileUtil.fileExists(file.getAbsolutePath()));
+
+    FileUtil.copyFileToClipboard(files);
   }
 
   public static void updateAboutTab(Status status) {

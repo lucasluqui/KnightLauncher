@@ -10,6 +10,10 @@ package com.luuqui.util;
 import com.samskivert.util.Logger;
 import org.apache.commons.io.FileUtils;
 
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -251,6 +255,27 @@ public class FileUtil {
         unpacker.unpack(packJarIn2, jarOut);
       }
     }
+  }
+
+  public static void copyFileToClipboard(List<File> files) {
+    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+      new Transferable() {
+        @Override
+        public DataFlavor[] getTransferDataFlavors() {
+          return new DataFlavor[] { DataFlavor.javaFileListFlavor };
+        }
+
+        @Override
+        public boolean isDataFlavorSupported(DataFlavor flavor) {
+          return DataFlavor.javaFileListFlavor.equals(flavor);
+        }
+
+        @Override
+        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+          return files;
+        }
+      }, null
+    );
   }
 
 }

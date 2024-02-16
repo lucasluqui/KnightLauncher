@@ -59,7 +59,7 @@ public class LauncherEventHandler {
       } else {
         // third party server launch procedure
         Server selectedServer = LauncherApp.selectedServer;
-        String sanitizedServerName = getSanitizedServerName(selectedServer.name);
+        String sanitizedServerName = LauncherApp.getSanitizedServerName(selectedServer.name);
 
         ProgressBar.startTask();
         ProgressBar.setBarMax(2);
@@ -195,7 +195,7 @@ public class LauncherEventHandler {
       LauncherApp.serverList.add(server);
 
       // make sure we have a folder to later download the client
-      FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + getSanitizedServerName(server.name));
+      FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + LauncherApp.getSanitizedServerName(server.name));
     }
 
     LauncherApp.selectedServer = official;
@@ -233,14 +233,9 @@ public class LauncherEventHandler {
     return results.isEmpty() ? null : results.get(0);
   }
 
-  private static String getSanitizedServerName(String serverName) {
-    return serverName.toLowerCase().replace(" ", "-")
-      .replace("(", "").replace(")", "");
-  }
-
   private static String[] getThirdPartyClientStartCommand(Server server) {
     String[] args;
-    String sanitizedServerName = getSanitizedServerName(server.name);
+    String sanitizedServerName = LauncherApp.getSanitizedServerName(server.name);
     if(SystemUtil.isWindows()) {
       args = new String[]{
         LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + "\\java_vm\\bin\\java",

@@ -333,4 +333,9 @@ public class LauncherApp {
     log.info("Latest ProjectX version updated", "version", LauncherApp.projectXVersion);
   }
 
+  public static String getSanitizedServerName(String serverName) {
+    return serverName.toLowerCase().replace(" ", "-")
+      .replace("(", "").replace(")", "");
+  }
+
 }
