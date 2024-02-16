@@ -686,7 +686,7 @@ public class SettingsGUI extends BaseGUI {
 
     JButton copyLauncherLogButton = new JButton("Copy knightlauncher.log to clipboard");
     copyLauncherLogButton.setFont(Fonts.fontMed);
-    copyLauncherLogButton.setBounds(25, 160, 250, 23);
+    copyLauncherLogButton.setBounds(25, 160, 270, 23);
     copyLauncherLogButton.setFocusPainted(false);
     copyLauncherLogButton.setFocusable(false);
     copyLauncherLogButton.setToolTipText("Copy knightlauncher.log to clipboard");
@@ -695,7 +695,7 @@ public class SettingsGUI extends BaseGUI {
 
     JButton copyGameLogButton = new JButton("Copy game logs to clipboard");
     copyGameLogButton.setFont(Fonts.fontMed);
-    copyGameLogButton.setBounds(25, 190, 250, 23);
+    copyGameLogButton.setBounds(25, 190, 270, 23);
     copyGameLogButton.setFocusPainted(false);
     copyGameLogButton.setFocusable(false);
     copyGameLogButton.setToolTipText("Copy game logs to clipboard");
