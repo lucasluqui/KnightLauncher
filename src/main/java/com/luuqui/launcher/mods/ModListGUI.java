@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import static com.luuqui.launcher.mods.Log.log;
+
 public class ModListGUI extends BaseGUI {
 
   private final LauncherApp app;
@@ -130,6 +132,12 @@ public class ModListGUI extends BaseGUI {
   }
 
   public static void updateModList() {
+
+    if(modListPane == null) {
+      log.error("What? how? why?! modListPane is null");
+      return;
+    }
+
     modListPane.removeAll();
     for (Mod mod : ModLoader.getModList()) {
       JPanel modPane = new JPanel();
