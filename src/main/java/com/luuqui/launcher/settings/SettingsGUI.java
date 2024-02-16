@@ -491,7 +491,7 @@ public class SettingsGUI extends BaseGUI {
     betaCodeButton.setFocusPainted(false);
     betaCodeButton.setFocusable(false);
     betaCodeButton.setToolTipText("Activate");
-    betaCodeButton.setBounds(295, 105, 80, 25);
+    betaCodeButton.setBounds(295, 105, 100, 25);
     betasPanel.add(betaCodeButton);
     betaCodeButton.addActionListener(action -> {
       int result = SettingsEventHandler.activateBetaCode(betaCodeTextField.getText());
