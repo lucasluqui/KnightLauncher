@@ -105,8 +105,10 @@ public class ModListGUI extends BaseGUI {
     forceApplyButton.addActionListener(ModListEventHandler::forceApplyEvent);
 
     labelForceApplyState = new JLabel("");
-    labelForceApplyState.setBounds(310, 20, 150, 25);
+    labelForceApplyState.setBounds(310, 5, 150, 25);
     labelForceApplyState.setFont(Fonts.fontReg);
+    labelForceApplyState.setHorizontalAlignment(SwingConstants.CENTER);
+    labelForceApplyState.setVerticalAlignment(SwingConstants.CENTER);
     modListGUIFrame.getContentPane().add(labelForceApplyState);
 
     modListPane = new JPanel();
