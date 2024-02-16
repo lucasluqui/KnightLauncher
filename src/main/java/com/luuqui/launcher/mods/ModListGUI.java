@@ -48,13 +48,13 @@ public class ModListGUI extends BaseGUI {
 
     labelModCount = new JLabel(String.valueOf(ModLoader.getModList().size()));
     labelModCount.setHorizontalAlignment(SwingConstants.LEFT);
-    labelModCount.setBounds(25, 15, 188, 40);
+    labelModCount.setBounds(25, 2, 188, 40);
     labelModCount.setFont(Fonts.fontMedGiant);
     modListGUIFrame.getContentPane().add(labelModCount);
 
     labelModCountText = new JLabel(Locale.getValue("m.mods_installed"));
     labelModCountText.setHorizontalAlignment(SwingConstants.LEFT);
-    labelModCountText.setBounds(73, 40, 188, 14);
+    labelModCountText.setBounds(26, 47, 188, 14);
     labelModCountText.setFont(Fonts.fontReg);
     modListGUIFrame.getContentPane().add(labelModCountText);
 
