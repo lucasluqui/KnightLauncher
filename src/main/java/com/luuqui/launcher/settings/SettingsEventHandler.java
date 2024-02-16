@@ -157,8 +157,11 @@ public class SettingsEventHandler {
   // 5 = not exist
   public static int activateBetaCode(String code) {
 
-    // Sanitize the code (remove any trailing spaces, white spaces, etc.)
-    code = code.trim();
+    // Sanitize the code (remove any trailing spaces, white spaces, slashes, etc.)
+    code = code.replace("/", "")
+      .replace("?", "")
+      .replace("&", "")
+      .trim();
 
     // Get the currently loaded codes
     String codes = SettingsProperties.getValue("launcher.betaCodes");
