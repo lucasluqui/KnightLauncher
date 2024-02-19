@@ -4,13 +4,13 @@ import com.luuqui.launcher.Locale;
 
 import javax.swing.*;
 
-public class DialogWarning {
+public class DialogInfo {
 
   public static void push(String msg) {
     JOptionPane.showMessageDialog(null,
-            msg,
-            "Knight Launcher Warning",
-            JOptionPane.WARNING_MESSAGE
+      msg,
+      "Knight Launcher Information",
+      JOptionPane.INFORMATION_MESSAGE
     );
   }
 
@@ -18,15 +18,15 @@ public class DialogWarning {
     JOptionPane.showMessageDialog(null,
       msg,
       title,
-      JOptionPane.WARNING_MESSAGE
+      JOptionPane.INFORMATION_MESSAGE
     );
   }
 
   public static void pushTranslated(String msg) {
     JOptionPane.showMessageDialog(null,
-            msg,
-            Locale.getValue("t.warning"),
-            JOptionPane.WARNING_MESSAGE
+      msg,
+      Locale.getValue("t.info"),
+      JOptionPane.INFORMATION_MESSAGE
     );
   }
 

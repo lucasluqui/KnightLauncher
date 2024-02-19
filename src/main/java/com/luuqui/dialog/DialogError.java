@@ -14,6 +14,14 @@ public class DialogError {
     );
   }
 
+  public static void push(String msg, String title) {
+    JOptionPane.showMessageDialog(null,
+      msg,
+      title,
+      JOptionPane.ERROR_MESSAGE
+    );
+  }
+
   public static void pushTranslated(String msg) {
     JOptionPane.showMessageDialog(null,
             msg,
