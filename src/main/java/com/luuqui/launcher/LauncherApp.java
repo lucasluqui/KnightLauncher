@@ -5,6 +5,7 @@ import com.luuqui.dialog.DialogWarning;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.flamingo.Flamingo;
 import com.luuqui.launcher.flamingo.data.Server;
+import com.luuqui.launcher.flamingo.data.Status;
 import com.luuqui.launcher.mods.ModListGUI;
 import com.luuqui.launcher.mods.ModLoader;
 import com.luuqui.launcher.settings.Settings;
@@ -26,6 +27,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -39,6 +42,7 @@ public class LauncherApp {
   public static String projectXVersion = null;
   public static java.util.List<Server> serverList = new ArrayList<>();
   public static Server selectedServer = null;
+  public static boolean flamingoOnline = false;
 
   public static void main(String[] args) {
 
@@ -261,13 +265,31 @@ public class LauncherApp {
   private void loadOnlineAssets() {
     Thread onlineAssetsThread = new Thread(() -> {
 
-      LauncherEventHandler.updateServerList(Flamingo.getServerList());
       checkVersion();
       getProjectXVersion();
-      SettingsEventHandler.updateAboutTab(Flamingo.getStatus());
 
     });
+
+    Thread flamingoThread = new Thread(() -> {
+
+      LauncherEventHandler.updateServerList(Flamingo.getServerList());
+      Status flamingoStatus = Flamingo.getStatus();
+      SettingsEventHandler.updateAboutTab(flamingoStatus);
+      if(flamingoStatus.version != null) LauncherApp.flamingoOnline = true;
+
+    });
+
     onlineAssetsThread.start();
+    flamingoThread.start();
+
+    final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+    executor.schedule(this::checkFlamingoStatus, 10, TimeUnit.SECONDS);
+  }
+
+  private void checkFlamingoStatus() {
+    if(!LauncherApp.flamingoOnline) {
+      LauncherGUI.showWarning("Flamingo is offline");
+    }
   }
 
   protected static String getSteamPlayerCountString() {

@@ -34,6 +34,8 @@ public class LauncherGUI extends BaseGUI {
   public static JLabel playerCountLabel;
   public static JComboBox serverList;
   public static JButton serverInfoButton;
+  public static JLabel warningLabelIcon;
+  public static JLabel warningLabel;
 
   public LauncherGUI(LauncherApp app) {
     super();
@@ -126,6 +128,23 @@ public class LauncherGUI extends BaseGUI {
     playerCountLabel.setForeground(new Color(34, 197, 94));
     playerCountLabel.setBounds(28, 235, 200, 18);
     sidePane.add(playerCountLabel);
+
+    Icon warningIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
+    warningLabelIcon = new JLabel(warningIcon);
+    warningLabelIcon.setBounds(28, 258, 20, 20);
+    warningLabelIcon.setFocusable(false);
+    warningLabelIcon.setOpaque(true);
+    warningLabelIcon.setVisible(false);
+    warningLabelIcon.setBackground(Colors.MID_RED);
+    warningLabelIcon.setForeground(Color.WHITE);
+    sidePane.add(warningLabelIcon);
+
+    warningLabel = new JLabel("");
+    warningLabel.setFont(Fonts.fontReg);
+    warningLabel.setForeground(Colors.MID_RED);
+    warningLabel.setVisible(false);
+    warningLabel.setBounds(54, 258, 200, 18);
+    sidePane.add(warningLabel);
 
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
     settingsButton = new JButton(Locale.getValue("b.settings"));
@@ -282,7 +301,7 @@ public class LauncherGUI extends BaseGUI {
     Icon launchTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 16, Color.WHITE);
     JButton launchTooltipButton = new JButton();
     launchTooltipButton.setIcon(launchTooltipButtonIcon);
-    launchTooltipButton.setBounds(552, 424, 16, 16);
+    launchTooltipButton.setBounds(548, 424, 20, 20);
     launchTooltipButton.setEnabled(true);
     launchTooltipButton.setFocusable(false);
     launchTooltipButton.setFocusPainted(false);
@@ -395,5 +414,11 @@ public class LauncherGUI extends BaseGUI {
       }
     });
 
+  }
+
+  public static void showWarning(String message) {
+    warningLabelIcon.setVisible(true);
+    warningLabel.setVisible(true);
+    warningLabel.setText(message);
   }
 }
