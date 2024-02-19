@@ -1,5 +1,6 @@
 package com.luuqui.launcher;
 
+import com.luuqui.dialog.DialogInfo;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mods.ModLoader;
@@ -202,6 +203,25 @@ public class LauncherEventHandler {
     selectedServerChanged(null);
   }
 
+  public static void displaySelectedServerInfo() {
+    Server selectedServer = LauncherApp.selectedServer;
+
+    String infoString = "";
+    infoString += "Name: " + selectedServer.name + "\n";
+    infoString += "Description: " + selectedServer.description + "\n";
+    infoString += "Version: " + selectedServer.version + "\n";
+    infoString += "Managed by: " + selectedServer.managedBy + "\n";
+    if(!selectedServer.siteUrl.equalsIgnoreCase("null")) infoString += "Website: " + selectedServer.siteUrl + "\n";
+    if(!selectedServer.communityUrl.equalsIgnoreCase("null")) infoString += "Community: " + selectedServer.communityUrl + "\n";
+    if(!selectedServer.sourceCodeUrl.equalsIgnoreCase("null")) infoString += "Source code: " + selectedServer.sourceCodeUrl + "\n";
+    infoString += "\n * Neither your activity in third party services nor theirs is endorsed \n by Knight Launcher. Play at your own discretion.";
+
+    DialogInfo.push(
+      infoString,
+      selectedServer.name + " Server Information"
+    );
+  }
+
   public static void selectedServerChanged(ActionEvent event) {
     Server selectedServer = findServerInServerList((String) LauncherGUI.serverList.getSelectedItem());
 
@@ -211,10 +231,14 @@ public class LauncherEventHandler {
         LauncherGUI.launchButton.setToolTipText("Play Now");
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
         LauncherGUI.playerCountLabel.setText(selectedServer.playerCountUrl);
+        LauncherGUI.serverInfoButton.setEnabled(false);
+        LauncherGUI.serverInfoButton.setVisible(false);
       } else {
         LauncherGUI.launchButton.setText("Play " + selectedServer.name);
         LauncherGUI.launchButton.setToolTipText("Play " + selectedServer.name);
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
+        LauncherGUI.serverInfoButton.setEnabled(true);
+        LauncherGUI.serverInfoButton.setVisible(true);
 
         // TODO: Fetch player count.
         LauncherGUI.playerCountLabel.setText("Player count unavailable.");

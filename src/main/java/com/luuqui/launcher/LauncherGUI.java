@@ -33,6 +33,7 @@ public class LauncherGUI extends BaseGUI {
   public static JLabel imageContainer;
   public static JLabel playerCountLabel;
   public static JComboBox serverList;
+  public static JButton serverInfoButton;
 
   public LauncherGUI(LauncherApp app) {
     super();
@@ -99,13 +100,26 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(serverListLabel);
 
     serverList = new JComboBox<String>();
-    serverList.setBounds(73, 210, 150, 20);
+    serverList.setBounds(73, 210, 120, 20);
     serverList.setFont(Fonts.fontReg);
     serverList.setFocusable(false);
     serverList.setRequestFocusEnabled(false);
     sidePane.add(serverList);
     serverList.addActionListener(action -> LauncherEventHandler.selectedServerChanged(action));
     serverList.addItem("Official");
+
+    Icon serverInfoButtonIcon = IconFontSwing.buildIcon(FontAwesome.INFO, 16, Color.WHITE);
+    serverInfoButton = new JButton();
+    serverInfoButton.setIcon(serverInfoButtonIcon);
+    serverInfoButton.setBounds(200, 210, 20, 20);
+    serverInfoButton.setEnabled(false);
+    serverInfoButton.setVisible(false);
+    serverInfoButton.setFocusable(false);
+    serverInfoButton.setFocusPainted(false);
+    serverInfoButton.setForeground(Color.WHITE);
+    serverInfoButton.setToolTipText("Server Information");
+    serverInfoButton.addActionListener(l -> LauncherEventHandler.displaySelectedServerInfo());
+    sidePane.add(serverInfoButton);
 
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
     playerCountLabel.setFont(Fonts.fontReg);
