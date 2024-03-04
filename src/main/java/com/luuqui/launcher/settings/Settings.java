@@ -17,6 +17,7 @@ public class Settings {
   public static String gameGarbageCollector = "ParallelOld";
   public static String gameAdditionalArgs = null;
   public static String launcherStyle = "dark";
+  public static int selectedServerIdx = 0;
   public static Boolean isOutdated = false;
   public static Boolean jvmPatched = false;
   public static Boolean ingameRPCSetup = false;

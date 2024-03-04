@@ -7,6 +7,7 @@ import com.luuqui.launcher.mods.ModLoader;
 import com.luuqui.launcher.settings.GameSettings;
 import com.luuqui.launcher.settings.Settings;
 import com.luuqui.launcher.settings.SettingsEventHandler;
+import com.luuqui.launcher.settings.SettingsProperties;
 import com.luuqui.util.*;
 import org.apache.commons.io.FileUtils;
 
@@ -199,8 +200,20 @@ public class LauncherEventHandler {
       FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + LauncherApp.getSanitizedServerName(server.name));
     }
 
-    LauncherApp.selectedServer = official;
+    try {
+      LauncherGUI.serverList.setSelectedIndex(Settings.selectedServerIdx);
+      LauncherApp.selectedServer = findServerInServerList((String) LauncherGUI.serverList.getSelectedItem());
+    } catch (Exception e) {
+      log.error(e);
+      LauncherGUI.serverList.setSelectedIndex(0);
+      LauncherApp.selectedServer = official;
+    }
+
     selectedServerChanged(null);
+  }
+
+  public static void saveSelectedServer() {
+    SettingsProperties.setValue("launcher.selectedServerIdx", String.valueOf(LauncherGUI.serverList.getSelectedIndex()));
   }
 
   public static void displaySelectedServerInfo() {
@@ -249,6 +262,8 @@ public class LauncherEventHandler {
       LauncherGUI.serverList.setSelectedIndex(0);
       LauncherApp.selectedServer = findServerInServerList("Official");
     }
+
+    saveSelectedServer();
   }
 
   private static Server findServerInServerList(String serverName) {
