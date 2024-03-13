@@ -68,7 +68,7 @@ public class LauncherEventHandler {
         ProgressBar.setState("Retrieving data from " + LauncherApp.selectedServer.name + "...");
         ProgressBar.setBarValue(0);
 
-        if(!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + "/version.txt")) {
+        if(!FileUtil.fileExists(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "version.txt")) {
           // we did not download this third party client, time to get it from the deploy url.
 
           ProgressBar.setState("Downloading " + LauncherApp.selectedServer.name + "... (this might take a while)");
@@ -84,13 +84,13 @@ public class LauncherEventHandler {
             try {
               FileUtils.copyURLToFile(
                 new URL(selectedServer.deployUrl + "/" + selectedServer.version + ".zip"),
-                new File(LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + "\\bundle.zip"),
+                new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip"),
                 0,
                 0
               );
-              Compressor.unzip(LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + "\\bundle.zip",
-                LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName, false);
-              FileUtil.deleteFile(LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + "\\bundle.zip");
+              Compressor.unzip(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip",
+                LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
+              FileUtil.deleteFile(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
               downloadCompleted = true;
             } catch (IOException e) {
               // Just keep retrying.
@@ -101,7 +101,7 @@ public class LauncherEventHandler {
 
         // let's see if we need to update the third party client
         try {
-          String localVersion = FileUtil.readFile(LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + "/version.txt");
+          String localVersion = FileUtil.readFile(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "version.txt");
           if(!selectedServer.version.equalsIgnoreCase(localVersion)) {
             log.info("Updating third party client: " + selectedServer.name);
 
@@ -118,13 +118,13 @@ public class LauncherEventHandler {
               try {
                 FileUtils.copyURLToFile(
                   new URL(selectedServer.deployUrl + "/" + selectedServer.version + ".zip"),
-                  new File(LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + "\\bundle.zip"),
+                  new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip"),
                   0,
                   0
                 );
-                Compressor.unzip(LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + "\\bundle.zip",
-                  LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName, false);
-                FileUtil.deleteFile(LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + "\\bundle.zip");
+                Compressor.unzip(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip",
+                  LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
+                FileUtil.deleteFile(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
                 downloadCompleted = true;
               } catch (IOException e) {
                 // Just keep retrying.
