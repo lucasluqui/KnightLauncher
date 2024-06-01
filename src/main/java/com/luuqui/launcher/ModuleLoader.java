@@ -30,7 +30,7 @@ public class ModuleLoader {
 
   public static void loadJarCommandLine() {
     try {
-      int vmArch = JavaUtil.getJVMArch(SystemUtil.isWindows() ? LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe" : LauncherGlobals.USER_DIR + "\\java\\bin\\java");
+      int vmArch = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath());
       if (SystemUtil.isWindows()) {
         FileUtil.extractFileWithinJar("/modules/jarcmd/jar-" + vmArch + ".exe", LauncherGlobals.USER_DIR + "\\java_vm\\bin\\jar.exe");
       } else {

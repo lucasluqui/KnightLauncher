@@ -238,7 +238,7 @@ public class LauncherApp {
     if(!SystemUtil.isWindows() && !(SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam"))) return false;
 
     // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by Knight Launcher.
-    if(JavaUtil.getJVMArch(LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe") == 64 ||
+    if(JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 ||
     Settings.jvmPatched) {
       Settings.jvmPatched = true;
       SettingsProperties.setValue("launcher.jvm_patched", "true");

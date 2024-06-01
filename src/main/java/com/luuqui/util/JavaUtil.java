@@ -1,8 +1,11 @@
 package com.luuqui.util;
 
+import com.luuqui.launcher.LauncherGlobals;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Properties;
 
 import static com.luuqui.launcher.settings.Log.log;
@@ -19,7 +22,7 @@ public class JavaUtil {
       // Matches a 64-bit '-version' output.
       if(output[1].contains("64-Bit Server VM")) return 64;
     } else {
-      output = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "file", path });
+      output = ProcessUtil.runAndCapture(new String[]{ "file", path });
       // We got no output, so we can't do any checks.
       if(output[0].isEmpty()) return 0;
 
@@ -48,6 +51,10 @@ public class JavaUtil {
     String osArch = releaseFile.getProperty("OS_ARCH");
 
     return (version + ", " + osArch).replace("\"", "");
+  }
+
+  public static String getGameJVMExePath() {
+    return LauncherGlobals.USER_DIR + File.separator + "java_vm" + File.separator +"bin" + File.separator + "java.exe";
   }
 
 }
