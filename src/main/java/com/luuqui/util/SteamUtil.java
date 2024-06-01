@@ -9,6 +9,10 @@ import java.net.URI;
 public class SteamUtil {
 
   public static void startGameById(int id) throws Exception {
+    if (SystemUtil.isUnix()) {
+      ProcessUtil.run(new String[] {"steam", "steam://rungameid/" + id}, true);
+      return;
+    }
     Desktop desktop = Desktop.getDesktop();
     URI steamProtocol = new URI("steam://run/" + id);
     desktop.browse(steamProtocol);
