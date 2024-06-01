@@ -13,15 +13,19 @@ public class JavaUtil {
     String[] output;
     if (SystemUtil.isWindows()) {
       output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", path, "-version" });
+      // We got no output, so we can't do any checks.
+      if(output[1].isEmpty()) return 0;
+
+      // Matches a 64-bit '-version' output.
+      if(output[1].contains("64-Bit Server VM")) return 64;
     } else {
-      output = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", path, "-version" });
+      output = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "file", path });
+      // We got no output, so we can't do any checks.
+      if(output[0].isEmpty()) return 0;
+
+      // Matches a 64-bit.
+      if(output[0].contains("64-Bit") || output[0].contains("PE32+")) return 64;
     }
-
-    // We got no output, so we can't do any checks.
-    if(output[1].isEmpty()) return 0;
-
-    // Matches a 64-bit '-version' output.
-    if(output[1].contains("64-Bit Server VM")) return 64;
 
     // No results matched. We assume it's 32-bit.
     return 32;
