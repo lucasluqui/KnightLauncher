@@ -34,7 +34,7 @@ public class JavaUtil {
   }
 
   public static String getGameJVMData() {
-    String path = System.getProperty("user.dir") + (SystemUtil.isWindows() ? "\\java_vm\\release" : "\\java\\release");
+    String path = System.getProperty("user.dir") + File.separator + "java_vm" + File.separator + "release";
     if(!FileUtil.fileExists(path)) {
       return "Unknown Java VM";
     }
