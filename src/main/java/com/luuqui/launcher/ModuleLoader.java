@@ -32,9 +32,9 @@ public class ModuleLoader {
     try {
       int vmArch = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath());
       if (SystemUtil.isWindows()) {
-        FileUtil.extractFileWithinJar("/modules/jarcmd/jar-" + vmArch + ".exe", LauncherGlobals.USER_DIR + "\\java_vm\\bin\\jar.exe");
+        FileUtil.extractFileWithinJar("/modules/jarcmd/jar-" + vmArch + ".exe", LauncherGlobals.USER_DIR + "/java_vm/bin/jar.exe");
       } else {
-          FileUtil.extractFileWithinJar(vmArch == 64 ? "/modules/jarcmd/jar-amd64" : "/modules/jarcmd/jar-i386", LauncherGlobals.USER_DIR + "\\java\\bin\\jar");
+        FileUtil.extractFileWithinJar(vmArch == 64 ? "/modules/jarcmd/jar-amd64" : "/modules/jarcmd/jar-i386", LauncherGlobals.USER_DIR + "/java_vm/bin/jar");
       }
     } catch (IOException e) {
       log.error(e);

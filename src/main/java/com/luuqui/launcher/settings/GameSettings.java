@@ -74,13 +74,13 @@ public class GameSettings {
   @Deprecated
   private static void loadConnectionSettings() {
     try {
-      FileUtil.extractFileWithinJar("/config/deployment.properties", LauncherGlobals.USER_DIR + "\\deployment.properties");
+      FileUtil.extractFileWithinJar("/config/deployment.properties", LauncherGlobals.USER_DIR + "/deployment.properties");
     } catch (IOException e) {
       log.error(e);
     }
     Properties properties = new Properties();
     try {
-      properties.load(Files.newInputStream(new File(LauncherGlobals.USER_DIR + "\\deployment.properties").toPath()));
+      properties.load(Files.newInputStream(new File(LauncherGlobals.USER_DIR + "/deployment.properties").toPath()));
     } catch (IOException e) {
       log.error(e);
     }
@@ -92,19 +92,19 @@ public class GameSettings {
     properties.setProperty("client_root_url", Settings.gameGetdownURL);
 
     try {
-      properties.store(Files.newOutputStream(new File(LauncherGlobals.USER_DIR + "\\deployment.properties").toPath()), null);
+      properties.store(Files.newOutputStream(new File(LauncherGlobals.USER_DIR + "/deployment.properties").toPath()), null);
     } catch (IOException e) {
       log.error(e);
     }
 
     String[] outputCapture = null;
     if(SystemUtil.isWindows()) {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", LauncherGlobals.USER_DIR + "\\java_vm\\bin\\jar.exe", "uf", "code\\config.jar", "deployment.properties" });
+      outputCapture = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", LauncherGlobals.USER_DIR + "/java_vm/bin/jar.exe", "uf", "code/config.jar", "deployment.properties" });
     } else {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", LauncherGlobals.USER_DIR + "\\java\\bin\\jar", "uf", "code\\config.jar", "deployment.properties" });
+      outputCapture = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", LauncherGlobals.USER_DIR + "/java_vm/bin/jar", "uf", "code/config.jar", "deployment.properties" });
     }
     log.debug("Connection settings capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
-    FileUtil.deleteFile(LauncherGlobals.USER_DIR + "\\deployment.properties");
+    FileUtil.deleteFile(LauncherGlobals.USER_DIR + "/deployment.properties");
   }
 
 }
