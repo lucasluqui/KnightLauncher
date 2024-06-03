@@ -136,6 +136,14 @@ public class LauncherApp {
 
     // External modules necessary for extra functionality (eg. RPC)
     FileUtil.createDir("KnightLauncher/modules/");
+
+    // For standalone client, fix path for java vm
+    File javaDir = new File(LauncherGlobals.USER_DIR + "/java");
+    File javaVmDir = new File(LauncherGlobals.USER_DIR + "/java_vm");
+    if (javaDir.exists() && !javaVmDir.exists()){
+      // rename java directory, this break GreyHaven launch script in standalone client
+      if (!javaDir.renameTo(javaVmDir)) log.error("Fail to rename the \"java\" folder");
+    }
   }
 
   // Checking if we're being ran inside the game's directory, "getdown-pro.jar" should always be present if so.
