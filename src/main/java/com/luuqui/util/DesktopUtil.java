@@ -42,7 +42,7 @@ public class DesktopUtil {
   }
 
   public static String getPathToDesktop() {
-    return System.getProperty("user.home") + File.separator + "Desktop" + File.separator;
+    return System.getProperty("user.home") + File.separator + "Desktop";
   }
 
   public static void createShellLink(String target, String args, String workDir, String ico, String hover, String name) {
