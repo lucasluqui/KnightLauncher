@@ -6,6 +6,7 @@ import com.luuqui.util.FileUtil;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.SystemUtil;
 
+import java.io.File;
 import java.io.IOException;
 
 import static com.luuqui.launcher.Log.log;
@@ -31,9 +32,9 @@ public class ModuleLoader {
   public static void loadJarCommandLine() {
     try {
       int vmArch = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath());
-      if (SystemUtil.isWindows()) {
+      if (SystemUtil.isWindows() && new File(LauncherGlobals.USER_DIR + "/java_vm/bin/jar.exe").exists()) {
         FileUtil.extractFileWithinJar("/modules/jarcmd/jar-" + vmArch + ".exe", LauncherGlobals.USER_DIR + "/java_vm/bin/jar.exe");
-      } else {
+      } else if (new File(LauncherGlobals.USER_DIR + "/java_vm/bin/jar").exists()){
         FileUtil.extractFileWithinJar(vmArch == 64 ? "/modules/jarcmd/jar-amd64" : "/modules/jarcmd/jar-i386", LauncherGlobals.USER_DIR + "/java_vm/bin/jar");
       }
     } catch (IOException e) {
