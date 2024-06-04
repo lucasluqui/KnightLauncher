@@ -290,7 +290,6 @@ public class LauncherApp {
 
   private void postInitialization() {
     ModLoader.checkInstalled();
-    if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
     if (Settings.useIngameRPC) ModuleLoader.loadIngameRPC();
     if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
       ModLoader.extractSafeguard();

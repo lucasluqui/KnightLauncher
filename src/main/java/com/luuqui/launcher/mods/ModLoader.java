@@ -5,6 +5,7 @@ import com.luuqui.launcher.*;
 import com.luuqui.launcher.mods.data.JarMod;
 import com.luuqui.launcher.mods.data.Mod;
 import com.luuqui.launcher.mods.data.ZipMod;
+import com.luuqui.launcher.settings.Settings;
 import com.luuqui.launcher.settings.SettingsGUI;
 import com.luuqui.launcher.settings.SettingsProperties;
 import com.luuqui.util.Compressor;
@@ -108,7 +109,7 @@ public class ModLoader {
   public static void mount() {
 
     LauncherGUI.launchButton.setEnabled(false);
-    if(rebuildRequired) startFileRebuild();
+    if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
     ProgressBar.startTask();
     ProgressBar.setBarMax(getEnabledModCount() + 1);
     ProgressBar.setState(Locale.getValue("m.mount"));
