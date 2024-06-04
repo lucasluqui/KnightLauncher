@@ -16,9 +16,6 @@ public class ModListEventHandler {
 
   public static void refreshEvent(ActionEvent action) {
     ModLoader.checkInstalled();
-    if (ModLoader.rebuildRequired && Settings.doRebuilds) {
-      ModLoader.startFileRebuild();
-    }
     ModListGUI.labelModCount.setText(Integer.toString(ModLoader.getModCount()));
     ModLoader.mount();
     ModListGUI.updateModList();
