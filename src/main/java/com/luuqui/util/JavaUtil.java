@@ -1,6 +1,7 @@
 package com.luuqui.util;
 
 import com.luuqui.launcher.LauncherGlobals;
+import com.samskivert.util.Folds;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +54,13 @@ public class JavaUtil {
   }
 
   public static String getGameJVMExePath() {
-    return LauncherGlobals.USER_DIR + File.separator + "java_vm" + File.separator +"bin" + File.separator + "java.exe";
+    File exeFile = new File(LauncherGlobals.USER_DIR, "/java_vm/bin/java.exe");
+    if (exeFile.exists()) return exeFile.getAbsolutePath();
+    File binFile = new File(LauncherGlobals.USER_DIR, "/java_vm/bin/java");
+    if (binFile.exists()) return binFile.getAbsolutePath();
+
+    log.error("Cannot locate game java vm executable");
+    return "";
   }
 
 }
