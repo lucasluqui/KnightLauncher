@@ -13,8 +13,10 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipFile;
 
 import static com.luuqui.launcher.mods.Log.log;
@@ -91,16 +93,16 @@ public class ModLoader {
         mountRequired = true;
       }
     }
+    // Finally lets see which have been set as disabled.
+    parseDisabledMods();
 
     // Check if there's a new or removed mod since last execution, rebuild will be needed in that case.
-    if (Integer.parseInt(SettingsProperties.getValue("modloader.lastModCount")) != getModCount()) {
-      SettingsProperties.setValue("modloader.lastModCount", Integer.toString(getModCount()));
+    if (Integer.parseInt(SettingsProperties.getValue("modloader.appliedModsHash")) != getEnableModsHash()) {
+      log.info("Hashcode doesn't match, preparing for remount...");
       rebuildRequired = true;
       mountRequired = true;
     }
-
-    // Finally lets see which have been set as disabled.
-    parseDisabledMods();
+    ModListGUI.updateModList();
   }
 
   public static void mount() {
@@ -112,13 +114,16 @@ public class ModLoader {
     ProgressBar.setState(Locale.getValue("m.mount"));
     DiscordRPC.getInstance().setDetails(Locale.getValue("m.mount"));
     LinkedList<Mod> localList = getModList();
+    Set<String> hashSet = new HashSet<String>();
 
     for (int i = 0; i < getModCount(); i++) {
       if(localList.get(i).isEnabled()) {
         localList.get(i).mount();
+        hashSet.add(localList.get(i).getFileName() + localList.get(i).getVersion());
         ProgressBar.setBarValue(i + 1);
       }
     }
+    SettingsProperties.setValue("modloader.appliedModsHash", Integer.toString(hashSet.hashCode()));
 
     // Make sure no cheat mod slips in.
     extractSafeguard();
@@ -200,6 +205,14 @@ public class ModLoader {
     return count;
   }
 
+  private static int getEnableModsHash() {
+    Set<String> hashSet = new HashSet<String>();
+    for(Mod mod : modList) {
+      if(mod.isEnabled()) hashSet.add(mod.getFileName() + mod.getVersion());
+    }
+    return hashSet.hashCode();
+  }
+
   public static LinkedList<Mod> getModList() {
     // We don't want to return the actual object so let's clone it.
     return new LinkedList<>(modList);
@@ -224,7 +237,6 @@ public class ModLoader {
         }
       }
     }
-    ModListGUI.updateModList();
   }
 
 }
