@@ -17,7 +17,6 @@ public class ModListEventHandler {
   public static void refreshEvent(ActionEvent action) {
     ModLoader.checkInstalled();
     ModListGUI.labelModCount.setText(Integer.toString(ModLoader.getModCount()));
-    ModLoader.mount();
   }
 
   public static void forceApplyEvent(ActionEvent action) {
