@@ -60,7 +60,7 @@ public class ModLoader {
         mod.setVersion(modJson.getString("version"));
       }
 
-      addMod(mod);
+      modList.add(mod);
       mod.wasAdded();
 
       // Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
@@ -186,10 +186,6 @@ public class ModLoader {
     } catch (IOException e) {
       log.error(e);
     }
-  }
-
-  private static void addMod(Mod mod) {
-    if(mod.isEnabled()) modList.add(mod);
   }
 
   public static int getModCount() {
