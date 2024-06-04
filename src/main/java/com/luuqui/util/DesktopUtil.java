@@ -23,6 +23,10 @@ public class DesktopUtil {
   }
 
   public static void openWebpage(URI uri) {
+    if (SystemUtil.isUnix()) {
+      ProcessUtil.run(new String[] {"xdg-open", uri.toString()}, true);
+      return;
+    }
     Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
     if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
       try {
