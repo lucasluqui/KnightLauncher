@@ -136,8 +136,7 @@ public class ModLoader {
   }
 
   public static void startFileRebuild() {
-    Thread rebuildThread = new Thread(() -> rebuildFiles());
-    rebuildThread.start();
+    rebuildFiles();
   }
 
   private static void rebuildFiles() {
