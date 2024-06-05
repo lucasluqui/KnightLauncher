@@ -5,6 +5,7 @@ import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.ProgressBar;
 import com.luuqui.util.FileUtil;
+import com.luuqui.util.JavaUtil;
 import com.luuqui.util.ProcessUtil;
 import com.luuqui.util.SystemUtil;
 
@@ -99,9 +100,9 @@ public class GameSettings {
 
     String[] outputCapture = null;
     if(SystemUtil.isWindows()) {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", LauncherGlobals.USER_DIR + "/java_vm/bin/jar.exe", "uf", "code/config.jar", "deployment.properties" });
+      outputCapture = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", JavaUtil.getGameJavaDirPath() + "/bin/jar.exe", "uf", "code/config.jar", "deployment.properties" });
     } else {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", LauncherGlobals.USER_DIR + "/java_vm/bin/jar", "uf", "code/config.jar", "deployment.properties" });
+      outputCapture = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", JavaUtil.getGameJavaDirPath() + "/bin/jar", "uf", "code/config.jar", "deployment.properties" });
     }
     log.debug("Connection settings capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
     FileUtil.deleteFile(LauncherGlobals.USER_DIR + "/deployment.properties");

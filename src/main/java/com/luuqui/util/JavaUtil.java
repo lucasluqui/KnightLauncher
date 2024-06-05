@@ -35,7 +35,7 @@ public class JavaUtil {
   }
 
   public static String getGameJVMData() {
-    String path = System.getProperty("user.dir") + File.separator + "java_vm" + File.separator + "release";
+    String path = getGameJavaDirPath() + "/release";
     if(!FileUtil.fileExists(path)) {
       return "Unknown Java VM";
     }
@@ -53,14 +53,28 @@ public class JavaUtil {
     return (version + ", " + osArch).replace("\"", "");
   }
 
-  public static String getGameJVMExePath() {
-    File exeFile = new File(LauncherGlobals.USER_DIR, "/java_vm/bin/java.exe");
-    if (exeFile.exists()) return exeFile.getAbsolutePath();
-    File binFile = new File(LauncherGlobals.USER_DIR, "/java_vm/bin/java");
-    if (binFile.exists()) return binFile.getAbsolutePath();
-
-    log.error("Cannot locate game java vm executable");
+  public static String getGameJavaDirPath() {
+    File javaVMDir = new File(LauncherGlobals.USER_DIR, "/java_vm");
+    if (javaVMDir.exists() && javaVMDir.isDirectory()) {
+     return javaVMDir.getAbsolutePath();
+    }
+    File javaDIR = new File(LauncherGlobals.USER_DIR, "/java");
+    if (javaDIR.exists() && javaDIR.isDirectory()) {
+      return javaDIR.getAbsolutePath();
+    }
     return "";
+  }
+
+  public static String getGameJVMExePath() {
+    String javaDir = getGameJavaDirPath();
+    if (new File(javaDir, "bin/java.exe").exists()) {
+      return javaDir + "/bin/java.exe";
+    }
+    if (new File(javaDir, "bin/java").exists()) {
+      return javaDir + "/bin/java";
+    }
+    log.error("Cannot locate local java executable");
+    return "java";
   }
 
 }

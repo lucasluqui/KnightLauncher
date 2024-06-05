@@ -1,5 +1,7 @@
 package com.luuqui.launcher;
 
+import com.luuqui.util.JavaUtil;
+
 import java.io.File;
 
 public class LauncherGlobals {
@@ -35,19 +37,7 @@ public class LauncherGlobals {
 
   static {
 
-    String javaPath;
-    if (new File(USER_DIR, "/java_vm/bin/java").exists()) {
-      javaPath = "./java_vm/bin/java";
-    } else if (new File(USER_DIR, "/java_vm/bin/java.exe").exists()){
-      javaPath = "./java_vm/bin/java.exe";
-    // just in case
-    } else if (new File(USER_DIR, "/java/bin/java").exists()){
-      javaPath = "./java/bin/java";
-    } else if (new File(USER_DIR, "/java/bin/java.exe").exists()){
-      javaPath = "./java/bin/java.exe";
-    } else {
-      javaPath = "java";
-    }
+    String javaPath = JavaUtil.getGameJVMExePath();
 
     GETDOWN_ARGS = new String[]{
         javaPath,
