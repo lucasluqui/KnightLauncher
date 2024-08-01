@@ -58,6 +58,11 @@ public class ModLoader {
         mod.setDescription(modJson.getString("description"));
         mod.setAuthor(modJson.getString("author"));
         mod.setVersion(modJson.getString("version"));
+        try {
+          mod.setImage(modJson.getString("image"));
+        } catch (Exception e) {
+          mod.setImage(null);
+        }
       }
 
       addMod(mod);

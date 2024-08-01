@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -81,6 +82,20 @@ public class ImageUtil {
     }
     ImageIcon icon = new ImageIcon(image);
     return icon;
+  }
+
+  public static BufferedImage loadImageFromBase64(String data) {
+    if(data == null) return null;
+
+    String base64Image = data.contains(",") ? data.split(",")[1] : data;
+    byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
+    BufferedImage img = null;
+    try {
+      img = ImageIO.read(new ByteArrayInputStream(imageBytes));
+    } catch (IOException e) {
+      log.error(e);
+    }
+    return img;
   }
 
 }

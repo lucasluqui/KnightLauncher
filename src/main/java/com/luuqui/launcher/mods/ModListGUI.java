@@ -2,6 +2,7 @@ package com.luuqui.launcher.mods;
 
 import com.luuqui.launcher.*;
 import com.luuqui.launcher.mods.data.Mod;
+import com.luuqui.util.ColorUtil;
 import com.luuqui.util.DesktopUtil;
 import com.luuqui.util.ImageUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -75,12 +76,12 @@ public class ModListGUI extends BaseGUI {
     refreshButton.addActionListener(ModListEventHandler::refreshEvent);
 
     JLabel enabledLabel = new JLabel("Enabled");
-    enabledLabel.setBounds(638, 86, 100, 25);
+    enabledLabel.setBounds(636, 86, 100, 25);
     enabledLabel.setFont(Fonts.fontMed);
     modListGUIFrame.getContentPane().add(enabledLabel);
 
     JButton modFolderButton = new JButton(Locale.getValue("b.open_mods_folder"));
-    modFolderButton.setBounds(465, 35, 150, 25);
+    modFolderButton.setBounds(445, 35, 160, 25);
     modFolderButton.setFont(Fonts.fontMed);
     modFolderButton.setFocusPainted(false);
     modFolderButton.setFocusable(false);
@@ -88,17 +89,17 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.getContentPane().add(modFolderButton);
     modFolderButton.addActionListener(action -> DesktopUtil.openDir(LauncherGlobals.USER_DIR + "/mods"));
 
-    JButton getModsButton = new JButton(Locale.getValue("b.get_mods"));
-    getModsButton.setBounds(620, 35, 150, 25);
+    JButton getModsButton = new JButton("Get mods via Discord");
+    getModsButton.setBounds(610, 35, 160, 25);
     getModsButton.setFont(Fonts.fontMed);
     getModsButton.setFocusPainted(false);
     getModsButton.setFocusable(false);
-    getModsButton.setToolTipText(Locale.getValue("b.get_mods"));
+    getModsButton.setToolTipText(Locale.getValue("Get mods via Discord"));
     modListGUIFrame.getContentPane().add(getModsButton);
     getModsButton.addActionListener(ModListEventHandler::getModsEvent);
 
     forceApplyButton = new JButton("Force apply");
-    forceApplyButton.setBounds(310, 35, 150, 25);
+    forceApplyButton.setBounds(280, 35, 160, 25);
     forceApplyButton.setFont(Fonts.fontMed);
     forceApplyButton.setFocusPainted(false);
     forceApplyButton.setFocusable(false);
@@ -107,31 +108,45 @@ public class ModListGUI extends BaseGUI {
     forceApplyButton.addActionListener(ModListEventHandler::forceApplyEvent);
 
     labelForceApplyState = new JLabel("");
-    labelForceApplyState.setBounds(310, 5, 150, 25);
+    labelForceApplyState.setBounds(280, 5, 160, 25);
     labelForceApplyState.setFont(Fonts.fontReg);
     labelForceApplyState.setHorizontalAlignment(SwingConstants.CENTER);
     labelForceApplyState.setVerticalAlignment(SwingConstants.CENTER);
     modListGUIFrame.getContentPane().add(labelForceApplyState);
 
+    Icon modStoreIcon = IconFontSwing.buildIcon(FontAwesome.SEARCH, 12, ColorUtil.getForegroundColor());
+    JButton modStoreButton = new JButton(Locale.getValue("Browse Mod Store"));
+    modStoreButton.setIcon(modStoreIcon);
+    modStoreButton.setBounds(610, 5, 160, 25);
+    modStoreButton.setFont(Fonts.fontMed);
+    modStoreButton.setFocusPainted(false);
+    modStoreButton.setFocusable(false);
+    modStoreButton.setToolTipText("Browse Mod Store");
+    modListGUIFrame.getContentPane().add(modStoreButton);
+    //getModsButton.addActionListener(ModListEventHandler::openModStore);
+
     modListPane = new JPanel();
     modListPane.setBackground(new Color(56, 60, 71));
     GridLayout layout = new GridLayout(ModLoader.getModCount(), 1);
-    layout.setVgap(15);
+    layout.setVgap(0);
     modListPane.setLayout(layout);
-    modListPane.setPreferredSize(new Dimension(750, ModLoader.getModCount() * 75));
+    modListPane.setPreferredSize(new Dimension(750, ModLoader.getModCount() * 76));
 
     updateModList();
 
     JScrollPane scrollBar = new JScrollPane(modListPane);
     scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollBar.setBounds(27, 120, 750, 340);
+    scrollBar.setBounds(25, 120, 750, 340);
     scrollBar.setBorder(null);
     scrollBar.getVerticalScrollBar().setUnitIncrement(16);
     modListGUIFrame.getContentPane().add(scrollBar);
   }
 
   public static void updateModList() {
+
+    Color[] backgroundColors = { new Color(45, 48, 57), new Color(34, 36, 43) };
+    int count = 0;
 
     if(modListPane == null) {
       log.error("What? how? why?! modListPane is null");
@@ -142,31 +157,34 @@ public class ModListGUI extends BaseGUI {
     for (Mod mod : ModLoader.getModList()) {
       JPanel modPane = new JPanel();
       modPane.setLayout(null);
-      modPane.setBounds(0, 0, 750, 64);
-      modPane.setBackground(new Color(56, 60, 71));
+      modPane.setBounds(0, 0, 750, 76);
+      modPane.setBackground((count & 1) == 0 ? backgroundColors[0] : backgroundColors[1]);
 
       JLabel modImage = new JLabel();
-      BufferedImage image = ImageUtil.loadImageWithinJar("/img/mod-default-64.png");
-      modImage.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(image, 25)));
-      modImage.setBounds(0, 0, 64, 64);
+      BufferedImage defaultImage = ImageUtil.loadImageWithinJar("/img/mod-default-64.png");
+      BufferedImage image = ImageUtil.loadImageFromBase64(mod.getImage());
+      modImage.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(image == null ? defaultImage : image, 25)));
+      modImage.setBounds(6, 6, 64, 64);
       modPane.add(modImage);
 
       JLabel modName = new JLabel();
       modName.setText(mod.getDisplayName());
+      modName.setToolTipText(mod.getDisplayName());
       modName.setFont(Fonts.fontMed);
-      modName.setBounds(75, 0, 150, 25);
+      modName.setBounds(81, 6, 150, 25);
       modPane.add(modName);
 
       JLabel modDescription = new JLabel();
       modDescription.setText(mod.getDescription());
+      modDescription.setToolTipText(mod.getDescription());
       modDescription.setFont(Fonts.fontReg);
-      modDescription.setBounds(75, 3, 400, 55);
+      modDescription.setBounds(81, 24, 450, 25);
       modPane.add(modDescription);
 
       JLabel modFooter = new JLabel();
       modFooter.setText("v" + mod.getVersion() + ", author: " + mod.getAuthor());
       modFooter.setFont(Fonts.fontRegSmall);
-      modFooter.setBounds(75, 25, 400, 55);
+      modFooter.setBounds(81, 32, 400, 55);
       modPane.add(modFooter);
 
       JCheckBox enabledCheckbox = new JCheckBox();
@@ -174,7 +192,7 @@ public class ModListGUI extends BaseGUI {
       enabledCheckbox.setVisible(true);
       enabledCheckbox.setFocusable(false);
       enabledCheckbox.setFocusPainted(false);
-      enabledCheckbox.setBounds(625, 15, 25, 25);
+      enabledCheckbox.setBounds(625, 25, 25, 25);
       enabledCheckbox.setSelected(mod.isEnabled());
 
       enabledCheckbox.addActionListener(l -> {
@@ -188,6 +206,7 @@ public class ModListGUI extends BaseGUI {
       modPane.add(enabledCheckbox);
 
       modListPane.add(modPane);
+      count++;
     }
     modListPane.updateUI();
   }
