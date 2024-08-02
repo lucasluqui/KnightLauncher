@@ -257,6 +257,7 @@ public class LauncherEventHandler {
         LauncherGUI.launchButton.setToolTipText("Play Now");
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
         LauncherGUI.playerCountLabel.setText(selectedServer.playerCountUrl);
+        LauncherGUI.playerCountLabel.setVisible(true);
         LauncherGUI.serverInfoButton.setEnabled(false);
         LauncherGUI.serverInfoButton.setVisible(false);
       } else {
@@ -267,7 +268,7 @@ public class LauncherEventHandler {
         LauncherGUI.serverInfoButton.setVisible(true);
 
         // TODO: Fetch player count.
-        LauncherGUI.playerCountLabel.setText("Player count unavailable.");
+        LauncherGUI.playerCountLabel.setVisible(false);
       }
       LauncherApp.selectedServer = selectedServer;
     } else {

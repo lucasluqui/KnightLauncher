@@ -1,5 +1,6 @@
 package com.luuqui.launcher;
 
+import com.luuqui.dialog.DialogError;
 import com.luuqui.dialog.DialogWarning;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.mods.ModListGUI;
@@ -41,6 +42,8 @@ public class LauncherGUI extends BaseGUI {
   public static JButton serverInfoButton;
   public static JLabel warningLabelIcon;
   public static JLabel warningLabel;
+  public static JButton warningNotice;
+  public static String currentWarning = "";
 
   public LauncherGUI(LauncherApp app) {
     super();
@@ -141,23 +144,6 @@ public class LauncherGUI extends BaseGUI {
     playerCountLabel.setForeground(new Color(34, 197, 94));
     playerCountLabel.setBounds(28, 235, 200, 18);
     sidePane.add(playerCountLabel);
-
-    Icon warningIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
-    warningLabelIcon = new JLabel(warningIcon);
-    warningLabelIcon.setBounds(28, 258, 20, 20);
-    warningLabelIcon.setFocusable(false);
-    warningLabelIcon.setOpaque(true);
-    warningLabelIcon.setVisible(false);
-    warningLabelIcon.setBackground(Colors.MID_RED);
-    warningLabelIcon.setForeground(Color.WHITE);
-    sidePane.add(warningLabelIcon);
-
-    warningLabel = new JLabel("");
-    warningLabel.setFont(Fonts.fontReg);
-    warningLabel.setForeground(Colors.MID_RED);
-    warningLabel.setVisible(false);
-    warningLabel.setBounds(54, 258, 200, 18);
-    sidePane.add(warningLabel);
 
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
     settingsButton = new JButton(Locale.getValue("b.settings"));
@@ -268,13 +254,14 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(bugButton);
     bugButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_BUG_REPORT));
 
-    Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.COFFEE, 16, Color.WHITE);
+    Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.PAYPAL, 16, Color.WHITE);
     JButton kofiButton = new JButton(kofiIcon);
     kofiButton.setBounds(146, 465, 35, 35);
     kofiButton.setToolTipText(Locale.getValue("b.kofi"));
     kofiButton.setFocusPainted(false);
     kofiButton.setFocusable(false);
-    kofiButton.setBackground(new Color(107, 114, 128));
+    kofiButton.setBorderPainted(false);
+    kofiButton.setBackground(new Color(222, 150, 47));
     kofiButton.setFont(Fonts.fontMed);
     sidePane.add(kofiButton);
     kofiButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_KOFI));
@@ -354,6 +341,22 @@ public class LauncherGUI extends BaseGUI {
     launchProgressBar.setBounds(35, 450, 505, 25);
     launchProgressBar.setVisible(false);
     mainPane.add(launchProgressBar);
+
+    Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
+    warningNotice = new JButton(warningNoticeIcon);
+    warningNotice.setBounds(737, 26, 35, 35);
+    warningNotice.setToolTipText(Locale.getValue("Warning notice"));
+    warningNotice.setFocusPainted(false);
+    warningNotice.setFocusable(false);
+    warningNotice.setBorderPainted(false);
+    warningNotice.setForeground(new Color(255, 255, 255));
+    warningNotice.setBackground(Colors.MID_RED);
+    warningNotice.setFont(Fonts.fontMed);
+    warningNotice.setVisible(false);
+    warningNotice.addActionListener(l -> {
+      DialogError.push(currentWarning, "Warning notice");
+    });
+    mainPane.add(warningNotice);
 
     JPanel titleBar = new JPanel();
     titleBar.setBounds(0, 0, launcherGUIFrame.getWidth(), 35);
@@ -448,9 +451,8 @@ public class LauncherGUI extends BaseGUI {
   }
 
   public static void showWarning(String message) {
-    warningLabelIcon.setVisible(true);
-    warningLabel.setVisible(true);
-    warningLabel.setText(message);
+    warningNotice.setVisible(true);
+    currentWarning = message;
   }
 
   public static BufferedImage generatePlainColorBanner() {
