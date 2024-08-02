@@ -21,7 +21,7 @@ public class ModListGUI extends BaseGUI {
   public static JPanel modListPanel;
   public static JPanel modListPane;
   public static JLabel labelModCount;
-  public static JLabel labelForceApplyState;
+  public static JLabel labelRefreshing;
   private JLabel labelModCountText;
   private JButton refreshButton;
   private JButton forceApplyButton;
@@ -66,7 +66,7 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.getContentPane().add(separator);
 
     refreshButton = new JButton(IconFontSwing.buildIcon(FontAwesome.REFRESH, 16, Color.WHITE));
-    refreshButton.setBounds(745, 86, 25, 25);
+    refreshButton.setBounds(25, 86, 25, 25);
     refreshButton.setFocusPainted(false);
     refreshButton.setFocusable(false);
     refreshButton.setBackground(null);
@@ -74,6 +74,14 @@ public class ModListGUI extends BaseGUI {
     refreshButton.setToolTipText(Locale.getValue("b.refresh"));
     modListGUIFrame.getContentPane().add(refreshButton);
     refreshButton.addActionListener(ModListEventHandler::refreshEvent);
+
+    labelRefreshing = new JLabel("Refreshing...");
+    labelRefreshing.setBounds(10, 86, 160, 25);
+    labelRefreshing.setFont(Fonts.fontReg);
+    labelRefreshing.setHorizontalAlignment(SwingConstants.CENTER);
+    labelRefreshing.setVerticalAlignment(SwingConstants.CENTER);
+    labelRefreshing.setVisible(false);
+    modListGUIFrame.getContentPane().add(labelRefreshing);
 
     JLabel enabledLabel = new JLabel("Enabled");
     enabledLabel.setBounds(636, 86, 100, 25);
@@ -104,15 +112,8 @@ public class ModListGUI extends BaseGUI {
     forceApplyButton.setFocusPainted(false);
     forceApplyButton.setFocusable(false);
     forceApplyButton.setToolTipText("Force apply");
-    modListGUIFrame.getContentPane().add(forceApplyButton);
+    //modListGUIFrame.getContentPane().add(forceApplyButton);
     forceApplyButton.addActionListener(ModListEventHandler::forceApplyEvent);
-
-    labelForceApplyState = new JLabel("");
-    labelForceApplyState.setBounds(280, 5, 160, 25);
-    labelForceApplyState.setFont(Fonts.fontReg);
-    labelForceApplyState.setHorizontalAlignment(SwingConstants.CENTER);
-    labelForceApplyState.setVerticalAlignment(SwingConstants.CENTER);
-    modListGUIFrame.getContentPane().add(labelForceApplyState);
 
     Icon modStoreIcon = IconFontSwing.buildIcon(FontAwesome.SEARCH, 12, ColorUtil.getForegroundColor());
     JButton modStoreButton = new JButton(Locale.getValue("Browse Mod Store"));

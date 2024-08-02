@@ -15,19 +15,24 @@ import java.util.Arrays;
 public class ModListEventHandler {
 
   public static void refreshEvent(ActionEvent action) {
-    ModLoader.checkInstalled();
-    if (ModLoader.rebuildRequired && Settings.doRebuilds) {
-      ModLoader.startFileRebuild();
-    }
-    ModListGUI.labelModCount.setText(Integer.toString(ModLoader.getModCount()));
-    ModLoader.mount();
-    ModListGUI.updateModList();
+    Thread refreshThread = new Thread(() -> {
+      ModListGUI.labelRefreshing.setVisible(true);
+      ModLoader.checkInstalled();
+      if (ModLoader.rebuildRequired && Settings.doRebuilds) {
+        ModLoader.startFileRebuild();
+      }
+      ModListGUI.labelModCount.setText(Integer.toString(ModLoader.getModCount()));
+      ModLoader.mount();
+      ModListGUI.updateModList();
+      ModListGUI.labelRefreshing.setVisible(false);
+    });
+    refreshThread.start();
   }
 
   public static void forceApplyEvent(ActionEvent action) {
-    ModListGUI.labelForceApplyState.setText("Applying...");
+    ModListGUI.labelRefreshing.setText("Applying...");
     ModLoader.mount();
-    ModListGUI.labelForceApplyState.setText("Applied");
+    ModListGUI.labelRefreshing.setText("Applied");
     DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
   }
 
