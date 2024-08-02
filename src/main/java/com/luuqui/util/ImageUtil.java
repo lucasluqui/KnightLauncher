@@ -5,10 +5,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
+import java.util.Base64;
 
 import static com.luuqui.util.Log.log;
 
@@ -96,6 +95,17 @@ public class ImageUtil {
       log.error(e);
     }
     return img;
+  }
+
+  public static String imageToBase64(BufferedImage image) throws UncheckedIOException {
+    ByteArrayOutputStream os = new ByteArrayOutputStream();
+    try {
+      ImageIO.write(image, "png", os);
+      return Base64.getEncoder().encodeToString(os.toByteArray());
+    }
+    catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 
   public static BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {

@@ -170,7 +170,11 @@ public class ModListGUI extends BaseGUI {
 
       JLabel modImage = new JLabel();
       BufferedImage defaultImage = ImageUtil.loadImageWithinJar("/img/mod-default-64.png");
-      BufferedImage image = ImageUtil.loadImageFromBase64(mod.getImage());
+      BufferedImage image = null;
+      if (mod.getImage() != null) {
+        image = ImageUtil.loadImageFromBase64(mod.getImage());
+        image = ImageUtil.resizeImage(image, 64, 64);
+      }
       modImage.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(image == null ? defaultImage : image, 25)));
       modImage.setBounds(6, 6, 64, 64);
       modPane.add(modImage);
