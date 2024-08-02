@@ -12,6 +12,8 @@ import com.luuqui.util.*;
 import org.apache.commons.io.FileUtils;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -194,7 +196,16 @@ public class LauncherEventHandler {
     LauncherApp.serverList.add(official);
 
     for(Server server : servers) {
+
+      if(server.name.equalsIgnoreCase("Official")) {
+        official.announceBanner = server.announceBanner;
+        official.announceContent = server.announceContent;
+        official.announceBannerLink = server.announceBannerLink;
+        continue;
+      }
+
       if(server.beta == 1) server.name += " (Beta)";
+
       LauncherGUI.serverList.addItem(server.name);
       LauncherApp.serverList.add(server);
 
@@ -265,6 +276,7 @@ public class LauncherEventHandler {
       LauncherApp.selectedServer = findServerInServerList("Official");
     }
 
+    updateBanner();
     saveSelectedServer();
   }
 
@@ -272,6 +284,44 @@ public class LauncherEventHandler {
     List<Server> results = LauncherApp.serverList.stream()
       .filter(s -> serverName.equals(s.name)).collect(Collectors.toList());
     return results.isEmpty() ? null : results.get(0);
+  }
+
+  public static void updateBanner() {
+    Thread refreshThread = new Thread(() -> {
+      String bannerUrl = LauncherApp.selectedServer.announceBanner.split("\\|")[0];
+      double bannerIntensity = Double.parseDouble(LauncherApp.selectedServer.announceBanner.split("\\|")[1]);
+      LauncherGUI.banner = LauncherGUI.processImageForBanner(ImageUtil.toBufferedImage(ImageUtil.getImageFromURL(bannerUrl, 800, 550)), bannerIntensity);
+      LauncherGUI.mainPane.repaint();
+
+      LauncherGUI.bannerTitle.setText(LauncherApp.selectedServer.announceContent.split("\\|")[0]);
+
+      String bannerSubtitle = LauncherApp.selectedServer.announceContent.split("\\|")[1];
+
+      if(bannerSubtitle.contains("\n")) {
+        LauncherGUI.bannerSubtitle1.setText(bannerSubtitle.split("\n")[0]);
+        LauncherGUI.bannerSubtitle2.setText(bannerSubtitle.split("\n")[1]);
+        LauncherGUI.bannerSubtitle2.setVisible(true);
+      } else {
+        LauncherGUI.bannerSubtitle1.setText(bannerSubtitle);
+        LauncherGUI.bannerSubtitle2.setVisible(false);
+      }
+
+      if(!LauncherApp.selectedServer.announceBannerLink.equalsIgnoreCase("null")) {
+
+        ActionListener[] listeners = LauncherGUI.bannerLinkButton.getActionListeners();
+        for (ActionListener listener : listeners) {
+          LauncherGUI.bannerLinkButton.removeActionListener(listener);
+        }
+
+        LauncherGUI.bannerLinkButton.addActionListener(l -> {
+          DesktopUtil.openWebpage(LauncherApp.selectedServer.announceBannerLink);
+        });
+        LauncherGUI.bannerLinkButton.setVisible(true);
+      } else {
+        LauncherGUI.bannerLinkButton.setVisible(false);
+      }
+    });
+    refreshThread.start();
   }
 
   private static String[] getThirdPartyClientStartCommand(Server server) {

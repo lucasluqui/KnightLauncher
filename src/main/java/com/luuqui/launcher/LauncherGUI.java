@@ -20,6 +20,11 @@ public class LauncherGUI extends BaseGUI {
   private final LauncherApp app;
   public static JFrame launcherGUIFrame;
   public static JPanel mainPane;
+  public static BufferedImage banner = null;
+  public static JLabel bannerTitle;
+  public static JLabel bannerSubtitle1;
+  public static JLabel bannerSubtitle2;
+  public static JButton bannerLinkButton;
   public static JTabbedPane layeredSettingsPane = new JTabbedPane();
   public static JPanel layeredModsPane = new JPanel();
   public static JButton layeredReturnButton;
@@ -70,7 +75,15 @@ public class LauncherGUI extends BaseGUI {
     sidePane.setBounds(0, 35, 250, 550);
     launcherGUIFrame.getContentPane().add(sidePane);
 
-    mainPane = new JPanel();
+    banner = generatePlainColorBanner();
+
+    mainPane = new JPanel() {
+      @Override
+      protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(banner, 0, 0, null);
+      }
+    };
     mainPane.setLayout(null);
     mainPane.setBackground(new Color(56, 60, 71));
     mainPane.setBounds(250, 35, 800, 550);
@@ -266,19 +279,36 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(kofiButton);
     kofiButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_KOFI));
 
-    JLabel infoPane = new JLabel();
-    BufferedImage infoPaneBackgroundImage = ImageUtil.loadImageWithinJar("/img/infopane.png");
-    infoPane.setBounds(50, 40, 700, 340);
-    infoPane.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(infoPaneBackgroundImage, 25)));
-    mainPane.add(infoPane);
+    bannerTitle = new JLabel("Uh, oh");
+    bannerTitle.setBounds(35, -60, 700, 340);
+    bannerTitle.setFont(Fonts.fontMedGiant);
+    bannerTitle.setForeground(new Color(255, 255, 255));
+    mainPane.add(bannerTitle);
+    //mainPane.setComponentZOrder(bannerTitle, 0);
 
-    JLabel infoPaneLoading = new JLabel("This server is not currently announcing anything.");
-    infoPaneLoading.setBounds(50, 40, 700, 340);
-    infoPaneLoading.setFont(Fonts.fontMedBig);
-    infoPaneLoading.setHorizontalAlignment(SwingConstants.CENTER);
-    infoPaneLoading.setVerticalAlignment(SwingConstants.CENTER);
-    mainPane.add(infoPaneLoading);
-    mainPane.setComponentZOrder(infoPaneLoading, 0);
+    bannerSubtitle1 = new JLabel("This server is not currently announcing anything.");
+    bannerSubtitle1.setBounds(40, -15, 700, 340);
+    bannerSubtitle1.setFont(Fonts.fontMedBig);
+    bannerSubtitle1.setForeground(new Color(255, 255, 255));
+    mainPane.add(bannerSubtitle1);
+
+    bannerSubtitle2 = new JLabel("");
+    bannerSubtitle2.setBounds(40, 5, 700, 340);
+    bannerSubtitle2.setFont(Fonts.fontMedBig);
+    bannerSubtitle2.setForeground(new Color(255, 255, 255));
+    mainPane.add(bannerSubtitle2);
+
+    bannerLinkButton = new JButton("Learn more");
+    bannerLinkButton.setBounds(40, 195, 100, 25);
+    bannerLinkButton.setFont(Fonts.fontMed);
+    bannerLinkButton.setForeground(new Color(255, 255, 255));
+    bannerLinkButton.setFocusPainted(false);
+    bannerLinkButton.setFocusable(false);
+    bannerLinkButton.setOpaque(false);
+    bannerLinkButton.setBackground(new Color(56, 60, 71, 150));
+    bannerLinkButton.setBorderPainted(false);
+    bannerLinkButton.setVisible(false);
+    mainPane.add(bannerLinkButton);
 
     launchButton = new JButton("Play Now");
     launchButton.setBounds(572, 423, 200, 66);
@@ -286,6 +316,7 @@ public class LauncherGUI extends BaseGUI {
     launchButton.setFocusPainted(false);
     launchButton.setFocusable(false);
     launchButton.setBackground(new Color(0, 133, 255));
+    launchButton.setBorderPainted(false);
     launchButton.setForeground(Color.WHITE);
     launchButton.setToolTipText("Play Now");
     mainPane.add(launchButton);
@@ -314,13 +345,13 @@ public class LauncherGUI extends BaseGUI {
 
     launchState = new JLabel("");
     launchState.setHorizontalAlignment(SwingConstants.LEFT);
-    launchState.setBounds(30, 420, 510, 25);
+    launchState.setBounds(35, 420, 505, 25);
     launchState.setFont(Fonts.fontRegBig);
     launchState.setVisible(false);
     mainPane.add(launchState);
 
     launchProgressBar = new JProgressBar();
-    launchProgressBar.setBounds(30, 450, 510, 25);
+    launchProgressBar.setBounds(35, 450, 505, 25);
     launchProgressBar.setVisible(false);
     mainPane.add(launchProgressBar);
 
@@ -420,5 +451,19 @@ public class LauncherGUI extends BaseGUI {
     warningLabelIcon.setVisible(true);
     warningLabel.setVisible(true);
     warningLabel.setText(message);
+  }
+
+  public static BufferedImage generatePlainColorBanner() {
+    BufferedImage image = new BufferedImage(800, 550, 1);
+    Graphics2D g2d = image.createGraphics();
+    g2d.setColor(new Color(56, 60, 71));
+    g2d.fillRect(0, 0, 800, 550);
+    return image;
+  }
+
+  public static BufferedImage processImageForBanner(BufferedImage image, double intensity) {
+    image = ImageUtil.resizeImage(image, 800, 550);
+    image = ImageUtil.fadeEdges(image, intensity);
+    return image;
   }
 }

@@ -40,7 +40,9 @@ public class Flamingo {
         server.communityUrl = serverJson.getString("communityUrl");
         server.sourceCodeUrl = serverJson.getString("sourceCodeUrl");
         server.announceType = serverJson.getString("announceType");
+        server.announceBanner = serverJson.getString("announceBanner");
         server.announceContent = serverJson.getString("announceContent");
+        server.announceBannerLink = serverJson.getString("announceBannerLink");
         server.enabled = serverJson.getInt("enabled");
 
         servers.add(server);

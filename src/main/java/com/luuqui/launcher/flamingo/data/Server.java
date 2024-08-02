@@ -26,7 +26,11 @@ public class Server {
 
   public String announceType;
 
+  public String announceBanner;
+
   public String announceContent;
+
+  public String announceBannerLink;
 
   public int enabled;
 
