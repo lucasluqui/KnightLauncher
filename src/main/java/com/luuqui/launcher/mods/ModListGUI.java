@@ -95,7 +95,7 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.getContentPane().add(enabledLabel);
 
     JButton modFolderButton = new JButton(Locale.getValue("b.open_mods_folder"));
-    modFolderButton.setBounds(445, 35, 160, 25);
+    modFolderButton.setBounds(610, 35, 160, 25);
     modFolderButton.setFont(Fonts.fontMed);
     modFolderButton.setFocusPainted(false);
     modFolderButton.setFocusable(false);
@@ -104,7 +104,7 @@ public class ModListGUI extends BaseGUI {
     modFolderButton.addActionListener(action -> DesktopUtil.openDir(LauncherGlobals.USER_DIR + "/mods"));
 
     JButton getModsButton = new JButton("Get mods via Discord");
-    getModsButton.setBounds(610, 35, 160, 25);
+    getModsButton.setBounds(445, 35, 160, 25 );
     getModsButton.setFont(Fonts.fontMed);
     getModsButton.setFocusPainted(false);
     getModsButton.setFocusable(false);
@@ -124,11 +124,12 @@ public class ModListGUI extends BaseGUI {
     Icon modStoreIcon = IconFontSwing.buildIcon(FontAwesome.SEARCH, 12, ColorUtil.getForegroundColor());
     JButton modStoreButton = new JButton(Locale.getValue("Browse Mod Store"));
     modStoreButton.setIcon(modStoreIcon);
-    modStoreButton.setBounds(610, 5, 160, 25);
+    modStoreButton.setBounds(280, 35, 160, 25);
     modStoreButton.setFont(Fonts.fontMed);
     modStoreButton.setFocusPainted(false);
     modStoreButton.setFocusable(false);
-    modStoreButton.setToolTipText("Browse Mod Store");
+    modStoreButton.setEnabled(false);
+    modStoreButton.setToolTipText("Not currently available");
     modListGUIFrame.getContentPane().add(modStoreButton);
     //getModsButton.addActionListener(ModListEventHandler::openModStore);
 
