@@ -411,7 +411,7 @@ public class SettingsGUI extends BaseGUI {
 
     Icon startIcon = IconFontSwing.buildIcon(FontAwesome.SHARE, 16, ColorUtil.getForegroundColor());
     JButton forceRebuildButton = new JButton(startIcon);
-    forceRebuildButton.setBounds(590, 310, 30, 23);
+    forceRebuildButton.setBounds(585, 310, 30, 23);
     forceRebuildButton.setFocusPainted(false);
     forceRebuildButton.setFocusable(false);
     gamePanel.add(forceRebuildButton);
@@ -441,7 +441,7 @@ public class SettingsGUI extends BaseGUI {
     gamePanel.add(labelJVMData);
 
     JButton jvmPatchButton = new JButton(startIcon);
-    jvmPatchButton.setBounds(590, 375, 30, 23);
+    jvmPatchButton.setBounds(585, 375, 30, 23);
     jvmPatchButton.setFocusPainted(false);
     jvmPatchButton.setFocusable(false);
     jvmPatchButton.setEnabled(false);
