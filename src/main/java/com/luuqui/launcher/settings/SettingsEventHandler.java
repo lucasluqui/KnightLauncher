@@ -139,18 +139,25 @@ public class SettingsEventHandler {
 
   public static void copyLauncherLogEvent(ActionEvent action) {
     List<File> files = new ArrayList<>();
+
+    // Add Knight Launcher logs to clipboard.
     files.add(new File(LauncherGlobals.USER_DIR + "\\knightlauncher.log"));
+
     FileUtil.copyFileToClipboard(files);
   }
 
   public static void copyGameLogEvent(ActionEvent action) {
     List<File> files = new ArrayList<>();
+
+    // Initial path where we'll pull game logs from.
     String path = LauncherGlobals.USER_DIR;
 
+    // Check if a third party server is selected, in that case, modify the path to copy their logs instead.
     if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
       path += "\\thirdparty\\" + LauncherApp.getSanitizedServerName(LauncherApp.selectedServer.name);
     }
 
+    // Copy all game logs.
     File getdownLog = new File(path + "\\launcher.log");
     files.add(getdownLog);
 
@@ -162,6 +169,36 @@ public class SettingsEventHandler {
 
     files.removeIf(file -> !FileUtil.fileExists(file.getAbsolutePath()));
 
+    FileUtil.copyFileToClipboard(files);
+  }
+
+  public static void copyLogsEvent(ActionEvent action) {
+    List<File> files = new ArrayList<>();
+
+    // Add Knight Launcher logs to clipboard.
+    files.add(new File(LauncherGlobals.USER_DIR + "\\knightlauncher.log"));
+
+    // Initial path where we'll pull game logs from.
+    String path = LauncherGlobals.USER_DIR;
+
+    // Check if a third party server is selected, in that case, modify the path to copy their logs instead.
+    if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
+      path += "\\thirdparty\\" + LauncherApp.getSanitizedServerName(LauncherApp.selectedServer.name);
+    }
+
+    // Copy all game logs.
+    File getdownLog = new File(path + "\\launcher.log");
+    files.add(getdownLog);
+
+    File gameLog = new File(path + "\\projectx.log");
+    files.add(gameLog);
+
+    File oldGameLog = new File(path + "\\old-projectx.log");
+    files.add(oldGameLog);
+
+    files.removeIf(file -> !FileUtil.fileExists(file.getAbsolutePath()));
+
+    // ...And we add them to the clipboard.
     FileUtil.copyFileToClipboard(files);
   }
 

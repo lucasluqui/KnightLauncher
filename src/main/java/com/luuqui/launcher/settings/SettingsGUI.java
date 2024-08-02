@@ -684,6 +684,16 @@ public class SettingsGUI extends BaseGUI {
     labelFlamingoUptime.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoUptime);
 
+    JButton copyLogsButton = new JButton("Copy logs to clipboard");
+    copyLogsButton.setFont(Fonts.fontMed);
+    copyLogsButton.setBounds(25, 160, 270, 23);
+    copyLogsButton.setFocusPainted(false);
+    copyLogsButton.setFocusable(false);
+    copyLogsButton.setToolTipText("Copy logs to clipboard");
+    aboutPanel.add(copyLogsButton);
+    copyLogsButton.addActionListener(SettingsEventHandler::copyLogsEvent);
+
+    /*
     JButton copyLauncherLogButton = new JButton("Copy knightlauncher.log to clipboard");
     copyLauncherLogButton.setFont(Fonts.fontMed);
     copyLauncherLogButton.setBounds(25, 160, 270, 23);
@@ -701,6 +711,7 @@ public class SettingsGUI extends BaseGUI {
     copyGameLogButton.setToolTipText("Copy game logs to clipboard");
     aboutPanel.add(copyGameLogButton);
     copyGameLogButton.addActionListener(SettingsEventHandler::copyGameLogEvent);
+    */
 
     return aboutPanel;
   }
