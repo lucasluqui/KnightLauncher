@@ -337,7 +337,7 @@ public class SettingsGUI extends BaseGUI {
     labelUseCustomGC.setFont(Fonts.fontRegBig);
     gamePanel.add(labelUseCustomGC);
 
-    JLabel labelUseCustomGCExplained = new JLabel("Change how Garbage Collection will be done on the game's Java VM");
+    JLabel labelUseCustomGCExplained = new JLabel("Change how Garbage Collection will be done on the game's Java VM.");
     labelUseCustomGCExplained.setBounds(25, 195, 600, 16);
     labelUseCustomGCExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelUseCustomGCExplained);
