@@ -22,6 +22,7 @@ public class ModListGUI extends BaseGUI {
   public static JPanel modListPane;
   public static JLabel labelModCount;
   public static JLabel labelRefreshing;
+  public static JProgressBar refreshProgressBar;
   private JLabel labelModCountText;
   private JButton refreshButton;
   private JButton forceApplyButton;
@@ -82,6 +83,11 @@ public class ModListGUI extends BaseGUI {
     labelRefreshing.setVerticalAlignment(SwingConstants.CENTER);
     labelRefreshing.setVisible(false);
     modListGUIFrame.getContentPane().add(labelRefreshing);
+
+    refreshProgressBar = new JProgressBar();
+    refreshProgressBar.setBounds(135, 94, 100, 10);
+    refreshProgressBar.setVisible(false);
+    modListGUIFrame.getContentPane().add(refreshProgressBar);
 
     JLabel enabledLabel = new JLabel("Enabled");
     enabledLabel.setBounds(636, 86, 100, 25);
