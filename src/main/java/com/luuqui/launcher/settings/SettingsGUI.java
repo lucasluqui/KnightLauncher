@@ -1,5 +1,7 @@
 package com.luuqui.launcher.settings;
 
+import com.luuqui.dialog.DialogInfo;
+import com.luuqui.dialog.DialogWarning;
 import com.luuqui.launcher.*;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.JavaUtil;
@@ -686,12 +688,15 @@ public class SettingsGUI extends BaseGUI {
 
     JButton copyLogsButton = new JButton("Copy logs to clipboard");
     copyLogsButton.setFont(Fonts.fontMed);
-    copyLogsButton.setBounds(25, 160, 270, 23);
+    copyLogsButton.setBounds(25, 160, 200, 23);
     copyLogsButton.setFocusPainted(false);
     copyLogsButton.setFocusable(false);
     copyLogsButton.setToolTipText("Copy logs to clipboard");
     aboutPanel.add(copyLogsButton);
-    copyLogsButton.addActionListener(SettingsEventHandler::copyLogsEvent);
+    copyLogsButton.addActionListener(l -> {
+      SettingsEventHandler.copyLogsEvent(l);
+      DialogInfo.push("Logs copied to clipboard.");
+    });
 
     /*
     JButton copyLauncherLogButton = new JButton("Copy knightlauncher.log to clipboard");
