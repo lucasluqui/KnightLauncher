@@ -68,11 +68,11 @@ public class LauncherGUI extends BaseGUI {
     launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     launcherGUIFrame.setUndecorated(true);
     launcherGUIFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-128.png"));
-    launcherGUIFrame.getContentPane().setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+    launcherGUIFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     launcherGUIFrame.getContentPane().setLayout(null);
 
     JPanel sidePane = new JPanel();
-    sidePane.setBackground(Colors.INTERFACE_SIDEPANE_BACKGROUND);
+    sidePane.setBackground(CustomColors.INTERFACE_SIDEPANE_BACKGROUND);
     sidePane.setVisible(true);
     sidePane.setLayout(null);
     sidePane.setBounds(0, 35, 250, 550);
@@ -88,7 +88,7 @@ public class LauncherGUI extends BaseGUI {
       }
     };
     mainPane.setLayout(null);
-    mainPane.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+    mainPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     mainPane.setBounds(250, 35, 800, 550);
     launcherGUIFrame.getContentPane().add(mainPane);
 
@@ -141,7 +141,7 @@ public class LauncherGUI extends BaseGUI {
 
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
     playerCountLabel.setFont(Fonts.fontReg);
-    playerCountLabel.setForeground(Colors.PLAYER_COUNT);
+    playerCountLabel.setForeground(CustomColors.PLAYER_COUNT);
     playerCountLabel.setBounds(28, 235, 200, 18);
     sidePane.add(playerCountLabel);
 
@@ -154,7 +154,7 @@ public class LauncherGUI extends BaseGUI {
     settingsButton.setFocusPainted(false);
     settingsButton.setFocusable(false);
     settingsButton.setBorderPainted(false);
-    settingsButton.setBackground(Colors.INTERFACE_SIDEPANE_BUTTON);
+    settingsButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
     settingsButton.setForeground(Color.WHITE);
     settingsButton.setToolTipText(Locale.getValue("b.settings"));
     settingsButton.addActionListener(action -> {
@@ -172,7 +172,7 @@ public class LauncherGUI extends BaseGUI {
       layeredReturnButton.setFocusable(false);
       layeredReturnButton.setFocusPainted(false);
       layeredReturnButton.setBorder(null);
-      layeredReturnButton.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+      layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
       layeredReturnButton.addActionListener(l -> {
         layeredSettingsPane.setVisible(false);
         layeredModsPane.setVisible(false);
@@ -193,7 +193,7 @@ public class LauncherGUI extends BaseGUI {
     modButton.setFocusable(false);
     modButton.setBorderPainted(false);
     modButton.setEnabled(true);
-    modButton.setBackground(Colors.INTERFACE_SIDEPANE_BUTTON);
+    modButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
     modButton.setForeground(Color.WHITE);
     modButton.setToolTipText(Locale.getValue("b.mods"));
     modButton.addActionListener(action -> {
@@ -211,7 +211,7 @@ public class LauncherGUI extends BaseGUI {
       layeredReturnButton.setFocusable(false);
       layeredReturnButton.setFocusPainted(false);
       layeredReturnButton.setBorder(null);
-      layeredReturnButton.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+      layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
       layeredReturnButton.addActionListener(l -> {
         layeredSettingsPane.setVisible(false);
         layeredModsPane.setVisible(false);
@@ -228,7 +228,7 @@ public class LauncherGUI extends BaseGUI {
     discordButton.setFocusPainted(false);
     discordButton.setFocusable(false);
     discordButton.setBorderPainted(false);
-    discordButton.setBackground(Colors.INTERFACE_SIDEPANE_BUTTON);
+    discordButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
     discordButton.setFont(Fonts.fontMed);
     sidePane.add(discordButton);
     discordButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_DISCORD));
@@ -240,7 +240,7 @@ public class LauncherGUI extends BaseGUI {
     bugButton.setFocusPainted(false);
     bugButton.setFocusable(false);
     bugButton.setBorderPainted(false);
-    bugButton.setBackground(Colors.INTERFACE_SIDEPANE_BUTTON);
+    bugButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
     bugButton.setFont(Fonts.fontMed);
     sidePane.add(bugButton);
     bugButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_BUG_REPORT));
@@ -252,7 +252,7 @@ public class LauncherGUI extends BaseGUI {
     kofiButton.setFocusPainted(false);
     kofiButton.setFocusable(false);
     kofiButton.setBorderPainted(false);
-    kofiButton.setBackground(Colors.PREMIUM);
+    kofiButton.setBackground(CustomColors.PREMIUM);
     kofiButton.setFont(Fonts.fontMed);
     sidePane.add(kofiButton);
     kofiButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_KOFI));
@@ -282,7 +282,7 @@ public class LauncherGUI extends BaseGUI {
     bannerLinkButton.setFocusPainted(false);
     bannerLinkButton.setFocusable(false);
     bannerLinkButton.setOpaque(false);
-    bannerLinkButton.setBackground(Colors.INTERFACE_MAINPANE_BUTTON);
+    bannerLinkButton.setBackground(CustomColors.INTERFACE_MAINPANE_BUTTON);
     bannerLinkButton.setBorderPainted(false);
     bannerLinkButton.setVisible(false);
     mainPane.add(bannerLinkButton);
@@ -292,7 +292,7 @@ public class LauncherGUI extends BaseGUI {
     launchButton.setFont(Fonts.fontMedBig);
     launchButton.setFocusPainted(false);
     launchButton.setFocusable(false);
-    launchButton.setBackground(Colors.LAUNCH);
+    launchButton.setBackground(CustomColors.LAUNCH);
     launchButton.setBorderPainted(false);
     launchButton.setForeground(Color.WHITE);
     launchButton.setToolTipText("Play Now");
@@ -314,7 +314,7 @@ public class LauncherGUI extends BaseGUI {
     launchTooltipButton.setFocusable(false);
     launchTooltipButton.setFocusPainted(false);
     launchTooltipButton.setBorderPainted(false);
-    launchTooltipButton.setBackground(Colors.INTERFACE_MAINPANE_BUTTON);
+    launchTooltipButton.setBackground(CustomColors.INTERFACE_MAINPANE_BUTTON);
     launchTooltipButton.setForeground(Color.WHITE);
     launchTooltipButton.setToolTipText(launchTooltipText);
     launchTooltipButton.addActionListener(l -> {
@@ -342,7 +342,7 @@ public class LauncherGUI extends BaseGUI {
     warningNotice.setFocusable(false);
     warningNotice.setBorderPainted(false);
     warningNotice.setForeground(Color.WHITE);
-    warningNotice.setBackground(Colors.MID_RED);
+    warningNotice.setBackground(CustomColors.MID_RED);
     warningNotice.setFont(Fonts.fontMed);
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
@@ -358,7 +358,7 @@ public class LauncherGUI extends BaseGUI {
     updateButton.setFocusPainted(false);
     updateButton.setFocusable(false);
     updateButton.setBorderPainted(false);
-    updateButton.setBackground(Colors.UPDATE);
+    updateButton.setBackground(CustomColors.UPDATE);
     updateButton.setForeground(Color.WHITE);
     updateButton.setVisible(false);
     mainPane.add(updateButton);
@@ -470,7 +470,7 @@ public class LauncherGUI extends BaseGUI {
   public static BufferedImage generatePlainColorBanner() {
     BufferedImage image = new BufferedImage(800, 550, 1);
     Graphics2D g2d = image.createGraphics();
-    g2d.setColor(Colors.INTERFACE_MAINPANE_BACKGROUND);
+    g2d.setColor(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     g2d.fillRect(0, 0, 800, 550);
     return image;
   }

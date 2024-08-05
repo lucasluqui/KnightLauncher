@@ -1,9 +1,7 @@
 package com.luuqui.launcher.settings;
 
 import com.luuqui.dialog.DialogInfo;
-import com.luuqui.dialog.DialogWarning;
 import com.luuqui.launcher.*;
-import com.luuqui.launcher.mods.ModLoader;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.SteamUtil;
@@ -12,7 +10,6 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
 public class SettingsGUI extends BaseGUI {
@@ -77,7 +74,7 @@ public class SettingsGUI extends BaseGUI {
     //tabbedPane.addTab(Locale.getValue("tab.spiralview"), createSpiralviewPanel());
     tabbedPane.addTab(Locale.getValue("tab.advanced"), createAdvancedPanel());
     tabbedPane.addTab(Locale.getValue("tab.about"), createAboutPanel());
-    tabbedPane.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+    tabbedPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     settingsGUIFrame.getContentPane().add(tabbedPane);
 
     JPanel titleBar = new JPanel();
@@ -157,7 +154,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createLauncherPanel() {
     JPanel launcherPanel = new JPanel();
     launcherPanel.setLayout(null);
-    launcherPanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+    launcherPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.launcher"));
@@ -296,7 +293,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createGamePanel() {
     JPanel gamePanel = new JPanel();
     gamePanel.setLayout(null);
-    gamePanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+    gamePanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.game"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -486,7 +483,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createBetasPanel() {
     JPanel betasPanel = new JPanel();
     betasPanel.setLayout(null);
-    betasPanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+    betasPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.betas"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -540,7 +537,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createSpiralviewPanel() {
     JPanel spiralviewPanel = new JPanel();
     spiralviewPanel.setLayout(null);
-    spiralviewPanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+    spiralviewPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.spiralview"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -562,7 +559,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createAdvancedPanel() {
     JPanel advancedPanel = new JPanel();
     advancedPanel.setLayout(null);
-    advancedPanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+    advancedPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.advanced"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -687,7 +684,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createAboutPanel() {
     JPanel aboutPanel = new JPanel();
     aboutPanel.setLayout(null);
-    aboutPanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+    aboutPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.about"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);

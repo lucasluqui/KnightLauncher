@@ -2,7 +2,7 @@ package com.luuqui.launcher;
 
 import java.awt.Color;
 
-public class Colors {
+public class CustomColors {
 
   public static final Color KL            = new Color(166, 63, 103);
   public static final Color LAUNCH        = new Color(0, 133, 255);

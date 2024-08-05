@@ -2,14 +2,12 @@ package com.luuqui.launcher;
 
 import com.luuqui.dialog.DialogError;
 import com.luuqui.discord.DiscordRPC;
-import com.luuqui.launcher.settings.SettingsProperties;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
-import sun.misc.Launcher;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,8 +16,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -52,7 +48,7 @@ public class Updater extends BaseGUI {
     updaterFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     updaterFrame.setUndecorated(true);
     updaterFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-128.png"));
-    updaterFrame.getContentPane().setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
+    updaterFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     updaterFrame.getContentPane().setLayout(null);
 
     JLabel launcherLogo = new JLabel();

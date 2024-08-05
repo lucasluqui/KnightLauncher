@@ -27,8 +27,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -233,8 +231,8 @@ public class LauncherApp {
       log.error(e);
     }
 
-    UIManager.put("TabbedPane.inactiveUnderlineColor", Colors.KL);
-    UIManager.put("Slider.thumbColor", Colors.KL);
+    UIManager.put("TabbedPane.inactiveUnderlineColor", CustomColors.KL);
+    UIManager.put("Slider.thumbColor", CustomColors.KL);
   }
 
   private void setupHTTPSProtocol() {
