@@ -8,23 +8,23 @@ import java.awt.*;
 public class ColorUtil {
 
   public static Color getTitleBarColor() {
-    return Settings.launcherStyle.equals("dark") ? Colors.INTERFACE_TITLE_BAR_DARK : Colors.INTERFACE_TITLE_BAR_LIGHT;
+    return Colors.INTERFACE_TITLE_BAR;
   }
 
   public static Color getForegroundColor() {
-    return Settings.launcherStyle.equals("dark") ? Color.WHITE : Color.BLACK;
+    return Color.WHITE;
   }
 
   public static Color getBackgroundColor() {
-    return Settings.launcherStyle.equals("dark") ? Colors.INTERFACE_PRIMARY_DARK : Color.WHITE;
+    return Colors.INTERFACE_MAINPANE_BACKGROUND;
   }
 
   public static Color getGreenForegroundColor() {
-    return Settings.launcherStyle.equals("dark") ? Colors.BRIGHT_GREEN : Colors.DARK_GREEN;
+    return Colors.BRIGHT_GREEN;
   }
 
   public static Color getRedForegroundColor() {
-    return Settings.launcherStyle.equals("dark") ? Colors.BRIGHT_RED : Colors.DARK_RED;
+    return Colors.BRIGHT_RED;
   }
 
 }

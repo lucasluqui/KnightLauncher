@@ -226,11 +226,15 @@ public class LauncherApp {
     System.setProperty("swing.aatext", "true");
 
     IconFontSwing.register(FontAwesome.getIconFont());
+
     try {
       UIManager.setLookAndFeel(new FlatDarkLaf());
     } catch (UnsupportedLookAndFeelException e) {
       log.error(e);
     }
+
+    UIManager.put("TabbedPane.inactiveUnderlineColor", Colors.KL);
+    UIManager.put("Slider.thumbColor", Colors.KL);
   }
 
   private void setupHTTPSProtocol() {

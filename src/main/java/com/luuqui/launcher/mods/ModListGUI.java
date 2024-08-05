@@ -45,7 +45,7 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.setBounds(100, 100, 385, 460);
     modListGUIFrame.setResizable(false);
     modListGUIFrame.setUndecorated(true);
-    modListGUIFrame.getContentPane().setBackground(new Color(56, 60, 71));
+    modListGUIFrame.getContentPane().setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
     modListGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     modListGUIFrame.getContentPane().setLayout(null);
     modListPanel = (JPanel) modListGUIFrame.getContentPane();
@@ -134,7 +134,7 @@ public class ModListGUI extends BaseGUI {
     //getModsButton.addActionListener(ModListEventHandler::openModStore);
 
     modListPane = new JPanel();
-    modListPane.setBackground(new Color(56, 60, 71));
+    modListPane.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
     GridLayout layout = new GridLayout(ModLoader.getModCount(), 1);
     layout.setVgap(0);
     modListPane.setLayout(layout);
@@ -153,7 +153,7 @@ public class ModListGUI extends BaseGUI {
 
   public static void updateModList() {
 
-    Color[] backgroundColors = { new Color(45, 48, 57), new Color(34, 36, 43) };
+    Color[] backgroundColors = { Colors.INTERFACE_MODLIST_BACKGROUND_LIGHT, Colors.INTERFACE_MODLIST_BACKGROUND_DARK };
     int count = 0;
 
     if(modListPane == null) {

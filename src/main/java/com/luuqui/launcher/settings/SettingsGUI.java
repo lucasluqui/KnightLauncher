@@ -77,7 +77,7 @@ public class SettingsGUI extends BaseGUI {
     //tabbedPane.addTab(Locale.getValue("tab.spiralview"), createSpiralviewPanel());
     tabbedPane.addTab(Locale.getValue("tab.advanced"), createAdvancedPanel());
     tabbedPane.addTab(Locale.getValue("tab.about"), createAboutPanel());
-    tabbedPane.setBackground(new Color(56, 60, 71));
+    tabbedPane.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
     settingsGUIFrame.getContentPane().add(tabbedPane);
 
     JPanel titleBar = new JPanel();
@@ -157,7 +157,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createLauncherPanel() {
     JPanel launcherPanel = new JPanel();
     launcherPanel.setLayout(null);
-    launcherPanel.setBackground(new Color(56, 60, 71));
+    launcherPanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
 
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.launcher"));
@@ -296,7 +296,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createGamePanel() {
     JPanel gamePanel = new JPanel();
     gamePanel.setLayout(null);
-    gamePanel.setBackground(new Color(56, 60, 71));
+    gamePanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.game"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -486,7 +486,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createBetasPanel() {
     JPanel betasPanel = new JPanel();
     betasPanel.setLayout(null);
-    betasPanel.setBackground(new Color(56, 60, 71));
+    betasPanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.betas"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -540,7 +540,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createSpiralviewPanel() {
     JPanel spiralviewPanel = new JPanel();
     spiralviewPanel.setLayout(null);
-    spiralviewPanel.setBackground(new Color(56, 60, 71));
+    spiralviewPanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.spiralview"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -562,7 +562,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createAdvancedPanel() {
     JPanel advancedPanel = new JPanel();
     advancedPanel.setLayout(null);
-    advancedPanel.setBackground(new Color(56, 60, 71));
+    advancedPanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.advanced"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -687,7 +687,7 @@ public class SettingsGUI extends BaseGUI {
   protected JPanel createAboutPanel() {
     JPanel aboutPanel = new JPanel();
     aboutPanel.setLayout(null);
-    aboutPanel.setBackground(new Color(56, 60, 71));
+    aboutPanel.setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel headerLabel = new JLabel(Locale.getValue("tab.about"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);

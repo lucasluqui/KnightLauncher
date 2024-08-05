@@ -52,7 +52,7 @@ public class Updater extends BaseGUI {
     updaterFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     updaterFrame.setUndecorated(true);
     updaterFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-128.png"));
-    updaterFrame.getContentPane().setBackground(new Color(56, 60, 71));
+    updaterFrame.getContentPane().setBackground(Colors.INTERFACE_MAINPANE_BACKGROUND);
     updaterFrame.getContentPane().setLayout(null);
 
     JLabel launcherLogo = new JLabel();
