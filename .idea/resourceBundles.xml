@@ -21,6 +21,8 @@
       <file value="file://$PROJECT_DIR$/assets/lang/lang_pl.properties" />
       <file value="file://$PROJECT_DIR$/assets/lang/lang_pt-br.properties" />
       <file value="file://$PROJECT_DIR$/assets/lang/lang_ru.properties" />
+      <file value="file://$PROJECT_DIR$/assets/lang/lang_zh-hans.properties" />
+      <file value="file://$PROJECT_DIR$/assets/lang/lang_zh-hant.properties" />
       <base-name>lang</base-name>
     </custom-resource-bundle>
   </component>
