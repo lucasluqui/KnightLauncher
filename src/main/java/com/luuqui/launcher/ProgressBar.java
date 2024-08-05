@@ -1,5 +1,7 @@
 package com.luuqui.launcher;
 
+import com.luuqui.launcher.mods.ModListGUI;
+
 import static com.luuqui.launcher.Log.log;
 
 public class ProgressBar {
@@ -27,10 +29,12 @@ public class ProgressBar {
 
   public static void setBarValue(int n) {
     LauncherGUI.launchProgressBar.setValue(n);
+    ModListGUI.refreshProgressBar.setValue(n);
   }
 
   public static void setBarMax(int n) {
     LauncherGUI.launchProgressBar.setMaximum(n);
+    ModListGUI.refreshProgressBar.setMaximum(n);
   }
 
   private static void showState(boolean show) {
@@ -39,6 +43,7 @@ public class ProgressBar {
 
   private static void showBar(boolean show) {
     LauncherGUI.launchProgressBar.setVisible(show);
+    ModListGUI.refreshProgressBar.setVisible(show);
   }
 
 }

@@ -10,11 +10,14 @@ import com.luuqui.launcher.settings.SettingsGUI;
 import com.luuqui.launcher.settings.SettingsProperties;
 import com.luuqui.util.Compressor;
 import com.luuqui.util.FileUtil;
+import com.luuqui.util.ImageUtil;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -61,6 +64,16 @@ public class ModLoader {
         mod.setDescription(modJson.getString("description"));
         mod.setAuthor(modJson.getString("author"));
         mod.setVersion(modJson.getString("version"));
+
+        try {
+          mod.setImage(modJson.getString("image"));
+        } catch (Exception e) {
+          try {
+            mod.setImage(ImageUtil.imageToBase64(ImageIO.read(Compressor.getISFromFileInsideZip(file.getAbsolutePath(), "mod.png"))));
+          } catch (Exception e2) {
+            mod.setImage(null);
+          }
+        }
       }
 
       modList.add(mod);
@@ -128,6 +141,9 @@ public class ModLoader {
 
     // Make sure no cheat mod slips in.
     extractSafeguard();
+
+    // Clean the game's rsrc folder from unwanted files.
+    clean();
 
     mountRequired = false;
     ProgressBar.finishTask();
@@ -237,6 +253,11 @@ public class ModLoader {
         }
       }
     }
+  }
+
+  private static void clean() {
+    new File(LauncherGlobals.USER_DIR + "/rsrc/mod.json").delete();
+    new File(LauncherGlobals.USER_DIR + "/rsrc/mod.png").delete();
   }
 
 }

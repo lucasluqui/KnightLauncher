@@ -9,6 +9,7 @@ public class Settings {
   public static Boolean createShortcut = true;
   public static String compressorUnzipMethod = "4j";
   public static int compressorExtractBuffer = 8196;
+  public static Boolean autoUpdate = true;
   public static int gameMemory = 512;
   public static Boolean gameUseStringDeduplication = false;
   public static Boolean gameDisableExplicitGC = false;

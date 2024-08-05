@@ -1,6 +1,9 @@
 package com.luuqui.launcher.settings;
 
+import com.luuqui.dialog.DialogInfo;
+import com.luuqui.dialog.DialogWarning;
 import com.luuqui.launcher.*;
+import com.luuqui.launcher.mods.ModLoader;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.SteamUtil;
@@ -29,6 +32,7 @@ public class SettingsGUI extends BaseGUI {
   public static JCheckBox switchExplicitGC;
   public static JCheckBox switchUseCustomGC;
   public static JCheckBox switchUseIngameRPC;
+  public static JCheckBox switchAutoUpdate;
   public static JEditorPane argumentsPane;
   public static JTextField serverAddressTextField;
   public static JTextField portTextField;
@@ -155,6 +159,7 @@ public class SettingsGUI extends BaseGUI {
     launcherPanel.setLayout(null);
     launcherPanel.setBackground(new Color(56, 60, 71));
 
+
     JLabel headerLabel = new JLabel(Locale.getValue("tab.launcher"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 60);
@@ -162,12 +167,12 @@ public class SettingsGUI extends BaseGUI {
     launcherPanel.add(headerLabel);
 
     JLabel labelLanguage = new JLabel(Locale.getValue("m.language"));
-    labelLanguage.setBounds(25, 90, 175, 18);
+    labelLanguage.setBounds(25, 90, 175, 20);
     labelLanguage.setFont(Fonts.fontRegBig);
     launcherPanel.add(labelLanguage);
 
     choiceLanguage = new JComboBox<String>();
-    choiceLanguage.setBounds(25, 115, 150, 20);
+    choiceLanguage.setBounds(110, 90, 150, 20);
     choiceLanguage.setFocusable(false);
     choiceLanguage.setFont(Fonts.fontReg);
     for (String lang : Locale.AVAILABLE_LANGUAGES) {
@@ -183,86 +188,107 @@ public class SettingsGUI extends BaseGUI {
     });
 
     JLabel labelCleaning = new JLabel(Locale.getValue("m.rebuilds"));
-    labelCleaning.setBounds(25, 175, 350, 18);
+    labelCleaning.setBounds(25, 140, 350, 20);
     labelCleaning.setFont(Fonts.fontRegBig);
     launcherPanel.add(labelCleaning);
 
     JLabel labelCleaningExplained = new JLabel(Locale.getValue("m.file_cleaning_explained"));
-    labelCleaningExplained.setBounds(25, 195, 600, 16);
+    labelCleaningExplained.setBounds(25, 160, 600, 16);
     labelCleaningExplained.setFont(Fonts.fontReg);
     launcherPanel.add(labelCleaningExplained);
 
     switchCleaning = new JCheckBox("");
-    switchCleaning.setBounds(590, 180, 30, 23);
+    switchCleaning.setBounds(590, 145, 30, 23);
     switchCleaning.setFocusPainted(false);
     launcherPanel.add(switchCleaning);
     switchCleaning.setSelected(Settings.doRebuilds);
-    switchCleaning.addActionListener(action -> SettingsEventHandler.rebuildsChangeEvent(action));
+    switchCleaning.addActionListener(SettingsEventHandler::rebuildsChangeEvent);
 
     JSeparator sep = new JSeparator();
-    sep.setBounds(25, 225, 600, 16);
+    sep.setBounds(25, 190, 600, 16);
     launcherPanel.add(sep);
 
     JLabel labelKeepOpen = new JLabel(Locale.getValue("m.keep_open"));
-    labelKeepOpen.setBounds(25, 240, 350, 18);
+    labelKeepOpen.setBounds(25, 205, 350, 20);
     labelKeepOpen.setFont(Fonts.fontRegBig);
     launcherPanel.add(labelKeepOpen);
 
     JLabel labelKeepOpenExplained = new JLabel(Locale.getValue("m.keep_open_explained"));
-    labelKeepOpenExplained.setBounds(25, 260, 600, 16);
+    labelKeepOpenExplained.setBounds(25, 225, 600, 16);
     labelKeepOpenExplained.setFont(Fonts.fontReg);
     launcherPanel.add(labelKeepOpenExplained);
 
     switchKeepOpen = new JCheckBox("");
-    switchKeepOpen.setBounds(590, 245, 30, 23);
+    switchKeepOpen.setBounds(590, 210, 30, 23);
     switchKeepOpen.setFocusPainted(false);
     launcherPanel.add(switchKeepOpen);
     switchKeepOpen.setSelected(Settings.keepOpen);
-    switchKeepOpen.addActionListener(action -> SettingsEventHandler.keepOpenChangeEvent(action));
+    switchKeepOpen.addActionListener(SettingsEventHandler::keepOpenChangeEvent);
 
     JSeparator sep2 = new JSeparator();
-    sep2.setBounds(25, 290, 600, 16);
+    sep2.setBounds(25, 255, 600, 16);
     launcherPanel.add(sep2);
 
     JLabel labelShortcut = new JLabel(Locale.getValue("m.create_shortcut"));
-    labelShortcut.setBounds(25, 305, 225, 18);
+    labelShortcut.setBounds(25, 270, 225, 20);
     labelShortcut.setFont(Fonts.fontRegBig);
     launcherPanel.add(labelShortcut);
 
     JLabel labelShortcutExplained = new JLabel(Locale.getValue("m.create_shortcut_explained"));
-    labelShortcutExplained.setBounds(25, 325, 600, 16);
+    labelShortcutExplained.setBounds(25, 290, 600, 16);
     labelShortcutExplained.setFont(Fonts.fontReg);
     launcherPanel.add(labelShortcutExplained);
 
     switchShortcut = new JCheckBox("");
-    switchShortcut.setBounds(590, 310, 30, 23);
+    switchShortcut.setBounds(590, 275, 30, 23);
     switchShortcut.setFocusPainted(false);
     launcherPanel.add(switchShortcut);
     switchShortcut.setSelected(Settings.createShortcut);
-    switchShortcut.addActionListener(action -> SettingsEventHandler.createShortcutChangeEvent(action));
+    switchShortcut.addActionListener(SettingsEventHandler::createShortcutChangeEvent);
 
     if(SystemUtil.isWindows() && SystemUtil.is64Bit()) {
       JSeparator sepDiscord = new JSeparator();
-      sepDiscord.setBounds(25, 355, 600, 16);
+      sepDiscord.setBounds(25, 320, 600, 16);
       launcherPanel.add(sepDiscord);
 
       JLabel labelUseIngameRPC = new JLabel(Locale.getValue("m.use_ingame_rpc"));
-      labelUseIngameRPC.setBounds(25, 370, 350, 18);
+      labelUseIngameRPC.setBounds(25, 335, 350, 20);
       labelUseIngameRPC.setFont(Fonts.fontRegBig);
       launcherPanel.add(labelUseIngameRPC);
 
       JLabel labelUseIngameRPCExplained = new JLabel(Locale.getValue("m.use_ingame_rpc_explained"));
-      labelUseIngameRPCExplained.setBounds(25, 390, 600, 16);
+      labelUseIngameRPCExplained.setBounds(25, 355, 600, 16);
       labelUseIngameRPCExplained.setFont(Fonts.fontReg);
       launcherPanel.add(labelUseIngameRPCExplained);
 
       switchUseIngameRPC = new JCheckBox("");
-      switchUseIngameRPC.setBounds(590, 375, 30, 23);
+      switchUseIngameRPC.setBounds(590, 340, 30, 23);
       switchUseIngameRPC.setFocusPainted(false);
       launcherPanel.add(switchUseIngameRPC);
       switchUseIngameRPC.setSelected(Settings.useIngameRPC);
-      switchUseIngameRPC.addActionListener(action -> SettingsEventHandler.ingameRPCChangeEvent(action));
+      switchUseIngameRPC.addActionListener(SettingsEventHandler::ingameRPCChangeEvent);
     }
+
+    JSeparator sepAutoUpdate = new JSeparator();
+    sepAutoUpdate.setBounds(25, 385, 600, 16);
+    launcherPanel.add(sepAutoUpdate);
+
+    JLabel labelAutoUpdate = new JLabel("Auto-update");
+    labelAutoUpdate.setBounds(25, 400, 350, 20);
+    labelAutoUpdate.setFont(Fonts.fontRegBig);
+    launcherPanel.add(labelAutoUpdate);
+
+    JLabel labelAutoUpdateExplained = new JLabel("Automatically download and apply launcher updates when they're available.");
+    labelAutoUpdateExplained.setBounds(25, 420, 600, 16);
+    labelAutoUpdateExplained.setFont(Fonts.fontReg);
+    launcherPanel.add(labelAutoUpdateExplained);
+
+    switchAutoUpdate = new JCheckBox("");
+    switchAutoUpdate.setBounds(590, 405, 30, 23);
+    switchAutoUpdate.setFocusPainted(false);
+    launcherPanel.add(switchAutoUpdate);
+    switchAutoUpdate.setSelected(Settings.autoUpdate);
+    switchAutoUpdate.addActionListener(SettingsEventHandler::autoUpdateChangeEvent);
 
     return launcherPanel;
   }
@@ -335,7 +361,7 @@ public class SettingsGUI extends BaseGUI {
     labelUseCustomGC.setFont(Fonts.fontRegBig);
     gamePanel.add(labelUseCustomGC);
 
-    JLabel labelUseCustomGCExplained = new JLabel("Change how Garbage Collection will be done on the game's Java VM");
+    JLabel labelUseCustomGCExplained = new JLabel("Change how Garbage Collection will be done on the game's Java VM.");
     labelUseCustomGCExplained.setBounds(25, 195, 600, 16);
     labelUseCustomGCExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelUseCustomGCExplained);
@@ -411,7 +437,7 @@ public class SettingsGUI extends BaseGUI {
 
     Icon startIcon = IconFontSwing.buildIcon(FontAwesome.SHARE, 16, ColorUtil.getForegroundColor());
     JButton forceRebuildButton = new JButton(startIcon);
-    forceRebuildButton.setBounds(590, 310, 30, 23);
+    forceRebuildButton.setBounds(585, 310, 30, 23);
     forceRebuildButton.setFocusPainted(false);
     forceRebuildButton.setFocusable(false);
     gamePanel.add(forceRebuildButton);
@@ -441,7 +467,7 @@ public class SettingsGUI extends BaseGUI {
     gamePanel.add(labelJVMData);
 
     JButton jvmPatchButton = new JButton(startIcon);
-    jvmPatchButton.setBounds(590, 375, 30, 23);
+    jvmPatchButton.setBounds(585, 375, 30, 23);
     jvmPatchButton.setFocusPainted(false);
     jvmPatchButton.setFocusable(false);
     jvmPatchButton.setEnabled(false);
@@ -684,6 +710,19 @@ public class SettingsGUI extends BaseGUI {
     labelFlamingoUptime.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoUptime);
 
+    JButton copyLogsButton = new JButton("Copy logs to clipboard");
+    copyLogsButton.setFont(Fonts.fontMed);
+    copyLogsButton.setBounds(25, 160, 200, 23);
+    copyLogsButton.setFocusPainted(false);
+    copyLogsButton.setFocusable(false);
+    copyLogsButton.setToolTipText("Copy logs to clipboard");
+    aboutPanel.add(copyLogsButton);
+    copyLogsButton.addActionListener(l -> {
+      SettingsEventHandler.copyLogsEvent(l);
+      DialogInfo.push("Logs copied to clipboard.");
+    });
+
+    /*
     JButton copyLauncherLogButton = new JButton("Copy knightlauncher.log to clipboard");
     copyLauncherLogButton.setFont(Fonts.fontMed);
     copyLauncherLogButton.setBounds(25, 160, 270, 23);
@@ -701,6 +740,7 @@ public class SettingsGUI extends BaseGUI {
     copyGameLogButton.setToolTipText("Copy game logs to clipboard");
     aboutPanel.add(copyGameLogButton);
     copyGameLogButton.addActionListener(SettingsEventHandler::copyGameLogEvent);
+    */
 
     return aboutPanel;
   }

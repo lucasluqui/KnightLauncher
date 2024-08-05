@@ -4,17 +4,20 @@ import com.luuqui.dialog.DialogInfo;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mods.ModLoader;
-import com.luuqui.launcher.settings.GameSettings;
-import com.luuqui.launcher.settings.Settings;
-import com.luuqui.launcher.settings.SettingsEventHandler;
-import com.luuqui.launcher.settings.SettingsProperties;
+import com.luuqui.launcher.settings.*;
 import com.luuqui.util.*;
 import org.apache.commons.io.FileUtils;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -194,7 +197,16 @@ public class LauncherEventHandler {
     LauncherApp.serverList.add(official);
 
     for(Server server : servers) {
+
+      if(server.name.equalsIgnoreCase("Official")) {
+        official.announceBanner = server.announceBanner;
+        official.announceContent = server.announceContent;
+        official.announceBannerLink = server.announceBannerLink;
+        continue;
+      }
+
       if(server.beta == 1) server.name += " (Beta)";
+
       LauncherGUI.serverList.addItem(server.name);
       LauncherApp.serverList.add(server);
 
@@ -246,6 +258,7 @@ public class LauncherEventHandler {
         LauncherGUI.launchButton.setToolTipText("Play Now");
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
         LauncherGUI.playerCountLabel.setText(selectedServer.playerCountUrl);
+        LauncherGUI.playerCountLabel.setVisible(true);
         LauncherGUI.serverInfoButton.setEnabled(false);
         LauncherGUI.serverInfoButton.setVisible(false);
       } else {
@@ -256,7 +269,7 @@ public class LauncherEventHandler {
         LauncherGUI.serverInfoButton.setVisible(true);
 
         // TODO: Fetch player count.
-        LauncherGUI.playerCountLabel.setText("Player count unavailable.");
+        LauncherGUI.playerCountLabel.setVisible(false);
       }
       LauncherApp.selectedServer = selectedServer;
     } else {
@@ -265,6 +278,7 @@ public class LauncherEventHandler {
       LauncherApp.selectedServer = findServerInServerList("Official");
     }
 
+    updateBanner();
     saveSelectedServer();
   }
 
@@ -272,6 +286,56 @@ public class LauncherEventHandler {
     List<Server> results = LauncherApp.serverList.stream()
       .filter(s -> serverName.equals(s.name)).collect(Collectors.toList());
     return results.isEmpty() ? null : results.get(0);
+  }
+
+  public static void updateBanner() {
+    Thread refreshThread = new Thread(() -> {
+      String bannerUrl = LauncherApp.selectedServer.announceBanner.split("\\|")[0];
+      double bannerIntensity = Double.parseDouble(LauncherApp.selectedServer.announceBanner.split("\\|")[1]);
+      LauncherGUI.banner = LauncherGUI.processImageForBanner(ImageUtil.toBufferedImage(ImageUtil.getImageFromURL(bannerUrl, 800, 550)), bannerIntensity);
+      LauncherGUI.mainPane.repaint();
+
+      LauncherGUI.bannerTitle.setText(LauncherApp.selectedServer.announceContent.split("\\|")[0]);
+
+      String bannerSubtitle = LauncherApp.selectedServer.announceContent.split("\\|")[1];
+
+      if(bannerSubtitle.contains("\n")) {
+        LauncherGUI.bannerSubtitle1.setText(bannerSubtitle.split("\n")[0]);
+        LauncherGUI.bannerSubtitle2.setText(bannerSubtitle.split("\n")[1]);
+        LauncherGUI.bannerSubtitle2.setVisible(true);
+      } else {
+        LauncherGUI.bannerSubtitle1.setText(bannerSubtitle);
+        LauncherGUI.bannerSubtitle2.setVisible(false);
+      }
+
+      if(!LauncherApp.selectedServer.announceBannerLink.equalsIgnoreCase("null")) {
+
+        ActionListener[] listeners = LauncherGUI.bannerLinkButton.getActionListeners();
+        for (ActionListener listener : listeners) {
+          LauncherGUI.bannerLinkButton.removeActionListener(listener);
+        }
+
+        LauncherGUI.bannerLinkButton.addActionListener(l -> {
+          DesktopUtil.openWebpage(LauncherApp.selectedServer.announceBannerLink);
+        });
+        LauncherGUI.bannerLinkButton.setVisible(true);
+      } else {
+        LauncherGUI.bannerLinkButton.setVisible(false);
+      }
+    });
+    refreshThread.start();
+  }
+
+  public static void updateLauncher() {
+    // delete any existing updaters from previous updates
+    new File(LauncherGlobals.USER_DIR + "/updater.jar").delete();
+    try {
+      Files.copy(Paths.get(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"), Paths.get(LauncherGlobals.USER_DIR + "/updater.jar"), StandardCopyOption.REPLACE_EXISTING);
+    } catch (Exception e) {
+      log.error(e);
+    }
+    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update"}, true);
+    System.exit(1);
   }
 
   private static String[] getThirdPartyClientStartCommand(Server server) {

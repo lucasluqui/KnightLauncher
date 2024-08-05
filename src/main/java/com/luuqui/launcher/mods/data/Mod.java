@@ -8,6 +8,7 @@ public abstract class Mod {
   protected String version;
   protected String fileName;
   protected Boolean isEnabled;
+  protected String image;
 
   protected final String DEFAULT_DESCRIPTION = "No description found";
   protected final String DEFAULT_AUTHOR = "Someone";
@@ -66,6 +67,14 @@ public abstract class Mod {
 
   public void setEnabled(boolean enabled) {
     this.isEnabled = enabled;
+  }
+
+  public String getImage() {
+    return this.image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
   }
 
   public abstract void mount();

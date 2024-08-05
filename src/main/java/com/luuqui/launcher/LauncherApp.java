@@ -39,6 +39,7 @@ public class LauncherApp {
   protected static SettingsGUI sgui;
   protected static ModListGUI mgui;
   protected static JVMPatcher jvmPatcher;
+  protected static Updater updater;
   public static String projectXVersion = null;
   public static java.util.List<Server> serverList = new ArrayList<>();
   public static Server selectedServer = null;
@@ -51,13 +52,14 @@ public class LauncherApp {
 
     if (app.requiresJVMPatch()) {
       jvmPatcher = app.composeJVMPatcher(app);
+    } else if (app.requiresUpdate()) {
+      updater = app.composeUpdater(app);
     } else {
       lgui = app.composeLauncherGUI(app);
       sgui = app.composeSettingsGUI(app);
       mgui = app.composeModListGUI(app);
+      app.postInitialization();
     }
-
-    app.postInitialization();
   }
 
   public LauncherApp () {
@@ -119,6 +121,17 @@ public class LauncherApp {
       }
     });
     return jvmPatcher;
+  }
+
+  private Updater composeUpdater(LauncherApp app) {
+    EventQueue.invokeLater(() -> {
+      try {
+        updater = new Updater(app);
+      } catch (Exception e) {
+        log.error(e);
+      }
+    });
+    return updater;
   }
 
   private void checkDirectories() {
@@ -280,6 +293,10 @@ public class LauncherApp {
     return true;
   }
 
+  private boolean requiresUpdate() {
+    return _args.length > 0 && _args[0].equals("update");
+  }
+
   private void postInitialization() {
     ModLoader.checkInstalled();
     if (Settings.useIngameRPC) ModuleLoader.loadIngameRPC();
@@ -312,14 +329,11 @@ public class LauncherApp {
 
     onlineAssetsThread.start();
     flamingoThread.start();
-
-    final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-    executor.schedule(this::checkFlamingoStatus, 10, TimeUnit.SECONDS);
   }
 
   private void checkFlamingoStatus() {
     if(!LauncherApp.flamingoOnline) {
-      LauncherGUI.showWarning("Flamingo is offline");
+      LauncherGUI.showWarning("Could not connect to Flamingo. Some launcher functionalities might not be fully available.");
     }
   }
 
@@ -353,14 +367,10 @@ public class LauncherApp {
 
       String latestRelease = jsonReleases.getString("tag_name");
       if (!latestRelease.equalsIgnoreCase(LauncherGlobals.LAUNCHER_VERSION)) {
+        if(Settings.autoUpdate) {
+          LauncherEventHandler.updateLauncher();
+        }
         Settings.isOutdated = true;
-        LauncherGUI.updateButton.addActionListener(action -> DesktopUtil.openWebpage(
-            "https://github.com/"
-                + LauncherGlobals.GITHUB_AUTHOR + "/"
-                + LauncherGlobals.GITHUB_REPO + "/"
-                + "releases/tag/"
-                + latestRelease
-        ));
         LauncherGUI.updateButton.setVisible(true);
       }
     } else {

@@ -1,5 +1,6 @@
 package com.luuqui.launcher;
 
+import com.luuqui.dialog.DialogError;
 import com.luuqui.dialog.DialogWarning;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.mods.ModListGUI;
@@ -20,6 +21,11 @@ public class LauncherGUI extends BaseGUI {
   private final LauncherApp app;
   public static JFrame launcherGUIFrame;
   public static JPanel mainPane;
+  public static BufferedImage banner = null;
+  public static JLabel bannerTitle;
+  public static JLabel bannerSubtitle1;
+  public static JLabel bannerSubtitle2;
+  public static JButton bannerLinkButton;
   public static JTabbedPane layeredSettingsPane = new JTabbedPane();
   public static JPanel layeredModsPane = new JPanel();
   public static JButton layeredReturnButton;
@@ -36,6 +42,8 @@ public class LauncherGUI extends BaseGUI {
   public static JButton serverInfoButton;
   public static JLabel warningLabelIcon;
   public static JLabel warningLabel;
+  public static JButton warningNotice;
+  public static String currentWarning = "";
 
   public LauncherGUI(LauncherApp app) {
     super();
@@ -70,7 +78,15 @@ public class LauncherGUI extends BaseGUI {
     sidePane.setBounds(0, 35, 250, 550);
     launcherGUIFrame.getContentPane().add(sidePane);
 
-    mainPane = new JPanel();
+    banner = generatePlainColorBanner();
+
+    mainPane = new JPanel() {
+      @Override
+      protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(banner, 0, 0, null);
+      }
+    };
     mainPane.setLayout(null);
     mainPane.setBackground(new Color(56, 60, 71));
     mainPane.setBounds(250, 35, 800, 550);
@@ -128,23 +144,6 @@ public class LauncherGUI extends BaseGUI {
     playerCountLabel.setForeground(new Color(34, 197, 94));
     playerCountLabel.setBounds(28, 235, 200, 18);
     sidePane.add(playerCountLabel);
-
-    Icon warningIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
-    warningLabelIcon = new JLabel(warningIcon);
-    warningLabelIcon.setBounds(28, 258, 20, 20);
-    warningLabelIcon.setFocusable(false);
-    warningLabelIcon.setOpaque(true);
-    warningLabelIcon.setVisible(false);
-    warningLabelIcon.setBackground(Colors.MID_RED);
-    warningLabelIcon.setForeground(Color.WHITE);
-    sidePane.add(warningLabelIcon);
-
-    warningLabel = new JLabel("");
-    warningLabel.setFont(Fonts.fontReg);
-    warningLabel.setForeground(Colors.MID_RED);
-    warningLabel.setVisible(false);
-    warningLabel.setBounds(54, 258, 200, 18);
-    sidePane.add(warningLabel);
 
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
     settingsButton = new JButton(Locale.getValue("b.settings"));
@@ -221,19 +220,6 @@ public class LauncherGUI extends BaseGUI {
     });
     sidePane.add(modButton);
 
-    Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 16, Color.WHITE);
-    updateButton = new JButton(Locale.getValue("b.update_available"));
-    updateButton.setHorizontalAlignment(SwingConstants.LEFT);
-    updateButton.setIcon(updateIcon);
-    updateButton.setFont(Fonts.fontMedIta);
-    updateButton.setFocusPainted(false);
-    updateButton.setFocusable(false);
-    updateButton.setBackground(new Color(34, 197, 94));
-    updateButton.setForeground(Color.WHITE);
-    updateButton.setVisible(false);
-    updateButton.setBounds(28, 400, 125, 35);
-    sidePane.add(updateButton);
-
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
     discordButton.setBounds(66, 465, 35, 35);
     discordButton.setToolTipText("Discord");
@@ -255,30 +241,48 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(bugButton);
     bugButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_BUG_REPORT));
 
-    Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.COFFEE, 16, Color.WHITE);
+    Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.PAYPAL, 16, Color.WHITE);
     JButton kofiButton = new JButton(kofiIcon);
     kofiButton.setBounds(146, 465, 35, 35);
     kofiButton.setToolTipText(Locale.getValue("b.kofi"));
     kofiButton.setFocusPainted(false);
     kofiButton.setFocusable(false);
-    kofiButton.setBackground(new Color(107, 114, 128));
+    kofiButton.setBorderPainted(false);
+    kofiButton.setBackground(new Color(222, 150, 47));
     kofiButton.setFont(Fonts.fontMed);
     sidePane.add(kofiButton);
     kofiButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_KOFI));
 
-    JLabel infoPane = new JLabel();
-    BufferedImage infoPaneBackgroundImage = ImageUtil.loadImageWithinJar("/img/infopane.png");
-    infoPane.setBounds(50, 40, 700, 340);
-    infoPane.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(infoPaneBackgroundImage, 25)));
-    mainPane.add(infoPane);
+    bannerTitle = new JLabel("Uh, oh");
+    bannerTitle.setBounds(35, -60, 700, 340);
+    bannerTitle.setFont(Fonts.fontMedGiant);
+    bannerTitle.setForeground(new Color(255, 255, 255));
+    mainPane.add(bannerTitle);
+    //mainPane.setComponentZOrder(bannerTitle, 0);
 
-    JLabel infoPaneLoading = new JLabel("This server is not currently announcing anything.");
-    infoPaneLoading.setBounds(50, 40, 700, 340);
-    infoPaneLoading.setFont(Fonts.fontMedBig);
-    infoPaneLoading.setHorizontalAlignment(SwingConstants.CENTER);
-    infoPaneLoading.setVerticalAlignment(SwingConstants.CENTER);
-    mainPane.add(infoPaneLoading);
-    mainPane.setComponentZOrder(infoPaneLoading, 0);
+    bannerSubtitle1 = new JLabel("This server is not currently announcing anything.");
+    bannerSubtitle1.setBounds(40, -15, 700, 340);
+    bannerSubtitle1.setFont(Fonts.fontMedBig);
+    bannerSubtitle1.setForeground(new Color(255, 255, 255));
+    mainPane.add(bannerSubtitle1);
+
+    bannerSubtitle2 = new JLabel("");
+    bannerSubtitle2.setBounds(40, 5, 700, 340);
+    bannerSubtitle2.setFont(Fonts.fontMedBig);
+    bannerSubtitle2.setForeground(new Color(255, 255, 255));
+    mainPane.add(bannerSubtitle2);
+
+    bannerLinkButton = new JButton("Learn more");
+    bannerLinkButton.setBounds(40, 195, 105, 25);
+    bannerLinkButton.setFont(Fonts.fontMed);
+    bannerLinkButton.setForeground(new Color(255, 255, 255));
+    bannerLinkButton.setFocusPainted(false);
+    bannerLinkButton.setFocusable(false);
+    bannerLinkButton.setOpaque(false);
+    bannerLinkButton.setBackground(new Color(56, 60, 71, 150));
+    bannerLinkButton.setBorderPainted(false);
+    bannerLinkButton.setVisible(false);
+    mainPane.add(bannerLinkButton);
 
     launchButton = new JButton("Play Now");
     launchButton.setBounds(572, 423, 200, 66);
@@ -286,6 +290,7 @@ public class LauncherGUI extends BaseGUI {
     launchButton.setFocusPainted(false);
     launchButton.setFocusable(false);
     launchButton.setBackground(new Color(0, 133, 255));
+    launchButton.setBorderPainted(false);
     launchButton.setForeground(Color.WHITE);
     launchButton.setToolTipText("Play Now");
     mainPane.add(launchButton);
@@ -314,15 +319,45 @@ public class LauncherGUI extends BaseGUI {
 
     launchState = new JLabel("");
     launchState.setHorizontalAlignment(SwingConstants.LEFT);
-    launchState.setBounds(30, 420, 510, 25);
+    launchState.setBounds(35, 420, 505, 25);
     launchState.setFont(Fonts.fontRegBig);
     launchState.setVisible(false);
     mainPane.add(launchState);
 
     launchProgressBar = new JProgressBar();
-    launchProgressBar.setBounds(30, 450, 510, 25);
+    launchProgressBar.setBounds(35, 450, 505, 25);
     launchProgressBar.setVisible(false);
     mainPane.add(launchProgressBar);
+
+    Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
+    warningNotice = new JButton(warningNoticeIcon);
+    warningNotice.setBounds(737, 26, 35, 35);
+    warningNotice.setToolTipText("Warning notice");
+    warningNotice.setFocusPainted(false);
+    warningNotice.setFocusable(false);
+    warningNotice.setBorderPainted(false);
+    warningNotice.setForeground(new Color(255, 255, 255));
+    warningNotice.setBackground(Colors.MID_RED);
+    warningNotice.setFont(Fonts.fontMed);
+    warningNotice.setVisible(false);
+    warningNotice.addActionListener(l -> {
+      DialogError.push(currentWarning, "Warning notice");
+    });
+    mainPane.add(warningNotice);
+
+    Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 16, Color.WHITE);
+    updateButton = new JButton(updateIcon);
+    updateButton.setBounds(737, 26, 35, 35);
+    updateButton.setToolTipText(Locale.getValue("b.update_available"));
+    updateButton.setFont(Fonts.fontMed);
+    updateButton.setFocusPainted(false);
+    updateButton.setFocusable(false);
+    updateButton.setBorderPainted(false);
+    updateButton.setBackground(new Color(34, 197, 94));
+    updateButton.setForeground(Color.WHITE);
+    updateButton.setVisible(false);
+    mainPane.add(updateButton);
+    updateButton.addActionListener(l -> LauncherEventHandler.updateLauncher());
 
     JPanel titleBar = new JPanel();
     titleBar.setBounds(0, 0, launcherGUIFrame.getWidth(), 35);
@@ -417,8 +452,27 @@ public class LauncherGUI extends BaseGUI {
   }
 
   public static void showWarning(String message) {
-    warningLabelIcon.setVisible(true);
-    warningLabel.setVisible(true);
-    warningLabel.setText(message);
+    // we're also showing an available update, lets move the warning notice
+    // slightly to the left, so they don't overlap.
+    if(updateButton.isVisible()) {
+      warningNotice.setBounds(warningNotice.getX() - 45, 26, 35, 35);
+    }
+
+    warningNotice.setVisible(true);
+    currentWarning = message;
+  }
+
+  public static BufferedImage generatePlainColorBanner() {
+    BufferedImage image = new BufferedImage(800, 550, 1);
+    Graphics2D g2d = image.createGraphics();
+    g2d.setColor(new Color(56, 60, 71));
+    g2d.fillRect(0, 0, 800, 550);
+    return image;
+  }
+
+  public static BufferedImage processImageForBanner(BufferedImage image, double intensity) {
+    image = ImageUtil.resizeImage(image, 800, 550);
+    image = ImageUtil.fadeEdges(image, intensity);
+    return image;
   }
 }

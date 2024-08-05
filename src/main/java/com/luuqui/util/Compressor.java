@@ -99,6 +99,19 @@ public class Compressor {
     return content;
   }
 
+  public static InputStream getISFromFileInsideZip(String zip, String pathInZip) {
+    ZipFile zipFile = new ZipFile(zip);
+    FileHeader fileHeader;
+    InputStream inputStream = null;
+    try {
+      fileHeader = zipFile.getFileHeader(pathInZip);
+      inputStream = zipFile.getInputStream(fileHeader);
+    } catch (IOException e) {
+      log.error(e);
+    }
+    return inputStream;
+  }
+
 
   @SuppressWarnings("unused")
   public static String getZipHash(String source) {
