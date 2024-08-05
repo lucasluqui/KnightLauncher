@@ -19,7 +19,7 @@ public class CustomColors {
   public static final Color BRIGHT_RED    = new Color(194, 0, 0);
   public static final Color BRIGHT_GREEN  = new Color(0, 194, 65);
 
-  public static final Color INTERFACE_TITLE_BAR                 = new Color(34, 36, 42);
+  public static final Color INTERFACE_TITLEBAR                  = new Color(34, 36, 42);
   public static final Color INTERFACE_SIDEPANE_BACKGROUND       = new Color(45, 48, 57);
   public static final Color INTERFACE_SIDEPANE_BUTTON           = new Color(107, 114, 128);
   public static final Color INTERFACE_MAINPANE_BACKGROUND       = new Color(56, 60, 71);

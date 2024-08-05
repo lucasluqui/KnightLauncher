@@ -7,7 +7,7 @@ import java.awt.*;
 public class ColorUtil {
 
   public static Color getTitleBarColor() {
-    return CustomColors.INTERFACE_TITLE_BAR;
+    return CustomColors.INTERFACE_TITLEBAR;
   }
 
   public static Color getForegroundColor() {
