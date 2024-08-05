@@ -1,6 +1,6 @@
 package com.luuqui.launcher;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class Colors {
 
