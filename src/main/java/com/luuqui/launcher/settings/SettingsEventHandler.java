@@ -110,6 +110,11 @@ public class SettingsEventHandler {
     SettingsProperties.setValue("launcher.useIngameRPC", SettingsGUI.switchUseIngameRPC.isSelected() ? "true" : "false");
   }
 
+  public static void autoUpdateChangeEvent(ActionEvent action) {
+    Settings.autoUpdate = SettingsGUI.switchAutoUpdate.isSelected();
+    SettingsProperties.setValue("launcher.autoUpdate", SettingsGUI.switchAutoUpdate.isSelected() ? "true" : "false");
+  }
+
   public static void jvmPatchEvent(ActionEvent action) {
     SettingsProperties.setValue("launcher.jvm_patched", "false");
     ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar", "forceJVMPatch"}, true);

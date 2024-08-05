@@ -4,10 +4,7 @@ import com.luuqui.dialog.DialogInfo;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mods.ModLoader;
-import com.luuqui.launcher.settings.GameSettings;
-import com.luuqui.launcher.settings.Settings;
-import com.luuqui.launcher.settings.SettingsEventHandler;
-import com.luuqui.launcher.settings.SettingsProperties;
+import com.luuqui.launcher.settings.*;
 import com.luuqui.util.*;
 import org.apache.commons.io.FileUtils;
 
@@ -17,6 +14,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -323,6 +324,18 @@ public class LauncherEventHandler {
       }
     });
     refreshThread.start();
+  }
+
+  public static void updateLauncher() {
+    // delete any existing updaters from previous updates
+    new File(LauncherGlobals.USER_DIR + "/updater.jar").delete();
+    try {
+      Files.copy(Paths.get(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"), Paths.get(LauncherGlobals.USER_DIR + "/updater.jar"), StandardCopyOption.REPLACE_EXISTING);
+    } catch (Exception e) {
+      log.error(e);
+    }
+    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "\\updater.jar", "update"}, true);
+    System.exit(1);
   }
 
   private static String[] getThirdPartyClientStartCommand(Server server) {

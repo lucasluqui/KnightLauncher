@@ -220,19 +220,6 @@ public class LauncherGUI extends BaseGUI {
     });
     sidePane.add(modButton);
 
-    Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 16, Color.WHITE);
-    updateButton = new JButton(Locale.getValue("b.update_available"));
-    updateButton.setHorizontalAlignment(SwingConstants.LEFT);
-    updateButton.setIcon(updateIcon);
-    updateButton.setFont(Fonts.fontMedIta);
-    updateButton.setFocusPainted(false);
-    updateButton.setFocusable(false);
-    updateButton.setBackground(new Color(34, 197, 94));
-    updateButton.setForeground(Color.WHITE);
-    updateButton.setVisible(false);
-    updateButton.setBounds(28, 400, 125, 35);
-    sidePane.add(updateButton);
-
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
     discordButton.setBounds(66, 465, 35, 35);
     discordButton.setToolTipText("Discord");
@@ -286,7 +273,7 @@ public class LauncherGUI extends BaseGUI {
     mainPane.add(bannerSubtitle2);
 
     bannerLinkButton = new JButton("Learn more");
-    bannerLinkButton.setBounds(40, 195, 100, 25);
+    bannerLinkButton.setBounds(40, 195, 105, 25);
     bannerLinkButton.setFont(Fonts.fontMed);
     bannerLinkButton.setForeground(new Color(255, 255, 255));
     bannerLinkButton.setFocusPainted(false);
@@ -345,7 +332,7 @@ public class LauncherGUI extends BaseGUI {
     Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
     warningNotice = new JButton(warningNoticeIcon);
     warningNotice.setBounds(737, 26, 35, 35);
-    warningNotice.setToolTipText(Locale.getValue("Warning notice"));
+    warningNotice.setToolTipText("Warning notice");
     warningNotice.setFocusPainted(false);
     warningNotice.setFocusable(false);
     warningNotice.setBorderPainted(false);
@@ -357,6 +344,20 @@ public class LauncherGUI extends BaseGUI {
       DialogError.push(currentWarning, "Warning notice");
     });
     mainPane.add(warningNotice);
+
+    Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 16, Color.WHITE);
+    updateButton = new JButton(updateIcon);
+    updateButton.setBounds(737, 26, 35, 35);
+    updateButton.setToolTipText(Locale.getValue("b.update_available"));
+    updateButton.setFont(Fonts.fontMed);
+    updateButton.setFocusPainted(false);
+    updateButton.setFocusable(false);
+    updateButton.setBorderPainted(false);
+    updateButton.setBackground(new Color(34, 197, 94));
+    updateButton.setForeground(Color.WHITE);
+    updateButton.setVisible(false);
+    mainPane.add(updateButton);
+    updateButton.addActionListener(l -> LauncherEventHandler.updateLauncher());
 
     JPanel titleBar = new JPanel();
     titleBar.setBounds(0, 0, launcherGUIFrame.getWidth(), 35);
@@ -451,6 +452,12 @@ public class LauncherGUI extends BaseGUI {
   }
 
   public static void showWarning(String message) {
+    // we're also showing an available update, lets move the warning notice
+    // slightly to the left, so they don't overlap.
+    if(updateButton.isVisible()) {
+      warningNotice.setBounds(warningNotice.getX() - 45, 26, 35, 35);
+    }
+
     warningNotice.setVisible(true);
     currentWarning = message;
   }

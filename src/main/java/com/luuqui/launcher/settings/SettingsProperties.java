@@ -12,7 +12,7 @@ import static com.luuqui.launcher.settings.Log.log;
 
 public class SettingsProperties {
 
-  private static final String PROP_VER = "17";
+  private static final String PROP_VER = "18";
 
   private static Properties _prop = new Properties();
   private static final String _propPath = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
@@ -86,6 +86,7 @@ public class SettingsProperties {
     Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
     Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
     Settings.selectedServerIdx = Integer.parseInt(getValue("launcher.selectedServerIdx"));
+    Settings.autoUpdate = Boolean.parseBoolean(getValue("launcher.autoUpdate"));
     Settings.compressorUnzipMethod = getValue("compressor.unzipMethod");
     Settings.compressorExtractBuffer = Integer.parseInt(getValue("compressor.extractBuffer"));
     Settings.gamePlatform = getValue("game.platform");
