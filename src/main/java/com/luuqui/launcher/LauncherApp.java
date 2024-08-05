@@ -58,9 +58,8 @@ public class LauncherApp {
       lgui = app.composeLauncherGUI(app);
       sgui = app.composeSettingsGUI(app);
       mgui = app.composeModListGUI(app);
+      app.postInitialization();
     }
-
-    app.postInitialization();
   }
 
   public LauncherApp () {
@@ -299,9 +298,6 @@ public class LauncherApp {
 
     onlineAssetsThread.start();
     flamingoThread.start();
-
-    final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-    executor.schedule(this::checkFlamingoStatus, 10, TimeUnit.SECONDS);
   }
 
   private void checkFlamingoStatus() {

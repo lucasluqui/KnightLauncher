@@ -18,6 +18,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -157,6 +159,7 @@ public class Updater extends BaseGUI {
   }
 
   private static void initProcess() {
+    //wait(5);
     Thread processThread = new Thread(Updater::startProcess);
     processThread.start();
   }
@@ -166,7 +169,7 @@ public class Updater extends BaseGUI {
 
     updaterProgressBar.setValue(1);
     updaterState.setText("Removing current version...");
-    FileUtil.rename(new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"), new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar.old"));
+    //FileUtil.rename(new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"), new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar.old"));
 
     updaterProgressBar.setValue(2);
     updaterState.setText("Downloading latest version...");
@@ -177,7 +180,7 @@ public class Updater extends BaseGUI {
               "Booting back into current version, try updating later.";
       DialogError.push(downloadErrMsg);
       log.error(downloadErrMsg);
-      FileUtil.rename(new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar.old"), new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"));
+      //FileUtil.rename(new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar.old"), new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"));
       finishProcess();
     }
 
@@ -249,6 +252,18 @@ public class Updater extends BaseGUI {
     ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar"}, true);
     updaterFrame.dispose();
     System.exit(1);
+  }
+
+  public static void wait(int ms)
+  {
+    try
+    {
+      Thread.sleep(ms);
+    }
+    catch(InterruptedException ex)
+    {
+      Thread.currentThread().interrupt();
+    }
   }
 }
 
