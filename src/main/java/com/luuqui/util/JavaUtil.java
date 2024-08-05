@@ -58,19 +58,19 @@ public class JavaUtil {
     if (javaVMDir.exists() && javaVMDir.isDirectory()) {
      return javaVMDir.getAbsolutePath();
     }
-    File javaDIR = new File(LauncherGlobals.USER_DIR, "/java");
-    if (javaDIR.exists() && javaDIR.isDirectory()) {
-      return javaDIR.getAbsolutePath();
+    File javaDir = new File(LauncherGlobals.USER_DIR, "/java");
+    if (javaDir.exists() && javaDir.isDirectory()) {
+      return javaDir.getAbsolutePath();
     }
     return "";
   }
 
   public static String getGameJVMExePath() {
     String javaDir = getGameJavaDirPath();
-    if (new File(javaDir, "bin/java.exe").exists()) {
+    if (FileUtil.fileExists(javaDir + "/bin/java.exe")) {
       return javaDir + "/bin/java.exe";
     }
-    if (new File(javaDir, "bin/java").exists()) {
+    if (FileUtil.fileExists(javaDir + "/bin/java")) {
       return javaDir + "/bin/java";
     }
     log.error("Cannot locate local java executable");
