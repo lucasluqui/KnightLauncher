@@ -23,6 +23,10 @@ public class DesktopUtil {
   }
 
   public static void openWebpage(URI uri) {
+    if (SystemUtil.isUnix()) {
+      ProcessUtil.run(new String[] {"xdg-open", uri.toString()}, true);
+      return;
+    }
     Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
     if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
       try {
@@ -42,7 +46,7 @@ public class DesktopUtil {
   }
 
   public static String getPathToDesktop() {
-    return System.getProperty("user.home") + File.separator + "Desktop" + File.separator;
+    return System.getProperty("user.home") + File.separator + "Desktop";
   }
 
   public static void createShellLink(String target, String args, String workDir, String ico, String hover, String name) {

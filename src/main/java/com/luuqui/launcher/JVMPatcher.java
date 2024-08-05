@@ -206,8 +206,8 @@ public class JVMPatcher extends BaseGUI {
     jvmPatcherProgressBar.setValue(2);
     jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_delete"));
     try {
-      if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "\\java_vm_unpatched")) {
-        FileUtils.moveDirectory(new File(LauncherGlobals.USER_DIR + "\\java_vm"), new File(LauncherGlobals.USER_DIR + "\\java_vm_unpatched"));
+      if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + File.separator + "java_vm_unpatched")) {
+        FileUtils.moveDirectory(new File(LauncherGlobals.USER_DIR, "java_vm"), new File(LauncherGlobals.USER_DIR, "java_vm_unpatched"));
       }
     } catch (IOException e) {
       log.error(e);
@@ -215,8 +215,8 @@ public class JVMPatcher extends BaseGUI {
 
     jvmPatcherProgressBar.setValue(3);
     jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_extract"));
-    Compressor.unzip(LauncherGlobals.USER_DIR + "\\jvm_pack.zip", LauncherGlobals.USER_DIR, false);
-    new File(LauncherGlobals.USER_DIR + "\\jvm_pack.zip").delete();
+    Compressor.unzip(LauncherGlobals.USER_DIR + File.separator + "jvm_pack.zip", LauncherGlobals.USER_DIR, false);
+    new File(LauncherGlobals.USER_DIR, "jvm_pack.zip").delete();
 
     jvmPatcherProgressBar.setValue(4);
     jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_finish"));
@@ -239,7 +239,7 @@ public class JVMPatcher extends BaseGUI {
       try {
         FileUtils.copyURLToFile(
                 new URL(downloadUrl),
-                new File(LauncherGlobals.USER_DIR + "\\jvm_pack.zip"),
+                new File(LauncherGlobals.USER_DIR, "jvm_pack.zip"),
                 0,
                 0
         );
@@ -254,7 +254,7 @@ public class JVMPatcher extends BaseGUI {
   private static void finish() {
     SettingsProperties.setValue("launcher.jvm_patched", "true");
     ModuleLoader.loadJarCommandLine();
-    ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar"}, true);
+    ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar"}, true);
     jvmPatcherFrame.dispose();
     System.exit(1);
   }

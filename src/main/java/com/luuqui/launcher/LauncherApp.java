@@ -75,7 +75,7 @@ public class LauncherApp {
     KeyboardController.start();
     checkDirectories();
     LauncherDigester.doDigest();
-    if (SystemUtil.isWindows()) checkShortcut();
+    if (SystemUtil.isWindows() || SystemUtil.isUnix()) checkShortcut();
   }
 
   private LauncherGUI composeLauncherGUI(LauncherApp app) {
@@ -170,8 +170,8 @@ public class LauncherApp {
   // Create a shortcut to the application if there's none.
   private void checkShortcut() {
     if (Settings.createShortcut
-            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME)) {
-
+            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME)
+            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME + ".desktop")) {
       BufferedImage bimg = ImageUtil.loadImageWithinJar("/img/icon-128.png");
       try {
         ICOEncoder.write(bimg, new File(LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-128.ico"));
@@ -179,14 +179,46 @@ public class LauncherApp {
         log.error(e);
       }
 
-      DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
-              "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
-              LauncherGlobals.USER_DIR,
-              LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-128.ico",
-              "Start " + LauncherGlobals.LAUNCHER_NAME,
-              LauncherGlobals.LAUNCHER_NAME
-      );
+      if (SystemUtil.isWindows()) {
+        DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
+                "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
+                LauncherGlobals.USER_DIR,
+                LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-128.ico",
+                "Start " + LauncherGlobals.LAUNCHER_NAME,
+                LauncherGlobals.LAUNCHER_NAME
+        );
+      } else {
+        makeDesktopFile();
+      }
     }
+  }
+
+  private void makeDesktopFile() {
+    File desktopFile = new File(DesktopUtil.getPathToDesktop(), LauncherGlobals.LAUNCHER_NAME + ".desktop");
+    File shFile = new File(DesktopUtil.getPathToDesktop(), ".KL.sh");
+    try {
+      BufferedWriter out = new BufferedWriter(new FileWriter(desktopFile));
+      out.write("[Desktop Entry]\n");
+      out.write("Version=1.5\n");
+      out.write("Exec=" + DesktopUtil.getPathToDesktop() + "/.KL.sh\n");
+      out.write("Name=Knight Launcher\n");
+      out.write("Type=Application\n");
+      out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-128.ico\n");
+      out.write("Comment=Open source game launcher for a certain game\n");
+      out.close();
+    } catch (IOException e) {
+      log.error(e);
+    }
+    try {
+      BufferedWriter out = new BufferedWriter(new FileWriter(shFile));
+      out.write("#! /bin/bash\n\n");
+      out.write("cd " + LauncherGlobals.USER_DIR.replaceAll(" ", "\\\\ ") + "\n");
+      out.write("java -jar KnightLauncher.jar\n");
+      out.close();
+    } catch (IOException e) {
+      log.error(e);
+    }
+    shFile.setExecutable(true);
   }
 
   private void setupLauncherStyle() {
@@ -251,7 +283,7 @@ public class LauncherApp {
     if(!SystemUtil.isWindows() && !(SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam"))) return false;
 
     // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by Knight Launcher.
-    if(JavaUtil.getJVMArch(LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe") == 64 ||
+    if(JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 ||
     Settings.jvmPatched) {
       Settings.jvmPatched = true;
       SettingsProperties.setValue("launcher.jvm_patched", "true");
@@ -267,9 +299,8 @@ public class LauncherApp {
 
   private void postInitialization() {
     ModLoader.checkInstalled();
-    if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
     if (Settings.useIngameRPC) ModuleLoader.loadIngameRPC();
-    if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\safeguard\\bundle.zip")) {
+    if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
       ModLoader.extractSafeguard();
     }
 

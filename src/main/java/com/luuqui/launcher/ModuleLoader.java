@@ -6,6 +6,7 @@ import com.luuqui.util.FileUtil;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.SystemUtil;
 
+import java.io.File;
 import java.io.IOException;
 
 import static com.luuqui.launcher.Log.log;
@@ -30,11 +31,11 @@ public class ModuleLoader {
 
   public static void loadJarCommandLine() {
     try {
-      int vmArch = JavaUtil.getJVMArch(SystemUtil.isWindows() ? LauncherGlobals.USER_DIR + "\\java_vm\\bin\\java.exe" : LauncherGlobals.USER_DIR + "\\java\\bin\\java");
-      if (SystemUtil.isWindows()) {
-        FileUtil.extractFileWithinJar("/modules/jarcmd/jar-" + vmArch + ".exe", LauncherGlobals.USER_DIR + "\\java_vm\\bin\\jar.exe");
-      } else {
-          FileUtil.extractFileWithinJar(vmArch == 64 ? "/modules/jarcmd/jar-amd64" : "/modules/jarcmd/jar-i386", LauncherGlobals.USER_DIR + "\\java\\bin\\jar");
+      int vmArch = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath());
+      if (SystemUtil.isWindows() && !new File(JavaUtil.getGameJavaDirPath() ,"bin/jar.exe").exists()) {
+        FileUtil.extractFileWithinJar("/modules/jarcmd/jar-" + vmArch + ".exe", JavaUtil.getGameJavaDirPath() + "/bin/jar.exe");
+      } else if (!new File(JavaUtil.getGameJavaDirPath(), "/bin/jar").exists()){
+        FileUtil.extractFileWithinJar(vmArch == 64 ? "/modules/jarcmd/jar-amd64" : "/modules/jarcmd/jar-i386", JavaUtil.getGameJavaDirPath() + "/bin/jar");
       }
     } catch (IOException e) {
       log.error(e);
