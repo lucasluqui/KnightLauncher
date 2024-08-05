@@ -334,7 +334,7 @@ public class LauncherEventHandler {
     } catch (Exception e) {
       log.error(e);
     }
-    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "\\updater.jar", "update"}, true);
+    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update"}, true);
     System.exit(1);
   }
 

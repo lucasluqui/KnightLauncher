@@ -159,7 +159,6 @@ public class Updater extends BaseGUI {
   }
 
   private static void initProcess() {
-    //wait(5);
     Thread processThread = new Thread(Updater::startProcess);
     processThread.start();
   }
@@ -227,7 +226,7 @@ public class Updater extends BaseGUI {
         try {
           FileUtils.copyURLToFile(
             new URL(downloadUrl),
-            new File(LauncherGlobals.USER_DIR + "\\KnightLauncher.zip"),
+            new File(LauncherGlobals.USER_DIR + "/KnightLauncher.zip"),
             0,
             0
           );
@@ -249,21 +248,10 @@ public class Updater extends BaseGUI {
   }
 
   private static void finishProcess() {
-    ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "\\KnightLauncher.jar"}, true);
+    ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/KnightLauncher.jar"}, true);
     updaterFrame.dispose();
     System.exit(1);
   }
 
-  public static void wait(int ms)
-  {
-    try
-    {
-      Thread.sleep(ms);
-    }
-    catch(InterruptedException ex)
-    {
-      Thread.currentThread().interrupt();
-    }
-  }
 }
 
