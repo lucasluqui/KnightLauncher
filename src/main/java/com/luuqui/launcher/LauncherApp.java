@@ -242,11 +242,17 @@ public class LauncherApp {
   }
 
   private void setupFileLogging() {
-    File logFile = new File("knightlauncher.log");
-    File oldLogFile = new File("old-knightlauncher.log");
+    File logFile = new File(LauncherGlobals.USER_DIR + File.separator + "knightlauncher.log");
+    File oldLogFile = new File(LauncherGlobals.USER_DIR + File.separator + "old-knightlauncher.log");
 
-    if (logFile.exists()) {
-      logFile.renameTo(oldLogFile);
+    // delete the current old log file if it exists.
+    if (FileUtil.fileExists(oldLogFile.getAbsolutePath())) {
+      FileUtil.deleteFile(oldLogFile.getAbsolutePath());
+    }
+
+    // rename the last log file to old.
+    if (FileUtil.fileExists(logFile.getAbsolutePath())) {
+      FileUtil.rename(logFile, oldLogFile);
     }
 
     try {
@@ -254,7 +260,7 @@ public class LauncherApp {
       System.setOut(printStream);
       System.setErr(printStream);
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error(e);
     }
 
     log.info("Knight Launcher started. Running version: " + LauncherGlobals.LAUNCHER_VERSION);
