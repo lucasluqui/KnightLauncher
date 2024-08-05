@@ -14,6 +14,9 @@ public class Locale {
   private static final Properties prop = new Properties();
   private static InputStream propStream = null;
 
+  private static final Properties propFallback = new Properties();
+  private static InputStream propFallbackStream = null;
+
   public static String[] AVAILABLE_LANGUAGES = {
           "English",
           "Arabic",
@@ -32,44 +35,90 @@ public class Locale {
 
   public static void setup() {
     propStream = Locale.class.getResourceAsStream("/lang/lang_" + Settings.lang + ".properties");
+    propFallbackStream = Locale.class.getResourceAsStream("/lang/lang_en.properties");
   }
 
   public static String getValue(String key) {
     String value = null;
+
+    // Look for this key's value on the selected language properties file.
     try {
       prop.load(propStream);
       value = prop.getProperty(key);
     } catch (IOException e) {
       log.error(e);
     }
-    if (value != null) return value.substring(1, value.length() - 1);
-    return key;
+
+    // The value is still null, we look on the fallback properties file instead (English).
+    if (value == null) {
+      try {
+        propFallback.load(propFallbackStream);
+        value = propFallback.getProperty(key);
+      } catch (IOException e) {
+        log.error(e);
+      }
+    }
+
+    // Is it still null? We return the key and that's it, otherwise the value we found.
+    return value == null ? key : value.substring(1, value.length() - 1);
   }
 
   public static String getValue(String key, String arg) {
     String value = null;
+
+    // Look for this key's value on the selected language properties file.
     try {
       prop.load(propStream);
       value = prop.getProperty(key);
+
+      // Format it.
       if (value != null) value = MessageFormat.format(prop.getProperty(key), arg);
     } catch (IOException e) {
       log.error(e);
     }
-    if (value != null) return value.substring(1, value.length() - 1);
-    return key;
+
+    // The value is still null, we look on the fallback properties file instead (English).
+    if (value == null) {
+      try {
+        propFallback.load(propFallbackStream);
+        value = propFallback.getProperty(key);
+        if (value != null) value = MessageFormat.format(propFallback.getProperty(key), arg);
+      } catch (IOException e) {
+        log.error(e);
+      }
+    }
+
+    // Is it still null? We return the key and that's it, otherwise the value we found.
+    return value == null ? key : value.substring(1, value.length() - 1);
   }
 
   public static String getValue(String key, String[] args) {
     String value = null;
+
+    // Look for this key's value on the selected language properties file.
     try {
       prop.load(propStream);
       value = prop.getProperty(key);
+
+      // Format it (multiple).
       if (value != null) value = MessageFormat.format(prop.getProperty(key), (Object[]) args);
     } catch (IOException e) {
       log.error(e);
     }
-    if (value != null) return value.substring(1, value.length() - 1);
-    return key;
+
+    // The value is still null, we look on the fallback properties file instead (English).
+    if (value == null) {
+      try {
+        propFallback.load(propFallbackStream);
+        value = propFallback.getProperty(key);
+        if (value != null) value = MessageFormat.format(propFallback.getProperty(key), (Object[]) args);
+      } catch (IOException e) {
+        log.error(e);
+      }
+    }
+
+    // Is it still null? We return the key and that's it, otherwise the value we found.
+    return value == null ? key : value.substring(1, value.length() - 1);
   }
 
   public static String getLangName(String code) {
