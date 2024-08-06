@@ -2,8 +2,8 @@ package com.luuqui.launcher;
 
 import com.luuqui.dialog.DialogError;
 import com.luuqui.dialog.DialogInfo;
-import com.luuqui.dialog.DialogWarning;
 import com.luuqui.discord.DiscordRPC;
+import com.luuqui.launcher.editor.EditorsGUI;
 import com.luuqui.launcher.mods.ModListGUI;
 import com.luuqui.launcher.settings.SettingsGUI;
 import com.luuqui.util.ColorUtil;
@@ -29,6 +29,7 @@ public class LauncherGUI extends BaseGUI {
   public static JButton bannerLinkButton;
   public static JTabbedPane layeredSettingsPane = new JTabbedPane();
   public static JPanel layeredModsPane = new JPanel();
+  public static JPanel layeredEditorsPane = new JPanel();
   public static JButton layeredReturnButton;
   public static JButton launchButton;
   public static JButton settingsButton;
@@ -182,6 +183,7 @@ public class LauncherGUI extends BaseGUI {
     settingsButton.addActionListener(action -> {
       mainPane.setVisible(false);
       layeredModsPane.setVisible(false);
+      layeredEditorsPane.setVisible(false);
 
       layeredSettingsPane = SettingsGUI.tabbedPane;
       layeredSettingsPane.setBounds(250, 75, 800, 550);
@@ -198,6 +200,7 @@ public class LauncherGUI extends BaseGUI {
       layeredReturnButton.addActionListener(l -> {
         layeredSettingsPane.setVisible(false);
         layeredModsPane.setVisible(false);
+        layeredEditorsPane.setVisible(false);
         mainPane.setVisible(true);
         layeredReturnButton.setVisible(false);
       });
@@ -221,6 +224,7 @@ public class LauncherGUI extends BaseGUI {
     modButton.addActionListener(action -> {
       mainPane.setVisible(false);
       layeredSettingsPane.setVisible(false);
+      layeredEditorsPane.setVisible(false);
 
       layeredModsPane = ModListGUI.modListPanel;
       layeredModsPane.setBounds(250, 75, 800, 550);
@@ -237,6 +241,7 @@ public class LauncherGUI extends BaseGUI {
       layeredReturnButton.addActionListener(l -> {
         layeredSettingsPane.setVisible(false);
         layeredModsPane.setVisible(false);
+        layeredEditorsPane.setVisible(false);
         mainPane.setVisible(true);
         layeredReturnButton.setVisible(false);
       });
@@ -258,14 +263,14 @@ public class LauncherGUI extends BaseGUI {
     editorsButton.setForeground(Color.WHITE);
     editorsButton.setToolTipText("Editors");
     editorsButton.addActionListener(action -> {
-      /*
       mainPane.setVisible(false);
       layeredSettingsPane.setVisible(false);
+      layeredModsPane.setVisible(false);
 
-      layeredModsPane = ModListGUI.modListPanel;
-      layeredModsPane.setBounds(250, 75, 800, 550);
-      launcherGUIFrame.add(layeredModsPane);
-      layeredModsPane.setVisible(true);
+      layeredEditorsPane = EditorsGUI.editorsPanel;
+      layeredEditorsPane.setBounds(250, 75, 800, 550);
+      launcherGUIFrame.add(layeredEditorsPane);
+      layeredEditorsPane.setVisible(true);
 
       layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
       layeredReturnButton.setBounds(255, 40, 25, 25);
@@ -277,14 +282,13 @@ public class LauncherGUI extends BaseGUI {
       layeredReturnButton.addActionListener(l -> {
         layeredSettingsPane.setVisible(false);
         layeredModsPane.setVisible(false);
+        layeredEditorsPane.setVisible(false);
         mainPane.setVisible(true);
         layeredReturnButton.setVisible(false);
       });
       launcherGUIFrame.add(layeredReturnButton);
-      */
     });
     sidePane.add(editorsButton);
-    editorsButton.setVisible(false);
 
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
     discordButton.setBounds(66, 465, 35, 35);

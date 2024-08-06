@@ -3,6 +3,7 @@ package com.luuqui.launcher;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.luuqui.dialog.DialogWarning;
 import com.luuqui.discord.DiscordRPC;
+import com.luuqui.launcher.editor.EditorsGUI;
 import com.luuqui.launcher.flamingo.Flamingo;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.flamingo.data.Status;
@@ -19,7 +20,6 @@ import net.sf.image4j.codec.ico.ICOEncoder;
 import org.json.JSONObject;
 
 import javax.swing.*;
-import javax.swing.text.Style;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -34,11 +34,14 @@ import static com.luuqui.launcher.Log.log;
 public class LauncherApp {
 
   private String[] _args = null;
+
   protected static LauncherGUI lgui;
   protected static SettingsGUI sgui;
   protected static ModListGUI mgui;
+  protected static EditorsGUI egui;
   protected static JVMPatcher jvmPatcher;
   protected static Updater updater;
+
   public static String projectXVersion = null;
   public static java.util.List<Server> serverList = new ArrayList<>();
   public static Server selectedServer = null;
@@ -57,6 +60,7 @@ public class LauncherApp {
       lgui = app.composeLauncherGUI(app);
       sgui = app.composeSettingsGUI(app);
       mgui = app.composeModListGUI(app);
+      egui = app.composeEditorsGUI(app);
       app.postInitialization();
     }
   }
@@ -109,6 +113,17 @@ public class LauncherApp {
       }
     });
     return mgui;
+  }
+
+  private EditorsGUI composeEditorsGUI(LauncherApp app) {
+    EventQueue.invokeLater(() -> {
+      try {
+        egui = new EditorsGUI(app);
+      } catch (Exception e) {
+        log.error(e);
+      }
+    });
+    return egui;
   }
 
   private JVMPatcher composeJVMPatcher(LauncherApp app) {

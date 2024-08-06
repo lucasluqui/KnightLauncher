@@ -263,6 +263,7 @@ public class LauncherEventHandler {
         LauncherGUI.serverInfoButton.setEnabled(false);
         LauncherGUI.serverInfoButton.setVisible(false);
         LauncherGUI.modButton.setEnabled(true);
+        LauncherGUI.editorsButton.setEnabled(true);
       } else {
         LauncherGUI.launchButton.setText("Play " + selectedServer.name);
         LauncherGUI.launchButton.setToolTipText("Play " + selectedServer.name);
@@ -276,6 +277,9 @@ public class LauncherEventHandler {
 
         // TODO: Modding support for third party servers.
         LauncherGUI.modButton.setEnabled(false);
+
+        // TODO: Editors support for third party servers.
+        LauncherGUI.editorsButton.setEnabled(false);
       }
       LauncherApp.selectedServer = selectedServer;
     } else {
