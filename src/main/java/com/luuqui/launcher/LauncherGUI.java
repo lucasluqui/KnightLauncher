@@ -545,4 +545,14 @@ public class LauncherGUI extends BaseGUI {
     image = ImageUtil.fadeEdges(image, intensity);
     return image;
   }
+
+  protected static void specialKeyPressed() {
+    launchButton.setBackground(CustomColors.LAUNCH_ALT);
+    launchButton.updateUI();
+  }
+
+  protected static void specialKeyReleased() {
+    launchButton.setBackground(CustomColors.LAUNCH);
+    launchButton.updateUI();
+  }
 }

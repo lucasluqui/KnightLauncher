@@ -15,22 +15,50 @@ public class KeyboardController {
 
         case KeyEvent.KEY_PRESSED:
           if (ke.getKeyCode() == KeyEvent.VK_SHIFT) {
-            shiftPressed = true;
+            shiftPressed();
+            specialKeyPressed();
           } else if (ke.getKeyCode() == KeyEvent.VK_ALT) {
-            altPressed = true;
+            altPressed();
+            specialKeyPressed();
           }
           break;
 
         case KeyEvent.KEY_RELEASED:
           if (ke.getKeyCode() == KeyEvent.VK_SHIFT) {
-            shiftPressed = false;
+            shiftReleased();
+            specialKeyReleased();
           } else if (ke.getKeyCode() == KeyEvent.VK_ALT) {
-            altPressed = false;
+            altReleased();
+            specialKeyReleased();
           }
           break;
       }
       return false;
     });
+  }
+
+  private static void specialKeyPressed() {
+    LauncherGUI.specialKeyPressed();
+  }
+
+  private static void specialKeyReleased() {
+    LauncherGUI.specialKeyReleased();
+  }
+
+  private static void shiftPressed() {
+    shiftPressed = true;
+  }
+
+  private static void shiftReleased() {
+    shiftPressed = false;
+  }
+
+  private static void altPressed() {
+    altPressed = true;
+  }
+
+  private static void altReleased() {
+    altPressed = false;
   }
 
   public static Boolean isShiftPressed() { return shiftPressed; }
