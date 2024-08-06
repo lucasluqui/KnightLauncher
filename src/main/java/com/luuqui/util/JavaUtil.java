@@ -5,7 +5,14 @@ import com.samskivert.util.Folds;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Properties;
 
 import static com.luuqui.launcher.settings.Log.log;
@@ -75,6 +82,50 @@ public class JavaUtil {
     }
     log.error("Cannot locate local java executable");
     return "java";
+  }
+
+  public static String getJavaVMCommandLineSeparator() {
+    return SystemUtil.isWindows() ? ";" : ":";
+  }
+
+  public static synchronized void loadLibrary(File jar) {
+    try {
+      // We are using reflection here to circumvent encapsulation; addURL is not public
+      URLClassLoader loader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+      URL url = jar.toURI().toURL();
+
+      // Disallow if already loaded
+      for (URL it : Arrays.asList(loader.getURLs())) {
+        if (it.equals(url)) {
+          return;
+        }
+      }
+
+      Method method = java.net.URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+      method.setAccessible(true);
+      method.invoke(loader, url);
+    } catch (final NoSuchMethodException |
+                   IllegalAccessException |
+                   MalformedURLException |
+                   InvocationTargetException e) {
+      log.error(e);
+    }
+  }
+
+  public static void addToLibraryPath(String... path) {
+    String cmdLineSeparator = getJavaVMCommandLineSeparator();
+
+    for(String p : path) {
+      System.setProperty("java.library.path", p + cmdLineSeparator + System.getProperty("java.library.path"));
+    }
+
+    try {
+      Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
+      fieldSysPath.setAccessible(true);
+      fieldSysPath.set(null, null);
+    } catch (Exception e) {
+      log.error(e);
+    }
   }
 
 }
