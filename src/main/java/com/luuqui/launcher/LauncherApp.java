@@ -231,6 +231,7 @@ public class LauncherApp {
       log.error(e);
     }
 
+    UIManager.put("TabbedPane.underlineColor", CustomColors.KL);
     UIManager.put("TabbedPane.inactiveUnderlineColor", CustomColors.KL);
     UIManager.put("Slider.thumbColor", CustomColors.KL);
   }
