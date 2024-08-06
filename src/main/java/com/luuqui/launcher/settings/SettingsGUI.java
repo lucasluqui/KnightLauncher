@@ -495,12 +495,12 @@ public class SettingsGUI extends BaseGUI {
     JLabel betaCodeLabel = new JLabel("Activate a Beta code");
     betaCodeLabel.setHorizontalAlignment(SwingConstants.LEFT);
     betaCodeLabel.setBounds(25, 70, 450, 50);
-    betaCodeLabel.setFont(Fonts.fontReg);
+    betaCodeLabel.setFont(Fonts.fontRegBig);
     betasPanel.add(betaCodeLabel);
 
     betaCodeTextField = new JTextField();
     betaCodeTextField.setFont(Fonts.fontCodeReg);
-    betaCodeTextField.setBounds(25, 105, 250, 25);
+    betaCodeTextField.setBounds(25, 110, 250, 25);
     betasPanel.add(betaCodeTextField);
 
     JLabel betaCodeResultLabel = new JLabel("");
@@ -515,7 +515,7 @@ public class SettingsGUI extends BaseGUI {
     betaCodeButton.setFocusPainted(false);
     betaCodeButton.setFocusable(false);
     betaCodeButton.setToolTipText("Activate");
-    betaCodeButton.setBounds(295, 105, 100, 25);
+    betaCodeButton.setBounds(290, 110, 100, 25);
     betasPanel.add(betaCodeButton);
     betaCodeButton.addActionListener(action -> {
       int result = SettingsEventHandler.activateBetaCode(betaCodeTextField.getText());
@@ -553,34 +553,34 @@ public class SettingsGUI extends BaseGUI {
 
     argumentsPane = new JEditorPane();
     argumentsPane.setFont(Fonts.fontCodeReg);
-    argumentsPane.setBounds(25, 125, 615, 100);
+    argumentsPane.setBounds(25, 117, 615, 100);
     advancedPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
 
     JScrollPane scrollBar = new JScrollPane(argumentsPane);
     scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollBar.setBounds(25, 125, 632, 100);
+    scrollBar.setBounds(25, 117, 632, 100);
     advancedPanel.add(scrollBar);
 
     JSeparator sep = new JSeparator();
-    sep.setBounds(25, 245, 600, 16);
+    sep.setBounds(25, 237, 600, 16);
     advancedPanel.add(sep);
 
     JLabel labelConnectionSettings = new JLabel("Connection Settings");
-    labelConnectionSettings.setBounds(25, 260, 600, 18);
+    labelConnectionSettings.setBounds(25, 254, 600, 18);
     labelConnectionSettings.setFont(Fonts.fontRegBig);
     advancedPanel.add(labelConnectionSettings);
 
     JLabel serverAddressLabel = new JLabel("Server Address");
     serverAddressLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    serverAddressLabel.setBounds(25, 275, 450, 50);
+    serverAddressLabel.setBounds(25, 269, 450, 50);
     serverAddressLabel.setFont(Fonts.fontReg);
     advancedPanel.add(serverAddressLabel);
 
     serverAddressTextField = new JTextField();
     serverAddressTextField.setFont(Fonts.fontCodeReg);
-    serverAddressTextField.setBounds(25, 310, 250, 25);
+    serverAddressTextField.setBounds(25, 304, 250, 25);
     serverAddressTextField.addActionListener(e -> {
       SettingsEventHandler.saveConnectionSettings();
     });
@@ -589,25 +589,25 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel portLabel = new JLabel("Port");
     portLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    portLabel.setBounds(280, 275, 450, 50);
+    portLabel.setBounds(280, 269, 450, 50);
     portLabel.setFont(Fonts.fontReg);
     advancedPanel.add(portLabel);
 
     portTextField = new JTextField();
     portTextField.setFont(Fonts.fontCodeReg);
-    portTextField.setBounds(280, 310, 55, 25);
+    portTextField.setBounds(280, 304, 55, 25);
     advancedPanel.add(portTextField);
     portTextField.setText(String.valueOf(Settings.gamePort));
 
     JLabel publicKeyLabel = new JLabel("Public Key");
     publicKeyLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    publicKeyLabel.setBounds(25, 330, 450, 50);
+    publicKeyLabel.setBounds(25, 324, 450, 50);
     publicKeyLabel.setFont(Fonts.fontReg);
     advancedPanel.add(publicKeyLabel);
 
     publicKeyTextField = new JTextField();
     publicKeyTextField.setFont(Fonts.fontCodeReg);
-    publicKeyTextField.setBounds(25, 365, 355, 30);
+    publicKeyTextField.setBounds(25, 359, 355, 30);
 
     JScrollBar publicKeyScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
     JPanel publicKeyPanel = new JPanel();
@@ -616,20 +616,20 @@ public class SettingsGUI extends BaseGUI {
     publicKeyScrollBar.setModel(publicKeyBRM);
     publicKeyPanel.add(publicKeyTextField);
     publicKeyPanel.add(publicKeyScrollBar);
-    publicKeyPanel.setBounds(25, 365, 355, 30);
+    publicKeyPanel.setBounds(25, 359, 355, 30);
 
     advancedPanel.add(publicKeyPanel);
     publicKeyTextField.setText(Settings.gamePublicKey);
 
     JLabel getdownURLLabel = new JLabel("Getdown URL");
     getdownURLLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    getdownURLLabel.setBounds(25, 385, 450, 50);
+    getdownURLLabel.setBounds(25, 379, 450, 50);
     getdownURLLabel.setFont(Fonts.fontReg);
     advancedPanel.add(getdownURLLabel);
 
     getdownURLTextField = new JTextField();
     getdownURLTextField.setFont(Fonts.fontCodeReg);
-    getdownURLTextField.setBounds(25, 420, 355, 30);
+    getdownURLTextField.setBounds(25, 414, 355, 30);
 
     JScrollBar getdownURLScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
     JPanel getdownURLPanel = new JPanel();
@@ -638,14 +638,14 @@ public class SettingsGUI extends BaseGUI {
     getdownURLScrollBar.setModel(getdownURLBRM);
     getdownURLPanel.add(getdownURLTextField);
     getdownURLPanel.add(getdownURLScrollBar);
-    getdownURLPanel.setBounds(25, 420, 355, 30);
+    getdownURLPanel.setBounds(25, 414, 355, 30);
 
     advancedPanel.add(getdownURLPanel);
     getdownURLTextField.setText(Settings.gameGetdownFullURL);
 
     JButton resetButton = new JButton("Reset values to default");
     resetButton.setFont(Fonts.fontMed);
-    resetButton.setBounds(400, 420, 180, 23);
+    resetButton.setBounds(400, 414, 180, 23);
     resetButton.setFocusPainted(false);
     resetButton.setFocusable(false);
     resetButton.setToolTipText("Reset values to default");

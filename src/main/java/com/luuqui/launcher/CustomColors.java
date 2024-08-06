@@ -28,5 +28,6 @@ public class CustomColors {
   public static final Color INTERFACE_MODLIST_BACKGROUND_DARK   = new Color(34, 36, 43);
   public static final Color INTERFACE_DEFAULT                   = new Color(179, 179, 180);
   public static final Color INTERFACE_DEFAULT_FOCUS             = new Color(97, 99, 101);
+  public static final Color INTERFACE_COMPONENT_FOCUS           = new Color(140, 140, 140);
 
 }
