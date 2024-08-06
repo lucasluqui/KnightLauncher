@@ -32,6 +32,7 @@ public class LauncherGUI extends BaseGUI {
   public static JButton launchButton;
   public static JButton settingsButton;
   public static JButton modButton;
+  public static JButton editorsButton;
   public static JButton updateButton;
   public static JTextPane tweetsContainer;
   public static JLabel launchState;
@@ -148,7 +149,7 @@ public class LauncherGUI extends BaseGUI {
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
     settingsButton = new JButton(Locale.getValue("b.settings"));
     settingsButton.setIcon(settingsIcon);
-    settingsButton.setBounds(28, 320, 125, 35);
+    settingsButton.setBounds(28, 300, 125, 35);
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
     settingsButton.setFont(Fonts.fontMed);
     settingsButton.setFocusPainted(false);
@@ -186,7 +187,7 @@ public class LauncherGUI extends BaseGUI {
     Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, 16, ColorUtil.getForegroundColor());
     modButton = new JButton(Locale.getValue("b.mods"));
     modButton.setIcon(modsIcon);
-    modButton.setBounds(28, 360, 125, 35);
+    modButton.setBounds(28, 340, 125, 35);
     modButton.setHorizontalAlignment(SwingConstants.LEFT);
     modButton.setFont(Fonts.fontMed);
     modButton.setFocusPainted(false);
@@ -222,6 +223,48 @@ public class LauncherGUI extends BaseGUI {
     });
     sidePane.add(modButton);
 
+    Icon editorsIcon = IconFontSwing.buildIcon(FontAwesome.PENCIL, 16, ColorUtil.getForegroundColor());
+    editorsButton = new JButton("Editors");
+    editorsButton.setIcon(editorsIcon);
+    editorsButton.setBounds(28, 380, 125, 35);
+    editorsButton.setHorizontalAlignment(SwingConstants.LEFT);
+    editorsButton.setFont(Fonts.fontMed);
+    editorsButton.setFocusPainted(false);
+    editorsButton.setFocusable(false);
+    editorsButton.setBorderPainted(false);
+    editorsButton.setEnabled(true);
+    editorsButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
+    editorsButton.setForeground(Color.WHITE);
+    editorsButton.setToolTipText("Editors");
+    editorsButton.addActionListener(action -> {
+      /*
+      mainPane.setVisible(false);
+      layeredSettingsPane.setVisible(false);
+
+      layeredModsPane = ModListGUI.modListPanel;
+      layeredModsPane.setBounds(250, 75, 800, 550);
+      launcherGUIFrame.add(layeredModsPane);
+      layeredModsPane.setVisible(true);
+
+      layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
+      layeredReturnButton.setBounds(255, 40, 25, 25);
+      layeredReturnButton.setVisible(true);
+      layeredReturnButton.setFocusable(false);
+      layeredReturnButton.setFocusPainted(false);
+      layeredReturnButton.setBorder(null);
+      layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+      layeredReturnButton.addActionListener(l -> {
+        layeredSettingsPane.setVisible(false);
+        layeredModsPane.setVisible(false);
+        mainPane.setVisible(true);
+        layeredReturnButton.setVisible(false);
+      });
+      launcherGUIFrame.add(layeredReturnButton);
+      */
+    });
+    sidePane.add(editorsButton);
+    editorsButton.setVisible(false);
+
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
     discordButton.setBounds(66, 465, 35, 35);
     discordButton.setToolTipText("Discord");
@@ -235,7 +278,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, Color.WHITE);
     JButton bugButton = new JButton(bugIcon);
-    bugButton.setBounds(106, 465, 35, 35);
+    bugButton.setBounds(107, 465, 35, 35);
     bugButton.setToolTipText(Locale.getValue("b.bug_report"));
     bugButton.setFocusPainted(false);
     bugButton.setFocusable(false);
@@ -247,7 +290,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.PAYPAL, 16, Color.WHITE);
     JButton kofiButton = new JButton(kofiIcon);
-    kofiButton.setBounds(146, 465, 35, 35);
+    kofiButton.setBounds(148, 465, 35, 35);
     kofiButton.setToolTipText(Locale.getValue("b.kofi"));
     kofiButton.setFocusPainted(false);
     kofiButton.setFocusable(false);
