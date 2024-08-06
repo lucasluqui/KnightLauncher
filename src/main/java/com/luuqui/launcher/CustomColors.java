@@ -26,5 +26,6 @@ public class CustomColors {
   public static final Color INTERFACE_MAINPANE_BUTTON           = new Color(INTERFACE_MAINPANE_BACKGROUND.getRed(), INTERFACE_MAINPANE_BACKGROUND.getGreen(), INTERFACE_MAINPANE_BACKGROUND.getBlue(), 150);
   public static final Color INTERFACE_MODLIST_BACKGROUND_LIGHT  = new Color(45, 48, 57);
   public static final Color INTERFACE_MODLIST_BACKGROUND_DARK   = new Color(34, 36, 43);
+  public static final Color INTERFACE_DEFAULT_FOCUS             = new Color(97, 99, 101);
 
 }

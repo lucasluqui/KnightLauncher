@@ -19,6 +19,7 @@ import net.sf.image4j.codec.ico.ICOEncoder;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import javax.swing.text.Style;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -231,9 +232,7 @@ public class LauncherApp {
       log.error(e);
     }
 
-    UIManager.put("TabbedPane.underlineColor", CustomColors.KL);
-    UIManager.put("TabbedPane.inactiveUnderlineColor", CustomColors.KL);
-    UIManager.put("Slider.thumbColor", CustomColors.KL);
+    Stylesheet.load();
   }
 
   private void setupHTTPSProtocol() {
