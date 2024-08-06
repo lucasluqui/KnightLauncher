@@ -193,7 +193,7 @@ public class LauncherEventHandler {
   public static void updateServerList(List<Server> servers) {
     LauncherApp.serverList.clear();
     Server official = new Server("Official");
-    official.playerCountUrl = LauncherApp.getSteamPlayerCountString();
+    official.playerCountUrl = "Players online: ~" + LauncherApp.getOfficialAproxPlayerCount();
     LauncherApp.serverList.add(official);
 
     for(Server server : servers) {
@@ -259,6 +259,7 @@ public class LauncherEventHandler {
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
         LauncherGUI.playerCountLabel.setText(selectedServer.playerCountUrl);
         LauncherGUI.playerCountLabel.setVisible(true);
+        LauncherGUI.playerCountTooltipButton.setVisible(true);
         LauncherGUI.serverInfoButton.setEnabled(false);
         LauncherGUI.serverInfoButton.setVisible(false);
         LauncherGUI.modButton.setEnabled(true);
@@ -268,6 +269,7 @@ public class LauncherEventHandler {
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
         LauncherGUI.serverInfoButton.setEnabled(true);
         LauncherGUI.serverInfoButton.setVisible(true);
+        LauncherGUI.playerCountTooltipButton.setVisible(false);
 
         // TODO: Fetch player count.
         LauncherGUI.playerCountLabel.setVisible(false);

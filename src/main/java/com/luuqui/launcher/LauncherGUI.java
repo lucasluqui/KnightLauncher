@@ -1,6 +1,7 @@
 package com.luuqui.launcher;
 
 import com.luuqui.dialog.DialogError;
+import com.luuqui.dialog.DialogInfo;
 import com.luuqui.dialog.DialogWarning;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.mods.ModListGUI;
@@ -34,6 +35,7 @@ public class LauncherGUI extends BaseGUI {
   public static JButton modButton;
   public static JButton editorsButton;
   public static JButton updateButton;
+  public static JButton playerCountTooltipButton;
   public static JTextPane tweetsContainer;
   public static JLabel launchState;
   public static JProgressBar launchProgressBar;
@@ -140,11 +142,30 @@ public class LauncherGUI extends BaseGUI {
     serverInfoButton.addActionListener(l -> LauncherEventHandler.displaySelectedServerInfo());
     sidePane.add(serverInfoButton);
 
+    Icon playerCountIcon = IconFontSwing.buildIcon(FontAwesome.USERS, 14, CustomColors.INTERFACE_DEFAULT);
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
     playerCountLabel.setFont(Fonts.fontReg);
-    playerCountLabel.setForeground(CustomColors.PLAYER_COUNT);
+    playerCountLabel.setIcon(playerCountIcon);
     playerCountLabel.setBounds(28, 235, 200, 18);
     sidePane.add(playerCountLabel);
+
+    String playerCountTooltipTitle = "Where does this player count come from?";
+    String playerCountTooltipText = "This player count is an approximation based on the currently online Steam players. The approximation is the Steam value increased by 1.6x to account for Standalone users.";
+    Icon playerCountTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 12, Color.WHITE);
+    playerCountTooltipButton = new JButton();
+    playerCountTooltipButton.setIcon(playerCountTooltipButtonIcon);
+    playerCountTooltipButton.setBounds(167, 238, 13, 13);
+    playerCountTooltipButton.setEnabled(true);
+    playerCountTooltipButton.setFocusable(false);
+    playerCountTooltipButton.setFocusPainted(false);
+    playerCountTooltipButton.setBorderPainted(false);
+    playerCountTooltipButton.setForeground(Color.WHITE);
+    playerCountTooltipButton.setToolTipText(playerCountTooltipTitle);
+    playerCountTooltipButton.addActionListener(l -> {
+      DialogInfo.push(playerCountTooltipText, playerCountTooltipTitle);
+    });
+    sidePane.add(playerCountTooltipButton);
+    playerCountTooltipButton.setVisible(false);
 
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
     settingsButton = new JButton(Locale.getValue("b.settings"));
@@ -348,6 +369,7 @@ public class LauncherGUI extends BaseGUI {
       }
     });
 
+    String launchTooltipTitle = "Launching alt accounts";
     String launchTooltipText = "Keep ALT or SHIFT pressed while launching to launch in alt account mode and save computing resources for your main instance.";
     Icon launchTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 16, Color.WHITE);
     JButton launchTooltipButton = new JButton();
@@ -359,9 +381,9 @@ public class LauncherGUI extends BaseGUI {
     launchTooltipButton.setBorderPainted(false);
     launchTooltipButton.setBackground(CustomColors.INTERFACE_MAINPANE_BUTTON);
     launchTooltipButton.setForeground(Color.WHITE);
-    launchTooltipButton.setToolTipText(launchTooltipText);
+    launchTooltipButton.setToolTipText(launchTooltipTitle);
     launchTooltipButton.addActionListener(l -> {
-      DialogWarning.push(launchTooltipText);
+      DialogInfo.push(launchTooltipText, launchTooltipTitle);
     });
     mainPane.add(launchTooltipButton);
 

@@ -345,15 +345,12 @@ public class LauncherApp {
     }
   }
 
-  protected static String getSteamPlayerCountString() {
+  protected static int getOfficialAproxPlayerCount() {
     int steamPlayers = SteamUtil.getCurrentPlayers("99900");
     if (steamPlayers == 0) {
-      return Locale.getValue("error.get_player_count");
+      return 0;
     } else {
-      int approximateTotalPlayers = Math.round(steamPlayers * 1.6f);
-      return Locale.getValue("m.player_count", new String[]{
-        String.valueOf(approximateTotalPlayers), String.valueOf(steamPlayers)
-      });
+      return Math.round(steamPlayers * 1.6f);
     }
   }
 
