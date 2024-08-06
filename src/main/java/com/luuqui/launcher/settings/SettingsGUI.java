@@ -68,13 +68,14 @@ public class SettingsGUI extends BaseGUI {
     tabbedPane.setFont(Fonts.fontMedBig);
     tabbedPane.setTabPlacement(JTabbedPane.LEFT);
     tabbedPane.setFocusable(false);
+    tabbedPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+
     tabbedPane.addTab(Locale.getValue("tab.launcher"), createLauncherPanel());
     tabbedPane.addTab(Locale.getValue("tab.game"), createGamePanel());
     tabbedPane.addTab(Locale.getValue("tab.betas"), createBetasPanel());
-    //tabbedPane.addTab(Locale.getValue("tab.spiralview"), createSpiralviewPanel());
     tabbedPane.addTab(Locale.getValue("tab.advanced"), createAdvancedPanel());
     tabbedPane.addTab(Locale.getValue("tab.about"), createAboutPanel());
-    tabbedPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+
     settingsGUIFrame.getContentPane().add(tabbedPane);
 
     JPanel titleBar = new JPanel();
@@ -534,28 +535,6 @@ public class SettingsGUI extends BaseGUI {
     return betasPanel;
   }
 
-  protected JPanel createSpiralviewPanel() {
-    JPanel spiralviewPanel = new JPanel();
-    spiralviewPanel.setLayout(null);
-    spiralviewPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-
-    JLabel headerLabel = new JLabel(Locale.getValue("tab.spiralview"));
-    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    headerLabel.setBounds(25, 11, 450, 50);
-    headerLabel.setFont(Fonts.fontMedGiant);
-    spiralviewPanel.add(headerLabel);
-
-    JButton modelEditorButton = new JButton("Start Model Viewer");
-    modelEditorButton.setFont(Fonts.fontMed);
-    modelEditorButton.setBounds(400, 215, 180, 23);
-    modelEditorButton.setFocusPainted(false);
-    modelEditorButton.setFocusable(false);
-    spiralviewPanel.add(modelEditorButton);
-    //modelEditorButton.addActionListener(action -> SettingsEventHandler.startModelViewer(action));
-
-    return spiralviewPanel;
-  }
-
   protected JPanel createAdvancedPanel() {
     JPanel advancedPanel = new JPanel();
     advancedPanel.setLayout(null);
@@ -568,7 +547,7 @@ public class SettingsGUI extends BaseGUI {
     advancedPanel.add(headerLabel);
 
     JLabel labelArguments = new JLabel(Locale.getValue("m.extratxt_write_arguments") + " (Extra.txt)");
-    labelArguments.setBounds(25, 90, 600, 18);
+    labelArguments.setBounds(25, 90, 600, 20);
     labelArguments.setFont(Fonts.fontRegBig);
     advancedPanel.add(labelArguments);
 
@@ -693,17 +672,17 @@ public class SettingsGUI extends BaseGUI {
     aboutPanel.add(headerLabel);
 
     labelFlamingoStatus = new JLabel("Flamingo status: Offline");
-    labelFlamingoStatus.setBounds(25, 90, 600, 18);
+    labelFlamingoStatus.setBounds(25, 90, 600, 20);
     labelFlamingoStatus.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoStatus);
 
     labelFlamingoVersion = new JLabel("Flamingo version: N/A");
-    labelFlamingoVersion.setBounds(25, 110, 600, 18);
+    labelFlamingoVersion.setBounds(25, 110, 600, 20);
     labelFlamingoVersion.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoVersion);
 
     labelFlamingoUptime = new JLabel("Flamingo uptime: N/A");
-    labelFlamingoUptime.setBounds(25, 130, 600, 18);
+    labelFlamingoUptime.setBounds(25, 130, 600, 20);
     labelFlamingoUptime.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoUptime);
 
@@ -718,26 +697,6 @@ public class SettingsGUI extends BaseGUI {
       SettingsEventHandler.copyLogsEvent(l);
       DialogInfo.push("Logs copied to clipboard.");
     });
-
-    /*
-    JButton copyLauncherLogButton = new JButton("Copy knightlauncher.log to clipboard");
-    copyLauncherLogButton.setFont(Fonts.fontMed);
-    copyLauncherLogButton.setBounds(25, 160, 270, 23);
-    copyLauncherLogButton.setFocusPainted(false);
-    copyLauncherLogButton.setFocusable(false);
-    copyLauncherLogButton.setToolTipText("Copy knightlauncher.log to clipboard");
-    aboutPanel.add(copyLauncherLogButton);
-    copyLauncherLogButton.addActionListener(SettingsEventHandler::copyLauncherLogEvent);
-
-    JButton copyGameLogButton = new JButton("Copy game logs to clipboard");
-    copyGameLogButton.setFont(Fonts.fontMed);
-    copyGameLogButton.setBounds(25, 190, 270, 23);
-    copyGameLogButton.setFocusPainted(false);
-    copyGameLogButton.setFocusable(false);
-    copyGameLogButton.setToolTipText("Copy game logs to clipboard");
-    aboutPanel.add(copyGameLogButton);
-    copyGameLogButton.addActionListener(SettingsEventHandler::copyGameLogEvent);
-    */
 
     return aboutPanel;
   }
