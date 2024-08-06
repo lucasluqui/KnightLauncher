@@ -261,6 +261,7 @@ public class LauncherEventHandler {
         LauncherGUI.playerCountLabel.setVisible(true);
         LauncherGUI.serverInfoButton.setEnabled(false);
         LauncherGUI.serverInfoButton.setVisible(false);
+        LauncherGUI.modButton.setEnabled(true);
       } else {
         LauncherGUI.launchButton.setText("Play " + selectedServer.name);
         LauncherGUI.launchButton.setToolTipText("Play " + selectedServer.name);
@@ -270,6 +271,9 @@ public class LauncherEventHandler {
 
         // TODO: Fetch player count.
         LauncherGUI.playerCountLabel.setVisible(false);
+
+        // TODO: Modding support for third party servers.
+        LauncherGUI.modButton.setEnabled(false);
       }
       LauncherApp.selectedServer = selectedServer;
     } else {
