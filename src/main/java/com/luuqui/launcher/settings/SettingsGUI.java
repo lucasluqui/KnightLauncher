@@ -243,6 +243,27 @@ public class SettingsGUI extends BaseGUI {
     switchShortcut.setSelected(Settings.createShortcut);
     switchShortcut.addActionListener(SettingsEventHandler::createShortcutChangeEvent);
 
+    JSeparator sepAutoUpdate = new JSeparator();
+    sepAutoUpdate.setBounds(25, 320, 600, 16);
+    launcherPanel.add(sepAutoUpdate);
+
+    JLabel labelAutoUpdate = new JLabel("Auto-update");
+    labelAutoUpdate.setBounds(25, 335, 350, 20);
+    labelAutoUpdate.setFont(Fonts.fontRegBig);
+    launcherPanel.add(labelAutoUpdate);
+
+    JLabel labelAutoUpdateExplained = new JLabel("Automatically download and apply launcher updates when they're available.");
+    labelAutoUpdateExplained.setBounds(25, 355, 600, 16);
+    labelAutoUpdateExplained.setFont(Fonts.fontReg);
+    launcherPanel.add(labelAutoUpdateExplained);
+
+    switchAutoUpdate = new JCheckBox("");
+    switchAutoUpdate.setBounds(590, 340, 30, 23);
+    switchAutoUpdate.setFocusPainted(false);
+    launcherPanel.add(switchAutoUpdate);
+    switchAutoUpdate.setSelected(Settings.autoUpdate);
+    switchAutoUpdate.addActionListener(SettingsEventHandler::autoUpdateChangeEvent);
+
     if(SystemUtil.isWindows() && SystemUtil.is64Bit()) {
       JSeparator sepDiscord = new JSeparator();
       sepDiscord.setBounds(25, 385, 600, 16);
@@ -265,27 +286,6 @@ public class SettingsGUI extends BaseGUI {
       switchUseIngameRPC.setSelected(Settings.useIngameRPC);
       switchUseIngameRPC.addActionListener(SettingsEventHandler::ingameRPCChangeEvent);
     }
-
-    JSeparator sepAutoUpdate = new JSeparator();
-    sepAutoUpdate.setBounds(25, 320, 600, 16);
-    launcherPanel.add(sepAutoUpdate);
-
-    JLabel labelAutoUpdate = new JLabel("Auto-update");
-    labelAutoUpdate.setBounds(25, 335, 350, 20);
-    labelAutoUpdate.setFont(Fonts.fontRegBig);
-    launcherPanel.add(labelAutoUpdate);
-
-    JLabel labelAutoUpdateExplained = new JLabel("Automatically download and apply launcher updates when they're available.");
-    labelAutoUpdateExplained.setBounds(25, 355, 600, 16);
-    labelAutoUpdateExplained.setFont(Fonts.fontReg);
-    launcherPanel.add(labelAutoUpdateExplained);
-
-    switchAutoUpdate = new JCheckBox("");
-    switchAutoUpdate.setBounds(590, 340, 30, 23);
-    switchAutoUpdate.setFocusPainted(false);
-    launcherPanel.add(switchAutoUpdate);
-    switchAutoUpdate.setSelected(Settings.autoUpdate);
-    switchAutoUpdate.addActionListener(SettingsEventHandler::autoUpdateChangeEvent);
 
     return launcherPanel;
   }
