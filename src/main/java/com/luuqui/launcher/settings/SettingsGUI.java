@@ -494,18 +494,18 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel betaCodeLabel = new JLabel("Activate a Beta code");
     betaCodeLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    betaCodeLabel.setBounds(25, 70, 450, 50);
+    betaCodeLabel.setBounds(25, 72, 450, 50);
     betaCodeLabel.setFont(Fonts.fontRegBig);
     betasPanel.add(betaCodeLabel);
 
     betaCodeTextField = new JTextField();
     betaCodeTextField.setFont(Fonts.fontCodeReg);
-    betaCodeTextField.setBounds(25, 110, 250, 25);
+    betaCodeTextField.setBounds(25, 112, 250, 25);
     betasPanel.add(betaCodeTextField);
 
     JLabel betaCodeResultLabel = new JLabel("");
     betaCodeResultLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    betaCodeResultLabel.setBounds(25, 125, 450, 50);
+    betaCodeResultLabel.setBounds(25, 127, 450, 50);
     betaCodeResultLabel.setFont(Fonts.fontReg);
     betaCodeResultLabel.setVisible(false);
     betasPanel.add(betaCodeResultLabel);
@@ -515,7 +515,7 @@ public class SettingsGUI extends BaseGUI {
     betaCodeButton.setFocusPainted(false);
     betaCodeButton.setFocusable(false);
     betaCodeButton.setToolTipText("Activate");
-    betaCodeButton.setBounds(290, 110, 100, 25);
+    betaCodeButton.setBounds(290, 112, 100, 25);
     betasPanel.add(betaCodeButton);
     betaCodeButton.addActionListener(action -> {
       int result = SettingsEventHandler.activateBetaCode(betaCodeTextField.getText());
