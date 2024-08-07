@@ -39,7 +39,7 @@ public class LauncherGUI extends BaseGUI {
   public static JButton playerCountTooltipButton;
   public static JTextPane tweetsContainer;
   public static JLabel launchState;
-  public static JProgressBar launchProgressBar;
+  public static JProgressBar launchProgressBar = new JProgressBar();
   public static JLabel imageContainer;
   public static JLabel playerCountLabel;
   public static JComboBox serverList;
@@ -151,7 +151,9 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(playerCountLabel);
 
     String playerCountTooltipTitle = "Where does this player count come from?";
-    String playerCountTooltipText = "This player count is an approximation based on the currently online Steam players. The approximation is the Steam value increased by 1.6x to account for Standalone users.";
+    String playerCountTooltipText = "This player count is an approximation based on the currently online Steam players. " +
+      "The approximation is the Steam value increased by 1.6x to account for Standalone users." +
+      "\n\nIf this number is ever 0 it's likely Steam is temporarily down for maintenance, it will be back up momentarily.";
     Icon playerCountTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 12, Color.WHITE);
     playerCountTooltipButton = new JButton();
     playerCountTooltipButton.setIcon(playerCountTooltipButtonIcon);

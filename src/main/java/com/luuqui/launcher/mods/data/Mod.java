@@ -79,6 +79,7 @@ public abstract class Mod {
 
   public abstract void mount();
   public abstract void wasAdded();
+  public abstract String getAbsolutePath();
 
   @Override
   public String toString() {

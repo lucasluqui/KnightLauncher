@@ -28,6 +28,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -322,36 +324,37 @@ public class LauncherApp {
 
   private void postInitialization() {
     ModLoader.checkInstalled();
-    if (Settings.useIngameRPC) ModuleLoader.loadIngameRPC();
     if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
       ModLoader.extractSafeguard();
     }
 
-    ModuleLoader.loadJarCommandLine();
+    //if (ModLoader.mountRequired) new Thread(ModLoader::mount).start();
+
+    ModuleLoader.loadModules();
 
     DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
     loadOnlineAssets();
   }
 
   private void loadOnlineAssets() {
-    Thread onlineAssetsThread = new Thread(() -> {
+    new Thread(() -> {
 
       checkVersion();
       getProjectXVersion();
 
-    });
+    }).start();
 
-    Thread flamingoThread = new Thread(() -> {
+    new Thread(() -> {
 
       LauncherEventHandler.updateServerList(Flamingo.getServerList());
       Status flamingoStatus = Flamingo.getStatus();
       SettingsEventHandler.updateAboutTab(flamingoStatus);
       if(flamingoStatus.version != null) LauncherApp.flamingoOnline = true;
 
-    });
+    }).start();
 
-    onlineAssetsThread.start();
-    flamingoThread.start();
+    final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+    executor.schedule(this::checkFlamingoStatus, 10, TimeUnit.SECONDS);
   }
 
   private void checkFlamingoStatus() {

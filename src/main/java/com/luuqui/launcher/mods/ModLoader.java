@@ -17,7 +17,6 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -79,6 +78,8 @@ public class ModLoader {
       modList.add(mod);
       mod.wasAdded();
 
+      /*
+
       // Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
       String hash = Compressor.getZipHash(file.getAbsolutePath());
       String hashFilePath = file.getAbsolutePath() + ".hash";
@@ -106,13 +107,16 @@ public class ModLoader {
         rebuildRequired = true;
         mountRequired = true;
       }
+
+      */
     }
+
     // Finally lets see which have been set as disabled.
     parseDisabledMods();
 
     // Check if there's a new or removed mod since last execution, rebuild will be needed in that case.
-    if (Integer.parseInt(SettingsProperties.getValue("modloader.appliedModsHash")) != getEnableModsHash()) {
-      log.info("Hashcode doesn't match, preparing for remount...");
+    if (Integer.parseInt(SettingsProperties.getValue("modloader.appliedModsHash")) != getEnabledModsHash()) {
+      log.info("Hashcode doesn't match, preparing for rebuild and remount...");
       rebuildRequired = true;
       mountRequired = true;
     }
@@ -120,23 +124,28 @@ public class ModLoader {
   }
 
   public static void mount() {
+    if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
 
     LauncherGUI.launchButton.setEnabled(false);
-    if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
+    LauncherGUI.settingsButton.setEnabled(false);
+    LauncherGUI.modButton.setEnabled(false);
+
     ProgressBar.startTask();
     ProgressBar.setBarMax(getEnabledModCount() + 1);
     ProgressBar.setState(Locale.getValue("m.mount"));
     DiscordRPC.getInstance().setDetails(Locale.getValue("m.mount"));
     LinkedList<Mod> localList = getModList();
-    Set<String> hashSet = new HashSet<String>();
+    Set<Long> hashSet = new HashSet<>();
 
     for (int i = 0; i < getModCount(); i++) {
       if(localList.get(i).isEnabled()) {
         localList.get(i).mount();
-        hashSet.add(localList.get(i).getFileName() + localList.get(i).getVersion());
+        long lastModified = new File(localList.get(i).getAbsolutePath()).lastModified();
+        hashSet.add(lastModified);
         ProgressBar.setBarValue(i + 1);
       }
     }
+
     SettingsProperties.setValue("modloader.appliedModsHash", Integer.toString(hashSet.hashCode()));
 
     // Make sure no cheat mod slips in.
@@ -148,7 +157,10 @@ public class ModLoader {
     mountRequired = false;
     ProgressBar.finishTask();
     LauncherDigester.doDigest();
+
     LauncherGUI.launchButton.setEnabled(true);
+    LauncherGUI.settingsButton.setEnabled(true);
+    LauncherGUI.modButton.setEnabled(true);
   }
 
   public static void startFileRebuild() {
@@ -159,7 +171,7 @@ public class ModLoader {
     try {
       LauncherGUI.launchButton.setEnabled(false);
       LauncherGUI.settingsButton.setEnabled(false);
-      SettingsGUI.forceRebuildButton.setEnabled(false);
+      LauncherGUI.modButton.setEnabled(false);
     } catch (Exception ignored) {}
 
 
@@ -192,7 +204,7 @@ public class ModLoader {
     try {
       LauncherGUI.launchButton.setEnabled(true);
       LauncherGUI.settingsButton.setEnabled(true);
-      SettingsGUI.forceRebuildButton.setEnabled(true);
+      LauncherGUI.modButton.setEnabled(true);
     } catch (Exception ignored) {}
 
     DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(getEnabledModCount())));
@@ -221,10 +233,11 @@ public class ModLoader {
     return count;
   }
 
-  private static int getEnableModsHash() {
-    Set<String> hashSet = new HashSet<String>();
+  private static int getEnabledModsHash() {
+    Set<Long> hashSet = new HashSet<>();
     for(Mod mod : modList) {
-      if(mod.isEnabled()) hashSet.add(mod.getFileName() + mod.getVersion());
+      long lastModified = new File(mod.getAbsolutePath()).lastModified();
+      if(mod.isEnabled()) hashSet.add(lastModified);
     }
     return hashSet.hashCode();
   }
@@ -258,6 +271,12 @@ public class ModLoader {
   private static void clean() {
     new File(LauncherGlobals.USER_DIR + "/rsrc/mod.json").delete();
     new File(LauncherGlobals.USER_DIR + "/rsrc/mod.png").delete();
+    for (String filePath : FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/mods/", ".hash")) {
+      new File(filePath).delete();
+    }
+    for (String filePath : FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/code-mods/", ".hash")) {
+      new File(filePath).delete();
+    }
   }
 
 }

@@ -23,6 +23,10 @@ public class ZipMod extends Mod {
     log.info("Zip Mod mounted successfully", "mod", this.displayName);
   }
 
+  public String getAbsolutePath() {
+    return LauncherGlobals.USER_DIR + "/mods/" + this.fileName;
+  }
+
   public void wasAdded() {
     log.info("A zip mod was added", "object", this.toString());
   }

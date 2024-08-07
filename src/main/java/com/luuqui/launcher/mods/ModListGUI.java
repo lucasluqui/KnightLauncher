@@ -22,7 +22,7 @@ public class ModListGUI extends BaseGUI {
   public static JPanel modListPane;
   public static JLabel labelModCount;
   public static JLabel labelRefreshing;
-  public static JProgressBar refreshProgressBar;
+  public static JProgressBar refreshProgressBar = new JProgressBar();
   private JLabel labelModCountText;
   private JButton refreshButton;
   private JButton forceApplyButton;

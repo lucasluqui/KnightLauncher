@@ -8,12 +8,22 @@ import com.luuqui.util.SystemUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import static com.luuqui.launcher.Log.log;
 
 public class ModuleLoader {
 
-  public static void loadIngameRPC() {
+  public static void loadModules() {
+    Thread moduleThread = new Thread(() -> {
+      loadIngameRPC();
+      loadJarCommandLine();
+      loadSpiralview();
+    });
+    moduleThread.start();
+  }
+
+  protected static void loadIngameRPC() {
     if (SystemUtil.isWindows() && SystemUtil.is64Bit()) {
       try {
         FileUtil.extractFileWithinJar("/modules/skdiscordrpc/bundle.zip", LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip");
@@ -29,7 +39,7 @@ public class ModuleLoader {
     }
   }
 
-  public static void loadJarCommandLine() {
+  protected static void loadJarCommandLine() {
     try {
       int vmArch = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath());
       if (SystemUtil.isWindows() && !FileUtil.fileExists(JavaUtil.getGameJavaDirPath() + "/bin/jar.exe")) {
@@ -37,6 +47,15 @@ public class ModuleLoader {
       } else if (!FileUtil.fileExists(JavaUtil.getGameJavaDirPath() + "/bin/jar")) {
         FileUtil.extractFileWithinJar(vmArch == 64 ? "/modules/jarcmd/jar-amd64" : "/modules/jarcmd/jar-i386", JavaUtil.getGameJavaDirPath() + "/bin/jar");
       }
+    } catch (IOException e) {
+      log.error(e);
+    }
+  }
+
+  protected static void loadSpiralview() {
+    try {
+      FileUtil.extractFileWithinJar("/modules/spiralview/spiralview.jar",
+        LauncherGlobals.USER_DIR + "/KnightLauncher/modules/spiralview/spiralview.jar");
     } catch (IOException e) {
       log.error(e);
     }
