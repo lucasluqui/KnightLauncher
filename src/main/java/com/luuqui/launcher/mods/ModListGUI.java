@@ -157,7 +157,7 @@ public class ModListGUI extends BaseGUI {
     int count = 0;
 
     if(modListPane == null) {
-      log.error("What? how? why?! modListPane is null");
+      log.warning("What? how? why?! modListPane is null");
       return;
     }
 

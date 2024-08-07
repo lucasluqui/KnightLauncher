@@ -324,13 +324,10 @@ public class LauncherApp {
 
   private void postInitialization() {
     ModLoader.checkInstalled();
+    new Thread(ModuleLoader::loadModules).start();
     if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
       ModLoader.extractSafeguard();
     }
-
-    //if (ModLoader.mountRequired) new Thread(ModLoader::mount).start();
-
-    ModuleLoader.loadModules();
 
     DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
     loadOnlineAssets();
@@ -346,10 +343,10 @@ public class LauncherApp {
 
     new Thread(() -> {
 
-      LauncherEventHandler.updateServerList(Flamingo.getServerList());
       Status flamingoStatus = Flamingo.getStatus();
-      SettingsEventHandler.updateAboutTab(flamingoStatus);
       if(flamingoStatus.version != null) LauncherApp.flamingoOnline = true;
+      LauncherEventHandler.updateServerList(Flamingo.getServerList());
+      SettingsEventHandler.updateAboutTab(flamingoStatus);
 
     }).start();
 

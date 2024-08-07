@@ -151,7 +151,7 @@ public class ModLoader {
     // Make sure no cheat mod slips in.
     extractSafeguard();
 
-    // Clean the game's rsrc folder from unwanted files.
+    // Clean the game from unwanted files.
     clean();
 
     mountRequired = false;
@@ -271,11 +271,11 @@ public class ModLoader {
   private static void clean() {
     new File(LauncherGlobals.USER_DIR + "/rsrc/mod.json").delete();
     new File(LauncherGlobals.USER_DIR + "/rsrc/mod.png").delete();
-    for (String filePath : FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/mods/", ".hash")) {
-      new File(filePath).delete();
+    for (String filePath : FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/mods", ".hash")) {
+      new File(LauncherGlobals.USER_DIR + "/mods/" + filePath).delete();
     }
-    for (String filePath : FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/code-mods/", ".hash")) {
-      new File(filePath).delete();
+    for (String filePath : FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/code-mods", ".hash")) {
+      new File(LauncherGlobals.USER_DIR + "/code-mods/" + filePath).delete();
     }
   }
 

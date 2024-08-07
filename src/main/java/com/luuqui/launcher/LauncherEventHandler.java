@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.luuqui.launcher.Log.log;
@@ -300,6 +301,9 @@ public class LauncherEventHandler {
 
   public static void updateBanner() {
     Thread refreshThread = new Thread(() -> {
+      if(!LauncherApp.flamingoOnline) {
+        return;
+      }
       String bannerUrl = LauncherApp.selectedServer.announceBanner.split("\\|")[0];
       double bannerIntensity = Double.parseDouble(LauncherApp.selectedServer.announceBanner.split("\\|")[1]);
       LauncherGUI.banner = LauncherGUI.processImageForBanner(ImageUtil.toBufferedImage(ImageUtil.getImageFromURL(bannerUrl, 800, 550)), bannerIntensity);
