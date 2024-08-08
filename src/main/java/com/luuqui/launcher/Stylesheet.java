@@ -1,9 +1,6 @@
 package com.luuqui.launcher;
 
-import com.formdev.flatlaf.ui.FlatMarginBorder;
-
 import javax.swing.*;
-import java.awt.*;
 
 public class Stylesheet {
 

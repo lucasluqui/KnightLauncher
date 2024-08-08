@@ -16,6 +16,7 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont-swing/1.0.1/jiconfont-swing-1.0.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont/1.0.0/jiconfont-1.0.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/json/json/20231013/json-20231013.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/Filters.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

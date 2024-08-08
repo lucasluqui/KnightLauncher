@@ -55,7 +55,7 @@ public class ModuleLoader {
   protected static void loadSpiralview() {
     try {
       FileUtil.extractFileWithinJar("/modules/spiralview/spiralview.jar",
-        LauncherGlobals.USER_DIR + "/spiralview.jar");
+        LauncherGlobals.USER_DIR + "/KnightLauncher/modules/spiralview/spiralview.jar");
     } catch (IOException e) {
       log.error(e);
     }
