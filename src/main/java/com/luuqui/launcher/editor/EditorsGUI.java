@@ -183,7 +183,7 @@ public class EditorsGUI extends BaseGUI {
     interfaceTesterPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel interfaceTesterLabel = new JLabel();
-    interfaceTesterLabel.setText("Interface Tester");
+    interfaceTesterLabel.setText("Interface Editor");
     interfaceTesterLabel.setFont(Fonts.fontMedGiant);
     interfaceTesterLabel.setHorizontalAlignment(SwingConstants.CENTER);
     interfaceTesterLabel.setVerticalAlignment(SwingConstants.CENTER);
