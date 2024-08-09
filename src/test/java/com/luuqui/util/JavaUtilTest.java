@@ -1,8 +1,8 @@
 package com.luuqui.util;
 
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class JavaUtilTest {
 
@@ -10,6 +10,6 @@ public class JavaUtilTest {
 
   @Test
   public void getJVMArch() throws Exception {
-    assertNotEquals("Cannot determine Java VM architecture", 0, JavaUtil.getJVMArch(PATH));
+    assertNotEquals(0, JavaUtil.getJVMArch(PATH), "Cannot determine Java VM architecture");
   }
 }
