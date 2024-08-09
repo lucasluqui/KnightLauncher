@@ -369,9 +369,14 @@ public class LauncherGUI extends BaseGUI {
     mainPane.add(launchButton);
     launchButton.addActionListener(action -> {
       if (KeyboardController.isShiftPressed() || KeyboardController.isAltPressed()) {
-        LauncherEventHandler.launchGameAltEvent();
+        // TODO: Consolidate alt launching inside LauncherEventHandler::launchGameEvent for both.
+        if(LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
+          LauncherEventHandler.launchGameAltEvent();
+        } else {
+          LauncherEventHandler.launchGameEvent(true);
+        }
       } else {
-        LauncherEventHandler.launchGameEvent();
+        LauncherEventHandler.launchGameEvent(false);
       }
     });
 

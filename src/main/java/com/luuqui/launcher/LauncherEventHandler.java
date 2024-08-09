@@ -28,7 +28,7 @@ public class LauncherEventHandler {
 
   private static final String[] RPC_COMMAND_LINE = new String[] { ".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe" };
 
-  public static void launchGameEvent() {
+  public static void launchGameEvent(boolean altMode) {
 
     Thread launchThread = new Thread(() -> {
 
@@ -148,7 +148,7 @@ public class LauncherEventHandler {
         ProgressBar.setState("Starting " + LauncherApp.selectedServer.name + "...");
         ProgressBar.setBarValue(2);
 
-        ProcessUtil.runFromDirectory(getThirdPartyClientStartCommand(selectedServer),
+        ProcessUtil.runFromDirectory(getThirdPartyClientStartCommand(selectedServer, altMode),
           LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName,
           true);
 
@@ -352,7 +352,7 @@ public class LauncherEventHandler {
     System.exit(1);
   }
 
-  private static String[] getThirdPartyClientStartCommand(Server server) {
+  private static String[] getThirdPartyClientStartCommand(Server server, boolean altMode) {
     String[] args;
     String sanitizedServerName = LauncherApp.getSanitizedServerName(server.name);
     if(SystemUtil.isWindows()) {
@@ -370,8 +370,8 @@ public class LauncherEventHandler {
           LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-digester.jar;" +
           LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-logging.jar;",
         "-Dcom.threerings.getdown=false",
-        "-Xms256M",
-        "-Xmx512M",
+        altMode ? "-Xms256M" : "-Xms512M",
+        altMode ? "-Xmx512M" : "-Xmx1024M",
         "-XX:+AggressiveOpts",
         "-XX:SoftRefLRUPolicyMSPerMB=10",
         "-Djava.library.path=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./native",
@@ -396,8 +396,8 @@ public class LauncherEventHandler {
           LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-digester.jar:" +
           LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-logging.jar:",
         "-Dcom.threerings.getdown=false",
-        "-Xms256M",
-        "-Xmx512M",
+        altMode ? "-Xms256M" : "-Xms512M",
+        altMode ? "-Xmx512M" : "-Xmx1024M",
         "-XX:+AggressiveOpts",
         "-XX:SoftRefLRUPolicyMSPerMB=10",
         "-Djava.library.path=" + LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "native",
