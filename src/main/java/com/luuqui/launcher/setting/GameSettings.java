@@ -1,4 +1,4 @@
-package com.luuqui.launcher.settings;
+package com.luuqui.launcher.setting;
 
 import com.lucasallegri.bootstrap.ProjectXBootstrap;
 import com.luuqui.launcher.LauncherGlobals;
@@ -13,7 +13,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.Properties;
 
-import static com.luuqui.launcher.settings.Log.log;
+import static com.luuqui.launcher.setting.Log.log;
 
 public class GameSettings {
 

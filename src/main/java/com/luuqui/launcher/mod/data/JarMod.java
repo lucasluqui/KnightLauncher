@@ -1,8 +1,8 @@
-package com.luuqui.launcher.mods.data;
+package com.luuqui.launcher.mod.data;
 
 import com.luuqui.launcher.LauncherGlobals;
 
-import static com.luuqui.launcher.mods.Log.log;
+import static com.luuqui.launcher.mod.Log.log;
 
 public class JarMod extends Mod {
 

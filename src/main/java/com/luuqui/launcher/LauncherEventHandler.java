@@ -3,23 +3,20 @@ package com.luuqui.launcher;
 import com.luuqui.dialog.DialogInfo;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.flamingo.data.Server;
-import com.luuqui.launcher.mods.ModLoader;
-import com.luuqui.launcher.settings.*;
+import com.luuqui.launcher.mod.ModLoader;
+import com.luuqui.launcher.setting.*;
 import com.luuqui.util.*;
 import org.apache.commons.io.FileUtils;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.luuqui.launcher.Log.log;

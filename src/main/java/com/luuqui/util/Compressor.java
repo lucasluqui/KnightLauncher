@@ -1,6 +1,6 @@
 package com.luuqui.util;
 
-import com.luuqui.launcher.settings.Settings;
+import com.luuqui.launcher.setting.Settings;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;

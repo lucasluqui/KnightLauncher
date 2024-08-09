@@ -1,4 +1,4 @@
-package com.luuqui.launcher.settings;
+package com.luuqui.launcher.setting;
 
 import com.luuqui.dialog.DialogWarning;
 import com.luuqui.launcher.LauncherApp;
@@ -7,17 +7,15 @@ import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.flamingo.Flamingo;
 import com.luuqui.launcher.flamingo.data.Status;
-import com.luuqui.launcher.mods.ModLoader;
+import com.luuqui.launcher.mod.ModLoader;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.ProcessUtil;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class SettingsEventHandler {

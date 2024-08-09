@@ -1,4 +1,4 @@
-package com.luuqui.launcher.mods.data;
+package com.luuqui.launcher.mod.data;
 
 public abstract class Mod {
 

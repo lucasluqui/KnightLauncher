@@ -1,7 +1,7 @@
 package com.luuqui.launcher;
 
 import com.luuqui.dialog.DialogError;
-import com.luuqui.launcher.settings.SettingsProperties;
+import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.Compressor;
 import com.luuqui.util.FileUtil;

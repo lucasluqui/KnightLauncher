@@ -1,7 +1,7 @@
-package com.luuqui.launcher.mods;
+package com.luuqui.launcher.mod;
 
 import com.luuqui.launcher.*;
-import com.luuqui.launcher.mods.data.Mod;
+import com.luuqui.launcher.mod.data.Mod;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.DesktopUtil;
 import com.luuqui.util.ImageUtil;
@@ -12,7 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static com.luuqui.launcher.mods.Log.log;
+import static com.luuqui.launcher.mod.Log.log;
 
 public class ModListGUI extends BaseGUI {
 

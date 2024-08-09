@@ -1,11 +1,11 @@
-package com.luuqui.launcher.mods;
+package com.luuqui.launcher.mod;
 
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.LauncherGlobals;
-import com.luuqui.launcher.mods.data.Mod;
-import com.luuqui.launcher.settings.Settings;
-import com.luuqui.launcher.settings.SettingsProperties;
+import com.luuqui.launcher.mod.data.Mod;
+import com.luuqui.launcher.setting.Settings;
+import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.DesktopUtil;
 
 import java.awt.event.ActionEvent;

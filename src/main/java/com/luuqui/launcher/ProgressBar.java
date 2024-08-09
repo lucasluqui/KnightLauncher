@@ -1,6 +1,6 @@
 package com.luuqui.launcher;
 
-import com.luuqui.launcher.mods.ModListGUI;
+import com.luuqui.launcher.mod.ModListGUI;
 
 import static com.luuqui.launcher.Log.log;
 

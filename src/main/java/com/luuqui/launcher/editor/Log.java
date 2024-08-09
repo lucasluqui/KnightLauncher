@@ -3,7 +3,7 @@ package com.luuqui.launcher.editor;
 import com.samskivert.util.Logger;
 
 /**
- * Contains a reference to the {@link Logger} object used by the mods package.
+ * Contains a reference to the {@link Logger} object used by the editor package.
  */
 @SuppressWarnings("unused")
 public class Log {

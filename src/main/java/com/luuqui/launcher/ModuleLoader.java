@@ -1,14 +1,12 @@
 package com.luuqui.launcher;
 
-import com.luuqui.launcher.settings.SettingsProperties;
+import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.Compressor;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.SystemUtil;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 import static com.luuqui.launcher.Log.log;
 

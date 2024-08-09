@@ -1,4 +1,4 @@
-package com.luuqui.launcher.settings;
+package com.luuqui.launcher.setting;
 
 public class Settings {
 

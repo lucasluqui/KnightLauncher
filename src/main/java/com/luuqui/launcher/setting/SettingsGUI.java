@@ -1,4 +1,4 @@
-package com.luuqui.launcher.settings;
+package com.luuqui.launcher.setting;
 
 import com.luuqui.dialog.DialogInfo;
 import com.luuqui.launcher.*;

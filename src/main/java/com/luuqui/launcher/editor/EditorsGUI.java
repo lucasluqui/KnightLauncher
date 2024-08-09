@@ -2,26 +2,16 @@ package com.luuqui.launcher.editor;
 
 import com.jhlabs.image.GaussianFilter;
 import com.jhlabs.image.GrayscaleFilter;
-import com.jhlabs.image.ImageUtils;
 import com.luuqui.launcher.*;
-import com.luuqui.launcher.mods.ModListEventHandler;
-import com.luuqui.launcher.mods.ModLoader;
-import com.luuqui.launcher.mods.data.Mod;
-import com.luuqui.util.ColorUtil;
-import com.luuqui.util.DesktopUtil;
 import com.luuqui.util.ImageUtil;
-import javafx.scene.effect.GaussianBlur;
-import jiconfont.icons.font_awesome.FontAwesome;
-import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 
-import static com.luuqui.launcher.mods.Log.log;
+import static com.luuqui.launcher.mod.Log.log;
 
 public class EditorsGUI extends BaseGUI {
 

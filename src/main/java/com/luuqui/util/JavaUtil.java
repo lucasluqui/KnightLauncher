@@ -1,7 +1,6 @@
 package com.luuqui.util;
 
 import com.luuqui.launcher.LauncherGlobals;
-import com.samskivert.util.Folds;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +14,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Properties;
 
-import static com.luuqui.launcher.settings.Log.log;
+import static com.luuqui.launcher.setting.Log.log;
 
 public class JavaUtil {
 

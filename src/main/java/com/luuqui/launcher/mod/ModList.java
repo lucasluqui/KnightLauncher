@@ -1,6 +1,6 @@
-package com.luuqui.launcher.mods;
+package com.luuqui.launcher.mod;
 
-import com.luuqui.launcher.mods.data.Mod;
+import com.luuqui.launcher.mod.data.Mod;
 
 import java.util.LinkedList;
 

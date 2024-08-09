@@ -1,4 +1,4 @@
-package com.luuqui.launcher.settings;
+package com.luuqui.launcher.setting;
 
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.util.FileUtil;
@@ -8,7 +8,7 @@ import com.luuqui.util.SystemUtil;
 import java.io.*;
 import java.util.*;
 
-import static com.luuqui.launcher.settings.Log.log;
+import static com.luuqui.launcher.setting.Log.log;
 
 public class SettingsProperties {
 

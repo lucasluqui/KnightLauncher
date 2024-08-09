@@ -1,6 +1,6 @@
 package com.luuqui.launcher;
 
-import com.luuqui.launcher.settings.Settings;
+import com.luuqui.launcher.setting.Settings;
 
 import java.io.IOException;
 import java.io.InputStream;

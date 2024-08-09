@@ -1,10 +1,10 @@
-package com.luuqui.launcher.mods.data;
+package com.luuqui.launcher.mod.data;
 
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.util.Compressor;
 import com.luuqui.util.SystemUtil;
 
-import static com.luuqui.launcher.mods.Log.log;
+import static com.luuqui.launcher.mod.Log.log;
 
 public class ZipMod extends Mod {
 
