@@ -2,6 +2,7 @@ package com.luuqui.launcher;
 
 import com.luuqui.launcher.settings.Settings;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -108,6 +109,8 @@ public class Fonts {
 
       fontCodeReg = Font.createFont(Font.TRUETYPE_FONT, fontCodeRegIs);
       fontCodeReg = fontCodeReg.deriveFont(12.0f * sizeMultiplier);
+
+      UIManager.put("ToolTip.font", fontReg);
 
     } catch (FontFormatException | IOException e) {
       log.error(e);

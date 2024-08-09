@@ -18,6 +18,11 @@ public class Stylesheet {
 
     UIManager.put("ScrollPane.smoothScrolling", true);
 
+    UIManager.put("ScrollBar.background", CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    UIManager.put("ScrollBar.trackArc", 100);
+    UIManager.put("ScrollBar.thumbArc", 100);
+    UIManager.put("ScrollBar.width", 10);
+
     UIManager.put("Button.default.focusedBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("Button.default.focusColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("Button.default.hoverBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
