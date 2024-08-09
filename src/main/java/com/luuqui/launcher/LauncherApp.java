@@ -73,10 +73,10 @@ public class LauncherApp {
     setupFileLogging();
     logVMInfo();
     checkTempDir();
+    setupLauncherStyle();
     checkStartLocation();
     setupHTTPSProtocol();
     SettingsProperties.setup();
-    setupLauncherStyle();
     Locale.setup();
     Fonts.setup();
     if (!SystemUtil.isARM()) DiscordRPC.getInstance().start();
