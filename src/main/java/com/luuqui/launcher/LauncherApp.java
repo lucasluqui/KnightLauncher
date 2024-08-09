@@ -27,6 +27,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -70,6 +72,7 @@ public class LauncherApp {
   public LauncherApp () {
     setupFileLogging();
     logVMInfo();
+    checkTempDir();
     checkStartLocation();
     setupHTTPSProtocol();
     SettingsProperties.setup();
@@ -419,6 +422,24 @@ public class LauncherApp {
   public static String getSanitizedServerName(String serverName) {
     return serverName.toLowerCase().replace(" ", "-")
       .replace("(", "").replace(")", "");
+  }
+
+  protected static void checkTempDir() {
+    // sometimes os usernames that have cyrillic characters can make Java have a
+    // bad time trying to read them for locating their TEMP path.
+    // let's give our old friend a hand and store the temp files ourselves for the time being.
+    boolean containsCyrillic = System.getProperty("user.name").codePoints()
+      .mapToObj(Character.UnicodeScript::of)
+      .anyMatch(Character.UnicodeScript.CYRILLIC::equals);
+    if (containsCyrillic) fixTempDir();
+  }
+
+  protected static void fixTempDir() {
+    System.setProperty("java.io.tmpdir", LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
+    Map<String, String> newEnv = new HashMap<>();
+    newEnv.put("TEMP", LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
+    SystemUtil.setEnv(newEnv);
+    log.info("TEMP path changed to: " + LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
   }
 
 }
