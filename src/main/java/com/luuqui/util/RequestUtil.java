@@ -35,4 +35,9 @@ public class RequestUtil {
     return new JSONObject(result.toString());
   }
 
+  public static String extractNumericFromString(String input) {
+    input = input.replaceAll("[^0-9 ]", "").replaceAll(" +", " ").trim();
+    return input;
+  }
+
 }
