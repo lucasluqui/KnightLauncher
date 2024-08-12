@@ -58,6 +58,15 @@ public class SystemUtil {
     if(isWindows()) {
       machineId = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "wmic csproduct get UUID" })[0];
       machineId = machineId.substring(machineId.indexOf("\n")).trim();
+
+      // Some lazy bios manufacturers won't bother setting a valid UUID for their BIOS and thus
+      // creating a case where someone might share an invalid or default UUID with someone else
+      // (the infamous 03000200-0400-0500-0006-000700080009 UUID!).
+      // Assuming this could be the case, we gather Windows' software GUID and add it to the mix.
+      String machineIdFailsafe = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "reg query HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid" })[0];
+      machineIdFailsafe = machineIdFailsafe.substring(machineIdFailsafe.indexOf("\n")).trim();
+      machineIdFailsafe = machineIdFailsafe.split("REG_SZ")[1].trim();
+      machineId += machineIdFailsafe;
     }
 
     if(isUnix()) {
