@@ -84,14 +84,13 @@ public class Flamingo {
     }
   }
 
-  private static JSONObject sendRequest(String method, String endpoint, String[] request) {
+  private static JSONObject sendRequest(String method, String endpoint, String[] request) throws Exception {
     try {
       request = Arrays.copyOf(request, request.length + 1);
       request[request.length - 1] = "version=" + RequestUtil.extractNumericFromString(LauncherGlobals.LAUNCHER_VERSION);
       return RequestUtil.makeRequest(method, endpoint, request);
     } catch (Exception e) {
-      log.error(e);
-      return null;
+      throw new Exception();
     }
   }
 
