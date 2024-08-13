@@ -13,13 +13,13 @@ public class CustomColors {
   public static final Color DISCORD       = new Color(114, 137, 218);
   public static final Color KOFI          = new Color(255, 94, 91);
 
-  public static final Color DARK_RED                = new Color(102, 0, 0);
-  public static final Color DARK_GREEN              = new Color(0, 102, 34);
-  public static final Color MID_RED                 = new Color(247, 59, 59);
-  public static final Color MID_GREEN               = new Color(52, 219, 103);
-  public static final Color BRIGHT_RED              = new Color(194, 0, 0);
-  public static final Color BRIGHT_GREEN            = new Color(0, 194, 65);
-  public static final Color BUTTON_FOREGROUND_DANGER   = new Color(251, 91, 91);
+  public static final Color DARK_RED                    = new Color(102, 0, 0);
+  public static final Color DARK_GREEN                  = new Color(0, 102, 34);
+  public static final Color MID_RED                     = new Color(247, 59, 59);
+  public static final Color MID_GREEN                   = new Color(52, 219, 103);
+  public static final Color BRIGHT_RED                  = new Color(194, 0, 0);
+  public static final Color BRIGHT_GREEN                = new Color(0, 194, 65);
+  public static final Color BUTTON_FOREGROUND_DANGER    = new Color(251, 91, 91);
 
   public static final Color INTERFACE_TITLEBAR                  = new Color(34, 36, 42);
   public static final Color INTERFACE_SIDEPANE_BACKGROUND       = new Color(45, 48, 57);
