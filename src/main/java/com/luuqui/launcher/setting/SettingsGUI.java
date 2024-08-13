@@ -12,6 +12,8 @@ import jiconfont.swing.IconFontSwing;
 import javax.swing.*;
 import java.awt.event.*;
 
+import static com.luuqui.launcher.setting.Log.log;
+
 public class SettingsGUI extends BaseGUI {
 
   private final LauncherApp app;
@@ -39,12 +41,15 @@ public class SettingsGUI extends BaseGUI {
   public static JLabel labelFlamingoStatus;
   public static JLabel labelFlamingoVersion;
   public static JLabel labelFlamingoUptime;
+  public static JButton betaCodeRevalidateButton;
+  public static JButton betaCodeClearLocalButton;
 
   @SuppressWarnings("static-access")
   public SettingsGUI(LauncherApp app) {
     super();
     this.app = app;
     initialize();
+    checkBetaCodes();
   }
 
   @SuppressWarnings("static-access")
@@ -539,10 +544,11 @@ public class SettingsGUI extends BaseGUI {
     betaCodeSpecialResultLabel.setVisible(false);
     betasPanel.add(betaCodeSpecialResultLabel);
 
-    JButton betaCodeRevalidateButton = new JButton("Revalidate my Beta codes");
+    betaCodeRevalidateButton = new JButton("Revalidate my Beta codes");
     betaCodeRevalidateButton.setFont(Fonts.fontMed);
     betaCodeRevalidateButton.setFocusPainted(false);
     betaCodeRevalidateButton.setFocusable(false);
+    betaCodeRevalidateButton.setVisible(false);
     betaCodeRevalidateButton.setToolTipText("Revalidate my Beta codes");
     betaCodeRevalidateButton.setBounds(25, 300, 250, 25);
     betasPanel.add(betaCodeRevalidateButton);
@@ -552,10 +558,11 @@ public class SettingsGUI extends BaseGUI {
       betaCodeSpecialResultLabel.setText("Beta codes revalidated.");
     });
 
-    JButton betaCodeClearLocalButton = new JButton("Clear locally stored Beta codes");
+    betaCodeClearLocalButton = new JButton("Clear locally stored Beta codes");
     betaCodeClearLocalButton.setFont(Fonts.fontMed);
     betaCodeClearLocalButton.setFocusPainted(false);
     betaCodeClearLocalButton.setFocusable(false);
+    betaCodeClearLocalButton.setVisible(false);
     betaCodeClearLocalButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
     betaCodeClearLocalButton.setToolTipText("Clear locally stored Beta codes");
     betaCodeClearLocalButton.setBounds(25, 335, 250, 25);
@@ -743,6 +750,13 @@ public class SettingsGUI extends BaseGUI {
       return MAX_ALLOWED_MEMORY_64_BIT;
     } else {
       return MAX_ALLOWED_MEMORY_32_BIT;
+    }
+  }
+
+  private static void checkBetaCodes() {
+    if(!SettingsProperties.getValue("launcher.betaCodes").trim().isEmpty()) {
+      betaCodeRevalidateButton.setVisible(true);
+      betaCodeClearLocalButton.setVisible(true);
     }
   }
 }
