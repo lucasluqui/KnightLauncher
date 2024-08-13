@@ -228,7 +228,7 @@ public class SettingsEventHandler {
   // 3 = already used (other)
   // 4 = already used (same machine id)
   // 5 = not exist
-  public static int activateBetaCode(String code) {
+  public static int activateBetaCode(String code, boolean force) {
 
     // Sanitize the code (remove any trailing spaces, white spaces, slashes, etc.)
     code = code.replace("/", "")
@@ -240,7 +240,7 @@ public class SettingsEventHandler {
     String codes = SettingsProperties.getValue("launcher.betaCodes");
 
     // This beta code is already present in local properties. We return '2' indicating duplicate.
-    if(codes != null && codes.contains(code)) return 2;
+    if(codes != null && codes.contains(code) && !force) return 2;
 
     String response = Flamingo.activateBetaCode(code);
 
@@ -265,6 +265,25 @@ public class SettingsEventHandler {
 
     // Return 0 indicating some sort of failure.
     return 0;
+  }
+
+  public static void revalidateBetaCodes() {
+    if (SettingsProperties.getValue("launcher.betaCodes").equalsIgnoreCase("")) return;
+
+    String[] betaCodes;
+    if(SettingsProperties.getValue("launcher.betaCodes").contains(",")) {
+      betaCodes = SettingsProperties.getValue("launcher.betaCodes").split(",");
+    } else {
+      betaCodes = new String[] { SettingsProperties.getValue("launcher.betaCodes") };
+    }
+
+    for(String betaCode : betaCodes) {
+      activateBetaCode(betaCode, true);
+    }
+  }
+
+  public static void clearLocalBetaCodes() {
+    SettingsProperties.setValue("launcher.betaCodes", "");
   }
 
   private static void addBetaCode(String code) {

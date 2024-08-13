@@ -518,7 +518,7 @@ public class SettingsGUI extends BaseGUI {
     betaCodeButton.setBounds(290, 112, 100, 25);
     betasPanel.add(betaCodeButton);
     betaCodeButton.addActionListener(action -> {
-      int result = SettingsEventHandler.activateBetaCode(betaCodeTextField.getText());
+      int result = SettingsEventHandler.activateBetaCode(betaCodeTextField.getText(), false);
 
       switch(result) {
         case 0: betaCodeResultLabel.setText("An unexpected error has occurred."); break;
@@ -530,6 +530,40 @@ public class SettingsGUI extends BaseGUI {
       }
 
       betaCodeResultLabel.setVisible(true);
+    });
+
+    JLabel betaCodeSpecialResultLabel = new JLabel("");
+    betaCodeSpecialResultLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    betaCodeSpecialResultLabel.setBounds(25, 350, 450, 50);
+    betaCodeSpecialResultLabel.setFont(Fonts.fontReg);
+    betaCodeSpecialResultLabel.setVisible(false);
+    betasPanel.add(betaCodeSpecialResultLabel);
+
+    JButton betaCodeRevalidateButton = new JButton("Revalidate my Beta codes");
+    betaCodeRevalidateButton.setFont(Fonts.fontMed);
+    betaCodeRevalidateButton.setFocusPainted(false);
+    betaCodeRevalidateButton.setFocusable(false);
+    betaCodeRevalidateButton.setToolTipText("Revalidate my Beta codes");
+    betaCodeRevalidateButton.setBounds(25, 300, 250, 25);
+    betasPanel.add(betaCodeRevalidateButton);
+    betaCodeRevalidateButton.addActionListener(action -> {
+      SettingsEventHandler.revalidateBetaCodes();
+      betaCodeSpecialResultLabel.setVisible(true);
+      betaCodeSpecialResultLabel.setText("Beta codes revalidated.");
+    });
+
+    JButton betaCodeClearLocalButton = new JButton("Clear locally stored Beta codes");
+    betaCodeClearLocalButton.setFont(Fonts.fontMed);
+    betaCodeClearLocalButton.setFocusPainted(false);
+    betaCodeClearLocalButton.setFocusable(false);
+    betaCodeClearLocalButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
+    betaCodeClearLocalButton.setToolTipText("Clear locally stored Beta codes");
+    betaCodeClearLocalButton.setBounds(25, 335, 250, 25);
+    betasPanel.add(betaCodeClearLocalButton);
+    betaCodeClearLocalButton.addActionListener(action -> {
+      SettingsEventHandler.clearLocalBetaCodes();
+      betaCodeSpecialResultLabel.setVisible(true);
+      betaCodeSpecialResultLabel.setText("Beta codes cleared.");
     });
 
     return betasPanel;
