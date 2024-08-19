@@ -350,8 +350,11 @@ public class LauncherEventHandler {
   }
 
   public static void showLatestChangelog() {
-    DialogInfo.push("You're currently on version: " + LauncherGlobals.LAUNCHER_VERSION + ".\nLatest available version: " + LauncherGUI.latestRelease + ".\n\n" +
-      "Knight Launcher " + LauncherGUI.latestRelease + "\n" + LauncherGUI.latestChangelog, "Latest Changelog");
+    DialogInfo.push("Currently running version: " + LauncherGlobals.LAUNCHER_VERSION
+      + ".\nLatest available version: " + LauncherGUI.latestRelease + ".\n\n" +
+      "Knight Launcher " + LauncherGUI.latestRelease + "\n"
+      + LauncherGUI.latestChangelog,
+      "Latest Changelog");
   }
 
   private static String[] getThirdPartyClientStartCommand(Server server, boolean altMode) {
