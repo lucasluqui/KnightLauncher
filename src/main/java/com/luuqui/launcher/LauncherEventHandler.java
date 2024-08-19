@@ -349,6 +349,11 @@ public class LauncherEventHandler {
     System.exit(1);
   }
 
+  public static void showLatestChangelog() {
+    DialogInfo.push("You're currently on version: " + LauncherGlobals.LAUNCHER_VERSION + ".\nLatest available version: " + LauncherGUI.latestRelease + ".\n\n" +
+      "Knight Launcher " + LauncherGUI.latestRelease + "\n" + LauncherGUI.latestChangelog, "Latest Changelog");
+  }
+
   private static String[] getThirdPartyClientStartCommand(Server server, boolean altMode) {
     String[] args;
     String sanitizedServerName = LauncherApp.getSanitizedServerName(server.name);

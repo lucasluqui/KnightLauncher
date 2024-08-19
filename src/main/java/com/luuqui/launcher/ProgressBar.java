@@ -2,6 +2,9 @@ package com.luuqui.launcher;
 
 import com.luuqui.launcher.mod.ModListGUI;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import static com.luuqui.launcher.Log.log;
 
 public class ProgressBar {
@@ -15,15 +18,18 @@ public class ProgressBar {
 
   public static void startTask() {
     activeTasks++;
-    showState(true);
     showBar(true);
   }
 
   public static void finishTask() {
     activeTasks--;
     if(activeTasks == 0) {
-      showState(false);
-      showBar(false);
+      setState("Finished");
+      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+      Thread finishDelayThread = new Thread(() -> {
+        showBar(false);
+      });
+      executor.schedule(finishDelayThread, 3, TimeUnit.SECONDS);
     }
   }
 
@@ -37,11 +43,9 @@ public class ProgressBar {
     ModListGUI.refreshProgressBar.setMaximum(n);
   }
 
-  private static void showState(boolean show) {
-    LauncherGUI.launchState.setVisible(show);
-  }
-
   private static void showBar(boolean show) {
+    LauncherGUI.launchBackground.setVisible(show);
+    LauncherGUI.launchState.setVisible(show);
     LauncherGUI.launchProgressBar.setVisible(show);
     ModListGUI.refreshProgressBar.setVisible(show);
   }

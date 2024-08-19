@@ -388,8 +388,10 @@ public class LauncherApp {
     if(rawResponseReleases != null) {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
 
-      String latestRelease = jsonReleases.getString("tag_name");
-      if (!latestRelease.equalsIgnoreCase(LauncherGlobals.LAUNCHER_VERSION)) {
+      LauncherGUI.latestRelease = jsonReleases.getString("tag_name");
+      LauncherGUI.latestChangelog = jsonReleases.getString("body");
+
+      if (!LauncherGUI.latestRelease.equalsIgnoreCase(LauncherGlobals.LAUNCHER_VERSION)) {
         if(Settings.autoUpdate) {
           LauncherEventHandler.updateLauncher();
         }

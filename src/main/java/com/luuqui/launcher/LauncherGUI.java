@@ -1,5 +1,7 @@
 package com.luuqui.launcher;
 
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.luuqui.dialog.DialogError;
 import com.luuqui.dialog.DialogInfo;
 import com.luuqui.discord.DiscordRPC;
@@ -36,18 +38,19 @@ public class LauncherGUI extends BaseGUI {
   public static JButton modButton;
   public static JButton editorsButton;
   public static JButton updateButton;
+  public static JButton changelogButton;
   public static JButton playerCountTooltipButton;
-  public static JTextPane tweetsContainer;
+  public static JLabel launchBackground;
   public static JLabel launchState;
   public static JProgressBar launchProgressBar = new JProgressBar();
-  public static JLabel imageContainer;
   public static JLabel playerCountLabel;
   public static JComboBox serverList;
   public static JButton serverInfoButton;
-  public static JLabel warningLabelIcon;
-  public static JLabel warningLabel;
   public static JButton warningNotice;
+
   public static String currentWarning = "";
+  public static String latestRelease = "";
+  public static String latestChangelog = "";
 
   public LauncherGUI(LauncherApp app) {
     super();
@@ -82,7 +85,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.setBounds(0, 35, 250, 550);
     launcherGUIFrame.getContentPane().add(sidePane);
 
-    banner = generatePlainColorBanner();
+    banner = ImageUtil.generatePlainColorImage(800, 550, CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     mainPane = new JPanel() {
       @Override
@@ -398,21 +401,47 @@ public class LauncherGUI extends BaseGUI {
     });
     mainPane.add(launchTooltipButton);
 
+    BufferedImage launchBackgroundImage = ImageUtil.generatePlainColorImage(500, 85, new Color(0, 0, 0));
+    launchBackgroundImage = (BufferedImage) ImageUtil.addRoundedCorners(launchBackgroundImage, 25);
+    ImageUtil.setAlpha(launchBackgroundImage, (byte) 191);
+    launchBackground = new JLabel("");
+    launchBackground.setBounds(20, 410, 500, 85);
+    launchBackground.setIcon(new ImageIcon(launchBackgroundImage));
+    launchBackground.setVisible(false);
+    mainPane.add(launchBackground);
+    mainPane.setComponentZOrder(launchBackground, 1);
+
     launchState = new JLabel("");
     launchState.setHorizontalAlignment(SwingConstants.LEFT);
     launchState.setBounds(35, 420, 505, 25);
     launchState.setFont(Fonts.fontRegBig);
     launchState.setVisible(false);
     mainPane.add(launchState);
+    mainPane.setComponentZOrder(launchState, 0);
 
     launchProgressBar = new JProgressBar();
-    launchProgressBar.setBounds(35, 450, 505, 25);
+    launchProgressBar.setBounds(35, 450, 470, 25);
     launchProgressBar.setVisible(false);
     mainPane.add(launchProgressBar);
+    mainPane.setComponentZOrder(launchProgressBar, 0);
+
+    Icon changelogIcon = IconFontSwing.buildIcon(FontAwesome.NEWSPAPER_O, 16, Color.WHITE);
+    changelogButton = new JButton(changelogIcon);
+    changelogButton.setBounds(737, 26, 35, 35);
+    changelogButton.setToolTipText(Locale.getValue("Latest changelog"));
+    changelogButton.setFont(Fonts.fontMed);
+    changelogButton.setFocusPainted(false);
+    changelogButton.setFocusable(false);
+    changelogButton.setBorderPainted(false);
+    changelogButton.setBackground(CustomColors.CHANGELOGS);
+    changelogButton.setForeground(Color.WHITE);
+    changelogButton.setVisible(true);
+    mainPane.add(changelogButton);
+    changelogButton.addActionListener(l -> LauncherEventHandler.showLatestChangelog());
 
     Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
     warningNotice = new JButton(warningNoticeIcon);
-    warningNotice.setBounds(737, 26, 35, 35);
+    warningNotice.setBounds(692, 26, 35, 35);
     warningNotice.setToolTipText("Warning notice");
     warningNotice.setFocusPainted(false);
     warningNotice.setFocusable(false);
@@ -428,7 +457,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 16, Color.WHITE);
     updateButton = new JButton(updateIcon);
-    updateButton.setBounds(737, 26, 35, 35);
+    updateButton.setBounds(692, 26, 35, 35);
     updateButton.setToolTipText(Locale.getValue("b.update_available"));
     updateButton.setFont(Fonts.fontMed);
     updateButton.setFocusPainted(false);
@@ -541,14 +570,6 @@ public class LauncherGUI extends BaseGUI {
 
     warningNotice.setVisible(true);
     currentWarning = message;
-  }
-
-  public static BufferedImage generatePlainColorBanner() {
-    BufferedImage image = new BufferedImage(800, 550, 1);
-    Graphics2D g2d = image.createGraphics();
-    g2d.setColor(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    g2d.fillRect(0, 0, 800, 550);
-    return image;
   }
 
   public static BufferedImage processImageForBanner(BufferedImage image, double intensity) {

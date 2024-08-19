@@ -1,5 +1,7 @@
 package com.luuqui.util;
 
+import com.luuqui.launcher.CustomColors;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -153,6 +155,29 @@ public class ImageUtil {
 
     // Return the buffered image
     return bimage;
+  }
+
+  public static BufferedImage generatePlainColorImage(int width, int height, Color color) {
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    Graphics2D g2d = image.createGraphics();
+    g2d.setColor(color);
+    g2d.fillRect(0, 0, width, height);
+    return image;
+  }
+
+  public static void setAlpha(BufferedImage input, byte alpha) {
+    alpha %= 0xff;
+    for (int cx=0;cx<input.getWidth();cx++) {
+      for (int cy=0;cy<input.getHeight();cy++) {
+        int color = input.getRGB(cx, cy);
+
+        int mc = (alpha << 24) | 0x00ffffff;
+        int newcolor = color & mc;
+        input.setRGB(cx, cy, newcolor);
+
+      }
+
+    }
   }
 
 }

@@ -12,6 +12,7 @@ public class CustomColors {
   public static final Color PLAYER_COUNT  = new Color(34, 197, 94);
   public static final Color DISCORD       = new Color(114, 137, 218);
   public static final Color KOFI          = new Color(255, 94, 91);
+  public static final Color CHANGELOGS    = new Color(0, 174, 255);
 
   public static final Color DARK_RED                    = new Color(102, 0, 0);
   public static final Color DARK_GREEN                  = new Color(0, 102, 34);
