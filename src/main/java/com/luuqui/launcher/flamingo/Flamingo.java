@@ -16,11 +16,14 @@ import static com.luuqui.launcher.flamingo.Log.log;
 
 public class Flamingo {
 
+  public static String ENDPOINT = "http://flamingo.luuqui.com";
+  public static int PORT = 6060;
+
   public static List<Server> getServerList() {
     List<Server> servers = new ArrayList<>();
 
     try {
-      JSONObject response = sendRequest("GET", LauncherGlobals.FLAMINGO_ENDPOINT + "/server-list/", new String[]{ "machineId=" + SystemUtil.getHashedMachineId() });
+      JSONObject response = sendRequest("GET", "/server-list/", new String[]{ "machineId=" + SystemUtil.getHashedMachineId() });
       log.info("Got server list from flamingo");
 
       // we got an empty server list. we return the empty servers list object.
@@ -58,7 +61,7 @@ public class Flamingo {
 
   public static String activateBetaCode(String code) {
     try {
-      JSONObject response = sendRequest("POST", LauncherGlobals.FLAMINGO_ENDPOINT + "/beta-code/activate/" + code, new String[]{"machineId=" + SystemUtil.getHashedMachineId()});
+      JSONObject response = sendRequest("POST", "/beta-code/activate/" + code, new String[]{"machineId=" + SystemUtil.getHashedMachineId()});
       log.info("Got response for beta code activation: " + response);
 
       return response.getString("result");
@@ -70,7 +73,7 @@ public class Flamingo {
 
   public static Status getStatus() {
     try {
-      JSONObject response = sendRequest("GET", LauncherGlobals.FLAMINGO_ENDPOINT + "/status/", new String[]{});
+      JSONObject response = sendRequest("GET", "/status/", new String[]{});
       log.info("Got status from flamingo: " + response);
 
       Status status = new Status();
@@ -88,7 +91,7 @@ public class Flamingo {
     try {
       request = Arrays.copyOf(request, request.length + 1);
       request[request.length - 1] = "version=" + RequestUtil.extractNumericFromString(LauncherGlobals.LAUNCHER_VERSION);
-      return RequestUtil.makeRequest(method, endpoint, request);
+      return RequestUtil.makeRequest(method, ENDPOINT + ":" + PORT + endpoint, request);
     } catch (Exception e) {
       throw new Exception();
     }
