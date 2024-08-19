@@ -5,8 +5,8 @@ import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.flamingo.data.Status;
 import com.luuqui.util.RequestUtil;
 import com.luuqui.util.SystemUtil;
+import com.luuqui.util.TextUtil;
 import org.json.JSONObject;
-import sun.misc.Launcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,7 +90,7 @@ public class Flamingo {
   private static JSONObject sendRequest(String method, String endpoint, String[] request) throws Exception {
     try {
       request = Arrays.copyOf(request, request.length + 1);
-      request[request.length - 1] = "version=" + RequestUtil.extractNumericFromString(LauncherGlobals.LAUNCHER_VERSION);
+      request[request.length - 1] = "version=" + TextUtil.extractNumericFromString(LauncherGlobals.LAUNCHER_VERSION);
       return RequestUtil.makeRequest(method, ENDPOINT + ":" + PORT + endpoint, request);
     } catch (Exception e) {
       throw new Exception();
