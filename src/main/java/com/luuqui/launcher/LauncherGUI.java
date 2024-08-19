@@ -428,7 +428,7 @@ public class LauncherGUI extends BaseGUI {
     Icon changelogIcon = IconFontSwing.buildIcon(FontAwesome.NEWSPAPER_O, 16, Color.WHITE);
     changelogButton = new JButton(changelogIcon);
     changelogButton.setBounds(737, 26, 35, 35);
-    changelogButton.setToolTipText(Locale.getValue("Latest changelog"));
+    changelogButton.setToolTipText(Locale.getValue("Latest Changelog"));
     changelogButton.setFont(Fonts.fontMed);
     changelogButton.setFocusPainted(false);
     changelogButton.setFocusable(false);

@@ -115,13 +115,6 @@ public class Updater extends BaseGUI {
     });
     titleBar.setLayout(null);
 
-    /*
-    JLabel windowTitle = new JLabel("Updater");
-    windowTitle.setFont(Fonts.fontMed);
-    windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 35);
-    titleBar.add(windowTitle);
-     */
-
     Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 20, ColorUtil.getForegroundColor());
     JButton closeButton = new JButton(closeIcon);
     closeButton.setBounds(updaterFrame.getWidth() - 38, 3, 29, 29);

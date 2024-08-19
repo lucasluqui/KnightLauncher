@@ -1,14 +1,15 @@
 package com.luuqui.launcher;
 
 import com.luuqui.dialog.DialogError;
+import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.setting.SettingsProperties;
-import com.luuqui.util.ColorUtil;
-import com.luuqui.util.Compressor;
-import com.luuqui.util.FileUtil;
-import com.luuqui.util.ProcessUtil;
+import com.luuqui.util.*;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -48,33 +49,34 @@ public class JVMPatcher extends BaseGUI {
     jvmPatcherFrame.setResizable(false);
     jvmPatcherFrame.setUndecorated(true);
     jvmPatcherFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    jvmPatcherFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-128.png"));
+    jvmPatcherFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     jvmPatcherFrame.getContentPane().setLayout(null);
 
-    headerLabel = new JLabel("We can automatically patch your game to use a 64-bit Java VM");
-    headerLabel.setBounds(25, 30, 480, 37);
+    headerLabel = new JLabel("Patch your game to use a compatible 64-bit Java VM");
+    headerLabel.setBounds(0, 50, 500, 37);
     headerLabel.setFont(Fonts.fontMed);
-    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
     jvmPatcherFrame.getContentPane().add(headerLabel);
 
     subHeaderLabel = new JLabel("You can always restart this patcher from the Settings menu");
-    subHeaderLabel.setBounds(25, 55, 480, 37);
+    subHeaderLabel.setBounds(0, 75, 500, 37);
     subHeaderLabel.setFont(Fonts.fontReg);
-    subHeaderLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    subHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
     jvmPatcherFrame.getContentPane().add(subHeaderLabel);
 
-    JLabel javaVersionSelectLabel = new JLabel("Java version to install:");
-    javaVersionSelectLabel.setBounds(25, 115, 150, 37);
+    JLabel javaVersionSelectLabel = new JLabel("Select a Java version to install");
+    javaVersionSelectLabel.setBounds(0, 115, 500, 37);
     javaVersionSelectLabel.setFont(Fonts.fontMed);
-    javaVersionSelectLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    javaVersionSelectLabel.setHorizontalAlignment(SwingConstants.CENTER);
     jvmPatcherFrame.getContentPane().add(javaVersionSelectLabel);
 
     javaVersionComboBox = new JComboBox<>();
-    javaVersionComboBox.setBounds(175, 123, 250, 20);
+    javaVersionComboBox.setBounds(150, 145, 205, 20);
     javaVersionComboBox.setFocusable(false);
     javaVersionComboBox.setFont(Fonts.fontReg);
     jvmPatcherFrame.add(javaVersionComboBox);
 
-    //javaVersionComboBox.addItem("Java 7 (7u80) (Recommended)");
     javaVersionComboBox.addItem("Java 8 (8u202)");
     javaVersionComboBox.addItem("Java 8 (8u251)");
     javaVersionComboBox.setSelectedIndex(0);
@@ -85,45 +87,29 @@ public class JVMPatcher extends BaseGUI {
     jvmPatcherFrame.getContentPane().add(jvmPatcherState);
 
     jvmPatcherProgressBar = new JProgressBar();
-    jvmPatcherProgressBar.setBounds(25, 204, 450, 5);
+    jvmPatcherProgressBar.setBounds(25, 204, 450, 25);
     jvmPatcherProgressBar.setVisible(false);
     jvmPatcherFrame.getContentPane().add(jvmPatcherProgressBar);
 
-    buttonAccept = new JButton("Yes, patch now");
+    buttonAccept = new JButton("Start patching");
     buttonAccept.setFocusPainted(false);
     buttonAccept.setFocusable(false);
     buttonAccept.setFont(Fonts.fontMed);
-    buttonAccept.setBounds(30, 200, 200, 23);
+    buttonAccept.setBounds(150, 200, 200, 25);
     jvmPatcherFrame.getContentPane().add(buttonAccept);
-    buttonAccept.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        buttonAccept.setEnabled(false);
-        buttonAccept.setVisible(false);
-        buttonDecline.setEnabled(false);
-        buttonDecline.setVisible(false);
-        javaVersionSelectLabel.setVisible(false);
-        javaVersionComboBox.setVisible(false);
-        headerLabel.setText("This will take a few minutes...");
-        subHeaderLabel.setText("Please do not close this window.");
-        jvmPatcherProgressBar.setVisible(true);
-        initPatcher();
-      }
-    });
-
-    buttonDecline = new JButton(Locale.getValue("b.jvm_patcher_decline"));
-    buttonDecline.setFocusPainted(false);
-    buttonDecline.setFocusable(false);
-    buttonDecline.setFont(Fonts.fontMed);
-    buttonDecline.setBounds(360, 200, 110, 23);
-    jvmPatcherFrame.getContentPane().add(buttonDecline);
-    buttonDecline.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent _action) {
-        finish();
-      }
+    buttonAccept.addActionListener(l -> {
+      buttonAccept.setEnabled(false);
+      buttonAccept.setVisible(false);
+      javaVersionSelectLabel.setVisible(false);
+      javaVersionComboBox.setVisible(false);
+      headerLabel.setText("This will take a few minutes...");
+      subHeaderLabel.setText("Please do not close this window.");
+      jvmPatcherProgressBar.setVisible(true);
+      initPatcher();
     });
 
     JPanel titleBar = new JPanel();
-    titleBar.setBounds(0, 0, jvmPatcherFrame.getWidth(), 20);
+    titleBar.setBounds(0, 0, jvmPatcherFrame.getWidth(), 35);
     titleBar.setBackground(ColorUtil.getTitleBarColor());
     jvmPatcherFrame.getContentPane().add(titleBar);
 
@@ -169,10 +155,34 @@ public class JVMPatcher extends BaseGUI {
     });
     titleBar.setLayout(null);
 
-    JLabel windowTitle = new JLabel(Locale.getValue("t.jvm_patcher"));
-    windowTitle.setFont(Fonts.fontMed);
-    windowTitle.setBounds(10, 0, jvmPatcherFrame.getWidth() - 100, 20);
-    titleBar.add(windowTitle);
+    Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 20, ColorUtil.getForegroundColor());
+    JButton closeButton = new JButton(closeIcon);
+    closeButton.setBounds(jvmPatcherFrame.getWidth() - 38, 3, 29, 29);
+    closeButton.setToolTipText(Locale.getValue("b.close"));
+    closeButton.setFocusPainted(false);
+    closeButton.setFocusable(false);
+    closeButton.setBackground(null);
+    closeButton.setBorder(null);
+    closeButton.setVisible(false);
+    closeButton.setFont(Fonts.fontMed);
+    titleBar.add(closeButton);
+    closeButton.addActionListener(e -> {
+      DiscordRPC.getInstance().stop();
+      System.exit(0);
+    });
+
+    Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 20, ColorUtil.getForegroundColor());
+    JButton minimizeButton = new JButton(minimizeIcon);
+    minimizeButton.setBounds(jvmPatcherFrame.getWidth() - 71, 3, 29, 29);
+    minimizeButton.setToolTipText(Locale.getValue("b.minimize"));
+    minimizeButton.setFocusPainted(false);
+    minimizeButton.setFocusable(false);
+    minimizeButton.setBackground(null);
+    minimizeButton.setBorder(null);
+    minimizeButton.setVisible(false);
+    minimizeButton.setFont(Fonts.fontMed);
+    titleBar.add(minimizeButton);
+    minimizeButton.addActionListener(e -> jvmPatcherFrame.setState(Frame.ICONIFIED));
 
     jvmPatcherFrame.setLocationRelativeTo(null);
     jvmPatcherFrame.setVisible(true);
