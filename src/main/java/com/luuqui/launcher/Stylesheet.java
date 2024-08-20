@@ -8,7 +8,7 @@ public class Stylesheet {
     UIManager.put("TabbedPane.underlineColor", CustomColors.KL);
     UIManager.put("TabbedPane.inactiveUnderlineColor", CustomColors.KL);
 
-    UIManager.put("Slider.thumbColor", CustomColors.KL);
+    UIManager.put("Slider.thumbColor", CustomColors.INTERFACE_DEFAULT);
 
     UIManager.put("ComboBox.selectionBackground", CustomColors.INTERFACE_DEFAULT_FOCUS);
 

@@ -712,24 +712,29 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setFont(Fonts.fontMedGiant);
     aboutPanel.add(headerLabel);
 
-    labelFlamingoStatus = new JLabel("Flamingo status: Offline");
+    labelFlamingoStatus = new JLabel("Knight Launcher version: " + LauncherGlobals.LAUNCHER_VERSION);
     labelFlamingoStatus.setBounds(25, 90, 600, 20);
     labelFlamingoStatus.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoStatus);
 
+    labelFlamingoStatus = new JLabel("Flamingo status: Offline");
+    labelFlamingoStatus.setBounds(25, 110, 600, 20);
+    labelFlamingoStatus.setFont(Fonts.fontRegBig);
+    aboutPanel.add(labelFlamingoStatus);
+
     labelFlamingoVersion = new JLabel("Flamingo version: N/A");
-    labelFlamingoVersion.setBounds(25, 110, 600, 20);
+    labelFlamingoVersion.setBounds(25, 130, 600, 20);
     labelFlamingoVersion.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoVersion);
 
     labelFlamingoUptime = new JLabel("Flamingo uptime: N/A");
-    labelFlamingoUptime.setBounds(25, 130, 600, 20);
+    labelFlamingoUptime.setBounds(25, 150, 600, 20);
     labelFlamingoUptime.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoUptime);
 
     JButton copyLogsButton = new JButton("Copy logs to clipboard");
     copyLogsButton.setFont(Fonts.fontMed);
-    copyLogsButton.setBounds(25, 160, 200, 23);
+    copyLogsButton.setBounds(25, 400, 200, 23);
     copyLogsButton.setFocusPainted(false);
     copyLogsButton.setFocusable(false);
     copyLogsButton.setToolTipText("Copy logs to clipboard");
