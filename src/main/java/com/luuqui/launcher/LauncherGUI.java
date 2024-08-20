@@ -1,7 +1,5 @@
 package com.luuqui.launcher;
 
-import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.luuqui.dialog.DialogError;
 import com.luuqui.dialog.DialogInfo;
 import com.luuqui.discord.DiscordRPC;
@@ -332,7 +330,7 @@ public class LauncherGUI extends BaseGUI {
     launcherVersion.setFont(Fonts.fontRegSmall);
     launcherVersion.setForeground(CustomColors.INTERFACE_SIDEPANE_FOOTNOTE);
     launcherVersion.setHorizontalAlignment(SwingConstants.LEFT);
-    launcherVersion.setBounds(10, 495, 100, 15);
+    launcherVersion.setBounds(10, 493, 100, 15);
     sidePane.add(launcherVersion);
 
     bannerTitle = new JLabel("Uh, oh");
