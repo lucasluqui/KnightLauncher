@@ -21,33 +21,39 @@ import java.awt.image.BufferedImage;
 
 public class LauncherGUI extends BaseGUI {
 
+  // Shared
   private final LauncherApp app;
   public static JFrame launcherGUIFrame;
+  public static JTabbedPane layeredSettingsPane = new JTabbedPane();
+  public static JPanel layeredModsPane = new JPanel();
+  public static JPanel layeredEditorsPane = new JPanel();
+  public static JButton layeredReturnButton;
+
+  // Side pane
+  public static JButton settingsButton;
+  public static JButton modButton;
+  public static JButton editorsButton;
+  public static JButton playerCountTooltipButton;
+  public static JLabel playerCountLabel;
+  public static JComboBox serverList;
+  public static JButton serverInfoButton;
+
+  // Main pane
   public static JPanel mainPane;
   public static BufferedImage banner = null;
   public static JLabel bannerTitle;
   public static JLabel bannerSubtitle1;
   public static JLabel bannerSubtitle2;
   public static JButton bannerLinkButton;
-  public static JTabbedPane layeredSettingsPane = new JTabbedPane();
-  public static JPanel layeredModsPane = new JPanel();
-  public static JPanel layeredEditorsPane = new JPanel();
-  public static JButton layeredReturnButton;
   public static JButton launchButton;
-  public static JButton settingsButton;
-  public static JButton modButton;
-  public static JButton editorsButton;
   public static JButton updateButton;
   public static JButton changelogButton;
-  public static JButton playerCountTooltipButton;
   public static JLabel launchBackground;
   public static JLabel launchState;
   public static JProgressBar launchProgressBar = new JProgressBar();
-  public static JLabel playerCountLabel;
-  public static JComboBox serverList;
-  public static JButton serverInfoButton;
   public static JButton warningNotice;
 
+  // Dynamic text
   public static String currentWarning = "";
   public static String latestRelease = "";
   public static String latestChangelog = "";
@@ -64,7 +70,6 @@ public class LauncherGUI extends BaseGUI {
   }
 
   /** @wbp.parser.entryPoint */
-  @SuppressWarnings("static-access")
   private void initialize() {
 
     launcherGUIFrame = new JFrame();
@@ -112,20 +117,13 @@ public class LauncherGUI extends BaseGUI {
     launcherName.setBounds(0, 100, 250, 80);
     sidePane.add(launcherName);
 
-    JLabel launcherVersion = new JLabel("v" + LauncherGlobals.LAUNCHER_VERSION);
-    launcherVersion.setFont(Fonts.fontMedIta);
-    launcherVersion.setHorizontalAlignment(SwingConstants.CENTER);
-    launcherVersion.setVerticalAlignment(SwingConstants.CENTER);
-    launcherVersion.setBounds(0, 150, 250, 25);
-    sidePane.add(launcherVersion);
-
     JLabel serverListLabel = new JLabel("Server");
     serverListLabel.setFont(Fonts.fontMed);
-    serverListLabel.setBounds(28, 210, 80, 20);
+    serverListLabel.setBounds(28, 185, 80, 20);
     sidePane.add(serverListLabel);
 
     serverList = new JComboBox<String>();
-    serverList.setBounds(73, 210, 120, 20);
+    serverList.setBounds(73, 185, 120, 20);
     serverList.setFont(Fonts.fontReg);
     serverList.setFocusable(false);
     serverList.setRequestFocusEnabled(false);
@@ -136,7 +134,7 @@ public class LauncherGUI extends BaseGUI {
     Icon serverInfoButtonIcon = IconFontSwing.buildIcon(FontAwesome.INFO, 16, Color.WHITE);
     serverInfoButton = new JButton();
     serverInfoButton.setIcon(serverInfoButtonIcon);
-    serverInfoButton.setBounds(200, 210, 20, 20);
+    serverInfoButton.setBounds(200, 185, 20, 20);
     serverInfoButton.setEnabled(false);
     serverInfoButton.setVisible(false);
     serverInfoButton.setFocusable(false);
@@ -150,7 +148,7 @@ public class LauncherGUI extends BaseGUI {
     playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
     playerCountLabel.setFont(Fonts.fontReg);
     playerCountLabel.setIcon(playerCountIcon);
-    playerCountLabel.setBounds(28, 235, 200, 18);
+    playerCountLabel.setBounds(28, 210, 200, 18);
     sidePane.add(playerCountLabel);
 
     String playerCountTooltipTitle = "Where does this player count come from?";
@@ -160,7 +158,7 @@ public class LauncherGUI extends BaseGUI {
     Icon playerCountTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 12, Color.WHITE);
     playerCountTooltipButton = new JButton();
     playerCountTooltipButton.setIcon(playerCountTooltipButtonIcon);
-    playerCountTooltipButton.setBounds(167, 238, 13, 13);
+    playerCountTooltipButton.setBounds(167, 213, 13, 13);
     playerCountTooltipButton.setEnabled(true);
     playerCountTooltipButton.setFocusable(false);
     playerCountTooltipButton.setFocusPainted(false);
@@ -176,7 +174,7 @@ public class LauncherGUI extends BaseGUI {
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
     settingsButton = new JButton(Locale.getValue("b.settings"));
     settingsButton.setIcon(settingsIcon);
-    settingsButton.setBounds(28, 300, 125, 35);
+    settingsButton.setBounds(28, 275, 125, 35);
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
     settingsButton.setFont(Fonts.fontMed);
     settingsButton.setFocusPainted(false);
@@ -216,7 +214,7 @@ public class LauncherGUI extends BaseGUI {
     Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, 16, ColorUtil.getForegroundColor());
     modButton = new JButton(Locale.getValue("b.mods"));
     modButton.setIcon(modsIcon);
-    modButton.setBounds(28, 340, 125, 35);
+    modButton.setBounds(28, 315, 125, 35);
     modButton.setHorizontalAlignment(SwingConstants.LEFT);
     modButton.setFont(Fonts.fontMed);
     modButton.setFocusPainted(false);
@@ -257,7 +255,7 @@ public class LauncherGUI extends BaseGUI {
     Icon editorsIcon = IconFontSwing.buildIcon(FontAwesome.PENCIL, 16, ColorUtil.getForegroundColor());
     editorsButton = new JButton("Editors");
     editorsButton.setIcon(editorsIcon);
-    editorsButton.setBounds(28, 380, 125, 35);
+    editorsButton.setBounds(28, 355, 125, 35);
     editorsButton.setHorizontalAlignment(SwingConstants.LEFT);
     editorsButton.setFont(Fonts.fontMed);
     editorsButton.setFocusPainted(false);
@@ -296,7 +294,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(editorsButton);
 
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
-    discordButton.setBounds(66, 465, 35, 35);
+    discordButton.setBounds(66, 440, 35, 35);
     discordButton.setToolTipText("Discord");
     discordButton.setFocusPainted(false);
     discordButton.setFocusable(false);
@@ -308,7 +306,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, Color.WHITE);
     JButton bugButton = new JButton(bugIcon);
-    bugButton.setBounds(107, 465, 35, 35);
+    bugButton.setBounds(107, 440, 35, 35);
     bugButton.setToolTipText(Locale.getValue("b.bug_report"));
     bugButton.setFocusPainted(false);
     bugButton.setFocusable(false);
@@ -320,7 +318,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.PAYPAL, 16, Color.WHITE);
     JButton kofiButton = new JButton(kofiIcon);
-    kofiButton.setBounds(148, 465, 35, 35);
+    kofiButton.setBounds(148, 440, 35, 35);
     kofiButton.setToolTipText(Locale.getValue("b.kofi"));
     kofiButton.setFocusPainted(false);
     kofiButton.setFocusable(false);
@@ -329,6 +327,13 @@ public class LauncherGUI extends BaseGUI {
     kofiButton.setFont(Fonts.fontMed);
     sidePane.add(kofiButton);
     kofiButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_KOFI));
+
+    JLabel launcherVersion = new JLabel("v" + LauncherGlobals.LAUNCHER_VERSION);
+    launcherVersion.setFont(Fonts.fontRegSmall);
+    launcherVersion.setForeground(CustomColors.INTERFACE_SIDEPANE_FOOTNOTE);
+    launcherVersion.setHorizontalAlignment(SwingConstants.LEFT);
+    launcherVersion.setBounds(10, 495, 100, 15);
+    sidePane.add(launcherVersion);
 
     bannerTitle = new JLabel("Uh, oh");
     bannerTitle.setBounds(35, -60, 700, 340);

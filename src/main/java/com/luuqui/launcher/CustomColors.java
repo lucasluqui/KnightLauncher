@@ -25,6 +25,7 @@ public class CustomColors {
   public static final Color INTERFACE_TITLEBAR                  = new Color(34, 36, 42);
   public static final Color INTERFACE_SIDEPANE_BACKGROUND       = new Color(45, 48, 57);
   public static final Color INTERFACE_SIDEPANE_BUTTON           = new Color(107, 114, 128);
+  public static final Color INTERFACE_SIDEPANE_FOOTNOTE         = new Color(79, 84, 100);
   public static final Color INTERFACE_MAINPANE_BACKGROUND       = new Color(56, 60, 71);
   public static final Color INTERFACE_MAINPANE_BUTTON           = new Color(INTERFACE_MAINPANE_BACKGROUND.getRed(), INTERFACE_MAINPANE_BACKGROUND.getGreen(), INTERFACE_MAINPANE_BACKGROUND.getBlue(), 150);
   public static final Color INTERFACE_MODLIST_BACKGROUND_LIGHT  = new Color(45, 48, 57);
