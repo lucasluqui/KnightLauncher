@@ -32,3 +32,6 @@ KnightLauncher.properties
 
 # Rsrc folder
 rsrc/
+
+# IDEA run configurations
+.idea/runConfigurations/
