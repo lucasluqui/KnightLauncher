@@ -21,7 +21,7 @@ public class JarMod extends Mod {
   }
 
   public String getAbsolutePath() {
-    return LauncherGlobals.USER_DIR + "/code-mods/" + this.fileName;
+    return LauncherGlobals.USER_DIR + "/mods/" + this.fileName;
   }
 
   public void wasAdded() {

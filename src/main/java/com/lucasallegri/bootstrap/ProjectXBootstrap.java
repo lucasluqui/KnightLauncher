@@ -33,7 +33,7 @@ import java.util.zip.ZipFile;
  */
 public class ProjectXBootstrap {
   private static final String USER_DIR = System.getProperty("user.dir");
-  private static final String CODE_MODS_DIR = USER_DIR + "/code-mods/";
+  private static final String CODE_MODS_DIR = USER_DIR + "/mods/";
   private static final String MANIFEST_PATH = "META-INF/MANIFEST.MF";
   private static final String MAIN_CLASS_KEY = "Main-Class:";
   private static final String NAME_KEY = "Name:";
@@ -130,7 +130,7 @@ public class ProjectXBootstrap {
         }
       }
     }
-    // Obtain the mod files in the "/code-mods/" directory
+    // Obtain the mod files in the "/mods/" directory
     File codeModsDir = new File(CODE_MODS_DIR);
     if (!codeModsDir.exists()) {
       return;

@@ -11,6 +11,8 @@ import com.luuqui.util.DesktopUtil;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class ModListEventHandler {
 
@@ -23,7 +25,7 @@ public class ModListEventHandler {
       }
       ModListGUI.labelModCount.setText(Integer.toString(ModLoader.getModCount()));
       ModLoader.mount();
-      ModListGUI.updateModList();
+      ModListGUI.updateModList(null);
     });
     refreshThread.start();
   }
@@ -68,5 +70,25 @@ public class ModListEventHandler {
     mod.setEnabled(true);
     ModLoader.mountRequired = true;
     ModLoader.rebuildRequired = true;
+  }
+
+  public static void showDirectoriesWarning(boolean show) {
+    if (!show) {
+      ModListGUI.warningNotice.setVisible(false);
+      return;
+    }
+
+    // Show the warning with a slight delay to make sure the GUI can load beforehand.
+    final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+    Thread showDirectoriesWarningThread = new Thread(() -> {
+      ModListGUI.warningNotice.setVisible(true);
+      ModListGUI.currentWarning = "There are folders within the mods folder." +
+        "\nYou do not need to extract the .zip files, simply drag and drop the .zip files inside the mods folder.";
+    });
+    executor.schedule(showDirectoriesWarningThread, 2, TimeUnit.SECONDS);
+  }
+
+  public static void searchMod() {
+    ModListGUI.updateModList(ModListGUI.searchBox.getText());
   }
 }

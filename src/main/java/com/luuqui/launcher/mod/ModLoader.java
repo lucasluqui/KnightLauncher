@@ -34,12 +34,14 @@ public class ModLoader {
 
   public static void checkInstalled() {
 
+    final String MOD_FOLDER_PATH = LauncherGlobals.USER_DIR + "/mods/";
+
     // Clean the list in case something remains in it.
     if (getModCount() > 0) clearModList();
 
     // Append all .zip and .jar files inside the mod folder into an ArrayList.
-    List<File> rawFiles = FileUtil.filesInDirectory(LauncherGlobals.USER_DIR + "/mods/", ".zip");
-    rawFiles.addAll(FileUtil.filesInDirectory(LauncherGlobals.USER_DIR + "/code-mods/", ".jar"));
+    List<File> rawFiles = FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".zip");
+    rawFiles.addAll(FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".jar"));
 
     for (File file : rawFiles) {
       JSONObject modJson;
@@ -76,38 +78,6 @@ public class ModLoader {
 
       modList.add(mod);
       mod.wasAdded();
-
-      /*
-
-      // Compute a hash for each mod file and check that it matches on every execution, if it doesn't, then rebuild.
-      String hash = Compressor.getZipHash(file.getAbsolutePath());
-      String hashFilePath = file.getAbsolutePath() + ".hash";
-
-      if (FileUtil.fileExists(hashFilePath)) {
-        try {
-          // We read the hash file contents.
-          String fileHash = FileUtil.readFile(hashFilePath);
-
-          // If both hashes match then we move on.
-          if (hash.startsWith(fileHash)) continue;
-
-          // They don't? We write a new one and schedule a file rebuild and remount.
-          new File(hashFilePath).delete();
-          FileUtil.writeFile(hashFilePath, hash);
-          rebuildRequired = true;
-          mountRequired = true;
-
-        } catch (IOException e) {
-          log.error(e);
-        }
-      } else {
-        // And if we don't have any hash at all then let's make it.
-        FileUtil.writeFile(hashFilePath, hash);
-        rebuildRequired = true;
-        mountRequired = true;
-      }
-
-      */
     }
 
     // Finally lets see which have been set as disabled.
@@ -119,7 +89,17 @@ public class ModLoader {
       rebuildRequired = true;
       mountRequired = true;
     }
-    ModListGUI.updateModList();
+
+    // Check if there's directories in the mod folder and push a warning to the user.
+    for (File file : FileUtil.filesAndDirectoriesInDirectory(MOD_FOLDER_PATH)) {
+      if(file.isDirectory()) {
+        ModListEventHandler.showDirectoriesWarning(true);
+        break;
+      }
+      ModListEventHandler.showDirectoriesWarning(false);
+    }
+
+    ModListGUI.updateModList(null);
   }
 
   public static void mount() {
@@ -272,9 +252,6 @@ public class ModLoader {
     new File(LauncherGlobals.USER_DIR + "/rsrc/mod.png").delete();
     for (String filePath : FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/mods", ".hash")) {
       new File(LauncherGlobals.USER_DIR + "/mods/" + filePath).delete();
-    }
-    for (String filePath : FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/code-mods", ".hash")) {
-      new File(LauncherGlobals.USER_DIR + "/code-mods/" + filePath).delete();
     }
   }
 

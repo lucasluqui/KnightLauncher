@@ -17,6 +17,7 @@ import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import net.sf.image4j.codec.ico.ICOEncoder;
+import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -157,9 +158,6 @@ public class LauncherApp {
     // Stores /rsrc (.zip) mods.
     FileUtil.createDir("mods");
 
-    // Stores /code (.jar) mods.
-    FileUtil.createDir("code-mods");
-
     // Stores clients for third-party servers.
     FileUtil.createDir("thirdparty");
 
@@ -168,6 +166,27 @@ public class LauncherApp {
 
     // External modules necessary for extra functionality (eg. RPC)
     FileUtil.createDir("KnightLauncher/modules/");
+
+    // Check if the deprecated "code-mods" folder exists, in that case start migrating.
+    if(FileUtil.fileExists("code-mods")) migrateLegacyCodeModsFolder();
+
+  }
+
+  private void migrateLegacyCodeModsFolder() {
+    File oldCodeModsFolder = new File("code-mods");
+    File[] oldCodeModsFolderFiles = oldCodeModsFolder.listFiles();
+    if(oldCodeModsFolderFiles == null) {
+      oldCodeModsFolder.delete();
+    } else {
+      for (File file : oldCodeModsFolderFiles) {
+        try {
+          FileUtils.moveFile(file, new File(LauncherGlobals.USER_DIR + "/mods/" + file.getName()));
+        } catch (IOException e) {
+          log.error(e);
+        }
+      }
+      oldCodeModsFolder.delete();
+    }
   }
 
   // Checking if we're being run inside the game's directory, "getdown-pro.jar" should always be present if so.

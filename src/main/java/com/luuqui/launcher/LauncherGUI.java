@@ -527,9 +527,12 @@ public class LauncherGUI extends BaseGUI {
     titleBar.add(windowTitle);
      */
 
+    final int BUTTON_WIDTH = 35;
+    final int BUTTON_HEIGHT = 35;
+
     Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 17, ColorUtil.getForegroundColor());
     JButton closeButton = new JButton(closeIcon);
-    closeButton.setBounds(launcherGUIFrame.getWidth() - 34, 0, 34, 34);
+    closeButton.setBounds(launcherGUIFrame.getWidth() - BUTTON_WIDTH, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
     closeButton.setToolTipText(Locale.getValue("b.close"));
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
@@ -555,7 +558,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 12, ColorUtil.getForegroundColor());
     JButton minimizeButton = new JButton(minimizeIcon);
-    minimizeButton.setBounds(launcherGUIFrame.getWidth() - 68, -7, 34, 41);
+    minimizeButton.setBounds(launcherGUIFrame.getWidth() - BUTTON_WIDTH * 2, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7);
     minimizeButton.setToolTipText(Locale.getValue("b.minimize"));
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
