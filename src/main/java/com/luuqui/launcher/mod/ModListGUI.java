@@ -255,7 +255,7 @@ public class ModListGUI extends BaseGUI {
       if(mod instanceof ZipMod) {
         modBadge.setText("Resource mod");
         modBadge.putClientProperty(FlatClientProperties.STYLE,
-          "background:lighten(@background,3%); foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND));
+          "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND) + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND));
         modBadge.setBounds(
           modBadge.getX(),
           modBadge.getY(),
@@ -265,7 +265,7 @@ public class ModListGUI extends BaseGUI {
       } else {
         modBadge.setText("Code mod");
         modBadge.putClientProperty(FlatClientProperties.STYLE,
-          "background:lighten(@background,3%); foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND));
+          "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND) + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND));
       }
       modBadge.setVisible(true);
       modBadge.setToolTipText(modBadge.getText());
