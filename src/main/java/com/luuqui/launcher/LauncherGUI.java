@@ -103,7 +103,8 @@ public class LauncherGUI extends BaseGUI {
 
     JLabel launcherLogo = new JLabel();
     BufferedImage launcherLogoImage = ImageUtil.loadImageWithinJar("/img/icon-92.png");
-    launcherLogo.setBounds(80, -55, 256, 256);
+    launcherLogo.setBounds(0, -55, 251, 256);
+    launcherLogo.setHorizontalAlignment(SwingConstants.CENTER);
     launcherLogo.setIcon(new ImageIcon(launcherLogoImage));
     sidePane.add(launcherLogo);
 
