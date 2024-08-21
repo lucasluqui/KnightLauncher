@@ -76,7 +76,7 @@ public class LauncherGUI extends BaseGUI {
     launcherGUIFrame.setBounds(100, 100, 1050, 550);
     launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     launcherGUIFrame.setUndecorated(true);
-    launcherGUIFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-128.png"));
+    launcherGUIFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-256.png"));
     launcherGUIFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     launcherGUIFrame.getContentPane().setLayout(null);
 
