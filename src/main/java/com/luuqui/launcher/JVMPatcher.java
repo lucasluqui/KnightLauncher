@@ -206,8 +206,8 @@ public class JVMPatcher extends BaseGUI {
     downloadPackagedJVM();
     if(_downloadAttempts > 3) {
       String downloadErrMsg = "The Java VM download couldn't be initiated after 3 attempts." +
-              "Knight Launcher will boot without patching but be aware game performance might not be the best." +
-              "You can manually restart this patcher heading to the 'Game' tab within launcher's settings.";
+              "\nKnight Launcher will boot without patching but be aware game performance might not be the best." +
+              "\nYou can manually restart this patcher heading to the 'Game' tab within launcher's Settings.";
       Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
       log.error(downloadErrMsg);
       finish();

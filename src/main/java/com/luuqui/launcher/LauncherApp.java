@@ -170,15 +170,15 @@ public class LauncherApp {
     FileUtil.createDir("KnightLauncher/modules/");
   }
 
-  // Checking if we're being ran inside the game's directory, "getdown-pro.jar" should always be present if so.
+  // Checking if we're being run inside the game's directory, "getdown-pro.jar" should always be present if so.
   private void checkStartLocation() {
     if (!FileUtil.fileExists("./getdown-pro.jar")) {
       String pathWarning = "The .jar file appears to be placed in the wrong directory. " +
-              "In some cases this is due to a false positive and can be ignored. Knight Launcher will attempt to launch normally."
-              + System.lineSeparator() + "If this persists try using the Batch (KnightLauncher_windows.bat) file for Windows " +
-              "or the Shell (KnightLauncher_mac_linux.sh) file for OSX/Linux.";
+              "\nIn some cases this is due to a false positive and can be ignored. Knight Launcher will attempt to launch normally."
+              + "\nIf this persists try using the Batch (KnightLauncher_windows.bat) file for Windows " +
+              "\nor the Shell (KnightLauncher_mac_linux.sh) file for OSX/Linux.";
       if (SystemUtil.isWindows()) {
-        pathWarning += System.lineSeparator() + "Additionally, we've detected the following Steam path: " + SteamUtil.getGamePathWindows();
+        pathWarning += "\nAdditionally, we've detected the following Steam path: \n" + SteamUtil.getGamePathWindows();
       }
       log.warning(pathWarning);
       Dialog.push(pathWarning, JOptionPane.WARNING_MESSAGE);
@@ -360,7 +360,7 @@ public class LauncherApp {
 
   private void checkFlamingoStatus() {
     if(!LauncherApp.flamingoOnline) {
-      LauncherGUI.showWarning("Could not connect to Flamingo. Some launcher functionalities might not be fully available.");
+      LauncherGUI.showWarning("Could not connect to Flamingo.\nSome launcher functionalities might not be fully available.");
     }
   }
 

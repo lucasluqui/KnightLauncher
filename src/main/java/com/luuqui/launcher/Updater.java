@@ -165,7 +165,7 @@ public class Updater extends BaseGUI {
 
     if(_downloadAttempts > 3) {
       String downloadErrMsg = "The updater couldn't be initiated after 3 download attempts." +
-              "Booting back into current version, try updating later.";
+              "\nBooting back into current version, try updating later.";
       Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
       log.error(downloadErrMsg);
       //FileUtil.rename(new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar.old"), new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"));
