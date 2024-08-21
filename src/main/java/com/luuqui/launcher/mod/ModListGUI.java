@@ -251,6 +251,7 @@ public class ModListGUI extends BaseGUI {
 
       JLabel modBadge = new JLabel();
       modBadge.setBounds(241, 52, 71, 15);
+      modBadge.setHorizontalAlignment(SwingConstants.CENTER);
       modBadge.setFont(Fonts.fontRegSmall);
       if(mod instanceof ZipMod) {
         modBadge.setText("Resource mod");
