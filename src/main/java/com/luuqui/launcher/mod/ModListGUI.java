@@ -250,7 +250,7 @@ public class ModListGUI extends BaseGUI {
       modPane.add(modFooter);
 
       JLabel modBadge = new JLabel();
-      modBadge.setBounds(241, 52, 71, 15);
+      modBadge.setBounds(241, 50, 71, 18);
       modBadge.setHorizontalAlignment(SwingConstants.CENTER);
       modBadge.setFont(Fonts.fontRegSmall);
       if(mod instanceof ZipMod) {
