@@ -111,6 +111,8 @@ public class Fonts {
       fontCodeReg = fontCodeReg.deriveFont(12.0f * sizeMultiplier);
 
       UIManager.put("ToolTip.font", fontReg);
+      UIManager.put("Button.font", fontMed);
+      UIManager.put("TitlePane.font", fontMed);
 
     } catch (FontFormatException | IOException e) {
       log.error(e);

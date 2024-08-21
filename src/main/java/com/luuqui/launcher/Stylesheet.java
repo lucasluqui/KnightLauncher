@@ -14,6 +14,8 @@ public class Stylesheet {
 
     UIManager.put("TextField.selectionBackground", CustomColors.INTERFACE_DEFAULT_FOCUS);
 
+    UIManager.put("TextArea.selectionBackground", CustomColors.INTERFACE_DEFAULT_FOCUS);
+
     UIManager.put("EditorPane.selectionBackground", CustomColors.INTERFACE_DEFAULT_FOCUS);
 
     UIManager.put("ScrollPane.smoothScrolling", true);
@@ -23,11 +25,7 @@ public class Stylesheet {
     UIManager.put("ScrollBar.thumbArc", 100);
     UIManager.put("ScrollBar.width", 10);
 
-    UIManager.put("Button.default.focusedBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
-    UIManager.put("Button.default.focusColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("Button.default.hoverBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
-    UIManager.put("Button.focusedBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
-    UIManager.put("Button.focusColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("Button.hoverBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
 
     UIManager.put("CheckBox.icon.focusedBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);

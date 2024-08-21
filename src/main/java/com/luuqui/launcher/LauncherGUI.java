@@ -150,7 +150,7 @@ public class LauncherGUI extends BaseGUI {
 
     String playerCountTooltipTitle = "Where does this player count come from?";
     String playerCountTooltipText = "This player count is an approximation based on the currently online Steam players. " +
-      "The approximation is the Steam value increased by 1.6x to account for Standalone users." +
+      "\nThe approximation is the Steam value increased by 1.6x to account for Standalone users." +
       "\n\nIf this number is ever 0 it's likely Steam is temporarily down for maintenance, it will be back up momentarily.";
     Icon playerCountTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 12, Color.WHITE);
     playerCountTooltipButton = new JButton();
@@ -385,8 +385,8 @@ public class LauncherGUI extends BaseGUI {
       }
     });
 
-    String launchTooltipTitle = "Launching alt accounts";
-    String launchTooltipText = "Keep ALT or SHIFT pressed while launching to launch in alt account mode and save computing resources for your main instance.";
+    String launchTooltipTitle = "Launching In Alt Mode";
+    String launchTooltipText = "Keep the ALT or SHIFT key pressed while launching to launch in Alt Mode\nand save computing resources for your main Spiral Knights instance.";
     Icon launchTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 16, Color.WHITE);
     JButton launchTooltipButton = new JButton();
     launchTooltipButton.setIcon(launchTooltipButtonIcon);
