@@ -24,7 +24,6 @@ public class ModListEventHandler {
       ModListGUI.labelModCount.setText(Integer.toString(ModLoader.getModCount()));
       ModLoader.mount();
       ModListGUI.updateModList();
-      ModListGUI.labelRefreshing.setVisible(false);
     });
     refreshThread.start();
   }

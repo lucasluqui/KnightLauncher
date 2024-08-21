@@ -1,6 +1,8 @@
 package com.luuqui.launcher.mod;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.launcher.*;
+import com.luuqui.launcher.mod.data.JarMod;
 import com.luuqui.launcher.mod.data.Mod;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.DesktopUtil;
@@ -77,15 +79,14 @@ public class ModListGUI extends BaseGUI {
     refreshButton.addActionListener(ModListEventHandler::refreshEvent);
 
     labelRefreshing = new JLabel("Refreshing...");
-    labelRefreshing.setBounds(10, 86, 160, 25);
+    labelRefreshing.setBounds(60, 86, 100, 25);
     labelRefreshing.setFont(Fonts.fontReg);
-    labelRefreshing.setHorizontalAlignment(SwingConstants.CENTER);
-    labelRefreshing.setVerticalAlignment(SwingConstants.CENTER);
+    labelRefreshing.setHorizontalAlignment(SwingConstants.LEFT);
     labelRefreshing.setVisible(false);
     modListGUIFrame.getContentPane().add(labelRefreshing);
 
     refreshProgressBar = new JProgressBar();
-    refreshProgressBar.setBounds(135, 94, 100, 10);
+    refreshProgressBar.setBounds(135, 93, 100, 10);
     refreshProgressBar.setVisible(false);
     modListGUIFrame.getContentPane().add(refreshProgressBar);
 
@@ -129,7 +130,7 @@ public class ModListGUI extends BaseGUI {
     modStoreButton.setFocusPainted(false);
     modStoreButton.setFocusable(false);
     modStoreButton.setEnabled(false);
-    modStoreButton.setToolTipText("Not currently available");
+    modStoreButton.setToolTipText(Locale.getValue("m.coming_soon"));
     modListGUIFrame.getContentPane().add(modStoreButton);
     //getModsButton.addActionListener(ModListEventHandler::openModStore);
 
@@ -161,7 +162,11 @@ public class ModListGUI extends BaseGUI {
       return;
     }
 
+    GridLayout layout = new GridLayout(ModLoader.getModCount(), 1);
+    layout.setVgap(0);
+    modListPane.setLayout(layout);
     modListPane.removeAll();
+
     for (Mod mod : ModLoader.getModList()) {
       JPanel modPane = new JPanel();
       modPane.setLayout(null);
@@ -198,6 +203,15 @@ public class ModListGUI extends BaseGUI {
       modFooter.setFont(Fonts.fontRegSmall);
       modFooter.setBounds(81, 32, 400, 55);
       modPane.add(modFooter);
+
+      JLabel modLabelCard = new JLabel();
+      modLabelCard.setText("Code mod");
+      modLabelCard.putClientProperty(FlatClientProperties.STYLE,
+          "background: lighten(@background,3%); foreground: #d97707; arc: 999; border: 2,8,2,8,#fbbf23");
+      modLabelCard.setFont(Fonts.fontRegSmall);
+      modLabelCard.setBounds(196, 52, 72, 15);
+      modLabelCard.setVisible(mod instanceof JarMod);
+      modPane.add(modLabelCard);
 
       JCheckBox enabledCheckbox = new JCheckBox();
       enabledCheckbox.setEnabled(true);
