@@ -255,7 +255,7 @@ public class ModListGUI extends BaseGUI {
       if(mod instanceof ZipMod) {
         modLabelCard.setText("Resource mod");
         modLabelCard.putClientProperty(FlatClientProperties.STYLE,
-          "background: lighten(@background,3%); foreground: #d97707; arc: 999; border: 2,8,2,8,#fbbf23");
+          "background:lighten(@background,3%); foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND));
         modLabelCard.setBounds(
           modLabelCard.getX(),
           modLabelCard.getY(),
@@ -265,7 +265,7 @@ public class ModListGUI extends BaseGUI {
       } else {
         modLabelCard.setText("Code mod");
         modLabelCard.putClientProperty(FlatClientProperties.STYLE,
-          "background: lighten(@background,3%); foreground: #d97707; arc: 999; border: 2,8,2,8,#fbbf23");
+          "background:lighten(@background,3%); foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND));
       }
       modLabelCard.setVisible(true);
       modLabelCard.setToolTipText(modLabelCard.getText());

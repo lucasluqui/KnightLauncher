@@ -26,4 +26,8 @@ public class ColorUtil {
     return CustomColors.BRIGHT_RED;
   }
 
+  public static String colorToHexString(Color color) {
+    return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+  }
+
 }
