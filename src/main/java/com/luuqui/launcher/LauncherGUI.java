@@ -2,6 +2,7 @@ package com.luuqui.launcher;
 
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
+import com.luuqui.launcher.editor.EditorsEventHandler;
 import com.luuqui.launcher.editor.EditorsGUI;
 import com.luuqui.launcher.mod.ModListGUI;
 import com.luuqui.launcher.setting.SettingsGUI;
@@ -526,9 +527,9 @@ public class LauncherGUI extends BaseGUI {
     titleBar.add(windowTitle);
      */
 
-    Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 20, ColorUtil.getForegroundColor());
+    Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 17, ColorUtil.getForegroundColor());
     JButton closeButton = new JButton(closeIcon);
-    closeButton.setBounds(launcherGUIFrame.getWidth() - 38, 3, 29, 29);
+    closeButton.setBounds(launcherGUIFrame.getWidth() - 34, 0, 34, 34);
     closeButton.setToolTipText(Locale.getValue("b.close"));
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
@@ -540,10 +541,21 @@ public class LauncherGUI extends BaseGUI {
       DiscordRPC.getInstance().stop();
       System.exit(0);
     });
+    closeButton.addMouseListener(new MouseListener() {
+      @Override public void mouseClicked(MouseEvent e) {}
+      @Override public void mousePressed(MouseEvent e) {}
+      @Override public void mouseReleased(MouseEvent e) {}
+      @Override public void mouseEntered(MouseEvent e) {
+        closeButton.setBackground(CustomColors.MID_RED);
+      }
+      @Override public void mouseExited(MouseEvent e) {
+        closeButton.setBackground(null);
+      }
+    });
 
-    Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 20, ColorUtil.getForegroundColor());
+    Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 12, ColorUtil.getForegroundColor());
     JButton minimizeButton = new JButton(minimizeIcon);
-    minimizeButton.setBounds(launcherGUIFrame.getWidth() - 71, 3, 29, 29);
+    minimizeButton.setBounds(launcherGUIFrame.getWidth() - 68, -7, 34, 41);
     minimizeButton.setToolTipText(Locale.getValue("b.minimize"));
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
