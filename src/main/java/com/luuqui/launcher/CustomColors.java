@@ -32,6 +32,9 @@ public class CustomColors {
   public static final Color INTERFACE_MAINPANE_BUTTON           = new Color(INTERFACE_MAINPANE_BACKGROUND.getRed(), INTERFACE_MAINPANE_BACKGROUND.getGreen(), INTERFACE_MAINPANE_BACKGROUND.getBlue(), 150);
   public static final Color INTERFACE_MAINPANE_FOOTNOTE         = new Color(90, 96, 114);
 
+  public static final Color INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND       = new Color(217, 119, 7);
+  public static final Color INTERFACE_SETTINGS_BADGE_JVM_FOREGROUND       = new Color(248, 159, 58);
+
   public static final Color INTERFACE_MODLIST_BACKGROUND_LIGHT            = new Color(45, 48, 57);
   public static final Color INTERFACE_MODLIST_BACKGROUND_DARK             = new Color(34, 36, 43);
   public static final Color INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND   = new Color(0, 174, 255);

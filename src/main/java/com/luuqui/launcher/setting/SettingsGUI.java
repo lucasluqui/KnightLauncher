@@ -1,7 +1,9 @@
 package com.luuqui.launcher.setting;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.*;
+import com.luuqui.launcher.mod.data.ZipMod;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.SteamUtil;
@@ -464,10 +466,13 @@ public class SettingsGUI extends BaseGUI {
     labelJVMPatchExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelJVMPatchExplained);
 
-    JLabel labelJVMData = new JLabel("Installed Java VM: " + JavaUtil.getGameJVMData());
-    labelJVMData.setBounds(25, 425, 600, 16);
-    labelJVMData.setFont(Fonts.fontMedIta);
-    gamePanel.add(labelJVMData);
+    JLabel javaVMBadge = new JLabel("Java VM: " + JavaUtil.getGameJVMData());
+    javaVMBadge.setBounds(25, 425, 175, 18);
+    javaVMBadge.setHorizontalAlignment(SwingConstants.CENTER);
+    javaVMBadge.setFont(Fonts.fontRegSmall);
+    javaVMBadge.putClientProperty(FlatClientProperties.STYLE,
+      "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND) + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND));
+    gamePanel.add(javaVMBadge);
 
     JButton jvmPatchButton = new JButton(startIcon);
     jvmPatchButton.setBounds(585, 375, 30, 23);
