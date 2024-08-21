@@ -249,27 +249,27 @@ public class ModListGUI extends BaseGUI {
       modFooter.setBounds(81, 32, 400, 55);
       modPane.add(modFooter);
 
-      JLabel modLabelCard = new JLabel();
-      modLabelCard.setBounds(241, 52, 71, 15);
-      modLabelCard.setFont(Fonts.fontRegSmall);
+      JLabel modBadge = new JLabel();
+      modBadge.setBounds(241, 52, 71, 15);
+      modBadge.setFont(Fonts.fontRegSmall);
       if(mod instanceof ZipMod) {
-        modLabelCard.setText("Resource mod");
-        modLabelCard.putClientProperty(FlatClientProperties.STYLE,
+        modBadge.setText("Resource mod");
+        modBadge.putClientProperty(FlatClientProperties.STYLE,
           "background:lighten(@background,3%); foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND));
-        modLabelCard.setBounds(
-          modLabelCard.getX(),
-          modLabelCard.getY(),
-          modLabelCard.getWidth() + 19,
-          modLabelCard.getHeight()
+        modBadge.setBounds(
+          modBadge.getX(),
+          modBadge.getY(),
+          modBadge.getWidth() + 19,
+          modBadge.getHeight()
         );
       } else {
-        modLabelCard.setText("Code mod");
-        modLabelCard.putClientProperty(FlatClientProperties.STYLE,
+        modBadge.setText("Code mod");
+        modBadge.putClientProperty(FlatClientProperties.STYLE,
           "background:lighten(@background,3%); foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND));
       }
-      modLabelCard.setVisible(true);
-      modLabelCard.setToolTipText(modLabelCard.getText());
-      modPane.add(modLabelCard);
+      modBadge.setVisible(true);
+      modBadge.setToolTipText(modBadge.getText());
+      modPane.add(modBadge);
 
       JCheckBox enabledCheckbox = new JCheckBox();
       enabledCheckbox.setEnabled(true);
