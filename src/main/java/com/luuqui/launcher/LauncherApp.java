@@ -1,7 +1,7 @@
 package com.luuqui.launcher;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.luuqui.dialog.DialogWarning;
+import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.editor.EditorsGUI;
 import com.luuqui.launcher.flamingo.Flamingo;
@@ -181,7 +181,7 @@ public class LauncherApp {
         pathWarning += System.lineSeparator() + "Additionally, we've detected the following Steam path: " + SteamUtil.getGamePathWindows();
       }
       log.warning(pathWarning);
-      DialogWarning.push(pathWarning);
+      Dialog.push(pathWarning, JOptionPane.WARNING_MESSAGE);
       //if (SystemUtil.isWindows()) DesktopUtil.openDir(SteamUtil.getGamePathWindows());
     }
   }

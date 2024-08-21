@@ -1,6 +1,6 @@
 package com.luuqui.launcher;
 
-import com.luuqui.dialog.DialogError;
+import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -166,7 +166,7 @@ public class Updater extends BaseGUI {
     if(_downloadAttempts > 3) {
       String downloadErrMsg = "The updater couldn't be initiated after 3 download attempts." +
               "Booting back into current version, try updating later.";
-      DialogError.push(downloadErrMsg);
+      Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
       log.error(downloadErrMsg);
       //FileUtil.rename(new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar.old"), new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"));
       finishProcess();

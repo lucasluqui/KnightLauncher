@@ -1,6 +1,6 @@
 package com.luuqui.launcher.setting;
 
-import com.luuqui.dialog.DialogInfo;
+import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.*;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.JavaUtil;
@@ -741,7 +741,7 @@ public class SettingsGUI extends BaseGUI {
     aboutPanel.add(copyLogsButton);
     copyLogsButton.addActionListener(l -> {
       SettingsEventHandler.copyLogsEvent(l);
-      DialogInfo.push("Logs copied to clipboard.");
+      Dialog.push("Logs copied to clipboard.", JOptionPane.INFORMATION_MESSAGE);
     });
 
     return aboutPanel;

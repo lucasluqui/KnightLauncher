@@ -1,6 +1,6 @@
 package com.luuqui.launcher;
 
-import com.luuqui.dialog.DialogError;
+import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.*;
@@ -208,7 +208,7 @@ public class JVMPatcher extends BaseGUI {
       String downloadErrMsg = "The Java VM download couldn't be initiated after 3 attempts." +
               "Knight Launcher will boot without patching but be aware game performance might not be the best." +
               "You can manually restart this patcher heading to the 'Game' tab within launcher's settings.";
-      DialogError.push(downloadErrMsg);
+      Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
       log.error(downloadErrMsg);
       finish();
     }

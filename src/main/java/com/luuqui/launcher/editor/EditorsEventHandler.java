@@ -1,14 +1,13 @@
 package com.luuqui.launcher.editor;
 
-import com.luuqui.dialog.DialogError;
+import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.ProcessUtil;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static com.luuqui.launcher.editor.Log.log;
 
@@ -31,7 +30,7 @@ public class EditorsEventHandler {
         log.warning("Incompatible game Java VM version: " + javaVMVersion + ". Luckily we can rely on system's (" + System.getProperty("java.version") + ")");
         javaVMPath = "java";
       } else {
-        DialogError.push("No compatible Java VM to start the editor with.", "Editors");
+        Dialog.push("No compatible Java VM to start the editor with.", "Editors", JOptionPane.ERROR_MESSAGE);
       }
 
       String[] editorCmdLine = new String[] {

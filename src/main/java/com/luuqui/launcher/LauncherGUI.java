@@ -1,7 +1,6 @@
 package com.luuqui.launcher;
 
-import com.luuqui.dialog.DialogError;
-import com.luuqui.dialog.DialogInfo;
+import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.editor.EditorsGUI;
 import com.luuqui.launcher.mod.ModListGUI;
@@ -164,7 +163,7 @@ public class LauncherGUI extends BaseGUI {
     playerCountTooltipButton.setForeground(Color.WHITE);
     playerCountTooltipButton.setToolTipText(playerCountTooltipTitle);
     playerCountTooltipButton.addActionListener(l -> {
-      DialogInfo.push(playerCountTooltipText, playerCountTooltipTitle);
+      Dialog.push(playerCountTooltipText, playerCountTooltipTitle, JOptionPane.INFORMATION_MESSAGE);
     });
     sidePane.add(playerCountTooltipButton);
     playerCountTooltipButton.setVisible(false);
@@ -400,7 +399,7 @@ public class LauncherGUI extends BaseGUI {
     launchTooltipButton.setForeground(Color.WHITE);
     launchTooltipButton.setToolTipText(launchTooltipTitle);
     launchTooltipButton.addActionListener(l -> {
-      DialogInfo.push(launchTooltipText, launchTooltipTitle);
+      Dialog.push(launchTooltipText, launchTooltipTitle, JOptionPane.INFORMATION_MESSAGE);
     });
     mainPane.add(launchTooltipButton);
 
@@ -454,7 +453,7 @@ public class LauncherGUI extends BaseGUI {
     warningNotice.setFont(Fonts.fontMed);
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
-      DialogError.push(currentWarning, "Warning notice");
+      Dialog.push(currentWarning, "Warning notice", JOptionPane.ERROR_MESSAGE);
     });
     mainPane.add(warningNotice);
 

@@ -1,6 +1,6 @@
 package com.luuqui.launcher;
 
-import com.luuqui.dialog.DialogInfo;
+import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mod.ModLoader;
@@ -8,6 +8,7 @@ import com.luuqui.launcher.setting.*;
 import com.luuqui.util.*;
 import org.apache.commons.io.FileUtils;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -241,9 +242,9 @@ public class LauncherEventHandler {
     if(!selectedServer.sourceCodeUrl.equalsIgnoreCase("null")) infoString += "Source code: " + selectedServer.sourceCodeUrl + "\n";
     infoString += "\n * Neither your activity in third party services nor theirs is endorsed \n by Knight Launcher. Play at your own discretion.";
 
-    DialogInfo.push(
+    Dialog.push(
       infoString,
-      selectedServer.name + " Server Information"
+      selectedServer.name + " Server Information", JOptionPane.INFORMATION_MESSAGE
     );
   }
 
@@ -350,11 +351,11 @@ public class LauncherEventHandler {
   }
 
   public static void showLatestChangelog() {
-    DialogInfo.push("Currently running version: " + LauncherGlobals.LAUNCHER_VERSION
+    Dialog.push("Currently running version: " + LauncherGlobals.LAUNCHER_VERSION
       + ".\nLatest available version: " + LauncherGUI.latestRelease + ".\n\n" +
       "Knight Launcher " + LauncherGUI.latestRelease + "\n"
       + LauncherGUI.latestChangelog,
-      "Latest Changelog");
+      "Latest Changelog", JOptionPane.INFORMATION_MESSAGE);
   }
 
   private static String[] getThirdPartyClientStartCommand(Server server, boolean altMode) {

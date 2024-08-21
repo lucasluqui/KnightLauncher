@@ -1,6 +1,6 @@
 package com.luuqui.launcher.setting;
 
-import com.luuqui.dialog.DialogWarning;
+import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.LauncherEventHandler;
 import com.luuqui.launcher.Locale;
@@ -11,6 +11,7 @@ import com.luuqui.launcher.mod.ModLoader;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.ProcessUtil;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
@@ -50,7 +51,7 @@ public class SettingsEventHandler {
       return; // Prevent triggering 2 times
     Settings.lang = Locale.getLangCode((String) SettingsGUI.choiceLanguage.getSelectedItem());
     SettingsProperties.setValue("launcher.lang", Locale.getLangCode((String) SettingsGUI.choiceLanguage.getSelectedItem()));
-    DialogWarning.pushTranslated(Locale.getValue("m.prompt_restart_required"));
+    Dialog.pushTranslated(Locale.getValue("m.prompt_restart_required"), JOptionPane.WARNING_MESSAGE);
   }
 
   public static void useStringDeduplicationChangeEvent(ActionEvent action) {
@@ -100,7 +101,7 @@ public class SettingsEventHandler {
     if(event.getStateChange() == ItemEvent.SELECTED)
       return; // Prevent triggering 2 times
     SettingsProperties.setValue("launcher.style", SettingsGUI.choiceStyle.getSelectedIndex() == 0 ? "dark" : "light");
-    DialogWarning.pushTranslated(Locale.getValue("m.prompt_restart_required"));
+    Dialog.pushTranslated(Locale.getValue("m.prompt_restart_required"), JOptionPane.WARNING_MESSAGE);
   }
 
   public static void ingameRPCChangeEvent(ActionEvent action) {
