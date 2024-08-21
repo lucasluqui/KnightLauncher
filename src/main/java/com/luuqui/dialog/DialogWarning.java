@@ -6,14 +6,6 @@ import javax.swing.*;
 
 public class DialogWarning {
 
-  public static void push(String msg) {
-    JOptionPane.showMessageDialog(null,
-            msg,
-            "Knight Launcher Warning",
-            JOptionPane.WARNING_MESSAGE
-    );
-  }
-
   public static void push(String msg, String title) {
     JOptionPane.showMessageDialog(null,
       msg,
@@ -22,12 +14,12 @@ public class DialogWarning {
     );
   }
 
+  public static void push(String msg) {
+   push(msg, "Knight Launcher Warning");
+  }
+
   public static void pushTranslated(String msg) {
-    JOptionPane.showMessageDialog(null,
-            msg,
-            Locale.getValue("t.warning"),
-            JOptionPane.WARNING_MESSAGE
-    );
+    push(msg, Locale.getValue("t.warning"));
   }
 
 }
