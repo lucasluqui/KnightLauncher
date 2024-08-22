@@ -160,7 +160,7 @@ public class ModListGUI extends BaseGUI {
     searchBox = new JTextField();
     searchBox.setBounds(250, 85, 300, 27);
     searchBox.setFont(Fonts.fontCodeReg);
-    searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Type name or author...");
+    searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Type mod name or author...");
     modListGUIFrame.getContentPane().add(searchBox);
     searchBox.addActionListener(l -> ModListEventHandler.searchMod());
     searchBox.addKeyListener(new KeyAdapter() {
