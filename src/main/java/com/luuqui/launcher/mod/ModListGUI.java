@@ -158,7 +158,7 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.getContentPane().add(refreshProgressBar);
 
     searchBox = new JTextField();
-    searchBox.setBounds(250, 87, 200, 22);
+    searchBox.setBounds(250, 87, 220, 22);
     searchBox.setFont(Fonts.fontCodeReg);
     searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Type name or author...");
     modListGUIFrame.getContentPane().add(searchBox);
@@ -168,7 +168,7 @@ public class ModListGUI extends BaseGUI {
     });
 
     JButton searchButton = new JButton("Search");
-    searchButton.setBounds(455, 87, 80, 22);
+    searchButton.setBounds(475, 87, 80, 22);
     modListGUIFrame.getContentPane().add(searchButton);
     searchButton.addActionListener(l -> ModListEventHandler.searchMod());
 
