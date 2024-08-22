@@ -21,7 +21,7 @@ public class LauncherGlobals {
   public static final String URL_JAVA_REDISTRIBUTABLES = "https://lucasallegri.b-cdn.net/knightlauncher/v2/java/windows/{version}/redist.zip";
   public static final String URL_DISCORD = "https://discord.gg/RAf499a";
   public static final String URL_GET_MODS = "https://discord.gg/fAR8qtrat2";
-  public static final String URL_KOFI = "https://ko-fi.com/lucasallegri";
+  public static final String URL_DONATE = "https://ko-fi.com/lucasallegri";
   public static final String URL_BUG_REPORT = "https://github.com/lucasluqui/KnightLauncher/issues";
 
   public static final String USER_DIR = System.getProperty("user.dir");

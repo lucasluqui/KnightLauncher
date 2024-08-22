@@ -303,7 +303,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(discordButton);
     discordButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_DISCORD));
 
-    Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 16, Color.WHITE);
+    Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 17, Color.WHITE);
     JButton bugButton = new JButton(bugIcon);
     bugButton.setBounds(107, 440, 35, 35);
     bugButton.setToolTipText(Locale.getValue("b.bug_report"));
@@ -315,17 +315,17 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(bugButton);
     bugButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_BUG_REPORT));
 
-    Icon kofiIcon = IconFontSwing.buildIcon(FontAwesome.PAYPAL, 16, Color.WHITE);
-    JButton kofiButton = new JButton(kofiIcon);
-    kofiButton.setBounds(148, 440, 35, 35);
-    kofiButton.setToolTipText(Locale.getValue("b.kofi"));
-    kofiButton.setFocusPainted(false);
-    kofiButton.setFocusable(false);
-    kofiButton.setBorderPainted(false);
-    kofiButton.setBackground(CustomColors.PREMIUM);
-    kofiButton.setFont(Fonts.fontMed);
-    sidePane.add(kofiButton);
-    kofiButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_KOFI));
+    Icon donateIcon = IconFontSwing.buildIcon(FontAwesome.USD, 17, Color.WHITE);
+    JButton donateButton = new JButton(donateIcon);
+    donateButton.setBounds(148, 440, 35, 35);
+    donateButton.setToolTipText("Donate");
+    donateButton.setFocusPainted(false);
+    donateButton.setFocusable(false);
+    donateButton.setBorderPainted(false);
+    donateButton.setBackground(CustomColors.PREMIUM);
+    donateButton.setFont(Fonts.fontMed);
+    sidePane.add(donateButton);
+    donateButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_DONATE));
 
     JLabel launcherVersion = new JLabel("v" + LauncherGlobals.LAUNCHER_VERSION);
     launcherVersion.setFont(Fonts.fontRegSmall);
@@ -429,7 +429,7 @@ public class LauncherGUI extends BaseGUI {
     mainPane.add(launchProgressBar);
     mainPane.setComponentZOrder(launchProgressBar, 0);
 
-    Icon changelogIcon = IconFontSwing.buildIcon(FontAwesome.NEWSPAPER_O, 16, Color.WHITE);
+    Icon changelogIcon = IconFontSwing.buildIcon(FontAwesome.BOOK, 18, Color.WHITE);
     changelogButton = new JButton(changelogIcon);
     changelogButton.setBounds(737, 26, 35, 35);
     changelogButton.setToolTipText(Locale.getValue("Latest Changelog"));

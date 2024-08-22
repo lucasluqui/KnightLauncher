@@ -91,7 +91,7 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.getContentPane().add(warningNotice);
 
 
-    Icon modStoreIcon = IconFontSwing.buildIcon(FontAwesome.SEARCH, 12, ColorUtil.getForegroundColor());
+    Icon modStoreIcon = IconFontSwing.buildIcon(FontAwesome.SEARCH, 10, Color.WHITE);
     JButton modStoreButton = new JButton(Locale.getValue("Browse Mod Store"));
     modStoreButton.setIcon(modStoreIcon);
     modStoreButton.setBounds(250, 35, 170, 25);
