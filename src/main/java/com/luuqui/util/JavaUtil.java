@@ -63,7 +63,7 @@ public class JavaUtil {
     String rawJavaVMData = getGameJVMData();
 
     if(rawJavaVMData.contains("Unknown")) {
-      return "Unknown Java VM, probably 32-bit";
+      return "Unknown, probably 32-bit";
     }
 
     String javaMajorVersion = "unknown";
@@ -81,7 +81,7 @@ public class JavaUtil {
     if(javaMajorVersion.equalsIgnoreCase("unknown")
       || javaMinorVersion.equalsIgnoreCase("unknown")
       || javaArch.equalsIgnoreCase("unknown")) {
-      return "Unknown Java VM, probably 32-bit";
+      return "Unknown, probably 32-bit";
     }
 
     return "Java " + javaMajorVersion + " (" + javaMinorVersion + "), " + javaArch;
