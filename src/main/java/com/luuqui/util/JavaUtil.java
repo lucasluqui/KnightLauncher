@@ -59,6 +59,34 @@ public class JavaUtil {
     return (version + ", " + osArch).replace("\"", "");
   }
 
+  public static String getReadableGameJVMData() {
+    String rawJavaVMData = getGameJVMData();
+
+    if(rawJavaVMData.contains("Unknown")) {
+      return "Unknown Java VM, probably 32-bit";
+    }
+
+    String javaMajorVersion = "unknown";
+    String javaMinorVersion = "unknown";
+    String javaArch = "unknown";
+
+    try {
+      javaMajorVersion = rawJavaVMData.split("\\.")[1];
+      javaMinorVersion = rawJavaVMData.split("_")[1].split(",")[0];
+      javaArch = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 ? "64-bit" : "32-bit";
+    } catch (Exception e) {
+      log.error(e);
+    }
+
+    if(javaMajorVersion.equalsIgnoreCase("unknown")
+      || javaMinorVersion.equalsIgnoreCase("unknown")
+      || javaArch.equalsIgnoreCase("unknown")) {
+      return "Unknown Java VM, probably 32-bit";
+    }
+
+    return "Java " + javaMajorVersion + " (" + javaMinorVersion + "), " + javaArch;
+  }
+
   public static String getGameJavaDirPath() {
     File javaVMDir = new File(LauncherGlobals.USER_DIR, "/java_vm");
     if (javaVMDir.exists() && javaVMDir.isDirectory()) {
