@@ -753,7 +753,7 @@ public class SettingsGUI extends BaseGUI {
   }
 
   private int getMaxAllowedMemoryAlloc() {
-    int MAX_ALLOWED_MEMORY_64_BIT = 8196;
+    int MAX_ALLOWED_MEMORY_64_BIT = 4096;
     int MAX_ALLOWED_MEMORY_32_BIT = 1024;
 
     if (JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64) {
