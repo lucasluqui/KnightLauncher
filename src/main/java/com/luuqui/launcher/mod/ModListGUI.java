@@ -76,7 +76,7 @@ public class ModListGUI extends BaseGUI {
 
     Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
     warningNotice = new JButton(warningNoticeIcon);
-    warningNotice.setBounds(125, 25, 35, 35);
+    warningNotice.setBounds(125, 24, 36, 36);
     warningNotice.setToolTipText("Warning notice");
     warningNotice.setFocusPainted(false);
     warningNotice.setFocusable(false);

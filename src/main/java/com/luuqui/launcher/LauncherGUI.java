@@ -293,7 +293,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(editorsButton);
 
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
-    discordButton.setBounds(66, 440, 35, 35);
+    discordButton.setBounds(65, 440, 36, 36);
     discordButton.setToolTipText("Discord");
     discordButton.setFocusPainted(false);
     discordButton.setFocusable(false);
@@ -305,7 +305,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 17, Color.WHITE);
     JButton bugButton = new JButton(bugIcon);
-    bugButton.setBounds(107, 440, 35, 35);
+    bugButton.setBounds(107, 440, 36, 36);
     bugButton.setToolTipText(Locale.getValue("b.bug_report"));
     bugButton.setFocusPainted(false);
     bugButton.setFocusable(false);
@@ -317,7 +317,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon donateIcon = IconFontSwing.buildIcon(FontAwesome.USD, 17, Color.WHITE);
     JButton donateButton = new JButton(donateIcon);
-    donateButton.setBounds(148, 440, 35, 35);
+    donateButton.setBounds(149, 440, 36, 36);
     donateButton.setToolTipText("Donate");
     donateButton.setFocusPainted(false);
     donateButton.setFocusable(false);
@@ -431,7 +431,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon changelogIcon = IconFontSwing.buildIcon(FontAwesome.BOOK, 18, Color.WHITE);
     changelogButton = new JButton(changelogIcon);
-    changelogButton.setBounds(737, 26, 35, 35);
+    changelogButton.setBounds(736, 26, 36, 36);
     changelogButton.setToolTipText(Locale.getValue("Latest Changelog"));
     changelogButton.setFont(Fonts.fontMed);
     changelogButton.setFocusPainted(false);
@@ -445,7 +445,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
     warningNotice = new JButton(warningNoticeIcon);
-    warningNotice.setBounds(692, 26, 35, 35);
+    warningNotice.setBounds(691, 26, 36, 36);
     warningNotice.setToolTipText("Warning notice");
     warningNotice.setFocusPainted(false);
     warningNotice.setFocusable(false);
@@ -461,7 +461,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 16, Color.WHITE);
     updateButton = new JButton(updateIcon);
-    updateButton.setBounds(692, 26, 35, 35);
+    updateButton.setBounds(691, 26, 36, 36);
     updateButton.setToolTipText(Locale.getValue("b.update_available"));
     updateButton.setFont(Fonts.fontMed);
     updateButton.setFocusPainted(false);
