@@ -12,7 +12,11 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import static com.luuqui.launcher.mod.Log.log;
@@ -161,6 +165,9 @@ public class ModListGUI extends BaseGUI {
     searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Type name or author...");
     modListGUIFrame.getContentPane().add(searchBox);
     searchBox.addActionListener(l -> ModListEventHandler.searchMod());
+    searchBox.addKeyListener(new KeyAdapter() {
+      public void keyReleased(KeyEvent e) { ModListEventHandler.searchMod(); }
+    });
 
     JButton searchButton = new JButton("Search");
     searchButton.setBounds(455, 87, 80, 22);
