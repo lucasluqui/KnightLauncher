@@ -34,7 +34,7 @@ public class ModListEventHandler {
     ModListGUI.labelRefreshing.setText("Applying...");
     ModLoader.mount();
     ModListGUI.labelRefreshing.setText("Applied");
-    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
+    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
   }
 
   public static void getModsEvent(ActionEvent action) {

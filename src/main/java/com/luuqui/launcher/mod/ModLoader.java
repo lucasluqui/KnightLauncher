@@ -186,7 +186,7 @@ public class ModLoader {
       LauncherGUI.modButton.setEnabled(true);
     } catch (Exception ignored) {}
 
-    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(getEnabledModCount())));
+    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
   }
 
   public static void extractSafeguard() {

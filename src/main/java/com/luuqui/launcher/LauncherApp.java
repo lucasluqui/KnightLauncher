@@ -352,7 +352,7 @@ public class LauncherApp {
       ModLoader.extractSafeguard();
     }
 
-    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready", String.valueOf(ModLoader.getEnabledModCount())));
+    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
     loadOnlineAssets();
   }
 
