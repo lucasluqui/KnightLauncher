@@ -320,12 +320,12 @@ public class LauncherApp {
   }
 
   private void logGameVMInfo() {
-    log.info("------------ Game VM Info ------------");
+    log.info("--------- Game JVM Info ---------");
     log.info("Java Dir: " + JavaUtil.getGameJavaDirPath());
     log.info("Java Exe Path: " + JavaUtil.getGameJVMExePath());
     log.info("Java Data: " + JavaUtil.getGameJVMData());
     log.info("Java Arch: " + JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()));
-    log.info("--------------------------------------");
+    log.info("---------------------------------");
   }
 
   private boolean requiresJVMPatch() {
