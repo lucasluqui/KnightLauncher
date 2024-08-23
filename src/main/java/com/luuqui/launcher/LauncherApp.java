@@ -73,6 +73,7 @@ public class LauncherApp {
   public LauncherApp () {
     setupFileLogging();
     logVMInfo();
+    logGameVMInfo();
     checkTempDir();
     setupLauncherStyle();
     checkStartLocation();
@@ -316,6 +317,15 @@ public class LauncherApp {
     log.info("User Home: " + System.getProperty("user.home"));
     log.info("Current Directory: " + System.getProperty("user.dir"));
     log.info("---------------------------------");
+  }
+
+  private void logGameVMInfo() {
+    log.info("------------ Game VM Info ------------");
+    log.info("Java Dir: " + JavaUtil.getGameJavaDirPath());
+    log.info("Java Exe Path: " + JavaUtil.getGameJVMExePath());
+    log.info("Java Data: " + JavaUtil.getGameJVMData());
+    log.info("Java Arch: " + JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()));
+    log.info("--------------------------------------");
   }
 
   private boolean requiresJVMPatch() {
