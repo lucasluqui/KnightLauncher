@@ -15,7 +15,7 @@
 Open source game launcher for a certain game. Supports automatic 64-bit Java VM installation, Discord integration, easier modding & much more.
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W4W11S2JU)
-## Current features
+## Some key features
 * Install and uninstall game mods in an easy and noob friendly way without worrying about game updates.
 * Jump into several editors such as a model viewer and scene editor to create custom user-generated content.
 * Automatically patch your game to use a 64-bit Java VM and heavily improve your performance.
