@@ -16,30 +16,32 @@ Open source game launcher for a certain game. Supports automatic 64-bit Java VM 
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W4W11S2JU)
 ## Current features
-* Install and uninstall mods in an easy and noob friendly way without having to worry about game updates.
-* Automatically patch your game to use a 64-bit Java VM.
+* Install and uninstall game mods in an easy and noob friendly way without worrying about game updates.
+* Jump into several editors such as a model viewer and scene editor to create custom user-generated content.
+* Automatically patch your game to use a 64-bit Java VM and heavily improve your performance.
 * Reinstall your game without having to re-download anything, not a single file!
-* Intuitive and user friendly GUI for extra.txt configuring.
-* Discord RPC integration that shows exactly what you're up to in-game.
-* Support for easily launching alt accounts without losing performance on your main instance.
+* Intuitive and user friendly GUI for configuring advanced settings including Extra.txt.
+* Discord RPC integration that shows exactly what you're up to in game.
+* Easily launch alt accounts with lesser resources assigned avoiding losing performance on your main instance.
+* Ability to switch between official and third party servers.
 
 ## Translators
 Thank you all for helping Knight Launcher, making it usable for everyone worldwide!
-* Arabic: Scyila
+* Arabic: asan_ploto
 * Chinese: [yihleego](https://github.com/yihleego)
-* Deutsch: Deathkey and Airbee
+* Deutsch: Biral and Airbee
 * Eesti: [Thyrux](https://github.com/Thyrux)
 * Français: PtitKrugger
 * Italiano: [Lawn](https://github.com/Foyylaroni) and Kaos
 * Japanese: Armin
 * Polski: [Crowfunder](https://github.com/Crowfunder)
-* Português (Brasil): Azuresh and Gugaarleo
-* Русский: Milliath Spooner and [Puzovoz](https://github.com/Puzovoz)
+* Português (Brasil): Stret and Gugaarleo
+* Русский: Milliath and [Puzovoz](https://github.com/Puzovoz)
 
 ## Discord
-We've built an amazing community on Discord focused on both helping newcomers get along with the launcher and giving a hand to current and aspiring modders.
+We've built an amazing community on Discord focused on both helping newcomers get along with the launcher and giving a hand to modders, come join us!
 
-Come join us! https://discord.gg/RAf499a
+https://discord.gg/RAf499a
 
 ## Third Party Libraries
 The following open source libraries were used to develop Knight Launcher:
@@ -47,9 +49,10 @@ The following open source libraries were used to develop Knight Launcher:
 - [Apache Commons IO](https://github.com/apache/commons-io)
 - [Image4J](https://github.com/imcdonagh/image4j)
 - [Zip4J](https://github.com/srikanth-lingala/zip4j)
-- [material-ui-swing](https://github.com/vincenzopalazzo/material-ui-swing)
+- [flatlaf](https://github.com/JFormDesigner/FlatLaf)
 - [discord-rpc](https://github.com/Vatuu/discord-rpc)
 - [mslinks](https://github.com/DmitriiShamrikov/mslinks)
 - [org.json](https://github.com/eskatos/org.json-java)
 - [jIconFont](https://github.com/jIconFont)
 - [samskivert](https://github.com/samskivert/samskivert)
+- [JHLabs Filters](http://www.jhlabs.com/)
