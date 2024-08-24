@@ -744,7 +744,7 @@ public class SettingsGUI extends BaseGUI {
     message.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     message.setEditable(false);
     message.setHighlighter(null);
-    message.setText("Development:\n- Luqui (maintainer), Crowfunder, CafuneAndChill, yihleego.\n\nLocalization:\n- asan_ploto (Arabic), yihleego (Chinese), Biral (Deutsch), Airbee (Deutsch), Thyrux (Eesti),\nLuqui (English), Luqui (Español), PtitKrugger (Français), Lawn (Italiano), Kaus (Italiano),\noctopews (Japanese), Crowfunder (Polski), Stret (Português Brasil), Gugaarleo (Português Brasil),\nmilliath (Russian), Puzovoz (Russian).\n\nTesting/QA:\n- Nurr, yihleego, Bidoknight, Carpvindra, Mushspore, CafuneAndChill, Xan, analarmingalarm,\nparma, loonadra, ultrongr, milliath, Puzovoz, Stret, 3xample.\n\nThird Party Libraries:\n- Apache Commons IO, Image4J, Zip4J, flatlaf, discord-rpc, mslinks, org.json, jIconFont,\nsamskivert, JHLabs Filters.");
+    message.setText("GitHub Contributors:\n- Luqui (maintainer), Crowfunder, CafuneAndChill, yihleego.\n\nLocalization:\n- asan_ploto (Arabic), yihleego (Chinese), Biral (Deutsch), Airbee (Deutsch), Thyrux (Eesti),\nLuqui (English), Luqui (Español), PtitKrugger (Français), Lawn (Italiano), Kaus (Italiano),\noctopews (Japanese), Crowfunder (Polski), Stret (Português Brasil), Gugaarleo (Português Brasil),\nmilliath (Russian), Puzovoz (Russian).\n\nTesting/QA:\n- Nurr, yihleego, Bidoknight, Carpvindra, Mushspore, CafuneAndChill, Xan, analarmingalarm,\nparma, loonadra, ultrongr, milliath, Puzovoz, Stret, 3xample.\n\nThird Party Libraries:\n- Apache Commons IO, Image4J, Zip4J, flatlaf, discord-rpc, mslinks, org.json, jIconFont,\nsamskivert, JHLabs Filters.");
     creditsPane.add(message);
     message.setCaretPosition(0);
 
