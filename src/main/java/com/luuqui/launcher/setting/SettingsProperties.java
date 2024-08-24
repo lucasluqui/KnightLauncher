@@ -17,7 +17,7 @@ public class SettingsProperties {
   private static Properties _prop = new Properties();
   private static final String _propPath = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
   private static HashMap<String, Object> migrationMap = new HashMap<>();
-  private static boolean migrationOngoing = false;
+  private static boolean migrating = false;
 
   public static void setup() {
     try {
@@ -53,7 +53,7 @@ public class SettingsProperties {
 
   public static void setValue(String key, String value) {
     try (InputStream is = new FileInputStream(_propPath)) {
-      if(migrationOngoing) _prop.load(is);
+      if(migrating) _prop.load(is);
       _prop.setProperty(key, value);
       _prop.store(new FileOutputStream(_propPath), null);
       log.info("Setting new key value", "key", key, "value", value);
@@ -77,6 +77,7 @@ public class SettingsProperties {
   }
 
   public static void load() {
+    // Launcher settings
     Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));
     Settings.launcherStyle = getValue("launcher.style");
     Settings.lang = getValue("launcher.lang");
@@ -87,8 +88,12 @@ public class SettingsProperties {
     Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
     Settings.selectedServerIdx = Integer.parseInt(getValue("launcher.selectedServerIdx"));
     Settings.autoUpdate = Boolean.parseBoolean(getValue("launcher.autoUpdate"));
+
+    // Compressor settings
     Settings.compressorUnzipMethod = getValue("compressor.unzipMethod");
     Settings.compressorExtractBuffer = Integer.parseInt(getValue("compressor.extractBuffer"));
+
+    // Game settings
     Settings.gamePlatform = getValue("game.platform");
     Settings.gameUseStringDeduplication = Boolean.parseBoolean(getValue("game.useStringDeduplication"));
     Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));
@@ -102,6 +107,7 @@ public class SettingsProperties {
     Settings.gameGetdownURL = getValue("game.getdownURL");
     Settings.gameGetdownFullURL = getValue("game.getdownFullURL");
     Settings.gameAdditionalArgs = getValue("game.additionalArgs");
+
     log.info("Successfully loaded required settings from prop file.");
     finishLoading();
   }
@@ -113,7 +119,7 @@ public class SettingsProperties {
   }
 
   private static void migrate() {
-    migrationOngoing = true;
+    migrating = true;
     for(String key : migrationMap.keySet()) {
       if(key.equals("PROP_VER")) continue;
       setValue(key, (String) migrationMap.get(key));
@@ -121,7 +127,7 @@ public class SettingsProperties {
 
     // Successfully migrated to newer PROP_VER.
     setValue("PROP_VER", PROP_VER);
-    migrationOngoing = false;
+    migrating = false;
   }
 
 }

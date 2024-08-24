@@ -16,8 +16,8 @@ import static com.luuqui.launcher.flamingo.Log.log;
 
 public class Flamingo {
 
-  public static String ENDPOINT = "http://flamingo.luuqui.com";
-  public static int PORT = 6060;
+  private static final String ENDPOINT = "flamingo.luuqui.com";
+  private static final int PORT = 6060;
 
   public static List<Server> getServerList() {
     List<Server> servers = new ArrayList<>();
@@ -91,7 +91,7 @@ public class Flamingo {
     try {
       request = Arrays.copyOf(request, request.length + 1);
       request[request.length - 1] = "version=" + TextUtil.extractNumericFromString(LauncherGlobals.LAUNCHER_VERSION);
-      return RequestUtil.makeRequest(method, ENDPOINT + ":" + PORT + endpoint, request);
+      return RequestUtil.makeRequest(method, "http://" + ENDPOINT + ":" + PORT + endpoint, request);
     } catch (Exception e) {
       throw new Exception();
     }

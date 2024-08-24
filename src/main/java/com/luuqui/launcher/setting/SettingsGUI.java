@@ -3,7 +3,6 @@ package com.luuqui.launcher.setting;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.*;
-import com.luuqui.launcher.mod.data.ZipMod;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.SteamUtil;
@@ -12,6 +11,7 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 import static com.luuqui.launcher.setting.Log.log;
@@ -46,7 +46,6 @@ public class SettingsGUI extends BaseGUI {
   public static JButton betaCodeRevalidateButton;
   public static JButton betaCodeClearLocalButton;
 
-  @SuppressWarnings("static-access")
   public SettingsGUI(LauncherApp app) {
     super();
     this.app = app;
@@ -481,9 +480,9 @@ public class SettingsGUI extends BaseGUI {
     jvmPatchButton.setEnabled(false);
     jvmPatchButton.setToolTipText("Your system does not support a 64-bit Java VM.");
     gamePanel.add(jvmPatchButton);
-    jvmPatchButton.addActionListener(action -> SettingsEventHandler.jvmPatchEvent(action));
+    jvmPatchButton.addActionListener(SettingsEventHandler::jvmPatchEvent);
 
-    if(((SystemUtil.isWindows() && SystemUtil.is64Bit() ) || ( SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam")))) {
+    if(((SystemUtil.isWindows() && SystemUtil.is64Bit() ) || ( SystemUtil.isUnix() && Settings.gamePlatform.equalsIgnoreCase("Steam")))) {
       jvmPatchButton.setEnabled(true);
       jvmPatchButton.setToolTipText(null);
     }
@@ -530,6 +529,7 @@ public class SettingsGUI extends BaseGUI {
     betaCodeButton.addActionListener(action -> {
       int result = SettingsEventHandler.activateBetaCode(betaCodeTextField.getText(), false);
 
+      // TODO: use enums.
       switch(result) {
         case 0: betaCodeResultLabel.setText("An unexpected error has occurred."); break;
         case 1: betaCodeResultLabel.setText("Successfully activated Beta code. (Check server list)"); break;
@@ -606,7 +606,7 @@ public class SettingsGUI extends BaseGUI {
     JScrollPane scrollBar = new JScrollPane(argumentsPane);
     scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollBar.setBounds(25, 117, 632, 100);
+    scrollBar.setBounds(25, 117, 590, 100);
     advancedPanel.add(scrollBar);
 
     JSeparator sep = new JSeparator();
@@ -647,13 +647,13 @@ public class SettingsGUI extends BaseGUI {
 
     JLabel publicKeyLabel = new JLabel("Public Key");
     publicKeyLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    publicKeyLabel.setBounds(25, 324, 450, 50);
+    publicKeyLabel.setBounds(25, 328, 450, 50);
     publicKeyLabel.setFont(Fonts.fontReg);
     advancedPanel.add(publicKeyLabel);
 
     publicKeyTextField = new JTextField();
     publicKeyTextField.setFont(Fonts.fontCodeReg);
-    publicKeyTextField.setBounds(25, 359, 355, 30);
+    publicKeyTextField.setBounds(25, 363, 355, 30);
 
     JScrollBar publicKeyScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
     JPanel publicKeyPanel = new JPanel();
@@ -662,20 +662,20 @@ public class SettingsGUI extends BaseGUI {
     publicKeyScrollBar.setModel(publicKeyBRM);
     publicKeyPanel.add(publicKeyTextField);
     publicKeyPanel.add(publicKeyScrollBar);
-    publicKeyPanel.setBounds(25, 359, 355, 30);
+    publicKeyPanel.setBounds(25, 363, 355, 38);
 
     advancedPanel.add(publicKeyPanel);
     publicKeyTextField.setText(Settings.gamePublicKey);
 
     JLabel getdownURLLabel = new JLabel("Getdown URL");
     getdownURLLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    getdownURLLabel.setBounds(25, 379, 450, 50);
+    getdownURLLabel.setBounds(25, 387, 450, 50);
     getdownURLLabel.setFont(Fonts.fontReg);
     advancedPanel.add(getdownURLLabel);
 
     getdownURLTextField = new JTextField();
     getdownURLTextField.setFont(Fonts.fontCodeReg);
-    getdownURLTextField.setBounds(25, 414, 355, 30);
+    getdownURLTextField.setBounds(25, 422, 355, 30);
 
     JScrollBar getdownURLScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
     JPanel getdownURLPanel = new JPanel();
@@ -684,24 +684,27 @@ public class SettingsGUI extends BaseGUI {
     getdownURLScrollBar.setModel(getdownURLBRM);
     getdownURLPanel.add(getdownURLTextField);
     getdownURLPanel.add(getdownURLScrollBar);
-    getdownURLPanel.setBounds(25, 414, 355, 30);
+    getdownURLPanel.setBounds(25, 422, 355, 38);
 
     advancedPanel.add(getdownURLPanel);
     getdownURLTextField.setText(Settings.gameGetdownFullURL);
 
     JButton resetButton = new JButton("Reset values to default");
     resetButton.setFont(Fonts.fontMed);
-    resetButton.setBounds(400, 414, 180, 23);
+    resetButton.setBounds(400, 422, 180, 23);
     resetButton.setFocusPainted(false);
     resetButton.setFocusable(false);
     resetButton.setToolTipText("Reset values to default");
     advancedPanel.add(resetButton);
-    resetButton.addActionListener(action -> SettingsEventHandler.resetButtonEvent(action));
+    resetButton.addActionListener(SettingsEventHandler::resetButtonEvent);
 
     serverAddressTextField.setEnabled(true);
     portTextField.setEnabled(true);
     publicKeyTextField.setEnabled(true);
     getdownURLTextField.setEnabled(true);
+
+    publicKeyTextField.setCaretPosition(0);
+    getdownURLTextField.setCaretPosition(0);
 
     return advancedPanel;
   }
@@ -717,29 +720,57 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setFont(Fonts.fontMedGiant);
     aboutPanel.add(headerLabel);
 
+    JLabel messageHeader = new JLabel("Credits");
+    messageHeader.setHorizontalAlignment(SwingConstants.LEFT);
+    messageHeader.setBounds(25, 90, 200, 30);
+    messageHeader.setFont(Fonts.fontMedBig);
+    aboutPanel.add(messageHeader);
+
+    JPanel creditsPane = new JPanel();
+    creditsPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+
+    JScrollPane creditsPaneScrollBar = new JScrollPane(creditsPane);
+    creditsPaneScrollBar.setBounds(-10, 120, 650, 175);
+    creditsPaneScrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+    creditsPaneScrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    creditsPaneScrollBar.setBorder(null);
+    creditsPaneScrollBar.getVerticalScrollBar().setUnitIncrement(16);
+    aboutPanel.add(creditsPaneScrollBar);
+
+    JTextArea message = new JTextArea();
+    message.setBounds(0, 0, 650, 250);
+    message.setFont(Fonts.fontReg);
+    message.setForeground(CustomColors.INTERFACE_DEFAULT);
+    message.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    message.setEditable(false);
+    message.setHighlighter(null);
+    message.setText("Development:\n- Luqui (maintainer), Crowfunder, CafuneAndChill, yihleego.\n\nLocalization:\n- asan_ploto (Arabic), yihleego (Chinese), Biral (Deutsch), Airbee (Deutsch), Thyrux (Eesti),\nLuqui (English), Luqui (Español), PtitKrugger (Français), Lawn (Italiano), Kaus (Italiano),\noctopews (Japanese), Crowfunder (Polski), Stret (Português Brasil), Gugaarleo (Português Brasil),\nmilliath (Russian), Puzovoz (Russian).\n\nTesting/QA:\n- Nurr, yihleego, Bidoknight, Carpvindra, Mushspore, CafuneAndChill, Xan, analarmingalarm,\nparma, loonadra, ultrongr, milliath, Puzovoz, Stret, 3xample.\n\nThird Party Libraries:\n- Apache Commons IO, Image4J, Zip4J, flatlaf, discord-rpc, mslinks, org.json, jIconFont,\nsamskivert, JHLabs Filters.");
+    creditsPane.add(message);
+    message.setCaretPosition(0);
+
     labelFlamingoStatus = new JLabel("Knight Launcher version: " + LauncherGlobals.LAUNCHER_VERSION);
-    labelFlamingoStatus.setBounds(25, 90, 600, 20);
+    labelFlamingoStatus.setBounds(25, 320, 600, 20);
     labelFlamingoStatus.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoStatus);
 
     labelFlamingoStatus = new JLabel("Flamingo status: Offline");
-    labelFlamingoStatus.setBounds(25, 110, 600, 20);
+    labelFlamingoStatus.setBounds(25, 340, 600, 20);
     labelFlamingoStatus.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoStatus);
 
     labelFlamingoVersion = new JLabel("Flamingo version: N/A");
-    labelFlamingoVersion.setBounds(25, 130, 600, 20);
+    labelFlamingoVersion.setBounds(25, 360, 600, 20);
     labelFlamingoVersion.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoVersion);
 
     labelFlamingoUptime = new JLabel("Flamingo uptime: N/A");
-    labelFlamingoUptime.setBounds(25, 150, 600, 20);
+    labelFlamingoUptime.setBounds(25, 380, 600, 20);
     labelFlamingoUptime.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoUptime);
 
     JButton copyLogsButton = new JButton("Copy logs to clipboard");
     copyLogsButton.setFont(Fonts.fontMed);
-    copyLogsButton.setBounds(25, 400, 200, 23);
+    copyLogsButton.setBounds(25, 420, 200, 23);
     copyLogsButton.setFocusPainted(false);
     copyLogsButton.setFocusable(false);
     copyLogsButton.setToolTipText("Copy logs to clipboard");

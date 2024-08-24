@@ -229,6 +229,7 @@ public class SettingsEventHandler {
   // 3 = already used (other)
   // 4 = already used (same machine id)
   // 5 = not exist
+  // TODO: use enums.
   public static int activateBetaCode(String code, boolean force) {
 
     // Sanitize the code (remove any trailing spaces, white spaces, slashes, etc.)
