@@ -13,7 +13,7 @@ public class LauncherGlobals {
   public static final String GITHUB_API = "https://api.github.com/";
   public static final String GITHUB_AUTHOR = "lucasluqui";
   public static final String GITHUB_REPO = "KnightLauncher";
-  public static final String GITHUB_BRANCH = "master";
+  public static final String GITHUB_BRANCH = "main";
 
   public static final String URL_CDN_V1 = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
   public static final String URL_CDN_LARGE_V1 = "https://lucasallegri.b-cdn.net/knightlauncher/v1/";
