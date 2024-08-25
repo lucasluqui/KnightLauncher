@@ -25,8 +25,4 @@ public class Dialog {
     push(msg, "Knight Launcher", messageType);
   }
 
-  public static void pushTranslated(String msg, int messageType) {
-    push(msg, Locale.getValue("t.info"), messageType);
-  }
-
 }

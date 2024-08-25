@@ -737,16 +737,16 @@ public class SettingsGUI extends BaseGUI {
     creditsPaneScrollBar.getVerticalScrollBar().setUnitIncrement(16);
     aboutPanel.add(creditsPaneScrollBar);
 
-    JTextArea message = new JTextArea();
-    message.setBounds(0, 0, 650, 250);
-    message.setFont(Fonts.fontReg);
-    message.setForeground(CustomColors.INTERFACE_DEFAULT);
-    message.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    message.setEditable(false);
-    message.setHighlighter(null);
-    message.setText("GitHub Contributors:\n- Luqui (maintainer), Crowfunder, CafuneAndChill, yihleego.\n\nLocalization:\n- asan_ploto (Arabic), yihleego (Chinese), Biral (Deutsch), Airbee (Deutsch), Thyrux (Eesti),\nLuqui (English), Luqui (Español), PtitKrugger (Français), Lawn (Italiano), Kaus (Italiano),\noctopews (Japanese), Crowfunder (Polski), Stret (Português Brasil), Gugaarleo (Português Brasil),\nmilliath (Russian), Puzovoz (Russian).\n\nTesting/QA:\n- Nurr, yihleego, Bidoknight, Carpvindra, Mushspore, CafuneAndChill, Xan, analarmingalarm,\nparma, loonadra, ultrongr, milliath, Puzovoz, Stret, 3xample.\n\nThird Party Libraries:\n- Apache Commons IO, Image4J, Zip4J, flatlaf, discord-rpc, mslinks, org.json, jIconFont,\nsamskivert, JHLabs Filters.");
-    creditsPane.add(message);
-    message.setCaretPosition(0);
+    JTextArea credits = new JTextArea();
+    credits.setBounds(0, 0, 650, 250);
+    credits.setFont(Fonts.fontReg);
+    credits.setForeground(CustomColors.INTERFACE_DEFAULT);
+    credits.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    credits.setEditable(false);
+    credits.setHighlighter(null);
+    credits.setText("GitHub Contributors:\n- Luqui (maintainer), Crowfunder, CafuneAndChill, yihleego.\n\nLocalization:\n- asan_ploto (Arabic), yihleego (Chinese), Biral (Deutsch), Airbee (Deutsch), Thyrux (Eesti),\nLuqui (English), Luqui (Español), PtitKrugger (Français), Lawn (Italiano), Kaus (Italiano),\noctopews (Japanese), Crowfunder (Polski), Stret (Português Brasil), Gugaarleo (Português Brasil),\nmilliath (Russian), Puzovoz (Russian).\n\nTesting/QA:\n- Nurr, yihleego, Bidoknight, Carpvindra, Mushspore, CafuneAndChill, Xan, analarmingalarm,\nparma, loonadra, ultrongr, milliath, Puzovoz, Stret, 3xample.\n\nThird Party Libraries:\n- Apache Commons IO, Image4J, Zip4J, flatlaf, discord-rpc, mslinks, org.json, jIconFont,\nsamskivert, JHLabs Filters.");
+    creditsPane.add(credits);
+    credits.setCaretPosition(0);
 
     labelFlamingoStatus = new JLabel("Knight Launcher version: " + LauncherGlobals.LAUNCHER_VERSION);
     labelFlamingoStatus.setBounds(25, 320, 600, 20);

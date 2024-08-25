@@ -51,7 +51,7 @@ public class SettingsEventHandler {
       return; // Prevent triggering 2 times
     Settings.lang = Locale.getLangCode((String) SettingsGUI.choiceLanguage.getSelectedItem());
     SettingsProperties.setValue("launcher.lang", Locale.getLangCode((String) SettingsGUI.choiceLanguage.getSelectedItem()));
-    Dialog.pushTranslated(Locale.getValue("m.prompt_restart_required"), JOptionPane.WARNING_MESSAGE);
+    Dialog.push(Locale.getValue("m.prompt_restart_required"), JOptionPane.INFORMATION_MESSAGE);
   }
 
   public static void useStringDeduplicationChangeEvent(ActionEvent action) {
@@ -101,7 +101,7 @@ public class SettingsEventHandler {
     if(event.getStateChange() == ItemEvent.SELECTED)
       return; // Prevent triggering 2 times
     SettingsProperties.setValue("launcher.style", SettingsGUI.choiceStyle.getSelectedIndex() == 0 ? "dark" : "light");
-    Dialog.pushTranslated(Locale.getValue("m.prompt_restart_required"), JOptionPane.WARNING_MESSAGE);
+    Dialog.push(Locale.getValue("m.prompt_restart_required"), JOptionPane.WARNING_MESSAGE);
   }
 
   public static void ingameRPCChangeEvent(ActionEvent action) {
