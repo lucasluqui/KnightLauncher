@@ -4,15 +4,22 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>KnightLauncher</groupId>
   <artifactId>KnightLauncher</artifactId>
-  <version>1.7.4</version>
+  <version>2.0-dev</version>
   <name>KnightLauncher</name>
   <description>Open source game launcher for a certain game.</description>
 
   <dependencies>
 
     <dependency>
+      <groupId>com.formdev</groupId>
+      <artifactId>flatlaf</artifactId>
+      <version>3.5.1</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.github.vatbub</groupId>
       <artifactId>mslinks</artifactId>
+      <!-- do not update, requires newer jdk -->
       <version>1.0.5</version>
     </dependency>
 
@@ -25,13 +32,13 @@
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20180813</version>
+      <version>20240303</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.jiconfont</groupId>
       <artifactId>jiconfont-swing</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
@@ -45,10 +52,11 @@
       <artifactId>samskivert</artifactId>
       <version>1.9</version>
     </dependency>
+
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.10.3</version>
       <scope>test</scope>
     </dependency>
 
@@ -59,7 +67,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.0</version>
+        <version>3.13.0</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>

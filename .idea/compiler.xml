@@ -9,8 +9,5 @@
         <module name="KnightLauncher" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="KnightLauncher" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
