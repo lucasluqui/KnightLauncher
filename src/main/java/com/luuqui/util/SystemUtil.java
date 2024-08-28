@@ -70,6 +70,14 @@ public class SystemUtil {
       if(!machineIdFailsafe.isEmpty()) {
         machineIdFailsafe = machineIdFailsafe.split("REG_SZ")[1].trim();
         machineId += machineIdFailsafe;
+      } else {
+        // Let's make sure they don't also have an invalid UUID before letting them through without the failsafe
+        // If they do send them to the NullPointerException realm.
+        if(machineId.equalsIgnoreCase("03000200-0400-0500-0006-000700080009")
+          || machineId.equalsIgnoreCase("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
+          || machineId.equalsIgnoreCase("00000000-0000-0000-0000-000000000000")) {
+          machineId = null;
+        }
       }
     }
 
