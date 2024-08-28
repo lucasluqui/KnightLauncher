@@ -65,8 +65,12 @@ public class SystemUtil {
       // Assuming this could be the case, we gather Windows' software GUID and add it to the mix.
       String machineIdFailsafe = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "reg query HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid" })[0];
       machineIdFailsafe = machineIdFailsafe.substring(machineIdFailsafe.indexOf("\n")).trim();
-      machineIdFailsafe = machineIdFailsafe.split("REG_SZ")[1].trim();
-      machineId += machineIdFailsafe;
+
+      // Some systems return an empty string when trying to get the failsafe, so let's not add it when that's the case.
+      if(!machineIdFailsafe.isEmpty()) {
+        machineIdFailsafe = machineIdFailsafe.split("REG_SZ")[1].trim();
+        machineId += machineIdFailsafe;
+      }
     }
 
     if(isUnix()) {
