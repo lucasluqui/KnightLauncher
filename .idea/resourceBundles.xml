@@ -5,10 +5,15 @@
     <file url="file://$PROJECT_DIR$/assets/lang/lang_de.properties" />
     <file url="file://$PROJECT_DIR$/assets/lang/lang_en.properties" />
     <file url="file://$PROJECT_DIR$/assets/lang/lang_es.properties" />
+    <file url="file://$PROJECT_DIR$/assets/lang/lang_et-ee.properties" />
     <file url="file://$PROJECT_DIR$/assets/lang/lang_fr.properties" />
     <file url="file://$PROJECT_DIR$/assets/lang/lang_it.properties" />
+    <file url="file://$PROJECT_DIR$/assets/lang/lang_jp.properties" />
     <file url="file://$PROJECT_DIR$/assets/lang/lang_pl.properties" />
+    <file url="file://$PROJECT_DIR$/assets/lang/lang_pt-br.properties" />
     <file url="file://$PROJECT_DIR$/assets/lang/lang_ru.properties" />
+    <file url="file://$PROJECT_DIR$/assets/lang/lang_zh-hans.properties" />
+    <file url="file://$PROJECT_DIR$/assets/lang/lang_zh-hant.properties" />
     <custom-resource-bundle>
       <file value="file://$PROJECT_DIR$/assets/lang/lang_ar.properties" />
       <file value="file://$PROJECT_DIR$/assets/lang/lang_de.properties" />
