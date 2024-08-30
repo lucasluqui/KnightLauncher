@@ -28,6 +28,7 @@ public class SettingsGUI extends BaseGUI {
   public static JCheckBox switchCleaning;
   public static JCheckBox switchKeepOpen;
   public static JCheckBox switchShortcut;
+  public static JButton jvmPatchButton;
   public static JButton forceRebuildButton;
   public static JCheckBox switchStringDedup;
   public static JCheckBox switchExplicitGC;
@@ -35,10 +36,12 @@ public class SettingsGUI extends BaseGUI {
   public static JCheckBox switchUseIngameRPC;
   public static JCheckBox switchAutoUpdate;
   public static JEditorPane argumentsPane;
+  public static JLabel labelDisclaimer;
   public static JTextField serverAddressTextField;
   public static JTextField portTextField;
   public static JTextField publicKeyTextField;
   public static JTextField getdownURLTextField;
+  public static JButton resetButton;
   public static JTextField betaCodeTextField;
   public static JLabel labelFlamingoStatus;
   public static JLabel labelFlamingoVersion;
@@ -383,7 +386,7 @@ public class SettingsGUI extends BaseGUI {
     switchUseCustomGC.setEnabled(SystemUtil.is64Bit());
 
     choiceGC = new JComboBox<String>();
-    choiceGC.setBounds(475, 180, 100, 20);
+    choiceGC.setBounds(465, 180, 110, 20);
     choiceGC.setFocusable(false);
     choiceGC.setFont(Fonts.fontReg);
     gamePanel.add(choiceGC);
@@ -440,7 +443,7 @@ public class SettingsGUI extends BaseGUI {
     gamePanel.add(labelFileCleanExplained);
 
     Icon startIcon = IconFontSwing.buildIcon(FontAwesome.SHARE, 16, ColorUtil.getForegroundColor());
-    JButton forceRebuildButton = new JButton(startIcon);
+    forceRebuildButton = new JButton(startIcon);
     forceRebuildButton.setBounds(585, 310, 30, 23);
     forceRebuildButton.setFocusPainted(false);
     forceRebuildButton.setFocusable(false);
@@ -473,7 +476,7 @@ public class SettingsGUI extends BaseGUI {
       "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND) + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND));
     gamePanel.add(javaVMBadge);
 
-    JButton jvmPatchButton = new JButton(startIcon);
+    jvmPatchButton = new JButton(startIcon);
     jvmPatchButton.setBounds(585, 375, 30, 23);
     jvmPatchButton.setFocusPainted(false);
     jvmPatchButton.setFocusable(false);
@@ -609,14 +612,23 @@ public class SettingsGUI extends BaseGUI {
     scrollBar.setBounds(25, 117, 590, 100);
     advancedPanel.add(scrollBar);
 
+    argumentsPane.setCaretPosition(0);
+
     JSeparator sep = new JSeparator();
     sep.setBounds(25, 237, 600, 16);
     advancedPanel.add(sep);
 
     JLabel labelConnectionSettings = new JLabel("Connection Settings");
-    labelConnectionSettings.setBounds(25, 254, 600, 18);
+    labelConnectionSettings.setBounds(25, 254, 600, 20);
     labelConnectionSettings.setFont(Fonts.fontRegBig);
     advancedPanel.add(labelConnectionSettings);
+
+    labelDisclaimer = new JLabel("Only applies to Official server connections.");
+    labelDisclaimer.setBounds(195, 255, 300, 18);
+    labelDisclaimer.setFont(Fonts.fontReg);
+    labelDisclaimer.setHorizontalAlignment(SwingConstants.LEFT);
+    labelDisclaimer.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
+    advancedPanel.add(labelDisclaimer);
 
     JLabel serverAddressLabel = new JLabel("Server Address");
     serverAddressLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -689,19 +701,15 @@ public class SettingsGUI extends BaseGUI {
     advancedPanel.add(getdownURLPanel);
     getdownURLTextField.setText(Settings.gameGetdownFullURL);
 
-    JButton resetButton = new JButton("Reset values to default");
+    resetButton = new JButton("Reset values to default");
     resetButton.setFont(Fonts.fontMed);
-    resetButton.setBounds(400, 422, 180, 23);
+    resetButton.setBounds(435, 422, 180, 23);
     resetButton.setFocusPainted(false);
     resetButton.setFocusable(false);
+    resetButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
     resetButton.setToolTipText("Reset values to default");
     advancedPanel.add(resetButton);
     resetButton.addActionListener(SettingsEventHandler::resetButtonEvent);
-
-    serverAddressTextField.setEnabled(true);
-    portTextField.setEnabled(true);
-    publicKeyTextField.setEnabled(true);
-    getdownURLTextField.setEnabled(true);
 
     publicKeyTextField.setCaretPosition(0);
     getdownURLTextField.setCaretPosition(0);

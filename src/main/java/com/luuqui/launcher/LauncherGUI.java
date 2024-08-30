@@ -353,7 +353,7 @@ public class LauncherGUI extends BaseGUI {
     mainPane.add(bannerSubtitle2);
 
     bannerLinkButton = new JButton("Learn more");
-    bannerLinkButton.setBounds(40, 195, 105, 25);
+    bannerLinkButton.setBounds(40, 195, 110, 25);
     bannerLinkButton.setFont(Fonts.fontMed);
     bannerLinkButton.setForeground(Color.WHITE);
     bannerLinkButton.setFocusPainted(false);

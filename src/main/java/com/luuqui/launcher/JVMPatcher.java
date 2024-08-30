@@ -72,12 +72,12 @@ public class JVMPatcher extends BaseGUI {
     jvmPatcherFrame.getContentPane().add(javaVersionSelectLabel);
 
     javaVersionComboBox = new JComboBox<>();
-    javaVersionComboBox.setBounds(150, 145, 205, 20);
+    javaVersionComboBox.setBounds(125, 145, 255, 20);
     javaVersionComboBox.setFocusable(false);
     javaVersionComboBox.setFont(Fonts.fontReg);
     jvmPatcherFrame.add(javaVersionComboBox);
 
-    javaVersionComboBox.addItem("Java 8 (8u202)");
+    javaVersionComboBox.addItem("Java 8 (8u202) (Recommended)");
     javaVersionComboBox.addItem("Java 8 (8u251)");
     javaVersionComboBox.setSelectedIndex(0);
 

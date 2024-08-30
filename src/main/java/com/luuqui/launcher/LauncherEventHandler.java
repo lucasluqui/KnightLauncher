@@ -263,6 +263,18 @@ public class LauncherEventHandler {
         LauncherGUI.serverInfoButton.setVisible(false);
         LauncherGUI.modButton.setEnabled(true);
         LauncherGUI.editorsButton.setEnabled(true);
+
+        SettingsGUI.switchUseIngameRPC.setEnabled(true);
+        SettingsGUI.choicePlatform.setEnabled(true);
+        SettingsGUI.forceRebuildButton.setEnabled(true);
+        SettingsGUI.jvmPatchButton.setEnabled(true);
+        SettingsGUI.argumentsPane.setEnabled(true);
+        SettingsGUI.labelDisclaimer.setVisible(false);
+        SettingsGUI.serverAddressTextField.setEnabled(true);
+        SettingsGUI.portTextField.setEnabled(true);
+        SettingsGUI.publicKeyTextField.setEnabled(true);
+        SettingsGUI.getdownURLTextField.setEnabled(true);
+        SettingsGUI.resetButton.setEnabled(true);
       } else {
         LauncherGUI.launchButton.setText("Play " + selectedServer.name);
         LauncherGUI.launchButton.setToolTipText("Play " + selectedServer.name);
@@ -279,6 +291,18 @@ public class LauncherEventHandler {
 
         // TODO: Editors support for third party servers.
         LauncherGUI.editorsButton.setEnabled(false);
+
+        SettingsGUI.switchUseIngameRPC.setEnabled(false);
+        SettingsGUI.choicePlatform.setEnabled(false);
+        SettingsGUI.forceRebuildButton.setEnabled(false);
+        SettingsGUI.jvmPatchButton.setEnabled(false);
+        SettingsGUI.argumentsPane.setEnabled(false);
+        SettingsGUI.labelDisclaimer.setVisible(true);
+        SettingsGUI.serverAddressTextField.setEnabled(false);
+        SettingsGUI.portTextField.setEnabled(false);
+        SettingsGUI.publicKeyTextField.setEnabled(false);
+        SettingsGUI.getdownURLTextField.setEnabled(false);
+        SettingsGUI.resetButton.setEnabled(false);
       }
       LauncherApp.selectedServer = selectedServer;
     } else {
@@ -376,8 +400,11 @@ public class LauncherEventHandler {
           LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-digester.jar;" +
           LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-logging.jar;",
         "-Dcom.threerings.getdown=false",
-        altMode ? "-Xms256M" : "-Xms512M",
-        altMode ? "-Xmx512M" : "-Xmx1024M",
+        Settings.gameDisableExplicitGC ? "-XX:+DisableExplicitGC" : "",
+        Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld") ? "-XX:+UseParallelGC" : "",
+        Settings.gameUseCustomGC ? "-XX:+Use" + Settings.gameGarbageCollector + "GC" : "",
+        altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M",
+        altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M",
         "-XX:+AggressiveOpts",
         "-XX:SoftRefLRUPolicyMSPerMB=10",
         "-Djava.library.path=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./native",

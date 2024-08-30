@@ -1,6 +1,7 @@
 package com.luuqui.launcher.setting;
 
 import com.lucasallegri.bootstrap.ProjectXBootstrap;
+import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.ProgressBar;
