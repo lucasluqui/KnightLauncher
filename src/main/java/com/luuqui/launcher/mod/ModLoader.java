@@ -105,6 +105,7 @@ public class ModLoader {
   public static void mount() {
     if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
 
+    LauncherGUI.serverList.setEnabled(false);
     LauncherGUI.launchButton.setEnabled(false);
     LauncherGUI.settingsButton.setEnabled(false);
     LauncherGUI.modButton.setEnabled(false);
@@ -137,6 +138,7 @@ public class ModLoader {
     ProgressBar.finishTask();
     LauncherDigester.doDigest();
 
+    LauncherGUI.serverList.setEnabled(true);
     LauncherGUI.launchButton.setEnabled(true);
     LauncherGUI.settingsButton.setEnabled(true);
     LauncherGUI.modButton.setEnabled(true);
@@ -148,6 +150,7 @@ public class ModLoader {
 
   private static void rebuildFiles() {
     try {
+      LauncherGUI.serverList.setEnabled(false);
       LauncherGUI.launchButton.setEnabled(false);
       LauncherGUI.settingsButton.setEnabled(false);
       LauncherGUI.modButton.setEnabled(false);
@@ -181,6 +184,7 @@ public class ModLoader {
     rebuildRequired = false;
 
     try {
+      LauncherGUI.serverList.setEnabled(true);
       LauncherGUI.launchButton.setEnabled(true);
       LauncherGUI.settingsButton.setEnabled(true);
       LauncherGUI.modButton.setEnabled(true);
