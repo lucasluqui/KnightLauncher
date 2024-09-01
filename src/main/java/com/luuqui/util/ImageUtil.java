@@ -4,6 +4,7 @@ import com.luuqui.launcher.CustomColors;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.bind.DatatypeConverter;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
@@ -54,7 +55,7 @@ public class ImageUtil {
 
     // ... then compositing the image on top,
     // using the white shape from above as alpha source
-    g2.setComposite(AlphaComposite.SrcAtop);
+    g2.setComposite(AlphaComposite.SrcIn);
     g2.drawImage(image, 0, 0, null);
 
     g2.dispose();
@@ -89,11 +90,11 @@ public class ImageUtil {
     if(data == null) return null;
 
     String base64Image = data.contains(",") ? data.split(",")[1] : data;
-    byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
+    byte[] imageBytes = DatatypeConverter.parseBase64Binary(base64Image);
     BufferedImage img = null;
     try {
       img = ImageIO.read(new ByteArrayInputStream(imageBytes));
-    } catch (IOException e) {
+    } catch (Exception e) {
       log.error(e);
     }
     return img;
@@ -116,6 +117,15 @@ public class ImageUtil {
     graphics2D.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
     graphics2D.dispose();
     return resizedImage;
+  }
+
+  public static BufferedImage resizeImagePreserveTransparency(BufferedImage originalImage, int targetWidth, int targetHeight) {
+    Image tmp = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+    BufferedImage newImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2d = newImage.createGraphics();
+    g2d.drawImage(tmp, 0, 0, null);
+    g2d.dispose();
+    return newImage;
   }
 
   // https://stackoverflow.com/questions/43106992/how-do-i-fade-the-edges-of-an-image-in-java-example-given
