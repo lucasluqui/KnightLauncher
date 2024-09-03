@@ -18,24 +18,30 @@ import static com.luuqui.launcher.setting.Log.log;
 
 public class JavaUtil {
 
-  public static int getJVMArch(String path) {
-    String[] output;
+  public static String getJVMVersionOutput(String path) {
+    String output;
     if (SystemUtil.isWindows()) {
-      output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", path, "-version" });
+      output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", path, "-version" })[1];
+    } else {
+      output = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", path + " -version" })[1];
+    }
+    return output;
+  }
 
+  public static int getJVMArch(String path) {
+    String output = getJVMVersionOutput(path);
+    if (SystemUtil.isWindows()) {
       // We got no output, so we can't do any checks.
-      if(output[1].isEmpty()) return 0;
+      if(output.isEmpty()) return 0;
 
       // Matches a 64-bit '-version' output.
-      if(output[1].contains("64-Bit Server VM")) return 64;
+      if(output.contains("64-Bit Server VM")) return 64;
     } else {
-      output = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", path + " -version" });
-
       // We got no output, so we can't do any checks.
-      if(output[1].isEmpty()) return 0;
+      if(output.isEmpty()) return 0;
 
       // Matches a 64-bit.
-      if(output[1].contains("64-Bit") || output[1].contains("PE32+")) return 64;
+      if(output.contains("64-Bit") || output.contains("PE32+")) return 64;
     }
 
     // No results matched. We assume it's 32-bit.
@@ -44,20 +50,24 @@ public class JavaUtil {
 
   public static String getGameJVMData() {
     String path = getGameJavaDirPath() + "/release";
-    if(!FileUtil.fileExists(path)) {
-      return "Unknown Java VM";
+    String version = "";
+    String osArch = "";
+
+    if(FileUtil.fileExists(path)) {
+      Properties releaseFile = new Properties();
+      try {
+        releaseFile.load(Files.newInputStream(new File(path).toPath()));
+      } catch (IOException e) {
+        log.error(e);
+      }
+
+      version = releaseFile.getProperty("JAVA_VERSION");
+      osArch = releaseFile.getProperty("OS_ARCH");
+    } else {
+      String output = getJVMVersionOutput(getGameJVMExePath());
+      version = output.split("\"")[1];
+      osArch = String.valueOf(getJVMArch(getGameJVMExePath()));
     }
-
-    Properties releaseFile = new Properties();
-    try {
-      releaseFile.load(Files.newInputStream(new File(path).toPath()));
-    } catch (IOException e) {
-      log.error(e);
-    }
-
-    String version = releaseFile.getProperty("JAVA_VERSION");
-    String osArch = releaseFile.getProperty("OS_ARCH");
-
     return (version + ", " + osArch).replace("\"", "");
   }
 
