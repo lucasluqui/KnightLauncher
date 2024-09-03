@@ -68,6 +68,11 @@ public class JavaUtil {
       version = output.split("\"")[1];
       osArch = String.valueOf(getJVMArch(getGameJVMExePath()));
     }
+
+    if(version.isEmpty() || osArch.isEmpty()) {
+      return "Unknown Java VM";
+    }
+
     return (version + ", " + osArch).replace("\"", "");
   }
 
