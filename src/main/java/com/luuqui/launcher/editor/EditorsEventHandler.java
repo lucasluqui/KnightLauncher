@@ -24,9 +24,9 @@ public class EditorsEventHandler {
       String javaVMVersion = JavaUtil.getGameJVMData();
       String libSeparator = JavaUtil.getJavaVMCommandLineSeparator();
 
-      if(javaVMVersion.contains("1.7") || javaVMVersion.contains("1.8") || javaVMVersion.contains("openjdk7") || javaVMVersion.contains("openjdk8")) {
+      if(javaVMVersion.contains("1.7") || javaVMVersion.contains("1.8")) {
         log.info("Compatible game Java VM version found: " + javaVMVersion);
-      } else if (System.getProperty("java.version").contains("1.7") || System.getProperty("java.version").contains("1.8") || System.getProperty("java.version").contains("openjdk7") || System.getProperty("java.version").contains("openjdk8")) {
+      } else if (System.getProperty("java.version").contains("1.7") || System.getProperty("java.version").contains("1.8")) {
         log.warning("Incompatible game Java VM version: " + javaVMVersion + ". Luckily we can rely on system's (" + System.getProperty("java.version") + ")");
         javaVMPath = "java";
       } else {
