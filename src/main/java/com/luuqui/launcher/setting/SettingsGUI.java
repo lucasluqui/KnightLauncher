@@ -28,12 +28,12 @@ public class SettingsGUI extends BaseGUI {
   public static JCheckBox switchCleaning;
   public static JCheckBox switchKeepOpen;
   public static JCheckBox switchShortcut;
-  public static JButton jvmPatchButton;
+  public static JButton jvmPatchButton = new JButton();
   public static JButton forceRebuildButton;
   public static JCheckBox switchStringDedup;
   public static JCheckBox switchExplicitGC;
   public static JCheckBox switchUseCustomGC;
-  public static JCheckBox switchUseIngameRPC;
+  public static JCheckBox switchUseIngameRPC = new JCheckBox();
   public static JCheckBox switchAutoUpdate;
   public static JEditorPane argumentsPane;
   public static JLabel labelDisclaimer;
