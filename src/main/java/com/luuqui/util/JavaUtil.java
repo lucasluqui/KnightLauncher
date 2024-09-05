@@ -87,15 +87,17 @@ public class JavaUtil {
     String javaMinorVersion = "unknown";
     String javaArch = "unknown";
 
+    boolean postJava8Versioning = !rawJavaVMData.startsWith("1.");
+
     try {
-      if(rawJavaVMData.startsWith("1.")) {
-        // version formatting for Java 8 and prior. e.g. "1.8.0_251"
+      if(postJava8Versioning) {
+        // versioning for Java 10 onwards. e.g. "15.0.2"
+        javaMajorVersion = rawJavaVMData;
+        javaMinorVersion = rawJavaVMData;
+      } else {
+        // versioning for Java 8 and prior. e.g. "1.8.0_251"
         javaMajorVersion = rawJavaVMData.split("\\.")[1];
         javaMinorVersion = rawJavaVMData.split("_")[1].split(",")[0];
-      } else {
-        // version formatting for Java 10 onwards. e.g. "15.0.2"
-        javaMajorVersion = rawJavaVMData.split("\\.")[0];
-        javaMinorVersion = rawJavaVMData.split("\\.")[2];
       }
       javaArch = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 ? "64-bit" : "32-bit";
     } catch (Exception e) {
@@ -106,6 +108,10 @@ public class JavaUtil {
       || javaMinorVersion.equalsIgnoreCase("unknown")
       || javaArch.equalsIgnoreCase("unknown")) {
       return "Unknown, probably 32-bit";
+    }
+
+    if(postJava8Versioning) {
+      return "Java " + javaMajorVersion + ", " + javaArch;
     }
 
     return "Java " + javaMajorVersion + " (" + javaMinorVersion + "), " + javaArch;
