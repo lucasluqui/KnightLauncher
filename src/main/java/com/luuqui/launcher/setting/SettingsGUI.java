@@ -11,10 +11,7 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
-
-import static com.luuqui.launcher.setting.Log.log;
 
 public class SettingsGUI extends BaseGUI {
 
@@ -33,6 +30,8 @@ public class SettingsGUI extends BaseGUI {
   public static JCheckBox switchStringDedup;
   public static JCheckBox switchExplicitGC;
   public static JCheckBox switchUseCustomGC;
+  public static JSlider memorySlider;
+  public static JLabel memoryValue;
   public static JCheckBox switchUseIngameRPC = new JCheckBox();
   public static JCheckBox switchAutoUpdate;
   public static JEditorPane argumentsPane;
@@ -41,13 +40,14 @@ public class SettingsGUI extends BaseGUI {
   public static JTextField portTextField;
   public static JTextField publicKeyTextField;
   public static JTextField getdownURLTextField;
-  public static JButton resetButton;
+  public static JButton resetConnectionSettingsButton;
   public static JTextField betaCodeTextField;
   public static JLabel labelFlamingoStatus;
   public static JLabel labelFlamingoVersion;
   public static JLabel labelFlamingoUptime;
   public static JButton betaCodeRevalidateButton;
   public static JButton betaCodeClearLocalButton;
+  public static JButton resetGameSettingsButton;
 
   public SettingsGUI(LauncherApp app) {
     super();
@@ -343,7 +343,7 @@ public class SettingsGUI extends BaseGUI {
     Settings.gameMemory = Math.min(Settings.gameMemory, getMaxAllowedMemoryAlloc());
     SettingsEventHandler.memoryChangeEvent(Settings.gameMemory);
 
-    JSlider memorySlider = new JSlider(JSlider.HORIZONTAL, 256, getMaxAllowedMemoryAlloc(), Settings.gameMemory);
+    memorySlider = new JSlider(JSlider.HORIZONTAL, 256, getMaxAllowedMemoryAlloc(), Settings.gameMemory);
     memorySlider.setBounds(215, 105, 350, 40);
     memorySlider.setFocusable(false);
     memorySlider.setFont(Fonts.fontReg);
@@ -352,7 +352,7 @@ public class SettingsGUI extends BaseGUI {
     memorySlider.setSnapToTicks(true);
     gamePanel.add(memorySlider);
 
-    JLabel memoryValue = new JLabel();
+    memoryValue = new JLabel();
     memoryValue.setBounds(220, 135, 350, 25);
     memoryValue.setFont(Fonts.fontReg);
     memoryValue.setText(Locale.getValue("o.memory_" + Settings.gameMemory));
@@ -468,14 +468,6 @@ public class SettingsGUI extends BaseGUI {
     labelJVMPatchExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelJVMPatchExplained);
 
-    JLabel javaVMBadge = new JLabel("Your Java VM: " + JavaUtil.getReadableGameJVMData());
-    javaVMBadge.setBounds(25, 425, 235, 18);
-    javaVMBadge.setHorizontalAlignment(SwingConstants.CENTER);
-    javaVMBadge.setFont(Fonts.fontRegSmall);
-    javaVMBadge.putClientProperty(FlatClientProperties.STYLE,
-      "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND) + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND));
-    gamePanel.add(javaVMBadge);
-
     jvmPatchButton = new JButton(startIcon);
     jvmPatchButton.setBounds(585, 375, 30, 23);
     jvmPatchButton.setFocusPainted(false);
@@ -489,6 +481,24 @@ public class SettingsGUI extends BaseGUI {
       jvmPatchButton.setEnabled(true);
       jvmPatchButton.setToolTipText(null);
     }
+
+    JLabel javaVMBadge = new JLabel("Your Java VM: " + JavaUtil.getReadableGameJVMData());
+    javaVMBadge.setBounds(25, 425, 235, 18);
+    javaVMBadge.setHorizontalAlignment(SwingConstants.CENTER);
+    javaVMBadge.setFont(Fonts.fontRegSmall);
+    javaVMBadge.putClientProperty(FlatClientProperties.STYLE,
+      "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND) + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND));
+    gamePanel.add(javaVMBadge);
+
+    resetGameSettingsButton = new JButton("Reset values to default");
+    resetGameSettingsButton.setFont(Fonts.fontMed);
+    resetGameSettingsButton.setBounds(435, 423, 180, 23);
+    resetGameSettingsButton.setFocusPainted(false);
+    resetGameSettingsButton.setFocusable(false);
+    resetGameSettingsButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
+    resetGameSettingsButton.setToolTipText("Reset values to default");
+    gamePanel.add(resetGameSettingsButton);
+    resetGameSettingsButton.addActionListener(SettingsEventHandler::resetGameSettingsButtonEvent);
 
     return gamePanel;
   }
@@ -605,6 +615,12 @@ public class SettingsGUI extends BaseGUI {
     argumentsPane.setBounds(25, 117, 615, 100);
     advancedPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
+    argumentsPane.addFocusListener(new FocusListener() {
+      @Override public void focusLost(FocusEvent e) {
+        SettingsEventHandler.saveAdditionalArgs();
+      }
+      @Override public void focusGained(FocusEvent e) {}
+    });
 
     JScrollPane scrollBar = new JScrollPane(argumentsPane);
     scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -701,15 +717,15 @@ public class SettingsGUI extends BaseGUI {
     advancedPanel.add(getdownURLPanel);
     getdownURLTextField.setText(Settings.gameGetdownFullURL);
 
-    resetButton = new JButton("Reset values to default");
-    resetButton.setFont(Fonts.fontMed);
-    resetButton.setBounds(435, 422, 180, 23);
-    resetButton.setFocusPainted(false);
-    resetButton.setFocusable(false);
-    resetButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
-    resetButton.setToolTipText("Reset values to default");
-    advancedPanel.add(resetButton);
-    resetButton.addActionListener(SettingsEventHandler::resetButtonEvent);
+    resetConnectionSettingsButton = new JButton("Reset values to default");
+    resetConnectionSettingsButton.setFont(Fonts.fontMed);
+    resetConnectionSettingsButton.setBounds(435, 423, 180, 23);
+    resetConnectionSettingsButton.setFocusPainted(false);
+    resetConnectionSettingsButton.setFocusable(false);
+    resetConnectionSettingsButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
+    resetConnectionSettingsButton.setToolTipText("Reset values to default");
+    advancedPanel.add(resetConnectionSettingsButton);
+    resetConnectionSettingsButton.addActionListener(SettingsEventHandler::resetConnectionSettingsButtonEvent);
 
     publicKeyTextField.setCaretPosition(0);
     getdownURLTextField.setCaretPosition(0);

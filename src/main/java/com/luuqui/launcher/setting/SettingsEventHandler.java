@@ -134,11 +134,38 @@ public class SettingsEventHandler {
     SettingsProperties.setValue("game.getdownFullURL", Settings.gameGetdownFullURL);
   }
 
-  public static void resetButtonEvent(ActionEvent action) {
-    SettingsGUI.serverAddressTextField.setText("game.spiralknights.com");
-    SettingsGUI.portTextField.setText("47624");
-    SettingsGUI.publicKeyTextField.setText("a5ed0dc3892b9472cfb668e236064e989e95945dad18f3d7e7d8e474d6e03de38bc044c3429b9ca649d0881d601c0eb8ffebc3756f0503f73a8ca1760943ea0e8921ad6f8102026586db3133844bbadbcfcfc666d23982d7684511fbf6cd8bb1d02a14270d0854098d16fe88f99c05825b0fe1b6fd497709106f2c418796aaf7aab7c92f26fcd9fbb3c43df48075fed8dd931273a7b0a333c8de5967797874c1944aed65b47f0792b273a529ac22a2dce08dad04eeebeeff67c7bc99b97682bff488038b28e24f4b5eea77ed966caede52f2c1ecf2b403110a9765daa81ddf718129a040823bead3a0bdca70ef6d08f483757a6d3b6e01fbbcb32006b7872bcd#10001");
-    SettingsGUI.getdownURLTextField.setText("http://gamemedia2.spiralknights.com/spiral/client/");
+  public static void resetConnectionSettingsButtonEvent(ActionEvent action) {
+    final String DEFAULT_SERVER_ADDRESS = "game.spiralknights.com";
+    final String DEFAULT_PORT = "47624";
+    final String DEFAULT_PUBLIC_KEY = "a5ed0dc3892b9472cfb668e236064e989e95945dad18f3d7e7d8e474d6e03de38bc044c3429b9ca649d0881d601c0eb8ffebc3756f0503f73a8ca1760943ea0e8921ad6f8102026586db3133844bbadbcfcfc666d23982d7684511fbf6cd8bb1d02a14270d0854098d16fe88f99c05825b0fe1b6fd497709106f2c418796aaf7aab7c92f26fcd9fbb3c43df48075fed8dd931273a7b0a333c8de5967797874c1944aed65b47f0792b273a529ac22a2dce08dad04eeebeeff67c7bc99b97682bff488038b28e24f4b5eea77ed966caede52f2c1ecf2b403110a9765daa81ddf718129a040823bead3a0bdca70ef6d08f483757a6d3b6e01fbbcb32006b7872bcd#10001";
+    final String DEFAULT_GETDOWN_URL = "http://gamemedia2.spiralknights.com/spiral/client/";
+
+    SettingsGUI.serverAddressTextField.setText(DEFAULT_SERVER_ADDRESS);
+    SettingsGUI.portTextField.setText(DEFAULT_PORT);
+    SettingsGUI.publicKeyTextField.setText(DEFAULT_PUBLIC_KEY);
+    SettingsGUI.getdownURLTextField.setText(DEFAULT_GETDOWN_URL);
+
+    saveConnectionSettings();
+  }
+
+  public static void resetGameSettingsButtonEvent(ActionEvent action) {
+    final int DEFAULT_MEMORY = 1024;
+    final boolean DEFAULT_USE_CUSTOM_GC = false;
+    final String DEFAULT_GC = "ParallelOld";
+    final boolean DEFAULT_DISABLE_EXPLICIT_GC = false;
+    final String DEFAULT_ADDITIONAL_ARGS = "";
+
+    SettingsGUI.memorySlider.setValue(DEFAULT_MEMORY);
+    SettingsGUI.switchUseCustomGC.setSelected(DEFAULT_USE_CUSTOM_GC);
+    SettingsGUI.choiceGC.setSelectedItem(DEFAULT_GC);
+    SettingsGUI.switchExplicitGC.setSelected(DEFAULT_DISABLE_EXPLICIT_GC);
+    SettingsGUI.argumentsPane.setText(DEFAULT_ADDITIONAL_ARGS);
+
+
+    customGCChangeEvent(null);
+    choiceGCChangeEvent(null);
+    disableExplicitGCChangeEvent(null);
+    saveAdditionalArgs();
   }
 
   public static void copyLauncherLogEvent(ActionEvent action) {

@@ -274,7 +274,7 @@ public class LauncherEventHandler {
         SettingsGUI.portTextField.setEnabled(true);
         SettingsGUI.publicKeyTextField.setEnabled(true);
         SettingsGUI.getdownURLTextField.setEnabled(true);
-        SettingsGUI.resetButton.setEnabled(true);
+        SettingsGUI.resetConnectionSettingsButton.setEnabled(true);
       } else {
         LauncherGUI.launchButton.setText("Play " + selectedServer.name);
         LauncherGUI.launchButton.setToolTipText("Play " + selectedServer.name);
@@ -302,7 +302,7 @@ public class LauncherEventHandler {
         SettingsGUI.portTextField.setEnabled(false);
         SettingsGUI.publicKeyTextField.setEnabled(false);
         SettingsGUI.getdownURLTextField.setEnabled(false);
-        SettingsGUI.resetButton.setEnabled(false);
+        SettingsGUI.resetConnectionSettingsButton.setEnabled(false);
       }
       LauncherApp.selectedServer = selectedServer;
     } else {
