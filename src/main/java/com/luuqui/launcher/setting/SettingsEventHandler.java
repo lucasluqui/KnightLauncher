@@ -9,15 +9,20 @@ import com.luuqui.launcher.flamingo.Flamingo;
 import com.luuqui.launcher.flamingo.data.Status;
 import com.luuqui.launcher.mod.ModLoader;
 import com.luuqui.util.FileUtil;
+import com.luuqui.util.JavaUtil;
 import com.luuqui.util.ProcessUtil;
+import com.sun.management.OperatingSystemMXBean;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.luuqui.launcher.setting.Log.log;
 
 public class SettingsEventHandler {
 
@@ -166,6 +171,30 @@ public class SettingsEventHandler {
     choiceGCChangeEvent(null);
     disableExplicitGCChangeEvent(null);
     saveAdditionalArgs();
+  }
+
+  public static void loadRecommendedSettingsButtonEvent(ActionEvent action) {
+    final boolean RECOMMENDED_USE_CUSTOM_GC = true;
+    final String RECOMMENDED_GC = "ParallelOld";
+    final boolean RECOMMENDED_DISABLE_EXPLICIT_GC = true;
+
+    long maximumMemory = ((OperatingSystemMXBean) ManagementFactory
+      .getOperatingSystemMXBean()).getTotalPhysicalMemorySize() / 1048576;
+
+    int recommendedMemory = (int) Math.min(JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 ? 3072 : 1024, maximumMemory / 0.25);
+
+    log.info("Recommended settings: Maximum physical memory is " + maximumMemory
+      + ", setting allocated memory to " + recommendedMemory);
+
+    SettingsGUI.memorySlider.setValue(recommendedMemory);
+    SettingsGUI.switchUseCustomGC.setSelected(RECOMMENDED_USE_CUSTOM_GC);
+    SettingsGUI.choiceGC.setSelectedItem(RECOMMENDED_GC);
+    SettingsGUI.switchExplicitGC.setSelected(RECOMMENDED_DISABLE_EXPLICIT_GC);
+
+
+    customGCChangeEvent(null);
+    choiceGCChangeEvent(null);
+    disableExplicitGCChangeEvent(null);
   }
 
   public static void copyLauncherLogEvent(ActionEvent action) {

@@ -311,6 +311,14 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setFont(Fonts.fontMedGiant);
     gamePanel.add(headerLabel);
 
+    JLabel javaVMBadge = new JLabel("Your Java VM: " + JavaUtil.getReadableGameJVMData());
+    javaVMBadge.setBounds(370, 35, 235, 18);
+    javaVMBadge.setHorizontalAlignment(SwingConstants.CENTER);
+    javaVMBadge.setFont(Fonts.fontRegSmall);
+    javaVMBadge.putClientProperty(FlatClientProperties.STYLE,
+      "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND) + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND));
+    gamePanel.add(javaVMBadge);
+
     JLabel labelStyle = new JLabel(Locale.getValue("m.platform"));
     labelStyle.setBounds(25, 90, 125, 18);
     labelStyle.setFont(Fonts.fontRegBig);
@@ -335,7 +343,7 @@ public class SettingsGUI extends BaseGUI {
     });
 
     JLabel labelMemory = new JLabel(Locale.getValue("m.allocated_memory"));
-    labelMemory.setBounds(225, 90, 275, 18);
+    labelMemory.setBounds(275, 90, 275, 18);
     labelMemory.setFont(Fonts.fontRegBig);
     gamePanel.add(labelMemory);
 
@@ -344,7 +352,7 @@ public class SettingsGUI extends BaseGUI {
     SettingsEventHandler.memoryChangeEvent(Settings.gameMemory);
 
     memorySlider = new JSlider(JSlider.HORIZONTAL, 256, getMaxAllowedMemoryAlloc(), Settings.gameMemory);
-    memorySlider.setBounds(215, 105, 350, 40);
+    memorySlider.setBounds(265, 105, 350, 40);
     memorySlider.setFocusable(false);
     memorySlider.setFont(Fonts.fontReg);
     memorySlider.setPaintTicks(true);
@@ -353,7 +361,7 @@ public class SettingsGUI extends BaseGUI {
     gamePanel.add(memorySlider);
 
     memoryValue = new JLabel();
-    memoryValue.setBounds(220, 135, 350, 25);
+    memoryValue.setBounds(270, 135, 350, 25);
     memoryValue.setFont(Fonts.fontReg);
     memoryValue.setText(Locale.getValue("o.memory_" + Settings.gameMemory));
     gamePanel.add(memoryValue);
@@ -482,13 +490,14 @@ public class SettingsGUI extends BaseGUI {
       jvmPatchButton.setToolTipText(null);
     }
 
-    JLabel javaVMBadge = new JLabel("Your Java VM: " + JavaUtil.getReadableGameJVMData());
-    javaVMBadge.setBounds(25, 425, 235, 18);
-    javaVMBadge.setHorizontalAlignment(SwingConstants.CENTER);
-    javaVMBadge.setFont(Fonts.fontRegSmall);
-    javaVMBadge.putClientProperty(FlatClientProperties.STYLE,
-      "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND) + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND));
-    gamePanel.add(javaVMBadge);
+    JButton loadRecommendedSettingsButton = new JButton("Load recommended settings");
+    loadRecommendedSettingsButton.setFont(Fonts.fontMed);
+    loadRecommendedSettingsButton.setBounds(195, 423, 230, 23);
+    loadRecommendedSettingsButton.setFocusPainted(false);
+    loadRecommendedSettingsButton.setFocusable(false);
+    loadRecommendedSettingsButton.setToolTipText("Load recommended settings");
+    gamePanel.add(loadRecommendedSettingsButton);
+    loadRecommendedSettingsButton.addActionListener(SettingsEventHandler::loadRecommendedSettingsButtonEvent);
 
     resetGameSettingsButton = new JButton("Reset values to default");
     resetGameSettingsButton.setFont(Fonts.fontMed);
