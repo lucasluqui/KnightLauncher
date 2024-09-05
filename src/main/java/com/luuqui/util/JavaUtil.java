@@ -88,8 +88,15 @@ public class JavaUtil {
     String javaArch = "unknown";
 
     try {
-      javaMajorVersion = rawJavaVMData.split("\\.")[1];
-      javaMinorVersion = rawJavaVMData.split("_")[1].split(",")[0];
+      if(rawJavaVMData.startsWith("1.")) {
+        // version formatting for Java 8 and prior
+        javaMajorVersion = rawJavaVMData.split("\\.")[1];
+        javaMinorVersion = rawJavaVMData.split("_")[1].split(",")[0];
+      } else {
+        // version formatting for Java 10 onwards
+        javaMajorVersion = rawJavaVMData.split("\\.")[0];
+        javaMinorVersion = rawJavaVMData.split("\\.")[2];
+      }
       javaArch = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 ? "64-bit" : "32-bit";
     } catch (Exception e) {
       log.error(e);
