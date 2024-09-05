@@ -236,6 +236,13 @@ public class EditorsGUI extends BaseGUI {
     editorListPane.add(interfaceTesterPane);
     editorListPane.add(particleEditorPane);
 
+    JLabel poweredByLabel = new JLabel("Powered by spiralview " + LauncherGlobals.BUNDLED_SPIRALVIEW_VERSION + " ");
+    poweredByLabel.setBounds(30, 449, 740, 15);
+    poweredByLabel.setFont(Fonts.fontReg);
+    poweredByLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+    poweredByLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
+    editorsGUIFrame.getContentPane().add(poweredByLabel);
+
   }
 
   protected static void startFakeProgress() {
