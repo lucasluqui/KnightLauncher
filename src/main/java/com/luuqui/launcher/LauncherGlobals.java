@@ -6,7 +6,7 @@ import java.io.File;
 
 public class LauncherGlobals {
 
-  public static final String LAUNCHER_VERSION = "2.0.5";
+  public static final String LAUNCHER_VERSION = "2.0.6";
 
   public static final String LAUNCHER_NAME = "Knight Launcher";
 
