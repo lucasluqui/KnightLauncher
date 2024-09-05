@@ -89,11 +89,11 @@ public class JavaUtil {
 
     try {
       if(rawJavaVMData.startsWith("1.")) {
-        // version formatting for Java 8 and prior
+        // version formatting for Java 8 and prior. e.g. "1.8.0_251"
         javaMajorVersion = rawJavaVMData.split("\\.")[1];
         javaMinorVersion = rawJavaVMData.split("_")[1].split(",")[0];
       } else {
-        // version formatting for Java 10 onwards
+        // version formatting for Java 10 onwards. e.g. "15.0.2"
         javaMajorVersion = rawJavaVMData.split("\\.")[0];
         javaMinorVersion = rawJavaVMData.split("\\.")[2];
       }
