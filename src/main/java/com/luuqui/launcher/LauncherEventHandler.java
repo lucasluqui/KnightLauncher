@@ -18,6 +18,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.luuqui.launcher.Log.log;
@@ -30,8 +32,9 @@ public class LauncherEventHandler {
 
     Thread launchThread = new Thread(() -> {
 
-      // disable server switching during launch procedure
+      // disable server switching and launch button during launch procedure
       LauncherGUI.serverList.setEnabled(false);
+      LauncherGUI.launchButton.setEnabled(false);
 
       if(LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
         // official servers launch procedure
@@ -153,14 +156,8 @@ public class LauncherEventHandler {
         ProgressBar.finishTask();
       }
 
-      DiscordRPC.getInstance().stop();
-      if (!Settings.keepOpen) {
-        LauncherGUI.launcherGUIFrame.dispose();
-        System.exit(1);
-      }
-
-      // re-enable server switching
-      LauncherGUI.serverList.setEnabled(true);
+      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+      executor.schedule(LauncherEventHandler::checkGameLaunched, 8, TimeUnit.SECONDS);
 
     });
     launchThread.start();
@@ -443,6 +440,23 @@ public class LauncherEventHandler {
     }
 
     return args;
+  }
+
+  private static void checkGameLaunched() {
+    // TODO: Add Linux and Mac compatibility to launch checking.
+    if(!SystemUtil.isWindows() || ProcessUtil.isGameRunningByTitle(LauncherApp.selectedServer.name.equalsIgnoreCase("Official") ? "Spiral Knights" : LauncherApp.selectedServer.name)) {
+      DiscordRPC.getInstance().stop();
+      if (!Settings.keepOpen) {
+        LauncherGUI.launcherGUIFrame.dispose();
+        System.exit(1);
+      }
+    } else {
+      Dialog.push("The game was not able to launch successfully.\n\nIt's recommended to follow these steps:\n- Enter launcher settings, go to the \"Game\" tab, and press the \"Load recommended settings\" button.\n- Lower the allocated memory.\n- Patch a 64-bit Java VM.\n\nIf this does still not solve your issue you can look for technical support on Discord.", "Error While Launching", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // re-enable server switching
+    LauncherGUI.serverList.setEnabled(true);
+    LauncherGUI.launchButton.setEnabled(true);
   }
 
 }

@@ -58,4 +58,10 @@ public class ProcessUtil {
     return new String[1];
   }
 
+  public static boolean isGameRunningByTitle(String processTitle) {
+    String output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "tasklist /v /fo csv /fi \"imagename eq java.exe\"" })[0];
+    log.info(output);
+    return output.contains(processTitle);
+  }
+
 }
