@@ -121,7 +121,11 @@ public class SettingsEventHandler {
 
   public static void jvmPatchEvent(ActionEvent action) {
     SettingsProperties.setValue("launcher.jvm_patched", "false");
-    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar", "forceJVMPatch"}, true);
+    String javaVMPatchDir = LauncherGlobals.USER_DIR;
+    if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
+      javaVMPatchDir += File.separator + "thirdparty" + File.separator + LauncherApp.getSanitizedServerName(LauncherApp.selectedServer.name);
+    }
+    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar", "forceJVMPatch", javaVMPatchDir}, true);
     SettingsGUI.settingsGUIFrame.dispose();
     System.exit(1);
   }

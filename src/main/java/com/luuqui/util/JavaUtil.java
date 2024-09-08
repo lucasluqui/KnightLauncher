@@ -1,5 +1,6 @@
 package com.luuqui.util;
 
+import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.LauncherGlobals;
 
 import java.io.File;
@@ -118,11 +119,19 @@ public class JavaUtil {
   }
 
   public static String getGameJavaDirPath() {
-    File javaVMDir = new File(LauncherGlobals.USER_DIR, "/java_vm");
+    String startingDirPath = LauncherGlobals.USER_DIR;
+
+    if(LauncherApp.selectedServer != null) {
+      if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
+        startingDirPath += File.separator + "thirdparty" + File.separator + LauncherApp.getSanitizedServerName(LauncherApp.selectedServer.name);
+      }
+    }
+
+    File javaVMDir = new File(startingDirPath, "/java_vm");
     if (javaVMDir.exists() && javaVMDir.isDirectory()) {
      return javaVMDir.getAbsolutePath();
     }
-    File javaDir = new File(LauncherGlobals.USER_DIR, "/java");
+    File javaDir = new File(startingDirPath, "/java");
     if (javaDir.exists() && javaDir.isDirectory()) {
       return javaDir.getAbsolutePath();
     }

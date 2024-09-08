@@ -17,6 +17,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -264,7 +265,6 @@ public class LauncherEventHandler {
         SettingsGUI.switchUseIngameRPC.setEnabled(true);
         SettingsGUI.choicePlatform.setEnabled(true);
         SettingsGUI.forceRebuildButton.setEnabled(true);
-        SettingsGUI.jvmPatchButton.setEnabled(true);
         SettingsGUI.argumentsPane.setEnabled(true);
         SettingsGUI.labelDisclaimer.setVisible(false);
         SettingsGUI.serverAddressTextField.setEnabled(true);
@@ -292,7 +292,6 @@ public class LauncherEventHandler {
         SettingsGUI.switchUseIngameRPC.setEnabled(false);
         SettingsGUI.choicePlatform.setEnabled(false);
         SettingsGUI.forceRebuildButton.setEnabled(false);
-        SettingsGUI.jvmPatchButton.setEnabled(false);
         SettingsGUI.argumentsPane.setEnabled(false);
         SettingsGUI.labelDisclaimer.setVisible(true);
         SettingsGUI.serverAddressTextField.setEnabled(false);
@@ -309,6 +308,7 @@ public class LauncherEventHandler {
     }
 
     updateBanner();
+    updateGameJavaVMData();
     saveSelectedServer();
   }
 
@@ -359,6 +359,17 @@ public class LauncherEventHandler {
     refreshThread.start();
   }
 
+  public static void updateGameJavaVMData() {
+    Thread thread = new Thread(() -> {
+      SettingsGUI.javaVMBadge.setText("Your Java VM: " + JavaUtil.getReadableGameJVMData());
+
+      boolean is64Bit = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64;
+      SettingsGUI.memorySlider.setMaximum(is64Bit ? 4096 : 1024);
+      SettingsEventHandler.memoryChangeEvent(SettingsGUI.memorySlider.getValue());
+    });
+    thread.start();
+  }
+
   public static void updateLauncher() {
     // delete any existing updaters from previous updates
     new File(LauncherGlobals.USER_DIR + "/updater.jar").delete();
@@ -380,66 +391,66 @@ public class LauncherEventHandler {
   }
 
   private static String[] getThirdPartyClientStartCommand(Server server, boolean altMode) {
-    String[] args;
+    List<String> argsList = new ArrayList<>();
     String sanitizedServerName = LauncherApp.getSanitizedServerName(server.name);
+
     if(SystemUtil.isWindows()) {
-      args = new String[]{
-        LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "java_vm" + File.separator + "bin" + File.separator + "java",
-        "-classpath",
-        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/config.jar;" +
-          LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/projectx-config.jar;" +
-          LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/projectx-pcode.jar;" +
-          LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/lwjgl.jar;" +
-          LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/lwjgl_util.jar;" +
-          LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/jinput.jar;" +
-          LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/jshortcut.jar;" +
-          LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-beanutils.jar;" +
-          LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-digester.jar;" +
-          LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-logging.jar;",
-        "-Dcom.threerings.getdown=false",
-        Settings.gameDisableExplicitGC ? "-XX:+DisableExplicitGC" : "",
-        Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld") ? "-XX:+UseParallelGC" : "",
-        Settings.gameUseCustomGC ? "-XX:+Use" + Settings.gameGarbageCollector + "GC" : "",
-        altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M",
-        altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M",
-        "-XX:+AggressiveOpts",
-        "-XX:SoftRefLRUPolicyMSPerMB=10",
-        "-Djava.library.path=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./native",
-        "-Dorg.lwjgl.util.NoChecks=true",
-        "-Dsun.java2d.d3d=false",
-        "-Dappdir=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + ".",
-        "-Dresource_dir=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./rsrc",
-        "com.threerings.projectx.client.ProjectXApp",
-      };
+      argsList.add(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "java_vm" + File.separator + "bin" + File.separator + "java");
+      argsList.add("-classpath");
+      argsList.add(LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/config.jar;" +
+        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/projectx-config.jar;" +
+        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/projectx-pcode.jar;" +
+        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/lwjgl.jar;" +
+        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/lwjgl_util.jar;" +
+        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/jinput.jar;" +
+        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/jshortcut.jar;" +
+        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-beanutils.jar;" +
+        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-digester.jar;" +
+        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-logging.jar;");
+      argsList.add("-Dcom.threerings.getdown=false");
+      if(Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
+      if(Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld")) argsList.add("-XX:+UseParallelGC");
+      if(Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+      argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
+      argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
+      argsList.add("-XX:+AggressiveOpts");
+      argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
+      argsList.add("-Djava.library.path=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./native");
+      argsList.add("-Dorg.lwjgl.util.NoChecks=true");
+      argsList.add("-Dsun.java2d.d3d=false");
+      argsList.add("-Dappdir=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + ".");
+      argsList.add("-Dresource_dir=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./rsrc");
+      argsList.add("com.threerings.projectx.client.ProjectXApp");
     } else {
-      args = new String[]{
-        LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "java" + File.separator + "bin" + File.separator + "java",
-        "-classpath",
-        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/config.jar:" +
-          LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/projectx-config.jar:" +
-          LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/projectx-pcode.jar:" +
-          LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/lwjgl.jar:" +
-          LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/lwjgl_util.jar:" +
-          LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/jinput.jar:" +
-          LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/jshortcut.jar:" +
-          LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-beanutils.jar:" +
-          LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-digester.jar:" +
-          LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-logging.jar:",
-        "-Dcom.threerings.getdown=false",
-        altMode ? "-Xms256M" : "-Xms512M",
-        altMode ? "-Xmx512M" : "-Xmx1024M",
-        "-XX:+AggressiveOpts",
-        "-XX:SoftRefLRUPolicyMSPerMB=10",
-        "-Djava.library.path=" + LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "native",
-        "-Dorg.lwjgl.util.NoChecks=true",
-        "-Dsun.java2d.d3d=false",
-        "-Dappdir=" + LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator,
-        "-Dresource_dir=" + LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "rsrc",
-        "com.threerings.projectx.client.ProjectXApp",
-      };
+      argsList.add(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "java" + File.separator + "bin" + File.separator + "java");
+      argsList.add("-classpath");
+      argsList.add(LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/config.jar:" +
+        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/projectx-config.jar:" +
+        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/projectx-pcode.jar:" +
+        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/lwjgl.jar:" +
+        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/lwjgl_util.jar:" +
+        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/jinput.jar:" +
+        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/jshortcut.jar:" +
+        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-beanutils.jar:" +
+        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-digester.jar:" +
+        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-logging.jar:");
+      argsList.add("-Dcom.threerings.getdown=false");
+      if(Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
+      if(Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld")) argsList.add("-XX:+UseParallelGC");
+      if(Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+      argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
+      argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
+      argsList.add("-XX:+AggressiveOpts");
+      argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
+      argsList.add("-Djava.library.path=" + LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "native");
+      argsList.add("-Dorg.lwjgl.util.NoChecks=true");
+      argsList.add("-Dsun.java2d.d3d=false");
+      argsList.add("-Dappdir=" + LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator);
+      argsList.add("-Dresource_dir=" + LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "rsrc");
+      argsList.add("com.threerings.projectx.client.ProjectXApp");
     }
 
-    return args;
+    return argsList.toArray(new String[argsList.size()]);
   }
 
   private static void checkGameLaunched() {

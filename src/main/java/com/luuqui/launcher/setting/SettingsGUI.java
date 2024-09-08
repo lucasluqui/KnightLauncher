@@ -48,6 +48,7 @@ public class SettingsGUI extends BaseGUI {
   public static JButton betaCodeRevalidateButton;
   public static JButton betaCodeClearLocalButton;
   public static JButton resetGameSettingsButton;
+  public static JLabel javaVMBadge = new JLabel();
 
   public SettingsGUI(LauncherApp app) {
     super();
@@ -311,7 +312,7 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setFont(Fonts.fontMedGiant);
     gamePanel.add(headerLabel);
 
-    JLabel javaVMBadge = new JLabel("Your Java VM: " + JavaUtil.getReadableGameJVMData());
+    javaVMBadge = new JLabel("Your Java VM: " + JavaUtil.getReadableGameJVMData());
     javaVMBadge.setBounds(370, 35, 235, 18);
     javaVMBadge.setHorizontalAlignment(SwingConstants.CENTER);
     javaVMBadge.setFont(Fonts.fontRegSmall);

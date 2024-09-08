@@ -52,6 +52,8 @@ public class LauncherApp {
   public static Server selectedServer = null;
   public static boolean flamingoOnline = false;
 
+  public static String javaVMPatchDir = null;
+
   public static void main(String[] args) {
 
     LauncherApp app = new LauncherApp();
@@ -331,7 +333,12 @@ public class LauncherApp {
   private boolean requiresJVMPatch() {
 
     // First of all see if we're being forced to patch.
-    if(_args.length > 0 && _args[0].equals("forceJVMPatch")) return true;
+    if(_args.length > 0 && _args[0].equals("forceJVMPatch")) {
+      // set the path dir to wherever we're being forced to patch to.
+      // this is primarily used for patching when third party servers were selected.
+      javaVMPatchDir = _args[1];
+      return true;
+    }
 
     // You need a 64-bit system to begin with.
     if(!SystemUtil.is64Bit()) return false;
@@ -347,6 +354,8 @@ public class LauncherApp {
       SettingsProperties.setValue("launcher.jvm_patched", "true");
       return false;
     }
+
+    javaVMPatchDir = LauncherGlobals.USER_DIR;
 
     return true;
   }
