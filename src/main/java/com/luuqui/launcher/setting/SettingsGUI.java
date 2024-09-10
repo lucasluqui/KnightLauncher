@@ -18,7 +18,7 @@ public class SettingsGUI extends BaseGUI {
   private final LauncherApp app;
   public static JFrame settingsGUIFrame;
   public static JTabbedPane tabbedPane;
-  public static JComboBox<String> choicePlatform;
+  public static JComboBox<String> choicePlatform = new JComboBox<String>();
   public static JComboBox<String> choiceLanguage;
   public static JComboBox<String> choiceStyle;
   public static JComboBox<String> choiceGC;
@@ -26,7 +26,7 @@ public class SettingsGUI extends BaseGUI {
   public static JCheckBox switchKeepOpen;
   public static JCheckBox switchShortcut;
   public static JButton jvmPatchButton = new JButton();
-  public static JButton forceRebuildButton;
+  public static JButton forceRebuildButton = new JButton();
   public static JCheckBox switchStringDedup;
   public static JCheckBox switchExplicitGC;
   public static JCheckBox switchUseCustomGC;
@@ -35,12 +35,12 @@ public class SettingsGUI extends BaseGUI {
   public static JCheckBox switchUseIngameRPC = new JCheckBox();
   public static JCheckBox switchAutoUpdate;
   public static JEditorPane argumentsPane;
-  public static JLabel labelDisclaimer;
-  public static JTextField serverAddressTextField;
-  public static JTextField portTextField;
-  public static JTextField publicKeyTextField;
-  public static JTextField getdownURLTextField;
-  public static JButton resetConnectionSettingsButton;
+  public static JLabel labelDisclaimer = new JLabel();
+  public static JTextField serverAddressTextField = new JTextField();
+  public static JTextField portTextField = new JTextField();
+  public static JTextField publicKeyTextField = new JTextField();
+  public static JTextField getdownURLTextField = new JTextField();
+  public static JButton resetConnectionSettingsButton = new JButton();
   public static JTextField betaCodeTextField;
   public static JLabel labelFlamingoStatus;
   public static JLabel labelFlamingoVersion;
