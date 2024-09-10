@@ -471,7 +471,7 @@ public class LauncherEventHandler {
         System.exit(1);
       }
     } else {
-      Dialog.push("The game was not able to launch successfully.\n\nIt's recommended to follow these steps:\n- Enter launcher settings, go to the \"Game\" tab, and press the \"Load recommended settings\" button.\n- Lower the allocated memory.\n- Patch a 64-bit Java VM.\n\nIf this does still not solve your issue you can look for technical support on Discord.", "Error While Launching", JOptionPane.ERROR_MESSAGE);
+      Dialog.push("The game was not able to launch.\n\nIt's recommended to try any of the following solutions in no particular order:\n- In the \"Game\" tab in the launcher's settings press the \"Load recommended settings\" button.\n- Lower the allocated memory in the \"Game\" tab in launcher's settings.\n- In the \"Game\" tab in the launcher's settings press the \"Reset values to default\" button.\n- Patch another Java VM in the \"Game\" tab in launcher's settings.\n\nIf this does still not solve your issue you can look for technical support on Discord.", "Error While Launching", JOptionPane.ERROR_MESSAGE);
     }
 
     // re-enable server switching

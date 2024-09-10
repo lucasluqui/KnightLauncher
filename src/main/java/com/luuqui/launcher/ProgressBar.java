@@ -30,7 +30,7 @@ public class ProgressBar {
       Thread finishDelayThread = new Thread(() -> {
         showBar(false);
       });
-      executor.schedule(finishDelayThread, 3, TimeUnit.SECONDS);
+      executor.schedule(finishDelayThread, 8, TimeUnit.SECONDS);
     }
   }
 
