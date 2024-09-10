@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -265,7 +266,6 @@ public class LauncherEventHandler {
         SettingsGUI.switchUseIngameRPC.setEnabled(true);
         SettingsGUI.choicePlatform.setEnabled(true);
         SettingsGUI.forceRebuildButton.setEnabled(true);
-        SettingsGUI.argumentsPane.setEnabled(true);
         SettingsGUI.labelDisclaimer.setVisible(false);
         SettingsGUI.serverAddressTextField.setEnabled(true);
         SettingsGUI.portTextField.setEnabled(true);
@@ -292,7 +292,6 @@ public class LauncherEventHandler {
         SettingsGUI.switchUseIngameRPC.setEnabled(false);
         SettingsGUI.choicePlatform.setEnabled(false);
         SettingsGUI.forceRebuildButton.setEnabled(false);
-        SettingsGUI.argumentsPane.setEnabled(false);
         SettingsGUI.labelDisclaimer.setVisible(true);
         SettingsGUI.serverAddressTextField.setEnabled(false);
         SettingsGUI.portTextField.setEnabled(false);
@@ -415,6 +414,11 @@ public class LauncherEventHandler {
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
       argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
+
+      if(!Settings.gameAdditionalArgs.isEmpty()) {
+        argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
+      }
+
       argsList.add("-Djava.library.path=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./native");
       argsList.add("-Dorg.lwjgl.util.NoChecks=true");
       argsList.add("-Dsun.java2d.d3d=false");
@@ -442,6 +446,11 @@ public class LauncherEventHandler {
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
       argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
+
+      if(!Settings.gameAdditionalArgs.isEmpty()) {
+        argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
+      }
+
       argsList.add("-Djava.library.path=" + LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "native");
       argsList.add("-Dorg.lwjgl.util.NoChecks=true");
       argsList.add("-Dsun.java2d.d3d=false");
