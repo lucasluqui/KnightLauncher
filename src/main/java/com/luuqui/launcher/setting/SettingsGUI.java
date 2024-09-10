@@ -3,15 +3,15 @@ package com.luuqui.launcher.setting;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.*;
-import com.luuqui.util.ColorUtil;
-import com.luuqui.util.JavaUtil;
-import com.luuqui.util.SteamUtil;
-import com.luuqui.util.SystemUtil;
+import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.IOException;
+
+import static com.luuqui.launcher.setting.Log.log;
 
 public class SettingsGUI extends BaseGUI {
 
@@ -640,6 +640,8 @@ public class SettingsGUI extends BaseGUI {
 
     argumentsPane.setCaretPosition(0);
 
+    checkExistingArguments();
+
     JSeparator sep = new JSeparator();
     sep.setBounds(25, 237, 600, 16);
     advancedPanel.add(sep);
@@ -832,6 +834,19 @@ public class SettingsGUI extends BaseGUI {
     if(!SettingsProperties.getValue("launcher.betaCodes").trim().isEmpty()) {
       betaCodeRevalidateButton.setVisible(true);
       betaCodeClearLocalButton.setVisible(true);
+    }
+  }
+
+  private static void checkExistingArguments() {
+    // Port all the contents of their existing extra.txt into
+    // Knight Launcher's gameAdditionalArgs setting so that it's also preserved in-launcher.
+    if(!FileUtil.fileExists("old-extra.txt")) {
+      try {
+        argumentsPane.setText(FileUtil.readFile("extra.txt").trim());
+        SettingsEventHandler.saveAdditionalArgs();
+      } catch (IOException e) {
+        log.error(e);
+      }
     }
   }
 }

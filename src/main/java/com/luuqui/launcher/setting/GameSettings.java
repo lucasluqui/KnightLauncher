@@ -30,17 +30,8 @@ public class GameSettings {
        * Back up the current extra.txt if there's no back up already.
        * This is useful if a user installs Knight Launcher and had already
        * made its own extra.txt, this way it won't get deleted forever, just renamed.
-       *
-       * Additionally, we also port all the contents of their extra.txt into
-       * Knight Launcher's gameAdditionalArgs setting so that it's also preserved in-launcher.
        */
       if(!FileUtil.fileExists("old-extra.txt")) {
-        try {
-          SettingsGUI.argumentsPane.setText(FileUtil.readFile("extra.txt").trim());
-          SettingsEventHandler.saveAdditionalArgs();
-        } catch (IOException e) {
-          log.error(e);
-        }
         FileUtil.rename(new File("extra.txt"), new File("old-extra.txt"));
       }
 
