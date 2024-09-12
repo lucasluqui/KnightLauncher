@@ -2,6 +2,7 @@ package com.luuqui.launcher;
 
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
+import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -155,25 +156,38 @@ public class JVMPatcher extends BaseGUI {
     });
     titleBar.setLayout(null);
 
-    Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 20, ColorUtil.getForegroundColor());
+    final int BUTTON_WIDTH = 35;
+    final int BUTTON_HEIGHT = 35;
+
+    Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 17, ColorUtil.getForegroundColor());
     JButton closeButton = new JButton(closeIcon);
-    closeButton.setBounds(jvmPatcherFrame.getWidth() - 38, 3, 29, 29);
+    closeButton.setBounds(jvmPatcherFrame.getWidth() - BUTTON_WIDTH, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
     closeButton.setToolTipText(Locale.getValue("b.close"));
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
     closeButton.setBackground(null);
     closeButton.setBorder(null);
-    closeButton.setVisible(false);
+    closeButton.setVisible(Settings.jvmPatched);
     closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(e -> {
-      DiscordRPC.getInstance().stop();
-      System.exit(0);
+      finish();
+    });
+    closeButton.addMouseListener(new MouseListener() {
+      @Override public void mouseClicked(MouseEvent e) {}
+      @Override public void mousePressed(MouseEvent e) {}
+      @Override public void mouseReleased(MouseEvent e) {}
+      @Override public void mouseEntered(MouseEvent e) {
+        closeButton.setBackground(CustomColors.MID_RED);
+      }
+      @Override public void mouseExited(MouseEvent e) {
+        closeButton.setBackground(null);
+      }
     });
 
-    Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 20, ColorUtil.getForegroundColor());
+    Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 12, ColorUtil.getForegroundColor());
     JButton minimizeButton = new JButton(minimizeIcon);
-    minimizeButton.setBounds(jvmPatcherFrame.getWidth() - 71, 3, 29, 29);
+    minimizeButton.setBounds(jvmPatcherFrame.getWidth() - BUTTON_WIDTH * 2, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7);
     minimizeButton.setToolTipText(Locale.getValue("b.minimize"));
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
@@ -264,6 +278,7 @@ public class JVMPatcher extends BaseGUI {
   private static void finish() {
     SettingsProperties.setValue("launcher.jvm_patched", "true");
     ModuleLoader.loadJarCommandLine();
+    DiscordRPC.getInstance().stop();
     ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar"}, true);
     jvmPatcherFrame.dispose();
     System.exit(1);

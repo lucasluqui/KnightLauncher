@@ -107,7 +107,6 @@ public class SettingsEventHandler {
   }
 
   public static void jvmPatchEvent(ActionEvent action) {
-    SettingsProperties.setValue("launcher.jvm_patched", "false");
     String javaVMPatchDir = LauncherGlobals.USER_DIR;
     if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
       javaVMPatchDir += File.separator + "thirdparty" + File.separator + LauncherApp.getSanitizedServerName(LauncherApp.selectedServer.name);
