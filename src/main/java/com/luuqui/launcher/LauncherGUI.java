@@ -116,7 +116,7 @@ public class LauncherGUI extends BaseGUI {
     launcherName.setBounds(0, 100, 250, 80);
     sidePane.add(launcherName);
 
-    JLabel serverListLabel = new JLabel("Server");
+    JLabel serverListLabel = new JLabel(Locale.getValue("m.server"));
     serverListLabel.setFont(Fonts.fontMed);
     serverListLabel.setBounds(28, 185, 80, 20);
     sidePane.add(serverListLabel);
@@ -139,7 +139,7 @@ public class LauncherGUI extends BaseGUI {
     serverInfoButton.setFocusable(false);
     serverInfoButton.setFocusPainted(false);
     serverInfoButton.setForeground(Color.WHITE);
-    serverInfoButton.setToolTipText("Server Information");
+    serverInfoButton.setToolTipText(Locale.getValue("b.server_info"));
     serverInfoButton.addActionListener(l -> LauncherEventHandler.displaySelectedServerInfo());
     sidePane.add(serverInfoButton);
 
@@ -150,10 +150,8 @@ public class LauncherGUI extends BaseGUI {
     playerCountLabel.setBounds(28, 210, 200, 18);
     sidePane.add(playerCountLabel);
 
-    String playerCountTooltipTitle = "Players Online";
-    String playerCountTooltipText = "This player count is an approximation based on the currently online Steam players. " +
-      "\nThe approximation is done by increasing the Steam online count by 1.6x to account for Standalone users." +
-      "\n\nIf this number is ever 0 it's likely Steam is temporarily down for maintenance, it will be back up momentarily.";
+    String playerCountTooltipTitle = Locale.getValue("b.players_online");
+    String playerCountTooltipText = Locale.getValue("m.players_online");
     Icon playerCountTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 12, Color.WHITE);
     playerCountTooltipButton = new JButton();
     playerCountTooltipButton.setIcon(playerCountTooltipButtonIcon);
@@ -252,7 +250,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(modButton);
 
     Icon editorsIcon = IconFontSwing.buildIcon(FontAwesome.PENCIL, 16, ColorUtil.getForegroundColor());
-    editorsButton = new JButton("Editors");
+    editorsButton = new JButton(Locale.getValue("b.editors"));
     editorsButton.setIcon(editorsIcon);
     editorsButton.setBounds(28, 355, 125, 35);
     editorsButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -263,7 +261,7 @@ public class LauncherGUI extends BaseGUI {
     editorsButton.setEnabled(true);
     editorsButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
     editorsButton.setForeground(Color.WHITE);
-    editorsButton.setToolTipText("Editors");
+    editorsButton.setToolTipText(Locale.getValue("b.editors"));
     editorsButton.addActionListener(action -> {
       mainPane.setVisible(false);
       layeredSettingsPane.setVisible(false);
@@ -294,7 +292,7 @@ public class LauncherGUI extends BaseGUI {
 
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
     discordButton.setBounds(65, 440, 36, 36);
-    discordButton.setToolTipText("Discord");
+    discordButton.setToolTipText(Locale.getValue("b.discord"));
     discordButton.setFocusPainted(false);
     discordButton.setFocusable(false);
     discordButton.setBorderPainted(false);
@@ -318,7 +316,7 @@ public class LauncherGUI extends BaseGUI {
     Icon donateIcon = IconFontSwing.buildIcon(FontAwesome.USD, 17, Color.WHITE);
     JButton donateButton = new JButton(donateIcon);
     donateButton.setBounds(149, 440, 36, 36);
-    donateButton.setToolTipText("Donate");
+    donateButton.setToolTipText(Locale.getValue("b.donate"));
     donateButton.setFocusPainted(false);
     donateButton.setFocusable(false);
     donateButton.setBorderPainted(false);
@@ -334,13 +332,13 @@ public class LauncherGUI extends BaseGUI {
     launcherVersion.setBounds(10, 493, 100, 15);
     sidePane.add(launcherVersion);
 
-    bannerTitle = new JLabel("Uh, oh");
+    bannerTitle = new JLabel(Locale.getValue("m.banner_title_default"));
     bannerTitle.setBounds(35, -60, 700, 340);
     bannerTitle.setFont(Fonts.fontMedGiant);
     bannerTitle.setForeground(Color.WHITE);
     mainPane.add(bannerTitle);
 
-    bannerSubtitle1 = new JLabel("This server is not currently announcing anything.");
+    bannerSubtitle1 = new JLabel(Locale.getValue("m.banner_subtitle_default"));
     bannerSubtitle1.setBounds(40, -15, 700, 340);
     bannerSubtitle1.setFont(Fonts.fontMedBig);
     bannerSubtitle1.setForeground(Color.WHITE);
@@ -352,7 +350,7 @@ public class LauncherGUI extends BaseGUI {
     bannerSubtitle2.setForeground(Color.WHITE);
     mainPane.add(bannerSubtitle2);
 
-    bannerLinkButton = new JButton("Learn more");
+    bannerLinkButton = new JButton(Locale.getValue("b.learn_more"));
     bannerLinkButton.setBounds(40, 195, 110, 25);
     bannerLinkButton.setFont(Fonts.fontMed);
     bannerLinkButton.setForeground(Color.WHITE);
@@ -364,7 +362,7 @@ public class LauncherGUI extends BaseGUI {
     bannerLinkButton.setVisible(false);
     mainPane.add(bannerLinkButton);
 
-    launchButton = new JButton("Play Now");
+    launchButton = new JButton(Locale.getValue("b.play_now"));
     launchButton.setBounds(572, 423, 200, 66);
     launchButton.setFont(Fonts.fontMedBig);
     launchButton.setFocusPainted(false);
@@ -372,7 +370,7 @@ public class LauncherGUI extends BaseGUI {
     launchButton.setBackground(CustomColors.LAUNCH);
     launchButton.setBorderPainted(false);
     launchButton.setForeground(Color.WHITE);
-    launchButton.setToolTipText("Play Now");
+    launchButton.setToolTipText(Locale.getValue("b.play_now"));
     mainPane.add(launchButton);
     launchButton.addActionListener(action -> {
       if (KeyboardController.isShiftPressed() || KeyboardController.isAltPressed()) {
@@ -387,8 +385,8 @@ public class LauncherGUI extends BaseGUI {
       }
     });
 
-    String launchTooltipTitle = "Launching In Alt Mode";
-    String launchTooltipText = "Keep the ALT or SHIFT key pressed to launch in Alt Mode and save\ncomputing resources for your main Spiral Knights instance.";
+    String launchTooltipTitle = Locale.getValue("b.alt_mode");
+    String launchTooltipText = Locale.getValue("m.alt_mode");
     Icon launchTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 16, Color.WHITE);
     JButton launchTooltipButton = new JButton();
     launchTooltipButton.setIcon(launchTooltipButtonIcon);
@@ -432,7 +430,7 @@ public class LauncherGUI extends BaseGUI {
     Icon changelogIcon = IconFontSwing.buildIcon(FontAwesome.BOOK, 18, Color.WHITE);
     changelogButton = new JButton(changelogIcon);
     changelogButton.setBounds(736, 26, 36, 36);
-    changelogButton.setToolTipText(Locale.getValue("Latest Changelog"));
+    changelogButton.setToolTipText(Locale.getValue("b.changelog"));
     changelogButton.setFont(Fonts.fontMed);
     changelogButton.setFocusPainted(false);
     changelogButton.setFocusable(false);
@@ -446,7 +444,7 @@ public class LauncherGUI extends BaseGUI {
     Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
     warningNotice = new JButton(warningNoticeIcon);
     warningNotice.setBounds(691, 26, 36, 36);
-    warningNotice.setToolTipText("Warning Notice");
+    warningNotice.setToolTipText(Locale.getValue("b.warning_notice"));
     warningNotice.setFocusPainted(false);
     warningNotice.setFocusable(false);
     warningNotice.setBorderPainted(false);
@@ -455,14 +453,14 @@ public class LauncherGUI extends BaseGUI {
     warningNotice.setFont(Fonts.fontMed);
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
-      Dialog.push(currentWarning, "Warning Notice", JOptionPane.ERROR_MESSAGE);
+      Dialog.push(currentWarning, Locale.getValue("b.warning_notice"), JOptionPane.ERROR_MESSAGE);
     });
     mainPane.add(warningNotice);
 
     Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 16, Color.WHITE);
     updateButton = new JButton(updateIcon);
     updateButton.setBounds(691, 26, 36, 36);
-    updateButton.setToolTipText(Locale.getValue("b.update_available"));
+    updateButton.setToolTipText(Locale.getValue("b.update"));
     updateButton.setFont(Fonts.fontMed);
     updateButton.setFocusPainted(false);
     updateButton.setFocusable(false);
