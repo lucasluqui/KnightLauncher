@@ -59,11 +59,6 @@ public class SettingsEventHandler {
     Dialog.push(Locale.getValue("m.prompt_restart_required"), JOptionPane.INFORMATION_MESSAGE);
   }
 
-  public static void useStringDeduplicationChangeEvent(ActionEvent action) {
-    Settings.gameUseStringDeduplication = SettingsGUI.switchStringDedup.isSelected();
-    SettingsProperties.setValue("game.useStringDeduplication", SettingsGUI.switchStringDedup.isSelected() ? "true" : "false");
-  }
-
   public static void customGCChangeEvent(ActionEvent action) {
     Settings.gameUseCustomGC = SettingsGUI.switchUseCustomGC.isSelected();
     SettingsProperties.setValue("game.useCustomGC", SettingsGUI.switchUseCustomGC.isSelected() ? "true" : "false");
@@ -99,14 +94,6 @@ public class SettingsEventHandler {
   public static void memoryChangeEvent(int memory) {
     Settings.gameMemory = memory;
     SettingsProperties.setValue("game.memory", String.valueOf(memory));
-  }
-
-
-  public static void styleChangeEvent(ItemEvent event) {
-    if(event.getStateChange() == ItemEvent.SELECTED)
-      return; // Prevent triggering 2 times
-    SettingsProperties.setValue("launcher.style", SettingsGUI.choiceStyle.getSelectedIndex() == 0 ? "dark" : "light");
-    Dialog.push(Locale.getValue("m.prompt_restart_required"), JOptionPane.WARNING_MESSAGE);
   }
 
   public static void ingameRPCChangeEvent(ActionEvent action) {

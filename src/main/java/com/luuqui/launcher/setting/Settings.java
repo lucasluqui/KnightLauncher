@@ -8,7 +8,6 @@ public class Settings {
   public static Boolean keepOpen = false;
   public static Boolean createShortcut = true;
   public static Boolean autoUpdate = true;
-  public static String launcherStyle = "dark";
   public static int selectedServerIdx = 0;
   public static Boolean jvmPatched = false;
   public static Boolean isOutdated = false;

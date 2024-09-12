@@ -79,7 +79,6 @@ public class SettingsProperties {
   public static void load() {
     // Launcher settings
     Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));
-    Settings.launcherStyle = getValue("launcher.style");
     Settings.lang = getValue("launcher.lang");
     Settings.doRebuilds = Boolean.parseBoolean(getValue("launcher.rebuilds"));
     Settings.keepOpen = Boolean.parseBoolean(getValue("launcher.keepOpen"));
@@ -95,9 +94,7 @@ public class SettingsProperties {
 
     // Game settings
     Settings.gamePlatform = getValue("game.platform");
-    Settings.gameUseStringDeduplication = Boolean.parseBoolean(getValue("game.useStringDeduplication"));
     Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));
-    Settings.gameUndecoratedWindow = Boolean.parseBoolean(getValue("game.undecoratedWindow"));
     Settings.gameUseCustomGC = Boolean.parseBoolean(getValue("game.useCustomGC"));
     Settings.gameGarbageCollector = getValue("game.garbageCollector");
     Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
