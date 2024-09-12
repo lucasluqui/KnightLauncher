@@ -363,8 +363,12 @@ public class LauncherEventHandler {
       SettingsGUI.javaVMBadge.setText("Your Java VM: " + JavaUtil.getReadableGameJVMData());
 
       boolean is64Bit = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64;
-      SettingsGUI.memorySlider.setMaximum(is64Bit ? 4096 : 1024);
-      SettingsEventHandler.memoryChangeEvent(SettingsGUI.memorySlider.getValue());
+      try {
+        SettingsGUI.memorySlider.setMaximum(is64Bit ? 4096 : 1024);
+        if(SettingsGUI.memorySlider.getValue() >= 256) {
+          SettingsEventHandler.memoryChangeEvent(SettingsGUI.memorySlider.getValue());
+        }
+      } catch (Exception ignored) {}
     });
     thread.start();
   }

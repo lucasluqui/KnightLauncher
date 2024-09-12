@@ -75,7 +75,7 @@ public class LauncherApp {
   public LauncherApp () {
     setupFileLogging();
     logVMInfo();
-    logGameVMInfo();
+    logGameJavaVMData();
     checkTempDir();
     setupLauncherStyle();
     checkStartLocation();
@@ -321,7 +321,7 @@ public class LauncherApp {
     log.info("---------------------------------");
   }
 
-  private void logGameVMInfo() {
+  private void logGameJavaVMData() {
     log.info("--------- Game JVM Info ---------");
     log.info("Java Dir: " + JavaUtil.getGameJavaDirPath());
     log.info("Java Exe Path: " + JavaUtil.getGameJVMExePath());
@@ -457,7 +457,7 @@ public class LauncherApp {
     }
 
     LauncherApp.projectXVersion = prop.getProperty("version");
-    log.info("Latest ProjectX version updated", "version", LauncherApp.projectXVersion);
+    log.info("Latest Official server version updated", "version", LauncherApp.projectXVersion);
   }
 
   public static String getSanitizedServerName(String serverName) {
