@@ -475,7 +475,7 @@ public class LauncherEventHandler {
         if(isGameRunning()) {
           LauncherApp.exit();
         } else {
-          Dialog.push("The game was not able to launch.\n\nIt's recommended to try any of the following solutions in no particular order:\n- In the \"Game\" tab in the launcher's settings press the \"Load recommended settings\" button.\n- Lower the allocated memory in the \"Game\" tab in launcher's settings.\n- In the \"Game\" tab in the launcher's settings press the \"Reset values to default\" button.\n- Patch another Java VM in the \"Game\" tab in launcher's settings.\n\nIf this does still not solve your issue you can look for technical support on Discord.", "Error While Launching", JOptionPane.ERROR_MESSAGE);
+          Dialog.push(Locale.getValue("m.game_launch_error"), "Error While Launching", JOptionPane.ERROR_MESSAGE);
         }
 
         // re-enable server switching and launching.
