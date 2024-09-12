@@ -94,7 +94,7 @@ public class ModListGUI extends BaseGUI {
     Icon modStoreIcon = IconFontSwing.buildIcon(FontAwesome.SEARCH, 10, Color.WHITE);
     JButton modStoreButton = new JButton(Locale.getValue("Browse Mod Store"));
     modStoreButton.setIcon(modStoreIcon);
-    modStoreButton.setBounds(250, 35, 170, 25);
+    modStoreButton.setBounds(240, 35, 175, 25);
     modStoreButton.setFont(Fonts.fontMed);
     modStoreButton.setFocusPainted(false);
     modStoreButton.setFocusable(false);
@@ -104,7 +104,7 @@ public class ModListGUI extends BaseGUI {
     //getModsButton.addActionListener(ModListEventHandler::openModStore);
 
     JButton getModsButton = new JButton("Get mods via Discord");
-    getModsButton.setBounds(425, 35, 170, 25 );
+    getModsButton.setBounds(420, 35, 175, 25 );
     getModsButton.setFont(Fonts.fontMed);
     getModsButton.setFocusPainted(false);
     getModsButton.setFocusable(false);
@@ -113,7 +113,7 @@ public class ModListGUI extends BaseGUI {
     getModsButton.addActionListener(ModListEventHandler::getModsEvent);
 
     JButton modFolderButton = new JButton(Locale.getValue("b.open_mods_folder"));
-    modFolderButton.setBounds(600, 35, 170, 25);
+    modFolderButton.setBounds(600, 35, 175, 25);
     modFolderButton.setFont(Fonts.fontMed);
     modFolderButton.setFocusPainted(false);
     modFolderButton.setFocusable(false);
@@ -256,7 +256,7 @@ public class ModListGUI extends BaseGUI {
       modPane.add(modFooter);
 
       JLabel modBadge = new JLabel();
-      modBadge.setBounds(241, 50, 71, 18);
+      modBadge.setBounds(241, 50, 86, 18);
       modBadge.setHorizontalAlignment(SwingConstants.CENTER);
       modBadge.setFont(Fonts.fontRegSmall);
       if(mod instanceof ZipMod) {
