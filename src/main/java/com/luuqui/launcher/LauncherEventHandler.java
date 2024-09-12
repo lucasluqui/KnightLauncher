@@ -191,7 +191,7 @@ public class LauncherEventHandler {
   public static void updateServerList(List<Server> servers) {
     LauncherApp.serverList.clear();
     Server official = new Server("Official");
-    official.playerCountUrl = "Players online: ~" + LauncherApp.getOfficialAproxPlayerCount();
+    official.playerCountUrl = Locale.getValue("m.players_online_official", String.valueOf(LauncherApp.getOfficialAproxPlayerCount()));
     LauncherApp.serverList.add(official);
 
     for(Server server : servers) {
@@ -252,8 +252,8 @@ public class LauncherEventHandler {
 
     if(selectedServer != null) {
       if(selectedServer.name.equalsIgnoreCase("Official")) {
-        LauncherGUI.launchButton.setText("Play Now");
-        LauncherGUI.launchButton.setToolTipText("Play Now");
+        LauncherGUI.launchButton.setText(Locale.getValue("b.play_now"));
+        LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_now"));
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
         LauncherGUI.playerCountLabel.setText(selectedServer.playerCountUrl);
         LauncherGUI.playerCountLabel.setVisible(true);
@@ -273,8 +273,8 @@ public class LauncherEventHandler {
         SettingsGUI.getdownURLTextField.setEnabled(true);
         SettingsGUI.resetConnectionSettingsButton.setEnabled(true);
       } else {
-        LauncherGUI.launchButton.setText("Play " + selectedServer.name);
-        LauncherGUI.launchButton.setToolTipText("Play " + selectedServer.name);
+        LauncherGUI.launchButton.setText(Locale.getValue("b.play_now_thirdparty", selectedServer.name));
+        LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_now_thirdparty", selectedServer.name));
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
         LauncherGUI.serverInfoButton.setEnabled(true);
         LauncherGUI.serverInfoButton.setVisible(true);
