@@ -75,7 +75,7 @@ public class LauncherApp {
   public LauncherApp () {
     setupFileLogging();
     logVMInfo();
-    logGameJavaVMData();
+    logGameVMInfo();
     checkTempDir();
     setupLauncherStyle();
     checkStartLocation();
@@ -321,12 +321,12 @@ public class LauncherApp {
     log.info("---------------------------------");
   }
 
-  private void logGameJavaVMData() {
-    log.info("--------- Game JVM Info ---------");
-    log.info("Java Dir: " + JavaUtil.getGameJavaDirPath());
-    log.info("Java Exe Path: " + JavaUtil.getGameJVMExePath());
-    log.info("Java Data: " + JavaUtil.getGameJVMData());
-    log.info("Java Arch: " + JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()));
+  private void logGameVMInfo() {
+    log.info("--------- Game VM Info ----------");
+    log.info("Directory: " + JavaUtil.getGameJavaDirPath());
+    log.info("Executable: " + JavaUtil.getGameJVMExePath());
+    log.info("Data: " + JavaUtil.getGameJVMData());
+    log.info("Arch: " + JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()));
     log.info("---------------------------------");
   }
 
