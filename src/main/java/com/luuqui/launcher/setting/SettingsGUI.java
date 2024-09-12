@@ -362,7 +362,7 @@ public class SettingsGUI extends BaseGUI {
     gamePanel.add(memorySlider);
 
     memoryValue = new JLabel();
-    memoryValue.setBounds(270, 135, 350, 25);
+    memoryValue.setBounds(270, 139, 350, 25);
     memoryValue.setFont(Fonts.fontReg);
     memoryValue.setText(Locale.getValue("o.memory_" + Settings.gameMemory));
     gamePanel.add(memoryValue);
@@ -578,7 +578,7 @@ public class SettingsGUI extends BaseGUI {
     betaCodeRevalidateButton.setFocusable(false);
     betaCodeRevalidateButton.setVisible(false);
     betaCodeRevalidateButton.setToolTipText("Revalidate my Beta codes");
-    betaCodeRevalidateButton.setBounds(25, 300, 250, 25);
+    betaCodeRevalidateButton.setBounds(25, 388, 250, 25);
     betasPanel.add(betaCodeRevalidateButton);
     betaCodeRevalidateButton.addActionListener(action -> {
       SettingsEventHandler.revalidateBetaCodes();
@@ -593,7 +593,7 @@ public class SettingsGUI extends BaseGUI {
     betaCodeClearLocalButton.setVisible(false);
     betaCodeClearLocalButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
     betaCodeClearLocalButton.setToolTipText("Clear locally stored Beta codes");
-    betaCodeClearLocalButton.setBounds(25, 335, 250, 25);
+    betaCodeClearLocalButton.setBounds(25, 423, 250, 25);
     betasPanel.add(betaCodeClearLocalButton);
     betaCodeClearLocalButton.addActionListener(action -> {
       SettingsEventHandler.clearLocalBetaCodes();
@@ -806,7 +806,7 @@ public class SettingsGUI extends BaseGUI {
 
     JButton copyLogsButton = new JButton("Copy logs to clipboard");
     copyLogsButton.setFont(Fonts.fontMed);
-    copyLogsButton.setBounds(25, 420, 200, 23);
+    copyLogsButton.setBounds(25, 423, 200, 23);
     copyLogsButton.setFocusPainted(false);
     copyLogsButton.setFocusable(false);
     copyLogsButton.setToolTipText("Copy logs to clipboard");
