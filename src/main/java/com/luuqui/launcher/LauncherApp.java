@@ -483,4 +483,12 @@ public class LauncherApp {
     log.info("TEMP path changed to: " + LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
   }
 
+  protected static void exit() {
+    DiscordRPC.getInstance().stop();
+    if (!Settings.keepOpen) {
+      LauncherGUI.launcherGUIFrame.dispose();
+      System.exit(1);
+    }
+  }
+
 }

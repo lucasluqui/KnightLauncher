@@ -159,7 +159,7 @@ public class LauncherEventHandler {
       }
 
       final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-      executor.schedule(LauncherEventHandler::checkGameLaunched, 8, TimeUnit.SECONDS);
+      executor.schedule(LauncherEventHandler::checkGameLaunch, 8, TimeUnit.SECONDS);
 
     });
     launchThread.start();
@@ -462,21 +462,34 @@ public class LauncherEventHandler {
     return argsList.toArray(new String[argsList.size()]);
   }
 
-  private static void checkGameLaunched() {
-    // TODO: Add Linux and Mac compatibility to launch checking.
-    if(!SystemUtil.isWindows() || ProcessUtil.isGameRunningByTitle(LauncherApp.selectedServer.name.equalsIgnoreCase("Official") ? "Spiral Knights" : LauncherApp.selectedServer.name)) {
-      DiscordRPC.getInstance().stop();
-      if (!Settings.keepOpen) {
-        LauncherGUI.launcherGUIFrame.dispose();
-        System.exit(1);
-      }
-    } else {
-      Dialog.push("The game was not able to launch.\n\nIt's recommended to try any of the following solutions in no particular order:\n- In the \"Game\" tab in the launcher's settings press the \"Load recommended settings\" button.\n- Lower the allocated memory in the \"Game\" tab in launcher's settings.\n- In the \"Game\" tab in the launcher's settings press the \"Reset values to default\" button.\n- Patch another Java VM in the \"Game\" tab in launcher's settings.\n\nIf this does still not solve your issue you can look for technical support on Discord.", "Error While Launching", JOptionPane.ERROR_MESSAGE);
-    }
+  private static void checkGameLaunch() {
+    if(isGameRunning()) {
+      LauncherApp.exit();
 
-    // re-enable server switching
-    LauncherGUI.serverList.setEnabled(true);
-    LauncherGUI.launchButton.setEnabled(true);
+      // re-enable server switching and launching.
+      LauncherGUI.serverList.setEnabled(true);
+      LauncherGUI.launchButton.setEnabled(true);
+    } else {
+      try {
+        Thread.sleep(8 * 1000);
+        if(isGameRunning()) {
+          LauncherApp.exit();
+        } else {
+          Dialog.push("The game was not able to launch.\n\nIt's recommended to try any of the following solutions in no particular order:\n- In the \"Game\" tab in the launcher's settings press the \"Load recommended settings\" button.\n- Lower the allocated memory in the \"Game\" tab in launcher's settings.\n- In the \"Game\" tab in the launcher's settings press the \"Reset values to default\" button.\n- Patch another Java VM in the \"Game\" tab in launcher's settings.\n\nIf this does still not solve your issue you can look for technical support on Discord.", "Error While Launching", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // re-enable server switching and launching.
+        LauncherGUI.serverList.setEnabled(true);
+        LauncherGUI.launchButton.setEnabled(true);
+      } catch (InterruptedException e) {
+        log.error(e);
+      }
+    }
+  }
+
+  private static boolean isGameRunning() {
+    // TODO: Add Linux and Mac compatibility to launch checking.
+    return !SystemUtil.isWindows() || ProcessUtil.isGameRunningByTitle(LauncherApp.selectedServer.name.equalsIgnoreCase("Official") ? "Spiral Knights" : LauncherApp.selectedServer.name);
   }
 
 }
