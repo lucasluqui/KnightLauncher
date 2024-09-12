@@ -65,9 +65,14 @@ public class JavaUtil {
       version = releaseFile.getProperty("JAVA_VERSION");
       osArch = releaseFile.getProperty("OS_ARCH");
     } else {
-      String output = getJVMVersionOutput(getGameJVMExePath());
-      version = output.split("\"")[1];
-      osArch = String.valueOf(getJVMArch(getGameJVMExePath()));
+      String output = "";
+      try {
+        output = getJVMVersionOutput(getGameJVMExePath());
+        version = output.split("\"")[1];
+        osArch = String.valueOf(getJVMArch(getGameJVMExePath()));
+      } catch (Exception e) {
+        log.error(e, "output", output);
+      }
     }
 
     if(version.isEmpty() || osArch.isEmpty()) {
@@ -167,7 +172,7 @@ public class JavaUtil {
         }
       }
 
-      Method method = java.net.URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+      Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
       method.setAccessible(true);
       method.invoke(loader, url);
     } catch (final NoSuchMethodException |
