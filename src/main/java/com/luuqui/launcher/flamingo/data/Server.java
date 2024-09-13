@@ -32,6 +32,8 @@ public class Server {
 
   public String announceBannerLink;
 
+  public String fromCode;
+
   public int enabled;
 
   public Server() {}

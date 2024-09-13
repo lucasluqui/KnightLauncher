@@ -264,7 +264,12 @@ public class SettingsEventHandler {
 
       SettingsGUI.labelFlamingoStatus.setText("Flamingo status: Online");
       SettingsGUI.labelFlamingoVersion.setText("Flamingo version: " + status.version);
-      SettingsGUI.labelFlamingoUptime.setText("Flamingo uptime: " + uptimeString);
+
+      if(uptimeString.isEmpty()) {
+        SettingsGUI.labelFlamingoUptime.setText("Flamingo uptime: Recently restarted");
+      } else {
+        SettingsGUI.labelFlamingoUptime.setText("Flamingo uptime: " + uptimeString);
+      }
     }
   }
 
