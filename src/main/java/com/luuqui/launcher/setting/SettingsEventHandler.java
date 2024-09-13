@@ -289,6 +289,9 @@ public class SettingsEventHandler {
       .replace("&", "")
       .trim();
 
+    // If the code is empty, do nothing
+    if(code.isEmpty()) return 5;
+
     // Get the currently loaded codes
     String codes = SettingsProperties.getValue("launcher.betaCodes");
 

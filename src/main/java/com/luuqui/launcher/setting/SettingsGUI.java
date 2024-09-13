@@ -655,16 +655,19 @@ public class SettingsGUI extends BaseGUI {
     betaCodeClearLocalButton.setBounds(25, 423, 250, 25);
     betasPanel.add(betaCodeClearLocalButton);
     betaCodeClearLocalButton.addActionListener(action -> {
-      SettingsEventHandler.clearLocalBetaCodes();
-      betaCodeSpecialResultLabel.setVisible(true);
-      betaCodeSpecialResultLabel.setText("Beta codes cleared.");
+      boolean confirm = Dialog.pushWithConfirm("WARNING: This action is destructive.\nOnly proceed if you know what you're doing.\n\nPress \"Yes\" to confirm.", "Clear locally stored Beta codes", JOptionPane.WARNING_MESSAGE);
+      if(confirm) {
+        SettingsEventHandler.clearLocalBetaCodes();
+        betaCodeSpecialResultLabel.setVisible(true);
+        betaCodeSpecialResultLabel.setText("Beta codes cleared.");
 
-      // Hide the result label after some time.
-      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-      Thread hideResultThread = new Thread(() -> {
-        betaCodeSpecialResultLabel.setVisible(false);
-      });
-      executor.schedule(hideResultThread, 5, TimeUnit.SECONDS);
+        // Hide the result label after some time.
+        final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+        Thread hideResultThread = new Thread(() -> {
+          betaCodeSpecialResultLabel.setVisible(false);
+        });
+        executor.schedule(hideResultThread, 5, TimeUnit.SECONDS);
+      }
     });
 
     return betasPanel;
