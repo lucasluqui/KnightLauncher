@@ -139,7 +139,7 @@ public class LauncherGUI extends BaseGUI {
     serverInfoButton.setFocusable(false);
     serverInfoButton.setFocusPainted(false);
     serverInfoButton.setForeground(Color.WHITE);
-    serverInfoButton.setToolTipText(Locale.getValue("b.server_info"));
+    serverInfoButton.setToolTipText(Locale.getValue("m.server_info"));
     serverInfoButton.addActionListener(l -> LauncherEventHandler.displaySelectedServerInfo());
     sidePane.add(serverInfoButton);
 
@@ -150,8 +150,8 @@ public class LauncherGUI extends BaseGUI {
     playerCountLabel.setBounds(28, 210, 200, 18);
     sidePane.add(playerCountLabel);
 
-    String playerCountTooltipTitle = Locale.getValue("b.players_online");
-    String playerCountTooltipText = Locale.getValue("m.players_online");
+    String playerCountTooltipTitle = Locale.getValue("m.players_online");
+    String playerCountTooltipText = Locale.getValue("m.players_online_text");
     Icon playerCountTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 12, Color.WHITE);
     playerCountTooltipButton = new JButton();
     playerCountTooltipButton.setIcon(playerCountTooltipButtonIcon);
@@ -385,8 +385,8 @@ public class LauncherGUI extends BaseGUI {
       }
     });
 
-    String launchTooltipTitle = Locale.getValue("b.alt_mode");
-    String launchTooltipText = Locale.getValue("m.alt_mode");
+    String launchTooltipTitle = Locale.getValue("m.alt_mode");
+    String launchTooltipText = Locale.getValue("m.alt_mode_text");
     Icon launchTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 16, Color.WHITE);
     JButton launchTooltipButton = new JButton();
     launchTooltipButton.setIcon(launchTooltipButtonIcon);
@@ -430,7 +430,7 @@ public class LauncherGUI extends BaseGUI {
     Icon changelogIcon = IconFontSwing.buildIcon(FontAwesome.BOOK, 18, Color.WHITE);
     changelogButton = new JButton(changelogIcon);
     changelogButton.setBounds(736, 26, 36, 36);
-    changelogButton.setToolTipText(Locale.getValue("b.changelog"));
+    changelogButton.setToolTipText(Locale.getValue("m.changelog"));
     changelogButton.setFont(Fonts.fontMed);
     changelogButton.setFocusPainted(false);
     changelogButton.setFocusable(false);
@@ -444,7 +444,7 @@ public class LauncherGUI extends BaseGUI {
     Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
     warningNotice = new JButton(warningNoticeIcon);
     warningNotice.setBounds(691, 26, 36, 36);
-    warningNotice.setToolTipText(Locale.getValue("b.warning_notice"));
+    warningNotice.setToolTipText(Locale.getValue("m.warning_notice"));
     warningNotice.setFocusPainted(false);
     warningNotice.setFocusable(false);
     warningNotice.setBorderPainted(false);
@@ -453,7 +453,7 @@ public class LauncherGUI extends BaseGUI {
     warningNotice.setFont(Fonts.fontMed);
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
-      Dialog.push(currentWarning, Locale.getValue("b.warning_notice"), JOptionPane.ERROR_MESSAGE);
+      Dialog.push(currentWarning, Locale.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
     });
     mainPane.add(warningNotice);
 
