@@ -313,6 +313,7 @@ public class SettingsEventHandler {
     if(response.equalsIgnoreCase("success")) {
       addBetaCode(code);
       LauncherEventHandler.updateServerList(Flamingo.getServerList());
+      updateActiveBetaCodes();
       return 1;
     }
 
@@ -337,6 +338,10 @@ public class SettingsEventHandler {
 
   public static void clearLocalBetaCodes() {
     SettingsProperties.setValue("launcher.betaCodes", "");
+  }
+
+  public static void updateActiveBetaCodes() {
+    SettingsGUI.updateActiveBetaCodes();
   }
 
   private static void addBetaCode(String code) {

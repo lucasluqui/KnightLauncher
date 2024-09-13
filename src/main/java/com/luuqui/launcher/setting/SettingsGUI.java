@@ -3,14 +3,19 @@ package com.luuqui.launcher.setting;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.*;
+import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mod.ModListGUI;
+import com.luuqui.launcher.mod.ModLoader;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -50,6 +55,10 @@ public class SettingsGUI extends BaseGUI {
   public static JButton betaCodeClearLocalButton;
   public static JButton resetGameSettingsButton;
   public static JLabel javaVMBadge = new JLabel();
+  public static JLabel activeCodesLabel = new JLabel();
+  public static JLabel activeCodesBackground = new JLabel();
+  public static JPanel activeCodesPane = new JPanel();
+  public static JScrollPane activeCodesPaneScrollBar = new JScrollPane();
 
   public SettingsGUI(LauncherApp app) {
     super();
@@ -573,6 +582,41 @@ public class SettingsGUI extends BaseGUI {
       executor.schedule(hideResultThread, 5, TimeUnit.SECONDS);
     });
 
+    activeCodesLabel = new JLabel("Activated Beta codes");
+    activeCodesLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    activeCodesLabel.setBounds(25, 190, 200, 30);
+    activeCodesLabel.setFont(Fonts.fontRegBig);
+    activeCodesLabel.setVisible(false);
+    betasPanel.add(activeCodesLabel);
+
+    BufferedImage activeCodesBackgroundImage = ImageUtil.generatePlainColorImage(475, 140, CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
+    activeCodesBackgroundImage = (BufferedImage) ImageUtil.addRoundedCorners(activeCodesBackgroundImage, 25);
+    activeCodesBackground = new JLabel("");
+    activeCodesBackground.setIcon(new ImageIcon(activeCodesBackgroundImage));
+    activeCodesBackground.setBounds(25, 220, 475, 140);
+    activeCodesBackground.setVisible(false);
+    betasPanel.add(activeCodesBackground);
+    betasPanel.setComponentZOrder(activeCodesBackground, 1);
+
+    activeCodesPane = new JPanel();
+    activeCodesPane.setBackground(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
+    activeCodesPane.setBorder(null);
+    activeCodesPane.setVisible(false);
+    betasPanel.setComponentZOrder(activeCodesPane, 0);
+
+    activeCodesPaneScrollBar = new JScrollPane(activeCodesPane);
+    activeCodesPaneScrollBar.setBounds(38, 232, 449, 105);
+    activeCodesPaneScrollBar.setBackground(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
+    activeCodesPaneScrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+    activeCodesPaneScrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    activeCodesPaneScrollBar.setBorder(null);
+    activeCodesPaneScrollBar.putClientProperty(FlatClientProperties.STYLE, "border:0,0,0,0");
+    activeCodesPaneScrollBar.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND));
+    activeCodesPaneScrollBar.getVerticalScrollBar().setUnitIncrement(16);
+    activeCodesPaneScrollBar.setVisible(false);
+    betasPanel.add(activeCodesPaneScrollBar);
+    betasPanel.setComponentZOrder(activeCodesPaneScrollBar, 0);
+
     JLabel betaCodeSpecialResultLabel = new JLabel("");
     betaCodeSpecialResultLabel.setHorizontalAlignment(SwingConstants.LEFT);
     betaCodeSpecialResultLabel.setBounds(325, 390, 450, 50);
@@ -778,11 +822,11 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setFont(Fonts.fontMedGiant);
     aboutPanel.add(headerLabel);
 
-    JLabel messageHeader = new JLabel("Credits");
-    messageHeader.setHorizontalAlignment(SwingConstants.LEFT);
-    messageHeader.setBounds(25, 90, 200, 30);
-    messageHeader.setFont(Fonts.fontMedBig);
-    aboutPanel.add(messageHeader);
+    JLabel creditsLabel = new JLabel("Credits");
+    creditsLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    creditsLabel.setBounds(25, 90, 200, 30);
+    creditsLabel.setFont(Fonts.fontRegBig);
+    aboutPanel.add(creditsLabel);
 
     JPanel creditsPane = new JPanel();
     creditsPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
@@ -870,5 +914,65 @@ public class SettingsGUI extends BaseGUI {
         log.error(e);
       }
     }
+  }
+
+  public static void updateActiveBetaCodes() {
+    java.util.List<Server> entitledServers = new ArrayList<>();
+
+    for(Server server : LauncherApp.serverList) {
+      if(server.fromCode == null) continue;
+      if(!server.fromCode.equalsIgnoreCase("null")) {
+        entitledServers.add(server);
+      }
+    }
+
+    if(!entitledServers.isEmpty()) {
+      int count = 0;
+      for(Server server : entitledServers) {
+        JPanel activeCodePane = new JPanel();
+        activeCodePane.setLayout(null);
+        activeCodePane.setBackground(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
+        activeCodePane.setBounds(0, count * 35, 449, 35);
+
+        JLabel activeCodeBadge = new JLabel(server.fromCode);
+        activeCodeBadge.setBounds(5, 5, 150, 18);
+        activeCodeBadge.setHorizontalAlignment(SwingConstants.CENTER);
+        activeCodeBadge.setFont(Fonts.fontRegSmall);
+        activeCodeBadge.putClientProperty(FlatClientProperties.STYLE,
+          "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_BACKGROUND)
+            + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_FOREGROUND)
+            + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_BACKGROUND));
+        activeCodePane.add(activeCodeBadge);
+
+        JLabel activeCodeText = new JLabel();
+        activeCodeText.setBounds(165, 5, 265, 18);
+        activeCodeText.setText("entitling you to " + server.name);
+        activeCodeText.setHorizontalAlignment(SwingConstants.LEFT);
+        activeCodeText.setFont(Fonts.fontRegSmall);
+        activeCodePane.add(activeCodeText);
+
+        activeCodesPane.add(activeCodePane);
+        count++;
+      }
+    }
+
+    activeCodesLabel.setVisible(!entitledServers.isEmpty());
+    activeCodesBackground.setVisible(!entitledServers.isEmpty());
+    activeCodesPane.setVisible(!entitledServers.isEmpty());
+    activeCodesPaneScrollBar.setVisible(!entitledServers.isEmpty());
+
+    activeCodesPane.setLayout(null);
+
+    activeCodesPane.setPreferredSize(new Dimension(449, entitledServers.size() * 35));
+
+    activeCodesPaneScrollBar.setBounds(
+      activeCodesPaneScrollBar.getX(),
+      activeCodesPaneScrollBar.getY(),
+      activeCodesPaneScrollBar.getWidth(),
+      115
+    );
+
+    activeCodesPane.updateUI();
+    activeCodesPaneScrollBar.updateUI();
   }
 }

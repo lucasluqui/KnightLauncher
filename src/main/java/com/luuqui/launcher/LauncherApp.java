@@ -362,6 +362,7 @@ public class LauncherApp {
       if(flamingoStatus.version != null) LauncherApp.flamingoOnline = true;
       LauncherEventHandler.updateServerList(Flamingo.getServerList());
       SettingsEventHandler.updateAboutTab(flamingoStatus);
+      SettingsEventHandler.updateActiveBetaCodes();
 
       getOfficialServerVersion();
 
