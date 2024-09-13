@@ -1,6 +1,5 @@
 package com.luuqui.launcher;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.editor.EditorsGUI;
@@ -14,8 +13,6 @@ import com.luuqui.launcher.setting.SettingsEventHandler;
 import com.luuqui.launcher.setting.SettingsGUI;
 import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.*;
-import jiconfont.icons.font_awesome.FontAwesome;
-import jiconfont.swing.IconFontSwing;
 import net.sf.image4j.codec.ico.ICOEncoder;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
@@ -27,12 +24,11 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -47,10 +43,10 @@ public class LauncherApp {
   protected static JVMPatcher jvmPatcher;
   protected static Updater updater;
 
-  public static String projectXVersion = null;
+  public static boolean flamingoOnline = false;
+
   public static java.util.List<Server> serverList = new ArrayList<>();
   public static Server selectedServer = null;
-  public static boolean flamingoOnline = false;
 
   public static String javaVMPatchDir = null;
 
@@ -77,12 +73,12 @@ public class LauncherApp {
     logVMInfo();
     logGameVMInfo();
     checkTempDir();
-    setupLauncherStyle();
+    SettingsProperties.setup();
+    Stylesheet.setup();
+    Fonts.setup();
+    Locale.setup();
     checkStartLocation();
     setupHTTPSProtocol();
-    SettingsProperties.setup();
-    Locale.setup();
-    Fonts.setup();
     if (!SystemUtil.isARM()) DiscordRPC.getInstance().start();
     KeyboardController.start();
     checkDirectories();
@@ -195,12 +191,9 @@ public class LauncherApp {
   // Checking if we're being run inside the game's directory, "getdown-pro.jar" should always be present if so.
   private void checkStartLocation() {
     if (!FileUtil.fileExists("./getdown-pro.jar")) {
-      String pathWarning = "The .jar file appears to be placed in the wrong directory. " +
-              "\nIn some cases this is due to a false positive and can be ignored. Knight Launcher will attempt to launch normally."
-              + "\nIf this persists try using the Batch (KnightLauncher_windows.bat) file for Windows " +
-              "\nor the Shell (KnightLauncher_mac_linux.sh) file for OSX/Linux.";
+      String pathWarning = Locale.getValue("error.start_location");
       if (SystemUtil.isWindows()) {
-        pathWarning += "\nAdditionally, we've detected the following Steam path: \n" + SteamUtil.getGamePathWindows();
+        pathWarning += Locale.getValue("error.start_location_steam_path", SteamUtil.getGamePathWindows());
       }
       log.warning(pathWarning);
       Dialog.push(pathWarning, JOptionPane.WARNING_MESSAGE);
@@ -260,21 +253,6 @@ public class LauncherApp {
       log.error(e);
     }
     shFile.setExecutable(true);
-  }
-
-  private void setupLauncherStyle() {
-    System.setProperty("awt.useSystemAAFontSettings", "on");
-    System.setProperty("swing.aatext", "true");
-
-    IconFontSwing.register(FontAwesome.getIconFont());
-
-    try {
-      UIManager.setLookAndFeel(new FlatDarkLaf());
-    } catch (UnsupportedLookAndFeelException e) {
-      log.error(e);
-    }
-
-    Stylesheet.load();
   }
 
   private void setupHTTPSProtocol() {
@@ -376,12 +354,7 @@ public class LauncherApp {
   }
 
   private void loadOnlineAssets() {
-    new Thread(() -> {
-
-      checkVersion();
-      getProjectXVersion();
-
-    }).start();
+    new Thread(this::checkVersion).start();
 
     new Thread(() -> {
 
@@ -389,6 +362,8 @@ public class LauncherApp {
       if(flamingoStatus.version != null) LauncherApp.flamingoOnline = true;
       LauncherEventHandler.updateServerList(Flamingo.getServerList());
       SettingsEventHandler.updateAboutTab(flamingoStatus);
+
+      getOfficialServerVersion();
 
     }).start();
 
@@ -442,7 +417,7 @@ public class LauncherApp {
     }
   }
 
-  private void getProjectXVersion() {
+  private void getOfficialServerVersion() {
     URL url = null;
     try {
       url = new URL(Settings.gameGetdownFullURL + "getdown.txt");
@@ -456,8 +431,15 @@ public class LauncherApp {
       log.error(e);
     }
 
-    LauncherApp.projectXVersion = prop.getProperty("version");
-    log.info("Latest Official server version updated", "version", LauncherApp.projectXVersion);
+    Server officialServer = Objects.requireNonNull(findServerByName("Official"));
+    officialServer.version = prop.getProperty("version");
+    log.info("Latest Official server version updated", "version", officialServer.version);
+  }
+
+  public static Server findServerByName(String serverName) {
+    List<Server> results = LauncherApp.serverList.stream()
+      .filter(s -> serverName.equals(s.name)).collect(Collectors.toList());
+    return results.isEmpty() ? null : results.get(0);
   }
 
   public static String getSanitizedServerName(String serverName) {

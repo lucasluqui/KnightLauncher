@@ -1,10 +1,27 @@
 package com.luuqui.launcher;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
+
 import javax.swing.*;
+
+import static com.luuqui.launcher.Log.log;
 
 public class Stylesheet {
 
-  public static void load() {
+  public static void setup() {
+    System.setProperty("awt.useSystemAAFontSettings", "on");
+    System.setProperty("swing.aatext", "true");
+
+    IconFontSwing.register(FontAwesome.getIconFont());
+
+    try {
+      UIManager.setLookAndFeel(new FlatDarkLaf());
+    } catch (UnsupportedLookAndFeelException e) {
+      log.error(e);
+    }
+
     UIManager.put("TabbedPane.underlineColor", CustomColors.KL);
     UIManager.put("TabbedPane.inactiveUnderlineColor", CustomColors.KL);
 

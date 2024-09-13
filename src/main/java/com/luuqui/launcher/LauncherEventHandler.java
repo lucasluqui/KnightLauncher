@@ -214,7 +214,7 @@ public class LauncherEventHandler {
 
     try {
       LauncherGUI.serverList.setSelectedIndex(Settings.selectedServerIdx);
-      LauncherApp.selectedServer = findServerInServerList((String) LauncherGUI.serverList.getSelectedItem());
+      LauncherApp.selectedServer = LauncherApp.findServerByName((String) LauncherGUI.serverList.getSelectedItem());
     } catch (Exception e) {
       log.error(e);
       LauncherGUI.serverList.setSelectedIndex(0);
@@ -248,7 +248,7 @@ public class LauncherEventHandler {
   }
 
   public static void selectedServerChanged(ActionEvent event) {
-    Server selectedServer = findServerInServerList((String) LauncherGUI.serverList.getSelectedItem());
+    Server selectedServer = LauncherApp.findServerByName((String) LauncherGUI.serverList.getSelectedItem());
 
     if(selectedServer != null) {
       if(selectedServer.name.equalsIgnoreCase("Official")) {
@@ -303,18 +303,12 @@ public class LauncherEventHandler {
     } else {
       // fallback to official in rare error scenario
       LauncherGUI.serverList.setSelectedIndex(0);
-      LauncherApp.selectedServer = findServerInServerList("Official");
+      LauncherApp.selectedServer = LauncherApp.findServerByName("Official");
     }
 
     updateBanner();
     updateGameJavaVMData();
     saveSelectedServer();
-  }
-
-  private static Server findServerInServerList(String serverName) {
-    List<Server> results = LauncherApp.serverList.stream()
-      .filter(s -> serverName.equals(s.name)).collect(Collectors.toList());
-    return results.isEmpty() ? null : results.get(0);
   }
 
   public static void updateBanner() {
