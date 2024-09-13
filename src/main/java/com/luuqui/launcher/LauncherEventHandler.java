@@ -479,7 +479,7 @@ public class LauncherEventHandler {
         if(isGameRunning()) {
           LauncherApp.exit();
         } else {
-          Dialog.push(Locale.getValue("m.game_launch_error"), Locale.getValue("t.game_launch_error"), JOptionPane.ERROR_MESSAGE);
+          Dialog.push(Locale.getValue("error.game_launch"), Locale.getValue("t.game_launch_error"), JOptionPane.ERROR_MESSAGE);
         }
 
         // re-enable server switching and launching.

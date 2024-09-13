@@ -144,7 +144,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(serverInfoButton);
 
     Icon playerCountIcon = IconFontSwing.buildIcon(FontAwesome.USERS, 14, CustomColors.INTERFACE_DEFAULT);
-    playerCountLabel = new JLabel(Locale.getValue("m.player_count_load"));
+    playerCountLabel = new JLabel(Locale.getValue("m.players_online_load"));
     playerCountLabel.setFont(Fonts.fontReg);
     playerCountLabel.setIcon(playerCountIcon);
     playerCountLabel.setBounds(28, 210, 200, 18);
