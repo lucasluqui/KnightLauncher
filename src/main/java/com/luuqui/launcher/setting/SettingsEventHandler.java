@@ -287,10 +287,14 @@ public class SettingsEventHandler {
     code = code.replace("/", "")
       .replace("?", "")
       .replace("&", "")
+      .replace("\"", "")
       .trim();
 
     // If the code is empty, do nothing
-    if(code.isEmpty()) return 5;
+    if(code.isEmpty()) return -1;
+
+    // Contains any more invalid characters.
+    if(!code.matches("^[0-9A-Za-z\\s-]+$")) return -1;
 
     // Get the currently loaded codes
     String codes = SettingsProperties.getValue("launcher.betaCodes");

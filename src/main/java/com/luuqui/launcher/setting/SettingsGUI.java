@@ -564,6 +564,7 @@ public class SettingsGUI extends BaseGUI {
 
       // TODO: use enums.
       switch(result) {
+        case -1: betaCodeResultLabel.setText("Please enter a valid Beta code."); break;
         case 0: betaCodeResultLabel.setText("An unexpected error has occurred."); break;
         case 1: betaCodeResultLabel.setText("Successfully activated Beta code. (Check server list)"); break;
         case 2: betaCodeResultLabel.setText("You already activated this Beta code."); break;
