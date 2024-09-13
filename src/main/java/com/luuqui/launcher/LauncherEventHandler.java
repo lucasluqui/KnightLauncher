@@ -72,13 +72,13 @@ public class LauncherEventHandler {
 
         ProgressBar.startTask();
         ProgressBar.setBarMax(2);
-        ProgressBar.setState("Retrieving data from " + LauncherApp.selectedServer.name + "...");
+        ProgressBar.setState(Locale.getValue("m.launch_thirdparty_data", LauncherApp.selectedServer.name));
         ProgressBar.setBarValue(0);
 
         if(!FileUtil.fileExists(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "version.txt")) {
           // we did not download this third party client, time to get it from the deploy url.
 
-          ProgressBar.setState("Downloading " + LauncherApp.selectedServer.name + "... (this might take a while)");
+          ProgressBar.setState(Locale.getValue("m.launch_thirdparty_download", LauncherApp.selectedServer.name));
           ProgressBar.setBarValue(1);
 
           boolean downloadCompleted = false;
@@ -112,7 +112,7 @@ public class LauncherEventHandler {
           if(!selectedServer.version.equalsIgnoreCase(localVersion)) {
             log.info("Updating third party client: " + selectedServer.name);
 
-            ProgressBar.setState("Updating " + LauncherApp.selectedServer.name + "... (this might take a while)");
+            ProgressBar.setState(Locale.getValue("m.launch_thirdparty_update", LauncherApp.selectedServer.name));
             ProgressBar.setBarValue(1);
 
             boolean downloadCompleted = false;
@@ -148,7 +148,7 @@ public class LauncherEventHandler {
         // we already have the client files,
         // the client is up-to-date, or the download has finished.
         // and so we start it up!
-        ProgressBar.setState("Starting " + LauncherApp.selectedServer.name + "...");
+        ProgressBar.setState(Locale.getValue("m.launch_thirdparty_start", LauncherApp.selectedServer.name));
         ProgressBar.setBarValue(2);
 
         ProcessUtil.runFromDirectory(getThirdPartyClientStartCommand(selectedServer, altMode),
