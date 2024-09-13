@@ -3,6 +3,7 @@ package com.luuqui.launcher.setting;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.*;
+import com.luuqui.launcher.mod.ModListGUI;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -10,6 +11,8 @@ import jiconfont.swing.IconFontSwing;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static com.luuqui.launcher.setting.Log.log;
 
@@ -561,11 +564,18 @@ public class SettingsGUI extends BaseGUI {
       }
 
       betaCodeResultLabel.setVisible(true);
+
+      // Hide the result label after some time.
+      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+      Thread hideResultThread = new Thread(() -> {
+        betaCodeResultLabel.setVisible(false);
+      });
+      executor.schedule(hideResultThread, 5, TimeUnit.SECONDS);
     });
 
     JLabel betaCodeSpecialResultLabel = new JLabel("");
     betaCodeSpecialResultLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    betaCodeSpecialResultLabel.setBounds(25, 350, 450, 50);
+    betaCodeSpecialResultLabel.setBounds(325, 390, 450, 50);
     betaCodeSpecialResultLabel.setFont(Fonts.fontReg);
     betaCodeSpecialResultLabel.setVisible(false);
     betasPanel.add(betaCodeSpecialResultLabel);
@@ -582,6 +592,13 @@ public class SettingsGUI extends BaseGUI {
       SettingsEventHandler.revalidateBetaCodes();
       betaCodeSpecialResultLabel.setVisible(true);
       betaCodeSpecialResultLabel.setText("Beta codes revalidated.");
+
+      // Hide the result label after some time.
+      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+      Thread hideResultThread = new Thread(() -> {
+        betaCodeSpecialResultLabel.setVisible(false);
+      });
+      executor.schedule(hideResultThread, 5, TimeUnit.SECONDS);
     });
 
     betaCodeClearLocalButton = new JButton("Clear locally stored Beta codes");
@@ -597,6 +614,13 @@ public class SettingsGUI extends BaseGUI {
       SettingsEventHandler.clearLocalBetaCodes();
       betaCodeSpecialResultLabel.setVisible(true);
       betaCodeSpecialResultLabel.setText("Beta codes cleared.");
+
+      // Hide the result label after some time.
+      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+      Thread hideResultThread = new Thread(() -> {
+        betaCodeSpecialResultLabel.setVisible(false);
+      });
+      executor.schedule(hideResultThread, 5, TimeUnit.SECONDS);
     });
 
     return betasPanel;

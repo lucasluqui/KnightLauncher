@@ -347,6 +347,9 @@ public class SettingsEventHandler {
     if(codes.equalsIgnoreCase("")) {
       codes += code;
     } else {
+      // don't add duplicates
+      if(codes.contains(code)) return;
+
       codes += "," + code;
     }
 
