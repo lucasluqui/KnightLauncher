@@ -231,19 +231,31 @@ public class LauncherEventHandler {
   public static void displaySelectedServerInfo() {
     Server selectedServer = LauncherApp.selectedServer;
 
-    String infoString = "";
-    infoString += "Name: " + selectedServer.name + "\n";
-    infoString += "Description: " + selectedServer.description + "\n";
-    infoString += "Version: " + selectedServer.version + "\n";
-    infoString += "Managed by: " + selectedServer.managedBy + "\n";
-    if(!selectedServer.siteUrl.equalsIgnoreCase("null")) infoString += "Website: " + selectedServer.siteUrl + "\n";
-    if(!selectedServer.communityUrl.equalsIgnoreCase("null")) infoString += "Community: " + selectedServer.communityUrl + "\n";
-    if(!selectedServer.sourceCodeUrl.equalsIgnoreCase("null")) infoString += "Source code: " + selectedServer.sourceCodeUrl + "\n";
-    infoString += "\n * Neither your activity in third party services nor theirs is endorsed \n by Knight Launcher. Play at your own discretion.";
+    String infoString = Locale.getValue(
+      "m.server_info_text",
+      new String[] {
+        selectedServer.name,
+        selectedServer.description,
+        selectedServer.version,
+        selectedServer.managedBy
+      }
+    );
+
+    if(!selectedServer.siteUrl.equalsIgnoreCase("null"))
+      infoString += Locale.getValue("m.server_info_text_siteurl", selectedServer.siteUrl);
+
+    if(!selectedServer.communityUrl.equalsIgnoreCase("null"))
+      infoString += Locale.getValue("m.server_info_text_communityurl", selectedServer.communityUrl);
+
+    if(!selectedServer.sourceCodeUrl.equalsIgnoreCase("null"))
+      infoString += Locale.getValue("m.server_info_text_sourcecode", selectedServer.sourceCodeUrl);
+
+    infoString += Locale.getValue("m.server_info_text_disclaimer");
 
     Dialog.push(
       infoString,
-      selectedServer.name + " Server Information", JOptionPane.INFORMATION_MESSAGE
+      selectedServer.name + " " + Locale.getValue("m.server_info"),
+      JOptionPane.INFORMATION_MESSAGE
     );
   }
 
@@ -354,7 +366,7 @@ public class LauncherEventHandler {
 
   public static void updateGameJavaVMData() {
     Thread thread = new Thread(() -> {
-      SettingsGUI.javaVMBadge.setText("Your Java VM: " + JavaUtil.getReadableGameJVMData());
+      SettingsGUI.javaVMBadge.setText(Locale.getValue("m.game_java_vm_data", JavaUtil.getReadableGameJVMData()));
 
       boolean is64Bit = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64;
       try {
@@ -380,11 +392,13 @@ public class LauncherEventHandler {
   }
 
   public static void showLatestChangelog() {
-    Dialog.push("Currently running version: " + LauncherGlobals.LAUNCHER_VERSION
-      + ".\nLatest available version: " + LauncherGUI.latestRelease + ".\n\n" +
-      "Knight Launcher " + LauncherGUI.latestRelease + "\n"
-      + LauncherGUI.latestChangelog,
-      "Latest Changelog", JOptionPane.INFORMATION_MESSAGE);
+    Dialog.push(Locale.getValue(
+        "m.changelog_text",
+        new String[] {
+          LauncherGlobals.LAUNCHER_VERSION,
+          LauncherGUI.latestRelease,
+          LauncherGUI.latestChangelog
+        }), JOptionPane.INFORMATION_MESSAGE);
   }
 
   private static String[] getThirdPartyClientStartCommand(Server server, boolean altMode) {

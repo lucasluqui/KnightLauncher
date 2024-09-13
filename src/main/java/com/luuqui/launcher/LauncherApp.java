@@ -373,7 +373,7 @@ public class LauncherApp {
 
   private void checkFlamingoStatus() {
     if(!LauncherApp.flamingoOnline) {
-      LauncherGUI.showWarning("Could not connect to Flamingo.\nSome launcher functionalities might not be fully available.");
+      LauncherGUI.showWarning(Locale.getValue("error.flamingo_offline"));
     }
   }
 
