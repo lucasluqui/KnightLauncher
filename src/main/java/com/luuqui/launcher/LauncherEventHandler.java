@@ -206,6 +206,7 @@ public class LauncherEventHandler {
       // Prevent from adding duplicate servers
       if(LauncherApp.findServerByName(server.name) != null) {
         log.info("Tried to add duplicate server", "server", server.name);
+        continue;
       }
 
       if(server.beta == 1) server.name += " (Beta)";
