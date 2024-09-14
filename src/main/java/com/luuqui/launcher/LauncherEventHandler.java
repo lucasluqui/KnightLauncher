@@ -203,6 +203,11 @@ public class LauncherEventHandler {
         continue;
       }
 
+      // Prevent from adding duplicate servers
+      if(LauncherApp.findServerByName(server.name) != null) {
+        log.info("Tried to add duplicate server", "server", server.name);
+      }
+
       if(server.beta == 1) server.name += " (Beta)";
 
       LauncherGUI.serverList.addItem(server.name);
