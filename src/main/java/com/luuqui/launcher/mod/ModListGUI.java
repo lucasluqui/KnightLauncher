@@ -62,7 +62,7 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.getContentPane().setLayout(null);
     modListPanel = (JPanel) modListGUIFrame.getContentPane();
 
-    labelModCount = new JLabel(String.valueOf(ModLoader.getModList().size()));
+    labelModCount = new JLabel();
     labelModCount.setHorizontalAlignment(SwingConstants.LEFT);
     labelModCount.setBounds(25, 2, 188, 40);
     labelModCount.setFont(Fonts.fontMedGiant);

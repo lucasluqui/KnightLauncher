@@ -48,9 +48,9 @@ public class SettingsGUI extends BaseGUI {
   public static JTextField getdownURLTextField = new JTextField();
   public static JButton resetConnectionSettingsButton = new JButton();
   public static JTextField betaCodeTextField;
-  public static JLabel labelFlamingoStatus;
-  public static JLabel labelFlamingoVersion;
-  public static JLabel labelFlamingoUptime;
+  public static JLabel labelFlamingoStatus = new JLabel();
+  public static JLabel labelFlamingoVersion = new JLabel();
+  public static JLabel labelFlamingoUptime = new JLabel();
   public static JButton betaCodeRevalidateButton;
   public static JButton betaCodeClearLocalButton;
   public static JButton resetGameSettingsButton;

@@ -99,6 +99,7 @@ public class ModLoader {
       ModListEventHandler.showDirectoriesWarning(false);
     }
 
+    ModListGUI.labelModCount.setText(String.valueOf(ModLoader.getModList().size()));
     ModListGUI.updateModList(null);
   }
 

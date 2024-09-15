@@ -64,6 +64,10 @@ public class LauncherApp {
       sgui = app.composeSettingsGUI(app);
       mgui = app.composeModListGUI(app);
       egui = app.composeEditorsGUI(app);
+
+      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+      executor.schedule(lgui::switchVisibility, 150, TimeUnit.MILLISECONDS);
+
       app.postInitialization();
     }
   }
@@ -87,69 +91,92 @@ public class LauncherApp {
   }
 
   private LauncherGUI composeLauncherGUI(LauncherApp app) {
-    EventQueue.invokeLater(() -> {
-      try {
-        lgui = new LauncherGUI(app);
-        lgui.switchVisibility();
-      } catch (Exception e) {
-        log.error(e);
-      }
-    });
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          lgui = new LauncherGUI(app);
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
     return lgui;
   }
 
   private SettingsGUI composeSettingsGUI(LauncherApp app) {
-    EventQueue.invokeLater(() -> {
-      try {
-        sgui = new SettingsGUI(app);
-      } catch (Exception e) {
-        log.error(e);
-      }
-    });
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          sgui = new SettingsGUI(app);
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
     return sgui;
   }
 
   private ModListGUI composeModListGUI(LauncherApp app) {
-    EventQueue.invokeLater(() -> {
-      try {
-        mgui = new ModListGUI(app);
-      } catch (Exception e) {
-        log.error(e);
-      }
-    });
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          mgui = new ModListGUI(app);
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
     return mgui;
   }
 
   private EditorsGUI composeEditorsGUI(LauncherApp app) {
-    EventQueue.invokeLater(() -> {
-      try {
-        egui = new EditorsGUI(app);
-      } catch (Exception e) {
-        log.error(e);
-      }
-    });
+    try {
+      EventQueue.invokeLater(() -> {
+        try {
+          egui = new EditorsGUI(app);
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
     return egui;
   }
 
   private JVMPatcher composeJVMPatcher(LauncherApp app) {
-    EventQueue.invokeLater(() -> {
-      try {
-        jvmPatcher = new JVMPatcher(app);
-      } catch (Exception e) {
-        log.error(e);
-      }
-    });
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          jvmPatcher = new JVMPatcher(app);
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
     return jvmPatcher;
   }
 
   private Updater composeUpdater(LauncherApp app) {
-    EventQueue.invokeLater(() -> {
-      try {
-        updater = new Updater(app);
-      } catch (Exception e) {
-        log.error(e);
-      }
-    });
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          updater = new Updater(app);
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
     return updater;
   }
 
@@ -206,9 +233,9 @@ public class LauncherApp {
     if (Settings.createShortcut
             && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME)
             && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME + ".desktop")) {
-      BufferedImage bimg = ImageUtil.loadImageWithinJar("/img/icon-128.png");
+      BufferedImage bimg = ImageUtil.loadImageWithinJar("/img/icon-512.png");
       try {
-        ICOEncoder.write(bimg, new File(LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-128.ico"));
+        ICOEncoder.write(bimg, new File(LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.ico"));
       } catch (IOException e) {
         log.error(e);
       }
@@ -217,7 +244,7 @@ public class LauncherApp {
         DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
                 "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
                 LauncherGlobals.USER_DIR,
-                LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-128.ico",
+                LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-512.ico",
                 "Start " + LauncherGlobals.LAUNCHER_NAME,
                 LauncherGlobals.LAUNCHER_NAME
         );
@@ -237,7 +264,7 @@ public class LauncherApp {
       out.write("Exec=" + DesktopUtil.getPathToDesktop() + "/.KL.sh\n");
       out.write("Name=Knight Launcher\n");
       out.write("Type=Application\n");
-      out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-128.ico\n");
+      out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.ico\n");
       out.write("Comment=Open source game launcher for a certain game\n");
       out.close();
     } catch (IOException e) {
@@ -343,7 +370,7 @@ public class LauncherApp {
   }
 
   private void postInitialization() {
-    ModLoader.checkInstalled();
+    new Thread(ModLoader::checkInstalled).start();
     new Thread(ModuleLoader::loadModules).start();
     if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
       ModLoader.extractSafeguard();
