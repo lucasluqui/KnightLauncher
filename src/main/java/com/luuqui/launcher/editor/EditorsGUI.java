@@ -53,7 +53,7 @@ public class EditorsGUI extends BaseGUI {
   private void initialize() {
     editorsGUIFrame = new JFrame();
     editorsGUIFrame.setVisible(false);
-    editorsGUIFrame.setTitle("Editors");
+    editorsGUIFrame.setTitle(Locale.getValue("t.editors"));
     editorsGUIFrame.setBounds(100, 100, 385, 460);
     editorsGUIFrame.setResizable(false);
     editorsGUIFrame.setUndecorated(true);
@@ -62,7 +62,7 @@ public class EditorsGUI extends BaseGUI {
     editorsGUIFrame.getContentPane().setLayout(null);
     editorsPanel = (JPanel) editorsGUIFrame.getContentPane();
 
-    editorLaunchState = new JLabel("Loading editor...");
+    editorLaunchState = new JLabel(Locale.getValue("m.editor_loading"));
     editorLaunchState.setHorizontalAlignment(SwingConstants.CENTER);
     editorLaunchState.setBounds(192, 190, 385, 25);
     editorLaunchState.setFont(Fonts.fontRegBig);
@@ -103,7 +103,7 @@ public class EditorsGUI extends BaseGUI {
     modelViewerPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel modelViewerLabel = new JLabel();
-    modelViewerLabel.setText("Model Viewer");
+    modelViewerLabel.setText(Locale.getValue("m.model_viewer"));
     modelViewerLabel.setFont(Fonts.fontMedGiant);
     modelViewerLabel.setHorizontalAlignment(SwingConstants.CENTER);
     modelViewerLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -138,7 +138,7 @@ public class EditorsGUI extends BaseGUI {
     sceneEditorPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel sceneEditorLabel = new JLabel();
-    sceneEditorLabel.setText("Scene Editor");
+    sceneEditorLabel.setText(Locale.getValue("m.scene_editor"));
     sceneEditorLabel.setFont(Fonts.fontMedGiant);
     sceneEditorLabel.setHorizontalAlignment(SwingConstants.CENTER);
     sceneEditorLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -173,7 +173,7 @@ public class EditorsGUI extends BaseGUI {
     interfaceTesterPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel interfaceTesterLabel = new JLabel();
-    interfaceTesterLabel.setText("Interface Editor");
+    interfaceTesterLabel.setText(Locale.getValue("m.interface_tester"));
     interfaceTesterLabel.setFont(Fonts.fontMedGiant);
     interfaceTesterLabel.setHorizontalAlignment(SwingConstants.CENTER);
     interfaceTesterLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -208,7 +208,7 @@ public class EditorsGUI extends BaseGUI {
     particleEditorPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel particleEditorLabel = new JLabel();
-    particleEditorLabel.setText("Particle Editor");
+    particleEditorLabel.setText(Locale.getValue("m.particle_editor"));
     particleEditorLabel.setFont(Fonts.fontMedGiant);
     particleEditorLabel.setHorizontalAlignment(SwingConstants.CENTER);
     particleEditorLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -236,7 +236,7 @@ public class EditorsGUI extends BaseGUI {
     editorListPane.add(interfaceTesterPane);
     editorListPane.add(particleEditorPane);
 
-    JLabel poweredByLabel = new JLabel("Powered by spiralview " + LauncherGlobals.BUNDLED_SPIRALVIEW_VERSION + " ");
+    JLabel poweredByLabel = new JLabel(Locale.getValue("m.powered_by_spiralview", LauncherGlobals.BUNDLED_SPIRALVIEW_VERSION));
     poweredByLabel.setBounds(30, 449, 740, 15);
     poweredByLabel.setFont(Fonts.fontReg);
     poweredByLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -246,7 +246,7 @@ public class EditorsGUI extends BaseGUI {
   }
 
   protected static void startFakeProgress() {
-    EditorsGUI.editorLaunchState.setText("Loading editor...");
+    EditorsGUI.editorLaunchState.setText(Locale.getValue("m.editor_loading"));
     for(int i = editorLaunchFakeProgressBar.getMinimum(); i <= editorLaunchFakeProgressBar.getMaximum(); i++) {
       final int percent = i;
       SwingUtilities.invokeLater(() -> editorLaunchFakeProgressBar.setValue(percent));
@@ -263,13 +263,13 @@ public class EditorsGUI extends BaseGUI {
   protected static void rotateFakeLabel(int pot) {
     switch(pot) {
       case 30:
-        EditorsGUI.editorLaunchState.setText("Compiling configs...");
+        EditorsGUI.editorLaunchState.setText(Locale.getValue("m.editor_fakeloading_1"));
         break;
       case 75:
-        EditorsGUI.editorLaunchState.setText("Creating interface...");
+        EditorsGUI.editorLaunchState.setText(Locale.getValue("m.editor_fakeloading_2"));
         break;
       case 100:
-        EditorsGUI.editorLaunchState.setText("Almost there...");
+        EditorsGUI.editorLaunchState.setText(Locale.getValue("m.editor_fakeloading_3"));
         break;
     }
   }

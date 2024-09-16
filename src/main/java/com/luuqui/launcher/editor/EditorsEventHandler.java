@@ -2,6 +2,7 @@ package com.luuqui.launcher.editor;
 
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.ModuleLoader;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.ProcessUtil;
@@ -37,7 +38,7 @@ public class EditorsEventHandler {
         log.warning("Incompatible game Java VM version: " + javaVMVersion + ". Luckily we can rely on system's (" + System.getProperty("java.version") + ")");
         javaVMPath = "java";
       } else {
-        Dialog.push("No compatible Java VM to start the editor with.", "Editors", JOptionPane.ERROR_MESSAGE);
+        Dialog.push(Locale.getValue("error.no_compatible_jvm"), Locale.getValue("b.editors"), JOptionPane.ERROR_MESSAGE);
       }
 
       String[] editorCmdLine = new String[] {
