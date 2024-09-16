@@ -258,17 +258,17 @@ public class SettingsEventHandler {
       String uptimeString = Duration.ofMillis(uptime)
         .toString()
         .replace( "PT" , "" )
-        .replace( "H" , " hours " )
-        .replace( "M" , " minutes " );
+        .replace( "H" , " " + Locale.getValue("m.hours").toLowerCase() + " " )
+        .replace( "M" , " " + Locale.getValue("m.minutes").toLowerCase() + " " );
       uptimeString = uptimeString.substring(0, uptimeString.length() - 7);
 
-      SettingsGUI.labelFlamingoStatus.setText("Flamingo status: Online");
-      SettingsGUI.labelFlamingoVersion.setText("Flamingo version: " + status.version);
+      SettingsGUI.labelFlamingoStatus.setText(Locale.getValue("m.flamingo_status", Locale.getValue("m.online")));
+      SettingsGUI.labelFlamingoVersion.setText(Locale.getValue("m.flamingo_version", status.version));
 
       if(uptimeString.isEmpty()) {
-        SettingsGUI.labelFlamingoUptime.setText("Flamingo uptime: Recently restarted");
+        SettingsGUI.labelFlamingoUptime.setText(Locale.getValue("m.flamingo_uptime", Locale.getValue("m.recently_restarted")));
       } else {
-        SettingsGUI.labelFlamingoUptime.setText("Flamingo uptime: " + uptimeString);
+        SettingsGUI.labelFlamingoUptime.setText(Locale.getValue("m.flamingo_uptime", uptimeString));
       }
     }
   }

@@ -266,12 +266,12 @@ public class SettingsGUI extends BaseGUI {
     sepAutoUpdate.setBounds(25, 320, 600, 16);
     launcherPanel.add(sepAutoUpdate);
 
-    JLabel labelAutoUpdate = new JLabel("Auto-update");
+    JLabel labelAutoUpdate = new JLabel(Locale.getValue("m.autoupdate"));
     labelAutoUpdate.setBounds(25, 335, 350, 20);
     labelAutoUpdate.setFont(Fonts.fontRegBig);
     launcherPanel.add(labelAutoUpdate);
 
-    JLabel labelAutoUpdateExplained = new JLabel("Automatically download and apply launcher updates when they're available.");
+    JLabel labelAutoUpdateExplained = new JLabel(Locale.getValue("m.autoupdate_explained"));
     labelAutoUpdateExplained.setBounds(25, 355, 600, 16);
     labelAutoUpdateExplained.setFont(Fonts.fontReg);
     launcherPanel.add(labelAutoUpdateExplained);
@@ -320,7 +320,7 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setFont(Fonts.fontMedGiant);
     gamePanel.add(headerLabel);
 
-    javaVMBadge = new JLabel("Your Java VM: " + JavaUtil.getReadableGameJVMData());
+    javaVMBadge = new JLabel(Locale.getValue("m.game_java_vm_data", JavaUtil.getReadableGameJVMData()));
     javaVMBadge.setBounds(370, 35, 235, 18);
     javaVMBadge.setHorizontalAlignment(SwingConstants.CENTER);
     javaVMBadge.setFont(Fonts.fontRegSmall);
@@ -380,12 +380,12 @@ public class SettingsGUI extends BaseGUI {
       SettingsEventHandler.memoryChangeEvent(memorySlider.getValue());
     });
 
-    JLabel labelUseCustomGC = new JLabel("Use a different GC behavior");
+    JLabel labelUseCustomGC = new JLabel(Locale.getValue("m.use_custom_gc"));
     labelUseCustomGC.setBounds(25, 175, 375, 18);
     labelUseCustomGC.setFont(Fonts.fontRegBig);
     gamePanel.add(labelUseCustomGC);
 
-    JLabel labelUseCustomGCExplained = new JLabel("Change how Garbage Collection will be done on the game's Java VM.");
+    JLabel labelUseCustomGCExplained = new JLabel(Locale.getValue("m.use_custom_gc_explained"));
     labelUseCustomGCExplained.setBounds(25, 195, 600, 16);
     labelUseCustomGCExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelUseCustomGCExplained);
@@ -490,7 +490,7 @@ public class SettingsGUI extends BaseGUI {
     jvmPatchButton.setFocusPainted(false);
     jvmPatchButton.setFocusable(false);
     jvmPatchButton.setEnabled(false);
-    jvmPatchButton.setToolTipText("Your system does not support a 64-bit Java VM.");
+    jvmPatchButton.setToolTipText(Locale.getValue("error.unsupported_64bit"));
     gamePanel.add(jvmPatchButton);
     jvmPatchButton.addActionListener(SettingsEventHandler::jvmPatchEvent);
 
@@ -499,22 +499,22 @@ public class SettingsGUI extends BaseGUI {
       jvmPatchButton.setToolTipText(null);
     }
 
-    JButton loadRecommendedSettingsButton = new JButton("Load recommended settings");
+    JButton loadRecommendedSettingsButton = new JButton(Locale.getValue("b.recommended_settings"));
     loadRecommendedSettingsButton.setFont(Fonts.fontMed);
     loadRecommendedSettingsButton.setBounds(195, 423, 230, 23);
     loadRecommendedSettingsButton.setFocusPainted(false);
     loadRecommendedSettingsButton.setFocusable(false);
-    loadRecommendedSettingsButton.setToolTipText("Load recommended settings");
+    loadRecommendedSettingsButton.setToolTipText(Locale.getValue("b.recommended_settings"));
     gamePanel.add(loadRecommendedSettingsButton);
     loadRecommendedSettingsButton.addActionListener(SettingsEventHandler::loadRecommendedSettingsButtonEvent);
 
-    resetGameSettingsButton = new JButton("Reset values to default");
+    resetGameSettingsButton = new JButton(Locale.getValue("b.reset_default"));
     resetGameSettingsButton.setFont(Fonts.fontMed);
     resetGameSettingsButton.setBounds(435, 423, 180, 23);
     resetGameSettingsButton.setFocusPainted(false);
     resetGameSettingsButton.setFocusable(false);
     resetGameSettingsButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
-    resetGameSettingsButton.setToolTipText("Reset values to default");
+    resetGameSettingsButton.setToolTipText(Locale.getValue("b.reset_default"));
     gamePanel.add(resetGameSettingsButton);
     resetGameSettingsButton.addActionListener(SettingsEventHandler::resetGameSettingsButtonEvent);
 
@@ -532,7 +532,7 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setFont(Fonts.fontMedGiant);
     betasPanel.add(headerLabel);
 
-    JLabel betaCodeLabel = new JLabel("Activate a Beta code");
+    JLabel betaCodeLabel = new JLabel(Locale.getValue("m.beta_code_activate"));
     betaCodeLabel.setHorizontalAlignment(SwingConstants.LEFT);
     betaCodeLabel.setBounds(25, 72, 450, 50);
     betaCodeLabel.setFont(Fonts.fontRegBig);
@@ -550,11 +550,11 @@ public class SettingsGUI extends BaseGUI {
     betaCodeResultLabel.setVisible(false);
     betasPanel.add(betaCodeResultLabel);
 
-    JButton betaCodeButton = new JButton("Activate");
+    JButton betaCodeButton = new JButton(Locale.getValue("b.activate"));
     betaCodeButton.setFont(Fonts.fontMed);
     betaCodeButton.setFocusPainted(false);
     betaCodeButton.setFocusable(false);
-    betaCodeButton.setToolTipText("Activate");
+    betaCodeButton.setToolTipText(Locale.getValue("b.activate"));
     betaCodeButton.setBounds(290, 112, 100, 25);
     betasPanel.add(betaCodeButton);
     betaCodeButton.addActionListener(action -> {
@@ -562,13 +562,13 @@ public class SettingsGUI extends BaseGUI {
 
       // TODO: use enums.
       switch(result) {
-        case -1: betaCodeResultLabel.setText("Please enter a valid Beta code."); break;
-        case 0: betaCodeResultLabel.setText("An unexpected error has occurred."); break;
-        case 1: betaCodeResultLabel.setText("Successfully activated Beta code. (Check server list)"); break;
-        case 2: betaCodeResultLabel.setText("You already activated this Beta code."); break;
-        case 3: betaCodeResultLabel.setText("This Beta code was already activated."); break;
-        case 4: betaCodeResultLabel.setText("You already activated this Beta code."); break;
-        case 5: betaCodeResultLabel.setText("This Beta code does not exist."); break;
+        case -1: betaCodeResultLabel.setText(Locale.getValue("m.beta_code_invalid")); break;
+        case 0: betaCodeResultLabel.setText(Locale.getValue("m.beta_code_error")); break;
+        case 1: betaCodeResultLabel.setText(Locale.getValue("m.beta_code_success")); break;
+        case 2: betaCodeResultLabel.setText(Locale.getValue("m.beta_code_duplicate")); break;
+        case 3: betaCodeResultLabel.setText(Locale.getValue("m.beta_code_already_used")); break;
+        case 4: betaCodeResultLabel.setText(Locale.getValue("m.beta_code_already_used_same")); break;
+        case 5: betaCodeResultLabel.setText(Locale.getValue("m.beta_code_not_exists")); break;
       }
 
       betaCodeResultLabel.setVisible(true);
@@ -580,7 +580,7 @@ public class SettingsGUI extends BaseGUI {
       ThreadingUtil.executeWithDelay(hideResultThread, 5000);
     });
 
-    activeCodesLabel = new JLabel("Activated Beta codes");
+    activeCodesLabel = new JLabel(Locale.getValue("m.beta_code_activated"));
     activeCodesLabel.setHorizontalAlignment(SwingConstants.LEFT);
     activeCodesLabel.setBounds(25, 190, 200, 30);
     activeCodesLabel.setFont(Fonts.fontRegBig);
@@ -622,18 +622,18 @@ public class SettingsGUI extends BaseGUI {
     betaCodeSpecialResultLabel.setVisible(false);
     betasPanel.add(betaCodeSpecialResultLabel);
 
-    betaCodeRevalidateButton = new JButton("Revalidate my Beta codes");
+    betaCodeRevalidateButton = new JButton(Locale.getValue("b.beta_code_revalidate"));
     betaCodeRevalidateButton.setFont(Fonts.fontMed);
     betaCodeRevalidateButton.setFocusPainted(false);
     betaCodeRevalidateButton.setFocusable(false);
     betaCodeRevalidateButton.setVisible(false);
-    betaCodeRevalidateButton.setToolTipText("Revalidate my Beta codes");
+    betaCodeRevalidateButton.setToolTipText(Locale.getValue("b.beta_code_revalidate"));
     betaCodeRevalidateButton.setBounds(25, 388, 250, 25);
     betasPanel.add(betaCodeRevalidateButton);
     betaCodeRevalidateButton.addActionListener(action -> {
       SettingsEventHandler.revalidateBetaCodes();
       betaCodeSpecialResultLabel.setVisible(true);
-      betaCodeSpecialResultLabel.setText("Beta codes revalidated.");
+      betaCodeSpecialResultLabel.setText(Locale.getValue("m.beta_code_revalidated"));
 
       // Hide the result label after some time.
       Thread hideResultThread = new Thread(() -> {
@@ -642,21 +642,21 @@ public class SettingsGUI extends BaseGUI {
       ThreadingUtil.executeWithDelay(hideResultThread, 5000);
     });
 
-    betaCodeClearLocalButton = new JButton("Clear locally stored Beta codes");
+    betaCodeClearLocalButton = new JButton(Locale.getValue("b.beta_code_clear_local"));
     betaCodeClearLocalButton.setFont(Fonts.fontMed);
     betaCodeClearLocalButton.setFocusPainted(false);
     betaCodeClearLocalButton.setFocusable(false);
     betaCodeClearLocalButton.setVisible(false);
     betaCodeClearLocalButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
-    betaCodeClearLocalButton.setToolTipText("Clear locally stored Beta codes");
+    betaCodeClearLocalButton.setToolTipText(Locale.getValue("b.beta_code_clear_local"));
     betaCodeClearLocalButton.setBounds(25, 423, 250, 25);
     betasPanel.add(betaCodeClearLocalButton);
     betaCodeClearLocalButton.addActionListener(action -> {
-      boolean confirm = Dialog.pushWithConfirm("WARNING: This action is destructive.\nOnly proceed if you know what you're doing.\n\nPress \"Yes\" to confirm.", "Clear locally stored Beta codes", JOptionPane.WARNING_MESSAGE);
+      boolean confirm = Dialog.pushWithConfirm(Locale.getValue("m.destructive_action"), Locale.getValue("b.beta_code_clear_local"), JOptionPane.WARNING_MESSAGE);
       if(confirm) {
         SettingsEventHandler.clearLocalBetaCodes();
         betaCodeSpecialResultLabel.setVisible(true);
-        betaCodeSpecialResultLabel.setText("Beta codes cleared.");
+        betaCodeSpecialResultLabel.setText(Locale.getValue("m.beta_code_cleared"));
 
         // Hide the result label after some time.
         Thread hideResultThread = new Thread(() -> {
@@ -711,19 +711,19 @@ public class SettingsGUI extends BaseGUI {
     sep.setBounds(25, 237, 600, 16);
     advancedPanel.add(sep);
 
-    JLabel labelConnectionSettings = new JLabel("Connection Settings");
+    JLabel labelConnectionSettings = new JLabel(Locale.getValue("m.connection_settings"));
     labelConnectionSettings.setBounds(25, 254, 600, 20);
     labelConnectionSettings.setFont(Fonts.fontRegBig);
     advancedPanel.add(labelConnectionSettings);
 
-    labelDisclaimer = new JLabel("Only applies to Official server connections.");
+    labelDisclaimer = new JLabel(Locale.getValue("m.connection_settings_thirdparty_disclaimer"));
     labelDisclaimer.setBounds(195, 255, 300, 18);
     labelDisclaimer.setFont(Fonts.fontReg);
     labelDisclaimer.setHorizontalAlignment(SwingConstants.LEFT);
     labelDisclaimer.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
     advancedPanel.add(labelDisclaimer);
 
-    JLabel serverAddressLabel = new JLabel("Server Address");
+    JLabel serverAddressLabel = new JLabel(Locale.getValue("m.server_address"));
     serverAddressLabel.setHorizontalAlignment(SwingConstants.LEFT);
     serverAddressLabel.setBounds(25, 269, 450, 50);
     serverAddressLabel.setFont(Fonts.fontReg);
@@ -738,7 +738,7 @@ public class SettingsGUI extends BaseGUI {
     advancedPanel.add(serverAddressTextField);
     serverAddressTextField.setText(Settings.gameEndpoint);
 
-    JLabel portLabel = new JLabel("Port");
+    JLabel portLabel = new JLabel(Locale.getValue("m.port"));
     portLabel.setHorizontalAlignment(SwingConstants.LEFT);
     portLabel.setBounds(280, 269, 450, 50);
     portLabel.setFont(Fonts.fontReg);
@@ -750,7 +750,7 @@ public class SettingsGUI extends BaseGUI {
     advancedPanel.add(portTextField);
     portTextField.setText(String.valueOf(Settings.gamePort));
 
-    JLabel publicKeyLabel = new JLabel("Public Key");
+    JLabel publicKeyLabel = new JLabel(Locale.getValue("m.public_key"));
     publicKeyLabel.setHorizontalAlignment(SwingConstants.LEFT);
     publicKeyLabel.setBounds(25, 328, 450, 50);
     publicKeyLabel.setFont(Fonts.fontReg);
@@ -772,7 +772,7 @@ public class SettingsGUI extends BaseGUI {
     advancedPanel.add(publicKeyPanel);
     publicKeyTextField.setText(Settings.gamePublicKey);
 
-    JLabel getdownURLLabel = new JLabel("Getdown URL");
+    JLabel getdownURLLabel = new JLabel(Locale.getValue("m.getdown_url"));
     getdownURLLabel.setHorizontalAlignment(SwingConstants.LEFT);
     getdownURLLabel.setBounds(25, 387, 450, 50);
     getdownURLLabel.setFont(Fonts.fontReg);
@@ -794,13 +794,13 @@ public class SettingsGUI extends BaseGUI {
     advancedPanel.add(getdownURLPanel);
     getdownURLTextField.setText(Settings.gameGetdownFullURL);
 
-    resetConnectionSettingsButton = new JButton("Reset values to default");
+    resetConnectionSettingsButton = new JButton(Locale.getValue("b.reset_default"));
     resetConnectionSettingsButton.setFont(Fonts.fontMed);
     resetConnectionSettingsButton.setBounds(435, 423, 180, 23);
     resetConnectionSettingsButton.setFocusPainted(false);
     resetConnectionSettingsButton.setFocusable(false);
     resetConnectionSettingsButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
-    resetConnectionSettingsButton.setToolTipText("Reset values to default");
+    resetConnectionSettingsButton.setToolTipText(Locale.getValue("b.reset_default"));
     advancedPanel.add(resetConnectionSettingsButton);
     resetConnectionSettingsButton.addActionListener(SettingsEventHandler::resetConnectionSettingsButtonEvent);
 
@@ -821,7 +821,7 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setFont(Fonts.fontMedGiant);
     aboutPanel.add(headerLabel);
 
-    JLabel creditsLabel = new JLabel("Credits");
+    JLabel creditsLabel = new JLabel(Locale.getValue("m.credits"));
     creditsLabel.setHorizontalAlignment(SwingConstants.LEFT);
     creditsLabel.setBounds(25, 90, 200, 30);
     creditsLabel.setFont(Fonts.fontRegBig);
@@ -849,36 +849,36 @@ public class SettingsGUI extends BaseGUI {
     creditsPane.add(credits);
     credits.setCaretPosition(0);
 
-    labelFlamingoStatus = new JLabel("Knight Launcher version: " + LauncherGlobals.LAUNCHER_VERSION);
+    labelFlamingoStatus = new JLabel(Locale.getValue("m.kl_version", LauncherGlobals.LAUNCHER_VERSION));
     labelFlamingoStatus.setBounds(25, 320, 600, 20);
     labelFlamingoStatus.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoStatus);
 
-    labelFlamingoStatus = new JLabel("Flamingo status: Offline");
+    labelFlamingoStatus = new JLabel(Locale.getValue("m.flamingo_status", Locale.getValue("m.offline")));
     labelFlamingoStatus.setBounds(25, 340, 600, 20);
     labelFlamingoStatus.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoStatus);
 
-    labelFlamingoVersion = new JLabel("Flamingo version: N/A");
+    labelFlamingoVersion = new JLabel(Locale.getValue("m.flamingo_version", "N/A"));
     labelFlamingoVersion.setBounds(25, 360, 600, 20);
     labelFlamingoVersion.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoVersion);
 
-    labelFlamingoUptime = new JLabel("Flamingo uptime: N/A");
+    labelFlamingoUptime = new JLabel(Locale.getValue("m.flamingo_uptime", "N/A"));
     labelFlamingoUptime.setBounds(25, 380, 600, 20);
     labelFlamingoUptime.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoUptime);
 
-    JButton copyLogsButton = new JButton("Copy logs to clipboard");
+    JButton copyLogsButton = new JButton(Locale.getValue("b.copy_logs"));
     copyLogsButton.setFont(Fonts.fontMed);
     copyLogsButton.setBounds(25, 423, 200, 23);
     copyLogsButton.setFocusPainted(false);
     copyLogsButton.setFocusable(false);
-    copyLogsButton.setToolTipText("Copy logs to clipboard");
+    copyLogsButton.setToolTipText(Locale.getValue("b.copy_logs"));
     aboutPanel.add(copyLogsButton);
     copyLogsButton.addActionListener(l -> {
       SettingsEventHandler.copyLogsEvent(l);
-      Dialog.push("Logs copied to clipboard.", JOptionPane.INFORMATION_MESSAGE);
+      Dialog.push(Locale.getValue("m.logs_copied"), JOptionPane.INFORMATION_MESSAGE);
     });
 
     return aboutPanel;
@@ -945,7 +945,7 @@ public class SettingsGUI extends BaseGUI {
 
         JLabel activeCodeText = new JLabel();
         activeCodeText.setBounds(165, 5, 265, 18);
-        activeCodeText.setText("entitling you to " + server.name);
+        activeCodeText.setText(Locale.getValue("m.beta_code_entitling", server.name));
         activeCodeText.setHorizontalAlignment(SwingConstants.LEFT);
         activeCodeText.setFont(Fonts.fontRegSmall);
         activeCodePane.add(activeCodeText);
