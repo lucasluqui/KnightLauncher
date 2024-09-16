@@ -17,7 +17,7 @@ public class JarMod extends Mod {
   }
 
   public void mount () {
-    log.info("Jar Mod mounted successfully", "mod", this.displayName);
+    log.info("Code mod mounted successfully", "mod", this.displayName);
   }
 
   public String getAbsolutePath() {
@@ -25,7 +25,7 @@ public class JarMod extends Mod {
   }
 
   public void wasAdded() {
-    log.info("A jar mod was added", "object", this.toString());
+    log.info("Code mod was added", "object", this.toString());
   }
 
 }

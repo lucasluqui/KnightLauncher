@@ -11,8 +11,8 @@ public abstract class Mod {
   protected String image;
 
   protected final String DEFAULT_DESCRIPTION = "No description found";
-  protected final String DEFAULT_AUTHOR = "Someone";
-  protected final String DEFAULT_VERSION = "Unknown";
+  protected final String DEFAULT_AUTHOR = "Unknown";
+  protected final String DEFAULT_VERSION = "?";
 
   protected Mod () {
     this.description = DEFAULT_DESCRIPTION;

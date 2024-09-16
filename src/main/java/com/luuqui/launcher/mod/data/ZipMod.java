@@ -20,7 +20,7 @@ public class ZipMod extends Mod {
 
   public void mount() {
     Compressor.unzip(LauncherGlobals.USER_DIR + "/mods/" + this.fileName, LauncherGlobals.USER_DIR + "/rsrc/", SystemUtil.isMac());
-    log.info("Zip Mod mounted successfully", "mod", this.displayName);
+    log.info("Zip mod mounted successfully", "mod", this.displayName);
   }
 
   public String getAbsolutePath() {
@@ -28,7 +28,7 @@ public class ZipMod extends Mod {
   }
 
   public void wasAdded() {
-    log.info("A zip mod was added", "object", this.toString());
+    log.info("Zip mod was added", "object", this.toString());
   }
 
 }
