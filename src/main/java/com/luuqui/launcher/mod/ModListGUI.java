@@ -77,7 +77,7 @@ public class ModListGUI extends BaseGUI {
     Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
     warningNotice = new JButton(warningNoticeIcon);
     warningNotice.setBounds(125, 24, 36, 36);
-    warningNotice.setToolTipText("Warning Notice");
+    warningNotice.setToolTipText(Locale.getValue("m.warning_notice"));
     warningNotice.setFocusPainted(false);
     warningNotice.setFocusable(false);
     warningNotice.setBorderPainted(false);
@@ -86,13 +86,13 @@ public class ModListGUI extends BaseGUI {
     warningNotice.setFont(Fonts.fontMed);
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
-      Dialog.push(currentWarning, "Warning Notice", JOptionPane.ERROR_MESSAGE);
+      Dialog.push(currentWarning, Locale.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
     });
     modListGUIFrame.getContentPane().add(warningNotice);
 
 
     Icon modStoreIcon = IconFontSwing.buildIcon(FontAwesome.SEARCH, 10, Color.WHITE);
-    JButton modStoreButton = new JButton(Locale.getValue("Browse Mod Store"));
+    JButton modStoreButton = new JButton(Locale.getValue("b.mod_store"));
     modStoreButton.setIcon(modStoreIcon);
     modStoreButton.setBounds(240, 35, 175, 25);
     modStoreButton.setFont(Fonts.fontMed);
@@ -103,12 +103,12 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.getContentPane().add(modStoreButton);
     //getModsButton.addActionListener(ModListEventHandler::openModStore);
 
-    JButton getModsButton = new JButton("Get mods via Discord");
+    JButton getModsButton = new JButton(Locale.getValue("b.get_mods"));
     getModsButton.setBounds(420, 35, 175, 25 );
     getModsButton.setFont(Fonts.fontMed);
     getModsButton.setFocusPainted(false);
     getModsButton.setFocusable(false);
-    getModsButton.setToolTipText(Locale.getValue("Get mods via Discord"));
+    getModsButton.setToolTipText(Locale.getValue("b.get_mods"));
     modListGUIFrame.getContentPane().add(getModsButton);
     getModsButton.addActionListener(ModListEventHandler::getModsEvent);
 
@@ -120,16 +120,6 @@ public class ModListGUI extends BaseGUI {
     modFolderButton.setToolTipText(Locale.getValue("b.open_mods_folder"));
     modListGUIFrame.getContentPane().add(modFolderButton);
     modFolderButton.addActionListener(action -> DesktopUtil.openDir(LauncherGlobals.USER_DIR + "/mods"));
-
-    forceApplyButton = new JButton("Force apply");
-    forceApplyButton.setBounds(280, 35, 160, 25);
-    forceApplyButton.setFont(Fonts.fontMed);
-    forceApplyButton.setFocusPainted(false);
-    forceApplyButton.setFocusable(false);
-    forceApplyButton.setVisible(false);
-    forceApplyButton.setToolTipText("Force apply");
-    //modListGUIFrame.getContentPane().add(forceApplyButton);
-    forceApplyButton.addActionListener(ModListEventHandler::forceApplyEvent);
 
     JSeparator separator = new JSeparator();
     separator.setBounds(25, 75, 750, 2);
@@ -145,7 +135,7 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.getContentPane().add(refreshButton);
     refreshButton.addActionListener(ModListEventHandler::refreshEvent);
 
-    labelRefreshing = new JLabel("Refreshing...");
+    labelRefreshing = new JLabel(Locale.getValue("m.refresh"));
     labelRefreshing.setBounds(60, 86, 100, 25);
     labelRefreshing.setFont(Fonts.fontReg);
     labelRefreshing.setHorizontalAlignment(SwingConstants.LEFT);
@@ -160,20 +150,20 @@ public class ModListGUI extends BaseGUI {
     searchBox = new JTextField();
     searchBox.setBounds(250, 85, 300, 27);
     searchBox.setFont(Fonts.fontCodeReg);
-    searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Type mod name or author...");
+    searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, Locale.getValue("m.modlist_searchbox_placeholder"));
     modListGUIFrame.getContentPane().add(searchBox);
     searchBox.addActionListener(l -> ModListEventHandler.searchMod());
     searchBox.addKeyListener(new KeyAdapter() {
       public void keyReleased(KeyEvent e) { ModListEventHandler.searchMod(); }
     });
 
-    JButton searchButton = new JButton("Search");
+    JButton searchButton = new JButton(Locale.getValue("m.search"));
     searchButton.setBounds(475, 85, 80, 26);
     modListGUIFrame.getContentPane().add(searchButton);
     searchButton.addActionListener(l -> ModListEventHandler.searchMod());
     searchButton.setVisible(false);
 
-    JLabel enabledLabel = new JLabel("Enabled");
+    JLabel enabledLabel = new JLabel(Locale.getValue("m.enabled"));
     enabledLabel.setBounds(636, 86, 100, 25);
     enabledLabel.setFont(Fonts.fontMed);
     modListGUIFrame.getContentPane().add(enabledLabel);
@@ -250,7 +240,7 @@ public class ModListGUI extends BaseGUI {
       modPane.add(modDescription);
 
       JLabel modFooter = new JLabel();
-      modFooter.setText("v" + mod.getVersion() + ", author: " + mod.getAuthor());
+      modFooter.setText(Locale.getValue("m.mod_footer", new String[] { mod.getVersion(), mod.getAuthor() }));
       modFooter.setFont(Fonts.fontRegSmall);
       modFooter.setBounds(81, 32, 400, 55);
       modPane.add(modFooter);
@@ -260,7 +250,7 @@ public class ModListGUI extends BaseGUI {
       modBadge.setHorizontalAlignment(SwingConstants.CENTER);
       modBadge.setFont(Fonts.fontRegSmall);
       if(mod instanceof ZipMod) {
-        modBadge.setText("Resource mod");
+        modBadge.setText(Locale.getValue("m.resource_mod"));
         modBadge.putClientProperty(FlatClientProperties.STYLE,
           "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND)
             + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_FOREGROUND)
@@ -272,7 +262,7 @@ public class ModListGUI extends BaseGUI {
           modBadge.getHeight()
         );
       } else {
-        modBadge.setText("Code mod");
+        modBadge.setText(Locale.getValue("m.code_mod"));
         modBadge.putClientProperty(FlatClientProperties.STYLE,
           "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND)
             + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_FOREGROUND)
@@ -317,7 +307,7 @@ public class ModListGUI extends BaseGUI {
       Math.min(325, count * 76)
     );
 
-    displayedModsLabel.setText("Displaying " + count + " out of " + ModLoader.getModCount() + " mod(s).");
+    displayedModsLabel.setText(Locale.getValue("m.modlist_footer", new String[] { String.valueOf(count), String.valueOf(ModLoader.getModCount()) }));
     displayedModsLabel.setBounds(
       displayedModsLabel.getX(),
       modListPaneScrollBar.getHeight() + modListPaneScrollBar.getY() + 6,

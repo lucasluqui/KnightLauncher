@@ -29,9 +29,9 @@ public class ModListEventHandler {
   }
 
   public static void forceApplyEvent(ActionEvent action) {
-    ModListGUI.labelRefreshing.setText("Applying...");
+    ModListGUI.labelRefreshing.setText(Locale.getValue("m.apply"));
     ModLoader.mount();
-    ModListGUI.labelRefreshing.setText("Applied");
+    ModListGUI.labelRefreshing.setText(Locale.getValue("m.applied"));
     DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
   }
 
@@ -79,8 +79,7 @@ public class ModListEventHandler {
     // Show the warning with a slight delay to make sure the GUI can load beforehand.
     Thread showDirectoriesWarningThread = new Thread(() -> {
       ModListGUI.warningNotice.setVisible(true);
-      ModListGUI.currentWarning = "There are folders within the mods folder." +
-        "\nYou do not need to extract the .zip files, simply drag and drop the .zip files inside the mods folder.";
+      ModListGUI.currentWarning = Locale.getValue("error.folders_within_mods_folder");
     });
     ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
   }
