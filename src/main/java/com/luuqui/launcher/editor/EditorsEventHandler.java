@@ -2,6 +2,7 @@ package com.luuqui.launcher.editor;
 
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.launcher.ModuleLoader;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.ProcessUtil;
 
@@ -14,8 +15,14 @@ import static com.luuqui.launcher.editor.Log.log;
 public class EditorsEventHandler {
 
   public static boolean isBooting = false;
+  public static boolean spiralviewExtracted = false;
 
   private static void startEditor(String editor, String arg) {
+    if(!spiralviewExtracted) {
+      ModuleLoader.loadSpiralview();
+      spiralviewExtracted = true;
+    }
+
     if(!isBooting) {
       isBooting = true;
       new Thread(EditorsEventHandler::startedBooting).start();

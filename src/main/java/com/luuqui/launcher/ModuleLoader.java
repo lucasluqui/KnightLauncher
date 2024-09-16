@@ -16,7 +16,6 @@ public class ModuleLoader {
     Thread moduleThread = new Thread(() -> {
       loadIngameRPC();
       loadJarCommandLine();
-      loadSpiralview();
     });
     moduleThread.start();
   }
@@ -50,7 +49,7 @@ public class ModuleLoader {
     }
   }
 
-  protected static void loadSpiralview() {
+  public static void loadSpiralview() {
     try {
       FileUtil.extractFileWithinJar("/modules/spiralview/spiralview.jar",
         LauncherGlobals.USER_DIR + "/KnightLauncher/modules/spiralview/spiralview.jar");
