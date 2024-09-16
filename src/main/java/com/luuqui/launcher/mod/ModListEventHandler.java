@@ -7,12 +7,11 @@ import com.luuqui.launcher.mod.data.Mod;
 import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.DesktopUtil;
+import com.luuqui.util.ThreadingUtil;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class ModListEventHandler {
 
@@ -78,13 +77,12 @@ public class ModListEventHandler {
     }
 
     // Show the warning with a slight delay to make sure the GUI can load beforehand.
-    final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     Thread showDirectoriesWarningThread = new Thread(() -> {
       ModListGUI.warningNotice.setVisible(true);
       ModListGUI.currentWarning = "There are folders within the mods folder." +
         "\nYou do not need to extract the .zip files, simply drag and drop the .zip files inside the mods folder.";
     });
-    executor.schedule(showDirectoriesWarningThread, 2, TimeUnit.SECONDS);
+    ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
   }
 
   public static void searchMod() {

@@ -1,6 +1,7 @@
 package com.luuqui.launcher;
 
 import com.luuqui.launcher.mod.ModListGUI;
+import com.luuqui.util.ThreadingUtil;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -26,11 +27,10 @@ public class ProgressBar {
     activeTasks--;
     if(activeTasks == 0) {
       setState("Finished");
-      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
       Thread finishDelayThread = new Thread(() -> {
         showBar(false);
       });
-      executor.schedule(finishDelayThread, 8, TimeUnit.SECONDS);
+      ThreadingUtil.executeWithDelay(finishDelayThread, 8000);
     }
   }
 

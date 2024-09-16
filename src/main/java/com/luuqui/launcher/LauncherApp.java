@@ -26,8 +26,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.luuqui.launcher.Log.log;
@@ -65,8 +63,7 @@ public class LauncherApp {
       mgui = app.composeModListGUI(app);
       egui = app.composeEditorsGUI(app);
 
-      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-      executor.schedule(lgui::switchVisibility, 150, TimeUnit.MILLISECONDS);
+      ThreadingUtil.executeWithDelay(lgui::switchVisibility, 200);
 
       app.postInitialization();
     }
@@ -395,8 +392,7 @@ public class LauncherApp {
 
     }).start();
 
-    final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-    executor.schedule(this::checkFlamingoStatus, 10, TimeUnit.SECONDS);
+    ThreadingUtil.executeWithDelay(this::checkFlamingoStatus, 10000);
   }
 
   private void checkFlamingoStatus() {

@@ -16,8 +16,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static com.luuqui.launcher.setting.Log.log;
 
@@ -576,11 +574,10 @@ public class SettingsGUI extends BaseGUI {
       betaCodeResultLabel.setVisible(true);
 
       // Hide the result label after some time.
-      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
       Thread hideResultThread = new Thread(() -> {
         betaCodeResultLabel.setVisible(false);
       });
-      executor.schedule(hideResultThread, 5, TimeUnit.SECONDS);
+      ThreadingUtil.executeWithDelay(hideResultThread, 5000);
     });
 
     activeCodesLabel = new JLabel("Activated Beta codes");
@@ -639,11 +636,10 @@ public class SettingsGUI extends BaseGUI {
       betaCodeSpecialResultLabel.setText("Beta codes revalidated.");
 
       // Hide the result label after some time.
-      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
       Thread hideResultThread = new Thread(() -> {
         betaCodeSpecialResultLabel.setVisible(false);
       });
-      executor.schedule(hideResultThread, 5, TimeUnit.SECONDS);
+      ThreadingUtil.executeWithDelay(hideResultThread, 5000);
     });
 
     betaCodeClearLocalButton = new JButton("Clear locally stored Beta codes");
@@ -663,11 +659,10 @@ public class SettingsGUI extends BaseGUI {
         betaCodeSpecialResultLabel.setText("Beta codes cleared.");
 
         // Hide the result label after some time.
-        final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         Thread hideResultThread = new Thread(() -> {
           betaCodeSpecialResultLabel.setVisible(false);
         });
-        executor.schedule(hideResultThread, 5, TimeUnit.SECONDS);
+        ThreadingUtil.executeWithDelay(hideResultThread, 5000);
       }
     });
 

@@ -20,9 +20,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -158,9 +155,7 @@ public class LauncherEventHandler {
         ProgressBar.finishTask();
       }
 
-      final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-      executor.schedule(LauncherEventHandler::checkGameLaunch, 8, TimeUnit.SECONDS);
-
+      ThreadingUtil.executeWithDelay(LauncherEventHandler::checkGameLaunch, 8000);
     });
     launchThread.start();
 
@@ -489,7 +484,7 @@ public class LauncherEventHandler {
       LauncherGUI.launchButton.setEnabled(true);
     } else {
       try {
-        Thread.sleep(8 * 1000);
+        Thread.sleep(8000);
         if(isGameRunning()) {
           LauncherApp.exit();
         } else {
