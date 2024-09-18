@@ -54,6 +54,38 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache</groupId>
+      <artifactId>commons</artifactId>
+      <version>2.6</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/commons-io-2.6.jar</systemPath>
+    </dependency>
+
+    <dependency>
+      <groupId>net.arikia.dev</groupId>
+      <artifactId>discord-rpc</artifactId>
+      <version>1.6.2</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/discord-rpc.jar</systemPath>
+    </dependency>
+
+    <dependency>
+      <groupId>com.jhlabs</groupId>
+      <artifactId>filters</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Filters.jar</systemPath>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sf</groupId>
+      <artifactId>image4j</artifactId>
+      <version>0.7.2</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/image4j-0.7.2.jar</systemPath>
+    </dependency>
+
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>5.10.3</version>
