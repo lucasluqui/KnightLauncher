@@ -2,6 +2,7 @@ package com.luuqui.launcher.mod;
 
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.*;
+import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.mod.data.JarMod;
 import com.luuqui.launcher.mod.data.Mod;
 import com.luuqui.launcher.mod.data.Modpack;
@@ -16,10 +17,7 @@ import org.json.JSONObject;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.ZipFile;
 
 import static com.luuqui.launcher.mod.Log.log;
@@ -40,10 +38,11 @@ public class ModLoader {
     // Clean the list in case something remains in it.
     if (getModCount() > 0) clearModList();
 
-    // Append all .zip and .jar files inside the mod folder into an ArrayList.
-    List<File> rawFiles = FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".zip");
-    rawFiles.addAll(FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".jar"));
+    // Append all .modpack, .zip, and .jar files inside the mod folder into an ArrayList.
+    List<File> rawFiles = new ArrayList<>();
     rawFiles.addAll(FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".modpack"));
+    rawFiles.addAll(FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".zip"));
+    rawFiles.addAll(FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".jar"));
 
     for (File file : rawFiles) {
       JSONObject modJson;
