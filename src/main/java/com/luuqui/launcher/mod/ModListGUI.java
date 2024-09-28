@@ -244,7 +244,7 @@ public class ModListGUI extends BaseGUI {
       JLabel modFooter = new JLabel();
       modFooter.setText(Locale.getValue("m.mod_footer", new String[] { mod.getVersion(), mod.getAuthor() }));
       modFooter.setFont(Fonts.fontRegSmall);
-      modFooter.setBounds(81, 32, 400, 55);
+      modFooter.setBounds(81, 32, 150, 55);
       modPane.add(modFooter);
 
       JLabel modBadge = new JLabel();
