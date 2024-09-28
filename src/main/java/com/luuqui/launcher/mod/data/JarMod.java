@@ -20,10 +20,6 @@ public class JarMod extends Mod {
     log.info("Code mod mounted successfully", "mod", this.displayName);
   }
 
-  public String getAbsolutePath() {
-    return LauncherGlobals.USER_DIR + "/mods/" + this.fileName;
-  }
-
   public void wasAdded() {
     log.info("Code mod was added", "object", this.toString());
   }

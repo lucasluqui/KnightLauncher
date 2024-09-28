@@ -4,6 +4,7 @@ import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.*;
 import com.luuqui.launcher.mod.data.JarMod;
 import com.luuqui.launcher.mod.data.Mod;
+import com.luuqui.launcher.mod.data.Modpack;
 import com.luuqui.launcher.mod.data.ZipMod;
 import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsProperties;
@@ -27,6 +28,8 @@ public class ModLoader {
 
   private static final LinkedList<Mod> modList = new LinkedList<>();
 
+  private static final String MOD_FOLDER_PATH = LauncherGlobals.USER_DIR + "/mods/";
+
   private static final String[] RSRC_BUNDLES = { "full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar" };
 
   public static Boolean mountRequired = false;
@@ -34,14 +37,13 @@ public class ModLoader {
 
   public static void checkInstalled() {
 
-    final String MOD_FOLDER_PATH = LauncherGlobals.USER_DIR + "/mods/";
-
     // Clean the list in case something remains in it.
     if (getModCount() > 0) clearModList();
 
     // Append all .zip and .jar files inside the mod folder into an ArrayList.
     List<File> rawFiles = FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".zip");
     rawFiles.addAll(FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".jar"));
+    rawFiles.addAll(FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".modpack"));
 
     for (File file : rawFiles) {
       JSONObject modJson;
@@ -57,6 +59,8 @@ public class ModLoader {
         mod = new ZipMod(fileName);
       } else if (fileName.endsWith("jar")) {
         mod = new JarMod(fileName);
+      } else if (fileName.endsWith("modpack")) {
+        mod = new Modpack(fileName);
       }
 
       if (mod != null && modJson != null) {

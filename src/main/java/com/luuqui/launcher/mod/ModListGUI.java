@@ -3,7 +3,9 @@ package com.luuqui.launcher.mod;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.*;
+import com.luuqui.launcher.mod.data.JarMod;
 import com.luuqui.launcher.mod.data.Mod;
+import com.luuqui.launcher.mod.data.Modpack;
 import com.luuqui.launcher.mod.data.ZipMod;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.DesktopUtil;
@@ -261,12 +263,18 @@ public class ModListGUI extends BaseGUI {
           modBadge.getWidth() + 19,
           modBadge.getHeight()
         );
-      } else {
+      } else if (mod instanceof JarMod) {
         modBadge.setText(Locale.getValue("m.code_mod"));
         modBadge.putClientProperty(FlatClientProperties.STYLE,
           "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND)
             + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_FOREGROUND)
             + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND));
+      } else if (mod instanceof Modpack) {
+        modBadge.setText(Locale.getValue("m.modpack"));
+        modBadge.putClientProperty(FlatClientProperties.STYLE,
+          "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND)
+            + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_FOREGROUND)
+            + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND));
       }
       modBadge.setVisible(true);
       modBadge.setToolTipText(modBadge.getText());

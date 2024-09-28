@@ -1,5 +1,7 @@
 package com.luuqui.launcher.mod.data;
 
+import com.luuqui.launcher.LauncherGlobals;
+
 public abstract class Mod {
 
   protected String displayName;
@@ -77,9 +79,12 @@ public abstract class Mod {
     this.image = image;
   }
 
+  public String getAbsolutePath() {
+    return LauncherGlobals.USER_DIR + "/mods/" + this.fileName;
+  }
+
   public abstract void mount();
   public abstract void wasAdded();
-  public abstract String getAbsolutePath();
 
   @Override
   public String toString() {

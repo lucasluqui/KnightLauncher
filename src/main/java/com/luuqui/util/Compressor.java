@@ -9,6 +9,9 @@ import java.io.*;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -151,5 +154,23 @@ public class Compressor {
     return hash;
   }
 
+  public static List<String> getFileListFromZip(String zipPath) {
+    java.util.zip.ZipFile zipFile = null;
+    try {
+      zipFile = new java.util.zip.ZipFile(zipPath);
+    } catch (IOException e) {
+      log.error(e);
+    }
+
+    Enumeration zipEntries = zipFile.entries();
+
+    List<String> fileList = new ArrayList();
+
+    while (zipEntries.hasMoreElements()) {
+      fileList.add(((ZipEntry) zipEntries.nextElement()).getName());
+    }
+
+    return fileList;
+  }
 
 }
