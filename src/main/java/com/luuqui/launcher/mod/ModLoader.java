@@ -9,6 +9,7 @@ import com.luuqui.launcher.mod.data.Mod;
 import com.luuqui.launcher.mod.data.Modpack;
 import com.luuqui.launcher.mod.data.ZipMod;
 import com.luuqui.launcher.setting.Settings;
+import com.luuqui.launcher.setting.SettingsGUI;
 import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.Compressor;
 import com.luuqui.util.FileUtil;
@@ -191,6 +192,7 @@ public class ModLoader {
       LauncherGUI.launchButton.setEnabled(false);
       LauncherGUI.settingsButton.setEnabled(false);
       LauncherGUI.modButton.setEnabled(false);
+      SettingsGUI.forceRebuildButton.setEnabled(false);
     } catch (Exception ignored) {}
 
     String rootDir = LauncherGlobals.USER_DIR;
@@ -231,6 +233,7 @@ public class ModLoader {
       LauncherGUI.launchButton.setEnabled(true);
       LauncherGUI.settingsButton.setEnabled(true);
       LauncherGUI.modButton.setEnabled(true);
+      SettingsGUI.forceRebuildButton.setEnabled(true);
     } catch (Exception ignored) {}
 
     DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
