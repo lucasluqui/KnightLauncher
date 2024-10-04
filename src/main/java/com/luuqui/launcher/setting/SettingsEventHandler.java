@@ -6,6 +6,7 @@ import com.luuqui.launcher.flamingo.Flamingo;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.flamingo.data.Status;
 import com.luuqui.launcher.mod.ModLoader;
+import com.luuqui.util.DesktopUtil;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.ProcessUtil;
@@ -273,6 +274,14 @@ public class SettingsEventHandler {
 
     // ...And we add them to the clipboard.
     FileUtil.copyFileToClipboard(files);
+  }
+
+  public static void openRootFolderEvent(ActionEvent event) {
+    String rootDir = LauncherGlobals.USER_DIR;
+    if(LauncherApp.selectedServer != null) {
+      rootDir = LauncherApp.selectedServer.getRootDirectory();
+    }
+    DesktopUtil.openDir(rootDir);
   }
 
   public static void updateAboutTab(Status status) {

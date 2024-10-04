@@ -881,6 +881,17 @@ public class SettingsGUI extends BaseGUI {
       Dialog.push(Locale.getValue("m.logs_copied"), JOptionPane.INFORMATION_MESSAGE);
     });
 
+    JButton openRootFolderButton = new JButton(Locale.getValue("b.open_root_folder"));
+    openRootFolderButton.setFont(Fonts.fontMed);
+    openRootFolderButton.setBounds(235, 423, 200, 23);
+    openRootFolderButton.setFocusPainted(false);
+    openRootFolderButton.setFocusable(false);
+    openRootFolderButton.setToolTipText(Locale.getValue("b.open_root_folder"));
+    aboutPanel.add(openRootFolderButton);
+    openRootFolderButton.addActionListener(l -> {
+      SettingsEventHandler.openRootFolderEvent(l);
+    });
+
     return aboutPanel;
   }
 
