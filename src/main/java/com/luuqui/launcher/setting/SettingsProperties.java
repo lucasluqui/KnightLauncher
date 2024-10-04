@@ -43,7 +43,7 @@ public class SettingsProperties {
     try (InputStream is = new FileInputStream(_propPath)) {
       _prop.load(is);
       value = _prop.getProperty(key);
-      log.info("Request for prop key", "key", key, "value", value);
+      log.info("Request for key", "key", key, "value", value);
       return value;
     } catch (IOException e) {
       log.error(e);
@@ -56,7 +56,7 @@ public class SettingsProperties {
       if(migrating) _prop.load(is);
       _prop.setProperty(key, value);
       _prop.store(new FileOutputStream(_propPath), null);
-      log.info("Setting new key value", "key", key, "value", value);
+      log.info("Setting new key", "key", key, "value", value);
     } catch (IOException e) {
       log.error(e);
     }
@@ -74,6 +74,20 @@ public class SettingsProperties {
       log.error(e);
     }
     return null;
+  }
+
+  public static void createKeyIfNotExists(String key, String value) {
+    try (InputStream is = new FileInputStream(_propPath)) {
+      if(_prop.getProperty(key) == null) {
+        _prop.setProperty(key, value);
+        _prop.store(new FileOutputStream(_propPath), null);
+        log.info("Setting new key", "key", key, "value", value);
+      } else {
+        log.info("Key already exists", "key", key, "value", value);
+      }
+    } catch (IOException e) {
+      log.error(e);
+    }
   }
 
   public static void load() {

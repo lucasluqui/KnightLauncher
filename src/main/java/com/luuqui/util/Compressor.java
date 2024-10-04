@@ -12,24 +12,27 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import static com.luuqui.util.Log.log;
 
 public class Compressor {
 
-  private static final int HASH_BUFFER_SIZE = 4096;
+  private static final int BUFFER_SIZE = 4096;
 
 
   public static void unzip(String source, String dest, Boolean force4j) {
     try {
+      if(force4j) {
+        unzip4j(source, dest);
+        return;
+      }
+
       switch (Settings.compressorUnzipMethod) {
         case "custom":
-          if (force4j) {
-            unzip4j(source, dest);
-            break;
-          }
           unzipCustom(source, dest);
           break;
         case "4j":
@@ -135,7 +138,7 @@ public class Compressor {
       while ((entry = stream.getNextEntry()) != null) {
         MessageDigest md = MessageDigest.getInstance("MD5");
         DigestInputStream dis = new DigestInputStream(stream, md);
-        byte[] buffer = new byte[HASH_BUFFER_SIZE];
+        byte[] buffer = new byte[BUFFER_SIZE];
         int read = dis.read(buffer);
         while (read > -1) {
           read = dis.read(buffer);
@@ -173,4 +176,37 @@ public class Compressor {
     return fileList;
   }
 
+  // source: https://stackoverflow.com/questions/51833423/how-to-zip-the-content-of-a-directory-in-java
+  public static void zipFolderContents(File srcFolder, File destZipFile, String zipFileName) throws Exception {
+    try (FileOutputStream fileWriter = new FileOutputStream(destZipFile);
+         ZipOutputStream zip = new ZipOutputStream(fileWriter)) {
+      addFolderToZip(srcFolder, srcFolder, zip, zipFileName);
+    }
+  }
+
+  private static void addFileToZip(File rootPath, File srcFile, ZipOutputStream zip, String zipFileName) throws Exception {
+    if (srcFile.isDirectory()) {
+      addFolderToZip(rootPath, srcFile, zip, zipFileName);
+    } else if(srcFile.getName().equalsIgnoreCase(zipFileName)) {
+      // do nothing
+    } else {
+      byte[] buf = new byte[BUFFER_SIZE];
+      int len;
+      try (FileInputStream in = new FileInputStream(srcFile)) {
+        String name = srcFile.getPath();
+        name = name.replace(rootPath.getPath(), "");
+        name = name.substring(1);
+        zip.putNextEntry(new ZipEntry(name));
+        while ((len = in.read(buf)) > 0) {
+          zip.write(buf, 0, len);
+        }
+      }
+    }
+  }
+
+  private static void addFolderToZip(File rootPath, File srcFolder, ZipOutputStream zip, String zipFileName) throws Exception {
+    for (File fileName : Objects.requireNonNull(srcFolder.listFiles())) {
+      addFileToZip(rootPath, fileName, zip, zipFileName);
+    }
+  }
 }

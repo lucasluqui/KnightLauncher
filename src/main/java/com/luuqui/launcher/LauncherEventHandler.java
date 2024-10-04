@@ -3,6 +3,7 @@ package com.luuqui.launcher;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.flamingo.data.Server;
+import com.luuqui.launcher.mod.ModListEventHandler;
 import com.luuqui.launcher.mod.ModLoader;
 import com.luuqui.launcher.setting.*;
 import com.luuqui.util.*;
@@ -12,6 +13,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -20,6 +22,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -65,7 +68,7 @@ public class LauncherEventHandler {
       } else {
         // third party server launch procedure
         Server selectedServer = LauncherApp.selectedServer;
-        String sanitizedServerName = LauncherApp.getSanitizedServerName(selectedServer.name);
+        String sanitizedServerName = selectedServer.getSanitizedName();
 
         ProgressBar.startTask();
         ProgressBar.setBarMax(2);
@@ -142,6 +145,17 @@ public class LauncherEventHandler {
           log.error(e);
         }
 
+        // make sure there's a base zip file we can use to clean files with.
+        String rootDir = selectedServer.getRootDirectory();
+        if(FileUtil.fileExists(rootDir + "/rsrc")
+          && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
+          try {
+            Compressor.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
+          } catch (Exception e) {
+            log.error(e);
+          }
+        }
+
         // we already have the client files,
         // the client is up-to-date, or the download has finished.
         // and so we start it up!
@@ -209,8 +223,25 @@ public class LauncherEventHandler {
       LauncherGUI.serverList.addItem(server.name);
       LauncherApp.serverList.add(server);
 
-      // make sure we have a folder to later download the client
-      FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + LauncherApp.getSanitizedServerName(server.name));
+      // make sure we have a proper folder structure for this server.
+      String serverName = server.getSanitizedName();
+      FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + serverName);
+      FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + serverName + "/mods");
+
+      // make sure there's a base zip file we can use to clean files with.
+      String rootDir = server.getRootDirectory();
+      if(FileUtil.fileExists(rootDir + "/rsrc")
+        && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
+        try {
+          Compressor.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
+        } catch (Exception e) {
+          log.error(e);
+        }
+      }
+
+      // check server specific settings keys.
+      SettingsEventHandler.checkServerSettingsKeys(serverName);
+      ModListEventHandler.checkServerSettingsKeys(serverName);
     }
 
     try {
@@ -273,18 +304,7 @@ public class LauncherEventHandler {
         LauncherGUI.playerCountTooltipButton.setVisible(true);
         LauncherGUI.serverInfoButton.setEnabled(false);
         LauncherGUI.serverInfoButton.setVisible(false);
-        LauncherGUI.modButton.setEnabled(true);
         LauncherGUI.editorsButton.setEnabled(true);
-
-        SettingsGUI.switchUseIngameRPC.setEnabled(true);
-        SettingsGUI.choicePlatform.setEnabled(true);
-        SettingsGUI.forceRebuildButton.setEnabled(true);
-        SettingsGUI.labelDisclaimer.setVisible(false);
-        SettingsGUI.serverAddressTextField.setEnabled(true);
-        SettingsGUI.portTextField.setEnabled(true);
-        SettingsGUI.publicKeyTextField.setEnabled(true);
-        SettingsGUI.getdownURLTextField.setEnabled(true);
-        SettingsGUI.resetConnectionSettingsButton.setEnabled(true);
       } else {
         LauncherGUI.launchButton.setText(Locale.getValue("b.play_now_thirdparty", selectedServer.name));
         LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_now_thirdparty", selectedServer.name));
@@ -296,32 +316,20 @@ public class LauncherEventHandler {
         // TODO: Fetch player count.
         LauncherGUI.playerCountLabel.setVisible(false);
 
-        // TODO: Modding support for third party servers.
-        LauncherGUI.modButton.setEnabled(false);
-
         // TODO: Editors support for third party servers.
         LauncherGUI.editorsButton.setEnabled(false);
-
-        SettingsGUI.switchUseIngameRPC.setEnabled(false);
-        SettingsGUI.choicePlatform.setEnabled(false);
-        SettingsGUI.forceRebuildButton.setEnabled(false);
-        SettingsGUI.labelDisclaimer.setVisible(true);
-        SettingsGUI.serverAddressTextField.setEnabled(false);
-        SettingsGUI.portTextField.setEnabled(false);
-        SettingsGUI.publicKeyTextField.setEnabled(false);
-        SettingsGUI.getdownURLTextField.setEnabled(false);
-        SettingsGUI.resetConnectionSettingsButton.setEnabled(false);
       }
       LauncherApp.selectedServer = selectedServer;
+
+      updateBanner();
+      SettingsEventHandler.selectedServerChanged();
+      ModListEventHandler.selectedServerChanged();
+      saveSelectedServer();
     } else {
       // fallback to official in rare error scenario
       LauncherGUI.serverList.setSelectedIndex(0);
       LauncherApp.selectedServer = LauncherApp.findServerByName("Official");
     }
-
-    updateBanner();
-    updateGameJavaVMData();
-    saveSelectedServer();
   }
 
   public static void updateBanner() {
@@ -365,21 +373,6 @@ public class LauncherEventHandler {
     refreshThread.start();
   }
 
-  public static void updateGameJavaVMData() {
-    Thread thread = new Thread(() -> {
-      SettingsGUI.javaVMBadge.setText(Locale.getValue("m.game_java_vm_data", JavaUtil.getReadableGameJVMData()));
-
-      boolean is64Bit = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64;
-      try {
-        SettingsGUI.memorySlider.setMaximum(is64Bit ? 4096 : 1024);
-        if(SettingsGUI.memorySlider.getValue() >= 256) {
-          SettingsEventHandler.memoryChangeEvent(SettingsGUI.memorySlider.getValue());
-        }
-      } catch (Exception ignored) {}
-    });
-    thread.start();
-  }
-
   public static void updateLauncher() {
     // delete any existing updaters from previous updates
     new File(LauncherGlobals.USER_DIR + "/updater.jar").delete();
@@ -404,7 +397,7 @@ public class LauncherEventHandler {
 
   private static String[] getThirdPartyClientStartCommand(Server server, boolean altMode) {
     List<String> argsList = new ArrayList<>();
-    String sanitizedServerName = LauncherApp.getSanitizedServerName(server.name);
+    String sanitizedServerName = server.getSanitizedName();
 
     if(SystemUtil.isWindows()) {
       argsList.add(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "java_vm" + File.separator + "bin" + File.separator + "java");

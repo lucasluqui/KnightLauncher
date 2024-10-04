@@ -1,11 +1,9 @@
 package com.luuqui.launcher.setting;
 
 import com.luuqui.dialog.Dialog;
-import com.luuqui.launcher.LauncherApp;
-import com.luuqui.launcher.LauncherEventHandler;
-import com.luuqui.launcher.Locale;
-import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.launcher.*;
 import com.luuqui.launcher.flamingo.Flamingo;
+import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.flamingo.data.Status;
 import com.luuqui.launcher.mod.ModLoader;
 import com.luuqui.util.FileUtil;
@@ -61,39 +59,64 @@ public class SettingsEventHandler {
 
   public static void customGCChangeEvent(ActionEvent action) {
     Settings.gameUseCustomGC = SettingsGUI.switchUseCustomGC.isSelected();
-    SettingsProperties.setValue("game.useCustomGC", SettingsGUI.switchUseCustomGC.isSelected() ? "true" : "false");
+    String key = "game.useCustomGC";
+    if(LauncherApp.selectedServer != null) {
+      key += LauncherApp.selectedServer.isOfficial() ? "" : "_" + LauncherApp.selectedServer.getSanitizedName();
+    }
+
+    SettingsProperties.setValue(key, SettingsGUI.switchUseCustomGC.isSelected() ? "true" : "false");
   }
 
   public static void choiceGCChangeEvent(ItemEvent event) {
+    String key = "game.garbageCollector";
+    if(LauncherApp.selectedServer != null) {
+      key += LauncherApp.selectedServer.isOfficial() ? "" : "_" + LauncherApp.selectedServer.getSanitizedName();
+    }
+
     switch (SettingsGUI.choiceGC.getSelectedIndex()) {
       case 0:
         Settings.gameGarbageCollector = "ParallelOld";
-        SettingsProperties.setValue("game.garbageCollector", "ParallelOld");
+        SettingsProperties.setValue(key, "ParallelOld");
         break;
       case 1:
         Settings.gameGarbageCollector = "Serial";
-        SettingsProperties.setValue("game.garbageCollector", "Serial");
+        SettingsProperties.setValue(key, "Serial");
         break;
       case 2:
         Settings.gameGarbageCollector = "G1";
-        SettingsProperties.setValue("game.garbageCollector", "G1");
+        SettingsProperties.setValue(key, "G1");
         break;
     }
   }
 
   public static void disableExplicitGCChangeEvent(ActionEvent action) {
     Settings.gameDisableExplicitGC = SettingsGUI.switchExplicitGC.isSelected();
-    SettingsProperties.setValue("game.disableExplicitGC", SettingsGUI.switchExplicitGC.isSelected() ? "true" : "false");
+    String key = "game.disableExplicitGC";
+    if(LauncherApp.selectedServer != null) {
+      key += LauncherApp.selectedServer.isOfficial() ? "" : "_" + LauncherApp.selectedServer.getSanitizedName();
+    }
+
+    SettingsProperties.setValue(key, SettingsGUI.switchExplicitGC.isSelected() ? "true" : "false");
   }
 
   public static void saveAdditionalArgs() {
     Settings.gameAdditionalArgs = SettingsGUI.argumentsPane.getText();
-    SettingsProperties.setValue("game.additionalArgs", SettingsGUI.argumentsPane.getText());
+    String key = "game.additionalArgs";
+    if(LauncherApp.selectedServer != null) {
+      key += LauncherApp.selectedServer.isOfficial() ? "" : "_" + LauncherApp.selectedServer.getSanitizedName();
+    }
+
+    SettingsProperties.setValue(key, SettingsGUI.argumentsPane.getText());
   }
 
   public static void memoryChangeEvent(int memory) {
     Settings.gameMemory = memory;
-    SettingsProperties.setValue("game.memory", String.valueOf(memory));
+    String key = "game.memory";
+    if(LauncherApp.selectedServer != null) {
+      key += LauncherApp.selectedServer.isOfficial() ? "" : "_" + LauncherApp.selectedServer.getSanitizedName();
+    }
+
+    SettingsProperties.setValue(key, String.valueOf(memory));
   }
 
   public static void ingameRPCChangeEvent(ActionEvent action) {
@@ -109,7 +132,7 @@ public class SettingsEventHandler {
   public static void jvmPatchEvent(ActionEvent action) {
     String javaVMPatchDir = LauncherGlobals.USER_DIR;
     if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
-      javaVMPatchDir += File.separator + "thirdparty" + File.separator + LauncherApp.getSanitizedServerName(LauncherApp.selectedServer.name);
+      javaVMPatchDir += File.separator + "thirdparty" + File.separator + LauncherApp.selectedServer.getSanitizedName();
     }
     ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar", "forceJVMPatch", javaVMPatchDir}, true);
     SettingsGUI.settingsGUIFrame.dispose();
@@ -204,7 +227,7 @@ public class SettingsEventHandler {
 
     // Check if a third party server is selected, in that case, modify the path to copy their logs instead.
     if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
-      path += "\\thirdparty\\" + LauncherApp.getSanitizedServerName(LauncherApp.selectedServer.name);
+      path += "\\thirdparty\\" + LauncherApp.selectedServer.getSanitizedName();
     }
 
     // Copy all game logs.
@@ -233,7 +256,7 @@ public class SettingsEventHandler {
 
     // Check if a third party server is selected, in that case, modify the path to copy their logs instead.
     if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
-      path += "\\thirdparty\\" + LauncherApp.getSanitizedServerName(LauncherApp.selectedServer.name);
+      path += "\\thirdparty\\" + LauncherApp.selectedServer.getSanitizedName();
     }
 
     // Copy all game logs.
@@ -367,5 +390,76 @@ public class SettingsEventHandler {
 
     // Successfully added a new beta code, update the properties file.
     SettingsProperties.setValue("launcher.betaCodes", codes);
+  }
+
+  public static void selectedServerChanged() {
+    Server selectedServer = LauncherApp.selectedServer;
+
+    if(selectedServer != null) {
+      if(selectedServer.name.equalsIgnoreCase("Official")) {
+        SettingsGUI.switchUseIngameRPC.setEnabled(true);
+        SettingsGUI.choicePlatform.setEnabled(true);
+        SettingsGUI.forceRebuildButton.setEnabled(true);
+        SettingsGUI.labelDisclaimer.setVisible(false);
+        SettingsGUI.serverAddressTextField.setEnabled(true);
+        SettingsGUI.portTextField.setEnabled(true);
+        SettingsGUI.publicKeyTextField.setEnabled(true);
+        SettingsGUI.getdownURLTextField.setEnabled(true);
+        SettingsGUI.resetConnectionSettingsButton.setEnabled(true);
+      } else {
+        SettingsGUI.switchUseIngameRPC.setEnabled(false);
+        SettingsGUI.choicePlatform.setEnabled(false);
+        SettingsGUI.forceRebuildButton.setEnabled(false);
+        SettingsGUI.labelDisclaimer.setVisible(true);
+        SettingsGUI.serverAddressTextField.setEnabled(false);
+        SettingsGUI.portTextField.setEnabled(false);
+        SettingsGUI.publicKeyTextField.setEnabled(false);
+        SettingsGUI.getdownURLTextField.setEnabled(false);
+        SettingsGUI.resetConnectionSettingsButton.setEnabled(false);
+      }
+
+      updateGameJavaVMData();
+      updateServerSettings(selectedServer);
+    }
+
+  }
+
+  public static void updateGameJavaVMData() {
+    Thread thread = new Thread(() -> {
+      SettingsGUI.javaVMBadge.setText(Locale.getValue("m.game_java_vm_data", JavaUtil.getReadableGameJVMData()));
+
+      boolean is64Bit = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64;
+      try {
+        SettingsGUI.memorySlider.setMaximum(is64Bit ? 4096 : 1024);
+        if(SettingsGUI.memorySlider.getValue() >= 256) {
+          SettingsEventHandler.memoryChangeEvent(SettingsGUI.memorySlider.getValue());
+        }
+      } catch (Exception ignored) {}
+    });
+    thread.start();
+  }
+
+  public static void updateServerSettings(Server server) {
+    String keySuffix = "";
+    if(!server.getSanitizedName().equalsIgnoreCase("")) keySuffix = "_" + server.getSanitizedName();
+
+    SettingsGUI.memorySlider.setValue(Integer.parseInt(SettingsProperties.getValue("game.memory" + keySuffix)));
+    SettingsGUI.switchUseCustomGC.setSelected(Boolean.parseBoolean(SettingsProperties.getValue("game.useCustomGC" + keySuffix)));
+    SettingsGUI.choiceGC.setSelectedItem(SettingsProperties.getValue("game.garbageCollector" + keySuffix));
+    SettingsGUI.switchExplicitGC.setSelected(Boolean.parseBoolean("game.disableExplicitGC" + keySuffix));
+    SettingsGUI.argumentsPane.setText(SettingsProperties.getValue("game.additionalArgs" + keySuffix));
+
+    customGCChangeEvent(null);
+    choiceGCChangeEvent(null);
+    disableExplicitGCChangeEvent(null);
+    saveAdditionalArgs();
+  }
+
+  public static void checkServerSettingsKeys(String serverName) {
+    SettingsProperties.createKeyIfNotExists("game.memory_" + serverName, "1024");
+    SettingsProperties.createKeyIfNotExists("game.useCustomGC_" + serverName, "false");
+    SettingsProperties.createKeyIfNotExists("game.garbageCollector_" + serverName, "ParallelOld");
+    SettingsProperties.createKeyIfNotExists("game.disableExplicitGC_" + serverName, "false");
+    SettingsProperties.createKeyIfNotExists("game.additionalArgs_" + serverName, "");
   }
 }

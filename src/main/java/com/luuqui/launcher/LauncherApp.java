@@ -367,14 +367,14 @@ public class LauncherApp {
   }
 
   private void postInitialization() {
-    new Thread(ModLoader::checkInstalled).start();
     new Thread(ModuleLoader::loadModules).start();
     if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
       ModLoader.extractSafeguard();
     }
 
-    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
     loadOnlineAssets();
+    new Thread(ModLoader::checkInstalled).start();
+    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
   }
 
   private void loadOnlineAssets() {
@@ -464,11 +464,6 @@ public class LauncherApp {
     List<Server> results = LauncherApp.serverList.stream()
       .filter(s -> serverName.equals(s.name)).collect(Collectors.toList());
     return results.isEmpty() ? null : results.get(0);
-  }
-
-  public static String getSanitizedServerName(String serverName) {
-    return serverName.toLowerCase().replace(" ", "-")
-      .replace("(", "").replace(")", "");
   }
 
   protected static void checkTempDir() {

@@ -1,8 +1,10 @@
 package com.luuqui.launcher.mod;
 
 import com.luuqui.discord.DiscordRPC;
+import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mod.data.Mod;
 import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsProperties;
@@ -86,5 +88,18 @@ public class ModListEventHandler {
 
   public static void searchMod() {
     ModListGUI.updateModList(ModListGUI.searchBox.getText());
+  }
+
+  public static void selectedServerChanged() {
+    Server selectedServer = LauncherApp.selectedServer;
+
+    if(selectedServer != null) {
+      new Thread(ModLoader::checkInstalled).start();
+    }
+  }
+
+  public static void checkServerSettingsKeys(String serverName) {
+    SettingsProperties.createKeyIfNotExists("modloader.appliedModsHash_" + serverName, "0");
+    SettingsProperties.createKeyIfNotExists("modloader.disabledMods_" + serverName, "");
   }
 }

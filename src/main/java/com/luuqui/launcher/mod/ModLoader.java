@@ -3,6 +3,7 @@ package com.luuqui.launcher.mod;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.*;
 import com.luuqui.launcher.Locale;
+import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mod.data.JarMod;
 import com.luuqui.launcher.mod.data.Mod;
 import com.luuqui.launcher.mod.data.Modpack;
@@ -26,87 +27,117 @@ public class ModLoader {
 
   private static final LinkedList<Mod> modList = new LinkedList<>();
 
-  private static final String MOD_FOLDER_PATH = LauncherGlobals.USER_DIR + "/mods/";
+  private static final String[] RSRC_BUNDLES = {
+    "full-music-bundle.jar",
+    "full-rest-bundle.jar",
+    "intro-bundle.jar"
+  };
 
-  private static final String[] RSRC_BUNDLES = { "full-music-bundle.jar", "full-rest-bundle.jar", "intro-bundle.jar" };
+  private static final String[] THIRDPARTY_RSRC_BUNDLES = {
+    "base.zip"
+  };
 
   public static Boolean mountRequired = false;
   public static Boolean rebuildRequired = false;
 
+  public static Boolean checking = false;
+
   public static void checkInstalled() {
+    if(!checking) {
+      checking = true;
 
-    // Clean the list in case something remains in it.
-    if (getModCount() > 0) clearModList();
+      LauncherGUI.serverList.setEnabled(false);
 
-    // Append all .modpack, .zip, and .jar files inside the mod folder into an ArrayList.
-    List<File> rawFiles = new ArrayList<>();
-    rawFiles.addAll(FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".modpack"));
-    rawFiles.addAll(FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".zip"));
-    rawFiles.addAll(FileUtil.filesInDirectory(MOD_FOLDER_PATH, ".jar"));
+      Server selectedServer = LauncherApp.selectedServer;
+      String selectedServerName = "";
+      String modFolderPath = LauncherGlobals.USER_DIR + "/mods/";
 
-    for (File file : rawFiles) {
-      JSONObject modJson;
-      try {
-        modJson = new JSONObject(Compressor.readFileInsideZip(file.getAbsolutePath(), "mod.json")).getJSONObject("mod");
-      } catch (Exception e) {
-        modJson = null;
+      if (selectedServer != null) {
+        selectedServerName = selectedServer.getSanitizedName();
+        modFolderPath = selectedServer.getModsDirectory();
       }
 
-      String fileName = file.getName();
-      Mod mod = null;
-      if (fileName.endsWith("zip")) {
-        mod = new ZipMod(fileName);
-      } else if (fileName.endsWith("jar")) {
-        mod = new JarMod(fileName);
-      } else if (fileName.endsWith("modpack")) {
-        mod = new Modpack(fileName);
-      }
+      // Clean the list in case something remains in it.
+      if (getModCount() > 0) clearModList();
 
-      if (mod != null && modJson != null) {
-        mod.setDisplayName(modJson.getString("name"));
-        mod.setDescription(modJson.getString("description"));
-        mod.setAuthor(modJson.getString("author"));
-        mod.setVersion(modJson.getString("version"));
+      // Append all .modpack, .zip, and .jar files inside the mod folder into an ArrayList.
+      List<File> rawFiles = new ArrayList<>();
+      rawFiles.addAll(FileUtil.filesInDirectory(modFolderPath, ".modpack"));
+      rawFiles.addAll(FileUtil.filesInDirectory(modFolderPath, ".zip"));
+      rawFiles.addAll(FileUtil.filesInDirectory(modFolderPath, ".jar"));
 
+      for (File file : rawFiles) {
+        JSONObject modJson;
         try {
-          mod.setImage(modJson.getString("image"));
+          modJson = new JSONObject(Compressor.readFileInsideZip(file.getAbsolutePath(), "mod.json")).getJSONObject("mod");
         } catch (Exception e) {
+          modJson = null;
+        }
+
+        String fileName = file.getName();
+        Mod mod = null;
+        if (fileName.endsWith("zip")) {
+          mod = new ZipMod(fileName);
+        } else if (fileName.endsWith("jar")) {
+          mod = new JarMod(fileName);
+        } else if (fileName.endsWith("modpack")) {
+          mod = new Modpack(fileName);
+        }
+
+        if (mod != null && modJson != null) {
+          mod.setDisplayName(modJson.getString("name"));
+          mod.setDescription(modJson.getString("description"));
+          mod.setAuthor(modJson.getString("author"));
+          mod.setVersion(modJson.getString("version"));
+
           try {
-            mod.setImage(ImageUtil.imageToBase64(ImageIO.read(Compressor.getISFromFileInsideZip(file.getAbsolutePath(), "mod.png"))));
-          } catch (Exception e2) {
-            mod.setImage(null);
+            mod.setImage(modJson.getString("image"));
+          } catch (Exception e) {
+            try {
+              mod.setImage(ImageUtil.imageToBase64(ImageIO.read(Compressor.getISFromFileInsideZip(file.getAbsolutePath(), "mod.png"))));
+            } catch (Exception e2) {
+              mod.setImage(null);
+            }
           }
         }
+
+        modList.add(mod);
+        mod.wasAdded();
       }
 
-      modList.add(mod);
-      mod.wasAdded();
-    }
+      // Finally lets see which have been set as disabled.
+      parseDisabledMods();
 
-    // Finally lets see which have been set as disabled.
-    parseDisabledMods();
-
-    // Check if there's a new or removed mod since last execution, rebuild will be needed in that case.
-    if (Integer.parseInt(SettingsProperties.getValue("modloader.appliedModsHash")) != getEnabledModsHash()) {
-      log.info("Hashcode doesn't match, preparing for rebuild and remount...");
-      rebuildRequired = true;
-      mountRequired = true;
-    }
-
-    // Check if there's directories in the mod folder and push a warning to the user.
-    for (File file : FileUtil.filesAndDirectoriesInDirectory(MOD_FOLDER_PATH)) {
-      if(file.isDirectory()) {
-        ModListEventHandler.showDirectoriesWarning(true);
-        break;
+      // Check if there's a new or removed mod since last execution, rebuild will be needed in that case.
+      String key = "modloader.appliedModsHash";
+      if(!selectedServerName.equalsIgnoreCase("")) key += "_" + selectedServerName;
+      if (Integer.parseInt(SettingsProperties.getValue(key)) != getEnabledModsHash()) {
+        log.info("Hashcode doesn't match, preparing for rebuild and remount...");
+        rebuildRequired = true;
+        mountRequired = true;
       }
-      ModListEventHandler.showDirectoriesWarning(false);
-    }
 
-    ModListGUI.labelModCount.setText(String.valueOf(ModLoader.getModList().size()));
-    ModListGUI.updateModList(null);
+      // Check if there's directories in the mod folder and push a warning to the user.
+      for (File file : FileUtil.filesAndDirectoriesInDirectory(modFolderPath)) {
+        if(file.isDirectory()) {
+          ModListEventHandler.showDirectoriesWarning(true);
+          break;
+        }
+        ModListEventHandler.showDirectoriesWarning(false);
+      }
+
+      ModListGUI.labelModCount.setText(String.valueOf(ModLoader.getModList().size()));
+      ModListGUI.updateModList(null);
+      LauncherGUI.serverList.setEnabled(true);
+      checking = false;
+    }
   }
 
   public static void mount() {
+
+    Server selectedServer = LauncherApp.selectedServer;
+    String selectedServerName = selectedServer.getSanitizedName();
+
     if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
 
     LauncherGUI.serverList.setEnabled(false);
@@ -130,10 +161,12 @@ public class ModLoader {
       }
     }
 
-    SettingsProperties.setValue("modloader.appliedModsHash", Integer.toString(hashSet.hashCode()));
+    String key = "modloader.appliedModsHash";
+    if(!selectedServerName.equalsIgnoreCase("")) key += "_" + selectedServerName;
+    SettingsProperties.setValue(key, Integer.toString(hashSet.hashCode()));
 
     // Make sure no cheat mod slips in.
-    extractSafeguard();
+    if(!LauncherApp.selectedServer.isOfficial()) extractSafeguard();
 
     // Clean the game from unwanted files.
     clean();
@@ -160,30 +193,32 @@ public class ModLoader {
       LauncherGUI.modButton.setEnabled(false);
     } catch (Exception ignored) {}
 
+    String rootDir = LauncherApp.selectedServer.getRootDirectory();
+    String[] bundles = LauncherApp.selectedServer.isOfficial() ? RSRC_BUNDLES : THIRDPARTY_RSRC_BUNDLES;
 
     ProgressBar.startTask();
-    ProgressBar.setBarMax(RSRC_BUNDLES.length + 1);
+    ProgressBar.setBarMax(bundles.length + 1);
     DiscordRPC.getInstance().setDetails(Locale.getValue("m.clean"));
     ProgressBar.setState(Locale.getValue("m.clean"));
 
     // Iterate through all 3 bundles to clean up the game files.
-    for (int i = 0; i < RSRC_BUNDLES.length; i++) {
+    for (int i = 0; i < bundles.length; i++) {
       ProgressBar.setBarValue(i + 1);
-      DiscordRPC.getInstance().setDetails(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(RSRC_BUNDLES.length)}));
+      DiscordRPC.getInstance().setDetails(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(bundles.length)}));
       try {
-        FileUtil.unpackJar(new ZipFile(LauncherGlobals.USER_DIR + "/rsrc/" + RSRC_BUNDLES[i]), new File(LauncherGlobals.USER_DIR + "/rsrc/"), false);
+        FileUtil.unpackJar(new ZipFile(rootDir + "/rsrc/" + bundles[i]), new File(rootDir + "/rsrc/"), false);
       } catch (IOException e) {
         log.error(e);
       }
     }
 
     // Check for .xml configs present in the configs folder and delete them.
-    List<String> configs = FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/rsrc/config", ".xml");
+    List<String> configs = FileUtil.fileNamesInDirectory(rootDir + "/rsrc/config", ".xml");
     for (String config : configs) {
-      new File(LauncherGlobals.USER_DIR + "/rsrc/config/" + config).delete();
+      new File(rootDir + "/rsrc/config/" + config).delete();
     }
 
-    ProgressBar.setBarValue(RSRC_BUNDLES.length + 1);
+    ProgressBar.setBarValue(bundles.length + 1);
     ProgressBar.finishTask();
     rebuildRequired = false;
 
@@ -239,7 +274,12 @@ public class ModLoader {
   }
 
   private static void parseDisabledMods() {
-    String rawString = SettingsProperties.getValue("modloader.disabledMods");
+    String selectedServerName = "";
+    if(LauncherApp.selectedServer != null) selectedServerName = LauncherApp.selectedServer.getSanitizedName();
+
+    String key = "modloader.disabledMods";
+    if(!selectedServerName.equalsIgnoreCase("")) key += "_" + selectedServerName;
+    String rawString = SettingsProperties.getValue(key);
 
     // No mods to parse as disabled, nothing to do.
     if(rawString.equals("")) return;
@@ -256,10 +296,11 @@ public class ModLoader {
   }
 
   private static void clean() {
-    new File(LauncherGlobals.USER_DIR + "/rsrc/mod.json").delete();
-    new File(LauncherGlobals.USER_DIR + "/rsrc/mod.png").delete();
-    for (String filePath : FileUtil.fileNamesInDirectory(LauncherGlobals.USER_DIR + "/mods", ".hash")) {
-      new File(LauncherGlobals.USER_DIR + "/mods/" + filePath).delete();
+    String rootDir = LauncherApp.selectedServer.getRootDirectory();
+    new File(rootDir + "/rsrc/mod.json").delete();
+    new File(rootDir + "/rsrc/mod.png").delete();
+    for (String filePath : FileUtil.fileNamesInDirectory(rootDir + "/mods", ".hash")) {
+      new File(rootDir + "/mods/" + filePath).delete();
     }
   }
 

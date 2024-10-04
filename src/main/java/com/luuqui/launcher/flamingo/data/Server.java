@@ -1,5 +1,7 @@
 package com.luuqui.launcher.flamingo.data;
 
+import com.luuqui.launcher.LauncherGlobals;
+
 public class Server {
 
   public String name;
@@ -42,6 +44,25 @@ public class Server {
     this.name = name;
     this.beta = 0;
     this.enabled = 1;
+  }
+
+  public String getSanitizedName() {
+    if(this.name.equalsIgnoreCase("Official")) return "";
+    return this.name.toLowerCase().replace(" ", "-")
+      .replace("(", "").replace(")", "");
+  }
+
+  public String getRootDirectory() {
+    if(this.name.equalsIgnoreCase("Official")) return LauncherGlobals.USER_DIR;
+    return LauncherGlobals.USER_DIR + "/thirdparty/" + this.getSanitizedName() + "/";
+  }
+
+  public String getModsDirectory() {
+    return this.getRootDirectory() + "/mods/";
+  }
+
+  public boolean isOfficial() {
+    return this.name.equalsIgnoreCase("Official");
   }
 
 }

@@ -128,7 +128,7 @@ public class JavaUtil {
 
     if(LauncherApp.selectedServer != null) {
       if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
-        startingDirPath += File.separator + "thirdparty" + File.separator + LauncherApp.getSanitizedServerName(LauncherApp.selectedServer.name);
+        startingDirPath += File.separator + "thirdparty" + File.separator + LauncherApp.selectedServer.getSanitizedName();
       }
     }
 
