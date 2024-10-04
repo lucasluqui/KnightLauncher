@@ -453,7 +453,7 @@ public class SettingsEventHandler {
     SettingsGUI.memorySlider.setValue(Integer.parseInt(SettingsProperties.getValue("game.memory" + keySuffix)));
     SettingsGUI.switchUseCustomGC.setSelected(Boolean.parseBoolean(SettingsProperties.getValue("game.useCustomGC" + keySuffix)));
     SettingsGUI.choiceGC.setSelectedItem(SettingsProperties.getValue("game.garbageCollector" + keySuffix));
-    SettingsGUI.switchExplicitGC.setSelected(Boolean.parseBoolean("game.disableExplicitGC" + keySuffix));
+    SettingsGUI.switchExplicitGC.setSelected(Boolean.parseBoolean(SettingsProperties.getValue("game.disableExplicitGC" + keySuffix)));
     SettingsGUI.argumentsPane.setText(SettingsProperties.getValue("game.additionalArgs" + keySuffix));
 
     customGCChangeEvent(null);
