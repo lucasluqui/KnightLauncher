@@ -33,6 +33,7 @@ public class ModListGUI extends BaseGUI {
   public static JProgressBar refreshProgressBar = new JProgressBar();
   public static JTextField searchBox;
   public static JLabel displayedModsLabel = new JLabel();
+  public static JLabel viewingModsLabel = new JLabel();
 
   protected static JButton warningNotice = new JButton();
   protected static String currentWarning = "";
@@ -188,6 +189,13 @@ public class ModListGUI extends BaseGUI {
     displayedModsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
     modListGUIFrame.getContentPane().add(displayedModsLabel);
 
+    viewingModsLabel = new JLabel(Locale.getValue("m.viewing_mods", "Official"));
+    viewingModsLabel.setBounds(25, 451, 740, 15);
+    viewingModsLabel.setFont(Fonts.fontReg);
+    viewingModsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+    viewingModsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
+    modListGUIFrame.getContentPane().add(viewingModsLabel);
+
     updateModList(null);
   }
 
@@ -321,6 +329,13 @@ public class ModListGUI extends BaseGUI {
       modListPaneScrollBar.getHeight() + modListPaneScrollBar.getY() + 6,
       displayedModsLabel.getWidth(),
       displayedModsLabel.getHeight()
+    );
+
+    viewingModsLabel.setBounds(
+      viewingModsLabel.getX(),
+      modListPaneScrollBar.getHeight() + modListPaneScrollBar.getY() + 6,
+      viewingModsLabel.getWidth(),
+      viewingModsLabel.getHeight()
     );
 
     modListPane.updateUI();

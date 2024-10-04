@@ -155,7 +155,7 @@ public class LauncherGUI extends BaseGUI {
     Icon playerCountTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 12, Color.WHITE);
     playerCountTooltipButton = new JButton();
     playerCountTooltipButton.setIcon(playerCountTooltipButtonIcon);
-    playerCountTooltipButton.setBounds(167, 213, 13, 13);
+    playerCountTooltipButton.setBounds(173, 213, 13, 13);
     playerCountTooltipButton.setEnabled(true);
     playerCountTooltipButton.setFocusable(false);
     playerCountTooltipButton.setFocusPainted(false);

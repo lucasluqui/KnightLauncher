@@ -95,6 +95,7 @@ public class ModListEventHandler {
 
     if(selectedServer != null) {
       new Thread(ModLoader::checkInstalled).start();
+      ModListGUI.viewingModsLabel.setText(Locale.getValue("m.viewing_mods", selectedServer.name));
     }
   }
 
