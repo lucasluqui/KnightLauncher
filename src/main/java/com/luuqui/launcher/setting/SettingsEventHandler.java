@@ -41,7 +41,7 @@ public class SettingsEventHandler {
 
   public static void forceRebuildEvent() {
     ModLoader.mountRequired = true;
-    ModLoader.startFileRebuild();
+    new Thread(ModLoader::startFileRebuild).start();
   }
 
   public static void createShortcutChangeEvent(ActionEvent event) {

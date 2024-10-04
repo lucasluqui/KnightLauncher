@@ -193,8 +193,12 @@ public class ModLoader {
       LauncherGUI.modButton.setEnabled(false);
     } catch (Exception ignored) {}
 
-    String rootDir = LauncherApp.selectedServer.getRootDirectory();
-    String[] bundles = LauncherApp.selectedServer.isOfficial() ? RSRC_BUNDLES : THIRDPARTY_RSRC_BUNDLES;
+    String rootDir = LauncherGlobals.USER_DIR;
+    String[] bundles = RSRC_BUNDLES;
+    if(LauncherApp.selectedServer != null) {
+      rootDir = LauncherApp.selectedServer.getRootDirectory();
+      bundles = LauncherApp.selectedServer.isOfficial() ? RSRC_BUNDLES : THIRDPARTY_RSRC_BUNDLES;
+    }
 
     ProgressBar.startTask();
     ProgressBar.setBarMax(bundles.length + 1);
