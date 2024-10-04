@@ -1,5 +1,6 @@
 package com.luuqui.launcher.mod.data;
 
+import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.LauncherGlobals;
 
 public abstract class Mod {
@@ -80,7 +81,12 @@ public abstract class Mod {
   }
 
   public String getAbsolutePath() {
-    return LauncherGlobals.USER_DIR + "/mods/" + this.fileName;
+    String rootDir = LauncherGlobals.USER_DIR;
+    if(LauncherApp.selectedServer != null) {
+      rootDir = LauncherApp.selectedServer.getRootDirectory();
+    }
+
+    return rootDir + "/mods/" + this.fileName;
   }
 
   public abstract void mount();
