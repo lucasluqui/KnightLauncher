@@ -181,6 +181,8 @@ public class Compressor {
     try (FileOutputStream fileWriter = new FileOutputStream(destZipFile);
          ZipOutputStream zip = new ZipOutputStream(fileWriter)) {
       addFolderToZip(srcFolder, srcFolder, zip, zipFileName);
+      fileWriter.close();
+      zip.close();
     }
   }
 
