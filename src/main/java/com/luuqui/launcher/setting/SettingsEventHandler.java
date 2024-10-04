@@ -460,6 +460,9 @@ public class SettingsEventHandler {
     choiceGCChangeEvent(null);
     disableExplicitGCChangeEvent(null);
     saveAdditionalArgs();
+
+    SettingsGUI.gameTabViewingSettingsLabel.setText(Locale.getValue("m.viewing_settings", server.name));
+    SettingsGUI.advancedTabViewingSettingsLabel.setText(Locale.getValue("m.viewing_settings", server.name));
   }
 
   public static void checkServerSettingsKeys(String serverName) {

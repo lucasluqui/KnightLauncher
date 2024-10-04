@@ -4,8 +4,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.*;
 import com.luuqui.launcher.flamingo.data.Server;
-import com.luuqui.launcher.mod.ModListGUI;
-import com.luuqui.launcher.mod.ModLoader;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -53,6 +51,8 @@ public class SettingsGUI extends BaseGUI {
   public static JButton betaCodeClearLocalButton;
   public static JButton resetGameSettingsButton;
   public static JLabel javaVMBadge = new JLabel();
+  public static JLabel gameTabViewingSettingsLabel = new JLabel();
+  public static JLabel advancedTabViewingSettingsLabel = new JLabel();
   public static JLabel activeCodesLabel = new JLabel();
   public static JLabel activeCodesBackground = new JLabel();
   public static JPanel activeCodesPane = new JPanel();
@@ -321,12 +321,19 @@ public class SettingsGUI extends BaseGUI {
     gamePanel.add(headerLabel);
 
     javaVMBadge = new JLabel(Locale.getValue("m.game_java_vm_data", JavaUtil.getReadableGameJVMData()));
-    javaVMBadge.setBounds(370, 35, 235, 18);
+    javaVMBadge.setBounds(370, 24, 235, 18);
     javaVMBadge.setHorizontalAlignment(SwingConstants.CENTER);
     javaVMBadge.setFont(Fonts.fontRegSmall);
     javaVMBadge.putClientProperty(FlatClientProperties.STYLE,
       "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND) + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_FOREGROUND) + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND));
     gamePanel.add(javaVMBadge);
+
+    gameTabViewingSettingsLabel = new JLabel(Locale.getValue("m.viewing_settings", "Official"));
+    gameTabViewingSettingsLabel.setBounds(250, 46, 350, 18);
+    gameTabViewingSettingsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+    gameTabViewingSettingsLabel.setFont(Fonts.fontRegSmall);
+    gameTabViewingSettingsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
+    gamePanel.add(gameTabViewingSettingsLabel);
 
     JLabel labelStyle = new JLabel(Locale.getValue("m.platform"));
     labelStyle.setBounds(25, 90, 125, 18);
@@ -679,6 +686,13 @@ public class SettingsGUI extends BaseGUI {
     headerLabel.setBounds(25, 11, 450, 60);
     headerLabel.setFont(Fonts.fontMedGiant);
     advancedPanel.add(headerLabel);
+
+    advancedTabViewingSettingsLabel = new JLabel(Locale.getValue("m.viewing_settings", "Official"));
+    advancedTabViewingSettingsLabel.setBounds(250, 35, 350, 18);
+    advancedTabViewingSettingsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+    advancedTabViewingSettingsLabel.setFont(Fonts.fontRegSmall);
+    advancedTabViewingSettingsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
+    advancedPanel.add(advancedTabViewingSettingsLabel);
 
     JLabel labelArguments = new JLabel(Locale.getValue("m.extratxt_write_arguments") + " (Extra.txt)");
     labelArguments.setBounds(25, 90, 600, 20);
