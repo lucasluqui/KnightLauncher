@@ -122,7 +122,7 @@ public class ModListGUI extends BaseGUI {
     modFolderButton.setFocusable(false);
     modFolderButton.setToolTipText(Locale.getValue("b.open_mods_folder"));
     modListGUIFrame.getContentPane().add(modFolderButton);
-    modFolderButton.addActionListener(action -> DesktopUtil.openDir(LauncherGlobals.USER_DIR + "/mods"));
+    modFolderButton.addActionListener(ModListEventHandler::openModsFolderEvent);
 
     JSeparator separator = new JSeparator();
     separator.setBounds(25, 75, 750, 2);

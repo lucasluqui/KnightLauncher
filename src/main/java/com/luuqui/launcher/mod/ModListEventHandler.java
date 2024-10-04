@@ -41,9 +41,21 @@ public class ModListEventHandler {
     DesktopUtil.openWebpage(LauncherGlobals.URL_GET_MODS);
   }
 
+  public static void openModsFolderEvent(ActionEvent action) {
+    String rootDir = LauncherGlobals.USER_DIR;
+    if(LauncherApp.selectedServer != null) {
+      rootDir = LauncherApp.selectedServer.getRootDirectory();
+    }
+    DesktopUtil.openDir(rootDir + "/mods");
+  }
+
   public static void disableMod(Mod mod) {
-    String disabledMods = SettingsProperties.getValue("modloader.disabledMods");
-    SettingsProperties.setValue("modloader.disabledMods",
+    String keySuffix = "";
+    if(LauncherApp.selectedServer != null) {
+      keySuffix = LauncherApp.selectedServer.isOfficial() ? "" : "_" + LauncherApp.selectedServer.getSanitizedName();
+    }
+    String disabledMods = SettingsProperties.getValue("modloader.disabledMods" + keySuffix);
+    SettingsProperties.setValue("modloader.disabledMods" + keySuffix,
         disabledMods.equals("") ? mod.getFileName() : disabledMods + "," + mod.getFileName());
     mod.setEnabled(false);
     ModLoader.mountRequired = true;
@@ -51,7 +63,11 @@ public class ModListEventHandler {
   }
 
   public static void enableMod(Mod mod) {
-    String disabledMods = SettingsProperties.getValue("modloader.disabledMods");
+    String keySuffix = "";
+    if(LauncherApp.selectedServer != null) {
+      keySuffix = LauncherApp.selectedServer.isOfficial() ? "" : "_" + LauncherApp.selectedServer.getSanitizedName();
+    }
+    String disabledMods = SettingsProperties.getValue("modloader.disabledMods" + keySuffix);
     if(disabledMods.contains(",")) {
       ArrayList<String> disabledModsList = new ArrayList<>(Arrays.asList(disabledMods.split(",")));
       disabledModsList.remove(mod.getFileName());
@@ -66,7 +82,7 @@ public class ModListEventHandler {
     } else {
       disabledMods = "";
     }
-    SettingsProperties.setValue("modloader.disabledMods", disabledMods);
+    SettingsProperties.setValue("modloader.disabledMods" + keySuffix, disabledMods);
     mod.setEnabled(true);
     ModLoader.mountRequired = true;
     ModLoader.rebuildRequired = true;
