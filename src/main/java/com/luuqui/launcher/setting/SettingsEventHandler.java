@@ -399,7 +399,6 @@ public class SettingsEventHandler {
       if(selectedServer.name.equalsIgnoreCase("Official")) {
         SettingsGUI.switchUseIngameRPC.setEnabled(true);
         SettingsGUI.choicePlatform.setEnabled(true);
-        SettingsGUI.forceRebuildButton.setEnabled(true);
         SettingsGUI.labelDisclaimer.setVisible(false);
         SettingsGUI.serverAddressTextField.setEnabled(true);
         SettingsGUI.portTextField.setEnabled(true);
@@ -409,7 +408,6 @@ public class SettingsEventHandler {
       } else {
         SettingsGUI.switchUseIngameRPC.setEnabled(false);
         SettingsGUI.choicePlatform.setEnabled(false);
-        SettingsGUI.forceRebuildButton.setEnabled(false);
         SettingsGUI.labelDisclaimer.setVisible(true);
         SettingsGUI.serverAddressTextField.setEnabled(false);
         SettingsGUI.portTextField.setEnabled(false);
