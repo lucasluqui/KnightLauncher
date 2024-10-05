@@ -137,6 +137,7 @@ public class LauncherEventHandler {
                 if(FileUtil.fileExists(selectedServer.getRootDirectory() + "/rsrc/base.zip")) {
                   FileUtil.deleteFile(selectedServer.getRootDirectory() + "/rsrc/base.zip");
                   try {
+                    ProgressBar.setState(Locale.getValue("m.launch_thirdparty_bundle_regen", LauncherApp.selectedServer.name));
                     Compressor.zipFolderContents(new File(selectedServer.getRootDirectory() + "/rsrc"),
                       new File(selectedServer.getRootDirectory() + "/rsrc/base.zip"), "base.zip");
                   } catch (Exception e) {
