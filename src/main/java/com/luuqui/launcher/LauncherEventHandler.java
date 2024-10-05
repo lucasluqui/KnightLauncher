@@ -132,6 +132,19 @@ public class LauncherEventHandler {
                 Compressor.unzip(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip",
                   LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
                 FileUtil.deleteFile(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
+
+                // Delete old base.zip bundle so we have an up-to-date vanilla state zip.
+                if(FileUtil.fileExists(selectedServer.getRootDirectory() + "/rsrc/base.zip")) {
+                  FileUtil.deleteFile(selectedServer.getRootDirectory() + "/rsrc/base.zip");
+                  try {
+                    Compressor.zipFolderContents(new File(selectedServer.getRootDirectory() + "/rsrc"),
+                      new File(selectedServer.getRootDirectory() + "/rsrc/base.zip"), "base.zip");
+                  } catch (Exception e) {
+                    log.error(e);
+                  }
+                }
+
+                // ...and we're done updating.
                 downloadCompleted = true;
               } catch (IOException e) {
                 // Just keep retrying.
@@ -305,6 +318,7 @@ public class LauncherEventHandler {
         LauncherGUI.serverInfoButton.setEnabled(false);
         LauncherGUI.serverInfoButton.setVisible(false);
         LauncherGUI.editorsButton.setEnabled(true);
+        LauncherGUI.editorsButton.setVisible(true);
       } else {
         LauncherGUI.launchButton.setText(Locale.getValue("b.play_now_thirdparty", selectedServer.name));
         LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_now_thirdparty", selectedServer.name));
@@ -318,6 +332,7 @@ public class LauncherEventHandler {
 
         // TODO: Editors support for third party servers.
         LauncherGUI.editorsButton.setEnabled(false);
+        LauncherGUI.editorsButton.setVisible(false);
       }
       LauncherApp.selectedServer = selectedServer;
 

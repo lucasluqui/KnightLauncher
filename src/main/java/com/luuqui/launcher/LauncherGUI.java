@@ -19,37 +19,8 @@ import java.awt.image.BufferedImage;
 
 public class LauncherGUI extends BaseGUI {
 
-  // Shared
   private final LauncherApp app;
   public static JFrame launcherGUIFrame;
-  public static JTabbedPane layeredSettingsPane = new JTabbedPane();
-  public static JPanel layeredModsPane = new JPanel();
-  public static JPanel layeredEditorsPane = new JPanel();
-  public static JButton layeredReturnButton;
-
-  // Side pane
-  public static JButton settingsButton;
-  public static JButton modButton;
-  public static JButton editorsButton;
-  public static JButton playerCountTooltipButton;
-  public static JLabel playerCountLabel;
-  public static JComboBox serverList;
-  public static JButton serverInfoButton;
-
-  // Main pane
-  public static JPanel mainPane;
-  public static BufferedImage banner = null;
-  public static JLabel bannerTitle;
-  public static JLabel bannerSubtitle1;
-  public static JLabel bannerSubtitle2;
-  public static JButton bannerLinkButton;
-  public static JButton launchButton;
-  public static JButton updateButton;
-  public static JButton changelogButton;
-  public static JLabel launchBackground;
-  public static JLabel launchState;
-  public static JProgressBar launchProgressBar = new JProgressBar();
-  public static JButton warningNotice;
 
   // Dynamic text
   public static String currentWarning = "";
@@ -603,4 +574,35 @@ public class LauncherGUI extends BaseGUI {
     launchButton.setBackground(CustomColors.LAUNCH);
     launchButton.updateUI();
   }
+
+  // Shared
+  public static JTabbedPane layeredSettingsPane = new JTabbedPane();
+  public static JPanel layeredModsPane = new JPanel();
+  public static JPanel layeredEditorsPane = new JPanel();
+  public static JButton layeredReturnButton;
+
+  // Side pane
+  public static JButton settingsButton;
+  public static JButton modButton;
+  public static JButton editorsButton;
+  public static JButton playerCountTooltipButton;
+  public static JLabel playerCountLabel;
+  public static JComboBox serverList;
+  public static JButton serverInfoButton;
+
+  // Main pane
+  public static JPanel mainPane;
+  public static BufferedImage banner = null;
+  public static JLabel bannerTitle;
+  public static JLabel bannerSubtitle1;
+  public static JLabel bannerSubtitle2;
+  public static JButton bannerLinkButton;
+  public static JButton launchButton;
+  public static JButton updateButton;
+  public static JButton changelogButton;
+  public static JLabel launchBackground;
+  public static JLabel launchState;
+  public static JProgressBar launchProgressBar = new JProgressBar();
+  public static JButton warningNotice;
+
 }

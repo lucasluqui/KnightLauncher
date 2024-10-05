@@ -22,14 +22,6 @@ public class JVMPatcher extends BaseGUI {
 
   private final LauncherApp app;
   public static JFrame jvmPatcherFrame;
-  private static JLabel headerLabel;
-  private static JLabel subHeaderLabel;
-  private static JButton buttonAccept;
-  private static JButton buttonDecline;
-  private static JProgressBar jvmPatcherProgressBar;
-  private static JLabel jvmPatcherState;
-  private static JComboBox<String> javaVersionComboBox;
-  private static int _downloadAttempts = 0;
 
   public JVMPatcher(LauncherApp app) {
     super();
@@ -283,5 +275,15 @@ public class JVMPatcher extends BaseGUI {
     jvmPatcherFrame.dispose();
     System.exit(1);
   }
+
+  private static JLabel headerLabel;
+  private static JLabel subHeaderLabel;
+  private static JButton buttonAccept;
+  private static JButton buttonDecline;
+  private static JProgressBar jvmPatcherProgressBar;
+  private static JLabel jvmPatcherState;
+  private static JComboBox<String> javaVersionComboBox;
+  private static int _downloadAttempts = 0;
+
 }
 

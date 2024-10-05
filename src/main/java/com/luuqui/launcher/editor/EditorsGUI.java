@@ -17,26 +17,6 @@ public class EditorsGUI extends BaseGUI {
 
   private final LauncherApp app;
   protected static JFrame editorsGUIFrame;
-  public static JPanel editorsPanel;
-  protected static JPanel editorListPane = new JPanel();
-  protected static JScrollPane editorListPaneScroll = new JScrollPane();
-  protected static JLabel editorLaunchState;
-  protected static JProgressBar editorLaunchFakeProgressBar;
-
-  protected static BufferedImage modelViewerImage = null;
-  protected static BufferedImage sceneEditorImage = null;
-  protected static BufferedImage interfaceTesterImage = null;
-  protected static BufferedImage particleEditorImage = null;
-
-  protected static BufferedImage modelViewerImageUnfocused = null;
-  protected static BufferedImage sceneEditorImageUnfocused = null;
-  protected static BufferedImage interfaceTesterImageUnfocused = null;
-  protected static BufferedImage particleEditorImageUnfocused = null;
-
-  protected static BufferedImage modelViewerImageFocused = null;
-  protected static BufferedImage sceneEditorImageFocused = null;
-  protected static BufferedImage interfaceTesterImageFocused = null;
-  protected static BufferedImage particleEditorImageFocused = null;
 
   public EditorsGUI(LauncherApp app) {
     super();
@@ -296,5 +276,26 @@ public class EditorsGUI extends BaseGUI {
     interfaceTesterImage = interfaceTesterImageUnfocused;
     particleEditorImage = particleEditorImageUnfocused;
   }
+
+  public static JPanel editorsPanel;
+  protected static JPanel editorListPane = new JPanel();
+  protected static JScrollPane editorListPaneScroll = new JScrollPane();
+  protected static JLabel editorLaunchState;
+  protected static JProgressBar editorLaunchFakeProgressBar;
+
+  protected static BufferedImage modelViewerImage = null;
+  protected static BufferedImage sceneEditorImage = null;
+  protected static BufferedImage interfaceTesterImage = null;
+  protected static BufferedImage particleEditorImage = null;
+
+  protected static BufferedImage modelViewerImageUnfocused = null;
+  protected static BufferedImage sceneEditorImageUnfocused = null;
+  protected static BufferedImage interfaceTesterImageUnfocused = null;
+  protected static BufferedImage particleEditorImageUnfocused = null;
+
+  protected static BufferedImage modelViewerImageFocused = null;
+  protected static BufferedImage sceneEditorImageFocused = null;
+  protected static BufferedImage interfaceTesterImageFocused = null;
+  protected static BufferedImage particleEditorImageFocused = null;
 
 }

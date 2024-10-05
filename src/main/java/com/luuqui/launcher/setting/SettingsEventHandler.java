@@ -407,7 +407,16 @@ public class SettingsEventHandler {
     if(selectedServer != null) {
       if(selectedServer.name.equalsIgnoreCase("Official")) {
         SettingsGUI.switchUseIngameRPC.setEnabled(true);
+        SettingsGUI.switchUseIngameRPC.setVisible(true);
+        SettingsGUI.labelUseIngameRPC.setVisible(true);
+        SettingsGUI.labelUseIngameRPCExplained.setVisible(true);
+        SettingsGUI.sepDiscord.setVisible(true);
+        SettingsGUI.labelPlatform.setVisible(true);
         SettingsGUI.choicePlatform.setEnabled(true);
+        SettingsGUI.choicePlatform.setVisible(true);
+        SettingsGUI.labelMemory.setBounds(275, 90, 275, 18);
+        SettingsGUI.memorySlider.setBounds(265, 105, 350, 40);
+        SettingsGUI.memoryValue.setBounds(270, 139, 350, 25);
         SettingsGUI.labelDisclaimer.setVisible(false);
         SettingsGUI.serverAddressTextField.setEnabled(true);
         SettingsGUI.portTextField.setEnabled(true);
@@ -416,7 +425,16 @@ public class SettingsEventHandler {
         SettingsGUI.resetConnectionSettingsButton.setEnabled(true);
       } else {
         SettingsGUI.switchUseIngameRPC.setEnabled(false);
+        SettingsGUI.switchUseIngameRPC.setVisible(false);
+        SettingsGUI.labelUseIngameRPC.setVisible(false);
+        SettingsGUI.labelUseIngameRPCExplained.setVisible(false);
+        SettingsGUI.sepDiscord.setVisible(false);
+        SettingsGUI.labelPlatform.setVisible(false);
         SettingsGUI.choicePlatform.setEnabled(false);
+        SettingsGUI.choicePlatform.setVisible(false);
+        SettingsGUI.labelMemory.setBounds(30, 90, 275, 18);
+        SettingsGUI.memorySlider.setBounds(20, 105, 350, 40);
+        SettingsGUI.memoryValue.setBounds(25, 139, 350, 25);
         SettingsGUI.labelDisclaimer.setVisible(true);
         SettingsGUI.serverAddressTextField.setEnabled(false);
         SettingsGUI.portTextField.setEnabled(false);

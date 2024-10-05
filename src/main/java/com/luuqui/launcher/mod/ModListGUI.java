@@ -25,15 +25,6 @@ public class ModListGUI extends BaseGUI {
 
   private final LauncherApp app;
   public static JFrame modListGUIFrame;
-  public static JPanel modListPanel;
-  public static JPanel modListPane = new JPanel();
-  public static JScrollPane modListPaneScrollBar = new JScrollPane();
-  public static JLabel labelModCount;
-  public static JLabel labelRefreshing;
-  public static JProgressBar refreshProgressBar = new JProgressBar();
-  public static JTextField searchBox;
-  public static JLabel displayedModsLabel = new JLabel();
-  public static JLabel viewingModsLabel = new JLabel();
 
   protected static JButton warningNotice = new JButton();
   protected static String currentWarning = "";
@@ -340,4 +331,15 @@ public class ModListGUI extends BaseGUI {
 
     modListPane.updateUI();
   }
+
+  public static JPanel modListPanel;
+  public static JPanel modListPane = new JPanel();
+  public static JScrollPane modListPaneScrollBar = new JScrollPane();
+  public static JLabel labelModCount;
+  public static JLabel labelRefreshing;
+  public static JProgressBar refreshProgressBar = new JProgressBar();
+  public static JTextField searchBox;
+  public static JLabel displayedModsLabel = new JLabel();
+  public static JLabel viewingModsLabel = new JLabel();
+
 }

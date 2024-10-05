@@ -21,42 +21,6 @@ public class SettingsGUI extends BaseGUI {
 
   private final LauncherApp app;
   public static JFrame settingsGUIFrame;
-  public static JTabbedPane tabbedPane;
-  public static JComboBox<String> choicePlatform = new JComboBox<String>();
-  public static JComboBox<String> choiceLanguage;
-  public static JComboBox<String> choiceGC;
-  public static JCheckBox switchCleaning;
-  public static JCheckBox switchKeepOpen;
-  public static JCheckBox switchShortcut;
-  public static JButton jvmPatchButton = new JButton();
-  public static JButton forceRebuildButton = new JButton();
-  public static JCheckBox switchExplicitGC;
-  public static JCheckBox switchUseCustomGC;
-  public static JSlider memorySlider;
-  public static JLabel memoryValue;
-  public static JCheckBox switchUseIngameRPC = new JCheckBox();
-  public static JCheckBox switchAutoUpdate;
-  public static JEditorPane argumentsPane;
-  public static JLabel labelDisclaimer = new JLabel();
-  public static JTextField serverAddressTextField = new JTextField();
-  public static JTextField portTextField = new JTextField();
-  public static JTextField publicKeyTextField = new JTextField();
-  public static JTextField getdownURLTextField = new JTextField();
-  public static JButton resetConnectionSettingsButton = new JButton();
-  public static JTextField betaCodeTextField;
-  public static JLabel labelFlamingoStatus = new JLabel();
-  public static JLabel labelFlamingoVersion = new JLabel();
-  public static JLabel labelFlamingoUptime = new JLabel();
-  public static JButton betaCodeRevalidateButton;
-  public static JButton betaCodeClearLocalButton;
-  public static JButton resetGameSettingsButton;
-  public static JLabel javaVMBadge = new JLabel();
-  public static JLabel gameTabViewingSettingsLabel = new JLabel();
-  public static JLabel advancedTabViewingSettingsLabel = new JLabel();
-  public static JLabel activeCodesLabel = new JLabel();
-  public static JLabel activeCodesBackground = new JLabel();
-  public static JPanel activeCodesPane = new JPanel();
-  public static JScrollPane activeCodesPaneScrollBar = new JScrollPane();
 
   public SettingsGUI(LauncherApp app) {
     super();
@@ -284,16 +248,16 @@ public class SettingsGUI extends BaseGUI {
     switchAutoUpdate.addActionListener(SettingsEventHandler::autoUpdateChangeEvent);
 
     if(SystemUtil.isWindows() && SystemUtil.is64Bit()) {
-      JSeparator sepDiscord = new JSeparator();
+      sepDiscord = new JSeparator();
       sepDiscord.setBounds(25, 385, 600, 16);
       launcherPanel.add(sepDiscord);
 
-      JLabel labelUseIngameRPC = new JLabel(Locale.getValue("m.use_ingame_rpc"));
+      labelUseIngameRPC = new JLabel(Locale.getValue("m.use_ingame_rpc"));
       labelUseIngameRPC.setBounds(25, 400, 350, 20);
       labelUseIngameRPC.setFont(Fonts.fontRegBig);
       launcherPanel.add(labelUseIngameRPC);
 
-      JLabel labelUseIngameRPCExplained = new JLabel(Locale.getValue("m.use_ingame_rpc_explained"));
+      labelUseIngameRPCExplained = new JLabel(Locale.getValue("m.use_ingame_rpc_explained"));
       labelUseIngameRPCExplained.setBounds(25, 420, 600, 16);
       labelUseIngameRPCExplained.setFont(Fonts.fontReg);
       launcherPanel.add(labelUseIngameRPCExplained);
@@ -335,10 +299,10 @@ public class SettingsGUI extends BaseGUI {
     gameTabViewingSettingsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
     gamePanel.add(gameTabViewingSettingsLabel);
 
-    JLabel labelStyle = new JLabel(Locale.getValue("m.platform"));
-    labelStyle.setBounds(25, 90, 125, 18);
-    labelStyle.setFont(Fonts.fontRegBig);
-    gamePanel.add(labelStyle);
+    labelPlatform = new JLabel(Locale.getValue("m.platform"));
+    labelPlatform.setBounds(25, 90, 125, 18);
+    labelPlatform.setFont(Fonts.fontRegBig);
+    gamePanel.add(labelPlatform);
 
     choicePlatform = new JComboBox<String>();
     choicePlatform.setBounds(25, 115, 150, 20);
@@ -358,7 +322,7 @@ public class SettingsGUI extends BaseGUI {
       }
     });
 
-    JLabel labelMemory = new JLabel(Locale.getValue("m.allocated_memory"));
+    labelMemory = new JLabel(Locale.getValue("m.allocated_memory"));
     labelMemory.setBounds(275, 90, 275, 18);
     labelMemory.setFont(Fonts.fontRegBig);
     gamePanel.add(labelMemory);
@@ -734,7 +698,7 @@ public class SettingsGUI extends BaseGUI {
     labelDisclaimer.setBounds(195, 255, 300, 18);
     labelDisclaimer.setFont(Fonts.fontReg);
     labelDisclaimer.setHorizontalAlignment(SwingConstants.LEFT);
-    labelDisclaimer.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
+    labelDisclaimer.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
     advancedPanel.add(labelDisclaimer);
 
     JLabel serverAddressLabel = new JLabel(Locale.getValue("m.server_address"));
@@ -999,4 +963,47 @@ public class SettingsGUI extends BaseGUI {
     activeCodesPane.updateUI();
     activeCodesPaneScrollBar.updateUI();
   }
+
+  public static JTabbedPane tabbedPane;
+  public static JComboBox<String> choicePlatform = new JComboBox<String>();
+  public static JComboBox<String> choiceLanguage;
+  public static JComboBox<String> choiceGC;
+  public static JCheckBox switchCleaning;
+  public static JCheckBox switchKeepOpen;
+  public static JCheckBox switchShortcut;
+  public static JButton jvmPatchButton = new JButton();
+  public static JButton forceRebuildButton = new JButton();
+  public static JCheckBox switchExplicitGC;
+  public static JCheckBox switchUseCustomGC;
+  public static JSlider memorySlider;
+  public static JLabel memoryValue;
+  public static JCheckBox switchUseIngameRPC = new JCheckBox();
+  public static JCheckBox switchAutoUpdate;
+  public static JEditorPane argumentsPane;
+  public static JLabel labelDisclaimer = new JLabel();
+  public static JTextField serverAddressTextField = new JTextField();
+  public static JTextField portTextField = new JTextField();
+  public static JTextField publicKeyTextField = new JTextField();
+  public static JTextField getdownURLTextField = new JTextField();
+  public static JButton resetConnectionSettingsButton = new JButton();
+  public static JTextField betaCodeTextField;
+  public static JLabel labelFlamingoStatus = new JLabel();
+  public static JLabel labelFlamingoVersion = new JLabel();
+  public static JLabel labelFlamingoUptime = new JLabel();
+  public static JButton betaCodeRevalidateButton;
+  public static JButton betaCodeClearLocalButton;
+  public static JButton resetGameSettingsButton;
+  public static JLabel javaVMBadge = new JLabel();
+  public static JLabel gameTabViewingSettingsLabel = new JLabel();
+  public static JLabel advancedTabViewingSettingsLabel = new JLabel();
+  public static JLabel activeCodesLabel = new JLabel();
+  public static JLabel activeCodesBackground = new JLabel();
+  public static JLabel labelPlatform = new JLabel();
+  public static JLabel labelMemory = new JLabel();
+  public static JLabel labelUseIngameRPC = new JLabel();
+  public static JLabel labelUseIngameRPCExplained = new JLabel();
+  public static JSeparator sepDiscord = new JSeparator();
+  public static JPanel activeCodesPane = new JPanel();
+  public static JScrollPane activeCodesPaneScrollBar = new JScrollPane();
+
 }
