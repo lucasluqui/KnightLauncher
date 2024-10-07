@@ -75,8 +75,8 @@ public class LauncherEventHandler {
         ProgressBar.setState(Locale.getValue("m.launch_thirdparty_data", LauncherApp.selectedServer.name));
         ProgressBar.setBarValue(0);
 
-        if(!FileUtil.fileExists(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "version.txt")) {
-          // we did not download this third party client, time to get it from the deploy url.
+        if(!selectedServer.isInstalled()) {
+          // we did not download this third party client yet, time to get it from the deploy url.
 
           ProgressBar.setState(Locale.getValue("m.launch_thirdparty_download", LauncherApp.selectedServer.name));
           ProgressBar.setBarValue(1);
@@ -107,57 +107,52 @@ public class LauncherEventHandler {
         }
 
         // let's see if we need to update the third party client
-        try {
-          String localVersion = FileUtil.readFile(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "version.txt");
-          if(!selectedServer.version.equalsIgnoreCase(localVersion)) {
-            log.info("Updating third party client: " + selectedServer.name);
+        if(selectedServer.isOutdated()) {
+          log.info("Updating third party client: " + selectedServer.name);
 
-            ProgressBar.setState(Locale.getValue("m.launch_thirdparty_update", LauncherApp.selectedServer.name));
-            ProgressBar.setBarValue(1);
+          ProgressBar.setState(Locale.getValue("m.launch_thirdparty_update", LauncherApp.selectedServer.name));
+          ProgressBar.setBarValue(1);
 
-            boolean downloadCompleted = false;
-            int downloadAttempts = 0;
+          boolean downloadCompleted = false;
+          int downloadAttempts = 0;
 
-            while (downloadAttempts <= 3 && !downloadCompleted) {
-              downloadAttempts++;
-              log.info("Downloading a third party client: " + sanitizedServerName,
-                "attempts", downloadAttempts);
-              try {
-                FileUtils.copyURLToFile(
-                  new URL(selectedServer.deployUrl + "/" + selectedServer.version + ".zip"),
-                  new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip"),
-                  0,
-                  0
-                );
-                Compressor.unzip(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip",
-                  LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
-                FileUtil.deleteFile(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
+          while (downloadAttempts <= 3 && !downloadCompleted) {
+            downloadAttempts++;
+            log.info("Downloading a third party client: " + sanitizedServerName,
+              "attempts", downloadAttempts);
+            try {
+              FileUtils.copyURLToFile(
+                new URL(selectedServer.deployUrl + "/" + selectedServer.version + ".zip"),
+                new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip"),
+                0,
+                0
+              );
+              Compressor.unzip(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip",
+                LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
+              FileUtil.deleteFile(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
 
-                // Delete old base.zip bundle so we have an up-to-date vanilla state zip.
-                if(FileUtil.fileExists(selectedServer.getRootDirectory() + "/rsrc/base.zip")) {
-                  FileUtil.deleteFile(selectedServer.getRootDirectory() + "/rsrc/base.zip");
-                  try {
-                    ProgressBar.setState(Locale.getValue("m.launch_thirdparty_bundle_regen", LauncherApp.selectedServer.name));
-                    Compressor.zipFolderContents(new File(selectedServer.getRootDirectory() + "/rsrc"),
-                      new File(selectedServer.getRootDirectory() + "/rsrc/base.zip"), "base.zip");
-                  } catch (Exception e) {
-                    log.error(e);
-                  }
+              // Delete old base.zip bundle so we have an up-to-date vanilla state zip.
+              if(FileUtil.fileExists(selectedServer.getRootDirectory() + "/rsrc/base.zip")) {
+                FileUtil.deleteFile(selectedServer.getRootDirectory() + "/rsrc/base.zip");
+                try {
+                  ProgressBar.setState(Locale.getValue("m.launch_thirdparty_bundle_regen", LauncherApp.selectedServer.name));
+                  Compressor.zipFolderContents(new File(selectedServer.getRootDirectory() + "/rsrc"),
+                    new File(selectedServer.getRootDirectory() + "/rsrc/base.zip"), "base.zip");
+                } catch (Exception e) {
+                  log.error(e);
                 }
-
-                // ...and we're done updating.
-                downloadCompleted = true;
-              } catch (IOException e) {
-                // Just keep retrying.
-                log.error(e);
               }
 
+              // ...and we're done updating.
+              downloadCompleted = true;
+            } catch (IOException e) {
+              // Just keep retrying.
+              log.error(e);
             }
+
           }
-          log.info("Third party client up to date: " + selectedServer.name);
-        } catch (IOException e) {
-          log.error(e);
         }
+        log.info("Third party client up to date: " + selectedServer.name);
 
         // make sure there's a base zip file we can use to clean files with.
         String rootDir = selectedServer.getRootDirectory();
@@ -309,7 +304,7 @@ public class LauncherEventHandler {
     Server selectedServer = LauncherApp.findServerByName((String) LauncherGUI.serverList.getSelectedItem());
 
     if(selectedServer != null) {
-      if(selectedServer.name.equalsIgnoreCase("Official")) {
+      if(selectedServer.isOfficial()) {
         LauncherGUI.launchButton.setText(Locale.getValue("b.play_now"));
         LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_now"));
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
@@ -321,9 +316,18 @@ public class LauncherEventHandler {
         LauncherGUI.editorsButton.setEnabled(true);
         LauncherGUI.editorsButton.setVisible(true);
       } else {
-        LauncherGUI.launchButton.setText(Locale.getValue("b.play_now_thirdparty", selectedServer.name));
-        LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_now_thirdparty", selectedServer.name));
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
+        if(!selectedServer.isInstalled()) {
+          LauncherGUI.launchButton.setText(Locale.getValue("b.install_thirdparty", selectedServer.name));
+          LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.install_thirdparty", selectedServer.name));
+        } else if (selectedServer.isOutdated()) {
+          LauncherGUI.launchButton.setText(Locale.getValue("b.update_thirdparty", selectedServer.name));
+          LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.update_thirdparty", selectedServer.name));
+        } else {
+          LauncherGUI.launchButton.setText(Locale.getValue("b.play_thirdparty", selectedServer.name));
+          LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_thirdparty", selectedServer.name));
+        }
+
         LauncherGUI.serverInfoButton.setEnabled(true);
         LauncherGUI.serverInfoButton.setVisible(true);
         LauncherGUI.playerCountTooltipButton.setVisible(false);

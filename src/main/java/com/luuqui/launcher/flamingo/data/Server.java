@@ -1,6 +1,12 @@
 package com.luuqui.launcher.flamingo.data;
 
 import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.util.FileUtil;
+
+import java.io.File;
+import java.io.IOException;
+
+import static com.luuqui.launcher.flamingo.Log.log;
 
 public class Server {
 
@@ -63,6 +69,23 @@ public class Server {
 
   public boolean isOfficial() {
     return this.name.equalsIgnoreCase("Official");
+  }
+
+  private String getLocalVersion() {
+    try {
+      return FileUtil.readFile(this.getRootDirectory() + File.separator + "version.txt");
+    } catch (IOException e) {
+      log.error(e);
+    }
+    return null;
+  }
+
+  public boolean isInstalled() {
+    return FileUtil.fileExists(this.getRootDirectory() + File.separator + "version.txt");
+  }
+
+  public boolean isOutdated() {
+    return !this.version.equalsIgnoreCase(getLocalVersion());
   }
 
 }
