@@ -350,12 +350,19 @@ public class LauncherEventHandler {
 
   public static void updateBanner() {
     Thread refreshThread = new Thread(() -> {
+      LauncherGUI.displayAnimBanner = false;
+
       if(!LauncherApp.flamingoOnline) {
         return;
       }
+
       String bannerUrl = LauncherApp.selectedServer.announceBanner.split("\\|")[0];
       double bannerIntensity = Double.parseDouble(LauncherApp.selectedServer.announceBanner.split("\\|")[1]);
-      LauncherGUI.banner = LauncherGUI.processImageForBanner(ImageUtil.toBufferedImage(ImageUtil.getImageFromURL(bannerUrl, 800, 550)), bannerIntensity);
+      if(!bannerUrl.contains(".gif")) {
+        LauncherGUI.banner = LauncherGUI.processImageForBanner(ImageUtil.toBufferedImage(ImageUtil.getImageFromURL(bannerUrl, 800, 550)), bannerIntensity);
+      } else {
+        LauncherGUI.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerUrl), bannerIntensity);
+      }
       LauncherGUI.mainPane.repaint();
 
       LauncherGUI.bannerTitle.setText(LauncherApp.selectedServer.announceContent.split("\\|")[0]);

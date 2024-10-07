@@ -1,6 +1,7 @@
 package com.luuqui.util;
 
 import com.luuqui.launcher.CustomColors;
+import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -29,6 +30,32 @@ public class ImageUtil {
     }
 
     return image;
+  }
+
+  public static byte[] getAnimatedImageFromURL(String url) {
+
+    InputStream is = null;
+    byte[] imageBytes = null;
+    try {
+      URL _url = new URL(url);
+      is = _url.openStream();
+      imageBytes = IOUtils.toByteArray(is);
+    }
+    catch (IOException e) {
+      log.error(e);
+      // Perform any other exception handling that's appropriate.
+    }
+    finally {
+      if (is != null) {
+        try {
+          is.close();
+        } catch (IOException e) {
+          log.error(e);
+        }
+      }
+    }
+
+    return imageBytes;
   }
 
   /*

@@ -8,6 +8,7 @@ import com.luuqui.launcher.mod.ModListGUI;
 import com.luuqui.launcher.setting.SettingsGUI;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.DesktopUtil;
+import com.luuqui.util.GifDecoder;
 import com.luuqui.util.ImageUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -16,6 +17,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static com.luuqui.launcher.Log.log;
 
 public class LauncherGUI extends BaseGUI {
 
@@ -26,6 +31,8 @@ public class LauncherGUI extends BaseGUI {
   public static String currentWarning = "";
   public static String latestRelease = "";
   public static String latestChangelog = "";
+
+  public static boolean displayAnimBanner = false;
 
   public LauncherGUI(LauncherApp app) {
     super();
@@ -563,6 +570,46 @@ public class LauncherGUI extends BaseGUI {
     image = ImageUtil.resizeImage(image, 800, 550);
     image = ImageUtil.fadeEdges(image, intensity);
     return image;
+  }
+
+  public static void processAnimatedImageForBanner(byte[] gifData, double intensity) {
+    try {
+      final GifDecoder.GifImage gif = GifDecoder.read(gifData);
+      final int frameCount = gif.getFrameCount();
+      final java.util.List<BufferedImage> proccesedImages = new ArrayList<>();
+
+      // process every single frame of the gif.
+      for (int i = 0; i < frameCount; i++) {
+        BufferedImage frame = gif.getFrame(i);
+        frame = ImageUtil.resizeImage(frame, 800, 550);
+        if(intensity > 0) ImageUtil.fadeEdges(frame, intensity);
+        proccesedImages.add(frame);
+      }
+
+      displayAnimBanner = true;
+      new Thread(() -> {
+        while(displayAnimBanner) {
+          for (BufferedImage image : proccesedImages) {
+            // we might need to end prematurely to avoid concurrent modifications.
+            if(!displayAnimBanner) break;
+
+            // sleep to sync to ~60 fps.
+            try {
+              Thread.sleep(16);
+            } catch (InterruptedException e) {
+              log.error(e);
+            }
+
+            // set the new frame.
+            banner = image;
+            mainPane.repaint();
+          }
+        }
+      }).start();
+
+    } catch (IOException e) {
+      log.error(e);
+    }
   }
 
   protected static void specialKeyPressed() {
