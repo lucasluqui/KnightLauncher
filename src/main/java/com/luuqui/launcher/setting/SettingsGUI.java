@@ -805,45 +805,57 @@ public class SettingsGUI extends BaseGUI {
     creditsLabel.setFont(Fonts.fontRegBig);
     aboutPanel.add(creditsLabel);
 
+    BufferedImage creditsBackgroundImage = ImageUtil.generatePlainColorImage(565, 195, CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
+    creditsBackgroundImage = (BufferedImage) ImageUtil.addRoundedCorners(creditsBackgroundImage, 25);
+    JLabel creditsBackground = new JLabel("");
+    creditsBackground.setIcon(new ImageIcon(creditsBackgroundImage));
+    creditsBackground.setBounds(20, 120, 575, 195);
+    aboutPanel.add(creditsBackground);
+    aboutPanel.setComponentZOrder(creditsBackground, 1);
+
     JPanel creditsPane = new JPanel();
-    creditsPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    creditsPane.setBackground(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
 
     JScrollPane creditsPaneScrollBar = new JScrollPane(creditsPane);
-    creditsPaneScrollBar.setBounds(-10, 120, 650, 175);
+    creditsPaneScrollBar.setBounds(25, 130, 550, 175);
     creditsPaneScrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     creditsPaneScrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     creditsPaneScrollBar.setBorder(null);
+    creditsPaneScrollBar.putClientProperty(FlatClientProperties.STYLE, "border:0,0,0,0");
+    creditsPaneScrollBar.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND));
     creditsPaneScrollBar.getVerticalScrollBar().setUnitIncrement(16);
     aboutPanel.add(creditsPaneScrollBar);
 
     JTextArea credits = new JTextArea();
-    credits.setBounds(0, 0, 650, 250);
+    credits.setBounds(0, 0, 550, 250);
     credits.setFont(Fonts.fontReg);
     credits.setForeground(CustomColors.INTERFACE_DEFAULT);
-    credits.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    credits.setBackground(null);
     credits.setEditable(false);
     credits.setHighlighter(null);
-    credits.setText("GitHub Contributors:\n- Luqui (maintainer), Crowfunder, CafuneAndChill, yihleego.\n\nLocalization:\n- asan_ploto (Arabic), yihleego (Chinese), Biral (Deutsch), Airbee (Deutsch), Thyrux (Eesti),\nLuqui (English), Luqui (Español), PtitKrugger (Français), Lawn (Italiano), Kaus (Italiano),\noctopews (Japanese), Crowfunder (Polski), Stret (Português Brasil), Gugaarleo (Português Brasil),\nmilliath (Russian), Puzovoz (Russian).\n\nTesting/QA:\n- Nurr, yihleego, Bidoknight, Carpvindra, Mushspore, CafuneAndChill, Xan, analarmingalarm,\nparma, loonadra, ultrongr, milliath, Puzovoz, Stret, 3xample.\n\nThird Party Libraries:\n- Apache Commons IO, Image4J, Zip4J, flatlaf, discord-rpc, mslinks, org.json, jIconFont,\nsamskivert, JHLabs Filters.");
+    credits.setText(Locale.getValue("m.credits_text"));
     creditsPane.add(credits);
     credits.setCaretPosition(0);
 
+    aboutPanel.setComponentZOrder(creditsPaneScrollBar, 0);
+
     labelFlamingoStatus = new JLabel(Locale.getValue("m.kl_version", LauncherGlobals.LAUNCHER_VERSION));
-    labelFlamingoStatus.setBounds(25, 320, 600, 20);
+    labelFlamingoStatus.setBounds(25, 327, 600, 20);
     labelFlamingoStatus.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoStatus);
 
     labelFlamingoStatus = new JLabel(Locale.getValue("m.flamingo_status", Locale.getValue("m.offline")));
-    labelFlamingoStatus.setBounds(25, 340, 600, 20);
+    labelFlamingoStatus.setBounds(25, 347, 600, 20);
     labelFlamingoStatus.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoStatus);
 
     labelFlamingoVersion = new JLabel(Locale.getValue("m.flamingo_version", "N/A"));
-    labelFlamingoVersion.setBounds(25, 360, 600, 20);
+    labelFlamingoVersion.setBounds(25, 367, 600, 20);
     labelFlamingoVersion.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoVersion);
 
     labelFlamingoUptime = new JLabel(Locale.getValue("m.flamingo_uptime", "N/A"));
-    labelFlamingoUptime.setBounds(25, 380, 600, 20);
+    labelFlamingoUptime.setBounds(25, 387, 600, 20);
     labelFlamingoUptime.setFont(Fonts.fontRegBig);
     aboutPanel.add(labelFlamingoUptime);
 
