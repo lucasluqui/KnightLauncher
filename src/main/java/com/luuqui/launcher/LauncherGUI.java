@@ -589,19 +589,19 @@ public class LauncherGUI extends BaseGUI {
       displayAnimBanner = true;
       new Thread(() -> {
         while(displayAnimBanner) {
-          for (BufferedImage image : proccesedImages) {
+          for (int i = 0; i < proccesedImages.size(); i++) {
             // we might need to end prematurely to avoid concurrent modifications.
             if(!displayAnimBanner) break;
 
-            // sleep to sync to ~60 fps.
+            // sleep based on the frame delay.
             try {
-              Thread.sleep(16);
+              Thread.sleep(gif.getDelay(i) * 10);
             } catch (InterruptedException e) {
               log.error(e);
             }
 
             // set the new frame.
-            banner = image;
+            banner = proccesedImages.get(i);
             mainPane.repaint();
           }
         }
