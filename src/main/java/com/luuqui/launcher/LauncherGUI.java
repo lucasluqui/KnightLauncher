@@ -2,9 +2,9 @@ package com.luuqui.launcher;
 
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
-import com.luuqui.launcher.editor.EditorsEventHandler;
 import com.luuqui.launcher.editor.EditorsGUI;
 import com.luuqui.launcher.mod.ModListGUI;
+import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsGUI;
 import com.luuqui.util.ColorUtil;
 import com.luuqui.util.DesktopUtil;
@@ -449,6 +449,21 @@ public class LauncherGUI extends BaseGUI {
     mainPane.add(updateButton);
     updateButton.addActionListener(l -> LauncherEventHandler.updateLauncher());
 
+    Icon playAnimatedBannersIconEnabled = IconFontSwing.buildIcon(FontAwesome.EYE, 18, Color.WHITE);
+    Icon playAnimatedBannersIconDisabled = IconFontSwing.buildIcon(FontAwesome.EYE_SLASH, 18, Color.WHITE);
+    playAnimatedBannersButton = new JButton(Settings.playAnimatedBanners ? playAnimatedBannersIconEnabled : playAnimatedBannersIconDisabled);
+    playAnimatedBannersButton.setBounds(736, 71, 36, 36);
+    playAnimatedBannersButton.setToolTipText(Locale.getValue(Settings.playAnimatedBanners ? "m.animated_banners_disable" : "m.animated_banners_enable"));
+    playAnimatedBannersButton.setFont(Fonts.fontMed);
+    playAnimatedBannersButton.setFocusPainted(false);
+    playAnimatedBannersButton.setFocusable(false);
+    playAnimatedBannersButton.setBorderPainted(false);
+    playAnimatedBannersButton.setBackground(Settings.playAnimatedBanners ? CustomColors.INTERFACE_SIDEPANE_BUTTON : CustomColors.MID_RED);
+    playAnimatedBannersButton.setForeground(Color.WHITE);
+    playAnimatedBannersButton.setVisible(false);
+    mainPane.add(playAnimatedBannersButton);
+    playAnimatedBannersButton.addActionListener(l -> LauncherEventHandler.switchBannerAnimations());
+
     JPanel titleBar = new JPanel();
     titleBar.setBounds(0, 0, launcherGUIFrame.getWidth(), 35);
     titleBar.setBackground(ColorUtil.getTitleBarColor());
@@ -593,16 +608,20 @@ public class LauncherGUI extends BaseGUI {
             // we might need to end prematurely to avoid concurrent modifications.
             if(!displayAnimBanner) break;
 
-            // sleep based on the frame delay.
             try {
               Thread.sleep(gif.getDelay(i) * 10);
             } catch (InterruptedException e) {
               log.error(e);
             }
 
-            // set the new frame.
-            banner = proccesedImages.get(i);
-            mainPane.repaint();
+            if(Settings.playAnimatedBanners) {
+              // set the new frame.
+              banner = proccesedImages.get(i);
+              mainPane.repaint();
+            } else {
+              banner = proccesedImages.get(0);
+              mainPane.repaint();
+            }
           }
         }
       }).start();
@@ -647,6 +666,7 @@ public class LauncherGUI extends BaseGUI {
   public static JButton launchButton;
   public static JButton updateButton;
   public static JButton changelogButton;
+  public static JButton playAnimatedBannersButton;
   public static JLabel launchBackground;
   public static JLabel launchState;
   public static JProgressBar launchProgressBar = new JProgressBar();

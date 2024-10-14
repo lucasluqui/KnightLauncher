@@ -7,13 +7,15 @@ import com.luuqui.launcher.mod.ModListEventHandler;
 import com.luuqui.launcher.mod.ModLoader;
 import com.luuqui.launcher.setting.*;
 import com.luuqui.util.*;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -22,7 +24,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.zip.ZipOutputStream;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -364,8 +365,10 @@ public class LauncherEventHandler {
       double bannerIntensity = Double.parseDouble(LauncherApp.selectedServer.announceBanner.split("\\|")[1]);
       if(!bannerUrl.contains(".gif")) {
         LauncherGUI.banner = LauncherGUI.processImageForBanner(ImageUtil.toBufferedImage(ImageUtil.getImageFromURL(bannerUrl, 800, 550)), bannerIntensity);
+        LauncherGUI.playAnimatedBannersButton.setVisible(false);
       } else {
         LauncherGUI.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerUrl), bannerIntensity);
+        LauncherGUI.playAnimatedBannersButton.setVisible(true);
       }
       LauncherGUI.mainPane.repaint();
 
@@ -420,6 +423,17 @@ public class LauncherEventHandler {
           LauncherGUI.latestRelease,
           LauncherGUI.latestChangelog
         }), JOptionPane.INFORMATION_MESSAGE);
+  }
+
+  public static void switchBannerAnimations() {
+    Settings.playAnimatedBanners = !Settings.playAnimatedBanners;
+    SettingsProperties.setValue("launcher.playAnimatedBanners", Boolean.toString(Settings.playAnimatedBanners));
+
+    Icon playAnimatedBannersIconEnabled = IconFontSwing.buildIcon(FontAwesome.EYE, 18, Color.WHITE);
+    Icon playAnimatedBannersIconDisabled = IconFontSwing.buildIcon(FontAwesome.EYE_SLASH, 18, Color.WHITE);
+    LauncherGUI.playAnimatedBannersButton.setIcon(Settings.playAnimatedBanners ? playAnimatedBannersIconEnabled : playAnimatedBannersIconDisabled);
+    LauncherGUI.playAnimatedBannersButton.setToolTipText(Locale.getValue(Settings.playAnimatedBanners ? "m.animated_banners_disable" : "m.animated_banners_enable"));
+    LauncherGUI.playAnimatedBannersButton.setBackground(Settings.playAnimatedBanners ? CustomColors.INTERFACE_SIDEPANE_BUTTON : CustomColors.MID_RED);
   }
 
   private static String[] getThirdPartyClientStartCommand(Server server, boolean altMode) {
