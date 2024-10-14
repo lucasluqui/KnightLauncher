@@ -13,6 +13,7 @@ public class Settings {
   public static Boolean isOutdated = false;
   public static Boolean ingameRPCSetup = false;
   public static Boolean useIngameRPC = true;
+  public static Boolean playAnimatedBanners = true;
 
   // Compressor settings
   public static String compressorUnzipMethod = "4j";
