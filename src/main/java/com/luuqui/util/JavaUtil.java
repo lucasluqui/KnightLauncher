@@ -133,7 +133,7 @@ public class JavaUtil {
     }
 
     File javaVMDir = new File(startingDirPath, "/java_vm");
-    if (javaVMDir.exists() && javaVMDir.isDirectory()) {
+    if (javaVMDir.exists() && javaVMDir.isDirectory() && SystemUtil.isWindows()) {
      return javaVMDir.getAbsolutePath();
     }
     File javaDir = new File(startingDirPath, "/java");
