@@ -17,6 +17,7 @@ import net.sf.image4j.codec.ico.ICOEncoder;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -232,23 +233,32 @@ public class LauncherApp {
             && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME + ".desktop")) {
       BufferedImage bimg = ImageUtil.loadImageWithinJar("/img/icon-512.png");
       try {
-        ICOEncoder.write(bimg, new File(LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.ico"));
+        if (SystemUtil.isWindows()) {
+          ICOEncoder.write(bimg, new File(LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.ico"));
+        } else {
+          File outputfile = new File(LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.png");
+          ImageIO.write(bimg, "png", outputfile);
+        }
       } catch (IOException e) {
         log.error(e);
       }
 
       if (SystemUtil.isWindows()) {
-        DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
-                "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
-                LauncherGlobals.USER_DIR,
-                LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-512.ico",
-                "Start " + LauncherGlobals.LAUNCHER_NAME,
-                LauncherGlobals.LAUNCHER_NAME
-        );
+        makeShellLink();
       } else {
         makeDesktopFile();
       }
     }
+  }
+
+  private void makeShellLink() {
+    DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
+      "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
+      LauncherGlobals.USER_DIR,
+      LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-512.ico",
+      "Start " + LauncherGlobals.LAUNCHER_NAME,
+      LauncherGlobals.LAUNCHER_NAME
+    );
   }
 
   private void makeDesktopFile() {
@@ -261,7 +271,7 @@ public class LauncherApp {
       out.write("Exec=" + DesktopUtil.getPathToDesktop() + "/.KL.sh\n");
       out.write("Name=Knight Launcher\n");
       out.write("Type=Application\n");
-      out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.ico\n");
+      out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.png\n");
       out.write("Comment=Open source game launcher for a certain game\n");
       out.close();
     } catch (IOException e) {
