@@ -263,30 +263,22 @@ public class LauncherApp {
 
   private void makeDesktopFile() {
     File desktopFile = new File(DesktopUtil.getPathToDesktop(), LauncherGlobals.LAUNCHER_NAME + ".desktop");
-    File shFile = new File(DesktopUtil.getPathToDesktop(), ".KL.sh");
     try {
       BufferedWriter out = new BufferedWriter(new FileWriter(desktopFile));
       out.write("[Desktop Entry]\n");
       out.write("Version=1.5\n");
-      out.write("Exec=" + DesktopUtil.getPathToDesktop() + "/.KL.sh\n");
       out.write("Name=Knight Launcher\n");
-      out.write("Type=Application\n");
-      out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.png\n");
       out.write("Comment=Open source game launcher for a certain game\n");
+      out.write("Exec=java -jar KnightLauncher.jar\n");
+      out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.png\n");
+      out.write("Path=" + LauncherGlobals.USER_DIR + "/\n");
+      out.write("Type=Application\n");
+      out.write("Categories=Game;\n");
+      out.close();
       out.close();
     } catch (IOException e) {
       log.error(e);
     }
-    try {
-      BufferedWriter out = new BufferedWriter(new FileWriter(shFile));
-      out.write("#! /bin/bash\n\n");
-      out.write("cd " + LauncherGlobals.USER_DIR.replaceAll(" ", "\\\\ ") + "\n");
-      out.write("java -jar KnightLauncher.jar\n");
-      out.close();
-    } catch (IOException e) {
-      log.error(e);
-    }
-    shFile.setExecutable(true);
   }
 
   private void setupHTTPSProtocol() {
