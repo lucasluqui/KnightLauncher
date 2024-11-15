@@ -216,12 +216,12 @@ public class EditorsGUI extends BaseGUI {
     editorListPane.add(interfaceTesterPane);
     editorListPane.add(particleEditorPane);
 
-    JLabel poweredByLabel = new JLabel(Locale.getValue("m.powered_by_spiralview", LauncherGlobals.BUNDLED_SPIRALVIEW_VERSION));
-    poweredByLabel.setBounds(30, 449, 740, 15);
-    poweredByLabel.setFont(Fonts.fontReg);
-    poweredByLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-    poweredByLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
-    editorsGUIFrame.getContentPane().add(poweredByLabel);
+    footerLabel = new JLabel();
+    footerLabel.setBounds(30, 449, 740, 15);
+    footerLabel.setFont(Fonts.fontReg);
+    footerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+    footerLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
+    editorsGUIFrame.getContentPane().add(footerLabel);
 
   }
 
@@ -282,6 +282,7 @@ public class EditorsGUI extends BaseGUI {
   protected static JScrollPane editorListPaneScroll = new JScrollPane();
   protected static JLabel editorLaunchState;
   protected static JProgressBar editorLaunchFakeProgressBar;
+  protected static JLabel footerLabel;
 
   protected static BufferedImage modelViewerImage = null;
   protected static BufferedImage sceneEditorImage = null;

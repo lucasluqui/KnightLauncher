@@ -2,6 +2,7 @@ package com.luuqui.launcher;
 
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
+import com.luuqui.launcher.editor.EditorsEventHandler;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mod.ModListEventHandler;
 import com.luuqui.launcher.mod.ModLoader;
@@ -339,6 +340,7 @@ public class LauncherEventHandler {
       updateBanner();
       SettingsEventHandler.selectedServerChanged();
       ModListEventHandler.selectedServerChanged();
+      EditorsEventHandler.selectedServerChanged();
       saveSelectedServer();
     } else {
       // fallback to official in rare error scenario

@@ -127,4 +127,12 @@ public class EditorsEventHandler {
     EditorsGUI.editorLaunchFakeProgressBar.setVisible(false);
   }
 
+  public static void selectedServerChanged() {
+    if(LauncherApp.selectedServer.isOfficial()) {
+      EditorsGUI.footerLabel.setText(Locale.getValue("m.powered_by_spiralview", LauncherGlobals.BUNDLED_SPIRALVIEW_VERSION));
+    } else {
+      EditorsGUI.footerLabel.setText(Locale.getValue("m.viewing_editors", LauncherApp.selectedServer.name));
+    }
+  }
+
 }
