@@ -314,8 +314,6 @@ public class LauncherEventHandler {
         LauncherGUI.playerCountTooltipButton.setVisible(true);
         LauncherGUI.serverInfoButton.setEnabled(false);
         LauncherGUI.serverInfoButton.setVisible(false);
-        LauncherGUI.editorsButton.setEnabled(true);
-        LauncherGUI.editorsButton.setVisible(true);
       } else {
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
         if(!selectedServer.isInstalled()) {
@@ -335,10 +333,6 @@ public class LauncherEventHandler {
 
         // TODO: Fetch player count.
         LauncherGUI.playerCountLabel.setVisible(false);
-
-        // TODO: Editors support for third party servers.
-        LauncherGUI.editorsButton.setEnabled(false);
-        LauncherGUI.editorsButton.setVisible(false);
       }
       LauncherApp.selectedServer = selectedServer;
 
