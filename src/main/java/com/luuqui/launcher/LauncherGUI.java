@@ -52,18 +52,25 @@ public class LauncherGUI extends BaseGUI {
     launcherGUIFrame.setVisible(false);
     launcherGUIFrame.setTitle(Locale.getValue("t.main", LauncherGlobals.LAUNCHER_VERSION));
     launcherGUIFrame.setResizable(false);
-    launcherGUIFrame.setBounds(100, 100, 1050, 550);
+    launcherGUIFrame.setBounds(100, 100, 1100, 550);
     launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     launcherGUIFrame.setUndecorated(true);
     launcherGUIFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-256.png"));
     launcherGUIFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     launcherGUIFrame.getContentPane().setLayout(null);
 
+    JPanel serverSwitcherPane = new JPanel();
+    serverSwitcherPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    serverSwitcherPane.setVisible(true);
+    serverSwitcherPane.setLayout(null);
+    serverSwitcherPane.setBounds(0, 35, 50, 550);
+    launcherGUIFrame.getContentPane().add(serverSwitcherPane);
+
     JPanel sidePane = new JPanel();
     sidePane.setBackground(CustomColors.INTERFACE_SIDEPANE_BACKGROUND);
     sidePane.setVisible(true);
     sidePane.setLayout(null);
-    sidePane.setBounds(0, 35, 250, 550);
+    sidePane.setBounds(50, 35, 250, 550);
     launcherGUIFrame.getContentPane().add(sidePane);
 
     banner = ImageUtil.generatePlainColorImage(800, 550, CustomColors.INTERFACE_MAINPANE_BACKGROUND);
@@ -77,7 +84,7 @@ public class LauncherGUI extends BaseGUI {
     };
     mainPane.setLayout(null);
     mainPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    mainPane.setBounds(250, 35, 800, 550);
+    mainPane.setBounds(300, 35, 800, 550);
     launcherGUIFrame.getContentPane().add(mainPane);
 
     JLabel launcherLogo = new JLabel();
@@ -164,12 +171,12 @@ public class LauncherGUI extends BaseGUI {
       layeredEditorsPane.setVisible(false);
 
       layeredSettingsPane = SettingsGUI.tabbedPane;
-      layeredSettingsPane.setBounds(250, 75, 800, 550);
+      layeredSettingsPane.setBounds(300, 75, 800, 550);
       launcherGUIFrame.add(layeredSettingsPane);
       layeredSettingsPane.setVisible(true);
 
       layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
-      layeredReturnButton.setBounds(255, 40, 25, 25);
+      layeredReturnButton.setBounds(305, 40, 25, 25);
       layeredReturnButton.setVisible(true);
       layeredReturnButton.setFocusable(false);
       layeredReturnButton.setFocusPainted(false);
@@ -205,12 +212,12 @@ public class LauncherGUI extends BaseGUI {
       layeredEditorsPane.setVisible(false);
 
       layeredModsPane = ModListGUI.modListPanel;
-      layeredModsPane.setBounds(250, 75, 800, 550);
+      layeredModsPane.setBounds(300, 75, 800, 550);
       launcherGUIFrame.add(layeredModsPane);
       layeredModsPane.setVisible(true);
 
       layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
-      layeredReturnButton.setBounds(255, 40, 25, 25);
+      layeredReturnButton.setBounds(305, 40, 25, 25);
       layeredReturnButton.setVisible(true);
       layeredReturnButton.setFocusable(false);
       layeredReturnButton.setFocusPainted(false);
@@ -246,12 +253,12 @@ public class LauncherGUI extends BaseGUI {
       layeredModsPane.setVisible(false);
 
       layeredEditorsPane = EditorsGUI.editorsPanel;
-      layeredEditorsPane.setBounds(250, 75, 800, 550);
+      layeredEditorsPane.setBounds(300, 75, 800, 550);
       launcherGUIFrame.add(layeredEditorsPane);
       layeredEditorsPane.setVisible(true);
 
       layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
-      layeredReturnButton.setBounds(255, 40, 25, 25);
+      layeredReturnButton.setBounds(305, 40, 25, 25);
       layeredReturnButton.setVisible(true);
       layeredReturnButton.setFocusable(false);
       layeredReturnButton.setFocusPainted(false);
@@ -306,8 +313,8 @@ public class LauncherGUI extends BaseGUI {
     JLabel launcherVersion = new JLabel("v" + LauncherGlobals.LAUNCHER_VERSION);
     launcherVersion.setFont(Fonts.fontRegSmall);
     launcherVersion.setForeground(CustomColors.INTERFACE_SIDEPANE_FOOTNOTE);
-    launcherVersion.setHorizontalAlignment(SwingConstants.LEFT);
-    launcherVersion.setBounds(10, 493, 100, 15);
+    launcherVersion.setHorizontalAlignment(SwingConstants.RIGHT);
+    launcherVersion.setBounds(10, 493, 230, 15);
     sidePane.add(launcherVersion);
 
     bannerTitle = new JLabel(Locale.getValue("m.banner_title_default"));
