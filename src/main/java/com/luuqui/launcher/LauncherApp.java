@@ -84,6 +84,7 @@ public class LauncherApp {
     if (!SystemUtil.isARM()) DiscordRPC.getInstance().start();
     KeyboardController.start();
     checkDirectories();
+    Cache.setup();
     LauncherDigester.doDigest();
     if (SystemUtil.isWindows() || SystemUtil.isUnix()) checkShortcut();
   }

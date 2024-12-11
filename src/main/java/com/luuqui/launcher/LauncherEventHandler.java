@@ -392,7 +392,7 @@ public class LauncherEventHandler {
           if(server.serverIcon.equalsIgnoreCase("null")) {
             serverIconImageIcon = defaultServerImageIcon;
           } else {
-            BufferedImage serverIconBufferedImage = ImageUtil.toBufferedImage(ImageUtil.getImageFromURL(server.serverIcon, 32, 32));
+            BufferedImage serverIconBufferedImage = Cache.fetchImage(server.serverIcon, 32, 32);
             serverIconImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(serverIconBufferedImage, 15));
           }
           serverIcon.setIcon(server.serverIcon.equalsIgnoreCase("null") ? defaultServerImageIcon : serverIconImageIcon);
@@ -485,7 +485,7 @@ public class LauncherEventHandler {
       String bannerUrl = LauncherApp.selectedServer.announceBanner.split("\\|")[0];
       double bannerIntensity = Double.parseDouble(LauncherApp.selectedServer.announceBanner.split("\\|")[1]);
       if(!bannerUrl.contains(".gif")) {
-        LauncherGUI.banner = LauncherGUI.processImageForBanner(ImageUtil.toBufferedImage(ImageUtil.getImageFromURL(bannerUrl, 800, 550)), bannerIntensity);
+        LauncherGUI.banner = LauncherGUI.processImageForBanner(Cache.fetchImage(bannerUrl, 800, 550), bannerIntensity);
         LauncherGUI.playAnimatedBannersButton.setVisible(false);
       } else {
         LauncherGUI.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerUrl), bannerIntensity);

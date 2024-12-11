@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
 
@@ -17,19 +18,27 @@ import static com.luuqui.util.Log.log;
 
 public class ImageUtil {
 
-  public static Image getImageFromURL(String url, int width, int height) {
+  public static Image getImageFromURL(URL url, int width, int height) {
 
     Image image = null;
 
     try {
-      URL _url = new URL(url);
-      image = ImageIO.read(_url);
+      image = ImageIO.read(url);
       image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
     } catch (IOException e) {
       log.error(e);
     }
 
     return image;
+  }
+
+  public static Image getImageFromURL(String url, int width, int height) {
+    try {
+      return getImageFromURL(new URL(url), width, height);
+    } catch (MalformedURLException e) {
+      log.error(e);
+      return null;
+    }
   }
 
   public static byte[] getAnimatedImageFromURL(String url) {
