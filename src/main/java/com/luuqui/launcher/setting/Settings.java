@@ -8,7 +8,7 @@ public class Settings {
   public static Boolean keepOpen = false;
   public static Boolean createShortcut = true;
   public static Boolean autoUpdate = true;
-  public static int selectedServerIdx = 0;
+  public static String selectedServerName = "Official";
   public static Boolean jvmPatched = false;
   public static Boolean isOutdated = false;
   public static Boolean ingameRPCSetup = false;

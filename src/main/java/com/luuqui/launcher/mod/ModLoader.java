@@ -47,7 +47,7 @@ public class ModLoader {
     if(!checking) {
       checking = true;
 
-      LauncherGUI.serverList.setEnabled(false);
+      LauncherGUI.serverSwitchingEnabled = false;
 
       Server selectedServer = LauncherApp.selectedServer;
       String selectedServerName = "";
@@ -129,7 +129,7 @@ public class ModLoader {
 
       ModListGUI.labelModCount.setText(String.valueOf(ModLoader.getModList().size()));
       ModListGUI.updateModList(null);
-      LauncherGUI.serverList.setEnabled(true);
+      LauncherGUI.serverSwitchingEnabled = true;
       checking = false;
     }
   }
@@ -141,7 +141,7 @@ public class ModLoader {
 
     if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
 
-    LauncherGUI.serverList.setEnabled(false);
+    LauncherGUI.serverSwitchingEnabled = false;
     LauncherGUI.launchButton.setEnabled(false);
     LauncherGUI.settingsButton.setEnabled(false);
     LauncherGUI.modButton.setEnabled(false);
@@ -176,7 +176,7 @@ public class ModLoader {
     ProgressBar.finishTask();
     LauncherDigester.doDigest();
 
-    LauncherGUI.serverList.setEnabled(true);
+    LauncherGUI.serverSwitchingEnabled = true;
     LauncherGUI.launchButton.setEnabled(true);
     LauncherGUI.settingsButton.setEnabled(true);
     LauncherGUI.modButton.setEnabled(true);
@@ -188,7 +188,7 @@ public class ModLoader {
 
   private static void rebuildFiles() {
     try {
-      LauncherGUI.serverList.setEnabled(false);
+      LauncherGUI.serverSwitchingEnabled = false;
       LauncherGUI.launchButton.setEnabled(false);
       LauncherGUI.settingsButton.setEnabled(false);
       LauncherGUI.modButton.setEnabled(false);
@@ -229,7 +229,7 @@ public class ModLoader {
     rebuildRequired = false;
 
     try {
-      LauncherGUI.serverList.setEnabled(true);
+      LauncherGUI.serverSwitchingEnabled = true;
       LauncherGUI.launchButton.setEnabled(true);
       LauncherGUI.settingsButton.setEnabled(true);
       LauncherGUI.modButton.setEnabled(true);

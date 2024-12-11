@@ -12,7 +12,7 @@ import static com.luuqui.launcher.setting.Log.log;
 
 public class SettingsProperties {
 
-  private static final String PROP_VER = "20";
+  private static final String PROP_VER = "21";
 
   private static Properties _prop = new Properties();
   private static final String _propPath = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
@@ -99,7 +99,7 @@ public class SettingsProperties {
     Settings.createShortcut = Boolean.parseBoolean(getValue("launcher.createShortcut"));
     Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
     Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
-    Settings.selectedServerIdx = Integer.parseInt(getValue("launcher.selectedServerIdx"));
+    Settings.selectedServerName = getValue("launcher.selectedServerName");
     Settings.autoUpdate = Boolean.parseBoolean(getValue("launcher.autoUpdate"));
     Settings.playAnimatedBanners = Boolean.parseBoolean(getValue("launcher.playAnimatedBanners"));
 

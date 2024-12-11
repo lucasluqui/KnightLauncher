@@ -1,8 +1,11 @@
 package com.luuqui.launcher;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
+import com.luuqui.launcher.editor.EditorsEventHandler;
 import com.luuqui.launcher.editor.EditorsGUI;
+import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mod.ModListGUI;
 import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsGUI;
@@ -19,6 +22,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -33,6 +37,8 @@ public class LauncherGUI extends BaseGUI {
   public static String latestChangelog = "";
 
   public static boolean displayAnimBanner = false;
+
+  public static boolean serverSwitchingEnabled = true;
 
   public LauncherGUI(LauncherApp app) {
     super();
@@ -59,12 +65,22 @@ public class LauncherGUI extends BaseGUI {
     launcherGUIFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     launcherGUIFrame.getContentPane().setLayout(null);
 
-    JPanel serverSwitcherPane = new JPanel();
+    serverSwitcherPane = new JPanel();
     serverSwitcherPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     serverSwitcherPane.setVisible(true);
-    serverSwitcherPane.setLayout(null);
-    serverSwitcherPane.setBounds(0, 35, 50, 550);
+    serverSwitcherPane.setBounds(0, 42, 50, 550);
     launcherGUIFrame.getContentPane().add(serverSwitcherPane);
+
+    serverSwitcherPaneScrollBar = new JScrollPane(serverSwitcherPane);
+    serverSwitcherPaneScrollBar.setBounds(0, 42, 50, 550);
+    serverSwitcherPaneScrollBar.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    serverSwitcherPaneScrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+    serverSwitcherPaneScrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    serverSwitcherPaneScrollBar.setBorder(null);
+    serverSwitcherPaneScrollBar.putClientProperty(FlatClientProperties.STYLE, "border:0,0,0,0");
+    serverSwitcherPaneScrollBar.getVerticalScrollBar().setUnitIncrement(16);
+    serverSwitcherPaneScrollBar.setVisible(true);
+    launcherGUIFrame.getContentPane().add(serverSwitcherPaneScrollBar);
 
     JPanel sidePane = new JPanel();
     sidePane.setBackground(CustomColors.INTERFACE_SIDEPANE_BACKGROUND);
@@ -106,14 +122,14 @@ public class LauncherGUI extends BaseGUI {
     serverListLabel.setBounds(28, 185, 80, 20);
     sidePane.add(serverListLabel);
 
-    serverList = new JComboBox<String>();
-    serverList.setBounds(73, 185, 120, 20);
-    serverList.setFont(Fonts.fontReg);
-    serverList.setFocusable(false);
-    serverList.setRequestFocusEnabled(false);
-    sidePane.add(serverList);
-    serverList.addActionListener(action -> LauncherEventHandler.selectedServerChanged(action));
-    serverList.addItem("Official");
+    //serverList = new JComboBox<String>();
+    //serverList.setBounds(73, 185, 120, 20);
+    //serverList.setFont(Fonts.fontReg);
+    //serverList.setFocusable(false);
+    //serverList.setRequestFocusEnabled(false);
+    //sidePane.add(serverList);
+    //serverList.addActionListener(action -> LauncherEventHandler.selectedServerChanged(action));
+    //serverList.addItem("Official");
 
     Icon serverInfoButtonIcon = IconFontSwing.buildIcon(FontAwesome.INFO, 16, Color.WHITE);
     serverInfoButton = new JButton();
@@ -653,6 +669,10 @@ public class LauncherGUI extends BaseGUI {
   public static JPanel layeredModsPane = new JPanel();
   public static JPanel layeredEditorsPane = new JPanel();
   public static JButton layeredReturnButton;
+
+  // Server switcher pane
+  public static JPanel serverSwitcherPane;
+  public static JScrollPane serverSwitcherPaneScrollBar;
 
   // Side pane
   public static JButton settingsButton;

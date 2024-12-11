@@ -1,5 +1,6 @@
 package com.luuqui.launcher;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.editor.EditorsEventHandler;
@@ -16,6 +17,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -37,7 +41,7 @@ public class LauncherEventHandler {
     Thread launchThread = new Thread(() -> {
 
       // disable server switching and launch button during launch procedure
-      LauncherGUI.serverList.setEnabled(false);
+      LauncherGUI.serverSwitchingEnabled = false;
       LauncherGUI.launchButton.setEnabled(false);
 
       if(LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
@@ -231,7 +235,6 @@ public class LauncherEventHandler {
 
       if(server.beta == 1) server.name += " (Beta)";
 
-      LauncherGUI.serverList.addItem(server.name);
       LauncherApp.serverList.add(server);
 
       // make sure we have a proper folder structure for this server.
@@ -256,19 +259,16 @@ public class LauncherEventHandler {
     }
 
     try {
-      LauncherGUI.serverList.setSelectedIndex(Settings.selectedServerIdx);
-      LauncherApp.selectedServer = LauncherApp.findServerByName((String) LauncherGUI.serverList.getSelectedItem());
+      LauncherApp.selectedServer = LauncherApp.findServerByName(Settings.selectedServerName);
     } catch (Exception e) {
       log.error(e);
-      LauncherGUI.serverList.setSelectedIndex(0);
       LauncherApp.selectedServer = official;
     }
-
-    selectedServerChanged(null);
+    selectedServerChanged();
   }
 
   public static void saveSelectedServer() {
-    SettingsProperties.setValue("launcher.selectedServerIdx", String.valueOf(LauncherGUI.serverList.getSelectedIndex()));
+    SettingsProperties.setValue("launcher.selectedServerName", LauncherApp.selectedServer.getSanitizedName());
   }
 
   public static void displaySelectedServerInfo() {
@@ -302,8 +302,8 @@ public class LauncherEventHandler {
     );
   }
 
-  public static void selectedServerChanged(ActionEvent event) {
-    Server selectedServer = LauncherApp.findServerByName((String) LauncherGUI.serverList.getSelectedItem());
+  public static void selectedServerChanged() {
+    Server selectedServer = LauncherApp.selectedServer;
 
     if(selectedServer != null) {
       if(selectedServer.isOfficial()) {
@@ -335,8 +335,8 @@ public class LauncherEventHandler {
         // TODO: Fetch player count.
         LauncherGUI.playerCountLabel.setVisible(false);
       }
-      LauncherApp.selectedServer = selectedServer;
 
+      updateServerSwitcher();
       updateBanner();
       SettingsEventHandler.selectedServerChanged();
       ModListEventHandler.selectedServerChanged();
@@ -344,8 +344,74 @@ public class LauncherEventHandler {
       saveSelectedServer();
     } else {
       // fallback to official in rare error scenario
-      LauncherGUI.serverList.setSelectedIndex(0);
       LauncherApp.selectedServer = LauncherApp.findServerByName("Official");
+      selectedServerChanged();
+    }
+  }
+
+  public static void updateServerSwitcher() {
+    LauncherGUI.serverSwitcherPane.removeAll();
+
+    List<Server> serverList = LauncherApp.serverList;
+    if(!serverList.isEmpty()) {
+      int count = 0;
+      for(Server server : serverList) {
+        JPanel serverIconPane = new JPanel();
+        serverIconPane.setLayout(null);
+        serverIconPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+        serverIconPane.setBounds(0, count * 50, 50, 50);
+
+        JLabel serverIcon = new JLabel();
+        BufferedImage serverIconImage = ImageUtil.loadImageWithinJar("/img/server-official.png");
+        serverIconImage = ImageUtil.resizeImagePreserveTransparency(serverIconImage, 32, 32);
+        serverIcon.setBounds(4, 4, 42, 42);
+        serverIcon.setHorizontalAlignment(SwingConstants.CENTER);
+        serverIcon.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(serverIconImage, 15)));
+        serverIcon.setToolTipText(server.name);
+        serverIconPane.add(serverIcon);
+
+        if(server == LauncherApp.selectedServer) {
+          serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8,"+ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND)+",2");
+          serverIcon.updateUI();
+        } else {
+          serverIcon.addMouseListener(new MouseListener() {
+            @Override public void mouseClicked(MouseEvent e) {
+              if(LauncherGUI.serverSwitchingEnabled) {
+                LauncherApp.selectedServer = server;
+                selectedServerChanged();
+              }
+            }
+            @Override public void mousePressed(MouseEvent e) {}
+            @Override public void mouseReleased(MouseEvent e) {}
+            @Override public void mouseEntered(MouseEvent e) {
+              serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8,"+ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND)+",2");
+              serverIcon.updateUI();
+            }
+            @Override public void mouseExited(MouseEvent e) {
+              serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 0; border:0,0,0,0");
+              serverIcon.updateUI();
+            }
+          });
+        }
+
+        log.info("adding icon pane for server " + server.name);
+        LauncherGUI.serverSwitcherPane.add(serverIconPane);
+        count++;
+      }
+
+      LauncherGUI.serverSwitcherPane.setPreferredSize(new Dimension(50, count * 50));
+
+      LauncherGUI.serverSwitcherPaneScrollBar.setBounds(
+        LauncherGUI.serverSwitcherPaneScrollBar.getX(),
+        LauncherGUI.serverSwitcherPaneScrollBar.getY(),
+        LauncherGUI.serverSwitcherPaneScrollBar.getWidth(),
+        550
+      );
+
+      LauncherGUI.serverSwitcherPane.setLayout(null);
+
+      LauncherGUI.serverSwitcherPane.updateUI();
+      LauncherGUI.serverSwitcherPaneScrollBar.updateUI();
     }
   }
 
@@ -510,7 +576,7 @@ public class LauncherEventHandler {
       LauncherApp.exit();
 
       // re-enable server switching and launching.
-      LauncherGUI.serverList.setEnabled(true);
+      LauncherGUI.serverSwitchingEnabled = true;
       LauncherGUI.launchButton.setEnabled(true);
     } else {
       try {
@@ -522,7 +588,7 @@ public class LauncherEventHandler {
         }
 
         // re-enable server switching and launching.
-        LauncherGUI.serverList.setEnabled(true);
+        LauncherGUI.serverSwitchingEnabled = true;
         LauncherGUI.launchButton.setEnabled(true);
       } catch (InterruptedException e) {
         log.error(e);
