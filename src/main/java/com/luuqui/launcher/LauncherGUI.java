@@ -105,10 +105,30 @@ public class LauncherGUI extends BaseGUI {
 
     JLabel launcherLogo = new JLabel();
     BufferedImage launcherLogoImage = ImageUtil.loadImageWithinJar("/img/icon-92.png");
+    BufferedImage launcherLogoImageHover = ImageUtil.loadImageWithinJar("/img/icon-92-hover.png");
     launcherLogo.setBounds(0, -55, 251, 256);
     launcherLogo.setHorizontalAlignment(SwingConstants.CENTER);
     launcherLogo.setIcon(new ImageIcon(launcherLogoImage));
     sidePane.add(launcherLogo);
+    launcherLogo.addMouseListener(new MouseListener() {
+      @Override public void mouseClicked(MouseEvent e) {
+        layeredSettingsPane.setVisible(false);
+        layeredModsPane.setVisible(false);
+        layeredEditorsPane.setVisible(false);
+        mainPane.setVisible(true);
+        layeredReturnButton.setVisible(false);
+      }
+      @Override public void mousePressed(MouseEvent e) {}
+      @Override public void mouseReleased(MouseEvent e) {}
+      @Override public void mouseEntered(MouseEvent e) {
+        launcherLogo.setIcon(new ImageIcon(launcherLogoImageHover));
+        launcherLogo.updateUI();
+      }
+      @Override public void mouseExited(MouseEvent e) {
+        launcherLogo.setIcon(new ImageIcon(launcherLogoImage));
+        launcherLogo.updateUI();
+      }
+    });
 
     JLabel launcherName = new JLabel(LauncherGlobals.LAUNCHER_NAME);
     launcherName.setFont(Fonts.fontMedBig);
