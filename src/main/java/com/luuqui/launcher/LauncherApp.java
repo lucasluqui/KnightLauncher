@@ -468,6 +468,12 @@ public class LauncherApp {
     return results.isEmpty() ? null : results.get(0);
   }
 
+  public static Server findServerBySanitizedName(String sanitizedServerName) {
+    List<Server> results = LauncherApp.serverList.stream()
+      .filter(s -> sanitizedServerName.equals(s.getSanitizedName())).collect(Collectors.toList());
+    return results.isEmpty() ? null : results.get(0);
+  }
+
   protected static void checkTempDir() {
     // sometimes os usernames that have cyrillic characters can make Java have a
     // bad time trying to read them for locating their TEMP path.

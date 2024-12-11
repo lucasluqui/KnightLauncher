@@ -259,7 +259,7 @@ public class LauncherEventHandler {
     }
 
     try {
-      LauncherApp.selectedServer = LauncherApp.findServerByName(Settings.selectedServerName);
+      LauncherApp.selectedServer = LauncherApp.findServerBySanitizedName(Settings.selectedServerName);
     } catch (Exception e) {
       log.error(e);
       LauncherApp.selectedServer = official;
@@ -268,7 +268,14 @@ public class LauncherEventHandler {
   }
 
   public static void saveSelectedServer() {
-    SettingsProperties.setValue("launcher.selectedServerName", LauncherApp.selectedServer.getSanitizedName());
+    String serverName = LauncherApp.selectedServer.getSanitizedName();
+    if(serverName.isEmpty()) serverName = "official";
+    SettingsProperties.setValue("launcher.selectedServerName", serverName);
+  }
+
+  public static void saveSelectedServer(String serverName) {
+    if(serverName.isEmpty()) serverName = "official";
+    SettingsProperties.setValue("launcher.selectedServerName", serverName);
   }
 
   public static void displaySelectedServerInfo() {
@@ -297,7 +304,7 @@ public class LauncherEventHandler {
 
     Dialog.push(
       infoString,
-      selectedServer.name + " " + Locale.getValue("m.server_info"),
+      selectedServer.name + " " + Locale.getValue("t.server_info"),
       JOptionPane.INFORMATION_MESSAGE
     );
   }
@@ -310,6 +317,7 @@ public class LauncherEventHandler {
         LauncherGUI.launchButton.setText(Locale.getValue("b.play_now"));
         LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_now"));
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
+        LauncherGUI.selectedServerLabel.setText(Locale.getValue("m.server", "Official"));
         LauncherGUI.playerCountLabel.setText(selectedServer.playerCountUrl);
         LauncherGUI.playerCountLabel.setVisible(true);
         LauncherGUI.playerCountTooltipButton.setVisible(true);
@@ -328,20 +336,24 @@ public class LauncherEventHandler {
           LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_thirdparty", selectedServer.name));
         }
 
+        LauncherGUI.selectedServerLabel.setText(Locale.getValue("m.server", ""));
+
         LauncherGUI.serverInfoButton.setEnabled(true);
         LauncherGUI.serverInfoButton.setVisible(true);
-        LauncherGUI.playerCountTooltipButton.setVisible(false);
+        LauncherGUI.serverInfoButton.setText(selectedServer.name);
 
         // TODO: Fetch player count.
-        LauncherGUI.playerCountLabel.setVisible(false);
+        LauncherGUI.playerCountLabel.setText("Players online: Unavailable");
+        LauncherGUI.playerCountTooltipButton.setVisible(false);
       }
 
-      updateServerSwitcher();
       updateBanner();
       SettingsEventHandler.selectedServerChanged();
       ModListEventHandler.selectedServerChanged();
       EditorsEventHandler.selectedServerChanged();
       saveSelectedServer();
+      updateServerSwitcher();
+      updateServerSwitcher(); // why do we have to call this twice for it to work correctly? TODO: figure out!
     } else {
       // fallback to official in rare error scenario
       LauncherApp.selectedServer = LauncherApp.findServerByName("Official");
@@ -355,6 +367,15 @@ public class LauncherEventHandler {
     List<Server> serverList = LauncherApp.serverList;
     if(!serverList.isEmpty()) {
       int count = 0;
+
+      BufferedImage officialServerBufferedImage = ImageUtil.loadImageWithinJar("/img/server-official.png");
+      officialServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(officialServerBufferedImage, 32, 32);
+      ImageIcon officialServerImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(officialServerBufferedImage, 15));
+
+      BufferedImage defaultServerBufferedImage = ImageUtil.loadImageWithinJar("/img/default-64.png");
+      defaultServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(defaultServerBufferedImage, 32, 32);
+      ImageIcon defaultServerImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(defaultServerBufferedImage, 15));
+
       for(Server server : serverList) {
         JPanel serverIconPane = new JPanel();
         serverIconPane.setLayout(null);
@@ -362,16 +383,25 @@ public class LauncherEventHandler {
         serverIconPane.setBounds(0, count * 50, 50, 50);
 
         JLabel serverIcon = new JLabel();
-        BufferedImage serverIconImage = ImageUtil.loadImageWithinJar("/img/server-official.png");
-        serverIconImage = ImageUtil.resizeImagePreserveTransparency(serverIconImage, 32, 32);
         serverIcon.setBounds(4, 4, 42, 42);
         serverIcon.setHorizontalAlignment(SwingConstants.CENTER);
-        serverIcon.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(serverIconImage, 15)));
+        if(server.isOfficial()) {
+          serverIcon.setIcon(officialServerImageIcon);
+        } else {
+          ImageIcon serverIconImageIcon;
+          if(server.serverIcon.equalsIgnoreCase("null")) {
+            serverIconImageIcon = defaultServerImageIcon;
+          } else {
+            BufferedImage serverIconBufferedImage = ImageUtil.toBufferedImage(ImageUtil.getImageFromURL(server.serverIcon, 32, 32));
+            serverIconImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(serverIconBufferedImage, 15));
+          }
+          serverIcon.setIcon(server.serverIcon.equalsIgnoreCase("null") ? defaultServerImageIcon : serverIconImageIcon);
+        }
         serverIcon.setToolTipText(server.name);
         serverIconPane.add(serverIcon);
 
         if(server == LauncherApp.selectedServer) {
-          serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8,"+ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND)+",2");
+          serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER) + ",2");
           serverIcon.updateUI();
         } else {
           serverIcon.addMouseListener(new MouseListener() {
@@ -379,12 +409,13 @@ public class LauncherEventHandler {
               if(LauncherGUI.serverSwitchingEnabled) {
                 LauncherApp.selectedServer = server;
                 selectedServerChanged();
+                saveSelectedServer(server.getSanitizedName());
               }
             }
             @Override public void mousePressed(MouseEvent e) {}
             @Override public void mouseReleased(MouseEvent e) {}
             @Override public void mouseEntered(MouseEvent e) {
-              serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8,"+ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND)+",2");
+              serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER) + ",2");
               serverIcon.updateUI();
             }
             @Override public void mouseExited(MouseEvent e) {
@@ -394,10 +425,38 @@ public class LauncherEventHandler {
           });
         }
 
-        log.info("adding icon pane for server " + server.name);
         LauncherGUI.serverSwitcherPane.add(serverIconPane);
         count++;
       }
+
+      JPanel addServerPane = new JPanel();
+      addServerPane.setLayout(null);
+      addServerPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+      addServerPane.setBounds(0, count * 50, 50, 50);
+
+      JLabel addServerIcon = new JLabel();
+      addServerIcon.setBounds(4, 4, 42, 42);
+      addServerIcon.setHorizontalAlignment(SwingConstants.CENTER);
+      addServerIcon.setToolTipText(Locale.getValue("m.add_server"));
+      addServerIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, 18, Color.WHITE));
+      addServerPane.add(addServerIcon);
+      addServerIcon.addMouseListener(new MouseListener() {
+        @Override public void mouseClicked(MouseEvent e) {
+          Dialog.push(Locale.getValue("m.add_server_text"), Locale.getValue("m.add_server"), JOptionPane.INFORMATION_MESSAGE);
+        }
+        @Override public void mousePressed(MouseEvent e) {}
+        @Override public void mouseReleased(MouseEvent e) {}
+        @Override public void mouseEntered(MouseEvent e) {
+          addServerIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER) + ",2");
+          addServerIcon.updateUI();
+        }
+        @Override public void mouseExited(MouseEvent e) {
+          addServerIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 0; border:0,0,0,0");
+          addServerIcon.updateUI();
+        }
+      });
+
+      LauncherGUI.serverSwitcherPane.add(addServerPane);
 
       LauncherGUI.serverSwitcherPane.setPreferredSize(new Dimension(50, count * 50));
 

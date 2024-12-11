@@ -117,24 +117,13 @@ public class LauncherGUI extends BaseGUI {
     launcherName.setBounds(0, 100, 250, 80);
     sidePane.add(launcherName);
 
-    JLabel serverListLabel = new JLabel(Locale.getValue("m.server"));
-    serverListLabel.setFont(Fonts.fontMed);
-    serverListLabel.setBounds(28, 185, 80, 20);
-    sidePane.add(serverListLabel);
+    selectedServerLabel = new JLabel(Locale.getValue("m.server", "Official"));
+    selectedServerLabel.setFont(Fonts.fontMed);
+    selectedServerLabel.setBounds(28, 185, 120, 20);
+    sidePane.add(selectedServerLabel);
 
-    //serverList = new JComboBox<String>();
-    //serverList.setBounds(73, 185, 120, 20);
-    //serverList.setFont(Fonts.fontReg);
-    //serverList.setFocusable(false);
-    //serverList.setRequestFocusEnabled(false);
-    //sidePane.add(serverList);
-    //serverList.addActionListener(action -> LauncherEventHandler.selectedServerChanged(action));
-    //serverList.addItem("Official");
-
-    Icon serverInfoButtonIcon = IconFontSwing.buildIcon(FontAwesome.INFO, 16, Color.WHITE);
     serverInfoButton = new JButton();
-    serverInfoButton.setIcon(serverInfoButtonIcon);
-    serverInfoButton.setBounds(200, 185, 20, 20);
+    serverInfoButton.setBounds(80, 185, 130, 20);
     serverInfoButton.setEnabled(false);
     serverInfoButton.setVisible(false);
     serverInfoButton.setFocusable(false);
@@ -680,7 +669,7 @@ public class LauncherGUI extends BaseGUI {
   public static JButton editorsButton;
   public static JButton playerCountTooltipButton;
   public static JLabel playerCountLabel;
-  public static JComboBox serverList;
+  public static JLabel selectedServerLabel;
   public static JButton serverInfoButton;
 
   // Main pane

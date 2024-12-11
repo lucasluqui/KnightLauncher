@@ -42,6 +42,8 @@ public class Server {
 
   public String fromCode;
 
+  public String serverIcon;
+
   public int enabled;
 
   public Server() {}
