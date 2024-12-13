@@ -38,8 +38,6 @@ public class LauncherGUI extends BaseGUI {
 
   public static boolean displayAnimBanner = false;
 
-  public static boolean serverSwitchingEnabled = true;
-
   public LauncherGUI(LauncherApp app) {
     super();
     this.app = app;
