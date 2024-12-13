@@ -47,7 +47,7 @@ public class ModLoader {
     if(!checking) {
       checking = true;
 
-      LauncherGUI.serverSwitchingEnabled = false;
+      LauncherEventHandler.updateServerSwitcher(true);
 
       Server selectedServer = LauncherApp.selectedServer;
       String selectedServerName = "";
@@ -129,7 +129,7 @@ public class ModLoader {
 
       ModListGUI.labelModCount.setText(String.valueOf(ModLoader.getModList().size()));
       ModListGUI.updateModList(null);
-      LauncherGUI.serverSwitchingEnabled = true;
+      LauncherEventHandler.updateServerSwitcher(false);
       checking = false;
     }
   }
@@ -141,7 +141,7 @@ public class ModLoader {
 
     if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
 
-    LauncherGUI.serverSwitchingEnabled = false;
+    LauncherEventHandler.updateServerSwitcher(true);
     LauncherGUI.launchButton.setEnabled(false);
     LauncherGUI.settingsButton.setEnabled(false);
     LauncherGUI.modButton.setEnabled(false);
@@ -176,7 +176,7 @@ public class ModLoader {
     ProgressBar.finishTask();
     LauncherDigester.doDigest();
 
-    LauncherGUI.serverSwitchingEnabled = true;
+    LauncherEventHandler.updateServerSwitcher(false);
     LauncherGUI.launchButton.setEnabled(true);
     LauncherGUI.settingsButton.setEnabled(true);
     LauncherGUI.modButton.setEnabled(true);
@@ -188,7 +188,7 @@ public class ModLoader {
 
   private static void rebuildFiles() {
     try {
-      LauncherGUI.serverSwitchingEnabled = false;
+      LauncherEventHandler.updateServerSwitcher(true);
       LauncherGUI.launchButton.setEnabled(false);
       LauncherGUI.settingsButton.setEnabled(false);
       LauncherGUI.modButton.setEnabled(false);
@@ -229,7 +229,7 @@ public class ModLoader {
     rebuildRequired = false;
 
     try {
-      LauncherGUI.serverSwitchingEnabled = true;
+      LauncherEventHandler.updateServerSwitcher(false);
       LauncherGUI.launchButton.setEnabled(true);
       LauncherGUI.settingsButton.setEnabled(true);
       LauncherGUI.modButton.setEnabled(true);

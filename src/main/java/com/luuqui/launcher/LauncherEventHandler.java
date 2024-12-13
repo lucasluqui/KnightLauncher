@@ -41,7 +41,7 @@ public class LauncherEventHandler {
     Thread launchThread = new Thread(() -> {
 
       // disable server switching and launch button during launch procedure
-      LauncherGUI.serverSwitchingEnabled = false;
+      LauncherEventHandler.updateServerSwitcher(true);
       LauncherGUI.launchButton.setEnabled(false);
 
       if(LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
@@ -352,8 +352,8 @@ public class LauncherEventHandler {
       ModListEventHandler.selectedServerChanged();
       EditorsEventHandler.selectedServerChanged();
       saveSelectedServer();
-      updateServerSwitcher();
-      updateServerSwitcher(); // why do we have to call this twice for it to work correctly? TODO: figure out!
+      updateServerSwitcher(false);
+      updateServerSwitcher(false); // why do we have to call this twice for it to work correctly? TODO: figure out!
     } else {
       // fallback to official in rare error scenario
       LauncherApp.selectedServer = LauncherApp.findServerByName("Official");
@@ -361,12 +361,13 @@ public class LauncherEventHandler {
     }
   }
 
-  public static void updateServerSwitcher() {
+  public static void updateServerSwitcher(boolean locked) {
     LauncherGUI.serverSwitcherPane.removeAll();
 
     List<Server> serverList = LauncherApp.serverList;
     if(!serverList.isEmpty()) {
       int count = 0;
+      String borderColor = ColorUtil.colorToHexString(locked ? CustomColors.INTERFACE_SERVERSWITCHER_LOCKED_HOVER_BORDER : CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER);
 
       BufferedImage officialServerBufferedImage = ImageUtil.loadImageWithinJar("/img/server-official.png");
       officialServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(officialServerBufferedImage, 32, 32);
@@ -401,12 +402,12 @@ public class LauncherEventHandler {
         serverIconPane.add(serverIcon);
 
         if(server == LauncherApp.selectedServer) {
-          serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER) + ",2");
+          serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + borderColor + ",2");
           serverIcon.updateUI();
         } else {
           serverIcon.addMouseListener(new MouseListener() {
             @Override public void mouseClicked(MouseEvent e) {
-              if(LauncherGUI.serverSwitchingEnabled) {
+              if(!locked) {
                 LauncherApp.selectedServer = server;
                 selectedServerChanged();
                 saveSelectedServer(server.getSanitizedName());
@@ -415,7 +416,7 @@ public class LauncherEventHandler {
             @Override public void mousePressed(MouseEvent e) {}
             @Override public void mouseReleased(MouseEvent e) {}
             @Override public void mouseEntered(MouseEvent e) {
-              serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER) + ",2");
+              serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + borderColor + ",2");
               serverIcon.updateUI();
             }
             @Override public void mouseExited(MouseEvent e) {
@@ -635,7 +636,7 @@ public class LauncherEventHandler {
       LauncherApp.exit();
 
       // re-enable server switching and launching.
-      LauncherGUI.serverSwitchingEnabled = true;
+      LauncherEventHandler.updateServerSwitcher(false);
       LauncherGUI.launchButton.setEnabled(true);
     } else {
       try {
@@ -647,7 +648,7 @@ public class LauncherEventHandler {
         }
 
         // re-enable server switching and launching.
-        LauncherGUI.serverSwitchingEnabled = true;
+        LauncherEventHandler.updateServerSwitcher(false);
         LauncherGUI.launchButton.setEnabled(true);
       } catch (InterruptedException e) {
         log.error(e);
