@@ -57,14 +57,24 @@ public class SystemUtil {
 
     if(isWindows()) {
       machineId = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "wmic csproduct get UUID" })[0];
-      machineId = machineId.substring(machineId.indexOf("\n")).trim();
+
+      try {
+        machineId = machineId.substring(machineId.indexOf("\n")).trim();
+      } catch (Exception e) {
+        log.error(e);
+      }
 
       // Some lazy bios manufacturers won't bother setting a valid UUID for their BIOS and thus
       // creating a case where someone might share an invalid or default UUID with someone else
       // (the infamous 03000200-0400-0500-0006-000700080009 UUID!).
       // Assuming this could be the case, we gather Windows' software GUID and add it to the mix.
       String machineIdFailsafe = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "reg query HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid" })[0];
-      machineIdFailsafe = machineIdFailsafe.substring(machineIdFailsafe.indexOf("\n")).trim();
+
+      try {
+        machineIdFailsafe = machineIdFailsafe.substring(machineIdFailsafe.indexOf("\n")).trim();
+      } catch (Exception e) {
+        log.error(e);
+      }
 
       // Some systems return an empty string when trying to get the failsafe, so let's not add it when that's the case.
       if(!machineIdFailsafe.isEmpty()) {
@@ -73,9 +83,9 @@ public class SystemUtil {
       } else {
         // Let's make sure they don't also have an invalid UUID before letting them through without the failsafe
         // If they do send them to the NullPointerException realm.
-        if(machineId.equalsIgnoreCase("03000200-0400-0500-0006-000700080009")
+        if(machineId != null && (machineId.equalsIgnoreCase("03000200-0400-0500-0006-000700080009")
           || machineId.equalsIgnoreCase("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
-          || machineId.equalsIgnoreCase("00000000-0000-0000-0000-000000000000")) {
+          || machineId.equalsIgnoreCase("00000000-0000-0000-0000-000000000000"))) {
           machineId = null;
         }
       }
