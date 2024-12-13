@@ -59,12 +59,12 @@ public class ProcessUtil {
   }
 
   public static boolean isGameRunningByTitle(String processTitle) {
-    String output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "tasklist /v /fo csv /fi \"imagename eq java.exe\"" })[0];
-    log.info("isGameRunningByTitle", "output", output.replace("\r", "").replace("\n", "|"));
+    String[] output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "tasklist /v /fo csv /fi \"imagename eq java.exe\"" });
+    log.info("isGameRunningByTitle", "output (stdout)", output[0].replace("\r", "").replace("\n", "|"), "output (stderr)", output[1]);
 
     // We return true if we find either the process title requested or an "ERROR" string due to some
     // systems not having a properly functioning "tasklist" command or some antivirus blocking it.
-    return output.contains(processTitle) || output.contains("ERROR");
+    return output[0].contains(processTitle) || output[1].contains("ERROR");
   }
 
 }
