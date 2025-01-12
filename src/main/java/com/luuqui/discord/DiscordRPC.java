@@ -2,6 +2,7 @@ package com.luuqui.discord;
 
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.util.SystemUtil;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRichPresence;
 
@@ -57,7 +58,12 @@ public class DiscordRPC {
 
   public static DiscordRPC getInstance() {
     if (_instance == null) {
-      _instance = new DiscordRPC(LauncherGlobals.RPC_CLIENT_ID);
+      try {
+        _instance = new DiscordRPC(LauncherGlobals.RPC_CLIENT_ID);
+      } catch (UnsatisfiedLinkError e) {
+        SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
+        _instance = new DiscordRPC(LauncherGlobals.RPC_CLIENT_ID);
+      }
     }
     return _instance;
   }

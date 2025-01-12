@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -177,6 +178,14 @@ public class SystemUtil {
     } catch (IllegalAccessException e) {
       log.error(e);
     }
+  }
+
+  public static void fixTempDir(String newDir) {
+    System.setProperty("java.io.tmpdir", newDir);
+    Map<String, String> newEnv = new HashMap<>();
+    newEnv.put("TEMP", newDir);
+    SystemUtil.setEnv(newEnv);
+    com.luuqui.launcher.Log.log.info("TEMP path changed to: " + newDir);
   }
 
 }

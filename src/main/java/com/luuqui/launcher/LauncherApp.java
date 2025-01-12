@@ -482,15 +482,7 @@ public class LauncherApp {
     boolean containsCyrillic = System.getProperty("user.name").codePoints()
       .mapToObj(Character.UnicodeScript::of)
       .anyMatch(Character.UnicodeScript.CYRILLIC::equals);
-    if (containsCyrillic) fixTempDir();
-  }
-
-  protected static void fixTempDir() {
-    System.setProperty("java.io.tmpdir", LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
-    Map<String, String> newEnv = new HashMap<>();
-    newEnv.put("TEMP", LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
-    SystemUtil.setEnv(newEnv);
-    log.info("TEMP path changed to: " + LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
+    if (containsCyrillic) SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
   }
 
   protected static void exit() {

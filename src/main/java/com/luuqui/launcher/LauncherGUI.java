@@ -9,10 +9,7 @@ import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mod.ModListGUI;
 import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsGUI;
-import com.luuqui.util.ColorUtil;
-import com.luuqui.util.DesktopUtil;
-import com.luuqui.util.GifDecoder;
-import com.luuqui.util.ImageUtil;
+import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
@@ -41,7 +38,14 @@ public class LauncherGUI extends BaseGUI {
   public LauncherGUI(LauncherApp app) {
     super();
     this.app = app;
-    initialize();
+    try {
+      initialize();
+    } catch (UnsatisfiedLinkError e) {
+      // Some Windows installations don't allow you to write to the default temp dir and throw this error instead
+      // when trying to set up any UI. Let's divert the temp directory to a custom one.
+      SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
+      initialize();
+    }
   }
 
   @SuppressWarnings("static-access")
