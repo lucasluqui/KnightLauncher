@@ -4,7 +4,6 @@
     <root id="archive" name="KnightLauncher.jar">
       <element id="module-output" name="KnightLauncher" />
       <element id="dir-copy" path="$PROJECT_DIR$/assets" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/formdev/flatlaf/3.5.1/flatlaf-3.5.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont-font_awesome/4.7.0.1/jiconfont-font_awesome-4.7.0.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont-swing/1.0.1/jiconfont-swing-1.0.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont/1.0.0/jiconfont-1.0.0.jar" path-in-jar="/" />
@@ -18,6 +17,7 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/Filters.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/image4j-0.7.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/xml/bind/jaxb-api-osgi/2.2.7/jaxb-api-osgi-2.2.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/formdev/flatlaf/3.5.4/flatlaf-3.5.4.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
