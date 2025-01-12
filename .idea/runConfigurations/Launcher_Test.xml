@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Launcher Test" type="JarApplication">
     <option name="JAR_PATH" value="$PROJECT_DIR$/build/artifacts/KnightLauncher_jar/KnightLauncher.jar" />
-    <option name="WORKING_DIRECTORY" value="F:\SteamLibrary\steamapps\common\Spiral Knights" />
+    <option name="WORKING_DIRECTORY" value="E:\SteamLibrary\steamapps\common\Spiral Knights" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
     <method v="2" />
