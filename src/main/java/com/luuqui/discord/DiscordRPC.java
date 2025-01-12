@@ -61,6 +61,7 @@ public class DiscordRPC {
       try {
         _instance = new DiscordRPC(LauncherGlobals.RPC_CLIENT_ID);
       } catch (UnsatisfiedLinkError e) {
+        log.error(e);
         SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
         _instance = new DiscordRPC(LauncherGlobals.RPC_CLIENT_ID);
       }

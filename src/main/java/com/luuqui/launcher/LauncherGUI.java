@@ -43,6 +43,7 @@ public class LauncherGUI extends BaseGUI {
     } catch (UnsatisfiedLinkError e) {
       // Some Windows installations don't allow you to write to the default temp dir and throw this error instead
       // when trying to set up any UI. Let's divert the temp directory to a custom one.
+      log.error(e);
       SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
       initialize();
     }
