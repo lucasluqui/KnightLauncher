@@ -278,6 +278,10 @@ public class LauncherEventHandler {
     SettingsProperties.setValue("launcher.selectedServerName", serverName);
   }
 
+  public static void openAuctionsWebpage(ActionEvent action) {
+    DesktopUtil.openWebpage("https://www.sk-ah.com");
+  }
+
   public static void displaySelectedServerInfo() {
     Server selectedServer = LauncherApp.selectedServer;
 
@@ -323,6 +327,7 @@ public class LauncherEventHandler {
         LauncherGUI.playerCountTooltipButton.setVisible(true);
         LauncherGUI.serverInfoButton.setEnabled(false);
         LauncherGUI.serverInfoButton.setVisible(false);
+        LauncherGUI.auctionButton.setVisible(true);
       } else {
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
         if(!selectedServer.isInstalled()) {
@@ -345,6 +350,8 @@ public class LauncherEventHandler {
         // TODO: Fetch player count.
         LauncherGUI.playerCountLabel.setText("Players online: Unavailable");
         LauncherGUI.playerCountTooltipButton.setVisible(false);
+
+        LauncherGUI.auctionButton.setVisible(false);
       }
 
       updateBanner();

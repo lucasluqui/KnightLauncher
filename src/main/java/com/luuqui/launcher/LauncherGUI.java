@@ -184,7 +184,7 @@ public class LauncherGUI extends BaseGUI {
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
     settingsButton = new JButton(Locale.getValue("b.settings"));
     settingsButton.setIcon(settingsIcon);
-    settingsButton.setBounds(28, 275, 125, 35);
+    settingsButton.setBounds(28, 255, 125, 35);
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
     settingsButton.setFont(Fonts.fontMed);
     settingsButton.setFocusPainted(false);
@@ -224,7 +224,7 @@ public class LauncherGUI extends BaseGUI {
     Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, 16, ColorUtil.getForegroundColor());
     modButton = new JButton(Locale.getValue("b.mods"));
     modButton.setIcon(modsIcon);
-    modButton.setBounds(28, 315, 125, 35);
+    modButton.setBounds(28, 295, 125, 35);
     modButton.setHorizontalAlignment(SwingConstants.LEFT);
     modButton.setFont(Fonts.fontMed);
     modButton.setFocusPainted(false);
@@ -265,7 +265,7 @@ public class LauncherGUI extends BaseGUI {
     Icon editorsIcon = IconFontSwing.buildIcon(FontAwesome.PENCIL, 16, ColorUtil.getForegroundColor());
     editorsButton = new JButton(Locale.getValue("b.editors"));
     editorsButton.setIcon(editorsIcon);
-    editorsButton.setBounds(28, 355, 125, 35);
+    editorsButton.setBounds(28, 335, 125, 35);
     editorsButton.setHorizontalAlignment(SwingConstants.LEFT);
     editorsButton.setFont(Fonts.fontMed);
     editorsButton.setFocusPainted(false);
@@ -302,6 +302,22 @@ public class LauncherGUI extends BaseGUI {
       launcherGUIFrame.add(layeredReturnButton);
     });
     sidePane.add(editorsButton);
+
+    Icon auctionIcon = IconFontSwing.buildIcon(FontAwesome.SHOPPING_CART, 16, ColorUtil.getForegroundColor());
+    auctionButton = new JButton(Locale.getValue("b.auction"));
+    auctionButton.setIcon(auctionIcon);
+    auctionButton.setBounds(28, 375, 125, 35);
+    auctionButton.setHorizontalAlignment(SwingConstants.LEFT);
+    auctionButton.setFont(Fonts.fontMed);
+    auctionButton.setFocusPainted(false);
+    auctionButton.setFocusable(false);
+    auctionButton.setBorderPainted(false);
+    auctionButton.setEnabled(true);
+    auctionButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
+    auctionButton.setForeground(Color.WHITE);
+    auctionButton.setToolTipText(Locale.getValue("b.auction"));
+    auctionButton.addActionListener(LauncherEventHandler::openAuctionsWebpage);
+    sidePane.add(auctionButton);
 
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
     discordButton.setBounds(65, 440, 36, 36);
@@ -690,6 +706,7 @@ public class LauncherGUI extends BaseGUI {
   public static JButton settingsButton;
   public static JButton modButton;
   public static JButton editorsButton;
+  public static JButton auctionButton;
   public static JButton playerCountTooltipButton;
   public static JLabel playerCountLabel;
   public static JLabel selectedServerLabel;
