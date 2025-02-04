@@ -285,7 +285,7 @@ public class SettingsGUI extends BaseGUI {
     gamePanel.add(headerLabel);
 
     javaVMBadge = new JLabel(Locale.getValue("m.game_java_vm_data", JavaUtil.getReadableGameJVMData()));
-    javaVMBadge.setBounds(370, 24, 235, 18);
+    javaVMBadge.setBounds(330, 24, 275, 18);
     javaVMBadge.setHorizontalAlignment(SwingConstants.CENTER);
     javaVMBadge.setFont(Fonts.fontRegSmall);
     javaVMBadge.putClientProperty(FlatClientProperties.STYLE,
