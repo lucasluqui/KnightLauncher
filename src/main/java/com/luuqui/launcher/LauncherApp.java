@@ -160,7 +160,8 @@ public class LauncherApp {
     } else {
       // Organic JVM patch, set default values.
       path = LauncherGlobals.USER_DIR;
-      legacy = false;
+      //legacy = false;
+      legacy = true; // Temporarily set Official to use legacy JVMs too
     }
 
       try {
