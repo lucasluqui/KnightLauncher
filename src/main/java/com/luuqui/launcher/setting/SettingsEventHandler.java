@@ -132,7 +132,8 @@ public class SettingsEventHandler {
 
   public static void jvmPatchEvent(ActionEvent action) {
     String javaVMPatchDir = LauncherGlobals.USER_DIR;
-    boolean legacy = false;
+    //boolean legacy = false;
+    boolean legacy = true; // Temporarily set Official to use legacy JVMs too
 
     if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
       javaVMPatchDir += File.separator + "thirdparty" + File.separator + LauncherApp.selectedServer.getSanitizedName();
