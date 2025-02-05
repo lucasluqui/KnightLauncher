@@ -15,23 +15,41 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.luuqui.launcher.Log.log;
 
 public class JVMPatcher extends BaseGUI {
 
-  private final LauncherApp app;
-  public static JFrame jvmPatcherFrame;
+  public JFrame jvmPatcherFrame;
 
-  public JVMPatcher(LauncherApp app) {
+  private final LauncherApp _app;
+  private final String _path;
+  private final boolean _legacy;
+  private int _downloadAttempts = 0;
+  private Map<String, String> _availableJVM = new HashMap<String, String>();
+
+  public JVMPatcher(LauncherApp app, String path, boolean legacy) {
     super();
-    this.app = app;
+    this._app = app;
+    this._path = path;
+    this._legacy = legacy;
+    setAvailableJVM();
     initialize();
   }
 
   @SuppressWarnings("static-access")
   public void switchVisibility() {
     this.jvmPatcherFrame.setVisible(!this.jvmPatcherFrame.isVisible());
+  }
+
+  private void setAvailableJVM() {
+    if(_legacy) {
+      _availableJVM.put("Java 8 (8u202)", "8u202");
+      _availableJVM.put("Java 8 (8u251)", "8u251");
+    }
+    _availableJVM.put("Java 11 (OpenJDK 11.0.26)", "ojdk-11.0.26");
   }
 
   private void initialize() {
@@ -58,22 +76,22 @@ public class JVMPatcher extends BaseGUI {
     subHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
     jvmPatcherFrame.getContentPane().add(subHeaderLabel);
 
-    JLabel javaVersionSelectLabel = new JLabel("Select a Java version to install");
-    javaVersionSelectLabel.setBounds(0, 115, 500, 37);
-    javaVersionSelectLabel.setFont(Fonts.fontMed);
-    javaVersionSelectLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    jvmPatcherFrame.getContentPane().add(javaVersionSelectLabel);
+    JLabel jvmSelectLabel = new JLabel("Select a Java version to install");
+    jvmSelectLabel.setBounds(0, 115, 500, 37);
+    jvmSelectLabel.setFont(Fonts.fontMed);
+    jvmSelectLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    jvmPatcherFrame.getContentPane().add(jvmSelectLabel);
 
-    javaVersionComboBox = new JComboBox<>();
-    javaVersionComboBox.setBounds(125, 145, 255, 20);
-    javaVersionComboBox.setFocusable(false);
-    javaVersionComboBox.setFont(Fonts.fontReg);
-    jvmPatcherFrame.add(javaVersionComboBox);
+    jvmComboBox = new JComboBox<>();
+    jvmComboBox.setBounds(125, 145, 255, 20);
+    jvmComboBox.setFocusable(false);
+    jvmComboBox.setFont(Fonts.fontReg);
+    jvmPatcherFrame.add(jvmComboBox);
 
-    javaVersionComboBox.addItem("Java 8 (8u202)");
-    javaVersionComboBox.addItem("Java 8 (8u251)");
-    javaVersionComboBox.addItem("Java 11 (OpenJDK 11.0.26)");
-    javaVersionComboBox.setSelectedIndex(0);
+    for(String key : _availableJVM.keySet()) {
+      jvmComboBox.addItem(key);
+    }
+    jvmComboBox.setSelectedIndex(0);
 
     jvmPatcherState = new JLabel("");
     jvmPatcherState.setBounds(26, 180, 450, 15);
@@ -94,12 +112,12 @@ public class JVMPatcher extends BaseGUI {
     buttonAccept.addActionListener(l -> {
       buttonAccept.setEnabled(false);
       buttonAccept.setVisible(false);
-      javaVersionSelectLabel.setVisible(false);
-      javaVersionComboBox.setVisible(false);
+      jvmSelectLabel.setVisible(false);
+      jvmComboBox.setVisible(false);
       headerLabel.setText("This will take a few minutes...");
       subHeaderLabel.setText("Please do not close this window.");
       jvmPatcherProgressBar.setVisible(true);
-      initPatcher();
+      this.initPatcher();
     });
 
     JPanel titleBar = new JPanel();
@@ -153,15 +171,18 @@ public class JVMPatcher extends BaseGUI {
     final int BUTTON_HEIGHT = 35;
 
     Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 17, ColorUtil.getForegroundColor());
-    JButton closeButton = new JButton(closeIcon);
+    closeButton = new JButton(closeIcon);
     closeButton.setBounds(jvmPatcherFrame.getWidth() - BUTTON_WIDTH, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
     closeButton.setToolTipText(Locale.getValue("b.close"));
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
     closeButton.setBackground(null);
     closeButton.setBorder(null);
-    closeButton.setVisible(Settings.jvmPatched);
     closeButton.setFont(Fonts.fontMed);
+
+    // Only allow closing this window if the JVM was already patched before.
+    closeButton.setVisible(Settings.jvmPatched);
+
     titleBar.add(closeButton);
     closeButton.addActionListener(e -> {
       finish();
@@ -196,21 +217,20 @@ public class JVMPatcher extends BaseGUI {
 
   }
 
-  private static void initPatcher() {
-    Thread patchThread = new Thread(new Runnable() {
-      public void run() {
-        patch();
-      }
-    });
+  private void initPatcher() {
+    Thread patchThread = new Thread(this::patch);
     patchThread.start();
   }
 
-  private static void patch() {
+  private void patch() {
+    // Don't allow closing the window once patching starts.
+    closeButton.setEnabled(false);
+
     jvmPatcherProgressBar.setMaximum(4);
     jvmPatcherProgressBar.setValue(1);
-    jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_download", "74"));
+    jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_download"));
     
-    downloadPackagedJVM();
+    this.downloadPackagedJVM();
     if(_downloadAttempts > 3) {
       String downloadErrMsg = "The Java VM download couldn't be initiated after 3 attempts." +
               "\nKnight Launcher will boot without patching but be aware game performance might not be the best." +
@@ -223,8 +243,8 @@ public class JVMPatcher extends BaseGUI {
     jvmPatcherProgressBar.setValue(2);
     jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_delete"));
     try {
-      if (!FileUtil.fileExists(LauncherApp.javaVMPatchDir + File.separator + "java_vm_unpatched")) {
-        FileUtils.moveDirectory(new File(LauncherApp.javaVMPatchDir, "java_vm"), new File(LauncherApp.javaVMPatchDir, "java_vm_unpatched"));
+      if (!FileUtil.fileExists(this._path + File.separator + "java_vm_unpatched")) {
+        FileUtils.moveDirectory(new File(this._path, "java_vm"), new File(this._path, "java_vm_unpatched"));
       }
     } catch (IOException e) {
       log.error(e);
@@ -232,22 +252,19 @@ public class JVMPatcher extends BaseGUI {
 
     jvmPatcherProgressBar.setValue(3);
     jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_extract"));
-    Compressor.unzip(LauncherApp.javaVMPatchDir + File.separator + "jvm_pack.zip", LauncherApp.javaVMPatchDir, false);
-    new File(LauncherApp.javaVMPatchDir, "jvm_pack.zip").delete();
+    Compressor.unzip(this._path + File.separator + "jvm_pack.zip", this._path, false);
+    new File(this._path, "jvm_pack.zip").delete();
 
     jvmPatcherProgressBar.setValue(4);
     jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_finish"));
+
+    closeButton.setEnabled(true);
     finish();
   }
 
-  private static void downloadPackagedJVM() {
-    String downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "8u251");
-
-    switch(javaVersionComboBox.getSelectedIndex()) {
-      case 0: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "8u202"); break;
-      case 1: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "8u251"); break;
-      case 2: downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", "ojdk-11.0.26"); break;
-    }
+  private void downloadPackagedJVM() {
+    String selectedJVM = _availableJVM.get(jvmComboBox.getSelectedItem().toString());
+    String downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", selectedJVM);
 
     boolean downloadCompleted = false;
     while(_downloadAttempts <= 3 && !downloadCompleted) {
@@ -256,7 +273,7 @@ public class JVMPatcher extends BaseGUI {
       try {
         FileUtils.copyURLToFile(
                 new URL(downloadUrl),
-                new File(LauncherApp.javaVMPatchDir, "jvm_pack.zip"),
+                new File(this._path, "jvm_pack.zip"),
                 0,
                 0
         );
@@ -268,7 +285,7 @@ public class JVMPatcher extends BaseGUI {
     }
   }
 
-  private static void finish() {
+  private void finish() {
     SettingsProperties.setValue("launcher.jvm_patched", "true");
     ModuleLoader.loadJarCommandLine();
     DiscordRPC.getInstance().stop();
@@ -277,14 +294,14 @@ public class JVMPatcher extends BaseGUI {
     System.exit(1);
   }
 
-  private static JLabel headerLabel;
-  private static JLabel subHeaderLabel;
-  private static JButton buttonAccept;
-  private static JButton buttonDecline;
-  private static JProgressBar jvmPatcherProgressBar;
-  private static JLabel jvmPatcherState;
-  private static JComboBox<String> javaVersionComboBox;
-  private static int _downloadAttempts = 0;
+  private JButton closeButton;
+
+  private JLabel headerLabel;
+  private JLabel subHeaderLabel;
+  private JButton buttonAccept;
+  private JProgressBar jvmPatcherProgressBar;
+  private JLabel jvmPatcherState;
+  private JComboBox<String> jvmComboBox;
 
 }
 

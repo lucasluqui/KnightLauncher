@@ -132,10 +132,17 @@ public class SettingsEventHandler {
 
   public static void jvmPatchEvent(ActionEvent action) {
     String javaVMPatchDir = LauncherGlobals.USER_DIR;
+    boolean legacy = false;
+
     if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
       javaVMPatchDir += File.separator + "thirdparty" + File.separator + LauncherApp.selectedServer.getSanitizedName();
+
+      // Set legacy to true to indicate the JVM Patcher that this installation only supports Java 8 and lower JVMs.
+      // Ideally all servers should follow Official and support newer Java versions at the same pace but that's not the case.
+      legacy = true;
     }
-    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar", "forceJVMPatch", javaVMPatchDir}, true);
+
+    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar", "forceJVMPatch", javaVMPatchDir, String.valueOf(legacy)}, true);
     SettingsGUI.settingsGUIFrame.dispose();
     System.exit(1);
   }

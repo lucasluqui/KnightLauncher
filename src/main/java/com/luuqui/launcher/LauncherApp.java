@@ -47,8 +47,6 @@ public class LauncherApp {
   public static java.util.List<Server> serverList = new ArrayList<>();
   public static Server selectedServer = null;
 
-  public static String javaVMPatchDir = null;
-
   public static void main(String[] args) {
 
     LauncherApp app = new LauncherApp();
@@ -150,10 +148,25 @@ public class LauncherApp {
   }
 
   private JVMPatcher composeJVMPatcher(LauncherApp app) {
-    try {
+    String path;
+    boolean legacy;
+
+    if(_args.length > 0) {
+      // If there's any arguments it means this is a forced JVM patch and there's extra info we should parse.
+      // Set the path dir to wherever we're being forced to patch to, and set legacy to only allow legacy JVMs.
+      // This is primarily used for patching when a third party server was selected.
+      path = _args[1];
+      legacy = Boolean.parseBoolean(_args[2]);
+    } else {
+      // Organic JVM patch, set default values.
+      path = LauncherGlobals.USER_DIR;
+      legacy = false;
+    }
+
+      try {
       EventQueue.invokeAndWait(() -> {
         try {
-          jvmPatcher = new JVMPatcher(app);
+          jvmPatcher = new JVMPatcher(app, path, legacy);
         } catch (Exception e) {
           log.error(e);
         }
@@ -339,9 +352,6 @@ public class LauncherApp {
 
     // First of all see if we're being forced to patch.
     if(_args.length > 0 && _args[0].equals("forceJVMPatch")) {
-      // set the path dir to wherever we're being forced to patch to.
-      // this is primarily used for patching when third party servers were selected.
-      javaVMPatchDir = _args[1];
       return true;
     }
 
@@ -359,8 +369,6 @@ public class LauncherApp {
       SettingsProperties.setValue("launcher.jvm_patched", "true");
       return false;
     }
-
-    javaVMPatchDir = LauncherGlobals.USER_DIR;
 
     return true;
   }
