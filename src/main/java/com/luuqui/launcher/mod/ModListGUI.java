@@ -31,7 +31,6 @@ public class ModListGUI extends BaseGUI {
 
   private JLabel labelModCountText;
   private JButton refreshButton;
-  private JButton forceApplyButton;
 
   public ModListGUI(LauncherApp app) {
     super();
@@ -296,6 +295,26 @@ public class ModListGUI extends BaseGUI {
       });
 
       modPane.add(enabledCheckbox);
+
+      if(mod instanceof JarMod) {
+        if(!((JarMod) mod).getMeetsJDKRequirements()) {
+          JLabel jarModIncompatBadge = new JLabel();
+          jarModIncompatBadge.setBounds(340, 50, 100, 18);
+          jarModIncompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
+          jarModIncompatBadge.setFont(Fonts.fontRegSmall);
+          jarModIncompatBadge.setText(Locale.getValue("m.code_mod_jdkincompatible"));
+          jarModIncompatBadge.setToolTipText(jarModIncompatBadge.getText());
+          jarModIncompatBadge.setVisible(true);
+          jarModIncompatBadge.putClientProperty(FlatClientProperties.STYLE,
+                  "background:" + ColorUtil.colorToHexString(CustomColors.BRIGHT_RED)
+                          + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.MID_RED)
+                          + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.BRIGHT_RED));
+          modPane.add(jarModIncompatBadge);
+
+          enabledCheckbox.setSelected(false);
+          enabledCheckbox.setEnabled(false);
+        }
+      }
 
       modListPane.add(modPane);
       count++;

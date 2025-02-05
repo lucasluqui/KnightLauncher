@@ -8,6 +8,7 @@ public class JarMod extends Mod {
 
   private int minJDKVersion;
   private int maxJDKVersion;
+  private boolean meetsJDKRequirements;
 
   public JarMod () {
     super();
@@ -19,6 +20,7 @@ public class JarMod extends Mod {
     this.fileName = fileName;
     this.minJDKVersion = 8;
     this.maxJDKVersion = 8;
+    this.meetsJDKRequirements = true;
   }
 
   public int getMinJDKVersion() {
@@ -35,6 +37,14 @@ public class JarMod extends Mod {
 
   public void setMaxJDKVersion(int maxJDKVersion) {
     this.maxJDKVersion = maxJDKVersion;
+  }
+
+  public boolean getMeetsJDKRequirements() {
+    return this.meetsJDKRequirements;
+  }
+
+  public void setMeetsJDKRequirements(boolean meetsJDKRequirements) {
+    this.meetsJDKRequirements = meetsJDKRequirements;
   }
 
   public void mount () {

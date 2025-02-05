@@ -329,7 +329,9 @@ public class ModLoader {
     for(Mod mod : modList) {
       if(mod instanceof JarMod) {
         // Disable any jar mod that is below the min JDK requirements or above the max JDK requirements.
-        mod.setEnabled( gameJVMVersion >= ((JarMod) mod).getMinJDKVersion() && gameJVMVersion <= ((JarMod) mod).getMaxJDKVersion() );
+        boolean compatible = gameJVMVersion >= ((JarMod) mod).getMinJDKVersion() && gameJVMVersion <= ((JarMod) mod).getMaxJDKVersion();
+        ((JarMod) mod).setEnabled(compatible);
+        ((JarMod) mod).setMeetsJDKRequirements(compatible);
       }
     }
   }

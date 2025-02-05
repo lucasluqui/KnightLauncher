@@ -53,7 +53,7 @@ public class JavaUtil {
       log.error(e, "output", output);
     }
 
-    return version.startsWith("1.") ? Integer.parseInt(version.split("\\.")[1]) : Integer.parseInt(version);
+    return version.startsWith("1.") ? Integer.parseInt(version.split("\\.")[1]) : Integer.parseInt(version.split("\\.")[0]);
   }
 
   public static String getGameJVMData() {
