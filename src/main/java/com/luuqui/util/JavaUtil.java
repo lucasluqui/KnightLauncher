@@ -31,19 +31,12 @@ public class JavaUtil {
 
   public static int getJVMArch(String path) {
     String output = getJVMVersionOutput(path);
-    if (SystemUtil.isWindows()) {
-      // We got no output, so we can't do any checks.
-      if(output.isEmpty()) return 0;
 
-      // Matches a 64-bit '-version' output.
-      if(output.contains("64-Bit Server VM")) return 64;
-    } else {
-      // We got no output, so we can't do any checks.
-      if(output.isEmpty()) return 0;
+    // We got no output, can't do any checks.
+    if(output.isEmpty()) return 0;
 
-      // Matches a 64-bit.
-      if(output.contains("64-Bit") || output.contains("PE32+")) return 64;
-    }
+    // Matches a 64-bit JVM.
+    if(output.contains("64-Bit") || output.contains("PE32+")) return 64;
 
     // No results matched. We assume it's 32-bit.
     return 32;
