@@ -107,7 +107,7 @@ public class ModLoader {
             try {
               minJDKVersion = Integer.parseInt(modJson.getString("minJDKVersion"));
             } catch (JSONException e) {
-              minJDKVersion = 0;
+              minJDKVersion = 8;
             }
             ((JarMod) mod).setMinJDKVersion(minJDKVersion);
           }
