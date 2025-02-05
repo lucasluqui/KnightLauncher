@@ -42,6 +42,25 @@ public class JavaUtil {
     return 32;
   }
 
+  public static int getJVMVersion(String path) {
+    String output = getJVMVersionOutput(path);
+    String version = "";
+
+    if(FileUtil.fileExists(path + "/release")) {
+      Properties releaseFile = new Properties();
+      try {
+        releaseFile.load(Files.newInputStream(new File(path).toPath()));
+      } catch (IOException e) {
+        log.error(e);
+      }
+      version = releaseFile.getProperty("JAVA_VERSION");
+    } else {
+      version = output.split("\"")[1];
+    }
+
+    return version.startsWith("1.") ? Integer.parseInt(version.split("\\.")[1]) : Integer.parseInt(version);
+  }
+
   public static String getGameJVMData() {
     String path = getGameJavaDirPath() + "/release";
     String version = "";
