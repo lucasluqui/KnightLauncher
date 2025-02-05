@@ -342,9 +342,10 @@ public class LauncherApp {
 
   private void logGameVMInfo() {
     log.info("--------- Game VM Info ----------");
-    log.info("Directory: " + JavaUtil.getGameJavaDirPath());
+    log.info("Directory: " + JavaUtil.getGameJVMDirPath());
     log.info("Executable: " + JavaUtil.getGameJVMExePath());
     log.info("Data: " + JavaUtil.getGameJVMData());
+    log.info("Version: " + JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath()));
     log.info("Arch: " + JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()));
     log.info("---------------------------------");
   }

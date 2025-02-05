@@ -101,9 +101,9 @@ public class GameSettings {
 
     String[] outputCapture = null;
     if(SystemUtil.isWindows()) {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", JavaUtil.getGameJavaDirPath() + "/bin/jar.exe", "uf", "code/config.jar", "deployment.properties" });
+      outputCapture = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "uf", "code/config.jar", "deployment.properties" });
     } else {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", JavaUtil.getGameJavaDirPath() + "/bin/jar", "uf", "code/config.jar", "deployment.properties" });
+      outputCapture = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "uf", "code/config.jar", "deployment.properties" });
     }
     log.debug("Connection settings capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
     FileUtil.deleteFile(LauncherGlobals.USER_DIR + "/deployment.properties");

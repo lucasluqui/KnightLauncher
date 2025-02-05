@@ -5,6 +5,7 @@ import com.luuqui.launcher.LauncherGlobals;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,7 +16,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Properties;
 
-import static com.luuqui.launcher.setting.Log.log;
+import static com.luuqui.util.Log.log;
 
 public class JavaUtil {
 
@@ -46,23 +47,17 @@ public class JavaUtil {
     String output = getJVMVersionOutput(path);
     String version = "";
 
-    if(FileUtil.fileExists(path + "/release")) {
-      Properties releaseFile = new Properties();
-      try {
-        releaseFile.load(Files.newInputStream(new File(path).toPath()));
-      } catch (IOException e) {
-        log.error(e);
-      }
-      version = releaseFile.getProperty("JAVA_VERSION");
-    } else {
+    try {
       version = output.split("\"")[1];
+    } catch (Exception e) {
+      log.error(e, "output", output);
     }
 
     return version.startsWith("1.") ? Integer.parseInt(version.split("\\.")[1]) : Integer.parseInt(version);
   }
 
   public static String getGameJVMData() {
-    String path = getGameJavaDirPath() + "/release";
+    String path = getGameJVMDirPath() + "/release";
     String version = "";
     String osArch = "";
 
@@ -135,7 +130,7 @@ public class JavaUtil {
     return "Java " + javaMajorVersion + " (" + javaMinorVersion + "), " + javaArch;
   }
 
-  public static String getGameJavaDirPath() {
+  public static String getGameJVMDirPath() {
     String startingDirPath = LauncherGlobals.USER_DIR;
 
     if(LauncherApp.selectedServer != null) {
@@ -156,7 +151,7 @@ public class JavaUtil {
   }
 
   public static String getGameJVMExePath() {
-    String javaDir = getGameJavaDirPath();
+    String javaDir = getGameJVMDirPath();
     if (FileUtil.fileExists(javaDir + "/bin/java.exe")) {
       return javaDir + "/bin/java.exe";
     }
