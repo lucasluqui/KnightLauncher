@@ -14,6 +14,7 @@ import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.Compressor;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.ImageUtil;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
@@ -68,13 +69,6 @@ public class ModLoader {
       rawFiles.addAll(FileUtil.filesInDirectory(modFolderPath, ".jar"));
 
       for (File file : rawFiles) {
-        JSONObject modJson;
-        try {
-          modJson = new JSONObject(Compressor.readFileInsideZip(file.getAbsolutePath(), "mod.json")).getJSONObject("mod");
-        } catch (Exception e) {
-          modJson = null;
-        }
-
         String fileName = file.getName();
         Mod mod = null;
         if (fileName.endsWith("zip")) {
@@ -83,6 +77,13 @@ public class ModLoader {
           mod = new JarMod(fileName);
         } else if (fileName.endsWith("modpack")) {
           mod = new Modpack(fileName);
+        }
+
+        JSONObject modJson;
+        try {
+          modJson = new JSONObject(Compressor.readFileInsideZip(file.getAbsolutePath(), "mod.json")).getJSONObject("mod");
+        } catch (Exception e) {
+          modJson = null;
         }
 
         if (mod != null && modJson != null) {
@@ -99,6 +100,16 @@ public class ModLoader {
             } catch (Exception e2) {
               mod.setImage(null);
             }
+          }
+
+          if(mod instanceof JarMod) {
+            int minJDKVersion;
+            try {
+              minJDKVersion = Integer.parseInt(modJson.getString("minJDKVersion"));
+            } catch (JSONException e) {
+              minJDKVersion = 0;
+            }
+            ((JarMod) mod).setMinJDKVersion(minJDKVersion);
           }
         }
 

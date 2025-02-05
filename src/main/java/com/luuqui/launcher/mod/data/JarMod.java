@@ -6,6 +6,8 @@ import static com.luuqui.launcher.mod.Log.log;
 
 public class JarMod extends Mod {
 
+  private int minJDKVersion;
+
   public JarMod () {
     super();
   }
@@ -14,6 +16,14 @@ public class JarMod extends Mod {
     super();
     this.displayName = fileName;
     this.fileName = fileName;
+  }
+
+  public int getMinJDKVersion() {
+    return this.minJDKVersion;
+  }
+
+  public void setMinJDKVersion(int minJDKVersion) {
+    this.minJDKVersion = minJDKVersion;
   }
 
   public void mount () {
