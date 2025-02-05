@@ -7,6 +7,7 @@ import static com.luuqui.launcher.mod.Log.log;
 public class JarMod extends Mod {
 
   private int minJDKVersion;
+  private int maxJDKVersion;
 
   public JarMod () {
     super();
@@ -16,6 +17,8 @@ public class JarMod extends Mod {
     super();
     this.displayName = fileName;
     this.fileName = fileName;
+    this.minJDKVersion = 8;
+    this.maxJDKVersion = 8;
   }
 
   public int getMinJDKVersion() {
@@ -26,12 +29,25 @@ public class JarMod extends Mod {
     this.minJDKVersion = minJDKVersion;
   }
 
+  public int getMaxJDKVersion() {
+    return this.maxJDKVersion;
+  }
+
+  public void setMaxJDKVersion(int maxJDKVersion) {
+    this.maxJDKVersion = maxJDKVersion;
+  }
+
   public void mount () {
     log.info("Code mod mounted successfully", "mod", this.displayName);
   }
 
   public void wasAdded() {
     log.info("Code mod was added", "object", this.toString());
+  }
+
+  @Override
+  public String toString() {
+    return super.toString() + ", [JarMod minJDKVersion=" + this.minJDKVersion + ",maxJDKVersion=" + this.maxJDKVersion + "]";
   }
 
 }
