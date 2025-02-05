@@ -48,8 +48,9 @@ public class JVMPatcher extends BaseGUI {
     if(_legacy) {
       _availableJVM.put("Java 8 (8u202)", "8u202");
       _availableJVM.put("Java 8 (8u251)", "8u251");
+    } else {
+      _availableJVM.put("Java 11 (OpenJDK 11.0.26)", "ojdk-11.0.26");
     }
-    _availableJVM.put("Java 11 (OpenJDK 11.0.26)", "ojdk-11.0.26");
   }
 
   private void initialize() {
