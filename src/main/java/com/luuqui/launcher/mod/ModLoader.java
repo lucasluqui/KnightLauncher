@@ -14,6 +14,7 @@ import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.Compressor;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.ImageUtil;
+import com.luuqui.util.JavaUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -127,6 +128,8 @@ public class ModLoader {
         rebuildRequired = true;
         mountRequired = true;
       }
+
+      checkJarModsJDKRequirements();
 
       // Check if there's directories in the mod folder and push a warning to the user.
       for (File file : FileUtil.filesAndDirectoriesInDirectory(modFolderPath)) {
@@ -318,6 +321,16 @@ public class ModLoader {
     new File(rootDir + "/rsrc/mod.png").delete();
     for (String filePath : FileUtil.fileNamesInDirectory(rootDir + "/mods", ".hash")) {
       new File(rootDir + "/mods/" + filePath).delete();
+    }
+  }
+
+  private static void checkJarModsJDKRequirements() {
+    int gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
+    for(Mod mod : modList) {
+      if(mod instanceof JarMod) {
+        // Disable any jar mod that is below the min JDK requirements or above the max JDK requirements.
+        mod.setEnabled( gameJVMVersion >= ((JarMod) mod).getMinJDKVersion() && gameJVMVersion <= ((JarMod) mod).getMaxJDKVersion() );
+      }
     }
   }
 
