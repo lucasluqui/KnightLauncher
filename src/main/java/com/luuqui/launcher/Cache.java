@@ -2,6 +2,7 @@ package com.luuqui.launcher;
 
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.ImageUtil;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.imageio.ImageIO;
@@ -23,7 +24,7 @@ public class Cache {
   }
 
   public static BufferedImage fetchImage(String url, int width, int height) {
-    String localPath = CACHE_PATH + url.split("https://")[1];
+    String localPath = getLocalPath(url);
     BufferedImage bufferedImage = null;
     URL localURL;
 
@@ -48,6 +49,35 @@ public class Cache {
     }
 
     return bufferedImage;
+  }
+
+  public static File fetchFile(String url) {
+    String localPath = getLocalPath(url);
+
+    if(FileUtil.fileExists(localPath)) {
+      log.info("Cache: Loading file from cache", "localPath", localPath);
+      return new File(localPath);
+    } else {
+      try {
+        File localFile = new File(localPath);
+        FileUtils.copyURLToFile(
+                new URL(url),
+                localFile,
+                0,
+                0
+        );
+        log.info("Cache: Saving file to cache", "localPath", localPath);
+        return localFile;
+      } catch (IOException e) {
+        log.error(e);
+      }
+    }
+
+    return null;
+  }
+
+  private static String getLocalPath(String url) {
+    return CACHE_PATH + url.split("https://")[1];
   }
 
 }
