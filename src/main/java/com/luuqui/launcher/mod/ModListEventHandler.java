@@ -18,7 +18,15 @@ import java.util.Arrays;
 public class ModListEventHandler {
 
   public static void refreshEvent(ActionEvent action) {
+    refreshMods();
+  }
+
+  public static void refreshMods() {
     Thread refreshThread = new Thread(() -> {
+      ModListGUI.refreshButton.setEnabled(false);
+      ModListGUI.enableAllModsButton.setEnabled(false);
+      ModListGUI.disableAllModsButton.setEnabled(false);
+
       ModListGUI.labelRefreshing.setVisible(true);
       ModLoader.checkInstalled();
       if (ModLoader.rebuildRequired && Settings.doRebuilds) {
@@ -26,15 +34,12 @@ public class ModListEventHandler {
       }
       ModLoader.mount();
       ModListGUI.updateModList(null);
+
+      ModListGUI.refreshButton.setEnabled(true);
+      ModListGUI.enableAllModsButton.setEnabled(true);
+      ModListGUI.disableAllModsButton.setEnabled(true);
     });
     refreshThread.start();
-  }
-
-  public static void forceApplyEvent(ActionEvent action) {
-    ModListGUI.labelRefreshing.setText(Locale.getValue("m.apply"));
-    ModLoader.mount();
-    ModListGUI.labelRefreshing.setText(Locale.getValue("m.applied"));
-    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
   }
 
   public static void getModsEvent(ActionEvent action) {
@@ -118,5 +123,19 @@ public class ModListEventHandler {
   public static void checkServerSettingsKeys(String serverName) {
     SettingsProperties.createKeyIfNotExists("modloader.appliedModsHash_" + serverName, "0");
     SettingsProperties.createKeyIfNotExists("modloader.disabledMods_" + serverName, "");
+  }
+
+  public static void enableAllModsEvent(ActionEvent event) {
+    for(Mod mod : ModLoader.getModList()) {
+      enableMod(mod);
+    }
+    refreshMods();
+  }
+
+  public static void disableAllModsEvent(ActionEvent event) {
+    for(Mod mod : ModLoader.getModList()) {
+      disableMod(mod);
+    }
+    refreshMods();
   }
 }

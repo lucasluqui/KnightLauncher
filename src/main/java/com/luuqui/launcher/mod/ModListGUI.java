@@ -30,7 +30,6 @@ public class ModListGUI extends BaseGUI {
   protected static String currentWarning = "";
 
   private JLabel labelModCountText;
-  private JButton refreshButton;
 
   public ModListGUI(LauncherApp app) {
     super();
@@ -87,7 +86,7 @@ public class ModListGUI extends BaseGUI {
     Icon modStoreIcon = IconFontSwing.buildIcon(FontAwesome.SEARCH, 10, Color.WHITE);
     JButton modStoreButton = new JButton(Locale.getValue("b.mod_store"));
     modStoreButton.setIcon(modStoreIcon);
-    modStoreButton.setBounds(240, 35, 175, 25);
+    modStoreButton.setBounds(240, 5, 175, 25);
     modStoreButton.setFont(Fonts.fontMed);
     modStoreButton.setFocusPainted(false);
     modStoreButton.setFocusable(false);
@@ -97,7 +96,7 @@ public class ModListGUI extends BaseGUI {
     //getModsButton.addActionListener(ModListEventHandler::openModStore);
 
     JButton getModsButton = new JButton(Locale.getValue("b.get_mods"));
-    getModsButton.setBounds(420, 35, 175, 25 );
+    getModsButton.setBounds(420, 5, 175, 25);
     getModsButton.setFont(Fonts.fontMed);
     getModsButton.setFocusPainted(false);
     getModsButton.setFocusable(false);
@@ -106,13 +105,31 @@ public class ModListGUI extends BaseGUI {
     getModsButton.addActionListener(ModListEventHandler::getModsEvent);
 
     JButton modFolderButton = new JButton(Locale.getValue("b.open_mods_folder"));
-    modFolderButton.setBounds(600, 35, 175, 25);
+    modFolderButton.setBounds(600, 5, 175, 25);
     modFolderButton.setFont(Fonts.fontMed);
     modFolderButton.setFocusPainted(false);
     modFolderButton.setFocusable(false);
     modFolderButton.setToolTipText(Locale.getValue("b.open_mods_folder"));
     modListGUIFrame.getContentPane().add(modFolderButton);
     modFolderButton.addActionListener(ModListEventHandler::openModsFolderEvent);
+
+    enableAllModsButton = new JButton(Locale.getValue("b.enable_all_mods"));
+    enableAllModsButton.setBounds(420, 35, 175, 25 );
+    enableAllModsButton.setFont(Fonts.fontMed);
+    enableAllModsButton.setFocusPainted(false);
+    enableAllModsButton.setFocusable(false);
+    enableAllModsButton.setToolTipText(Locale.getValue("b.enable_all_mods"));
+    modListGUIFrame.getContentPane().add(enableAllModsButton);
+    enableAllModsButton.addActionListener(ModListEventHandler::enableAllModsEvent);
+
+    disableAllModsButton = new JButton(Locale.getValue("b.disable_all_mods"));
+    disableAllModsButton.setBounds(600, 35, 175, 25);
+    disableAllModsButton.setFont(Fonts.fontMed);
+    disableAllModsButton.setFocusPainted(false);
+    disableAllModsButton.setFocusable(false);
+    disableAllModsButton.setToolTipText(Locale.getValue("b.disable_all_mods"));
+    modListGUIFrame.getContentPane().add(disableAllModsButton);
+    disableAllModsButton.addActionListener(ModListEventHandler::disableAllModsEvent);
 
     JSeparator separator = new JSeparator();
     separator.setBounds(25, 75, 750, 2);
@@ -355,6 +372,9 @@ public class ModListGUI extends BaseGUI {
   public static JPanel modListPane = new JPanel();
   public static JScrollPane modListPaneScrollBar = new JScrollPane();
   public static JLabel labelModCount;
+  public static JButton refreshButton;
+  public static JButton enableAllModsButton;
+  public static JButton disableAllModsButton;
   public static JLabel labelRefreshing;
   public static JProgressBar refreshProgressBar = new JProgressBar();
   public static JTextField searchBox;
