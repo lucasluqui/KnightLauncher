@@ -45,15 +45,16 @@ public class JavaUtil {
 
   public static int getJVMVersion(String path) {
     String output = getJVMVersionOutput(path);
-    String version = "";
+    int version = 0;
 
     try {
-      version = output.split("\"")[1];
+      output = output.split("\"")[1];
+      version = output.startsWith("1.") ? Integer.parseInt(output.split("\\.")[1]) : Integer.parseInt(output.split("\\.")[0]);
     } catch (Exception e) {
       log.error(e, "output", output);
     }
 
-    return version.startsWith("1.") ? Integer.parseInt(version.split("\\.")[1]) : Integer.parseInt(version.split("\\.")[0]);
+    return version;
   }
 
   public static String getGameJVMData() {
