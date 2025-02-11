@@ -2,6 +2,7 @@ package com.luuqui.launcher;
 
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.ImageUtil;
+import com.luuqui.util.SystemUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -77,7 +78,9 @@ public class Cache {
   }
 
   private static String getLocalPath(String url) {
-    return CACHE_PATH + url.split("https://")[1];
+    String localPath = CACHE_PATH + url.split("https://")[1];
+    localPath = localPath.replace("/", File.separator);
+    return localPath;
   }
 
 }
