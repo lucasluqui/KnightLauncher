@@ -2,7 +2,6 @@ package com.luuqui.launcher;
 
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.ImageUtil;
-import com.luuqui.util.SystemUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
