@@ -80,38 +80,7 @@ public class ModLoader {
           mod = new Modpack(fileName);
         }
 
-        JSONObject modJson;
-        try {
-          modJson = new JSONObject(Compressor.readFileInsideZip(file.getAbsolutePath(), "mod.json")).getJSONObject("mod");
-        } catch (Exception e) {
-          modJson = null;
-        }
-
-        if (mod != null && modJson != null) {
-          mod.setDisplayName(modJson.getString("name"));
-          mod.setDescription(modJson.getString("description"));
-          mod.setAuthor(modJson.getString("author"));
-          mod.setVersion(modJson.getString("version"));
-
-          try {
-            mod.setImage(modJson.getString("image"));
-          } catch (Exception e) {
-            try {
-              mod.setImage(ImageUtil.imageToBase64(ImageIO.read(Compressor.getISFromFileInsideZip(file.getAbsolutePath(), "mod.png"))));
-            } catch (Exception e2) {
-              mod.setImage(null);
-            }
-          }
-
-          if(mod instanceof JarMod) {
-            try {
-              int minJDKVersion = Integer.parseInt(modJson.getString("minJDKVersion"));
-              int maxJDKVersion = Integer.parseInt(modJson.getString("maxJDKVersion"));
-              ((JarMod) mod).setMinJDKVersion(minJDKVersion);
-              ((JarMod) mod).setMaxJDKVersion(maxJDKVersion);
-            } catch (JSONException ignored) {}
-          }
-        }
+        parseModData(mod);
 
         modList.add(mod);
         mod.wasAdded();
@@ -321,6 +290,41 @@ public class ModLoader {
     new File(rootDir + "/rsrc/mod.png").delete();
     for (String filePath : FileUtil.fileNamesInDirectory(rootDir + "/mods", ".hash")) {
       new File(rootDir + "/mods/" + filePath).delete();
+    }
+  }
+
+  public static void parseModData(Mod mod) {
+    JSONObject modJson;
+    try {
+      modJson = new JSONObject(Compressor.readFileInsideZip(mod.getAbsolutePath(), "mod.json")).getJSONObject("mod");
+    } catch (Exception e) {
+      modJson = null;
+    }
+
+    if (mod != null && modJson != null) {
+      mod.setDisplayName(modJson.getString("name"));
+      mod.setDescription(modJson.getString("description"));
+      mod.setAuthor(modJson.getString("author"));
+      mod.setVersion(modJson.getString("version"));
+
+      try {
+        mod.setImage(modJson.getString("image"));
+      } catch (Exception e) {
+        try {
+          mod.setImage(ImageUtil.imageToBase64(ImageIO.read(Compressor.getISFromFileInsideZip(mod.getAbsolutePath(), "mod.png"))));
+        } catch (Exception e2) {
+          mod.setImage(null);
+        }
+      }
+
+      if(mod instanceof JarMod) {
+        try {
+          int minJDKVersion = Integer.parseInt(modJson.getString("minJDKVersion"));
+          int maxJDKVersion = Integer.parseInt(modJson.getString("maxJDKVersion"));
+          ((JarMod) mod).setMinJDKVersion(minJDKVersion);
+          ((JarMod) mod).setMaxJDKVersion(maxJDKVersion);
+        } catch (JSONException ignored) {}
+      }
     }
   }
 
