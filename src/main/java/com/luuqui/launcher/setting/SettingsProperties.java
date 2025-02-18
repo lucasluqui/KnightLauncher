@@ -92,7 +92,6 @@ public class SettingsProperties {
 
   public static void load() {
     // Launcher settings
-    Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));
     Settings.lang = getValue("launcher.lang");
     Settings.doRebuilds = Boolean.parseBoolean(getValue("launcher.rebuilds"));
     Settings.keepOpen = Boolean.parseBoolean(getValue("launcher.keepOpen"));

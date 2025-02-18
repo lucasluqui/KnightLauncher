@@ -179,11 +179,8 @@ public class JVMPatcher extends BaseGUI {
     closeButton.setFocusable(false);
     closeButton.setBackground(null);
     closeButton.setBorder(null);
+    closeButton.setVisible(true);
     closeButton.setFont(Fonts.fontMed);
-
-    // Only allow closing this window if the JVM was already patched before.
-    closeButton.setVisible(Settings.jvmPatched);
-
     titleBar.add(closeButton);
     closeButton.addActionListener(e -> {
       finish();
@@ -287,7 +284,6 @@ public class JVMPatcher extends BaseGUI {
   }
 
   private void finish() {
-    SettingsProperties.setValue("launcher.jvm_patched", "true");
     ModuleLoader.loadJarCommandLine();
     DiscordRPC.getInstance().stop();
     ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar"}, true);
