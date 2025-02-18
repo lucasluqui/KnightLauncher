@@ -262,7 +262,7 @@ public class JVMPatcher extends BaseGUI {
 
   private void downloadPackagedJVM() {
     String selectedJVM = _availableJVM.get(jvmComboBox.getSelectedItem().toString());
-    String downloadUrl = LauncherGlobals.URL_JAVA_REDISTRIBUTABLES.replace("{version}", selectedJVM);
+    String downloadUrl = LauncherGlobals.URL_JAVA_REDIST.replace("{version}", selectedJVM);
 
     boolean downloadCompleted = false;
     while(_downloadAttempts <= 3 && !downloadCompleted) {

@@ -16,7 +16,7 @@ public class LauncherGlobals {
   public static final String GITHUB_BRANCH = "main";
 
   public static final String URL_CDN = "https://cdn.luuqui.com/knightlauncher/v2/";
-  public static final String URL_JAVA_REDISTRIBUTABLES = URL_CDN + "java/windows/{version}/redist.zip";
+  public static final String URL_JAVA_REDIST = URL_CDN + "java/windows/{version}/redist.zip";
   public static final String URL_DISCORD = "https://discord.gg/RAf499a";
   public static final String URL_GET_MODS = "https://discord.gg/fAR8qtrat2";
   public static final String URL_DONATE = "https://ko-fi.com/lucasallegri";
