@@ -45,7 +45,7 @@ public class LauncherEventHandler {
       LauncherGUI.launchButton.setEnabled(false);
 
       if(LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
-        // official servers launch procedure
+        // start: official servers launch procedure
         if (ModLoader.mountRequired) ModLoader.mount();
         SettingsEventHandler.saveAdditionalArgs();
         SettingsEventHandler.saveConnectionSettings();
@@ -71,8 +71,9 @@ public class LauncherEventHandler {
 
         log.info("Starting game", "platform", Settings.gamePlatform);
         if (Settings.useIngameRPC) ProcessUtil.run(RPC_COMMAND_LINE, true);
+        // end: official servers launch procedure
       } else {
-        // third party server launch procedure
+        // start: third party server launch procedure
         Server selectedServer = LauncherApp.selectedServer;
         String sanitizedServerName = selectedServer.getSanitizedName();
 
@@ -81,9 +82,8 @@ public class LauncherEventHandler {
         ProgressBar.setState(Locale.getValue("m.launch_thirdparty_data", LauncherApp.selectedServer.name));
         ProgressBar.setBarValue(0);
 
+        // we did not download this third party client yet, time to get it from the deploy url.
         if(!selectedServer.isInstalled()) {
-          // we did not download this third party client yet, time to get it from the deploy url.
-
           ProgressBar.setState(Locale.getValue("m.launch_thirdparty_download", LauncherApp.selectedServer.name));
           ProgressBar.setBarValue(1);
 
@@ -196,12 +196,7 @@ public class LauncherEventHandler {
 
       if(LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
         // official servers alt launch procedure
-        if (!SystemUtil.isWindows()) {
-          ProcessUtil.run(LauncherGlobals.ALT_CLIENT_ARGS, true);
-        } else {
-          ProcessUtil.run(LauncherGlobals.ALT_CLIENT_ARGS_WIN, true);
-        }
-
+        ProcessUtil.run(LauncherGlobals.ALT_CLIENT_ARGS, true);
         DiscordRPC.getInstance().stop();
       } else {
         // third party alt launch procedure
