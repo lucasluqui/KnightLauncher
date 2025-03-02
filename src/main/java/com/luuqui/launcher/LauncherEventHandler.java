@@ -54,7 +54,7 @@ public class LauncherEventHandler {
         if (Settings.gamePlatform.startsWith("Steam")) {
 
           try {
-            SteamUtil.startGameById(99900);
+            SteamUtil.startGameById(99900, SystemUtil.isMac());
           } catch (Exception e) {
             log.error(e);
           }
