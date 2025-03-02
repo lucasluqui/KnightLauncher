@@ -8,13 +8,16 @@ import java.net.URI;
 
 public class SteamUtil {
 
-  public static void startGameById(int id) throws Exception {
+  public static void startGameById(int id, boolean dialog) throws Exception {
+    // Special procedure for unix systems where we might not be able to get the darn desktop.
     if (SystemUtil.isUnix()) {
       ProcessUtil.run(new String[] {"steam", "steam://rungameid/" + id}, true);
       return;
     }
+
+    String steamProtocolString = dialog ? "steam://launch/" + id + "/dialog" : "steam://run/" + id;
     Desktop desktop = Desktop.getDesktop();
-    URI steamProtocol = new URI("steam://run/" + id);
+    URI steamProtocol = new URI(steamProtocolString);
     desktop.browse(steamProtocol);
   }
 

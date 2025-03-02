@@ -79,7 +79,7 @@ public class LauncherApp {
     Locale.setup();
     checkStartLocation();
     setupHTTPSProtocol();
-    if (!SystemUtil.isARM()) DiscordRPC.getInstance().start();
+    if (!SystemUtil.isARM() && !SystemUtil.isMac()) DiscordRPC.getInstance().start();
     KeyboardController.start();
     checkDirectories();
     Cache.setup();
