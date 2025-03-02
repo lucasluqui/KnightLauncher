@@ -21,21 +21,32 @@ public class DiscordRPC {
    */
   private String details;
 
-  private final DiscordEventHandlers EVENT_HANDLER = new DiscordEventHandlers();
+  private boolean stub;
+
+  private final DiscordEventHandlers eventHandler;
 
   private static DiscordRPC _instance = null;
 
-  public DiscordRPC(String clientId) {
+  public DiscordRPC (String clientId) {
     this.clientId = clientId;
+    this.eventHandler = new DiscordEventHandlers();
+  }
+
+  public DiscordRPC (String clientId, boolean stub) {
+    this.clientId = clientId;
+    this.stub = stub;
+    this.eventHandler = null;
   }
 
   public void start() {
-    net.arikia.dev.drpc.DiscordRPC.discordInitialize(this.clientId, EVENT_HANDLER, true);
+    if (stub) return;
+    net.arikia.dev.drpc.DiscordRPC.discordInitialize(this.clientId, this.eventHandler, true);
     setDetails(Locale.getValue("presence.starting"));
     log.info("Discord RPC Instance is now running.");
   }
 
   public void setDetails(String details) {
+    if (stub) return;
     this.details = details;
     updatePresenceDetails(details);
   }
@@ -53,10 +64,17 @@ public class DiscordRPC {
   }
 
   public void stop() {
+    if (stub) return;
     net.arikia.dev.drpc.DiscordRPC.discordShutdown();
   }
 
   public static DiscordRPC getInstance() {
+    // Give ARM and macOS users a stub version of the DiscordRPC object
+    // so that it knows not to do anything when prompted.
+    if (SystemUtil.isARM() || SystemUtil.isMac()) {
+      _instance = new DiscordRPC("0", true);
+    }
+
     if (_instance == null) {
       try {
         _instance = new DiscordRPC(LauncherGlobals.RPC_CLIENT_ID);
