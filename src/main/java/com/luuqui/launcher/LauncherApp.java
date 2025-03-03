@@ -79,7 +79,7 @@ public class LauncherApp {
     Locale.setup();
     checkStartLocation();
     setupHTTPSProtocol();
-    if (!SystemUtil.isARM() && !SystemUtil.isMac()) DiscordPresenceClient.getInstance().start();
+    DiscordPresenceClient.getInstance().start();
     KeyboardController.start();
     checkDirectories();
     Cache.setup();
