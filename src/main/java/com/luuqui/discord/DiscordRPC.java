@@ -69,13 +69,14 @@ public class DiscordRPC {
   }
 
   public static DiscordRPC getInstance() {
-    // Give ARM and macOS users a stub version of the DiscordRPC object
-    // so that it knows not to do anything when prompted.
-    if (SystemUtil.isARM() || SystemUtil.isMac()) {
-      _instance = new DiscordRPC("0", true);
-    }
-
     if (_instance == null) {
+      // Give ARM and macOS users a stub version of the DiscordRPC object
+      // so that it knows not to do anything when prompted.
+      if (SystemUtil.isARM() || SystemUtil.isMac()) {
+        _instance = new DiscordRPC("0", true);
+        return _instance;
+      }
+
       try {
         _instance = new DiscordRPC(LauncherGlobals.RPC_CLIENT_ID);
       } catch (UnsatisfiedLinkError e) {
