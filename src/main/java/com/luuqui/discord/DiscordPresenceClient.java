@@ -46,7 +46,7 @@ public class DiscordPresenceClient {
   public DiscordPresenceClient(String clientId, boolean stub) {
     this.clientId = clientId;
     this.stub = stub;
-    this.eventHandler = null;
+    this.eventHandler = stub ? null : new DiscordEventHandlers();
   }
 
   public void start() {
