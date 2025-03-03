@@ -2,7 +2,7 @@ package com.luuqui.launcher;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.dialog.Dialog;
-import com.luuqui.discord.DiscordRPC;
+import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.launcher.editor.EditorsEventHandler;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mod.ModListEventHandler;
@@ -197,7 +197,7 @@ public class LauncherEventHandler {
       if(LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
         // official servers alt launch procedure
         ProcessUtil.run(LauncherGlobals.ALT_CLIENT_ARGS, true);
-        DiscordRPC.getInstance().stop();
+        DiscordPresenceClient.getInstance().stop();
       } else {
         // third party alt launch procedure
       }

@@ -2,10 +2,8 @@ package com.luuqui.launcher;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.luuqui.dialog.Dialog;
-import com.luuqui.discord.DiscordRPC;
-import com.luuqui.launcher.editor.EditorsEventHandler;
+import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.launcher.editor.EditorsGUI;
-import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mod.ModListGUI;
 import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsGUI;
@@ -19,7 +17,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -583,7 +580,7 @@ public class LauncherGUI extends BaseGUI {
     closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(e -> {
-      DiscordRPC.getInstance().stop();
+      DiscordPresenceClient.getInstance().stop();
       System.exit(0);
     });
     closeButton.addMouseListener(new MouseListener() {
@@ -615,7 +612,7 @@ public class LauncherGUI extends BaseGUI {
     launcherGUIFrame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent windowEvent) {
-        DiscordRPC.getInstance().stop();
+        DiscordPresenceClient.getInstance().stop();
       }
     });
 

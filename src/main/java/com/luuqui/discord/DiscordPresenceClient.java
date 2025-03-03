@@ -4,14 +4,15 @@ import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.util.SystemUtil;
 import net.arikia.dev.drpc.DiscordEventHandlers;
+import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
 
 import static com.luuqui.discord.Log.log;
 
-public class DiscordRPC {
+public class DiscordPresenceClient {
 
   /**
-   * Client ID of this Discord RPC Instance.
+   * Client ID of this DiscordRPC Instance.
    * Example: "123456789123456". Must be a String.
    */
   private final String clientId;
@@ -21,18 +22,28 @@ public class DiscordRPC {
    */
   private String details;
 
+  /**
+   * Used to mark this object as "stub" for when requested by ARM and macOS systems,
+   * so that it doesn't attempt to follow through with any of the calls.
+   */
   private boolean stub;
 
+  /**
+   * The event handler which... handles all the Discord bits.
+   */
   private final DiscordEventHandlers eventHandler;
 
-  private static DiscordRPC _instance = null;
+  /**
+   * Our not-so-beautiful presence client.
+   */
+  private static DiscordPresenceClient _instance = null;
 
-  public DiscordRPC (String clientId) {
+  public DiscordPresenceClient(String clientId) {
     this.clientId = clientId;
     this.eventHandler = new DiscordEventHandlers();
   }
 
-  public DiscordRPC (String clientId, boolean stub) {
+  public DiscordPresenceClient(String clientId, boolean stub) {
     this.clientId = clientId;
     this.stub = stub;
     this.eventHandler = null;
@@ -40,7 +51,7 @@ public class DiscordRPC {
 
   public void start() {
     if (stub) return;
-    net.arikia.dev.drpc.DiscordRPC.discordInitialize(this.clientId, this.eventHandler, true);
+    DiscordRPC.discordInitialize(this.clientId, this.eventHandler, true);
     setDetails(Locale.getValue("presence.starting"));
     log.info("Discord RPC Instance is now running.");
   }
@@ -65,24 +76,24 @@ public class DiscordRPC {
 
   public void stop() {
     if (stub) return;
-    net.arikia.dev.drpc.DiscordRPC.discordShutdown();
+    DiscordRPC.discordShutdown();
   }
 
-  public static DiscordRPC getInstance() {
+  public static DiscordPresenceClient getInstance() {
     if (_instance == null) {
-      // Give ARM and macOS users a stub version of the DiscordRPC object
+      // Give ARM and macOS users a stub version of the DiscordPresenceClient object
       // so that it knows not to do anything when prompted.
       if (SystemUtil.isARM() || SystemUtil.isMac()) {
-        _instance = new DiscordRPC("0", true);
+        _instance = new DiscordPresenceClient("0", true);
         return _instance;
       }
 
       try {
-        _instance = new DiscordRPC(LauncherGlobals.RPC_CLIENT_ID);
+        _instance = new DiscordPresenceClient(LauncherGlobals.RPC_CLIENT_ID);
       } catch (UnsatisfiedLinkError e) {
         log.error(e);
         SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
-        _instance = new DiscordRPC(LauncherGlobals.RPC_CLIENT_ID);
+        _instance = new DiscordPresenceClient(LauncherGlobals.RPC_CLIENT_ID);
       }
     }
     return _instance;

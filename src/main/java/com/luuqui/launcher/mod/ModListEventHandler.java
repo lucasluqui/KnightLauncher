@@ -1,6 +1,5 @@
 package com.luuqui.launcher.mod;
 
-import com.luuqui.discord.DiscordRPC;
 import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.LauncherGlobals;

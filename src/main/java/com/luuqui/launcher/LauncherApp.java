@@ -1,7 +1,7 @@
 package com.luuqui.launcher;
 
 import com.luuqui.dialog.Dialog;
-import com.luuqui.discord.DiscordRPC;
+import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.launcher.editor.EditorsGUI;
 import com.luuqui.launcher.flamingo.Flamingo;
 import com.luuqui.launcher.flamingo.data.Server;
@@ -79,7 +79,7 @@ public class LauncherApp {
     Locale.setup();
     checkStartLocation();
     setupHTTPSProtocol();
-    if (!SystemUtil.isARM() && !SystemUtil.isMac()) DiscordRPC.getInstance().start();
+    if (!SystemUtil.isARM() && !SystemUtil.isMac()) DiscordPresenceClient.getInstance().start();
     KeyboardController.start();
     checkDirectories();
     Cache.setup();
@@ -366,7 +366,7 @@ public class LauncherApp {
 
     loadOnlineAssets();
     new Thread(ModLoader::checkInstalled).start();
-    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
+    DiscordPresenceClient.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
   }
 
   private void loadOnlineAssets() {
@@ -475,7 +475,7 @@ public class LauncherApp {
   }
 
   protected static void exit() {
-    DiscordRPC.getInstance().stop();
+    DiscordPresenceClient.getInstance().stop();
     if (!Settings.keepOpen) {
       LauncherGUI.launcherGUIFrame.dispose();
       System.exit(1);

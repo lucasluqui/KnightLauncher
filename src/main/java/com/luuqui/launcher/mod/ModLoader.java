@@ -1,6 +1,6 @@
 package com.luuqui.launcher.mod;
 
-import com.luuqui.discord.DiscordRPC;
+import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.launcher.*;
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.flamingo.data.Server;
@@ -131,7 +131,7 @@ public class ModLoader {
     ProgressBar.startTask();
     ProgressBar.setBarMax(getEnabledModCount() + 1);
     ProgressBar.setState(Locale.getValue("m.mount"));
-    DiscordRPC.getInstance().setDetails(Locale.getValue("m.mount"));
+    DiscordPresenceClient.getInstance().setDetails(Locale.getValue("m.mount"));
     LinkedList<Mod> localList = getModList();
     Set<Long> hashSet = new HashSet<>();
 
@@ -186,13 +186,13 @@ public class ModLoader {
 
     ProgressBar.startTask();
     ProgressBar.setBarMax(bundles.length + 1);
-    DiscordRPC.getInstance().setDetails(Locale.getValue("m.clean"));
+    DiscordPresenceClient.getInstance().setDetails(Locale.getValue("m.clean"));
     ProgressBar.setState(Locale.getValue("m.clean"));
 
     // Iterate through all 3 bundles to clean up the game files.
     for (int i = 0; i < bundles.length; i++) {
       ProgressBar.setBarValue(i + 1);
-      DiscordRPC.getInstance().setDetails(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(bundles.length)}));
+      DiscordPresenceClient.getInstance().setDetails(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(bundles.length)}));
       try {
         FileUtil.unpackJar(new ZipFile(rootDir + "/rsrc/" + bundles[i]), new File(rootDir + "/rsrc/"), false);
       } catch (IOException e) {
@@ -218,7 +218,7 @@ public class ModLoader {
       SettingsGUI.forceRebuildButton.setEnabled(true);
     } catch (Exception ignored) {}
 
-    DiscordRPC.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
+    DiscordPresenceClient.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
   }
 
   public static void extractSafeguard() {

@@ -1,7 +1,7 @@
 package com.luuqui.launcher;
 
 import com.luuqui.dialog.Dialog;
-import com.luuqui.discord.DiscordRPC;
+import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -126,7 +126,7 @@ public class Updater extends BaseGUI {
     closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(e -> {
-      DiscordRPC.getInstance().stop();
+      DiscordPresenceClient.getInstance().stop();
       System.exit(0);
     });
 

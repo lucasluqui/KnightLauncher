@@ -1,9 +1,7 @@
 package com.luuqui.launcher;
 
 import com.luuqui.dialog.Dialog;
-import com.luuqui.discord.DiscordRPC;
-import com.luuqui.launcher.setting.Settings;
-import com.luuqui.launcher.setting.SettingsProperties;
+import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -285,7 +283,7 @@ public class JVMPatcher extends BaseGUI {
 
   private void finish() {
     ModuleLoader.loadJarCommandLine();
-    DiscordRPC.getInstance().stop();
+    DiscordPresenceClient.getInstance().stop();
     ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar"}, true);
     jvmPatcherFrame.dispose();
     System.exit(1);
