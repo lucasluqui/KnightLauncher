@@ -14,7 +14,7 @@ public class ProgressBar {
 
   public static void setState(String newState) {
     LauncherGUI.launchState.setText(newState);
-    ModListGUI.labelRefreshing.setText(newState);
+    ModListGUI.refreshProgressBar.setString(newState);
     log.info(newState);
   }
 
@@ -49,7 +49,6 @@ public class ProgressBar {
     LauncherGUI.launchState.setVisible(show);
     LauncherGUI.launchProgressBar.setVisible(show);
     ModListGUI.refreshProgressBar.setVisible(show);
-    ModListGUI.labelRefreshing.setVisible(show);
   }
 
 }

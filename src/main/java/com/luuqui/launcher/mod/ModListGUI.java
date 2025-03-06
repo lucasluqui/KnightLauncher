@@ -135,8 +135,18 @@ public class ModListGUI extends BaseGUI {
     separator.setBounds(25, 75, 750, 2);
     modListGUIFrame.getContentPane().add(separator);
 
+    addModButton = new JButton(IconFontSwing.buildIcon(FontAwesome.PLUS, 18, Color.WHITE));
+    addModButton.setBounds(25, 86, 25, 25);
+    addModButton.setFocusPainted(false);
+    addModButton.setFocusable(false);
+    addModButton.setBackground(null);
+    addModButton.setBorder(null);
+    addModButton.setToolTipText(Locale.getValue("b.add_mod"));
+    modListGUIFrame.getContentPane().add(addModButton);
+    addModButton.addActionListener(ModListEventHandler::addModEvent);
+
     refreshButton = new JButton(IconFontSwing.buildIcon(FontAwesome.REFRESH, 16, Color.WHITE));
-    refreshButton.setBounds(25, 86, 25, 25);
+    refreshButton.setBounds(55, 86, 25, 25);
     refreshButton.setFocusPainted(false);
     refreshButton.setFocusable(false);
     refreshButton.setBackground(null);
@@ -145,15 +155,9 @@ public class ModListGUI extends BaseGUI {
     modListGUIFrame.getContentPane().add(refreshButton);
     refreshButton.addActionListener(ModListEventHandler::refreshEvent);
 
-    labelRefreshing = new JLabel(Locale.getValue("m.refresh"));
-    labelRefreshing.setBounds(60, 86, 100, 25);
-    labelRefreshing.setFont(Fonts.fontReg);
-    labelRefreshing.setHorizontalAlignment(SwingConstants.LEFT);
-    labelRefreshing.setVisible(false);
-    modListGUIFrame.getContentPane().add(labelRefreshing);
-
     refreshProgressBar = new JProgressBar();
-    refreshProgressBar.setBounds(135, 93, 100, 10);
+    refreshProgressBar.setBounds(110, 90, 100, 16);
+    refreshProgressBar.setStringPainted(true);
     refreshProgressBar.setVisible(false);
     modListGUIFrame.getContentPane().add(refreshProgressBar);
 
@@ -372,6 +376,7 @@ public class ModListGUI extends BaseGUI {
   public static JPanel modListPane = new JPanel();
   public static JScrollPane modListPaneScrollBar = new JScrollPane();
   public static JLabel labelModCount;
+  public static JButton addModButton;
   public static JButton refreshButton;
   public static JButton enableAllModsButton;
   public static JButton disableAllModsButton;

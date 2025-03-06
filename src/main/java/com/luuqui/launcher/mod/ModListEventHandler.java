@@ -25,8 +25,8 @@ public class ModListEventHandler {
       ModListGUI.refreshButton.setEnabled(false);
       ModListGUI.enableAllModsButton.setEnabled(false);
       ModListGUI.disableAllModsButton.setEnabled(false);
+      ModListGUI.addModButton.setEnabled(false);
 
-      ModListGUI.labelRefreshing.setVisible(true);
       ModLoader.checkInstalled();
       if (ModLoader.rebuildRequired && Settings.doRebuilds) {
         ModLoader.startFileRebuild();
@@ -37,6 +37,7 @@ public class ModListEventHandler {
       ModListGUI.refreshButton.setEnabled(true);
       ModListGUI.enableAllModsButton.setEnabled(true);
       ModListGUI.disableAllModsButton.setEnabled(true);
+      ModListGUI.addModButton.setEnabled(true);
     });
     refreshThread.start();
   }
@@ -136,5 +137,9 @@ public class ModListEventHandler {
       disableMod(mod);
     }
     refreshMods();
+  }
+
+  public static void addModEvent(ActionEvent event) {
+
   }
 }
