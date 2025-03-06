@@ -113,6 +113,7 @@ public class Fonts {
       UIManager.put("ToolTip.font", fontReg);
       UIManager.put("Button.font", fontMed);
       UIManager.put("TitlePane.font", fontMed);
+      UIManager.put("ProgressBar.font", fontMed);
 
     } catch (FontFormatException | IOException e) {
       log.error(e);
