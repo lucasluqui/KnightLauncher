@@ -13,4 +13,24 @@ public class DateUtil {
     return dateFormat.format(date);
   }
 
+  public static String getDayNumberWithSuffix(int date) {
+    String suffix = "th";
+    switch (date) {
+      case 1:
+      case 21:
+      case 31:
+        suffix = "st";
+        break;
+      case 2:
+      case 22:
+        suffix = "nd";
+        break;
+      case 3:
+      case 23:
+        suffix = "rd";
+        break;
+    }
+    return date + suffix;
+  }
+
 }

@@ -26,8 +26,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
 
 import static com.luuqui.launcher.Log.log;
@@ -219,6 +219,7 @@ public class LauncherEventHandler {
         official.announceBanner = server.announceBanner;
         official.announceContent = server.announceContent;
         official.announceBannerLink = server.announceBannerLink;
+        official.announceBannerEndsAt = server.announceBannerEndsAt;
         continue;
       }
 
@@ -522,6 +523,16 @@ public class LauncherEventHandler {
         LauncherGUI.bannerLinkButton.setVisible(true);
       } else {
         LauncherGUI.bannerLinkButton.setVisible(false);
+      }
+
+      if(LauncherApp.selectedServer.announceBannerEndsAt != 0L) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(LauncherApp.selectedServer.announceBannerEndsAt);
+        calendar.setTimeZone(TimeZone.getTimeZone("PST")); // Game's timezone
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM"); // Only the month, we'll concatenate the day later.
+
+        LauncherGUI.bannerEndsAt.setText(Locale.getValue("m.banner_ends_at", dateFormat.format(calendar.getTime()) + " " + DateUtil.getDayNumberWithSuffix(calendar.get(Calendar.DATE) - 1)));
+        LauncherGUI.bannerEndsAt.setVisible(true);
       }
     });
     refreshThread.start();

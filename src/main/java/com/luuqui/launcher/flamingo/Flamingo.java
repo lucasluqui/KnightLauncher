@@ -49,7 +49,7 @@ public class Flamingo {
         server.announceBanner = serverJson.getString("announceBanner");
         server.announceContent = serverJson.getString("announceContent");
         server.announceBannerLink = serverJson.getString("announceBannerLink");
-        server.announceBannerEndsAt = serverJson.getString("announceBannerEndsAt").equalsIgnoreCase("null") ? null : Date.valueOf(serverJson.getString("announceBannerEndsAt"));
+        server.announceBannerEndsAt = serverJson.getLong("announceBannerEndsAt");
         server.fromCode = serverJson.getString("fromCode");
         server.serverIcon = serverJson.getString("serverIcon");
         server.enabled = serverJson.getInt("enabled");

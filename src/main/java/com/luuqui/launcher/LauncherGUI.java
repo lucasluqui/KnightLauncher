@@ -376,6 +376,21 @@ public class LauncherGUI extends BaseGUI {
     bannerSubtitle2.setForeground(Color.WHITE);
     mainPane.add(bannerSubtitle2);
 
+    Icon endsAtIcon = IconFontSwing.buildIcon(FontAwesome.CLOCK_O, 16, Color.WHITE);
+    bannerEndsAt = new JLabel("");
+    bannerEndsAt.setIcon(endsAtIcon);
+    bannerEndsAt.setBounds(40, 50, 225, 25);
+    bannerEndsAt.setFont(Fonts.fontReg);
+    bannerEndsAt.setForeground(Color.WHITE);
+    bannerEndsAt.setHorizontalAlignment(SwingConstants.CENTER);
+    bannerEndsAt.setVerticalAlignment(SwingConstants.CENTER);
+    bannerEndsAt.putClientProperty(FlatClientProperties.STYLE,
+            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND)
+            + "AA; foreground:" + ColorUtil.colorToHexString(Color.WHITE)
+            + "; arc:999;");
+    bannerEndsAt.setVisible(false);
+    mainPane.add(bannerEndsAt);
+
     bannerLinkButton = new JButton(Locale.getValue("b.learn_more"));
     bannerLinkButton.setBounds(40, 195, 110, 25);
     bannerLinkButton.setFont(Fonts.fontMed);
@@ -715,6 +730,7 @@ public class LauncherGUI extends BaseGUI {
   public static JLabel bannerTitle;
   public static JLabel bannerSubtitle1;
   public static JLabel bannerSubtitle2;
+  public static JLabel bannerEndsAt;
   public static JButton bannerLinkButton;
   public static JButton launchButton;
   public static JButton updateButton;
