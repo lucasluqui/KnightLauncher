@@ -134,7 +134,7 @@ public class ModListGUI extends BaseGUI {
     separator.setBounds(25, 75, 750, 2);
     modListGUIFrame.getContentPane().add(separator);
 
-    addModButton = new JButton(IconFontSwing.buildIcon(FontAwesome.PLUS, 18, Color.WHITE));
+    addModButton = new JButton(IconFontSwing.buildIcon(FontAwesome.PLUS, 18, CustomColors.MID_GREEN));
     addModButton.setBounds(25, 86, 25, 25);
     addModButton.setFocusPainted(false);
     addModButton.setFocusable(false);
