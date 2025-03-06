@@ -322,7 +322,7 @@ public class ModListGUI extends BaseGUI {
       removeButton.setFocusable(false);
       removeButton.setBackground(null);
       removeButton.setBorder(null);
-      removeButton.setToolTipText(Locale.getValue("b.remove_mod"));
+      removeButton.setToolTipText(Locale.getValue("b.remove_mod", mod.getDisplayName()));
       removeButton.addActionListener(l -> ModListEventHandler.removeModEvent(mod));
 
       modPane.add(removeButton);
