@@ -1,5 +1,6 @@
 package com.luuqui.launcher.mod;
 
+import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.LauncherGlobals;
@@ -9,10 +10,17 @@ import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.DesktopUtil;
 import com.luuqui.util.ThreadingUtil;
+import org.apache.commons.io.FileUtils;
 
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static com.luuqui.launcher.mod.Log.log;
 
 public class ModListEventHandler {
 
@@ -140,6 +148,34 @@ public class ModListEventHandler {
   }
 
   public static void addModEvent(ActionEvent event) {
+    JFileChooser fileChooser = new JFileChooser();
 
+    FileNameExtensionFilter restrict = new FileNameExtensionFilter(".zip, .jar, .modpack", "zip", "jar", "modpack");
+    fileChooser.setAcceptAllFileFilterUsed(false);
+    fileChooser.addChoosableFileFilter(restrict);
+
+    int response = fileChooser.showSaveDialog(null);
+
+    if (response == JFileChooser.APPROVE_OPTION) {
+      String path = fileChooser.getSelectedFile().getAbsolutePath();
+      if(path.endsWith(".zip") || path.endsWith(".jar") || path.endsWith(".modpack")) {
+        File file = new File(path);
+          try {
+            FileUtils.copyFile(file, new File(LauncherApp.selectedServer.getRootDirectory() + "/mods/" + file.getName()));
+            log.info("Adding mod: " + file.getName());
+            refreshMods();
+          } catch (IOException e) {
+            log.error(e);
+          }
+      } else {
+        Dialog.push(Locale.getValue("error.mod_file_format"), Locale.getValue("t.add_mod_error"), JOptionPane.ERROR_MESSAGE);
+      }
+    }
+  }
+
+  public static void removeModEvent(Mod mod) {
+    new File(mod.getAbsolutePath()).delete();
+    log.info("Removed mod: " + mod);
+    refreshMods();
   }
 }

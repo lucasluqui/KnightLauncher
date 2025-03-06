@@ -8,7 +8,6 @@ import com.luuqui.launcher.mod.data.Mod;
 import com.luuqui.launcher.mod.data.Modpack;
 import com.luuqui.launcher.mod.data.ZipMod;
 import com.luuqui.util.ColorUtil;
-import com.luuqui.util.DesktopUtil;
 import com.luuqui.util.ImageUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -250,7 +249,7 @@ public class ModListGUI extends BaseGUI {
       modName.setText(mod.getDisplayName());
       modName.setToolTipText(mod.getDisplayName());
       modName.setFont(Fonts.fontMed);
-      modName.setBounds(81, 6, 150, 25);
+      modName.setBounds(81, 6, 250, 25);
       modPane.add(modName);
 
       JLabel modDescription = new JLabel();
@@ -316,6 +315,17 @@ public class ModListGUI extends BaseGUI {
       });
 
       modPane.add(enabledCheckbox);
+
+      JButton removeButton = new JButton(IconFontSwing.buildIcon(FontAwesome.TRASH, 18, CustomColors.BUTTON_FOREGROUND_DANGER));
+      removeButton.setBounds(680, 25, 25, 25);
+      removeButton.setFocusPainted(false);
+      removeButton.setFocusable(false);
+      removeButton.setBackground(null);
+      removeButton.setBorder(null);
+      removeButton.setToolTipText(Locale.getValue("b.remove_mod"));
+      removeButton.addActionListener(l -> ModListEventHandler.removeModEvent(mod));
+
+      modPane.add(removeButton);
 
       if(mod instanceof JarMod) {
         if(!((JarMod) mod).getMeetsJDKRequirements()) {
