@@ -5,6 +5,7 @@ import com.luuqui.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 import static com.luuqui.launcher.flamingo.Log.log;
 
@@ -39,6 +40,8 @@ public class Server {
   public String announceContent;
 
   public String announceBannerLink;
+
+  public Date announceBannerEndsAt;
 
   public String fromCode;
 

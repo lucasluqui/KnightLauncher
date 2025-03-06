@@ -8,6 +8,7 @@ import com.luuqui.util.SystemUtil;
 import com.luuqui.util.TextUtil;
 import org.json.JSONObject;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +49,7 @@ public class Flamingo {
         server.announceBanner = serverJson.getString("announceBanner");
         server.announceContent = serverJson.getString("announceContent");
         server.announceBannerLink = serverJson.getString("announceBannerLink");
+        server.announceBannerEndsAt = serverJson.getString("announceBannerEndsAt").equalsIgnoreCase("null") ? null : Date.valueOf(serverJson.getString("announceBannerEndsAt"));
         server.fromCode = serverJson.getString("fromCode");
         server.serverIcon = serverJson.getString("serverIcon");
         server.enabled = serverJson.getInt("enabled");
