@@ -33,7 +33,7 @@ public class JVMPatcher extends BaseGUI {
     this._app = app;
     this._path = path;
     this._legacy = legacy;
-    setAvailableJVM();
+    setAvailableJVMs();
     initialize();
   }
 
@@ -42,7 +42,7 @@ public class JVMPatcher extends BaseGUI {
     this.jvmPatcherFrame.setVisible(!this.jvmPatcherFrame.isVisible());
   }
 
-  private void setAvailableJVM() {
+  private void setAvailableJVMs() {
     if(_legacy) {
       _availableJVM.put("Java 8 (8u202)", "8u202");
       _availableJVM.put("Java 8 (8u251)", "8u251");
