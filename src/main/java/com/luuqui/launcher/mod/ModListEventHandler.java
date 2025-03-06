@@ -174,8 +174,11 @@ public class ModListEventHandler {
   }
 
   public static void removeModEvent(Mod mod) {
-    new File(mod.getAbsolutePath()).delete();
-    log.info("Removed mod: " + mod);
-    refreshMods();
+    boolean confirm = Dialog.pushWithConfirm(Locale.getValue("m.destructive_action"), Locale.getValue("b.remove_mod", mod.getDisplayName()), JOptionPane.WARNING_MESSAGE);
+    if(confirm) {
+      new File(mod.getAbsolutePath()).delete();
+      log.info("Removed mod: " + mod);
+      refreshMods();
+    }
   }
 }
