@@ -350,8 +350,36 @@ public class LauncherApp {
     log.info("---------------------------------");
   }
 
+  /* Uncomment this when the dreaded day comes around.
+
   private boolean requiresJVMPatch() {
     return _args.length > 0 && _args[0].equals("forceJVMPatch");
+  }
+
+  */
+
+  private boolean requiresJVMPatch() {
+    // First of all see if we're being forced to patch.
+    if(_args.length > 0 && _args[0].equals("forceJVMPatch")) {
+      return true;
+    }
+
+    // You need a 64-bit system to begin with.
+    if(!SystemUtil.is64Bit()) return false;
+
+    // Currently Java VM patching is only supported on Windows systems and Linux installs through Steam.
+    if(!SystemUtil.isWindows() && !(SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam"))) return false;
+
+    // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by Knight Launcher.
+    String javaVMVersion = JavaUtil.getGameJVMData();
+
+    if(( JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 && !javaVMVersion.contains("1.7") ) || Settings.jvmPatched) {
+      Settings.jvmPatched = true;
+      SettingsProperties.setValue("launcher.jvm_patched", "true");
+      return false;
+    }
+
+    return true;
   }
 
   private boolean requiresUpdate() {

@@ -9,6 +9,7 @@ public class Settings {
   public static Boolean createShortcut = true;
   public static Boolean autoUpdate = true;
   public static String selectedServerName = "official";
+  public static Boolean jvmPatched = false; // Delete this when the dreaded day comes.
   public static Boolean isOutdated = false;
   public static Boolean ingameRPCSetup = false;
   public static Boolean useIngameRPC = true;

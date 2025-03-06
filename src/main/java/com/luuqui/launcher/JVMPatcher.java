@@ -2,6 +2,8 @@ package com.luuqui.launcher;
 
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordPresenceClient;
+import com.luuqui.launcher.setting.Settings;
+import com.luuqui.launcher.setting.SettingsProperties;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -177,7 +179,9 @@ public class JVMPatcher extends BaseGUI {
     closeButton.setFocusable(false);
     closeButton.setBackground(null);
     closeButton.setBorder(null);
-    closeButton.setVisible(true);
+    //closeButton.setVisible(true);
+    // Only allow closing this window if the JVM was already patched before.
+    closeButton.setVisible(Settings.jvmPatched); // Delete this when the dreaded day comes.
     closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(e -> {
@@ -282,6 +286,7 @@ public class JVMPatcher extends BaseGUI {
   }
 
   private void finish() {
+    SettingsProperties.setValue("launcher.jvm_patched", "true"); // Delete this when the dreaded day comes.
     ModuleLoader.loadJarCommandLine();
     DiscordPresenceClient.getInstance().stop();
     ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar"}, true);
