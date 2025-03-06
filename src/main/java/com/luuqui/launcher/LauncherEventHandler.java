@@ -526,13 +526,19 @@ public class LauncherEventHandler {
       }
 
       if(LauncherApp.selectedServer.announceBannerEndsAt != 0L) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(LauncherApp.selectedServer.announceBannerEndsAt);
-        calendar.setTimeZone(TimeZone.getTimeZone("PST")); // Game's timezone
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM"); // Only the month, we'll concatenate the day later.
+        if(System.currentTimeMillis() > LauncherApp.selectedServer.announceBannerEndsAt) {
+          LauncherGUI.bannerEndsAt.setText(Locale.getValue("m.banner_ends_at_ended"));
+        } else {
+          Calendar calendar = Calendar.getInstance();
+          calendar.setTimeInMillis(LauncherApp.selectedServer.announceBannerEndsAt);
+          calendar.setTimeZone(TimeZone.getTimeZone("PST")); // Game's timezone
+          SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM"); // Only the month, we'll concatenate the day later.
 
-        LauncherGUI.bannerEndsAt.setText(Locale.getValue("m.banner_ends_at", dateFormat.format(calendar.getTime()) + " " + DateUtil.getDayNumberWithSuffix(calendar.get(Calendar.DATE) - 1)));
+          LauncherGUI.bannerEndsAt.setText(Locale.getValue("m.banner_ends_at", dateFormat.format(calendar.getTime()) + " " + DateUtil.getDayNumberWithSuffix(calendar.get(Calendar.DATE) - 1)));
+        }
         LauncherGUI.bannerEndsAt.setVisible(true);
+      } else {
+        LauncherGUI.bannerEndsAt.setVisible(false);
       }
     });
     refreshThread.start();
