@@ -26,8 +26,6 @@ public class DateUtil {
     long hoursRemaining = minutesRemaining / 60L;
     long daysRemaining = hoursRemaining / 24L;
 
-    log.info("Remaining time", "remainingMillis", remainingMillis, "daysRemaining", daysRemaining, "hoursRemaining", hoursRemaining, "minutesRemaining", minutesRemaining);
-
     if(daysRemaining > 0L) {
       return Locale.getValue("m.timer_days", String.valueOf(daysRemaining));
     } else if(hoursRemaining > 0L) {
