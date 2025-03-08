@@ -526,20 +526,24 @@ public class LauncherEventHandler {
         LauncherGUI.bannerLinkButton.setVisible(false);
       }
 
-      if(LauncherApp.selectedServer.announceBannerEndsAt != 0L) {
-        if(System.currentTimeMillis() > LauncherApp.selectedServer.announceBannerEndsAt) {
-          LauncherGUI.bannerEndsAt.setText(Locale.getValue("m.banner_ends_at_ended"));
-        } else {
-          Calendar calendar = Calendar.getInstance();
-          calendar.setTimeInMillis(LauncherApp.selectedServer.announceBannerEndsAt);
-          calendar.setTimeZone(TimeZone.getTimeZone("PST")); // Game's timezone
-          SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM"); // Only the month, we'll concatenate the day later.
+      if(LauncherApp.selectedServer.announceBannerEndsAt != 0L || LauncherApp.selectedServer.announceBannerStartsAt != 0L) {
 
-          LauncherGUI.bannerEndsAt.setText(Locale.getValue("m.banner_ends_at", dateFormat.format(calendar.getTime()) + " " + DateUtil.getDayNumberWithSuffix(calendar.get(Calendar.DATE) - 1)));
+        if(LauncherApp.selectedServer.announceBannerStartsAt > System.currentTimeMillis()) {
+          // The event has not yet started
+          LauncherGUI.bannerTimer.setText(Locale.getValue("m.banner_starts_at_remaining", DateUtil.getFormattedRemaining(LauncherApp.selectedServer.announceBannerStartsAt)));
+        } else if(System.currentTimeMillis() > LauncherApp.selectedServer.announceBannerEndsAt) {
+          // The event already ended
+          LauncherGUI.bannerTimer.setText(Locale.getValue("m.banner_ends_at_ended"));
+        } else {
+          // The event is currently running
+          LauncherGUI.bannerTimer.setText(Locale.getValue("m.banner_ends_at_date", DateUtil.getFormattedMonthDay(LauncherApp.selectedServer.announceBannerEndsAt)));
         }
-        LauncherGUI.bannerEndsAt.setVisible(true);
+
+        // In any case, the timer needs to be visible
+        LauncherGUI.bannerTimer.setVisible(true);
       } else {
-        LauncherGUI.bannerEndsAt.setVisible(false);
+        // Nothing to show here.
+        LauncherGUI.bannerTimer.setVisible(false);
       }
     });
     refreshThread.start();

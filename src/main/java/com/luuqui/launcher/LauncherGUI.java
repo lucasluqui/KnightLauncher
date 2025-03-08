@@ -358,6 +358,21 @@ public class LauncherGUI extends BaseGUI {
     launcherVersion.setBounds(10, 493, 230, 15);
     sidePane.add(launcherVersion);
 
+    Icon timerIcon = IconFontSwing.buildIcon(FontAwesome.CLOCK_O, 16, Color.WHITE);
+    bannerTimer = new JLabel("");
+    bannerTimer.setIcon(timerIcon);
+    bannerTimer.setBounds(40, 50, 225, 25);
+    bannerTimer.setFont(Fonts.fontReg);
+    bannerTimer.setForeground(Color.WHITE);
+    bannerTimer.setHorizontalAlignment(SwingConstants.CENTER);
+    bannerTimer.setVerticalAlignment(SwingConstants.CENTER);
+    bannerTimer.putClientProperty(FlatClientProperties.STYLE,
+            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND)
+                    + "AA; foreground:" + ColorUtil.colorToHexString(Color.WHITE)
+                    + "; arc:999;");
+    bannerTimer.setVisible(false);
+    mainPane.add(bannerTimer);
+
     bannerTitle = new JLabel(Locale.getValue("m.banner_title_default"));
     bannerTitle.setBounds(35, -60, 700, 340);
     bannerTitle.setFont(Fonts.fontMedGiant);
@@ -375,21 +390,6 @@ public class LauncherGUI extends BaseGUI {
     bannerSubtitle2.setFont(Fonts.fontMedBig);
     bannerSubtitle2.setForeground(Color.WHITE);
     mainPane.add(bannerSubtitle2);
-
-    Icon endsAtIcon = IconFontSwing.buildIcon(FontAwesome.CLOCK_O, 16, Color.WHITE);
-    bannerEndsAt = new JLabel("");
-    bannerEndsAt.setIcon(endsAtIcon);
-    bannerEndsAt.setBounds(40, 50, 225, 25);
-    bannerEndsAt.setFont(Fonts.fontReg);
-    bannerEndsAt.setForeground(Color.WHITE);
-    bannerEndsAt.setHorizontalAlignment(SwingConstants.CENTER);
-    bannerEndsAt.setVerticalAlignment(SwingConstants.CENTER);
-    bannerEndsAt.putClientProperty(FlatClientProperties.STYLE,
-            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND)
-            + "AA; foreground:" + ColorUtil.colorToHexString(Color.WHITE)
-            + "; arc:999;");
-    bannerEndsAt.setVisible(false);
-    mainPane.add(bannerEndsAt);
 
     bannerLinkButton = new JButton(Locale.getValue("b.learn_more"));
     bannerLinkButton.setBounds(40, 195, 110, 25);
@@ -727,10 +727,10 @@ public class LauncherGUI extends BaseGUI {
   // Main pane
   public static JPanel mainPane;
   public static BufferedImage banner = null;
+  public static JLabel bannerTimer;
   public static JLabel bannerTitle;
   public static JLabel bannerSubtitle1;
   public static JLabel bannerSubtitle2;
-  public static JLabel bannerEndsAt;
   public static JButton bannerLinkButton;
   public static JButton launchButton;
   public static JButton updateButton;
