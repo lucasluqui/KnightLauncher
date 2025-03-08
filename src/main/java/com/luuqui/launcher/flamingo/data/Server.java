@@ -40,6 +40,8 @@ public class Server {
 
   public String announceBannerLink;
 
+  public long announceBannerStartsAt;
+
   public long announceBannerEndsAt;
 
   public String fromCode;

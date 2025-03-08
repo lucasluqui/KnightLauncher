@@ -219,6 +219,7 @@ public class LauncherEventHandler {
         official.announceBanner = server.announceBanner;
         official.announceContent = server.announceContent;
         official.announceBannerLink = server.announceBannerLink;
+        official.announceBannerStartsAt = server.announceBannerStartsAt;
         official.announceBannerEndsAt = server.announceBannerEndsAt;
         continue;
       }
