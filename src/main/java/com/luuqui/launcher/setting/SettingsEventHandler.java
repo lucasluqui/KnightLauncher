@@ -164,7 +164,7 @@ public class SettingsEventHandler {
   }
 
   public static void resetGameSettingsButtonEvent(ActionEvent action) {
-    final int DEFAULT_MEMORY = 2048;
+    final int DEFAULT_MEMORY = 1024;
     final boolean DEFAULT_USE_CUSTOM_GC = false;
     final String DEFAULT_GC = "Z";
     final boolean DEFAULT_DISABLE_EXPLICIT_GC = false;
@@ -191,7 +191,7 @@ public class SettingsEventHandler {
     long maximumMemory = ((OperatingSystemMXBean) ManagementFactory
       .getOperatingSystemMXBean()).getTotalPhysicalMemorySize() / 1048576;
 
-    int recommendedMemory = (int) Math.min(JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 ? 3072 : 2048, maximumMemory / 0.25);
+    int recommendedMemory = (int) Math.min(JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 ? 3072 : 1024, maximumMemory / 0.25);
 
     log.info("Recommended settings: Maximum physical memory is " + maximumMemory
       + ", setting allocated memory to " + recommendedMemory);
