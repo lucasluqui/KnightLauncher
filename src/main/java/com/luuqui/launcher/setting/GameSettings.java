@@ -49,7 +49,7 @@ public class GameSettings {
 
       if (Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
 
-      if (Settings.gameGarbageCollector.equals("G1")) {
+      if (Settings.gameGarbageCollector.equals("G1") || Settings.gameGarbageCollector.equals("Z")) {
         writer.println("-Xms" + Settings.gameMemory + "M");
         writer.println("-Xmx" + Settings.gameMemory + "M");
       } else {
