@@ -12,7 +12,7 @@ import static com.luuqui.launcher.setting.Log.log;
 
 public class SettingsProperties {
 
-  private static final String PROP_VER = "22";
+  private static final String PROP_VER = "21";
 
   private static Properties _prop = new Properties();
   private static final String _propPath = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
