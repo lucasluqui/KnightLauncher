@@ -22,12 +22,12 @@ public class Settings {
 
   // Game settings
   public static String gamePlatform = "Steam";
-  public static int gameMemory = 512;
+  public static int gameMemory = 2048;
   public static Boolean gameUseStringDeduplication = false;
   public static Boolean gameDisableExplicitGC = false;
   public static Boolean gameUndecoratedWindow = false;
   public static Boolean gameUseCustomGC = false;
-  public static String gameGarbageCollector = "ParallelOld";
+  public static String gameGarbageCollector = "Z";
   public static String gameAdditionalArgs = null;
   public static String gameEndpoint = "game.spiralknights.com";
   public static int gamePort = 47624;
