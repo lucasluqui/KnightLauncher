@@ -74,20 +74,8 @@ public class SettingsEventHandler {
       key += LauncherApp.selectedServer.isOfficial() ? "" : "_" + LauncherApp.selectedServer.getSanitizedName();
     }
 
-    switch (SettingsGUI.choiceGC.getSelectedIndex()) {
-      case 0:
-        Settings.gameGarbageCollector = "ParallelOld";
-        SettingsProperties.setValue(key, "ParallelOld");
-        break;
-      case 1:
-        Settings.gameGarbageCollector = "Serial";
-        SettingsProperties.setValue(key, "Serial");
-        break;
-      case 2:
-        Settings.gameGarbageCollector = "G1";
-        SettingsProperties.setValue(key, "G1");
-        break;
-    }
+    Settings.gameGarbageCollector = (String) SettingsGUI.choiceGC.getSelectedItem();
+    SettingsProperties.setValue(key, (String) SettingsGUI.choiceGC.getSelectedItem());
   }
 
   public static void disableExplicitGCChangeEvent(ActionEvent action) {
@@ -178,7 +166,7 @@ public class SettingsEventHandler {
   public static void resetGameSettingsButtonEvent(ActionEvent action) {
     final int DEFAULT_MEMORY = 1024;
     final boolean DEFAULT_USE_CUSTOM_GC = false;
-    final String DEFAULT_GC = "ParallelOld";
+    final String DEFAULT_GC = "Z";
     final boolean DEFAULT_DISABLE_EXPLICIT_GC = false;
     final String DEFAULT_ADDITIONAL_ARGS = "";
 
@@ -197,7 +185,7 @@ public class SettingsEventHandler {
 
   public static void loadRecommendedSettingsButtonEvent(ActionEvent action) {
     final boolean RECOMMENDED_USE_CUSTOM_GC = true;
-    final String RECOMMENDED_GC = "ParallelOld";
+    final String RECOMMENDED_GC = "Z";
     final boolean RECOMMENDED_DISABLE_EXPLICIT_GC = true;
 
     long maximumMemory = ((OperatingSystemMXBean) ManagementFactory
