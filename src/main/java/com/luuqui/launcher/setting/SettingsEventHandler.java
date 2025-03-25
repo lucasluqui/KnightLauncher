@@ -191,7 +191,7 @@ public class SettingsEventHandler {
     long maximumMemory = ((OperatingSystemMXBean) ManagementFactory
       .getOperatingSystemMXBean()).getTotalPhysicalMemorySize() / 1048576;
 
-    int recommendedMemory = (int) Math.min(4096, maximumMemory * 0.25);
+    int recommendedMemory = (int) Math.min(JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 ? 3072 : 2048, maximumMemory / 0.25);
 
     log.info("Recommended settings: Maximum physical memory is " + maximumMemory
       + ", setting allocated memory to " + recommendedMemory);
