@@ -536,7 +536,7 @@ public class LauncherEventHandler {
           LauncherGUI.bannerTimer.setText(Locale.getValue("m.banner_ends_at_ended"));
         } else {
           // The event is currently running
-          LauncherGUI.bannerTimer.setText(Locale.getValue("m.banner_ends_at_date", DateUtil.getFormattedMonthDay(LauncherApp.selectedServer.announceBannerEndsAt)));
+          LauncherGUI.bannerTimer.setText(Locale.getValue("m.banner_ends_at_remaining", DateUtil.getFormattedRemaining(LauncherApp.selectedServer.announceBannerEndsAt)));
         }
 
         // In any case, the timer needs to be visible
