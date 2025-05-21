@@ -18,8 +18,8 @@ public class JarMod extends Mod {
     super();
     this.displayName = fileName;
     this.fileName = fileName;
-    this.minJDKVersion = 8;
-    this.maxJDKVersion = 8;
+    this.minJDKVersion = 11;
+    this.maxJDKVersion = 11;
     this.meetsJDKRequirements = true;
   }
 
