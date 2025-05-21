@@ -156,7 +156,6 @@ public class ModLoader {
 
     mountRequired = false;
     ProgressBar.finishTask();
-    if(Settings.doDigest) LauncherDigester.doDigest();
 
     LauncherEventHandler.updateServerSwitcher(false);
     LauncherGUI.launchButton.setEnabled(true);

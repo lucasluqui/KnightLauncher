@@ -5,12 +5,11 @@ import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.Locale;
 import com.luuqui.launcher.ProgressBar;
-import com.luuqui.util.FileUtil;
-import com.luuqui.util.JavaUtil;
-import com.luuqui.util.ProcessUtil;
-import com.luuqui.util.SystemUtil;
+import com.luuqui.util.*;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.Properties;
 
@@ -62,6 +61,8 @@ public class GameSettings {
       writer.println(Settings.gameAdditionalArgs);
       writer.close();
 
+      if(LauncherApp.selectedServer.isOfficial()) loadConnectionSettings();
+
       ProgressBar.setBarValue(1);
       ProgressBar.finishTask();
     } catch (FileNotFoundException | UnsupportedEncodingException e) {
@@ -69,11 +70,34 @@ public class GameSettings {
     }
   }
 
-  /**
-   * @see ProjectXBootstrap
-   * @deprecated No longer use the way of modifying files.
-   */
-  @Deprecated
+  public static void resetGetdown() {
+    int downloadAttempts = 0;
+    boolean downloadCompleted = false;
+
+    while (downloadAttempts <= 3 && !downloadCompleted) {
+      downloadAttempts++;
+      log.info("Resetting Getdown", "attempts", downloadAttempts);
+      try {
+        FileUtils.copyURLToFile(
+                new URL("http://gamemedia2.spiralknights.com/spiral/client/getdown.txt"),
+                new File(LauncherGlobals.USER_DIR, "getdown.txt"),
+                0,
+                0
+        );
+        FileUtils.copyURLToFile(
+                new URL("http://gamemedia2.spiralknights.com/spiral/client/digest.txt"),
+                new File(LauncherGlobals.USER_DIR, "digest.txt"),
+                0,
+                0
+        );
+        downloadCompleted = true;
+      } catch (IOException e) {
+        // Just keep retrying.
+        log.error(e);
+      }
+    }
+  }
+
   private static void loadConnectionSettings() {
     try {
       FileUtil.extractFileWithinJar("/config/deployment.properties", LauncherGlobals.USER_DIR + "/deployment.properties");

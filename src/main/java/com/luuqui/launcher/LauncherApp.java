@@ -83,7 +83,6 @@ public class LauncherApp {
     KeyboardController.start();
     checkDirectories();
     Cache.setup();
-    if(Settings.doDigest) LauncherDigester.doDigest();
     if (SystemUtil.isWindows() || SystemUtil.isUnix()) checkShortcut();
   }
 

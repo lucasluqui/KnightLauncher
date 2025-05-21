@@ -50,6 +50,7 @@ public class LauncherEventHandler {
         SettingsEventHandler.saveAdditionalArgs();
         SettingsEventHandler.saveConnectionSettings();
         GameSettings.load();
+        GameSettings.resetGetdown();
 
         if (Settings.gamePlatform.startsWith("Steam")) {
 
