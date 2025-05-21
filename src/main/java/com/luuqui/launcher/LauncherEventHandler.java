@@ -445,6 +445,7 @@ public class LauncherEventHandler {
       addServerIcon.setHorizontalAlignment(SwingConstants.CENTER);
       addServerIcon.setToolTipText(Locale.getValue("m.add_server"));
       addServerIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, 18, Color.WHITE));
+      addServerIcon.setVisible(false);
       addServerPane.add(addServerIcon);
       addServerIcon.addMouseListener(new MouseListener() {
         @Override public void mouseClicked(MouseEvent e) {
