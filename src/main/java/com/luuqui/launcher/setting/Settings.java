@@ -14,7 +14,7 @@ public class Settings {
   public static Boolean ingameRPCSetup = false;
   public static Boolean useIngameRPC = true;
   public static Boolean playAnimatedBanners = true;
-  public static Boolean doDigest = true;
+  public static Boolean loadCodeMods = false;
 
   // Compressor settings
   public static String compressorUnzipMethod = "4j";
