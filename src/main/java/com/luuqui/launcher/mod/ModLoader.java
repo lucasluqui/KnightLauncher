@@ -331,12 +331,7 @@ public class ModLoader {
 
   private static void checkJarModsRequirements() {
     int gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
-    String pxVersion = null;
-    try {
-      pxVersion = LauncherApp.selectedServer == null ? FileUtil.readFile(LauncherGlobals.USER_DIR + File.separator + "version.txt") : LauncherApp.selectedServer.version;
-    } catch (IOException e) {
-      log.error(e);
-    }
+    String pxVersion = LauncherApp.selectedServer == null ? LauncherApp.getLocalGameVersion() : LauncherApp.selectedServer.version;
 
     for(Mod mod : modList) {
       if(mod instanceof JarMod) {

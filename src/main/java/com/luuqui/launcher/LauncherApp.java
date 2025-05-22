@@ -505,6 +505,14 @@ public class LauncherApp {
     if (containsCyrillic) SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
   }
 
+  public static String getLocalGameVersion() {
+    try {
+      return FileUtil.readFile(LauncherApp.selectedServer == null ? LauncherGlobals.USER_DIR + File.separator + "version.txt" : LauncherApp.selectedServer.getRootDirectory() + "version.txt");
+    } catch (IOException e) {
+      log.error(e);
+    }
+  }
+
   protected static void exit() {
     DiscordPresenceClient.getInstance().stop();
     if (!Settings.keepOpen) {
