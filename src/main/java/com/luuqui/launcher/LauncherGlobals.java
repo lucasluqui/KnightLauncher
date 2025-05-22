@@ -26,7 +26,7 @@ public class LauncherGlobals {
 
   public static final String RPC_CLIENT_ID = "626524043209867274";
 
-  public static final String BUNDLED_SPIRALVIEW_VERSION = "2.0.7";
+  public static final String BUNDLED_SPIRALVIEW_VERSION = "2.0.8";
 
   public static final String[] GETDOWN_ARGS;
   public static final String[] GETDOWN_ARGS_WIN;
