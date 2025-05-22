@@ -52,25 +52,32 @@ public class LauncherEventHandler {
         GameSettings.load();
         GameSettings.resetGetdown();
 
-        if (Settings.gamePlatform.startsWith("Steam")) {
+        if (Settings.loadCodeMods) {
 
-          try {
-            SteamUtil.startGameById(99900, SystemUtil.isMac());
-          } catch (Exception e) {
-            log.error(e);
-          }
+          ProcessUtil.run(getCodeModsStartCommand(altMode), true);
 
         } else {
 
-          if (SystemUtil.isWindows()) {
-            ProcessUtil.run(LauncherGlobals.GETDOWN_ARGS_WIN, true);
-          } else {
-            ProcessUtil.run(LauncherGlobals.GETDOWN_ARGS, true);
-          }
+          if (Settings.gamePlatform.startsWith("Steam")) {
 
+            try {
+              SteamUtil.startGameById(99900, SystemUtil.isMac());
+            } catch (Exception e) {
+              log.error(e);
+            }
+
+          } else {
+
+            if (SystemUtil.isWindows()) {
+              ProcessUtil.run(LauncherGlobals.GETDOWN_ARGS_WIN, true);
+            } else {
+              ProcessUtil.run(LauncherGlobals.GETDOWN_ARGS, true);
+            }
+
+          }
         }
 
-        log.info("Starting game", "platform", Settings.gamePlatform);
+        log.info("Starting game", "platform", Settings.gamePlatform, "codeMods", Settings.loadCodeMods);
         if (Settings.useIngameRPC) ProcessUtil.run(RPC_COMMAND_LINE, true);
         // end: official servers launch procedure
       } else {
@@ -582,6 +589,81 @@ public class LauncherEventHandler {
     LauncherGUI.playAnimatedBannersButton.setIcon(Settings.playAnimatedBanners ? playAnimatedBannersIconEnabled : playAnimatedBannersIconDisabled);
     LauncherGUI.playAnimatedBannersButton.setToolTipText(Locale.getValue(Settings.playAnimatedBanners ? "m.animated_banners_disable" : "m.animated_banners_enable"));
     LauncherGUI.playAnimatedBannersButton.setBackground(Settings.playAnimatedBanners ? CustomColors.INTERFACE_SIDEPANE_BUTTON : CustomColors.MID_RED);
+  }
+
+  private static String[] getCodeModsStartCommand(boolean altMode) {
+    List<String> argsList = new ArrayList<>();
+
+    if(SystemUtil.isWindows()) {
+      argsList.add(LauncherGlobals.USER_DIR + File.separator + "java_vm" + File.separator + "bin" + File.separator + "java");
+      argsList.add("-classpath");
+      argsList.add(LauncherGlobals.USER_DIR + File.separator + "./code/config.jar;" +
+          LauncherGlobals.USER_DIR + File.separator + "./code/projectx-config.jar;" +
+          LauncherGlobals.USER_DIR + File.separator + "./code/projectx-pcode.jar;" +
+          LauncherGlobals.USER_DIR + File.separator + "./code/lwjgl.jar;" +
+          LauncherGlobals.USER_DIR + File.separator + "./code/lwjgl_util.jar;" +
+          LauncherGlobals.USER_DIR + File.separator + "./code/jinput.jar;" +
+          LauncherGlobals.USER_DIR + File.separator + "./code/jutils.jar;" +
+          LauncherGlobals.USER_DIR + File.separator + "./code/jshortcut.jar;" +
+          LauncherGlobals.USER_DIR + File.separator + "./code/commons-beanutils.jar;" +
+          LauncherGlobals.USER_DIR + File.separator + "./code/commons-digester.jar;" +
+          LauncherGlobals.USER_DIR + File.separator + "./code/commons-logging.jar;" +
+          LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar;");
+      argsList.add("-Dcom.threerings.getdown=false");
+      if(Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
+      if(Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld")) argsList.add("-XX:+UseParallelGC");
+      if(Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+      argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
+      argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
+      argsList.add("-XX:+AggressiveOpts");
+      argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
+
+      if(!Settings.gameAdditionalArgs.isEmpty()) {
+        argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
+      }
+
+      argsList.add("-Djava.library.path=" + LauncherGlobals.USER_DIR + File.separator + "./native");
+      argsList.add("-Dorg.lwjgl.util.NoChecks=true");
+      argsList.add("-Dsun.java2d.d3d=false");
+      argsList.add("-Dappdir=" + LauncherGlobals.USER_DIR + File.separator + ".");
+      argsList.add("-Dresource_dir=" + LauncherGlobals.USER_DIR + File.separator + "./rsrc");
+      argsList.add("com.luuqui.bootstrap.Bootstrap");
+    } else {
+      argsList.add(LauncherGlobals.USER_DIR + File.separator + "java" + File.separator + "bin" + File.separator + "java");
+      argsList.add("-classpath");
+      argsList.add(LauncherGlobals.USER_DIR + File.separator + "code/config.jar:" +
+          LauncherGlobals.USER_DIR + File.separator + "code/projectx-config.jar:" +
+          LauncherGlobals.USER_DIR + File.separator + "code/projectx-pcode.jar:" +
+          LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar:" +
+          LauncherGlobals.USER_DIR + File.separator + "code/lwjgl.jar:" +
+          LauncherGlobals.USER_DIR + File.separator + "code/lwjgl_util.jar:" +
+          LauncherGlobals.USER_DIR + File.separator + "code/jinput.jar:" +
+          LauncherGlobals.USER_DIR + File.separator + "code/jshortcut.jar:" +
+          LauncherGlobals.USER_DIR + File.separator + "code/commons-beanutils.jar:" +
+          LauncherGlobals.USER_DIR + File.separator + "code/commons-digester.jar:" +
+          LauncherGlobals.USER_DIR + File.separator + "code/commons-logging.jar:");
+      argsList.add("-Dcom.threerings.getdown=false");
+      if(Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
+      if(Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld")) argsList.add("-XX:+UseParallelGC");
+      if(Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+      argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
+      argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
+      argsList.add("-XX:+AggressiveOpts");
+      argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
+
+      if(!Settings.gameAdditionalArgs.isEmpty()) {
+        argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
+      }
+
+      argsList.add("-Djava.library.path=" + LauncherGlobals.USER_DIR + File.separator + "native");
+      argsList.add("-Dorg.lwjgl.util.NoChecks=true");
+      argsList.add("-Dsun.java2d.d3d=false");
+      argsList.add("-Dappdir=" + LauncherGlobals.USER_DIR + File.separator);
+      argsList.add("-Dresource_dir=" + LauncherGlobals.USER_DIR + File.separator + "rsrc");
+      argsList.add("com.luuqui.bootstrap.Bootstrap");
+    }
+
+    return argsList.toArray(new String[argsList.size()]);
   }
 
   private static String[] getThirdPartyClientStartCommand(Server server, boolean altMode) {

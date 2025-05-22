@@ -71,8 +71,7 @@ public class LauncherGlobals {
         USER_DIR + fileSeparator + "./code/jshortcut.jar" + javaSeparator +
         USER_DIR + fileSeparator + "./code/commons-beanutils.jar" + javaSeparator +
         USER_DIR + fileSeparator + "./code/commons-digester.jar" + javaSeparator +
-        USER_DIR + fileSeparator + "./code/commons-logging.jar" + javaSeparator +
-        USER_DIR + fileSeparator + "./KnightLauncher.jar" + javaSeparator,
+        USER_DIR + fileSeparator + "./code/commons-logging.jar" + javaSeparator,
         "-Dcom.threerings.getdown=false",
         "-Xms256M",
         "-Xmx512M",
@@ -84,7 +83,7 @@ public class LauncherGlobals {
         "-Dappdir=" + USER_DIR + fileSeparator + ".",
         "-Dresource_dir=" + USER_DIR + fileSeparator + "./rsrc",
         "-XX:+UseStringDeduplication",
-        "com.lucasallegri.bootstrap.ProjectXBootstrap",
+        "com.threerings.projectx.client.ProjectXApp",
     };
   }
 
