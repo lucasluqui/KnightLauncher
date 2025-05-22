@@ -98,7 +98,7 @@ public class ModLoader {
         mountRequired = true;
       }
 
-      checkJarModsJDKRequirements();
+      checkJarModsRequirements();
 
       // Check if there's directories in the mod folder and push a warning to the user.
       for (File file : FileUtil.filesAndDirectoriesInDirectory(modFolderPath)) {
@@ -320,21 +320,30 @@ public class ModLoader {
         try {
           int minJDKVersion = Integer.parseInt(modJson.getString("minJDKVersion"));
           int maxJDKVersion = Integer.parseInt(modJson.getString("maxJDKVersion"));
+          String pxVersion = modJson.getString("pxVersion");
           ((JarMod) mod).setMinJDKVersion(minJDKVersion);
           ((JarMod) mod).setMaxJDKVersion(maxJDKVersion);
+          ((JarMod) mod).setPXVersion(pxVersion);
         } catch (JSONException ignored) {}
       }
     }
   }
 
-  private static void checkJarModsJDKRequirements() {
+  private static void checkJarModsRequirements() {
     int gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
+    String pxVersion = LauncherApp.selectedServer.version;
+
     for(Mod mod : modList) {
       if(mod instanceof JarMod) {
         // Disable any jar mod that is below the min JDK requirements or above the max JDK requirements.
-        boolean compatible = gameJVMVersion >= ((JarMod) mod).getMinJDKVersion() && gameJVMVersion <= ((JarMod) mod).getMaxJDKVersion();
-        if(mod.isEnabled()) mod.setEnabled(compatible);
-        ((JarMod) mod).setMeetsJDKRequirements(compatible);
+        boolean jdkCompatible = gameJVMVersion >= ((JarMod) mod).getMinJDKVersion() && gameJVMVersion <= ((JarMod) mod).getMaxJDKVersion();
+        ((JarMod) mod).setJDKCompatible(jdkCompatible);
+
+        // Disable any jar mod that isn't compatible with this pcode version.
+        boolean pxCompatible = pxVersion.equalsIgnoreCase(((JarMod) mod).getPXVersion());
+        ((JarMod) mod).setPXCompatible(pxCompatible);
+
+        if(mod.isEnabled()) mod.setEnabled(jdkCompatible && pxCompatible);
       }
     }
   }

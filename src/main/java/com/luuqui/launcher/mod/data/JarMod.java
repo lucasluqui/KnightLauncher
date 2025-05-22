@@ -8,7 +8,10 @@ public class JarMod extends Mod {
 
   private int minJDKVersion;
   private int maxJDKVersion;
-  private boolean meetsJDKRequirements;
+  private String pxVersion;
+
+  private boolean jdkCompatible;
+  private boolean pxCompatible;
 
   public JarMod () {
     super();
@@ -20,7 +23,9 @@ public class JarMod extends Mod {
     this.fileName = fileName;
     this.minJDKVersion = 8;
     this.maxJDKVersion = 8;
-    this.meetsJDKRequirements = true;
+    this.pxVersion = "0";
+    this.jdkCompatible = true;
+    this.pxCompatible = true;
   }
 
   public int getMinJDKVersion() {
@@ -39,13 +44,25 @@ public class JarMod extends Mod {
     this.maxJDKVersion = maxJDKVersion;
   }
 
-  public boolean getMeetsJDKRequirements() {
-    return this.meetsJDKRequirements;
+  public boolean isJDKCompatible() {
+    return this.jdkCompatible;
   }
 
-  public void setMeetsJDKRequirements(boolean meetsJDKRequirements) {
-    this.meetsJDKRequirements = meetsJDKRequirements;
+  public void setJDKCompatible(boolean jdkCompatible) { this.jdkCompatible = jdkCompatible; }
+
+  public String getPXVersion() {
+    return this.pxVersion;
   }
+
+  public void setPXVersion(String pxVersion) {
+    this.pxVersion = pxVersion;
+  }
+
+  public boolean isPXCompatible() {
+    return this.pxCompatible;
+  }
+
+  public void setPXCompatible(boolean pxCompatible) { this.pxCompatible = pxCompatible; }
 
   public void mount () {
     log.info("Code mod mounted successfully", "mod", this.displayName);

@@ -328,7 +328,7 @@ public class ModListGUI extends BaseGUI {
       modPane.add(removeButton);
 
       if(mod instanceof JarMod) {
-        if(!((JarMod) mod).getMeetsJDKRequirements()) {
+        if(!((JarMod) mod).isJDKCompatible() || !((JarMod) mod).isPXCompatible()) {
           JLabel jarModIncompatBadge = new JLabel();
           jarModIncompatBadge.setBounds(340, 50, 100, 18);
           jarModIncompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
