@@ -1,5 +1,8 @@
 package com.luuqui.bootstrap;
 
+import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.util.JavaUtil;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;

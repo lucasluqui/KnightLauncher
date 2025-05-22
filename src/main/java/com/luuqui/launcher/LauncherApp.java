@@ -84,9 +84,6 @@ public class LauncherApp {
     checkDirectories();
     Cache.setup();
 
-    // Load pcode in runtime
-    JavaUtil.loadLibrary(new File(LauncherGlobals.USER_DIR + File.separator + "code" + File.separator + "projectx-pcode.jar"));
-
     if (SystemUtil.isWindows() || SystemUtil.isUnix()) checkShortcut();
   }
 
@@ -511,6 +508,7 @@ public class LauncherApp {
     } catch (IOException e) {
       log.error(e);
     }
+    return "-1";
   }
 
   protected static void exit() {
