@@ -83,6 +83,10 @@ public class LauncherApp {
     KeyboardController.start();
     checkDirectories();
     Cache.setup();
+
+    // Load pcode in runtime
+    JavaUtil.loadLibrary(new File(LauncherGlobals.USER_DIR + File.separator + "code" + File.separator + "projectx-pcode.jar"));
+
     if (SystemUtil.isWindows() || SystemUtil.isUnix()) checkShortcut();
   }
 
