@@ -318,9 +318,9 @@ public class ModLoader {
 
       if(mod instanceof JarMod) {
         try {
-          int minJDKVersion = Integer.parseInt(modJson.getString("minJDKVersion"));
-          int maxJDKVersion = Integer.parseInt(modJson.getString("maxJDKVersion"));
-          String pxVersion = modJson.getString("pxVersion");
+          int minJDKVersion = !modJson.isNull("minJDKVersion") ? Integer.parseInt(modJson.getString("minJDKVersion")) : 8;
+          int maxJDKVersion = !modJson.isNull("maxJDKVersion") ? Integer.parseInt(modJson.getString("maxJDKVersion")) : 8;
+          String pxVersion = !modJson.isNull("pxVersion") ? modJson.getString("pxVersion") : "0";
           ((JarMod) mod).setMinJDKVersion(minJDKVersion);
           ((JarMod) mod).setMaxJDKVersion(maxJDKVersion);
           ((JarMod) mod).setPXVersion(pxVersion);
@@ -331,7 +331,12 @@ public class ModLoader {
 
   private static void checkJarModsRequirements() {
     int gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
-    String pxVersion = LauncherApp.selectedServer.version;
+    String pxVersion = null;
+    try {
+      pxVersion = LauncherApp.selectedServer == null ? FileUtil.readFile(LauncherGlobals.USER_DIR + File.separator + "version.txt") : LauncherApp.selectedServer.version;
+    } catch (IOException e) {
+      log.error(e);
+    }
 
     for(Mod mod : modList) {
       if(mod instanceof JarMod) {

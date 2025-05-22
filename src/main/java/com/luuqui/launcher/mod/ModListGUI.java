@@ -328,12 +328,14 @@ public class ModListGUI extends BaseGUI {
       modPane.add(removeButton);
 
       if(mod instanceof JarMod) {
-        if(!((JarMod) mod).isJDKCompatible() || !((JarMod) mod).isPXCompatible()) {
+        boolean isJDKCompatible = ((JarMod) mod).isJDKCompatible();
+        boolean isPXCompatible = ((JarMod) mod).isPXCompatible();
+        if(!isJDKCompatible || !isPXCompatible) {
           JLabel jarModIncompatBadge = new JLabel();
-          jarModIncompatBadge.setBounds(340, 50, 100, 18);
+          jarModIncompatBadge.setBounds(340, 50, 125, 18);
           jarModIncompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
           jarModIncompatBadge.setFont(Fonts.fontRegSmall);
-          jarModIncompatBadge.setText(Locale.getValue("m.code_mod_jdkincompatible"));
+          jarModIncompatBadge.setText(Locale.getValue("m.code_mod_incompatible", !isPXCompatible ? "PX" : "JDK"));
           jarModIncompatBadge.setToolTipText(jarModIncompatBadge.getText());
           jarModIncompatBadge.setVisible(true);
           jarModIncompatBadge.putClientProperty(FlatClientProperties.STYLE,

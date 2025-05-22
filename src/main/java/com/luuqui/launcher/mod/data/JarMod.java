@@ -74,7 +74,7 @@ public class JarMod extends Mod {
 
   @Override
   public String toString() {
-    return super.toString() + ", [JarMod minJDKVersion=" + this.minJDKVersion + ",maxJDKVersion=" + this.maxJDKVersion + "]";
+    return super.toString() + ", [JarMod minJDKVersion=" + this.minJDKVersion + ",maxJDKVersion=" + this.maxJDKVersion + ",pxVersion=" + this.pxVersion + "]";
   }
 
 }
