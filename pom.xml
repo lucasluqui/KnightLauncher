@@ -92,6 +92,14 @@
     </dependency>
 
     <dependency>
+      <groupId>pcode</groupId>
+      <artifactId>pcode</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>E:/SteamLibrary/steamapps/common/Spiral Knights/code/projectx-pcode.jar</systemPath>
+    </dependency>
+
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>5.10.3</version>
