@@ -115,6 +115,20 @@ public class ModListEventHandler {
     ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
   }
 
+  public static void showIncompatibleCodeModsWarning(boolean show) {
+    if (!show) {
+      ModListGUI.warningNotice.setVisible(false);
+      return;
+    }
+
+    // Show the warning with a slight delay to make sure the GUI can load beforehand.
+    Thread showDirectoriesWarningThread = new Thread(() -> {
+      ModListGUI.warningNotice.setVisible(true);
+      ModListGUI.currentWarning = Locale.getValue("error.incompatible_code_mods");
+    });
+    ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
+  }
+
   public static void searchMod() {
     ModListGUI.updateModList(ModListGUI.searchBox.getText());
   }

@@ -333,6 +333,7 @@ public class ModLoader {
     int gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
     String pxVersion = LauncherApp.selectedServer == null ? LauncherApp.getLocalGameVersion() : LauncherApp.selectedServer.version;
 
+    boolean hasIncompatibility = false;
     for(Mod mod : modList) {
       if(mod instanceof JarMod) {
         // Disable any jar mod that is below the min JDK requirements or above the max JDK requirements.
@@ -344,8 +345,14 @@ public class ModLoader {
         ((JarMod) mod).setPXCompatible(pxCompatible);
 
         if(mod.isEnabled()) mod.setEnabled(jdkCompatible && pxCompatible);
+
+        if((!jdkCompatible || !pxCompatible) && Settings.loadCodeMods) {
+          hasIncompatibility = true;
+        }
       }
     }
+
+    ModListEventHandler.showIncompatibleCodeModsWarning(hasIncompatibility);
   }
 
 }
