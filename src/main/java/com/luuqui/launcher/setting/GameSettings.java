@@ -83,12 +83,6 @@ public class GameSettings {
                 0,
                 0
         );
-        FileUtils.copyURLToFile(
-                new URL("http://gamemedia2.spiralknights.com/spiral/client/digest.txt"),
-                new File(LauncherGlobals.USER_DIR, "digest.txt"),
-                0,
-                0
-        );
         downloadCompleted = true;
       } catch (IOException e) {
         // Just keep retrying.
