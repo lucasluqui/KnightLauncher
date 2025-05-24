@@ -78,7 +78,7 @@ public class GameSettings {
       log.info("Resetting Getdown", "attempts", downloadAttempts);
       try {
         FileUtils.copyURLToFile(
-                new URL("http://gamemedia2.spiralknights.com/spiral/" + LauncherApp.getLocalGameVersion() + "/getdown.txt"),
+                new URL("http://gamemedia2.spiralknights.com/spiral/" + LauncherApp.getLocalGameVersion().trim() + "/getdown.txt"),
                 new File(LauncherGlobals.USER_DIR, "getdown.txt"),
                 0,
                 0

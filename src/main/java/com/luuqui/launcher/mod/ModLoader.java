@@ -98,6 +98,12 @@ public class ModLoader {
         mountRequired = true;
       }
 
+      if(gameVersionChanged()) {
+        log.info("Game version has changed", "new", LauncherApp.getLocalGameVersion().trim());
+        rebuildRequired = true;
+        mountRequired = true;
+      }
+
       checkJarModsRequirements();
 
       // Check if there's directories in the mod folder and push a warning to the user.
@@ -353,6 +359,25 @@ public class ModLoader {
     }
 
     ModListEventHandler.showIncompatibleCodeModsWarning(hasIncompatibility);
+  }
+
+  private static boolean gameVersionChanged() {
+    Server selectedServer = LauncherApp.selectedServer;
+    String key = "modloader.lastKnownVersion";
+
+    if(selectedServer != null) {
+      key += LauncherApp.selectedServer.isOfficial() ? "" : "_" + LauncherApp.selectedServer.getSanitizedName();
+    }
+
+    String lastKnownVersion = SettingsProperties.getValue(key);
+    String currentVersion = LauncherApp.getLocalGameVersion().trim();
+
+    if(!lastKnownVersion.equalsIgnoreCase(currentVersion)) {
+      SettingsProperties.setValue(key, currentVersion);
+      return true;
+    }
+
+    return false;
   }
 
 }

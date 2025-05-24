@@ -145,6 +145,7 @@ public class ModListEventHandler {
   public static void checkServerSettingsKeys(String serverName) {
     SettingsProperties.createKeyIfNotExists("modloader.appliedModsHash_" + serverName, "0");
     SettingsProperties.createKeyIfNotExists("modloader.disabledMods_" + serverName, "");
+    SettingsProperties.createKeyIfNotExists("modloader.lastKnownVersion_" + serverName, "0");
   }
 
   public static void enableAllModsEvent(ActionEvent event) {
