@@ -444,6 +444,21 @@ public class LauncherGUI extends BaseGUI {
     });
     mainPane.add(launchTooltipButton);
 
+    Icon altModeIcon = IconFontSwing.buildIcon(FontAwesome.USER_PLUS, 16, Color.WHITE);
+    altModeEnabledPill = new JLabel(Locale.getValue("m.alt_mode_enabled"));
+    altModeEnabledPill.setIcon(altModeIcon);
+    altModeEnabledPill.setBounds(572, 399, 200, 20);
+    altModeEnabledPill.setFont(Fonts.fontReg);
+    altModeEnabledPill.setForeground(Color.WHITE);
+    altModeEnabledPill.setHorizontalAlignment(SwingConstants.CENTER);
+    altModeEnabledPill.setVerticalAlignment(SwingConstants.CENTER);
+    altModeEnabledPill.putClientProperty(FlatClientProperties.STYLE,
+        "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND)
+            + "AA; foreground:" + ColorUtil.colorToHexString(Color.WHITE)
+            + "; arc:999;");
+    altModeEnabledPill.setVisible(false);
+    mainPane.add(altModeEnabledPill);
+
     BufferedImage launchBackgroundImage = ImageUtil.generatePlainColorImage(500, 85, new Color(0, 0, 0));
     launchBackgroundImage = (BufferedImage) ImageUtil.addRoundedCorners(launchBackgroundImage, 25);
     ImageUtil.setAlpha(launchBackgroundImage, (byte) 191);
@@ -697,11 +712,13 @@ public class LauncherGUI extends BaseGUI {
   protected static void specialKeyPressed() {
     launchButton.setBackground(CustomColors.LAUNCH_ALT);
     launchButton.updateUI();
+    altModeEnabledPill.setVisible(true);
   }
 
   protected static void specialKeyReleased() {
     launchButton.setBackground(CustomColors.LAUNCH);
     launchButton.updateUI();
+    altModeEnabledPill.setVisible(false);
   }
 
   // Shared
@@ -740,5 +757,6 @@ public class LauncherGUI extends BaseGUI {
   public static JLabel launchState;
   public static JProgressBar launchProgressBar = new JProgressBar();
   public static JButton warningNotice;
+  public static JLabel altModeEnabledPill;
 
 }
