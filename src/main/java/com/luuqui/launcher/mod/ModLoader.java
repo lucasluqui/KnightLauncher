@@ -135,7 +135,7 @@ public class ModLoader {
     LauncherGUI.modButton.setEnabled(false);
 
     ProgressBar.startTask();
-    ProgressBar.setBarMax(getEnabledModCount() + 1);
+    ProgressBar.setBarMax(getEnabledModCount());
     ProgressBar.setState(Locale.getValue("m.mount"));
     DiscordPresenceClient.getInstance().setDetails(Locale.getValue("m.mount"));
     LinkedList<Mod> localList = getModList();
