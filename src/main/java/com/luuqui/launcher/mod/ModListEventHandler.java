@@ -164,12 +164,14 @@ public class ModListEventHandler {
 
   public static void addModEvent(ActionEvent event) {
     JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Add mod");
+    fileChooser.setApproveButtonText("Add");
 
     FileNameExtensionFilter restrict = new FileNameExtensionFilter(".zip, .jar, .modpack", "zip", "jar", "modpack");
     fileChooser.setAcceptAllFileFilterUsed(false);
     fileChooser.addChoosableFileFilter(restrict);
 
-    int response = fileChooser.showSaveDialog(null);
+    int response = fileChooser.showOpenDialog(null);
 
     if (response == JFileChooser.APPROVE_OPTION) {
       String path = fileChooser.getSelectedFile().getAbsolutePath();
