@@ -14,12 +14,6 @@ public class DateUtil {
 
   private static final String TIMEZONE = "PST"; // Game's timezone
 
-  //public static String getDateAsString() {
-  //  Date date = Calendar.getInstance().getTime();
-  //  DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
-  //  return dateFormat.format(date);
-  //}
-
   public static String getFormattedTimeRemaining(long timestamp) {
     long remainingMillis = timestamp - System.currentTimeMillis();
     long minutesRemaining = (remainingMillis / 1000L) / 60L;
@@ -43,7 +37,7 @@ public class DateUtil {
     calendar.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM"); // Only the month, we'll concatenate the day later.
 
-    return dateFormat.format(calendar.getTime()) + " " + DateUtil.getDayNumberWithSuffix(calendar.get(Calendar.DATE) - 1);
+    return dateFormat.format(calendar.getTime()) + " " + getDayNumberWithSuffix(calendar.get(Calendar.DATE) - 1) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + getMinuteWithTrailingZero(calendar.get(Calendar.MINUTE)) + " " + (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM") + " " + TIMEZONE;
   }
 
   private static String getDayNumberWithSuffix(int date) {
@@ -64,6 +58,10 @@ public class DateUtil {
         break;
     }
     return date + suffix;
+  }
+
+  private static String getMinuteWithTrailingZero(int minute) {
+    return minute < 10 ? "0" + minute : "" + minute;
   }
 
 }
