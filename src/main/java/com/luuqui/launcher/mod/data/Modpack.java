@@ -3,6 +3,7 @@ package com.luuqui.launcher.mod.data;
 import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.mod.ModLoader;
+import com.luuqui.launcher.setting.Settings;
 import com.luuqui.util.Compressor;
 import com.luuqui.util.SystemUtil;
 import org.apache.commons.io.FileUtils;
@@ -40,7 +41,7 @@ public class Modpack extends Mod {
       } catch (IOException e) {
         log.error(e);
       }
-      Compressor.unzip(pathOutside, rootDir + "/rsrc/", false, true, ModLoader.FILTER_LIST);
+      Compressor.unzip(pathOutside, rootDir + "/rsrc/", false, Settings.fileProtection, ModLoader.FILTER_LIST);
       log.info("Mod from modpack mounted successfully", "pack", this.displayName, "mod", fileInsideZip);
       tempFile.delete();
     }
