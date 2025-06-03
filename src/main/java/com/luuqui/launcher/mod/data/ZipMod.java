@@ -2,6 +2,7 @@ package com.luuqui.launcher.mod.data;
 
 import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.launcher.mod.ModLoader;
 import com.luuqui.util.Compressor;
 import com.luuqui.util.SystemUtil;
 
@@ -27,7 +28,7 @@ public class ZipMod extends Mod {
       rootDir = LauncherApp.selectedServer.getRootDirectory();
     }
 
-    Compressor.unzip(rootDir + "/mods/" + this.fileName, rootDir + "/rsrc/", SystemUtil.isMac());
+    Compressor.unzip(rootDir + "/mods/" + this.fileName, rootDir + "/rsrc/", false, true, ModLoader.FILTER_LIST);
 
     log.info("Zip mod mounted successfully", "mod", this.displayName);
   }

@@ -29,7 +29,7 @@ public class Compressor {
 
   public static void unzip(String source, String dest, Boolean force4j, Boolean filter, String[] filterList) {
     try {
-      if(force4j) {
+      if(force4j || SystemUtil.isMac()) {
         unzip4j(source, dest, filter, filterList);
         return;
       }
