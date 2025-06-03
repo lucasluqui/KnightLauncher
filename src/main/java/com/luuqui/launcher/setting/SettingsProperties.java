@@ -12,7 +12,7 @@ import static com.luuqui.launcher.setting.Log.log;
 
 public class SettingsProperties {
 
-  private static final String PROP_VER = "23";
+  private static final String PROP_VER = "24";
 
   private static Properties _prop = new Properties();
   private static final String _propPath = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
@@ -103,6 +103,7 @@ public class SettingsProperties {
     Settings.autoUpdate = Boolean.parseBoolean(getValue("launcher.autoUpdate"));
     Settings.playAnimatedBanners = Boolean.parseBoolean(getValue("launcher.playAnimatedBanners"));
     Settings.loadCodeMods = Boolean.parseBoolean(getValue("launcher.loadCodeMods"));
+    Settings.fileProtection = Boolean.parseBoolean(getValue("launcher.fileProtection"));
 
     // Compressor settings
     Settings.compressorUnzipMethod = getValue("compressor.unzipMethod");
