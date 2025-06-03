@@ -540,13 +540,15 @@ public class LauncherEventHandler {
 
         if(LauncherApp.selectedServer.announceBannerStartsAt > System.currentTimeMillis()) {
           // The event has not yet started
-          LauncherGUI.bannerTimer.setText(Locale.getValue("m.banner_starts_at_remaining", DateUtil.getFormattedRemaining(LauncherApp.selectedServer.announceBannerStartsAt)));
+          LauncherGUI.bannerTimer.setText(Locale.getValue("m.banner_starts_at_time_remaining", DateUtil.getFormattedTimeRemaining(LauncherApp.selectedServer.announceBannerStartsAt)));
+          LauncherGUI.bannerTimer.setToolTipText(Locale.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(LauncherApp.selectedServer.announceBannerStartsAt)));
         } else if(System.currentTimeMillis() > LauncherApp.selectedServer.announceBannerEndsAt) {
           // The event already ended
           LauncherGUI.bannerTimer.setText(Locale.getValue("m.banner_ends_at_ended"));
         } else {
           // The event is currently running
-          LauncherGUI.bannerTimer.setText(Locale.getValue("m.banner_ends_at_remaining", DateUtil.getFormattedRemaining(LauncherApp.selectedServer.announceBannerEndsAt)));
+          LauncherGUI.bannerTimer.setText(Locale.getValue("m.banner_ends_at_time_remaining", DateUtil.getFormattedTimeRemaining(LauncherApp.selectedServer.announceBannerEndsAt)));
+          LauncherGUI.bannerTimer.setToolTipText(Locale.getValue("m.banner_ends_at_time", DateUtil.getFormattedTime(LauncherApp.selectedServer.announceBannerEndsAt)));
         }
 
         // In any case, the timer needs to be visible

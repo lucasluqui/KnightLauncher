@@ -14,13 +14,13 @@ public class DateUtil {
 
   private static final String TIMEZONE = "PST"; // Game's timezone
 
-  public static String getDateAsString() {
-    Date date = Calendar.getInstance().getTime();
-    DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
-    return dateFormat.format(date);
-  }
+  //public static String getDateAsString() {
+  //  Date date = Calendar.getInstance().getTime();
+  //  DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
+  //  return dateFormat.format(date);
+  //}
 
-  public static String getFormattedRemaining(long timestamp) {
+  public static String getFormattedTimeRemaining(long timestamp) {
     long remainingMillis = timestamp - System.currentTimeMillis();
     long minutesRemaining = (remainingMillis / 1000L) / 60L;
     long hoursRemaining = minutesRemaining / 60L;
@@ -37,7 +37,7 @@ public class DateUtil {
     }
   }
 
-  public static String getFormattedMonthDay(long timestamp) {
+  public static String getFormattedTime(long timestamp) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(timestamp);
     calendar.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
