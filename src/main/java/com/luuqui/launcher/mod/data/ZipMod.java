@@ -20,11 +20,15 @@ public class ZipMod extends Mod {
   }
 
   public void mount() {
+    log.info("Mounting Zip mod", "mod", this.displayName);
+
     String rootDir = LauncherGlobals.USER_DIR;
     if(LauncherApp.selectedServer != null) {
       rootDir = LauncherApp.selectedServer.getRootDirectory();
     }
+
     Compressor.unzip(rootDir + "/mods/" + this.fileName, rootDir + "/rsrc/", SystemUtil.isMac());
+
     log.info("Zip mod mounted successfully", "mod", this.displayName);
   }
 
