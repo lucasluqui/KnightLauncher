@@ -69,7 +69,23 @@ public class GameSettings {
     }
   }
 
-  public static void resetGetdown() {
+  public static void checkGetdown() {
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(LauncherGlobals.USER_DIR + File.separator + "getdown.txt"));
+      String firstLine = br.readLine();
+      br.close();
+
+      if(firstLine.contains("Customized")) {
+        log.info("Detected a legacy modified Getdown file. Resetting");
+        resetGetdown();
+      }
+    } catch (IOException e) {
+      log.error(e);
+      resetGetdown();
+    }
+  }
+
+  private static void resetGetdown() {
     int downloadAttempts = 0;
     boolean downloadCompleted = false;
 
@@ -78,10 +94,10 @@ public class GameSettings {
       log.info("Resetting Getdown", "attempts", downloadAttempts);
       try {
         FileUtils.copyURLToFile(
-                new URL("http://gamemedia2.spiralknights.com/spiral/" + LauncherApp.getLocalGameVersion().trim() + "/getdown.txt"),
-                new File(LauncherGlobals.USER_DIR, "getdown.txt"),
-                0,
-                0
+            new URL("http://gamemedia2.spiralknights.com/spiral/" + LauncherApp.getLocalGameVersion().trim() + "/getdown.txt"),
+            new File(LauncherGlobals.USER_DIR, "getdown.txt"),
+            0,
+            0
         );
         downloadCompleted = true;
       } catch (IOException e) {
