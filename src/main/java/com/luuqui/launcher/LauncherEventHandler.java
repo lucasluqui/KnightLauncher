@@ -50,7 +50,7 @@ public class LauncherEventHandler {
         SettingsEventHandler.saveAdditionalArgs();
         SettingsEventHandler.saveConnectionSettings();
         GameSettings.load();
-        GameSettings.resetGetdown();
+        GameSettings.checkGetdown();
 
         if (Settings.loadCodeMods) {
 
@@ -77,6 +77,7 @@ public class LauncherEventHandler {
           }
         }
 
+        ProgressBar.setState(Locale.getValue("m.launch"));
         log.info("Starting game", "platform", Settings.gamePlatform, "codeMods", Settings.loadCodeMods);
         if (Settings.useIngameRPC) ProcessUtil.run(RPC_COMMAND_LINE, true);
         // end: official servers launch procedure
