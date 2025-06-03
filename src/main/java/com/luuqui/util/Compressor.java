@@ -23,23 +23,23 @@ public class Compressor {
 
   private static final int BUFFER_SIZE = 4096;
 
-
   public static void unzip(String source, String dest, Boolean force4j) {
+    unzip(source, dest, force4j, false, null);
+  }
+
+  public static void unzip(String source, String dest, Boolean force4j, Boolean filter, String[] filterList) {
     try {
       if(force4j) {
-        unzip4j(source, dest);
+        unzip4j(source, dest, filter, filterList);
         return;
       }
 
       switch (Settings.compressorUnzipMethod) {
         case "custom":
-          unzipCustom(source, dest);
-          break;
-        case "4j":
-          unzip4j(source, dest);
+          unzipCustom(source, dest, filter, filterList);
           break;
         default:
-          unzip4j(source, dest);
+          unzip4j(source, dest, filter, filterList);
           break;
       }
     } catch (IOException e) {
@@ -49,23 +49,97 @@ public class Compressor {
 
 
   public static void unzip4j(String source, String dest) throws ZipException {
+    unzip4j(source, dest, false, null);
+  }
+
+  public static void unzip4j(String source, String dest, Boolean filter, String[] filterList) throws ZipException {
     ZipFile zipFile = new ZipFile(source);
+
+    try {
+
+      // Check if we've been given a filter list and in that case, iterate through it.
+      if(filterList != null) {
+        for(String fileName : filterList) {
+          if(zipFile.getFileHeader(fileName) != null) {
+            log.info("Filter found illegal file", "source", source, "file", fileName, "filter", filter);
+            if (filter) zipFile.removeFile(fileName);
+          }
+        }
+      }
+
+      // Also, check whether any of the files matches the forced filter list.
+      for(String fileName : FORCED_FILTER_LIST) {
+        if(zipFile.getFileHeader(fileName) != null) {
+          log.info("Filter found illegal file. This is a forced filter thus filter value will be ignored.",
+              "source", source, "file", fileName, "filter", filter);
+          zipFile.removeFile(fileName);
+        }
+      }
+
+    } catch (Exception e) {
+      log.error(e);
+    }
+
+    // All done, time to extract.
     zipFile.extractAll(dest);
   }
 
 
   public static void unzipCustom(String zipFilePath, String destDirectory) throws IOException {
+    unzipCustom(zipFilePath, destDirectory, false, null);
+  }
+
+  public static void unzipCustom(String zipFilePath, String destDirectory, Boolean filter, String[] filterList) throws IOException {
     FileUtil.createDir(destDirectory);
     ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
     ZipEntry entry = zipIn.getNextEntry();
     // iterates over entries in the zip file
     while (entry != null) {
       String filePath = destDirectory + File.separator + entry.getName();
-      if (entry.getName().contains(".json")) {
-        zipIn.closeEntry();
-        entry = zipIn.getNextEntry();
-        continue;
+
+      try {
+
+        boolean illegalFile = false;
+
+        // Check if we've been given a filter list and in that case, iterate through it.
+        if(filterList != null) {
+          for(String fileName : filterList) {
+            if(filePath.equalsIgnoreCase(fileName)) {
+              log.info("Filter found illegal file", "source", zipFilePath, "file", fileName, "filter", filter);
+              if (filter) {
+                illegalFile = true;
+              }
+              break;
+            }
+          }
+
+          if (illegalFile) {
+            zipIn.closeEntry();
+            entry = zipIn.getNextEntry();
+            continue;
+          }
+        }
+
+        // Also, check whether any of the files matches the forced filter list.
+        for(String fileName : FORCED_FILTER_LIST) {
+          if(filePath.equalsIgnoreCase(fileName)) {
+            log.info("Filter found illegal file. This is a forced filter thus filter value will be ignored.",
+                "source", zipFilePath, "file", fileName, "filter", filter);
+            illegalFile = true;
+            break;
+          }
+        }
+
+        if (illegalFile) {
+          zipIn.closeEntry();
+          entry = zipIn.getNextEntry();
+          continue;
+        }
+
+      } catch (Exception e) {
+        log.error(e);
       }
+
       if (!entry.isDirectory()) {
         // if the entry is a file, extracts it
         extractFileSafe(zipIn, filePath);
@@ -211,4 +285,39 @@ public class Compressor {
       addFileToZip(rootPath, fileName, zip, zipFileName);
     }
   }
+
+  private static final String[] FORCED_FILTER_LIST = new String[] {
+      "item/live/statue/model.dat",
+      "world/dynamic/switch/button/model.dat",
+      "world/dynamic/switch/button/model_pressure.dat",
+      "world/dynamic/switch/button/model_pressure_onetime.dat",
+      "world/dynamic/switch/button/model_pressure_statue.dat",
+      "world/dynamic/switch/button/model_whitespace.dat",
+      "world/dynamic/switch/button/parts/animation_down.dat",
+      "world/dynamic/switch/button/parts/animation_hide.dat",
+      "world/dynamic/switch/button/parts/animation_show.dat",
+      "world/dynamic/switch/button/parts/animation_up.dat",
+      "world/dynamic/switch/button/parts/animation_whitespace_down.dat",
+      "world/dynamic/switch/button/parts/animation_whitespace_up.dat",
+      "world/dynamic/switch/button/parts/fx_down.dat",
+      "world/dynamic/switch/button_large/fx_whitespace-hit.dat",
+      "world/dynamic/switch/button_large/fx_whitespace.dat",
+      "world/dynamic/switch/button_large/model.dat",
+      "world/dynamic/switch/button_large/model_horde.dat",
+      "world/dynamic/switch/button_large/model_whitespace.dat",
+      "world/dynamic/switch/clockwork_button/glow.dat",
+      "world/dynamic/switch/clockwork_button/model.dat",
+      "world/dynamic/switch/clockwork_button/animation/state_down.dat",
+      "world/dynamic/switch/clockwork_button/animation/state_up.dat",
+      "world/dynamic/switch/multistate/model.dat",
+      "world/dynamic/switch/multistate/parts/animation_disabled.dat",
+      "world/dynamic/switch/multistate/parts/animation_green.dat",
+      "world/dynamic/switch/multistate/parts/animation_red.dat",
+      "world/dynamic/switch/multistate/parts/animation_violet.dat",
+      "world/dynamic/switch/multistate/parts/animation_yellow.dat",
+      "world/dynamic/switch/toggle_lever/animation_off.dat",
+      "world/dynamic/switch/toggle_lever/animation_on.dat",
+      "world/dynamic/switch/toggle_lever/model.dat"
+  };
+
 }
