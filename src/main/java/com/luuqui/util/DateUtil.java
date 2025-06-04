@@ -3,10 +3,10 @@ package com.luuqui.util;
 import com.luuqui.launcher.Locale;
 
 import java.text.SimpleDateFormat;
-import java.time.Month;
-import java.time.format.TextStyle;
 import java.util.Calendar;
 import java.util.TimeZone;
+
+import static com.luuqui.util.Log.log;
 
 public class DateUtil {
 
