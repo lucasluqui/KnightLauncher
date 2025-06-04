@@ -2,13 +2,11 @@ package com.luuqui.util;
 
 import com.luuqui.launcher.Locale;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
-
-import static com.luuqui.util.Log.log;
 
 public class DateUtil {
 
@@ -35,9 +33,16 @@ public class DateUtil {
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(timestamp);
     calendar.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM"); // Only the month, we'll concatenate the day later.
 
-    return dateFormat.format(calendar.getTime()) + " " + getDayNumberWithSuffix(calendar.get(Calendar.DATE) - 1) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + getMinuteWithTrailingZero(calendar.get(Calendar.MINUTE)) + " " + (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM") + " " + TIMEZONE;
+    // Only the month, we'll concatenate the rest later.
+    // Also, force it to be in English locale.
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM", java.util.Locale.ENGLISH);
+
+    return dateFormat.format(calendar.getTime()) + " "
+        + getDayNumberWithSuffix(calendar.get(Calendar.DATE) - 1) + " "
+        + calendar.get(Calendar.HOUR_OF_DAY) + ":" + getMinuteWithTrailingZero(calendar.get(Calendar.MINUTE)) + " "
+        + (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM") + " "
+        + TIMEZONE;
   }
 
   private static String getDayNumberWithSuffix(int date) {
