@@ -96,7 +96,7 @@
       <artifactId>pcode</artifactId>
       <version>1.0.0</version>
       <scope>system</scope>
-      <systemPath>E:/SteamLibrary/steamapps/common/Spiral Knights/code/projectx-pcode.jar</systemPath>
+      <systemPath>F:/Program Files/Spiral Knights/code/projectx-pcode.jar</systemPath>
     </dependency>
 
     <dependency>
