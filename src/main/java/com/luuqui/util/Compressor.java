@@ -287,8 +287,6 @@ public class Compressor {
   }
 
   private static final String[] FORCED_FILTER_LIST = new String[] {
-      "META-INF/",
-      "META-INF/MANIFEST.MF",
       "item/live/statue/model.dat",
       "world/dynamic/switch/button/model.dat",
       "world/dynamic/switch/button/model_pressure.dat",
