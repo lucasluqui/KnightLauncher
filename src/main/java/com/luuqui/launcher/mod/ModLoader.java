@@ -197,14 +197,14 @@ public class ModLoader {
     ProgressBar.setBarMax(bundles.length + 1);
 
     // Clear the entirety of the rsrc folder leaving only the jar and zip bundles.
-    FileUtil.purgeDirectory(new File(rootDir + "/rsrc/"), new String[] {".jar", ".jarv", ".zip"});
     DiscordPresenceClient.getInstance().setDetails(Locale.getValue("m.purge"));
     ProgressBar.setState(Locale.getValue("m.purge"));
+    FileUtil.purgeDirectory(new File(rootDir + "/rsrc/"), new String[] {".jar", ".jarv", ".zip"});
 
-    DiscordPresenceClient.getInstance().setDetails(Locale.getValue("m.clean"));
-    ProgressBar.setState(Locale.getValue("m.clean"));
+    // Iterate through all bundles to rebuild the game files.
+    DiscordPresenceClient.getInstance().setDetails(Locale.getValue("m.rebuild"));
+    ProgressBar.setState(Locale.getValue("m.rebuild"));
 
-    // Iterate through all 3 bundles to clean up the game files.
     for (int i = 0; i < bundles.length; i++) {
       ProgressBar.setBarValue(i + 1);
       DiscordPresenceClient.getInstance().setDetails(Locale.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(bundles.length)}));
