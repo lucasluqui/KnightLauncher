@@ -195,7 +195,7 @@ public class ModListEventHandler {
     if(confirm) {
       new File(mod.getAbsolutePath()).delete();
       log.info("Removed mod: " + mod);
-      refreshMods();
+      refreshMods(false);
     }
   }
 }
