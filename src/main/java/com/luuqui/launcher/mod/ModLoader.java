@@ -122,12 +122,12 @@ public class ModLoader {
     }
   }
 
-  public static void mount(boolean rebuild) {
+  public static void mount() {
 
     Server selectedServer = LauncherApp.selectedServer;
     String selectedServerName = selectedServer.getSanitizedName();
 
-    if (Settings.doRebuilds && ModLoader.rebuildRequired && rebuild) ModLoader.startFileRebuild();
+    if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
 
     LauncherEventHandler.updateServerSwitcher(true);
     LauncherGUI.launchButton.setEnabled(false);

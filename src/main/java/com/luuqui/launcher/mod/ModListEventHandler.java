@@ -28,7 +28,7 @@ public class ModListEventHandler {
     refreshMods(true);
   }
 
-  public static void refreshMods(boolean rebuild) {
+  public static void refreshMods(boolean mount) {
     Thread refreshThread = new Thread(() -> {
       ModListGUI.refreshButton.setEnabled(false);
       ModListGUI.enableAllModsButton.setEnabled(false);
@@ -36,10 +36,14 @@ public class ModListEventHandler {
       ModListGUI.addModButton.setEnabled(false);
 
       ModLoader.checkInstalled();
-      if (ModLoader.rebuildRequired && Settings.doRebuilds && rebuild) {
-        ModLoader.startFileRebuild();
+
+      if (mount) {
+        if (ModLoader.rebuildRequired && Settings.doRebuilds) {
+          ModLoader.startFileRebuild();
+        }
+        ModLoader.mount();
       }
-      ModLoader.mount(rebuild);
+
       ModListGUI.updateModList(null);
 
       ModListGUI.refreshButton.setEnabled(true);
