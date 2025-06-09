@@ -25,10 +25,10 @@ import static com.luuqui.launcher.mod.Log.log;
 public class ModListEventHandler {
 
   public static void refreshEvent(ActionEvent action) {
-    refreshMods();
+    refreshMods(true);
   }
 
-  public static void refreshMods() {
+  public static void refreshMods(boolean rebuild) {
     Thread refreshThread = new Thread(() -> {
       ModListGUI.refreshButton.setEnabled(false);
       ModListGUI.enableAllModsButton.setEnabled(false);
@@ -36,7 +36,7 @@ public class ModListEventHandler {
       ModListGUI.addModButton.setEnabled(false);
 
       ModLoader.checkInstalled();
-      if (ModLoader.rebuildRequired && Settings.doRebuilds) {
+      if (ModLoader.rebuildRequired && Settings.doRebuilds && rebuild) {
         ModLoader.startFileRebuild();
       }
       ModLoader.mount();
@@ -152,14 +152,14 @@ public class ModListEventHandler {
     for(Mod mod : ModLoader.getModList()) {
       enableMod(mod);
     }
-    refreshMods();
+    refreshMods(false);
   }
 
   public static void disableAllModsEvent(ActionEvent event) {
     for(Mod mod : ModLoader.getModList()) {
       disableMod(mod);
     }
-    refreshMods();
+    refreshMods(false);
   }
 
   public static void addModEvent(ActionEvent event) {
@@ -179,8 +179,8 @@ public class ModListEventHandler {
         File file = new File(path);
           try {
             FileUtils.copyFile(file, new File(LauncherApp.selectedServer.getRootDirectory() + "/mods/" + file.getName()));
-            log.info("Adding mod: " + file.getName());
-            refreshMods();
+            log.info("Added mod: " + file.getName());
+            refreshMods(false);
           } catch (IOException e) {
             log.error(e);
           }
