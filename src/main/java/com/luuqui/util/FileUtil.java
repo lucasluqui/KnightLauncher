@@ -291,4 +291,20 @@ public class FileUtil {
     );
   }
 
+  public static void purgeDirectory(File dir, String[] exceptions) {
+    for (File file : dir.listFiles()) {
+      boolean skip = false;
+      for (String except : exceptions) {
+        if (file.getName().contains(except)) {
+          skip = true;
+          break;
+        }
+      }
+      if (skip) continue;
+      if (file.isDirectory())
+        purgeDirectory(file, exceptions);
+      file.delete();
+    }
+  }
+
 }

@@ -46,7 +46,7 @@ public class LauncherEventHandler {
 
       if(LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
         // start: official servers launch procedure
-        if (ModLoader.mountRequired) ModLoader.mount();
+        if (ModLoader.mountRequired) ModLoader.mount(true);
         SettingsEventHandler.saveAdditionalArgs();
         SettingsEventHandler.saveConnectionSettings();
         GameSettings.load();

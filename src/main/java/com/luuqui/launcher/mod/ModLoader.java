@@ -122,12 +122,12 @@ public class ModLoader {
     }
   }
 
-  public static void mount() {
+  public static void mount(boolean rebuild) {
 
     Server selectedServer = LauncherApp.selectedServer;
     String selectedServerName = selectedServer.getSanitizedName();
 
-    if (Settings.doRebuilds && ModLoader.rebuildRequired) ModLoader.startFileRebuild();
+    if (Settings.doRebuilds && ModLoader.rebuildRequired && rebuild) ModLoader.startFileRebuild();
 
     LauncherEventHandler.updateServerSwitcher(true);
     LauncherGUI.launchButton.setEnabled(false);
@@ -170,10 +170,14 @@ public class ModLoader {
   }
 
   public static void startFileRebuild() {
-    rebuildFiles();
+    rebuildFiles(false);
   }
 
-  private static void rebuildFiles() {
+  public static void startStrictFileRebuild() {
+    rebuildFiles(true);
+  }
+
+  private static void rebuildFiles(boolean strict) {
     try {
       LauncherEventHandler.updateServerSwitcher(true);
       LauncherGUI.launchButton.setEnabled(false);
@@ -191,6 +195,12 @@ public class ModLoader {
 
     ProgressBar.startTask();
     ProgressBar.setBarMax(bundles.length + 1);
+
+    // Clear the entirety of the rsrc folder leaving only the jar and zip bundles.
+    FileUtil.purgeDirectory(new File(rootDir + "/rsrc/"), new String[] {".jar", ".jarv", ".zip"});
+    DiscordPresenceClient.getInstance().setDetails(Locale.getValue("m.purge"));
+    ProgressBar.setState(Locale.getValue("m.purge"));
+
     DiscordPresenceClient.getInstance().setDetails(Locale.getValue("m.clean"));
     ProgressBar.setState(Locale.getValue("m.clean"));
 

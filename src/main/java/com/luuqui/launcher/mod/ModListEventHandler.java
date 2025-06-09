@@ -39,7 +39,7 @@ public class ModListEventHandler {
       if (ModLoader.rebuildRequired && Settings.doRebuilds && rebuild) {
         ModLoader.startFileRebuild();
       }
-      ModLoader.mount();
+      ModLoader.mount(rebuild);
       ModListGUI.updateModList(null);
 
       ModListGUI.refreshButton.setEnabled(true);
