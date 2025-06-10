@@ -327,7 +327,7 @@ public class LauncherEventHandler {
         LauncherGUI.launchButton.setText(Locale.getValue("b.play_now"));
         LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_now"));
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
-        LauncherGUI.selectedServerLabel.setText(Locale.getValue("m.server", "Official"));
+        LauncherGUI.selectedServerLabel.setText("Official");
         LauncherGUI.playerCountLabel.setText(selectedServer.playerCountUrl);
         LauncherGUI.playerCountLabel.setVisible(true);
         LauncherGUI.playerCountTooltipButton.setVisible(true);
@@ -347,7 +347,7 @@ public class LauncherEventHandler {
           LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_thirdparty", selectedServer.name));
         }
 
-        LauncherGUI.selectedServerLabel.setText(Locale.getValue("m.server", ""));
+        LauncherGUI.selectedServerLabel.setText("");
 
         LauncherGUI.serverInfoButton.setEnabled(true);
         LauncherGUI.serverInfoButton.setVisible(true);

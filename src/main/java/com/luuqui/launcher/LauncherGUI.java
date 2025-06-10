@@ -137,13 +137,14 @@ public class LauncherGUI extends BaseGUI {
     launcherName.setBounds(0, 100, 250, 80);
     sidePane.add(launcherName);
 
-    selectedServerLabel = new JLabel(Locale.getValue("m.server", "Official"));
+    selectedServerLabel = new JLabel("Official");
     selectedServerLabel.setFont(Fonts.fontMed);
+    selectedServerLabel.setVisible(true);
     selectedServerLabel.setBounds(28, 185, 120, 20);
     sidePane.add(selectedServerLabel);
 
     serverInfoButton = new JButton();
-    serverInfoButton.setBounds(80, 185, 130, 20);
+    serverInfoButton.setBounds(28, 185, 130, 20);
     serverInfoButton.setEnabled(false);
     serverInfoButton.setVisible(false);
     serverInfoButton.setFocusable(false);
