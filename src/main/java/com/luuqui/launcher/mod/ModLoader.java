@@ -160,6 +160,11 @@ public class ModLoader {
     // Clean the game from unwanted files.
     clean();
 
+    // Update the last known game version.
+    String versionKey = "modloader.lastKnownVersion";
+    if(!selectedServerName.equalsIgnoreCase("")) versionKey += "_" + selectedServerName;
+    SettingsProperties.setValue(versionKey, LauncherApp.getLocalGameVersion());
+
     mountRequired = false;
     ProgressBar.finishTask();
 
@@ -383,7 +388,6 @@ public class ModLoader {
     String currentVersion = LauncherApp.getLocalGameVersion().trim();
 
     if(!lastKnownVersion.equalsIgnoreCase(currentVersion)) {
-      SettingsProperties.setValue(key, currentVersion);
       return true;
     }
 

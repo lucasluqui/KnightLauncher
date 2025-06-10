@@ -504,7 +504,7 @@ public class LauncherApp {
 
   public static String getLocalGameVersion() {
     try {
-      return FileUtil.readFile(LauncherApp.selectedServer == null ? LauncherGlobals.USER_DIR + File.separator + "version.txt" : LauncherApp.selectedServer.getRootDirectory() + File.separator + "version.txt");
+      return FileUtil.readFile(LauncherApp.selectedServer == null ? LauncherGlobals.USER_DIR + File.separator + "version.txt" : LauncherApp.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
     } catch (IOException e) {
       log.error(e);
     }
