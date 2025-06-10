@@ -420,12 +420,12 @@ public class SettingsGUI extends BaseGUI {
     sep3.setBounds(25, 290, 600, 16);
     gamePanel.add(sep3);
 
-    JLabel labelFileClean = new JLabel(Locale.getValue("b.force_rebuild"));
+    JLabel labelFileClean = new JLabel(Locale.getValue("m.rebuild_files"));
     labelFileClean.setBounds(25, 305, 275, 18);
     labelFileClean.setFont(Fonts.fontRegBig);
     gamePanel.add(labelFileClean);
 
-    JLabel labelFileCleanExplained = new JLabel(Locale.getValue("m.clean_files_explained"));
+    JLabel labelFileCleanExplained = new JLabel(Locale.getValue("m.rebuild_files_explained"));
     labelFileCleanExplained.setBounds(25, 325, 600, 16);
     labelFileCleanExplained.setFont(Fonts.fontReg);
     gamePanel.add(labelFileCleanExplained);

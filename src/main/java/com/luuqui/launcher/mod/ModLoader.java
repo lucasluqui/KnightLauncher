@@ -15,12 +15,14 @@ import com.luuqui.util.Compressor;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.ImageUtil;
 import com.luuqui.util.JavaUtil;
+import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.util.zip.ZipFile;
 
@@ -226,6 +228,13 @@ public class ModLoader {
       new File(rootDir + "/rsrc/config/" + config).delete();
     }
 
+    // Strict requires resetting code and config jars to vanilla too.
+    if (LauncherApp.selectedServer.isOfficial() && strict) {
+      DiscordPresenceClient.getInstance().setDetails(Locale.getValue("m.reset_code"));
+      ProgressBar.setState(Locale.getValue("m.reset_code"));
+      resetCode();
+    }
+
     ProgressBar.setBarValue(bundles.length + 1);
     ProgressBar.finishTask();
     rebuildRequired = false;
@@ -392,6 +401,34 @@ public class ModLoader {
     }
 
     return false;
+  }
+
+  private static void resetCode() {
+    int downloadAttempts = 0;
+    boolean downloadCompleted = false;
+
+    while (downloadAttempts <= 3 && !downloadCompleted) {
+      downloadAttempts++;
+      log.info("Resetting code jars", "attempts", downloadAttempts);
+      try {
+        FileUtils.copyURLToFile(
+            new URL("http://gamemedia2.spiralknights.com/spiral/" + LauncherApp.getLocalGameVersion() + "/code/projectx-pcode.jar"),
+            new File(LauncherGlobals.USER_DIR + "/code/", "projectx-pcode.jar"),
+            0,
+            0
+        );
+        FileUtils.copyURLToFile(
+            new URL("http://gamemedia2.spiralknights.com/spiral/" + LauncherApp.getLocalGameVersion() + "/code/projectx-config.jar"),
+            new File(LauncherGlobals.USER_DIR + "/code/", "projectx-config.jar"),
+            0,
+            0
+        );
+        downloadCompleted = true;
+      } catch (IOException e) {
+        // Keep retrying.
+        log.error(e);
+      }
+    }
   }
 
   public static final String[] FILTER_LIST = new String[] {
