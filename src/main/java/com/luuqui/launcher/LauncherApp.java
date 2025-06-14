@@ -44,7 +44,7 @@ public class LauncherApp {
 
   public static boolean flamingoOnline = false;
 
-  public static java.util.List<Server> serverList = new ArrayList<>();
+  public static List<Server> serverList = new ArrayList<>();
   public static Server selectedServer = null;
 
   public static void main(String[] args) {
@@ -134,7 +134,7 @@ public class LauncherApp {
 
   private EditorsGUI composeEditorsGUI(LauncherApp app) {
     try {
-      EventQueue.invokeLater(() -> {
+      EventQueue.invokeAndWait(() -> {
         try {
           egui = new EditorsGUI(app);
         } catch (Exception e) {
@@ -391,6 +391,8 @@ public class LauncherApp {
     if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
       ModLoader.extractSafeguard();
     }
+
+    LauncherEventHandler.updateServerList(null);
 
     loadOnlineAssets();
     new Thread(ModLoader::checkInstalled).start();

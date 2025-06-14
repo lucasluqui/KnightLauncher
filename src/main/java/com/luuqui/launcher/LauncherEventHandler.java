@@ -219,57 +219,62 @@ public class LauncherEventHandler {
   public static void updateServerList(List<Server> servers) {
     LauncherApp.serverList.clear();
     Server official = new Server("Official");
-    official.playerCountUrl = Locale.getValue("m.players_online_official", String.valueOf(LauncherApp.getOfficialAproxPlayerCount()));
     LauncherApp.serverList.add(official);
 
-    for(Server server : servers) {
+    if (servers != null) {
+      for(Server server : servers) {
 
-      if(server.name.equalsIgnoreCase("Official")) {
-        official.announceBanner = server.announceBanner;
-        official.announceContent = server.announceContent;
-        official.announceBannerLink = server.announceBannerLink;
-        official.announceBannerStartsAt = server.announceBannerStartsAt;
-        official.announceBannerEndsAt = server.announceBannerEndsAt;
-        continue;
-      }
-
-      // Prevent from adding duplicate servers
-      if(LauncherApp.findServerByName(server.name) != null) {
-        log.info("Tried to add duplicate server", "server", server.name);
-        continue;
-      }
-
-      if(server.beta == 1) server.name += " (Beta)";
-
-      LauncherApp.serverList.add(server);
-
-      // make sure we have a proper folder structure for this server.
-      String serverName = server.getSanitizedName();
-      FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + serverName);
-      FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + serverName + "/mods");
-
-      // make sure there's a base zip file we can use to clean files with.
-      String rootDir = server.getRootDirectory();
-      if(FileUtil.fileExists(rootDir + "/rsrc")
-        && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
-        try {
-          Compressor.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
-        } catch (Exception e) {
-          log.error(e);
+        if(server.name.equalsIgnoreCase("Official")) {
+          official.playerCountUrl = Locale.getValue("m.players_online_official", String.valueOf(LauncherApp.getOfficialAproxPlayerCount()));
+          official.announceBanner = server.announceBanner;
+          official.announceContent = server.announceContent;
+          official.announceBannerLink = server.announceBannerLink;
+          official.announceBannerStartsAt = server.announceBannerStartsAt;
+          official.announceBannerEndsAt = server.announceBannerEndsAt;
+          continue;
         }
+
+        // Prevent from adding duplicate servers
+        if(LauncherApp.findServerByName(server.name) != null) {
+          log.info("Tried to add duplicate server", "server", server.name);
+          continue;
+        }
+
+        if(server.beta == 1) server.name += " (Beta)";
+
+        LauncherApp.serverList.add(server);
+
+        // make sure we have a proper folder structure for this server.
+        String serverName = server.getSanitizedName();
+        FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + serverName);
+        FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + serverName + "/mods");
+
+        // make sure there's a base zip file we can use to clean files with.
+        String rootDir = server.getRootDirectory();
+        if(FileUtil.fileExists(rootDir + "/rsrc")
+            && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
+          try {
+            Compressor.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
+          } catch (Exception e) {
+            log.error(e);
+          }
+        }
+
+        // check server specific settings keys.
+        SettingsEventHandler.checkServerSettingsKeys(serverName);
+        ModListEventHandler.checkServerSettingsKeys(serverName);
       }
 
-      // check server specific settings keys.
-      SettingsEventHandler.checkServerSettingsKeys(serverName);
-      ModListEventHandler.checkServerSettingsKeys(serverName);
-    }
-
-    try {
-      LauncherApp.selectedServer = LauncherApp.findServerBySanitizedName(Settings.selectedServerName);
-    } catch (Exception e) {
-      log.error(e);
+      try {
+        LauncherApp.selectedServer = LauncherApp.findServerBySanitizedName(Settings.selectedServerName);
+      } catch (Exception e) {
+        log.error(e);
+        LauncherApp.selectedServer = official;
+      }
+    } else {
       LauncherApp.selectedServer = official;
     }
+
     selectedServerChanged();
   }
 
@@ -328,9 +333,11 @@ public class LauncherEventHandler {
         LauncherGUI.launchButton.setToolTipText(Locale.getValue("b.play_now"));
         LauncherGUI.launchButton.setEnabled(selectedServer.enabled == 1);
         LauncherGUI.selectedServerLabel.setText("Official");
-        LauncherGUI.playerCountLabel.setText(selectedServer.playerCountUrl);
         LauncherGUI.playerCountLabel.setVisible(true);
-        LauncherGUI.playerCountTooltipButton.setVisible(true);
+        if (selectedServer.playerCountUrl != null) {
+          LauncherGUI.playerCountLabel.setText(selectedServer.playerCountUrl);
+          LauncherGUI.playerCountTooltipButton.setVisible(true);
+        }
         LauncherGUI.serverInfoButton.setEnabled(false);
         LauncherGUI.serverInfoButton.setVisible(false);
         LauncherGUI.auctionButton.setVisible(true);
