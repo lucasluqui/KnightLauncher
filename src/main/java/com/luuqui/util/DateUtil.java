@@ -39,7 +39,7 @@ public class DateUtil {
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM", java.util.Locale.ENGLISH);
 
     return dateFormat.format(calendar.getTime()) + " "
-        + getDayNumberWithSuffix(calendar.get(Calendar.DATE) - 1) + " "
+        + getDayNumberWithSuffix(calendar.get(Calendar.DATE)) + " "
         + calendar.get(Calendar.HOUR_OF_DAY) + ":" + getMinuteWithTrailingZero(calendar.get(Calendar.MINUTE)) + " "
         + (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM") + " "
         + TIMEZONE;
