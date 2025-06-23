@@ -91,33 +91,13 @@
 
     <!-- local dependencies, found in /lib/ -->
 
-    <!--
-    <dependency>
-      <groupId>org.apache</groupId>
-      <artifactId>commons</artifactId>
-      <version>2.6</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/commons-io-2.6.jar</systemPath>
-    </dependency>
-    -->
-
     <dependency>
       <groupId>net.arikia.dev</groupId>
       <artifactId>discord-rpc</artifactId>
       <version>1.6.2</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/discord-rpc.jar</systemPath>
+      <systemPath>${project.basedir}/lib/discord-rpc-1.6.2.jar</systemPath>
     </dependency>
-
-    <!--
-    <dependency>
-      <groupId>com.jhlabs</groupId>
-      <artifactId>filters</artifactId>
-      <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/Filters.jar</systemPath>
-    </dependency>
-    -->
 
     <dependency>
       <groupId>net.sf</groupId>
