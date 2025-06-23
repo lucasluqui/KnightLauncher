@@ -23,7 +23,7 @@ public class EditorsGUI extends BaseGUI
   @Inject
   public EditorsGUI ()
   {
-    super();
+    super(385, 460, false);
   }
 
   public void init ()
@@ -32,35 +32,29 @@ public class EditorsGUI extends BaseGUI
     compose();
   }
 
-  public void switchVisibility ()
-  {
-    this.editorsGUIFrame.setVisible(!this.editorsGUIFrame.isVisible());
-  }
-
   private void compose ()
   {
-    editorsGUIFrame = new JFrame();
-    editorsGUIFrame.setVisible(false);
-    editorsGUIFrame.setTitle(_localeManager.getValue("t.editors"));
-    editorsGUIFrame.setBounds(100, 100, 385, 460);
-    editorsGUIFrame.setResizable(false);
-    editorsGUIFrame.setUndecorated(true);
-    editorsGUIFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    editorsGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    editorsGUIFrame.getContentPane().setLayout(null);
-    editorsPanel = (JPanel) editorsGUIFrame.getContentPane();
+    guiFrame.setVisible(false);
+    guiFrame.setTitle(_localeManager.getValue("t.editors"));
+    guiFrame.setBounds(100, 100, this.width, this.height);
+    guiFrame.setResizable(false);
+    guiFrame.setUndecorated(true);
+    guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    guiFrame.getContentPane().setLayout(null);
+    editorsPanel = (JPanel) guiFrame.getContentPane();
 
     editorLaunchState = new JLabel(_localeManager.getValue("m.editor_loading"));
     editorLaunchState.setHorizontalAlignment(SwingConstants.CENTER);
     editorLaunchState.setBounds(192, 190, 385, 25);
     editorLaunchState.setFont(Fonts.fontRegBig);
     editorLaunchState.setVisible(false);
-    editorsGUIFrame.getContentPane().add(editorLaunchState);
+    guiFrame.getContentPane().add(editorLaunchState);
 
     editorLaunchFakeProgressBar = new JProgressBar(0, 150);
     editorLaunchFakeProgressBar.setBounds(192, 220, 385, 25);
     editorLaunchFakeProgressBar.setVisible(false);
-    editorsGUIFrame.getContentPane().add(editorLaunchFakeProgressBar);
+    guiFrame.getContentPane().add(editorLaunchFakeProgressBar);
 
     editorListPane = new JPanel();
     editorListPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
@@ -77,7 +71,7 @@ public class EditorsGUI extends BaseGUI
     editorListPaneScroll.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     editorListPaneScroll.setForeground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     editorListPaneScroll.getVerticalScrollBar().setUnitIncrement(16);
-    editorsGUIFrame.getContentPane().add(editorListPaneScroll);
+    guiFrame.getContentPane().add(editorListPaneScroll);
 
     JPanel modelViewerPane = new JPanel() {
       @Override
@@ -229,7 +223,7 @@ public class EditorsGUI extends BaseGUI
     footerLabel.setFont(Fonts.fontReg);
     footerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     footerLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
-    editorsGUIFrame.getContentPane().add(footerLabel);
+    guiFrame.getContentPane().add(footerLabel);
 
   }
 
@@ -288,8 +282,6 @@ public class EditorsGUI extends BaseGUI
     interfaceTesterImage = interfaceTesterImageUnfocused;
     particleEditorImage = particleEditorImageUnfocused;
   }
-
-  public JFrame editorsGUIFrame;
 
   public JPanel editorsPanel;
   protected JPanel editorListPane = new JPanel();

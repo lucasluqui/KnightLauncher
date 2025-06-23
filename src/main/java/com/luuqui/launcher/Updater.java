@@ -29,7 +29,7 @@ public class Updater extends BaseGUI
 
   public Updater ()
   {
-    super();
+    super(500, 125, false);
   }
 
   public void init ()
@@ -38,117 +38,38 @@ public class Updater extends BaseGUI
     startUpdate();
   }
 
-  public void switchVisibility ()
-  {
-    this.updaterFrame.setVisible(!this.updaterFrame.isVisible());
-  }
-
   private void compose ()
   {
-    updaterFrame = new JFrame();
-    updaterFrame.setVisible(false);
-    updaterFrame.setTitle("Updater");
-    updaterFrame.setResizable(false);
-    updaterFrame.setBounds(100, 100, 500, 125);
-    updaterFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    updaterFrame.setUndecorated(true);
-    updaterFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-128.png"));
-    updaterFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    updaterFrame.getContentPane().setLayout(null);
+    guiFrame.setVisible(false);
+    guiFrame.setTitle("Updater");
+    guiFrame.setResizable(false);
+    guiFrame.setBounds(100, 100, this.width, this.height);
+    guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    guiFrame.setUndecorated(true);
+    guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-128.png"));
+    guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    guiFrame.getContentPane().setLayout(null);
 
     JLabel launcherLogo = new JLabel();
     BufferedImage launcherLogoImage = ImageUtil.loadImageWithinJar("/img/icon-64.png");
     launcherLogo.setBounds(15, 48, 64, 64);
     launcherLogo.setIcon(new ImageIcon(launcherLogoImage));
-    updaterFrame.add(launcherLogo);
+    guiFrame.add(launcherLogo);
 
     updaterState = new JLabel("");
     updaterState.setHorizontalAlignment(SwingConstants.LEFT);
     updaterState.setBounds(100, 49, 375, 25);
     updaterState.setFont(Fonts.fontRegBig);
     updaterState.setVisible(true);
-    updaterFrame.add(updaterState);
+    guiFrame.add(updaterState);
 
     updaterProgressBar = new JProgressBar();
     updaterProgressBar.setBounds(100, 79, 375, 25);
     updaterProgressBar.setVisible(true);
-    updaterFrame.add(updaterProgressBar);
+    guiFrame.add(updaterProgressBar);
 
-    JPanel titleBar = new JPanel();
-    titleBar.setBounds(0, 0, updaterFrame.getWidth(), 35);
-    titleBar.setBackground(ColorUtil.getTitleBarColor());
-    updaterFrame.getContentPane().add(titleBar);
-
-    /*
-     * Based on Paul Samsotha's reply @ StackOverflow
-     * link: https://stackoverflow.com/questions/24476496/drag-and-resize-undecorated-jframe
-     */
-    titleBar.addMouseListener(new MouseAdapter() {
-      public void mousePressed(MouseEvent me) {
-
-        pX = me.getX();
-        pY = me.getY();
-      }
-    });
-    titleBar.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mousePressed(MouseEvent me) {
-
-        pX = me.getX();
-        pY = me.getY();
-      }
-
-      @Override
-      public void mouseDragged(MouseEvent me) {
-
-        updaterFrame.setLocation(updaterFrame.getLocation().x + me.getX() - pX,
-          updaterFrame.getLocation().y + me.getY() - pY);
-      }
-    });
-    titleBar.addMouseMotionListener(new MouseMotionListener() {
-      @Override
-      public void mouseDragged(MouseEvent me) {
-
-        updaterFrame.setLocation(updaterFrame.getLocation().x + me.getX() - pX,
-          updaterFrame.getLocation().y + me.getY() - pY);
-      }
-
-      @Override
-      public void mouseMoved(MouseEvent arg0) {
-        // Auto-generated method stub
-      }
-    });
-    titleBar.setLayout(null);
-
-    Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 20, ColorUtil.getForegroundColor());
-    JButton closeButton = new JButton(closeIcon);
-    closeButton.setBounds(updaterFrame.getWidth() - 38, 3, 29, 29);
-    closeButton.setToolTipText(_localeManager.getValue("b.close"));
-    closeButton.setFocusPainted(false);
-    closeButton.setFocusable(false);
-    closeButton.setBackground(null);
-    closeButton.setBorder(null);
-    closeButton.setFont(Fonts.fontMed);
-    titleBar.add(closeButton);
-    closeButton.addActionListener(e -> {
-      _discordPresenceClient.stop();
-      System.exit(0);
-    });
-
-    Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 20, ColorUtil.getForegroundColor());
-    JButton minimizeButton = new JButton(minimizeIcon);
-    minimizeButton.setBounds(updaterFrame.getWidth() - 71, 3, 29, 29);
-    minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));
-    minimizeButton.setFocusPainted(false);
-    minimizeButton.setFocusable(false);
-    minimizeButton.setBackground(null);
-    minimizeButton.setBorder(null);
-    minimizeButton.setFont(Fonts.fontMed);
-    titleBar.add(minimizeButton);
-    minimizeButton.addActionListener(e -> updaterFrame.setState(Frame.ICONIFIED));
-
-    updaterFrame.setLocationRelativeTo(null);
-    updaterFrame.setVisible(true);
+    guiFrame.setLocationRelativeTo(null);
+    guiFrame.setVisible(true);
   }
 
   private void startUpdate ()
@@ -245,12 +166,12 @@ public class Updater extends BaseGUI
 
   private void finish ()
   {
+    _discordPresenceClient.stop();
     ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "/KnightLauncher.jar" }, true);
-    this.updaterFrame.dispose();
+    this.guiFrame.dispose();
     System.exit(1);
   }
 
-  public JFrame updaterFrame;
   private JProgressBar updaterProgressBar;
   private JLabel updaterState;
 

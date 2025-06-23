@@ -38,7 +38,7 @@ public class LauncherGUI extends BaseGUI {
   @Inject
   public LauncherGUI ()
   {
-    super();
+    super(1100, 550, true);
   }
 
   public void init ()
@@ -54,29 +54,24 @@ public class LauncherGUI extends BaseGUI {
     }
   }
 
-  public void switchVisibility() {
-    this.launcherGUIFrame.setVisible(!this.launcherGUIFrame.isVisible());
-  }
-
   /** @wbp.parser.entryPoint */
   private void compose ()
   {
-    launcherGUIFrame = new JFrame();
-    launcherGUIFrame.setVisible(false);
-    launcherGUIFrame.setTitle(_localeManager.getValue("t.main", LauncherGlobals.LAUNCHER_VERSION));
-    launcherGUIFrame.setResizable(false);
-    launcherGUIFrame.setBounds(100, 100, 1100, 550);
-    launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    launcherGUIFrame.setUndecorated(true);
-    launcherGUIFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-256.png"));
-    launcherGUIFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    launcherGUIFrame.getContentPane().setLayout(null);
+    guiFrame.setVisible(false);
+    guiFrame.setTitle(_localeManager.getValue("t.main", LauncherGlobals.LAUNCHER_VERSION));
+    guiFrame.setResizable(false);
+    guiFrame.setBounds(100, 100, this.width, this.height);
+    guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    guiFrame.setUndecorated(true);
+    guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-256.png"));
+    guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    guiFrame.getContentPane().setLayout(null);
 
     serverSwitcherPane = new JPanel();
     serverSwitcherPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     serverSwitcherPane.setVisible(true);
     serverSwitcherPane.setBounds(0, 42, 50, 550);
-    launcherGUIFrame.getContentPane().add(serverSwitcherPane);
+    guiFrame.getContentPane().add(serverSwitcherPane);
 
     serverSwitcherPaneScrollBar = new JScrollPane(serverSwitcherPane);
     serverSwitcherPaneScrollBar.setBounds(0, 42, 50, 550);
@@ -87,14 +82,14 @@ public class LauncherGUI extends BaseGUI {
     serverSwitcherPaneScrollBar.putClientProperty(FlatClientProperties.STYLE, "border:0,0,0,0");
     serverSwitcherPaneScrollBar.getVerticalScrollBar().setUnitIncrement(16);
     serverSwitcherPaneScrollBar.setVisible(true);
-    launcherGUIFrame.getContentPane().add(serverSwitcherPaneScrollBar);
+    guiFrame.getContentPane().add(serverSwitcherPaneScrollBar);
 
     JPanel sidePane = new JPanel();
     sidePane.setBackground(CustomColors.INTERFACE_SIDEPANE_BACKGROUND);
     sidePane.setVisible(true);
     sidePane.setLayout(null);
     sidePane.setBounds(50, 35, 250, 550);
-    launcherGUIFrame.getContentPane().add(sidePane);
+    guiFrame.getContentPane().add(sidePane);
 
     banner = ImageUtil.generatePlainColorImage(800, 550, CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
@@ -108,7 +103,7 @@ public class LauncherGUI extends BaseGUI {
     mainPane.setLayout(null);
     mainPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     mainPane.setBounds(300, 35, 800, 550);
-    launcherGUIFrame.getContentPane().add(mainPane);
+    guiFrame.getContentPane().add(mainPane);
 
     JLabel launcherLogo = new JLabel();
     BufferedImage launcherLogoImage = ImageUtil.loadImageWithinJar("/img/icon-92.png");
@@ -205,7 +200,7 @@ public class LauncherGUI extends BaseGUI {
 
       layeredSettingsPane = _launcherCtx.settingsGUI.tabbedPane;
       layeredSettingsPane.setBounds(300, 75, 800, 550);
-      launcherGUIFrame.add(layeredSettingsPane);
+      guiFrame.add(layeredSettingsPane);
       layeredSettingsPane.setVisible(true);
 
       layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
@@ -222,7 +217,7 @@ public class LauncherGUI extends BaseGUI {
         mainPane.setVisible(true);
         layeredReturnButton.setVisible(false);
       });
-      launcherGUIFrame.add(layeredReturnButton);
+      guiFrame.add(layeredReturnButton);
     });
     sidePane.add(settingsButton);
 
@@ -246,7 +241,7 @@ public class LauncherGUI extends BaseGUI {
 
       layeredModsPane = _launcherCtx.modListGUI.modListPanel;
       layeredModsPane.setBounds(300, 75, 800, 550);
-      launcherGUIFrame.add(layeredModsPane);
+      guiFrame.add(layeredModsPane);
       layeredModsPane.setVisible(true);
 
       layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
@@ -263,7 +258,7 @@ public class LauncherGUI extends BaseGUI {
         mainPane.setVisible(true);
         layeredReturnButton.setVisible(false);
       });
-      launcherGUIFrame.add(layeredReturnButton);
+      guiFrame.add(layeredReturnButton);
     });
     sidePane.add(modButton);
 
@@ -287,7 +282,7 @@ public class LauncherGUI extends BaseGUI {
 
       layeredEditorsPane = _launcherCtx.editorsGUI.editorsPanel;
       layeredEditorsPane.setBounds(300, 75, 800, 550);
-      launcherGUIFrame.add(layeredEditorsPane);
+      guiFrame.add(layeredEditorsPane);
       layeredEditorsPane.setVisible(true);
 
       layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
@@ -304,7 +299,7 @@ public class LauncherGUI extends BaseGUI {
         mainPane.setVisible(true);
         layeredReturnButton.setVisible(false);
       });
-      launcherGUIFrame.add(layeredReturnButton);
+      guiFrame.add(layeredReturnButton);
     });
     sidePane.add(editorsButton);
 
@@ -550,104 +545,9 @@ public class LauncherGUI extends BaseGUI {
     mainPane.add(playAnimatedBannersButton);
     playAnimatedBannersButton.addActionListener(l -> this.eventHandler.switchBannerAnimations());
 
-    JPanel titleBar = new JPanel();
-    titleBar.setBounds(0, 0, launcherGUIFrame.getWidth(), 35);
-    titleBar.setBackground(ColorUtil.getTitleBarColor());
-    launcherGUIFrame.getContentPane().add(titleBar);
+    guiFrame.setLocationRelativeTo(null);
 
-
-    /*
-     * Based on Paul Samsotha's reply @ StackOverflow
-     * link: https://stackoverflow.com/questions/24476496/drag-and-resize-undecorated-jframe
-     */
-    titleBar.addMouseListener(new MouseAdapter() {
-      public void mousePressed(MouseEvent me) {
-
-        pX = me.getX();
-        pY = me.getY();
-      }
-    });
-    titleBar.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mousePressed(MouseEvent me) {
-
-        pX = me.getX();
-        pY = me.getY();
-      }
-
-      @Override
-      public void mouseDragged(MouseEvent me) {
-
-        launcherGUIFrame.setLocation(launcherGUIFrame.getLocation().x + me.getX() - pX,
-                launcherGUIFrame.getLocation().y + me.getY() - pY);
-      }
-    });
-    titleBar.addMouseMotionListener(new MouseMotionListener() {
-      @Override
-      public void mouseDragged(MouseEvent me) {
-
-        launcherGUIFrame.setLocation(launcherGUIFrame.getLocation().x + me.getX() - pX,
-                launcherGUIFrame.getLocation().y + me.getY() - pY);
-      }
-
-      @Override
-      public void mouseMoved(MouseEvent arg0) {
-        // Auto-generated method stub
-      }
-    });
-    titleBar.setLayout(null);
-
-    /*
-    JLabel windowTitle = new JLabel(Locale.getValue("t.main", LauncherGlobals.LAUNCHER_VERSION));
-    windowTitle.setFont(Fonts.fontMed);
-    windowTitle.setBounds(10, 0, launcherGUIFrame.getWidth() - 200, 35);
-    titleBar.add(windowTitle);
-     */
-
-    final int BUTTON_WIDTH = 35;
-    final int BUTTON_HEIGHT = 35;
-
-    Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 17, ColorUtil.getForegroundColor());
-    JButton closeButton = new JButton(closeIcon);
-    closeButton.setBounds(launcherGUIFrame.getWidth() - BUTTON_WIDTH, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
-    closeButton.setToolTipText(_localeManager.getValue("b.close"));
-    closeButton.setFocusPainted(false);
-    closeButton.setFocusable(false);
-    closeButton.setBackground(null);
-    closeButton.setBorder(null);
-    closeButton.setFont(Fonts.fontMed);
-    titleBar.add(closeButton);
-    closeButton.addActionListener(e -> {
-      _discordPresenceClient.stop();
-      System.exit(0);
-    });
-    closeButton.addMouseListener(new MouseListener() {
-      @Override public void mouseClicked(MouseEvent e) {}
-      @Override public void mousePressed(MouseEvent e) {}
-      @Override public void mouseReleased(MouseEvent e) {}
-      @Override public void mouseEntered(MouseEvent e) {
-        closeButton.setBackground(CustomColors.MID_RED);
-      }
-      @Override public void mouseExited(MouseEvent e) {
-        closeButton.setBackground(null);
-      }
-    });
-
-    Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 12, ColorUtil.getForegroundColor());
-    JButton minimizeButton = new JButton(minimizeIcon);
-    minimizeButton.setBounds(launcherGUIFrame.getWidth() - BUTTON_WIDTH * 2, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7);
-    minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));
-    minimizeButton.setFocusPainted(false);
-    minimizeButton.setFocusable(false);
-    minimizeButton.setBackground(null);
-    minimizeButton.setBorder(null);
-    minimizeButton.setFont(Fonts.fontMed);
-    titleBar.add(minimizeButton);
-    minimizeButton.addActionListener(e -> launcherGUIFrame.setState(Frame.ICONIFIED));
-
-    launcherGUIFrame.setLocationRelativeTo(null);
-
-    launcherGUIFrame.addWindowListener(new WindowAdapter() {
+    guiFrame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent windowEvent) {
         _discordPresenceClient.stop();
@@ -733,8 +633,6 @@ public class LauncherGUI extends BaseGUI {
     launchButton.updateUI();
     altModeEnabledPill.setVisible(false);
   }
-
-  public JFrame launcherGUIFrame;
 
   // Shared
   public JTabbedPane layeredSettingsPane = new JTabbedPane();

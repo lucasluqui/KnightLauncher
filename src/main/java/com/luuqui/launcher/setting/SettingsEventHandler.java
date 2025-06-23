@@ -161,7 +161,7 @@ public class SettingsEventHandler
     }
 
     ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar", "forceJVMPatch", javaVMPatchDir, String.valueOf(legacy)}, true);
-    this.gui.settingsGUIFrame.dispose();
+    this.gui.guiFrame.dispose();
     System.exit(1);
   }
 

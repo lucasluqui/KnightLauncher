@@ -33,7 +33,7 @@ public class ModListGUI extends BaseGUI
   @Inject
   public ModListGUI ()
   {
-    super();
+    super(385, 460, false);
   }
 
   public void init ()
@@ -41,34 +41,29 @@ public class ModListGUI extends BaseGUI
     compose();
   }
 
-  public void switchVisibility() {
-    this.modListGUIFrame.setVisible(!this.modListGUIFrame.isVisible());
-  }
-
   private void compose ()
   {
-    modListGUIFrame = new JFrame();
-    modListGUIFrame.setVisible(false);
-    modListGUIFrame.setTitle(_localeManager.getValue("t.mods"));
-    modListGUIFrame.setBounds(100, 100, 385, 460);
-    modListGUIFrame.setResizable(false);
-    modListGUIFrame.setUndecorated(true);
-    modListGUIFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    modListGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    modListGUIFrame.getContentPane().setLayout(null);
-    modListPanel = (JPanel) modListGUIFrame.getContentPane();
+    guiFrame.setVisible(false);
+    guiFrame.setTitle(_localeManager.getValue("t.mods"));
+    guiFrame.setBounds(100, 100, this.width, this.height);
+    guiFrame.setResizable(false);
+    guiFrame.setUndecorated(true);
+    guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    guiFrame.getContentPane().setLayout(null);
+    modListPanel = (JPanel) guiFrame.getContentPane();
 
     labelModCount = new JLabel();
     labelModCount.setHorizontalAlignment(SwingConstants.LEFT);
     labelModCount.setBounds(25, 2, 188, 40);
     labelModCount.setFont(Fonts.fontMedGiant);
-    modListGUIFrame.getContentPane().add(labelModCount);
+    guiFrame.getContentPane().add(labelModCount);
 
     labelModCountText = new JLabel(_localeManager.getValue("m.mods_installed"));
     labelModCountText.setHorizontalAlignment(SwingConstants.LEFT);
     labelModCountText.setBounds(26, 47, 188, 14);
     labelModCountText.setFont(Fonts.fontReg);
-    modListGUIFrame.getContentPane().add(labelModCountText);
+    guiFrame.getContentPane().add(labelModCountText);
 
     Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
     warningNotice = new JButton(warningNoticeIcon);
@@ -84,7 +79,7 @@ public class ModListGUI extends BaseGUI
     warningNotice.addActionListener(l -> {
       Dialog.push(currentWarning, _localeManager.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
     });
-    modListGUIFrame.getContentPane().add(warningNotice);
+    guiFrame.getContentPane().add(warningNotice);
 
 
     Icon modStoreIcon = IconFontSwing.buildIcon(FontAwesome.SEARCH, 10, Color.WHITE);
@@ -96,7 +91,7 @@ public class ModListGUI extends BaseGUI
     modStoreButton.setFocusable(false);
     modStoreButton.setEnabled(false);
     modStoreButton.setToolTipText(_localeManager.getValue("m.coming_soon"));
-    modListGUIFrame.getContentPane().add(modStoreButton);
+    guiFrame.getContentPane().add(modStoreButton);
     //getModsButton.addActionListener(this.eventHandler::openModStore);
 
     JButton getModsButton = new JButton(_localeManager.getValue("b.get_mods"));
@@ -105,7 +100,7 @@ public class ModListGUI extends BaseGUI
     getModsButton.setFocusPainted(false);
     getModsButton.setFocusable(false);
     getModsButton.setToolTipText(_localeManager.getValue("b.get_mods"));
-    modListGUIFrame.getContentPane().add(getModsButton);
+    guiFrame.getContentPane().add(getModsButton);
     getModsButton.addActionListener(this.eventHandler::getModsEvent);
 
     JButton modFolderButton = new JButton(_localeManager.getValue("b.open_mods_folder"));
@@ -114,7 +109,7 @@ public class ModListGUI extends BaseGUI
     modFolderButton.setFocusPainted(false);
     modFolderButton.setFocusable(false);
     modFolderButton.setToolTipText(_localeManager.getValue("b.open_mods_folder"));
-    modListGUIFrame.getContentPane().add(modFolderButton);
+    guiFrame.getContentPane().add(modFolderButton);
     modFolderButton.addActionListener(this.eventHandler::openModsFolderEvent);
 
     enableAllModsButton = new JButton(_localeManager.getValue("b.enable_all_mods"));
@@ -123,7 +118,7 @@ public class ModListGUI extends BaseGUI
     enableAllModsButton.setFocusPainted(false);
     enableAllModsButton.setFocusable(false);
     enableAllModsButton.setToolTipText(_localeManager.getValue("b.enable_all_mods"));
-    modListGUIFrame.getContentPane().add(enableAllModsButton);
+    guiFrame.getContentPane().add(enableAllModsButton);
     enableAllModsButton.addActionListener(this.eventHandler::enableAllModsEvent);
 
     disableAllModsButton = new JButton(_localeManager.getValue("b.disable_all_mods"));
@@ -132,12 +127,12 @@ public class ModListGUI extends BaseGUI
     disableAllModsButton.setFocusPainted(false);
     disableAllModsButton.setFocusable(false);
     disableAllModsButton.setToolTipText(_localeManager.getValue("b.disable_all_mods"));
-    modListGUIFrame.getContentPane().add(disableAllModsButton);
+    guiFrame.getContentPane().add(disableAllModsButton);
     disableAllModsButton.addActionListener(this.eventHandler::disableAllModsEvent);
 
     JSeparator separator = new JSeparator();
     separator.setBounds(25, 75, 750, 2);
-    modListGUIFrame.getContentPane().add(separator);
+    guiFrame.getContentPane().add(separator);
 
     addModButton = new JButton(IconFontSwing.buildIcon(FontAwesome.PLUS, 18, CustomColors.MID_GREEN));
     addModButton.setBounds(25, 86, 25, 25);
@@ -146,7 +141,7 @@ public class ModListGUI extends BaseGUI
     addModButton.setBackground(null);
     addModButton.setBorder(null);
     addModButton.setToolTipText(_localeManager.getValue("b.add_mod"));
-    modListGUIFrame.getContentPane().add(addModButton);
+    guiFrame.getContentPane().add(addModButton);
     addModButton.addActionListener(this.eventHandler::addModEvent);
 
     refreshButton = new JButton(IconFontSwing.buildIcon(FontAwesome.REFRESH, 16, Color.WHITE));
@@ -156,20 +151,20 @@ public class ModListGUI extends BaseGUI
     refreshButton.setBackground(null);
     refreshButton.setBorder(null);
     refreshButton.setToolTipText(_localeManager.getValue("b.refresh"));
-    modListGUIFrame.getContentPane().add(refreshButton);
+    guiFrame.getContentPane().add(refreshButton);
     refreshButton.addActionListener(this.eventHandler::refreshEvent);
 
     refreshProgressBar = new JProgressBar();
     refreshProgressBar.setBounds(110, 90, 100, 16);
     refreshProgressBar.setStringPainted(true);
     refreshProgressBar.setVisible(false);
-    modListGUIFrame.getContentPane().add(refreshProgressBar);
+    guiFrame.getContentPane().add(refreshProgressBar);
 
     searchBox = new JTextField();
     searchBox.setBounds(250, 85, 300, 27);
     searchBox.setFont(Fonts.fontCodeReg);
     searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, _localeManager.getValue("m.modlist_searchbox_placeholder"));
-    modListGUIFrame.getContentPane().add(searchBox);
+    guiFrame.getContentPane().add(searchBox);
     searchBox.addActionListener(l -> eventHandler.searchMod());
     searchBox.addKeyListener(new KeyAdapter() {
       public void keyReleased(KeyEvent e) { eventHandler.searchMod(); }
@@ -177,14 +172,14 @@ public class ModListGUI extends BaseGUI
 
     JButton searchButton = new JButton(_localeManager.getValue("m.search"));
     searchButton.setBounds(475, 85, 80, 26);
-    modListGUIFrame.getContentPane().add(searchButton);
+    guiFrame.getContentPane().add(searchButton);
     searchButton.addActionListener(l -> this.eventHandler.searchMod());
     searchButton.setVisible(false);
 
     JLabel enabledLabel = new JLabel(_localeManager.getValue("m.enabled"));
     enabledLabel.setBounds(636, 86, 100, 25);
     enabledLabel.setFont(Fonts.fontMed);
-    modListGUIFrame.getContentPane().add(enabledLabel);
+    guiFrame.getContentPane().add(enabledLabel);
 
     modListPane = new JPanel();
     modListPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
@@ -195,21 +190,21 @@ public class ModListGUI extends BaseGUI
     modListPaneScrollBar.setBounds(25, 120, 750, Math.min(325, _modManager.getModCount() * 76));
     modListPaneScrollBar.setBorder(null);
     modListPaneScrollBar.getVerticalScrollBar().setUnitIncrement(16);
-    modListGUIFrame.getContentPane().add(modListPaneScrollBar);
+    guiFrame.getContentPane().add(modListPaneScrollBar);
 
     displayedModsLabel = new JLabel();
     displayedModsLabel.setBounds(25, 451, 300, 15);
     displayedModsLabel.setFont(Fonts.fontReg);
     displayedModsLabel.setHorizontalAlignment(SwingConstants.LEFT);
     displayedModsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
-    modListGUIFrame.getContentPane().add(displayedModsLabel);
+    guiFrame.getContentPane().add(displayedModsLabel);
 
     viewingModsLabel = new JLabel(_localeManager.getValue("m.viewing_mods", "Official"));
     viewingModsLabel.setBounds(25, 451, 740, 15);
     viewingModsLabel.setFont(Fonts.fontReg);
     viewingModsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     viewingModsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
-    modListGUIFrame.getContentPane().add(viewingModsLabel);
+    guiFrame.getContentPane().add(viewingModsLabel);
 
     updateModList(null);
   }
@@ -389,7 +384,6 @@ public class ModListGUI extends BaseGUI
     modListPane.updateUI();
   }
 
-  public JFrame modListGUIFrame;
   public JPanel modListPanel;
   public JPanel modListPane = new JPanel();
   public JScrollPane modListPaneScrollBar = new JScrollPane();
@@ -398,7 +392,6 @@ public class ModListGUI extends BaseGUI
   public JButton refreshButton;
   public JButton enableAllModsButton;
   public JButton disableAllModsButton;
-  public JLabel labelRefreshing;
   public JProgressBar refreshProgressBar = new JProgressBar();
   public JTextField searchBox;
   public JLabel displayedModsLabel = new JLabel();

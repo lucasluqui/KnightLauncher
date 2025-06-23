@@ -24,7 +24,7 @@ public class SettingsGUI extends BaseGUI
   @Inject
   public SettingsGUI ()
   {
-    super();
+    super(850, 475, false);
   }
 
   public void init ()
@@ -33,21 +33,15 @@ public class SettingsGUI extends BaseGUI
     eventHandler.checkBetaCodes();
   }
 
-  public void switchVisibility ()
-  {
-    this.settingsGUIFrame.setVisible(!this.settingsGUIFrame.isVisible());
-  }
-
   private void compose ()
   {
-    settingsGUIFrame = new JFrame();
-    settingsGUIFrame.setVisible(false);
-    settingsGUIFrame.setTitle(_localeManager.getValue("t.settings"));
-    settingsGUIFrame.setBounds(100, 100, 850, 475);
-    settingsGUIFrame.setResizable(false);
-    settingsGUIFrame.setUndecorated(true);
-    settingsGUIFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    settingsGUIFrame.getContentPane().setLayout(null);
+    guiFrame.setVisible(false);
+    guiFrame.setTitle(_localeManager.getValue("t.settings"));
+    guiFrame.setBounds(100, 100, this.width, this.height);
+    guiFrame.setResizable(false);
+    guiFrame.setUndecorated(true);
+    guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    guiFrame.getContentPane().setLayout(null);
 
     tabbedPane = new JTabbedPane();
     tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -63,80 +57,9 @@ public class SettingsGUI extends BaseGUI
     tabbedPane.addTab(_localeManager.getValue("tab.advanced"), createAdvancedPanel());
     tabbedPane.addTab(_localeManager.getValue("tab.about"), createAboutPanel());
 
-    settingsGUIFrame.getContentPane().add(tabbedPane);
+    guiFrame.getContentPane().add(tabbedPane);
 
-    JPanel titleBar = new JPanel();
-    titleBar.setBounds(0, 0, settingsGUIFrame.getWidth(), 20);
-    titleBar.setBackground(ColorUtil.getTitleBarColor());
-    settingsGUIFrame.getContentPane().add(titleBar);
-
-
-    /*
-     * Based on Paul Samsotha's reply @ StackOverflow
-     * link: https://stackoverflow.com/questions/24476496/drag-and-resize-undecorated-jframe
-     */
-    titleBar.addMouseListener(new MouseAdapter() {
-      public void mousePressed(MouseEvent me) {
-
-        pX = me.getX();
-        pY = me.getY();
-      }
-    });
-    titleBar.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mousePressed(MouseEvent me) {
-
-        pX = me.getX();
-        pY = me.getY();
-      }
-
-      @Override
-      public void mouseDragged(MouseEvent me) {
-
-        settingsGUIFrame.setLocation(settingsGUIFrame.getLocation().x + me.getX() - pX,
-                settingsGUIFrame.getLocation().y + me.getY() - pY);
-      }
-    });
-    titleBar.addMouseMotionListener(new MouseMotionListener() {
-      @Override
-      public void mouseDragged(MouseEvent me) {
-
-        settingsGUIFrame.setLocation(settingsGUIFrame.getLocation().x + me.getX() - pX,
-                settingsGUIFrame.getLocation().y + me.getY() - pY);
-      }
-
-      @Override
-      public void mouseMoved(MouseEvent arg0) {
-        // Auto-generated method stub
-      }
-    });
-    titleBar.setLayout(null);
-
-    JLabel windowTitle = new JLabel(_localeManager.getValue("t.settings"));
-    windowTitle.setFont(Fonts.fontMed);
-    windowTitle.setBounds(10, 0, settingsGUIFrame.getWidth() - 100, 20);
-    titleBar.add(windowTitle);
-
-    Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 14, ColorUtil.getForegroundColor());
-    JButton closeButton = new JButton(closeIcon);
-    closeButton.setBounds(settingsGUIFrame.getWidth() - 18, 1, 20, 21);
-    closeButton.setToolTipText(_localeManager.getValue("b.close"));
-    closeButton.setFocusPainted(false);
-    closeButton.setFocusable(false);
-    closeButton.setFont(Fonts.fontMed);
-    titleBar.add(closeButton);
-    closeButton.addActionListener(e -> settingsGUIFrame.setVisible(false));
-
-    Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 14, ColorUtil.getForegroundColor());
-    JButton minimizeButton = new JButton(minimizeIcon);
-    minimizeButton.setBounds(settingsGUIFrame.getWidth() - 38, 1, 20, 21);
-    minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));
-    minimizeButton.setFocusPainted(false);
-    minimizeButton.setFocusable(false);
-    minimizeButton.setFont(Fonts.fontMed);
-    titleBar.add(minimizeButton);
-
-    settingsGUIFrame.setLocationRelativeTo(null);
+    guiFrame.setLocationRelativeTo(null);
   }
 
   protected JPanel createLauncherPanel ()
@@ -875,7 +798,6 @@ public class SettingsGUI extends BaseGUI
     return aboutPanel;
   }
 
-  public JFrame settingsGUIFrame;
   public JTabbedPane tabbedPane;
   public JComboBox<String> choicePlatform = new JComboBox<String>();
   public JComboBox<String> choiceLanguage;
