@@ -74,7 +74,11 @@ public class SettingsManager
     String value;
     try (InputStream is = new FileInputStream(_propPath)) {
       _prop.load(is);
-      value = _prop.getProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName());
+      if (server != null) {
+        value = _prop.getProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName());
+      } else {
+        value = _prop.getProperty(key);
+      }
       log.info("Request for key", "key", key, "value", value);
       return value;
     } catch (IOException e) {
@@ -99,7 +103,11 @@ public class SettingsManager
   {
     try (InputStream is = new FileInputStream(_propPath)) {
       if (migrating) _prop.load(is);
-      _prop.setProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName(), value);
+      if (server != null) {
+        _prop.setProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName(), value);
+      } else {
+        _prop.setProperty(key, value);
+      }
       _prop.store(new FileOutputStream(_propPath), null);
       log.info("Setting new key", "key", key, "value", value);
     } catch (IOException e) {
