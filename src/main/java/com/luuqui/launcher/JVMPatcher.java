@@ -61,7 +61,6 @@ public class JVMPatcher extends BaseGUI
 
   private void compose ()
   {
-    log.info("test");
     guiFrame.setVisible(false);
     guiFrame.setTitle(_localeManager.getValue("t.jvm_patcher"));
     guiFrame.setBounds(100, 100, this.width, this.height);
