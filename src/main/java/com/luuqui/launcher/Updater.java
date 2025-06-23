@@ -29,7 +29,7 @@ public class Updater extends BaseGUI
 
   public Updater ()
   {
-    super(500, 125, false);
+    super(500, 125, true);
   }
 
   public void init ()
@@ -67,6 +67,9 @@ public class Updater extends BaseGUI
     updaterProgressBar.setBounds(100, 79, 375, 25);
     updaterProgressBar.setVisible(true);
     guiFrame.add(updaterProgressBar);
+
+    closeButton.setVisible(false);
+    minimizeButton.setVisible(false);
 
     guiFrame.setLocationRelativeTo(null);
     guiFrame.setVisible(true);
