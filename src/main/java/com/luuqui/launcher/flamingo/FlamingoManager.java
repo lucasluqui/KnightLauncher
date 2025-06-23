@@ -159,6 +159,12 @@ public class FlamingoManager
   public String getLocalId ()
   {
     _settingsManager.createKeyIfNotExists("launcher.key", TextUtil.getRandomAlphanumeric(64));
+
+    // Make sure the key is valid and wasn't modified.
+    if (_settingsManager.getValue("launcher.key").length() != 64) {
+      _settingsManager.setValue("launcher.key", TextUtil.getRandomAlphanumeric(64));
+    }
+
     return _settingsManager.getValue("launcher.key");
   }
 
