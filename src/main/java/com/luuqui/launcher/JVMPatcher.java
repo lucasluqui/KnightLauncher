@@ -35,6 +35,7 @@ public class JVMPatcher extends BaseGUI
   @Inject protected ModuleManager _moduleManager;
   @Inject protected DiscordPresenceClient _discordPresenceClient;
 
+  @Inject
   public JVMPatcher ()
   {
     super(500, 250, true);
@@ -60,6 +61,7 @@ public class JVMPatcher extends BaseGUI
 
   private void compose ()
   {
+    log.info("test");
     guiFrame.setVisible(false);
     guiFrame.setTitle(_localeManager.getValue("t.jvm_patcher"));
     guiFrame.setBounds(100, 100, this.width, this.height);
@@ -218,7 +220,6 @@ public class JVMPatcher extends BaseGUI
     System.exit(1);
   }
 
-  private JButton closeButton;
   private JLabel headerLabel;
   private JLabel subHeaderLabel;
   private JButton buttonAccept;

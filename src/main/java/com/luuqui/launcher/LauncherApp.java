@@ -111,16 +111,16 @@ public class LauncherApp
 
   private void initInterfaces ()
   {
+    this.initLauncherGUI();
+    this.initSettingsGUI();
+    this.initModListGUI();
+    this.initEditorsGUI();
+
     if (this.requiresJVMPatch()) {
       this.initJVMPatcher();
     } else if (this.requiresUpdate()) {
       this.initUpdater();
     } else {
-      this.initLauncherGUI();
-      this.initSettingsGUI();
-      this.initModListGUI();
-      this.initEditorsGUI();
-
       ThreadingUtil.executeWithDelay(_launcherCtx.launcherGUI::switchVisibility, 200);
     }
   }
@@ -218,8 +218,8 @@ public class LauncherApp
           final String path;
           final boolean legacy;
 
-          if (args.length > 0) {
-            // If there are any arguments, it means this is a forced JVM patch and there's extra info we should parse.
+          if (args.length > 1) {
+            // If there are more than one argument, it means this is a forced JVM patch, and there's extra info we should parse.
             // Set the path dir to wherever we're being forced to patch to, and set legacy to only allow legacy JVMs.
             // This is primarily used for patching when a third party server was selected.
             path = args[1];
@@ -432,20 +432,20 @@ public class LauncherApp
   private boolean requiresJVMPatch ()
   {
     // First see if we're being forced to patch.
-    if(this.args.length > 0 && this.args[0].equals("forceJVMPatch")) {
+    if (this.args.length > 0 && this.args[0].equals("forceJVMPatch")) {
       return true;
     }
 
     // You need a 64-bit system to begin with.
-    if(!SystemUtil.is64Bit()) return false;
+    if (!SystemUtil.is64Bit()) return false;
 
     // Currently, Java VM patching is only supported on Windows systems and Linux installs through Steam.
-    if(!SystemUtil.isWindows() && !(SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam"))) return false;
+    if (!SystemUtil.isWindows() && !(SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam"))) return false;
 
     // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by Knight Launcher.
     String javaVMVersion = JavaUtil.getGameJVMData();
 
-    if(( JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 && !javaVMVersion.contains("1.7") ) || Settings.jvmPatched) {
+    if (( JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 && !javaVMVersion.contains("1.7") ) || Settings.jvmPatched) {
       Settings.jvmPatched = true;
       _settingsManager.setValue("launcher.jvm_patched", "true");
       return false;
