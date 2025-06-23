@@ -1,5 +1,6 @@
 package com.luuqui.launcher;
 
+import com.google.inject.Singleton;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.ImageUtil;
 import org.apache.commons.io.FileUtils;
@@ -14,16 +15,24 @@ import java.net.URL;
 
 import static com.luuqui.launcher.Log.log;
 
-public class Cache {
+@Singleton
+public class CacheManager
+{
+  public String CACHE_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "cache" + File.separator;
 
-  public static String CACHE_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "cache" + File.separator;
+  public CacheManager ()
+  {
 
-  public static void setup() {
+  }
+
+  public void init ()
+  {
     // Stores all cache resources.
     FileUtil.createDir(CACHE_PATH);
   }
 
-  public static BufferedImage fetchImage(String url, int width, int height) {
+  public BufferedImage fetchImage (String url, int width, int height)
+  {
     String localPath = getLocalPath(url);
     BufferedImage bufferedImage = null;
     URL localURL;
@@ -51,7 +60,8 @@ public class Cache {
     return bufferedImage;
   }
 
-  public static File fetchFile(String url) {
+  public File fetchFile (String url)
+  {
     String localPath = getLocalPath(url);
 
     if(FileUtil.fileExists(localPath)) {
@@ -76,7 +86,8 @@ public class Cache {
     return null;
   }
 
-  private static String getLocalPath(String url) {
+  private String getLocalPath (String url)
+  {
     String localPath = CACHE_PATH + url.split("https://")[1];
     localPath = localPath.replace("/", File.separator);
     return localPath;

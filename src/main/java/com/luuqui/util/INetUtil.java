@@ -9,9 +9,11 @@ import java.nio.charset.StandardCharsets;
 
 import static com.luuqui.util.Log.log;
 
-public class INetUtil {
+public class INetUtil
+{
 
-  public static String getWebpageContent(String url) {
+  public static String getWebpageContent (String url)
+  {
     try {
       URLConnection connection = new URL(url).openConnection();
       connection

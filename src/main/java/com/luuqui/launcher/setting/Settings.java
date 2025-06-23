@@ -1,7 +1,7 @@
 package com.luuqui.launcher.setting;
 
-public class Settings {
-
+public class Settings
+{
   // Launcher settings
   public static String lang = "en";
   public static Boolean doRebuilds = true;

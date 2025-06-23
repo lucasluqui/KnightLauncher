@@ -7,9 +7,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class RequestUtil {
+public class RequestUtil
+{
 
-  public static JSONObject makeRequest(String method, String endpoint, String[] params) throws Exception {
+  public static JSONObject makeRequest (String method, String endpoint, String[] params)
+      throws Exception
+  {
     StringBuilder result = new StringBuilder();
 
     // parse params

@@ -12,23 +12,28 @@ import java.util.UUID;
 
 import static com.luuqui.util.Log.log;
 
-public class SystemUtil {
+public class SystemUtil
+{
 
   private static final String OS = System.getProperty("os.name").toLowerCase();
 
-  public static boolean isWindows() {
+  public static boolean isWindows ()
+  {
     return OS.contains("win");
   }
 
-  public static boolean isMac() {
+  public static boolean isMac ()
+  {
     return OS.contains("mac");
   }
 
-  public static boolean isUnix() {
+  public static boolean isUnix ()
+  {
     return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
   }
 
-  public static boolean is64Bit() {
+  public static boolean is64Bit ()
+  {
     boolean is64Bit;
     if (isWindows()) {
       is64Bit = (System.getenv("ProgramFiles(x86)") != null);
@@ -38,7 +43,8 @@ public class SystemUtil {
     return is64Bit;
   }
 
-  public static boolean isARM() {
+  public static boolean isARM ()
+  {
     boolean isARM = false;
     if (System.getProperty("os.arch").contains("arm")) {
       isARM = true;
@@ -47,13 +53,15 @@ public class SystemUtil {
   }
 
   @Deprecated
-  public static boolean hasValidJavaHome() {
+  public static boolean hasValidJavaHome ()
+  {
     return System.getProperty("java.home").contains("1.6") ||
             System.getProperty("java.home").contains("1.7") ||
             System.getProperty("java.home").contains("1.8");
   }
 
-  private static String getMachineId() {
+  private static String getMachineId ()
+  {
     String machineId = null;
 
     if(isWindows()) {
@@ -123,7 +131,8 @@ public class SystemUtil {
     return machineId;
   }
 
-  public static String getHashedMachineId() {
+  public static String getHashedMachineId ()
+  {
     String machineId = getMachineId();
     String hashedMachineId = null;
 
@@ -139,7 +148,8 @@ public class SystemUtil {
     return hashedMachineId;
   }
 
-  public static void setEnv(Map<String, String> newenv) {
+  public static void setEnv (Map<String, String> newenv)
+  {
     try {
       Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
       Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
@@ -180,12 +190,13 @@ public class SystemUtil {
     }
   }
 
-  public static void fixTempDir(String newDir) {
+  public static void fixTempDir (String newDir)
+  {
     System.setProperty("java.io.tmpdir", newDir);
     Map<String, String> newEnv = new HashMap<>();
     newEnv.put("TEMP", newDir);
     SystemUtil.setEnv(newEnv);
-    com.luuqui.launcher.Log.log.info("TEMP path changed to: " + newDir);
+    log.info("TEMP path changed to: " + newDir);
   }
 
 }

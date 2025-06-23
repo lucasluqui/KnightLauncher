@@ -6,7 +6,8 @@ import com.samskivert.util.Logger;
  * Contains a reference to the {@link Logger} object used by the util package.
  */
 @SuppressWarnings("unused")
-public class Log {
+public class Log
+{
 
   /**
    * The {@link Logger} reference.

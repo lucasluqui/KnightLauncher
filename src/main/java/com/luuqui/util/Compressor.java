@@ -19,7 +19,8 @@ import java.util.zip.ZipOutputStream;
 
 import static com.luuqui.util.Log.log;
 
-public class Compressor {
+public class Compressor
+{
 
   private static final int BUFFER_SIZE = 4096;
 

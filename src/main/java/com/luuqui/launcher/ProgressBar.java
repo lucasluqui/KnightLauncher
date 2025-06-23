@@ -1,29 +1,36 @@
 package com.luuqui.launcher;
 
-import com.luuqui.launcher.mod.ModListGUI;
+import com.google.inject.Inject;
 import com.luuqui.util.ThreadingUtil;
-
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static com.luuqui.launcher.Log.log;
 
-public class ProgressBar {
+public class ProgressBar
+{
+  @Inject protected LauncherContext _launcherCtx;
 
-  private static int activeTasks = 0;
+  private int activeTasks = 0;
 
-  public static void setState(String newState) {
-    LauncherGUI.launchState.setText(newState);
-    ModListGUI.refreshProgressBar.setString(newState);
+  public ProgressBar ()
+  {
+
+  }
+
+  public void setState (String newState)
+  {
+    _launcherCtx.launcherGUI.launchState.setText(newState);
+    _launcherCtx.modListGUI.refreshProgressBar.setString(newState);
     log.info(newState);
   }
 
-  public static void startTask() {
+  public void startTask ()
+  {
     activeTasks++;
     showBar(true);
   }
 
-  public static void finishTask() {
+  public void finishTask ()
+  {
     activeTasks--;
     if(activeTasks == 0) {
       setState("Finished");
@@ -34,21 +41,24 @@ public class ProgressBar {
     }
   }
 
-  public static void setBarValue(int n) {
-    LauncherGUI.launchProgressBar.setValue(n);
-    ModListGUI.refreshProgressBar.setValue(n);
+  public void setBarValue (int n)
+  {
+    _launcherCtx.launcherGUI.launchProgressBar.setValue(n);
+    _launcherCtx.modListGUI.refreshProgressBar.setValue(n);
   }
 
-  public static void setBarMax(int n) {
-    LauncherGUI.launchProgressBar.setMaximum(n);
-    ModListGUI.refreshProgressBar.setMaximum(n);
+  public void setBarMax (int n)
+  {
+    _launcherCtx.launcherGUI.launchProgressBar.setMaximum(n);
+    _launcherCtx.modListGUI.refreshProgressBar.setMaximum(n);
   }
 
-  private static void showBar(boolean show) {
-    LauncherGUI.launchBackground.setVisible(show);
-    LauncherGUI.launchState.setVisible(show);
-    LauncherGUI.launchProgressBar.setVisible(show);
-    ModListGUI.refreshProgressBar.setVisible(show);
+  private void showBar (boolean show)
+  {
+    _launcherCtx.launcherGUI.launchBackground.setVisible(show);
+    _launcherCtx.launcherGUI.launchState.setVisible(show);
+    _launcherCtx.launcherGUI.launchProgressBar.setVisible(show);
+    _launcherCtx.modListGUI.refreshProgressBar.setVisible(show);
   }
 
 }

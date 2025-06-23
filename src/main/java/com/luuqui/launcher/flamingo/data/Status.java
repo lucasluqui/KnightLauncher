@@ -1,6 +1,7 @@
 package com.luuqui.launcher.flamingo.data;
 
-public class Status {
+public class Status
+{
 
   public String version;
 

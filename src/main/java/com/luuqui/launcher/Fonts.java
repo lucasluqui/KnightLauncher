@@ -9,8 +9,8 @@ import java.io.InputStream;
 
 import static com.luuqui.launcher.Log.log;
 
-public class Fonts {
-
+public class Fonts
+{
   private static final String fontPathRegular = "/fonts/Figtree-Regular.ttf";
   private static final String fontPathMedium = "/fonts/Figtree-SemiBold.ttf";
   private static final String fontPathRegularJP = "/fonts/NotoSansJP-Regular.otf";
@@ -18,6 +18,7 @@ public class Fonts {
   private static final String fontPathRegularAR = "/fonts/Lemonada-Regular.ttf";
   private static final String fontPathMediumAR = "/fonts/Lemonada-Medium.ttf";
   private static final String fontPathCodeRegular = "/fonts/SourceCodePro-Regular.ttf";
+
   public static Font fontRegSmall = null;
   public static Font fontReg = null;
   public static Font fontRegBig = null;
@@ -26,10 +27,11 @@ public class Fonts {
   public static Font fontMedBig = null;
   public static Font fontMedGiant = null;
   public static Font fontCodeReg = null;
+
   private static float sizeMultiplier = 1.0f;
 
-  public static void setup() {
-
+  public static void setup()
+  {
     InputStream fontRegSmallIs;
     InputStream fontRegIs;
     InputStream fontRegBigIs;
@@ -118,7 +120,5 @@ public class Fonts {
     } catch (FontFormatException | IOException e) {
       log.error(e);
     }
-
   }
-
 }

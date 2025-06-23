@@ -8,9 +8,11 @@ import javax.swing.*;
 
 import static com.luuqui.launcher.Log.log;
 
-public class Stylesheet {
+public class Stylesheet
+{
 
-  public static void setup() {
+  public static void setup ()
+  {
     System.setProperty("awt.useSystemAAFontSettings", "on");
     System.setProperty("swing.aatext", "true");
 

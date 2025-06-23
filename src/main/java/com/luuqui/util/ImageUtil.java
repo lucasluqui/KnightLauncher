@@ -1,6 +1,5 @@
 package com.luuqui.util;
 
-import com.luuqui.launcher.CustomColors;
 import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
@@ -16,10 +15,11 @@ import java.util.Base64;
 
 import static com.luuqui.util.Log.log;
 
-public class ImageUtil {
+public class ImageUtil
+{
 
-  public static Image getImageFromURL(URL url, int width, int height) {
-
+  public static Image getImageFromURL (URL url, int width, int height)
+  {
     Image image = null;
 
     try {
@@ -32,7 +32,8 @@ public class ImageUtil {
     return image;
   }
 
-  public static Image getImageFromURL(String url, int width, int height) {
+  public static Image getImageFromURL (String url, int width, int height)
+  {
     try {
       return getImageFromURL(new URL(url), width, height);
     } catch (MalformedURLException e) {
@@ -41,8 +42,8 @@ public class ImageUtil {
     }
   }
 
-  public static byte[] getAnimatedImageFromURL(String url) {
-
+  public static byte[] getAnimatedImageFromURL (String url)
+  {
     InputStream is = null;
     byte[] imageBytes = null;
     try {
@@ -69,10 +70,10 @@ public class ImageUtil {
 
   /*
    * Based on Philipp Reichart's response
-   * @ https://stackoverflow.com/questions/7603400/how-to-make-a-rounded-corner-image-in-java
+   * https://stackoverflow.com/questions/7603400/how-to-make-a-rounded-corner-image-in-java
    */
-  public static Image addRoundedCorners(Image image, int radius) {
-
+  public static Image addRoundedCorners (Image image, int radius)
+  {
     int w = image.getWidth(null);
     int h = image.getHeight(null);
     BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
@@ -99,8 +100,8 @@ public class ImageUtil {
     return output;
   }
 
-  public static BufferedImage loadImageWithinJar(String fileName) {
-
+  public static BufferedImage loadImageWithinJar (String fileName)
+  {
     BufferedImage buff = null;
     try {
       buff = ImageIO.read(ImageUtil.class.getResourceAsStream(fileName));
@@ -111,7 +112,8 @@ public class ImageUtil {
     return buff;
   }
 
-  public static ImageIcon imageStreamToIcon(InputStream imageStream) {
+  public static ImageIcon imageStreamToIcon (InputStream imageStream)
+  {
     BufferedImage image = null;
     try {
       image = ImageIO.read(imageStream);
@@ -122,7 +124,8 @@ public class ImageUtil {
     return icon;
   }
 
-  public static BufferedImage loadImageFromBase64(String data) {
+  public static BufferedImage loadImageFromBase64 (String data)
+  {
     if(data == null) return null;
 
     String base64Image = data.contains(",") ? data.split(",")[1] : data;
@@ -136,7 +139,9 @@ public class ImageUtil {
     return img;
   }
 
-  public static String imageToBase64(BufferedImage image) throws UncheckedIOException {
+  public static String imageToBase64 (BufferedImage image)
+      throws UncheckedIOException
+  {
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     try {
       ImageIO.write(image, "png", os);
@@ -147,7 +152,8 @@ public class ImageUtil {
     }
   }
 
-  public static BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
+  public static BufferedImage resizeImage (BufferedImage originalImage, int targetWidth, int targetHeight)
+  {
     BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
     Graphics2D graphics2D = resizedImage.createGraphics();
     graphics2D.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
@@ -155,7 +161,8 @@ public class ImageUtil {
     return resizedImage;
   }
 
-  public static BufferedImage resizeImagePreserveTransparency(BufferedImage originalImage, int targetWidth, int targetHeight) {
+  public static BufferedImage resizeImagePreserveTransparency (BufferedImage originalImage, int targetWidth, int targetHeight)
+  {
     Image tmp = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
     BufferedImage newImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
     Graphics2D g2d = newImage.createGraphics();
@@ -165,7 +172,8 @@ public class ImageUtil {
   }
 
   // https://stackoverflow.com/questions/43106992/how-do-i-fade-the-edges-of-an-image-in-java-example-given
-  public static BufferedImage fadeEdges(BufferedImage sourceImage, double intensity) {
+  public static BufferedImage fadeEdges (BufferedImage sourceImage, double intensity)
+  {
     for(int i = 0; i < sourceImage.getWidth(); i++) { // i is the x coord
       for(int j = 0; j < sourceImage.getHeight(); j++) { // j is the y coord
         int color = sourceImage.getRGB(i, j);
@@ -184,7 +192,7 @@ public class ImageUtil {
     return sourceImage;
   }
 
-  public static BufferedImage toBufferedImage(Image img)
+  public static BufferedImage toBufferedImage (Image img)
   {
     if (img instanceof BufferedImage)
     {
@@ -203,7 +211,8 @@ public class ImageUtil {
     return bimage;
   }
 
-  public static BufferedImage generatePlainColorImage(int width, int height, Color color) {
+  public static BufferedImage generatePlainColorImage (int width, int height, Color color)
+  {
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     Graphics2D g2d = image.createGraphics();
     g2d.setColor(color);
@@ -211,7 +220,8 @@ public class ImageUtil {
     return image;
   }
 
-  public static void setAlpha(BufferedImage input, byte alpha) {
+  public static void setAlpha (BufferedImage input, byte alpha)
+  {
     alpha %= 0xff;
     for (int cx=0;cx<input.getWidth();cx++) {
       for (int cy=0;cy<input.getHeight();cy++) {

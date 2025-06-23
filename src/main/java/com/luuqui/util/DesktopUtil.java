@@ -12,9 +12,11 @@ import java.net.URL;
 
 import static com.luuqui.util.Log.log;
 
-public class DesktopUtil {
+public class DesktopUtil
+{
 
-  public static void openDir(String path) {
+  public static void openDir (String path)
+  {
     try {
       Desktop.getDesktop().open(new File(path));
     } catch (IOException e) {
@@ -22,7 +24,8 @@ public class DesktopUtil {
     }
   }
 
-  public static void openWebpage(URI uri) {
+  public static void openWebpage (URI uri)
+  {
     if (SystemUtil.isUnix()) {
       ProcessUtil.run(new String[] {"xdg-open", uri.toString()}, true);
       return;
@@ -37,7 +40,8 @@ public class DesktopUtil {
     }
   }
 
-  public static void openWebpage(String url) {
+  public static void openWebpage (String url)
+  {
     try {
       openWebpage(new URL(url).toURI());
     } catch (URISyntaxException | MalformedURLException e) {
@@ -45,11 +49,13 @@ public class DesktopUtil {
     }
   }
 
-  public static String getPathToDesktop() {
+  public static String getPathToDesktop ()
+  {
     return System.getProperty("user.home") + File.separator + "Desktop";
   }
 
-  public static void createShellLink(String target, String args, String workDir, String ico, String hover, String name) {
+  public static void createShellLink (String target, String args, String workDir, String ico, String hover, String name)
+  {
     ShellLink sl = ShellLink.createLink(target)
             .setCMDArgs(args)
             .setWorkingDir(workDir)

@@ -6,9 +6,14 @@ import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 
-public class SteamUtil {
+import static com.luuqui.util.Log.log;
 
-  public static void startGameById(int id, boolean dialog) throws Exception {
+public class SteamUtil
+{
+
+  public static void startGameById (int id, boolean dialog)
+      throws Exception
+  {
     // Special procedure for unix systems where we might not be able to get the darn desktop.
     if (SystemUtil.isUnix()) {
       ProcessUtil.run(new String[] {"steam", "steam://rungameid/" + id}, true);
@@ -21,17 +26,19 @@ public class SteamUtil {
     desktop.browse(steamProtocol);
   }
 
-  public static String getGamePathWindows() {
+  public static String getGamePathWindows ()
+  {
     try {
       return WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "Software\\Valve\\Steam", "SteamPath", 0)
               + "/steamapps/common/Spiral Knights";
     } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-      e.printStackTrace();
+      log.error(e);
     }
     return null;
   }
 
-  public static int getCurrentPlayers(String id) {
+  public static int getCurrentPlayers (String id)
+  {
     String rawResponse = INetUtil.getWebpageContent("https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=" + id);
     if (rawResponse == null) return 0;
     JSONObject jsonResponse = new JSONObject(rawResponse);
@@ -39,7 +46,8 @@ public class SteamUtil {
     return Integer.parseInt(currentPlayers);
   }
 
-  public static boolean isRunningInSteamapps() {
+  public static boolean isRunningInSteamapps ()
+  {
     return System.getProperty("user.dir").contains("steamapps");
   }
 

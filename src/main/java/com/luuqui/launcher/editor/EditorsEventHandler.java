@@ -1,10 +1,12 @@
 package com.luuqui.launcher.editor;
 
+import com.google.inject.Inject;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.LauncherGlobals;
-import com.luuqui.launcher.Locale;
-import com.luuqui.launcher.ModuleLoader;
+import com.luuqui.launcher.LocaleManager;
+import com.luuqui.launcher.ModuleManager;
+import com.luuqui.launcher.flamingo.FlamingoManager;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.ProcessUtil;
 
@@ -16,20 +18,82 @@ import java.util.List;
 
 import static com.luuqui.launcher.editor.Log.log;
 
-public class EditorsEventHandler {
+public class EditorsEventHandler
+{
+  @Inject private EditorsGUI gui;
 
-  public static boolean isBooting = false;
-  public static boolean spiralviewExtracted = false;
+  protected LocaleManager _localeManager;
+  protected FlamingoManager _flamingoManager;
+  protected ModuleManager _moduleManager;
 
-  private static void startEditor(String editor, String arg, boolean thirdparty) {
+  public boolean isBooting = false;
+  public boolean spiralviewExtracted = false;
+
+  @Inject
+  public EditorsEventHandler (LocaleManager _localeManager,
+                              FlamingoManager _flamingoManager,
+                              ModuleManager _moduleManager)
+  {
+    this._localeManager = _localeManager;
+    this._flamingoManager = _flamingoManager;
+    this._moduleManager = _moduleManager;
+  }
+
+  @SuppressWarnings("unused")
+  public void startModelViewer (ActionEvent actionEvent)
+  {
+    this.gui.editorLaunchFakeProgressBar.setMaximum(150);
+    if(_flamingoManager.getSelectedServer().isOfficial()) {
+      startEditor("com.luuqui.spiralview.ModelViewerHook", "rsrc/character/pc/model.dat", false);
+    } else {
+      startEditor("com.threerings.opengl.model.tools.ModelViewer", _flamingoManager.getSelectedServer().getRootDirectory() + "rsrc/character/pc/model.dat", true);
+    }
+  }
+
+  @SuppressWarnings("unused")
+  public void startSceneEditor (ActionEvent actionEvent)
+  {
+    this.gui.editorLaunchFakeProgressBar.setMaximum(155);
+    if(_flamingoManager.getSelectedServer().isOfficial()) {
+      startEditor("com.luuqui.spiralview.SceneEditorHook", "", false);
+    } else {
+      startEditor("com.threerings.tudey.tools.SceneEditor", "", true);
+    }
+  }
+
+  @SuppressWarnings("unused")
+  public void startInterfaceTester (ActionEvent actionEvent)
+  {
+    this.gui.editorLaunchFakeProgressBar.setMaximum(110);
+    if(_flamingoManager.getSelectedServer().isOfficial()) {
+      startEditor("com.luuqui.spiralview.InterfaceTesterHook", "", false);
+    } else {
+      Dialog.push(_localeManager.getValue("error.not_supported"), _localeManager.getValue("t.error"), JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  @SuppressWarnings("unused")
+  public void startParticleEditor (ActionEvent actionEvent)
+  {
+    this.gui.editorLaunchFakeProgressBar.setMaximum(125);
+    if(_flamingoManager.getSelectedServer().isOfficial()) {
+      startEditor("com.luuqui.spiralview.ParticleEditorHook", "", false);
+    } else {
+      startEditor("com.threerings.opengl.effect.tools.ParticleEditor", "", true);
+    }
+  }
+
+  @SuppressWarnings("all")
+  private void startEditor (String editor, String arg, boolean thirdparty)
+  {
     if(!spiralviewExtracted) {
-      ModuleLoader.loadSpiralview();
+      _moduleManager.loadSpiralview();
       spiralviewExtracted = true;
     }
 
     if(!isBooting) {
       isBooting = true;
-      new Thread(EditorsEventHandler::startedBooting).start();
+      new Thread(this::startedBooting).start();
 
       String javaVMPath = JavaUtil.getGameJVMExePath();
       String javaVMVersion = JavaUtil.getGameJVMData();
@@ -41,11 +105,11 @@ public class EditorsEventHandler {
         log.warning("Incompatible game Java VM version: " + javaVMVersion + ". Luckily we can rely on system's (" + System.getProperty("java.version") + ")");
         javaVMPath = "java";
       } else {
-        Dialog.push(Locale.getValue("error.no_compatible_jvm"), Locale.getValue("b.editors"), JOptionPane.ERROR_MESSAGE);
+        Dialog.push(_localeManager.getValue("error.no_compatible_jvm"), _localeManager.getValue("b.editors"), JOptionPane.ERROR_MESSAGE);
       }
 
       String classpath = "";
-      String rootDir = LauncherApp.selectedServer.getRootDirectory();
+      String rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
       if(!thirdparty) classpath += rootDir + File.separator + "./KnightLauncher/modules/spiralview/spiralview.jar" + libSeparator;
       if(thirdparty) classpath += LauncherGlobals.USER_DIR + File.separator + "./KnightLauncher.jar" + libSeparator;
       classpath += rootDir + File.separator + "./code/projectx-config.jar" + libSeparator;
@@ -76,62 +140,29 @@ public class EditorsEventHandler {
     }
   }
 
-  public static void startModelViewer(ActionEvent actionEvent) {
-    EditorsGUI.editorLaunchFakeProgressBar.setMaximum(150);
-    if(LauncherApp.selectedServer.isOfficial()) {
-      startEditor("com.luuqui.spiralview.ModelViewerHook", "rsrc/character/pc/model.dat", false);
-    } else {
-      startEditor("com.threerings.opengl.model.tools.ModelViewer", LauncherApp.selectedServer.getRootDirectory() + "rsrc/character/pc/model.dat", true);
-    }
-  }
-
-  public static void startSceneEditor(ActionEvent actionEvent) {
-    EditorsGUI.editorLaunchFakeProgressBar.setMaximum(155);
-    if(LauncherApp.selectedServer.isOfficial()) {
-      startEditor("com.luuqui.spiralview.SceneEditorHook", "", false);
-    } else {
-      startEditor("com.threerings.tudey.tools.SceneEditor", "", true);
-    }
-  }
-
-  public static void startInterfaceTester(ActionEvent actionEvent) {
-    EditorsGUI.editorLaunchFakeProgressBar.setMaximum(110);
-    if(LauncherApp.selectedServer.isOfficial()) {
-      startEditor("com.luuqui.spiralview.InterfaceTesterHook", "", false);
-    } else {
-      Dialog.push(Locale.getValue("error.not_supported"), Locale.getValue("t.error"), JOptionPane.ERROR_MESSAGE);
-    }
-  }
-
-  public static void startParticleEditor(ActionEvent actionEvent) {
-    EditorsGUI.editorLaunchFakeProgressBar.setMaximum(125);
-    if(LauncherApp.selectedServer.isOfficial()) {
-      startEditor("com.luuqui.spiralview.ParticleEditorHook", "", false);
-    } else {
-      startEditor("com.threerings.opengl.effect.tools.ParticleEditor", "", true);
-    }
-  }
-
-  protected static void startedBooting() {
+  protected void startedBooting ()
+  {
     isBooting = true;
-    EditorsGUI.editorListPaneScroll.setVisible(false);
-    EditorsGUI.editorLaunchState.setVisible(true);
-    EditorsGUI.editorLaunchFakeProgressBar.setVisible(true);
-    EditorsGUI.startFakeProgress();
+    this.gui.editorListPaneScroll.setVisible(false);
+    this.gui.editorLaunchState.setVisible(true);
+    this.gui.editorLaunchFakeProgressBar.setVisible(true);
+    this.gui.startFakeProgress();
   }
 
-  protected static void finishedBooting() {
+  protected void finishedBooting ()
+  {
     isBooting = false;
-    EditorsGUI.editorListPaneScroll.setVisible(true);
-    EditorsGUI.editorLaunchState.setVisible(false);
-    EditorsGUI.editorLaunchFakeProgressBar.setVisible(false);
+    this.gui.editorListPaneScroll.setVisible(true);
+    this.gui.editorLaunchState.setVisible(false);
+    this.gui.editorLaunchFakeProgressBar.setVisible(false);
   }
 
-  public static void selectedServerChanged() {
-    if(LauncherApp.selectedServer.isOfficial()) {
-      EditorsGUI.footerLabel.setText(Locale.getValue("m.powered_by_spiralview", LauncherGlobals.BUNDLED_SPIRALVIEW_VERSION));
+  public void selectedServerChanged ()
+  {
+    if(_flamingoManager.getSelectedServer().isOfficial()) {
+      this.gui.footerLabel.setText(_localeManager.getValue("m.powered_by_spiralview", LauncherGlobals.BUNDLED_SPIRALVIEW_VERSION));
     } else {
-      EditorsGUI.footerLabel.setText(Locale.getValue("m.viewing_editors", LauncherApp.selectedServer.name));
+      this.gui.footerLabel.setText(_localeManager.getValue("m.viewing_editors", _flamingoManager.getSelectedServer().name));
     }
   }
 

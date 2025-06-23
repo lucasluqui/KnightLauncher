@@ -1,38 +1,36 @@
 package com.luuqui.util;
 
-import com.luuqui.launcher.Locale;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import static com.luuqui.util.Log.log;
-
-public class DateUtil {
-
+public class DateUtil
+{
   private static final String TIMEZONE = "PST"; // Game's timezone
 
-  public static String getFormattedTimeRemaining(long timestamp) {
+  public static String getFormattedTimeRemaining (long timestamp)
+  {
     long remainingMillis = timestamp - System.currentTimeMillis();
     long minutesRemaining = (remainingMillis / 1000L) / 60L;
     long hoursRemaining = minutesRemaining / 60L;
     long daysRemaining = hoursRemaining / 24L;
 
     if(daysRemaining > 0L) {
-      return Locale.getValue("m.timer_days", String.valueOf(daysRemaining));
+      return daysRemaining + " {d}";
     } else if(hoursRemaining > 0L) {
-      return Locale.getValue("m.timer_hours", String.valueOf(hoursRemaining));
+      return hoursRemaining + " {h}";
     } else if(minutesRemaining > 0L) {
-      return Locale.getValue("m.timer_minutes", String.valueOf(minutesRemaining));
+      return minutesRemaining + " {m}";
     } else {
-      return Locale.getValue("m.timer_less_than_minute");
+      return "";
     }
   }
 
-  public static String getFormattedTime(long timestamp) {
+  public static String getFormattedTime (long timestamp, String timezone)
+  {
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(timestamp);
-    calendar.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
+    calendar.setTimeZone(TimeZone.getTimeZone(timezone));
 
     // Only the month, we'll concatenate the rest later.
     // Also, force it to be in English locale.
@@ -45,7 +43,8 @@ public class DateUtil {
         + TIMEZONE;
   }
 
-  private static String getDayNumberWithSuffix(int date) {
+  private static String getDayNumberWithSuffix (int date)
+  {
     String suffix = "th";
     switch (date) {
       case 1:
@@ -65,7 +64,8 @@ public class DateUtil {
     return date + suffix;
   }
 
-  private static String getMinuteWithTrailingZero(int minute) {
+  private static String getMinuteWithTrailingZero (int minute)
+  {
     return minute < 10 ? "0" + minute : "" + minute;
   }
 

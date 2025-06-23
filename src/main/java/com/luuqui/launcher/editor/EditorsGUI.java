@@ -1,5 +1,6 @@
 package com.luuqui.launcher.editor;
 
+import com.google.inject.Inject;
 import com.jhlabs.image.GaussianFilter;
 import com.jhlabs.image.GrayscaleFilter;
 import com.luuqui.launcher.*;
@@ -13,27 +14,36 @@ import java.awt.image.BufferedImage;
 
 import static com.luuqui.launcher.mod.Log.log;
 
-public class EditorsGUI extends BaseGUI {
+public class EditorsGUI extends BaseGUI
+{
+  @Inject public EditorsEventHandler eventHandler;
 
-  private final LauncherApp app;
-  protected static JFrame editorsGUIFrame;
+  @Inject protected LocaleManager _localeManager;
 
-  public EditorsGUI(LauncherApp app) {
+  public JFrame editorsGUIFrame;
+
+  @Inject
+  public EditorsGUI ()
+  {
     super();
-    this.app = app;
-    setupImages();
-    initialize();
   }
 
-  @SuppressWarnings("static-access")
-  public void switchVisibility() {
+  public void init ()
+  {
+    setupImages();
+    compose();
+  }
+
+  public void switchVisibility ()
+  {
     this.editorsGUIFrame.setVisible(!this.editorsGUIFrame.isVisible());
   }
 
-  private void initialize() {
+  private void compose ()
+  {
     editorsGUIFrame = new JFrame();
     editorsGUIFrame.setVisible(false);
-    editorsGUIFrame.setTitle(Locale.getValue("t.editors"));
+    editorsGUIFrame.setTitle(_localeManager.getValue("t.editors"));
     editorsGUIFrame.setBounds(100, 100, 385, 460);
     editorsGUIFrame.setResizable(false);
     editorsGUIFrame.setUndecorated(true);
@@ -42,7 +52,7 @@ public class EditorsGUI extends BaseGUI {
     editorsGUIFrame.getContentPane().setLayout(null);
     editorsPanel = (JPanel) editorsGUIFrame.getContentPane();
 
-    editorLaunchState = new JLabel(Locale.getValue("m.editor_loading"));
+    editorLaunchState = new JLabel(_localeManager.getValue("m.editor_loading"));
     editorLaunchState.setHorizontalAlignment(SwingConstants.CENTER);
     editorLaunchState.setBounds(192, 190, 385, 25);
     editorLaunchState.setFont(Fonts.fontRegBig);
@@ -83,7 +93,7 @@ public class EditorsGUI extends BaseGUI {
     modelViewerPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel modelViewerLabel = new JLabel();
-    modelViewerLabel.setText(Locale.getValue("m.model_viewer"));
+    modelViewerLabel.setText(_localeManager.getValue("m.model_viewer"));
     modelViewerLabel.setFont(Fonts.fontMedGiant);
     modelViewerLabel.setHorizontalAlignment(SwingConstants.CENTER);
     modelViewerLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -91,9 +101,9 @@ public class EditorsGUI extends BaseGUI {
     modelViewerPane.add(modelViewerLabel);
 
     modelViewerPane.addMouseListener(new MouseListener() {
-      @Override public void mouseClicked(MouseEvent e) { EditorsEventHandler.startModelViewer(null); }
-      @Override public void mousePressed(MouseEvent e) { EditorsEventHandler.startModelViewer(null); }
-      @Override public void mouseReleased(MouseEvent e) { EditorsEventHandler.startModelViewer(null); }
+      @Override public void mouseClicked(MouseEvent e) { eventHandler.startModelViewer(null); }
+      @Override public void mousePressed(MouseEvent e) { eventHandler.startModelViewer(null); }
+      @Override public void mouseReleased(MouseEvent e) { eventHandler.startModelViewer(null); }
       @Override public void mouseEntered(MouseEvent e) {
         modelViewerPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         modelViewerImage = modelViewerImageFocused;
@@ -118,7 +128,7 @@ public class EditorsGUI extends BaseGUI {
     sceneEditorPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel sceneEditorLabel = new JLabel();
-    sceneEditorLabel.setText(Locale.getValue("m.scene_editor"));
+    sceneEditorLabel.setText(_localeManager.getValue("m.scene_editor"));
     sceneEditorLabel.setFont(Fonts.fontMedGiant);
     sceneEditorLabel.setHorizontalAlignment(SwingConstants.CENTER);
     sceneEditorLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -126,9 +136,9 @@ public class EditorsGUI extends BaseGUI {
     sceneEditorPane.add(sceneEditorLabel);
 
     sceneEditorPane.addMouseListener(new MouseListener() {
-      @Override public void mouseClicked(MouseEvent e) { EditorsEventHandler.startSceneEditor(null); }
-      @Override public void mousePressed(MouseEvent e) { EditorsEventHandler.startSceneEditor(null); }
-      @Override public void mouseReleased(MouseEvent e) { EditorsEventHandler.startSceneEditor(null); }
+      @Override public void mouseClicked(MouseEvent e) { eventHandler.startSceneEditor(null); }
+      @Override public void mousePressed(MouseEvent e) { eventHandler.startSceneEditor(null); }
+      @Override public void mouseReleased(MouseEvent e) { eventHandler.startSceneEditor(null); }
       @Override public void mouseEntered(MouseEvent e) {
         sceneEditorPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         sceneEditorImage = sceneEditorImageFocused;
@@ -153,7 +163,7 @@ public class EditorsGUI extends BaseGUI {
     interfaceTesterPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel interfaceTesterLabel = new JLabel();
-    interfaceTesterLabel.setText(Locale.getValue("m.interface_tester"));
+    interfaceTesterLabel.setText(_localeManager.getValue("m.interface_tester"));
     interfaceTesterLabel.setFont(Fonts.fontMedGiant);
     interfaceTesterLabel.setHorizontalAlignment(SwingConstants.CENTER);
     interfaceTesterLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -161,9 +171,9 @@ public class EditorsGUI extends BaseGUI {
     interfaceTesterPane.add(interfaceTesterLabel);
 
     interfaceTesterPane.addMouseListener(new MouseListener() {
-      @Override public void mouseClicked(MouseEvent e) { EditorsEventHandler.startInterfaceTester(null); }
-      @Override public void mousePressed(MouseEvent e) { EditorsEventHandler.startInterfaceTester(null); }
-      @Override public void mouseReleased(MouseEvent e) { EditorsEventHandler.startInterfaceTester(null); }
+      @Override public void mouseClicked(MouseEvent e) { eventHandler.startInterfaceTester(null); }
+      @Override public void mousePressed(MouseEvent e) { eventHandler.startInterfaceTester(null); }
+      @Override public void mouseReleased(MouseEvent e) { eventHandler.startInterfaceTester(null); }
       @Override public void mouseEntered(MouseEvent e) {
         interfaceTesterPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         interfaceTesterImage = interfaceTesterImageFocused;
@@ -188,7 +198,7 @@ public class EditorsGUI extends BaseGUI {
     particleEditorPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
     JLabel particleEditorLabel = new JLabel();
-    particleEditorLabel.setText(Locale.getValue("m.particle_editor"));
+    particleEditorLabel.setText(_localeManager.getValue("m.particle_editor"));
     particleEditorLabel.setFont(Fonts.fontMedGiant);
     particleEditorLabel.setHorizontalAlignment(SwingConstants.CENTER);
     particleEditorLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -196,9 +206,9 @@ public class EditorsGUI extends BaseGUI {
     particleEditorPane.add(particleEditorLabel);
 
     particleEditorPane.addMouseListener(new MouseListener() {
-      @Override public void mouseClicked(MouseEvent e) { EditorsEventHandler.startParticleEditor(null); }
-      @Override public void mousePressed(MouseEvent e) { EditorsEventHandler.startParticleEditor(null); }
-      @Override public void mouseReleased(MouseEvent e) { EditorsEventHandler.startParticleEditor(null); }
+      @Override public void mouseClicked(MouseEvent e) { eventHandler.startParticleEditor(null); }
+      @Override public void mousePressed(MouseEvent e) { eventHandler.startParticleEditor(null); }
+      @Override public void mouseReleased(MouseEvent e) { eventHandler.startParticleEditor(null); }
       @Override public void mouseEntered(MouseEvent e) {
         particleEditorPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         particleEditorImage = particleEditorImageFocused;
@@ -225,8 +235,10 @@ public class EditorsGUI extends BaseGUI {
 
   }
 
-  protected static void startFakeProgress() {
-    EditorsGUI.editorLaunchState.setText(Locale.getValue("m.editor_loading"));
+  @SuppressWarnings("all")
+  protected void startFakeProgress ()
+  {
+    this.editorLaunchState.setText(_localeManager.getValue("m.editor_loading"));
     for(int i = editorLaunchFakeProgressBar.getMinimum(); i <= editorLaunchFakeProgressBar.getMaximum(); i++) {
       final int percent = i;
       SwingUtilities.invokeLater(() -> editorLaunchFakeProgressBar.setValue(percent));
@@ -237,24 +249,26 @@ public class EditorsGUI extends BaseGUI {
         log.error(e);
       }
     }
-    EditorsEventHandler.finishedBooting();
+    this.eventHandler.finishedBooting();
   }
 
-  protected static void rotateFakeLabel(int pot) {
+  protected void rotateFakeLabel (int pot)
+  {
     switch(pot) {
       case 30:
-        EditorsGUI.editorLaunchState.setText(Locale.getValue("m.editor_fakeloading_1"));
+        this.editorLaunchState.setText(_localeManager.getValue("m.editor_fake_loading_1"));
         break;
       case 75:
-        EditorsGUI.editorLaunchState.setText(Locale.getValue("m.editor_fakeloading_2"));
+        this.editorLaunchState.setText(_localeManager.getValue("m.editor_fake_loading_2"));
         break;
       case 100:
-        EditorsGUI.editorLaunchState.setText(Locale.getValue("m.editor_fakeloading_3"));
+        this.editorLaunchState.setText(_localeManager.getValue("m.editor_fake_loading_3"));
         break;
     }
   }
 
-  protected void setupImages() {
+  protected void setupImages ()
+  {
     modelViewerImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/img/editor-model.png"), 740, 100);
     modelViewerImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(modelViewerImageFocused, null), 25);
     modelViewerImageUnfocused = new GrayscaleFilter().filter(modelViewerImageFocused, null);
@@ -277,26 +291,26 @@ public class EditorsGUI extends BaseGUI {
     particleEditorImage = particleEditorImageUnfocused;
   }
 
-  public static JPanel editorsPanel;
-  protected static JPanel editorListPane = new JPanel();
-  protected static JScrollPane editorListPaneScroll = new JScrollPane();
-  protected static JLabel editorLaunchState;
-  protected static JProgressBar editorLaunchFakeProgressBar;
-  protected static JLabel footerLabel;
+  public JPanel editorsPanel;
+  protected JPanel editorListPane = new JPanel();
+  protected JScrollPane editorListPaneScroll = new JScrollPane();
+  protected JLabel editorLaunchState;
+  protected JProgressBar editorLaunchFakeProgressBar;
+  protected JLabel footerLabel;
 
-  protected static BufferedImage modelViewerImage = null;
-  protected static BufferedImage sceneEditorImage = null;
-  protected static BufferedImage interfaceTesterImage = null;
-  protected static BufferedImage particleEditorImage = null;
+  protected BufferedImage modelViewerImage = null;
+  protected BufferedImage sceneEditorImage = null;
+  protected BufferedImage interfaceTesterImage = null;
+  protected BufferedImage particleEditorImage = null;
 
-  protected static BufferedImage modelViewerImageUnfocused = null;
-  protected static BufferedImage sceneEditorImageUnfocused = null;
-  protected static BufferedImage interfaceTesterImageUnfocused = null;
-  protected static BufferedImage particleEditorImageUnfocused = null;
+  protected BufferedImage modelViewerImageUnfocused = null;
+  protected BufferedImage sceneEditorImageUnfocused = null;
+  protected BufferedImage interfaceTesterImageUnfocused = null;
+  protected BufferedImage particleEditorImageUnfocused = null;
 
-  protected static BufferedImage modelViewerImageFocused = null;
-  protected static BufferedImage sceneEditorImageFocused = null;
-  protected static BufferedImage interfaceTesterImageFocused = null;
-  protected static BufferedImage particleEditorImageFocused = null;
+  protected BufferedImage modelViewerImageFocused = null;
+  protected BufferedImage sceneEditorImageFocused = null;
+  protected BufferedImage interfaceTesterImageFocused = null;
+  protected BufferedImage particleEditorImageFocused = null;
 
 }

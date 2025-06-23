@@ -1,5 +1,6 @@
 package com.luuqui.launcher;
 
+import com.google.inject.Inject;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.util.*;
@@ -19,27 +20,31 @@ import java.net.URL;
 
 import static com.luuqui.launcher.Log.log;
 
-public class Updater extends BaseGUI {
+public class Updater extends BaseGUI
+{
+  @Inject protected LocaleManager _localeManager;
+  @Inject protected DiscordPresenceClient _discordPresenceClient;
 
-  private final LauncherApp app;
-  public static JFrame updaterFrame;
-  private static JProgressBar updaterProgressBar;
-  private static JLabel updaterState;
-  private static int _downloadAttempts = 0;
+  private int downloadAttempts = 0;
 
-  public Updater(LauncherApp app) {
+  public Updater ()
+  {
     super();
-    this.app = app;
-    initialize();
-    initProcess();
   }
 
-  @SuppressWarnings("static-access")
-  public void switchVisibility() {
+  public void init ()
+  {
+    compose();
+    startUpdate();
+  }
+
+  public void switchVisibility ()
+  {
     this.updaterFrame.setVisible(!this.updaterFrame.isVisible());
   }
 
-  private void initialize() {
+  private void compose ()
+  {
     updaterFrame = new JFrame();
     updaterFrame.setVisible(false);
     updaterFrame.setTitle("Updater");
@@ -118,7 +123,7 @@ public class Updater extends BaseGUI {
     Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 20, ColorUtil.getForegroundColor());
     JButton closeButton = new JButton(closeIcon);
     closeButton.setBounds(updaterFrame.getWidth() - 38, 3, 29, 29);
-    closeButton.setToolTipText(Locale.getValue("b.close"));
+    closeButton.setToolTipText(_localeManager.getValue("b.close"));
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
     closeButton.setBackground(null);
@@ -126,14 +131,14 @@ public class Updater extends BaseGUI {
     closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(e -> {
-      DiscordPresenceClient.getInstance().stop();
+      _discordPresenceClient.stop();
       System.exit(0);
     });
 
     Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_DOWN, 20, ColorUtil.getForegroundColor());
     JButton minimizeButton = new JButton(minimizeIcon);
     minimizeButton.setBounds(updaterFrame.getWidth() - 71, 3, 29, 29);
-    minimizeButton.setToolTipText(Locale.getValue("b.minimize"));
+    minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
     minimizeButton.setBackground(null);
@@ -144,15 +149,16 @@ public class Updater extends BaseGUI {
 
     updaterFrame.setLocationRelativeTo(null);
     updaterFrame.setVisible(true);
-
   }
 
-  private static void initProcess() {
-    Thread processThread = new Thread(Updater::startProcess);
-    processThread.start();
+  private void startUpdate ()
+  {
+    Thread updateThread = new Thread(this::update);
+    updateThread.start();
   }
 
-  private static void startProcess() {
+  private void update ()
+  {
     updaterProgressBar.setMaximum(5);
 
     updaterProgressBar.setValue(1);
@@ -163,13 +169,13 @@ public class Updater extends BaseGUI {
     updaterState.setText("Downloading latest version...");
     downloadLatestVersion();
 
-    if(_downloadAttempts > 3) {
+    if(this.downloadAttempts > 3) {
       String downloadErrMsg = "The updater couldn't be initiated after 3 download attempts." +
               "\nBooting back into current version, try updating later.";
       Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
       log.error(downloadErrMsg);
       //FileUtil.rename(new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar.old"), new File(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"));
-      finishProcess();
+      finish();
     }
 
     updaterProgressBar.setValue(4);
@@ -179,15 +185,16 @@ public class Updater extends BaseGUI {
 
     updaterProgressBar.setValue(5);
     updaterState.setText("Update finished.");
-    finishProcess();
+    this.finish();
   }
 
-  private static void downloadLatestVersion() {
+  private void downloadLatestVersion ()
+  {
     boolean downloadCompleted = false;
-    while(_downloadAttempts <= 3 && !downloadCompleted) {
-      _downloadAttempts++;
+    while(this.downloadAttempts <= 3 && !downloadCompleted) {
+      this.downloadAttempts++;
 
-      log.info("Fetching latest version", "attempts", _downloadAttempts);
+      log.info("Fetching latest version", "attempts", this.downloadAttempts);
 
       String rawResponseReleases = INetUtil.getWebpageContent(
         LauncherGlobals.GITHUB_API
@@ -210,7 +217,7 @@ public class Updater extends BaseGUI {
           + latestRelease + "/"
           + "KnightLauncher-" + latestRelease + ".zip";
 
-        log.info("Downloading latest version", "url", downloadUrl, "attempts", _downloadAttempts);
+        log.info("Downloading latest version", "url", downloadUrl, "attempts", this.downloadAttempts);
 
         try {
           FileUtils.copyURLToFile(
@@ -220,8 +227,8 @@ public class Updater extends BaseGUI {
             0
           );
 
-          updaterProgressBar.setValue(3);
-          updaterState.setText("Extracting latest version...");
+          this.updaterProgressBar.setValue(3);
+          this.updaterState.setText("Extracting latest version...");
           try {
             Compressor.unzip4j(LauncherGlobals.USER_DIR + "/KnightLauncher.zip", LauncherGlobals.USER_DIR + "/");
             downloadCompleted = true;
@@ -229,18 +236,23 @@ public class Updater extends BaseGUI {
             log.error(e);
           }
         } catch (IOException e) {
-          // Just keep retrying.
+          // Keep retrying.
           log.error(e);
         }
       }
     }
   }
 
-  private static void finishProcess() {
-    ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/KnightLauncher.jar"}, true);
-    updaterFrame.dispose();
+  private void finish ()
+  {
+    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "/KnightLauncher.jar" }, true);
+    this.updaterFrame.dispose();
     System.exit(1);
   }
+
+  public JFrame updaterFrame;
+  private JProgressBar updaterProgressBar;
+  private JLabel updaterState;
 
 }
 

@@ -8,9 +8,11 @@ import java.nio.charset.Charset;
 
 import static com.luuqui.util.Log.log;
 
-public class ProcessUtil {
+public class ProcessUtil
+{
 
-  public static void run(String[] command, boolean keepAlive) {
+  public static void run (String[] command, boolean keepAlive)
+  {
     Process process = null;
     try {
       process = Runtime.getRuntime().exec(command);
@@ -23,7 +25,8 @@ public class ProcessUtil {
     }
   }
 
-  public static void runFromDirectory(String[] command, String workDir, boolean keepAlive) {
+  public static void runFromDirectory (String[] command, String workDir, boolean keepAlive)
+  {
     ProcessBuilder pb = new ProcessBuilder(command);
     pb.directory(new File(workDir));
     Process process = null;
@@ -38,7 +41,8 @@ public class ProcessUtil {
     }
   }
 
-  public static String[] runAndCapture(String[] command) {
+  public static String[] runAndCapture (String[] command)
+  {
     Process process = null;
     try {
       process = new ProcessBuilder(command).start();
@@ -58,9 +62,10 @@ public class ProcessUtil {
     return new String[1];
   }
 
-  public static boolean isGameRunningByTitle(String processTitle) {
-    String[] output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "tasklist /v /fo csv /fi \"imagename eq java.exe\"" });
-    log.info("isGameRunningByTitle", "output (stdout)", output[0].replace("\r", "").replace("\n", "|"), "output (stderr)", output[1]);
+  public static boolean isProcessRunning (String processExecutable, String processTitle)
+  {
+    String[] output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "tasklist /v /fo csv /fi \"imagename eq " + processExecutable + "\"" });
+    log.info("isProcessRunning", "output (stdout)", output[0].replace("\r", "").replace("\n", "|"), "output (stderr)", output[1]);
 
     // We return true if we find either the process title requested or an "ERROR" string due to some
     // systems not having a properly functioning "tasklist" command or some antivirus blocking it.

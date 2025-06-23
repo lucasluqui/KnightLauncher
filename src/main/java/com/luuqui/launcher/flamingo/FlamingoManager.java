@@ -1,33 +1,53 @@
 package com.luuqui.launcher.flamingo;
 
+import com.google.inject.Singleton;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.flamingo.data.Status;
+import com.luuqui.util.FileUtil;
 import com.luuqui.util.RequestUtil;
 import com.luuqui.util.SystemUtil;
 import com.luuqui.util.TextUtil;
 import org.json.JSONObject;
 
-import java.sql.Date;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.luuqui.launcher.flamingo.Log.log;
 
-public class Flamingo {
+@Singleton
+public class FlamingoManager
+{
+  @SuppressWarnings("all")
+  private final String ENDPOINT = "flamingo.luuqui.com";
 
-  private static final String ENDPOINT = "flamingo.luuqui.com";
-  private static final int PORT = 6060;
+  @SuppressWarnings("all")
+  private final int PORT = 6060;
 
-  public static List<Server> getServerList() {
+  private List<Server> serverList = new ArrayList<>();
+  private Server selectedServer = null;
+  private boolean online = false;
+
+  public FlamingoManager () { }
+
+  public void init ()
+  {
+
+  }
+
+  public List<Server> fetchServerList ()
+  {
     List<Server> servers = new ArrayList<>();
 
     try {
       JSONObject response = sendRequest("GET", "/server-list/", new String[]{ "machineId=" + SystemUtil.getHashedMachineId() });
       log.info("Got server list from flamingo");
 
-      // we got an empty server list. we return the empty servers list object.
+      // we got an empty server list, so empty we return it.
       if(response.toString().equalsIgnoreCase("{}")) return servers;
 
       for(Object serverJsonObj : response.getJSONArray("serverlist")) {
@@ -64,7 +84,8 @@ public class Flamingo {
     return servers;
   }
 
-  public static String activateBetaCode(String code) {
+  public String activateBetaCode (String code)
+  {
     try {
       JSONObject response = sendRequest("POST", "/beta-code/activate/" + code, new String[]{"machineId=" + SystemUtil.getHashedMachineId()});
       log.info("Got response for beta code activation: " + response);
@@ -76,7 +97,8 @@ public class Flamingo {
     }
   }
 
-  public static Status getStatus() {
+  public Status getStatus ()
+  {
     try {
       JSONObject response = sendRequest("GET", "/status/", new String[]{});
       log.info("Got status from flamingo: " + response);
@@ -92,7 +114,9 @@ public class Flamingo {
     }
   }
 
-  private static JSONObject sendRequest(String method, String endpoint, String[] request) throws Exception {
+  private JSONObject sendRequest (String method, String endpoint, String[] request)
+      throws Exception
+  {
     try {
       request = Arrays.copyOf(request, request.length + 1);
       request[request.length - 1] = "version=" + TextUtil.extractNumericFromString(LauncherGlobals.LAUNCHER_VERSION);
@@ -100,6 +124,60 @@ public class Flamingo {
     } catch (Exception e) {
       throw new Exception();
     }
+  }
+
+  public Server findServerByName (String serverName)
+  {
+    List<Server> results = getServerList().stream()
+        .filter(s -> serverName.equals(s.name)).collect(Collectors.toList());
+    return results.isEmpty() ? null : results.get(0);
+  }
+
+  public Server findServerBySanitizedName (String sanitizedServerName)
+  {
+    List<Server> results = getServerList().stream()
+        .filter(s -> sanitizedServerName.equals(s.getSanitizedName())).collect(Collectors.toList());
+    return results.isEmpty() ? null : results.get(0);
+  }
+
+  public String getLocalGameVersion ()
+  {
+    try {
+      return FileUtil.readFile(this.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
+    } catch (IOException e) {
+      log.error(e);
+    }
+    return "-1";
+  }
+
+  public List<Server> getServerList ()
+  {
+    return this.serverList;
+  }
+
+  public void setServerList (List<Server> serverList)
+  {
+    this.serverList = serverList;
+  }
+
+  public Server getSelectedServer ()
+  {
+    return this.selectedServer;
+  }
+
+  public void setSelectedServer (Server server)
+  {
+    this.selectedServer = server;
+  }
+
+  public boolean getOnline ()
+  {
+    return this.online;
+  }
+
+  public void setOnline (boolean online)
+  {
+    this.online = online;
   }
 
 }

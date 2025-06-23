@@ -1,13 +1,15 @@
 package com.luuqui.launcher.mod;
 
+import com.google.inject.Inject;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.LauncherApp;
-import com.luuqui.launcher.Locale;
+import com.luuqui.launcher.LocaleManager;
 import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.launcher.flamingo.FlamingoManager;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mod.data.Mod;
 import com.luuqui.launcher.setting.Settings;
-import com.luuqui.launcher.setting.SettingsProperties;
+import com.luuqui.launcher.setting.SettingsManager;
 import com.luuqui.util.DesktopUtil;
 import com.luuqui.util.ThreadingUtil;
 import org.apache.commons.io.FileUtils;
@@ -22,69 +24,99 @@ import java.util.Arrays;
 
 import static com.luuqui.launcher.mod.Log.log;
 
-public class ModListEventHandler {
+public class ModListEventHandler
+{
+  @Inject private ModListGUI gui;
 
-  public static void refreshEvent(ActionEvent action) {
+  protected ModManager _modManager;
+  protected LocaleManager _localeManager;
+  protected SettingsManager _settingsManager;
+  protected FlamingoManager _flamingoManager;
+
+  @Inject
+  public ModListEventHandler (ModManager _modManager,
+                              LocaleManager _localeManager,
+                              SettingsManager _settingsManager,
+                              FlamingoManager _flamingoManager)
+  {
+    this._modManager = _modManager;
+    this._localeManager = _localeManager;
+    this._settingsManager = _settingsManager;
+    this._flamingoManager = _flamingoManager;
+  }
+
+  @SuppressWarnings("unused")
+  public void refreshEvent (ActionEvent action)
+  {
     refreshMods(true);
   }
 
-  public static void refreshMods(boolean mount) {
+  public void refreshMods (boolean mount)
+  {
     Thread refreshThread = new Thread(() -> {
-      ModListGUI.refreshButton.setEnabled(false);
-      ModListGUI.enableAllModsButton.setEnabled(false);
-      ModListGUI.disableAllModsButton.setEnabled(false);
-      ModListGUI.addModButton.setEnabled(false);
+      this.gui.refreshButton.setEnabled(false);
+      this.gui.enableAllModsButton.setEnabled(false);
+      this.gui.disableAllModsButton.setEnabled(false);
+      this.gui.addModButton.setEnabled(false);
 
-      ModLoader.checkInstalled();
+      _modManager.checkInstalled();
 
       if (mount) {
-        if (ModLoader.rebuildRequired && Settings.doRebuilds) {
-          ModLoader.startFileRebuild();
+        if (_modManager.rebuildRequired && Settings.doRebuilds) {
+          _modManager.startFileRebuild();
         }
-        ModLoader.mount();
+        _modManager.mount();
       }
 
-      ModListGUI.updateModList(null);
+      this.gui.updateModList(null);
 
-      ModListGUI.refreshButton.setEnabled(true);
-      ModListGUI.enableAllModsButton.setEnabled(true);
-      ModListGUI.disableAllModsButton.setEnabled(true);
-      ModListGUI.addModButton.setEnabled(true);
+      this.gui.refreshButton.setEnabled(true);
+      this.gui.enableAllModsButton.setEnabled(true);
+      this.gui.disableAllModsButton.setEnabled(true);
+      this.gui.addModButton.setEnabled(true);
     });
     refreshThread.start();
   }
 
-  public static void getModsEvent(ActionEvent action) {
+  @SuppressWarnings("unused")
+  public void getModsEvent (ActionEvent action)
+  {
     DesktopUtil.openWebpage(LauncherGlobals.URL_GET_MODS);
   }
 
-  public static void openModsFolderEvent(ActionEvent action) {
+  @SuppressWarnings("unused")
+  public void openModsFolderEvent (ActionEvent action)
+  {
     String rootDir = LauncherGlobals.USER_DIR;
-    if(LauncherApp.selectedServer != null) {
-      rootDir = LauncherApp.selectedServer.getRootDirectory();
+    if(_flamingoManager.getSelectedServer() != null) {
+      rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
     }
     DesktopUtil.openDir(rootDir + "/mods");
   }
 
-  public static void disableMod(Mod mod) {
+  @SuppressWarnings("all")
+  public void disableMod (Mod mod)
+  {
     String keySuffix = "";
-    if(LauncherApp.selectedServer != null) {
-      keySuffix = LauncherApp.selectedServer.isOfficial() ? "" : "_" + LauncherApp.selectedServer.getSanitizedName();
+    if(_flamingoManager.getSelectedServer() != null) {
+      keySuffix = _flamingoManager.getSelectedServer().isOfficial() ? "" : "_" + _flamingoManager.getSelectedServer().getSanitizedName();
     }
-    String disabledMods = SettingsProperties.getValue("modloader.disabledMods" + keySuffix);
-    SettingsProperties.setValue("modloader.disabledMods" + keySuffix,
+    String disabledMods = _settingsManager.getValue("modloader.disabledMods" + keySuffix);
+    _settingsManager.setValue("modloader.disabledMods" + keySuffix,
         disabledMods.equals("") ? mod.getFileName() : disabledMods + "," + mod.getFileName());
     mod.setEnabled(false);
-    ModLoader.mountRequired = true;
-    ModLoader.rebuildRequired = true;
+    _modManager.mountRequired = true;
+    _modManager.rebuildRequired = true;
   }
 
-  public static void enableMod(Mod mod) {
+  @SuppressWarnings("all")
+  public void enableMod (Mod mod)
+  {
     String keySuffix = "";
-    if(LauncherApp.selectedServer != null) {
-      keySuffix = LauncherApp.selectedServer.isOfficial() ? "" : "_" + LauncherApp.selectedServer.getSanitizedName();
+    if(_flamingoManager.getSelectedServer() != null) {
+      keySuffix = _flamingoManager.getSelectedServer().isOfficial() ? "" : "_" + _flamingoManager.getSelectedServer().getSanitizedName();
     }
-    String disabledMods = SettingsProperties.getValue("modloader.disabledMods" + keySuffix);
+    String disabledMods = _settingsManager.getValue("modloader.disabledMods" + keySuffix);
     if(disabledMods.contains(",")) {
       ArrayList<String> disabledModsList = new ArrayList<>(Arrays.asList(disabledMods.split(",")));
       disabledModsList.remove(mod.getFileName());
@@ -99,74 +131,85 @@ public class ModListEventHandler {
     } else {
       disabledMods = "";
     }
-    SettingsProperties.setValue("modloader.disabledMods" + keySuffix, disabledMods);
+    _settingsManager.setValue("modloader.disabledMods" + keySuffix, disabledMods);
     mod.setEnabled(true);
-    ModLoader.mountRequired = true;
-    ModLoader.rebuildRequired = true;
+    _modManager.mountRequired = true;
+    _modManager.rebuildRequired = true;
   }
 
-  public static void showDirectoriesWarning(boolean show) {
+  public void showDirectoriesWarning (boolean show)
+  {
     if (!show) {
-      ModListGUI.warningNotice.setVisible(false);
+      this.gui.warningNotice.setVisible(false);
       return;
     }
 
     // Show the warning with a slight delay to make sure the GUI can load beforehand.
     Thread showDirectoriesWarningThread = new Thread(() -> {
-      ModListGUI.warningNotice.setVisible(true);
-      ModListGUI.currentWarning = Locale.getValue("error.folders_within_mods_folder");
+      this.gui.warningNotice.setVisible(true);
+      this.gui.currentWarning = _localeManager.getValue("error.folders_within_mods_folder");
     });
     ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
   }
 
-  public static void showIncompatibleCodeModsWarning(boolean show) {
+  public void showIncompatibleCodeModsWarning (boolean show)
+  {
     if (!show) {
-      ModListGUI.warningNotice.setVisible(false);
+      this.gui.warningNotice.setVisible(false);
       return;
     }
 
     // Show the warning with a slight delay to make sure the GUI can load beforehand.
     Thread showDirectoriesWarningThread = new Thread(() -> {
-      ModListGUI.warningNotice.setVisible(true);
-      ModListGUI.currentWarning = Locale.getValue("error.incompatible_code_mods");
+      this.gui.warningNotice.setVisible(true);
+      this.gui.currentWarning = _localeManager.getValue("error.incompatible_code_mods");
     });
     ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
   }
 
-  public static void searchMod() {
-    ModListGUI.updateModList(ModListGUI.searchBox.getText());
+  public void searchMod ()
+  {
+    this.gui.updateModList(this.gui.searchBox.getText());
   }
 
-  public static void selectedServerChanged() {
-    Server selectedServer = LauncherApp.selectedServer;
+  public void selectedServerChanged ()
+  {
+    Server selectedServer = _flamingoManager.getSelectedServer();
 
     if(selectedServer != null) {
-      new Thread(ModLoader::checkInstalled).start();
-      ModListGUI.viewingModsLabel.setText(Locale.getValue("m.viewing_mods", selectedServer.name));
+      new Thread(_modManager::checkInstalled).start();
+      this.gui.viewingModsLabel.setText(_localeManager.getValue("m.viewing_mods", selectedServer.name));
     }
   }
 
-  public static void checkServerSettingsKeys(String serverName) {
-    SettingsProperties.createKeyIfNotExists("modloader.appliedModsHash_" + serverName, "0");
-    SettingsProperties.createKeyIfNotExists("modloader.disabledMods_" + serverName, "");
-    SettingsProperties.createKeyIfNotExists("modloader.lastKnownVersion_" + serverName, "0");
+  public void checkServerSettingsKeys (String serverName)
+  {
+    _settingsManager.createKeyIfNotExists("modloader.appliedModsHash_" + serverName, "0");
+    _settingsManager.createKeyIfNotExists("modloader.disabledMods_" + serverName, "");
+    _settingsManager.createKeyIfNotExists("modloader.lastKnownVersion_" + serverName, "0");
   }
 
-  public static void enableAllModsEvent(ActionEvent event) {
-    for(Mod mod : ModLoader.getModList()) {
+  @SuppressWarnings("unused")
+  public void enableAllModsEvent (ActionEvent event)
+  {
+    for(Mod mod : _modManager.getModList()) {
       enableMod(mod);
     }
     refreshMods(false);
   }
 
-  public static void disableAllModsEvent(ActionEvent event) {
-    for(Mod mod : ModLoader.getModList()) {
+  @SuppressWarnings("unused")
+  public void disableAllModsEvent (ActionEvent event)
+  {
+    for(Mod mod : _modManager.getModList()) {
       disableMod(mod);
     }
     refreshMods(false);
   }
 
-  public static void addModEvent(ActionEvent event) {
+  @SuppressWarnings("unused")
+  public void addModEvent (ActionEvent event)
+  {
     JFileChooser fileChooser = new JFileChooser();
     fileChooser.setDialogTitle("Add mod");
     fileChooser.setApproveButtonText("Add");
@@ -182,22 +225,24 @@ public class ModListEventHandler {
       if(path.endsWith(".zip") || path.endsWith(".jar") || path.endsWith(".modpack")) {
         File file = new File(path);
           try {
-            FileUtils.copyFile(file, new File(LauncherApp.selectedServer.getRootDirectory() + "/mods/" + file.getName()));
+            FileUtils.copyFile(file, new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + file.getName()));
             log.info("Added mod: " + file.getName());
             refreshMods(false);
           } catch (IOException e) {
             log.error(e);
           }
       } else {
-        Dialog.push(Locale.getValue("error.mod_file_format"), Locale.getValue("t.add_mod_error"), JOptionPane.ERROR_MESSAGE);
+        Dialog.push(_localeManager.getValue("error.mod_file_format"), _localeManager.getValue("t.add_mod_error"), JOptionPane.ERROR_MESSAGE);
       }
     }
   }
 
-  public static void removeModEvent(Mod mod) {
-    boolean confirm = Dialog.pushWithConfirm(Locale.getValue("m.destructive_action"), Locale.getValue("b.remove_mod", mod.getDisplayName()), JOptionPane.WARNING_MESSAGE);
+  @SuppressWarnings("all")
+  public void removeModEvent (Mod mod)
+  {
+    boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.destructive_action"), _localeManager.getValue("b.remove_mod", mod.getDisplayName()), JOptionPane.WARNING_MESSAGE);
     if(confirm) {
-      new File(mod.getAbsolutePath()).delete();
+      new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + mod.getFileName()).delete();
       log.info("Removed mod: " + mod);
       refreshMods(false);
     }

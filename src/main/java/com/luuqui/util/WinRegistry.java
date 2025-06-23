@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.prefs.Preferences;
 
-public class WinRegistry {
+public class WinRegistry
+{
   public static final int HKEY_CURRENT_USER = 0x80000001;
   public static final int HKEY_LOCAL_MACHINE = 0x80000002;
   public static final int REG_SUCCESS = 0;
@@ -73,8 +74,7 @@ public class WinRegistry {
     }
   }
 
-  private WinRegistry() {
-  }
+  private WinRegistry () { }
 
   /**
    * Read a value from key and value name
@@ -90,9 +90,10 @@ public class WinRegistry {
    * @throws IllegalAccessException
    * @throws InvocationTargetException
    */
-  public static String readString(int hkey, String key, String valueName, int wow64)
+  public static String readString (int hkey, String key, String valueName, int wow64)
           throws IllegalArgumentException, IllegalAccessException,
-          InvocationTargetException {
+          InvocationTargetException
+  {
     if (hkey == HKEY_LOCAL_MACHINE) {
       return readString(systemRoot, hkey, key, valueName, wow64);
     } else if (hkey == HKEY_CURRENT_USER) {
@@ -115,8 +116,9 @@ public class WinRegistry {
    * @throws IllegalAccessException
    * @throws InvocationTargetException
    */
-  public static Map<String, String> readStringValues(int hkey, String key, int wow64)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  public static Map<String, String> readStringValues (int hkey, String key, int wow64)
+          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     if (hkey == HKEY_LOCAL_MACHINE) {
       return readStringValues(systemRoot, hkey, key, wow64);
     } else if (hkey == HKEY_CURRENT_USER) {
@@ -139,8 +141,9 @@ public class WinRegistry {
    * @throws IllegalAccessException
    * @throws InvocationTargetException
    */
-  public static List<String> readStringSubKeys(int hkey, String key, int wow64)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  public static List<String> readStringSubKeys (int hkey, String key, int wow64)
+          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     if (hkey == HKEY_LOCAL_MACHINE) {
       return readStringSubKeys(systemRoot, hkey, key, wow64);
     } else if (hkey == HKEY_CURRENT_USER) {
@@ -160,8 +163,9 @@ public class WinRegistry {
    * @throws InvocationTargetException
    */
   @SuppressWarnings("deprecation")
-  public static void createKey(int hkey, String key)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  public static void createKey (int hkey, String key)
+          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     int[] ret;
     if (hkey == HKEY_LOCAL_MACHINE) {
       ret = createKey(systemRoot, hkey, key);
@@ -191,9 +195,9 @@ public class WinRegistry {
    * @throws IllegalAccessException
    * @throws InvocationTargetException
    */
-  public static void writeStringValue
-  (int hkey, String key, String valueName, String value, int wow64)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  public static void writeStringValue (int hkey, String key, String valueName, String value, int wow64)
+      throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     if (hkey == HKEY_LOCAL_MACHINE) {
       writeStringValue(systemRoot, hkey, key, valueName, value, wow64);
     } else if (hkey == HKEY_CURRENT_USER) {
@@ -212,8 +216,9 @@ public class WinRegistry {
    * @throws IllegalAccessException
    * @throws InvocationTargetException
    */
-  public static void deleteKey(int hkey, String key)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  public static void deleteKey (int hkey, String key)
+      throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     int rc = -1;
     if (hkey == HKEY_LOCAL_MACHINE) {
       rc = deleteKey(systemRoot, hkey, key);
@@ -238,8 +243,9 @@ public class WinRegistry {
    * @throws IllegalAccessException
    * @throws InvocationTargetException
    */
-  public static void deleteValue(int hkey, String key, String value, int wow64)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  public static void deleteValue (int hkey, String key, String value, int wow64)
+      throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     int rc = -1;
     if (hkey == HKEY_LOCAL_MACHINE) {
       rc = deleteValue(systemRoot, hkey, key, value, wow64);
@@ -253,8 +259,9 @@ public class WinRegistry {
 
   //========================================================================
   @SuppressWarnings("deprecation")
-  private static int deleteValue(Preferences root, int hkey, String key, String value, int wow64)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  private static int deleteValue (Preferences root, int hkey, String key, String value, int wow64)
+      throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     int[] handles = (int[]) regOpenKey.invoke(root, new Object[]{
             new Integer(hkey), toCstr(key), new Integer(KEY_ALL_ACCESS | wow64)
     });
@@ -270,8 +277,9 @@ public class WinRegistry {
 
   //========================================================================
   @SuppressWarnings("deprecation")
-  private static int deleteKey(Preferences root, int hkey, String key)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  private static int deleteKey (Preferences root, int hkey, String key)
+      throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     int rc = ((Integer) regDeleteKey.invoke(root, new Object[]{
             new Integer(hkey), toCstr(key)
     })).intValue();
@@ -280,8 +288,9 @@ public class WinRegistry {
 
   //========================================================================
   @SuppressWarnings("deprecation")
-  private static String readString(Preferences root, int hkey, String key, String value, int wow64)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  private static String readString (Preferences root, int hkey, String key, String value, int wow64)
+      throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     int[] handles = (int[]) regOpenKey.invoke(root, new Object[]{
             new Integer(hkey), toCstr(key), new Integer(KEY_READ | wow64)
     });
@@ -297,8 +306,9 @@ public class WinRegistry {
 
   //========================================================================
   @SuppressWarnings("deprecation")
-  private static Map<String, String> readStringValues(Preferences root, int hkey, String key, int wow64)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  private static Map<String, String> readStringValues (Preferences root, int hkey, String key, int wow64)
+      throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     HashMap<String, String> results = new HashMap<String, String>();
     int[] handles = (int[]) regOpenKey.invoke(root, new Object[]{
             new Integer(hkey), toCstr(key), new Integer(KEY_READ | wow64)
@@ -325,8 +335,9 @@ public class WinRegistry {
 
   //========================================================================
   @SuppressWarnings("deprecation")
-  private static List<String> readStringSubKeys(Preferences root, int hkey, String key, int wow64)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  private static List<String> readStringSubKeys (Preferences root, int hkey, String key, int wow64)
+      throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     List<String> results = new ArrayList<String>();
     int[] handles = (int[]) regOpenKey.invoke(root, new Object[]{
             new Integer(hkey), toCstr(key), new Integer(KEY_READ | wow64)
@@ -352,8 +363,9 @@ public class WinRegistry {
 
   //========================================================================
   @SuppressWarnings("deprecation")
-  private static int[] createKey(Preferences root, int hkey, String key)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  private static int[] createKey (Preferences root, int hkey, String key)
+      throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     return (int[]) regCreateKeyEx.invoke(root, new Object[]{
             new Integer(hkey), toCstr(key)
     });
@@ -361,8 +373,9 @@ public class WinRegistry {
 
   //========================================================================
   @SuppressWarnings("deprecation")
-  private static void writeStringValue(Preferences root, int hkey, String key, String valueName, String value, int wow64)
-          throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+  private static void writeStringValue (Preferences root, int hkey, String key, String valueName, String value, int wow64)
+      throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+  {
     int[] handles = (int[]) regOpenKey.invoke(root, new Object[]{
             new Integer(hkey), toCstr(key), new Integer(KEY_ALL_ACCESS | wow64)
     });
@@ -372,7 +385,8 @@ public class WinRegistry {
 
   //========================================================================
   // utility
-  private static byte[] toCstr(String str) {
+  private static byte[] toCstr (String str)
+  {
     byte[] result = new byte[str.length() + 1];
 
     for (int i = 0; i < str.length(); i++) {

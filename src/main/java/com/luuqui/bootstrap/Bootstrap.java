@@ -34,7 +34,9 @@ import java.util.zip.ZipFile;
  *
  * @author Leego Yih
  */
-public class Bootstrap {
+@SuppressWarnings("all")
+public class Bootstrap
+{
   private static final String USER_DIR = System.getProperty("user.dir");
   private static final String CODE_MODS_DIR = USER_DIR + "/mods/";
   private static final String MANIFEST_PATH = "META-INF/MANIFEST.MF";
@@ -57,12 +59,14 @@ public class Bootstrap {
     }
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main (String[] args) throws Exception
+  {
     loadJarMods();
     com.threerings.projectx.client.ProjectXApp.main(args);
   }
 
-  static void loadJarMods() {
+  static void loadJarMods ()
+  {
     // Read disabled jar mods from KnightLauncher.properties
     Set<String> disabledJarMods = new HashSet<>();
     String disabledJarModsString = configs.getProperty("modloader.disabledMods");
@@ -98,7 +102,8 @@ public class Bootstrap {
     loadClasses(jars);
   }
 
-  static void loadJars(List<File> jars) {
+  static void loadJars (List<File> jars)
+  {
     // TODO Compatible with more versions of the JDK
     Method method;
     try {
@@ -122,7 +127,8 @@ public class Bootstrap {
     method.setAccessible(accessible);
   }
 
-  static void loadClasses(List<File> jars) {
+  static void loadClasses (List<File> jars)
+  {
     Map<String, Class<?>> classes = new LinkedHashMap<>();
     for (File jar : jars) {
       String manifest = readZip(jar, MANIFEST_PATH);
@@ -160,7 +166,8 @@ public class Bootstrap {
     }
   }
 
-  static void mountMods(Map<String, Class<?>> classes) {
+  static void mountMods (Map<String, Class<?>> classes)
+  {
     for (Map.Entry<String, Class<?>> entry : classes.entrySet()) {
       String modName = entry.getKey();
       Class<?> clazz = entry.getValue();
@@ -179,7 +186,8 @@ public class Bootstrap {
     }
   }
 
-  static String readZip(File file, String entry) {
+  static String readZip (File file, String entry)
+  {
     StringBuilder sb = new StringBuilder();
     try {
       ZipFile zip = new ZipFile(file);
@@ -199,12 +207,14 @@ public class Bootstrap {
     }
   }
 
-  static class LogFormatter extends Formatter {
+  static class LogFormatter extends Formatter
+  {
     private static final String format = "%1$tY/%1$tm/%1$td/%1$tH:%1$tM:%1$tS %2$s[%4$s]\t%5$s%6$s%n";
 
     private final Date dat = new Date();
 
-    public synchronized String format(LogRecord record) {
+    public synchronized String format (LogRecord record)
+    {
       dat.setTime(record.getMillis());
       String source;
       if (record.getSourceClassName() != null) {

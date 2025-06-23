@@ -1,12 +1,11 @@
 package com.luuqui.launcher;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.google.inject.Inject;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordPresenceClient;
-import com.luuqui.launcher.editor.EditorsGUI;
-import com.luuqui.launcher.mod.ModListGUI;
+import com.luuqui.launcher.flamingo.FlamingoManager;
 import com.luuqui.launcher.setting.Settings;
-import com.luuqui.launcher.setting.SettingsGUI;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -22,41 +21,49 @@ import static com.luuqui.launcher.Log.log;
 
 public class LauncherGUI extends BaseGUI {
 
-  private final LauncherApp app;
-  public static JFrame launcherGUIFrame;
+  @Inject public LauncherEventHandler eventHandler;
 
-  // Dynamic text
-  public static String currentWarning = "";
-  public static String latestRelease = "";
-  public static String latestChangelog = "";
+  @Inject protected LauncherContext _launcherCtx;
+  @Inject protected LocaleManager _localeManager;
+  @Inject protected FlamingoManager _flamingoManager;
+  @Inject protected DiscordPresenceClient _discordPresenceClient;
+  @Inject protected KeyboardController _keyboardController;
 
-  public static boolean displayAnimBanner = false;
+  public String currentWarning = "";
+  public String latestRelease = "";
+  public String latestChangelog = "";
 
-  public LauncherGUI(LauncherApp app) {
+  public boolean displayingAnimBanner = false;
+
+  @Inject
+  public LauncherGUI ()
+  {
     super();
-    this.app = app;
+  }
+
+  public void init ()
+  {
     try {
-      initialize();
+      compose();
     } catch (UnsatisfiedLinkError e) {
       // Some Windows installations don't allow you to write to the default temp dir and throw this error instead
       // when trying to set up any UI. Let's divert the temp directory to a custom one.
       log.error(e);
       SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
-      initialize();
+      compose();
     }
   }
 
-  @SuppressWarnings("static-access")
   public void switchVisibility() {
     this.launcherGUIFrame.setVisible(!this.launcherGUIFrame.isVisible());
   }
 
   /** @wbp.parser.entryPoint */
-  private void initialize() {
-
+  private void compose ()
+  {
     launcherGUIFrame = new JFrame();
     launcherGUIFrame.setVisible(false);
-    launcherGUIFrame.setTitle(Locale.getValue("t.main", LauncherGlobals.LAUNCHER_VERSION));
+    launcherGUIFrame.setTitle(_localeManager.getValue("t.main", LauncherGlobals.LAUNCHER_VERSION));
     launcherGUIFrame.setResizable(false);
     launcherGUIFrame.setBounds(100, 100, 1100, 550);
     launcherGUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -150,19 +157,19 @@ public class LauncherGUI extends BaseGUI {
     serverInfoButton.setFocusable(false);
     serverInfoButton.setFocusPainted(false);
     serverInfoButton.setForeground(Color.WHITE);
-    serverInfoButton.setToolTipText(Locale.getValue("m.server_info"));
-    serverInfoButton.addActionListener(l -> LauncherEventHandler.displaySelectedServerInfo());
+    serverInfoButton.setToolTipText(_localeManager.getValue("m.server_info"));
+    serverInfoButton.addActionListener(l -> this.eventHandler.displaySelectedServerInfo());
     sidePane.add(serverInfoButton);
 
     Icon playerCountIcon = IconFontSwing.buildIcon(FontAwesome.USERS, 14, CustomColors.INTERFACE_DEFAULT);
-    playerCountLabel = new JLabel(Locale.getValue("m.players_online_load"));
+    playerCountLabel = new JLabel(_localeManager.getValue("m.players_online_load"));
     playerCountLabel.setFont(Fonts.fontReg);
     playerCountLabel.setIcon(playerCountIcon);
     playerCountLabel.setBounds(28, 210, 200, 18);
     sidePane.add(playerCountLabel);
 
-    String playerCountTooltipTitle = Locale.getValue("m.players_online");
-    String playerCountTooltipText = Locale.getValue("m.players_online_text");
+    String playerCountTooltipTitle = _localeManager.getValue("m.players_online");
+    String playerCountTooltipText = _localeManager.getValue("m.players_online_text");
     Icon playerCountTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 12, Color.WHITE);
     playerCountTooltipButton = new JButton();
     playerCountTooltipButton.setIcon(playerCountTooltipButtonIcon);
@@ -180,7 +187,7 @@ public class LauncherGUI extends BaseGUI {
     playerCountTooltipButton.setVisible(false);
 
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
-    settingsButton = new JButton(Locale.getValue("b.settings"));
+    settingsButton = new JButton(_localeManager.getValue("b.settings"));
     settingsButton.setIcon(settingsIcon);
     settingsButton.setBounds(28, 255, 125, 35);
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -190,13 +197,13 @@ public class LauncherGUI extends BaseGUI {
     settingsButton.setBorderPainted(false);
     settingsButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
     settingsButton.setForeground(Color.WHITE);
-    settingsButton.setToolTipText(Locale.getValue("b.settings"));
+    settingsButton.setToolTipText(_localeManager.getValue("b.settings"));
     settingsButton.addActionListener(action -> {
       mainPane.setVisible(false);
       layeredModsPane.setVisible(false);
       layeredEditorsPane.setVisible(false);
 
-      layeredSettingsPane = SettingsGUI.tabbedPane;
+      layeredSettingsPane = _launcherCtx.settingsGUI.tabbedPane;
       layeredSettingsPane.setBounds(300, 75, 800, 550);
       launcherGUIFrame.add(layeredSettingsPane);
       layeredSettingsPane.setVisible(true);
@@ -220,7 +227,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(settingsButton);
 
     Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, 16, ColorUtil.getForegroundColor());
-    modButton = new JButton(Locale.getValue("b.mods"));
+    modButton = new JButton(_localeManager.getValue("b.mods"));
     modButton.setIcon(modsIcon);
     modButton.setBounds(28, 295, 125, 35);
     modButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -231,13 +238,13 @@ public class LauncherGUI extends BaseGUI {
     modButton.setEnabled(true);
     modButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
     modButton.setForeground(Color.WHITE);
-    modButton.setToolTipText(Locale.getValue("b.mods"));
+    modButton.setToolTipText(_localeManager.getValue("b.mods"));
     modButton.addActionListener(action -> {
       mainPane.setVisible(false);
       layeredSettingsPane.setVisible(false);
       layeredEditorsPane.setVisible(false);
 
-      layeredModsPane = ModListGUI.modListPanel;
+      layeredModsPane = _launcherCtx.modListGUI.modListPanel;
       layeredModsPane.setBounds(300, 75, 800, 550);
       launcherGUIFrame.add(layeredModsPane);
       layeredModsPane.setVisible(true);
@@ -261,7 +268,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(modButton);
 
     Icon editorsIcon = IconFontSwing.buildIcon(FontAwesome.PENCIL, 16, ColorUtil.getForegroundColor());
-    editorsButton = new JButton(Locale.getValue("b.editors"));
+    editorsButton = new JButton(_localeManager.getValue("b.editors"));
     editorsButton.setIcon(editorsIcon);
     editorsButton.setBounds(28, 335, 125, 35);
     editorsButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -272,13 +279,13 @@ public class LauncherGUI extends BaseGUI {
     editorsButton.setEnabled(true);
     editorsButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
     editorsButton.setForeground(Color.WHITE);
-    editorsButton.setToolTipText(Locale.getValue("b.editors"));
+    editorsButton.setToolTipText(_localeManager.getValue("b.editors"));
     editorsButton.addActionListener(action -> {
       mainPane.setVisible(false);
       layeredSettingsPane.setVisible(false);
       layeredModsPane.setVisible(false);
 
-      layeredEditorsPane = EditorsGUI.editorsPanel;
+      layeredEditorsPane = _launcherCtx.editorsGUI.editorsPanel;
       layeredEditorsPane.setBounds(300, 75, 800, 550);
       launcherGUIFrame.add(layeredEditorsPane);
       layeredEditorsPane.setVisible(true);
@@ -302,7 +309,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(editorsButton);
 
     Icon auctionIcon = IconFontSwing.buildIcon(FontAwesome.SHOPPING_CART, 16, ColorUtil.getForegroundColor());
-    auctionButton = new JButton(Locale.getValue("b.auction"));
+    auctionButton = new JButton(_localeManager.getValue("b.auction"));
     auctionButton.setIcon(auctionIcon);
     auctionButton.setBounds(28, 375, 125, 35);
     auctionButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -313,13 +320,13 @@ public class LauncherGUI extends BaseGUI {
     auctionButton.setEnabled(true);
     auctionButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
     auctionButton.setForeground(Color.WHITE);
-    auctionButton.setToolTipText(Locale.getValue("b.auction"));
-    auctionButton.addActionListener(LauncherEventHandler::openAuctionsWebpage);
+    auctionButton.setToolTipText(_localeManager.getValue("b.auction"));
+    auctionButton.addActionListener(this.eventHandler::openAuctionsWebpage);
     sidePane.add(auctionButton);
 
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
     discordButton.setBounds(65, 440, 36, 36);
-    discordButton.setToolTipText(Locale.getValue("b.discord"));
+    discordButton.setToolTipText(_localeManager.getValue("b.discord"));
     discordButton.setFocusPainted(false);
     discordButton.setFocusable(false);
     discordButton.setBorderPainted(false);
@@ -331,7 +338,7 @@ public class LauncherGUI extends BaseGUI {
     Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 17, Color.WHITE);
     JButton bugButton = new JButton(bugIcon);
     bugButton.setBounds(107, 440, 36, 36);
-    bugButton.setToolTipText(Locale.getValue("b.bug_report"));
+    bugButton.setToolTipText(_localeManager.getValue("b.bug_report"));
     bugButton.setFocusPainted(false);
     bugButton.setFocusable(false);
     bugButton.setBorderPainted(false);
@@ -343,7 +350,7 @@ public class LauncherGUI extends BaseGUI {
     Icon donateIcon = IconFontSwing.buildIcon(FontAwesome.USD, 17, Color.WHITE);
     JButton donateButton = new JButton(donateIcon);
     donateButton.setBounds(149, 440, 36, 36);
-    donateButton.setToolTipText(Locale.getValue("b.donate"));
+    donateButton.setToolTipText(_localeManager.getValue("b.donate"));
     donateButton.setFocusPainted(false);
     donateButton.setFocusable(false);
     donateButton.setBorderPainted(false);
@@ -374,13 +381,13 @@ public class LauncherGUI extends BaseGUI {
     bannerTimer.setVisible(false);
     mainPane.add(bannerTimer);
 
-    bannerTitle = new JLabel(Locale.getValue("m.banner_title_default"));
+    bannerTitle = new JLabel(_localeManager.getValue("m.banner_title_default"));
     bannerTitle.setBounds(35, -60, 700, 340);
     bannerTitle.setFont(Fonts.fontMedGiant);
     bannerTitle.setForeground(Color.WHITE);
     mainPane.add(bannerTitle);
 
-    bannerSubtitle1 = new JLabel(Locale.getValue("m.banner_subtitle_default"));
+    bannerSubtitle1 = new JLabel(_localeManager.getValue("m.banner_subtitle_default"));
     bannerSubtitle1.setBounds(40, -15, 700, 340);
     bannerSubtitle1.setFont(Fonts.fontMedBig);
     bannerSubtitle1.setForeground(Color.WHITE);
@@ -392,7 +399,7 @@ public class LauncherGUI extends BaseGUI {
     bannerSubtitle2.setForeground(Color.WHITE);
     mainPane.add(bannerSubtitle2);
 
-    bannerLinkButton = new JButton(Locale.getValue("b.learn_more"));
+    bannerLinkButton = new JButton(_localeManager.getValue("b.learn_more"));
     bannerLinkButton.setBounds(40, 195, 110, 25);
     bannerLinkButton.setFont(Fonts.fontMed);
     bannerLinkButton.setForeground(Color.WHITE);
@@ -404,7 +411,7 @@ public class LauncherGUI extends BaseGUI {
     bannerLinkButton.setVisible(false);
     mainPane.add(bannerLinkButton);
 
-    launchButton = new JButton(Locale.getValue("b.play_now"));
+    launchButton = new JButton(_localeManager.getValue("b.play_now"));
     launchButton.setBounds(572, 423, 200, 66);
     launchButton.setFont(Fonts.fontMedBig);
     launchButton.setFocusPainted(false);
@@ -412,23 +419,23 @@ public class LauncherGUI extends BaseGUI {
     launchButton.setBackground(CustomColors.LAUNCH);
     launchButton.setBorderPainted(false);
     launchButton.setForeground(Color.WHITE);
-    launchButton.setToolTipText(Locale.getValue("b.play_now"));
+    launchButton.setToolTipText(_localeManager.getValue("b.play_now"));
     mainPane.add(launchButton);
     launchButton.addActionListener(action -> {
-      if (KeyboardController.isShiftPressed() || KeyboardController.isAltPressed()) {
+      if (_keyboardController.isShiftPressed() || _keyboardController.isAltPressed()) {
         // TODO: Consolidate alt launching inside LauncherEventHandler::launchGameEvent for both.
-        if(LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
-          LauncherEventHandler.launchGameAltEvent();
+        if(_flamingoManager.getSelectedServer().isOfficial()) {
+          this.eventHandler.launchGameAltEvent();
         } else {
-          LauncherEventHandler.launchGameEvent(true);
+          this.eventHandler.launchGameEvent(true);
         }
       } else {
-        LauncherEventHandler.launchGameEvent(false);
+        this.eventHandler.launchGameEvent(false);
       }
     });
 
-    String launchTooltipTitle = Locale.getValue("m.alt_mode");
-    String launchTooltipText = Locale.getValue("m.alt_mode_text");
+    String launchTooltipTitle = _localeManager.getValue("m.alt_mode");
+    String launchTooltipText = _localeManager.getValue("m.alt_mode_text");
     Icon launchTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 16, Color.WHITE);
     JButton launchTooltipButton = new JButton();
     launchTooltipButton.setIcon(launchTooltipButtonIcon);
@@ -446,7 +453,7 @@ public class LauncherGUI extends BaseGUI {
     mainPane.add(launchTooltipButton);
 
     Icon altModeIcon = IconFontSwing.buildIcon(FontAwesome.USER_PLUS, 16, Color.WHITE);
-    altModeEnabledPill = new JLabel(Locale.getValue("m.alt_mode_enabled"));
+    altModeEnabledPill = new JLabel(_localeManager.getValue("m.alt_mode_enabled"));
     altModeEnabledPill.setIcon(altModeIcon);
     altModeEnabledPill.setBounds(572, 399, 200, 20);
     altModeEnabledPill.setFont(Fonts.fontReg);
@@ -487,7 +494,7 @@ public class LauncherGUI extends BaseGUI {
     Icon changelogIcon = IconFontSwing.buildIcon(FontAwesome.BOOK, 18, Color.WHITE);
     changelogButton = new JButton(changelogIcon);
     changelogButton.setBounds(736, 26, 36, 36);
-    changelogButton.setToolTipText(Locale.getValue("m.changelog"));
+    changelogButton.setToolTipText(_localeManager.getValue("m.changelog"));
     changelogButton.setFont(Fonts.fontMed);
     changelogButton.setFocusPainted(false);
     changelogButton.setFocusable(false);
@@ -496,12 +503,12 @@ public class LauncherGUI extends BaseGUI {
     changelogButton.setForeground(Color.WHITE);
     changelogButton.setVisible(true);
     mainPane.add(changelogButton);
-    changelogButton.addActionListener(l -> LauncherEventHandler.showLatestChangelog());
+    changelogButton.addActionListener(l -> this.eventHandler.showLatestChangelog());
 
     Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
     warningNotice = new JButton(warningNoticeIcon);
     warningNotice.setBounds(691, 26, 36, 36);
-    warningNotice.setToolTipText(Locale.getValue("m.warning_notice"));
+    warningNotice.setToolTipText(_localeManager.getValue("m.warning_notice"));
     warningNotice.setFocusPainted(false);
     warningNotice.setFocusable(false);
     warningNotice.setBorderPainted(false);
@@ -510,14 +517,14 @@ public class LauncherGUI extends BaseGUI {
     warningNotice.setFont(Fonts.fontMed);
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
-      Dialog.push(currentWarning, Locale.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
+      Dialog.push(currentWarning, _localeManager.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
     });
     mainPane.add(warningNotice);
 
     Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 16, Color.WHITE);
     updateButton = new JButton(updateIcon);
     updateButton.setBounds(691, 26, 36, 36);
-    updateButton.setToolTipText(Locale.getValue("b.update"));
+    updateButton.setToolTipText(_localeManager.getValue("b.update"));
     updateButton.setFont(Fonts.fontMed);
     updateButton.setFocusPainted(false);
     updateButton.setFocusable(false);
@@ -526,13 +533,13 @@ public class LauncherGUI extends BaseGUI {
     updateButton.setForeground(Color.WHITE);
     updateButton.setVisible(false);
     mainPane.add(updateButton);
-    updateButton.addActionListener(l -> LauncherEventHandler.updateLauncher());
+    updateButton.addActionListener(l -> this.eventHandler.updateLauncher());
 
     Icon playAnimatedBannersIconEnabled = IconFontSwing.buildIcon(FontAwesome.EYE, 18, Color.WHITE);
     Icon playAnimatedBannersIconDisabled = IconFontSwing.buildIcon(FontAwesome.EYE_SLASH, 18, Color.WHITE);
     playAnimatedBannersButton = new JButton(Settings.playAnimatedBanners ? playAnimatedBannersIconEnabled : playAnimatedBannersIconDisabled);
     playAnimatedBannersButton.setBounds(736, 71, 36, 36);
-    playAnimatedBannersButton.setToolTipText(Locale.getValue(Settings.playAnimatedBanners ? "m.animated_banners_disable" : "m.animated_banners_enable"));
+    playAnimatedBannersButton.setToolTipText(_localeManager.getValue(Settings.playAnimatedBanners ? "m.animated_banners_disable" : "m.animated_banners_enable"));
     playAnimatedBannersButton.setFont(Fonts.fontMed);
     playAnimatedBannersButton.setFocusPainted(false);
     playAnimatedBannersButton.setFocusable(false);
@@ -541,7 +548,7 @@ public class LauncherGUI extends BaseGUI {
     playAnimatedBannersButton.setForeground(Color.WHITE);
     playAnimatedBannersButton.setVisible(false);
     mainPane.add(playAnimatedBannersButton);
-    playAnimatedBannersButton.addActionListener(l -> LauncherEventHandler.switchBannerAnimations());
+    playAnimatedBannersButton.addActionListener(l -> this.eventHandler.switchBannerAnimations());
 
     JPanel titleBar = new JPanel();
     titleBar.setBounds(0, 0, launcherGUIFrame.getWidth(), 35);
@@ -603,7 +610,7 @@ public class LauncherGUI extends BaseGUI {
     Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 17, ColorUtil.getForegroundColor());
     JButton closeButton = new JButton(closeIcon);
     closeButton.setBounds(launcherGUIFrame.getWidth() - BUTTON_WIDTH, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
-    closeButton.setToolTipText(Locale.getValue("b.close"));
+    closeButton.setToolTipText(_localeManager.getValue("b.close"));
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
     closeButton.setBackground(null);
@@ -611,7 +618,7 @@ public class LauncherGUI extends BaseGUI {
     closeButton.setFont(Fonts.fontMed);
     titleBar.add(closeButton);
     closeButton.addActionListener(e -> {
-      DiscordPresenceClient.getInstance().stop();
+      _discordPresenceClient.stop();
       System.exit(0);
     });
     closeButton.addMouseListener(new MouseListener() {
@@ -629,7 +636,7 @@ public class LauncherGUI extends BaseGUI {
     Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 12, ColorUtil.getForegroundColor());
     JButton minimizeButton = new JButton(minimizeIcon);
     minimizeButton.setBounds(launcherGUIFrame.getWidth() - BUTTON_WIDTH * 2, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7);
-    minimizeButton.setToolTipText(Locale.getValue("b.minimize"));
+    minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
     minimizeButton.setBackground(null);
@@ -643,14 +650,15 @@ public class LauncherGUI extends BaseGUI {
     launcherGUIFrame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent windowEvent) {
-        DiscordPresenceClient.getInstance().stop();
+        _discordPresenceClient.stop();
       }
     });
 
   }
 
-  public static void showWarning(String message) {
-    // we're also showing an available update, lets move the warning notice
+  public void showWarning(String message)
+  {
+    // we're also showing an available update, let's move the warning notice
     // slightly to the left, so they don't overlap.
     if(updateButton.isVisible()) {
       warningNotice.setBounds(warningNotice.getX() - 45, 26, 35, 35);
@@ -660,19 +668,21 @@ public class LauncherGUI extends BaseGUI {
     currentWarning = message;
   }
 
-  public static BufferedImage processImageForBanner(BufferedImage image, double intensity) {
+  public BufferedImage processImageForBanner (BufferedImage image, double intensity)
+  {
     image = ImageUtil.resizeImage(image, 800, 550);
     image = ImageUtil.fadeEdges(image, intensity);
     return image;
   }
 
-  public static void processAnimatedImageForBanner(byte[] gifData, double intensity) {
+  public void processAnimatedImageForBanner (byte[] gifData, double intensity)
+  {
     try {
       final GifDecoder.GifImage gif = GifDecoder.read(gifData);
       final int frameCount = gif.getFrameCount();
       final java.util.List<BufferedImage> proccesedImages = new ArrayList<>();
 
-      // process every single frame of the gif.
+      // process every single frame of the GIF.
       for (int i = 0; i < frameCount; i++) {
         BufferedImage frame = gif.getFrame(i);
         frame = ImageUtil.resizeImage(frame, 800, 550);
@@ -680,12 +690,12 @@ public class LauncherGUI extends BaseGUI {
         proccesedImages.add(frame);
       }
 
-      displayAnimBanner = true;
+      displayingAnimBanner = true;
       new Thread(() -> {
-        while(displayAnimBanner) {
+        while(displayingAnimBanner) {
           for (int i = 0; i < proccesedImages.size(); i++) {
             // we might need to end prematurely to avoid concurrent modifications.
-            if(!displayAnimBanner) break;
+            if(!displayingAnimBanner) break;
 
             try {
               Thread.sleep(gif.getDelay(i) * 10);
@@ -710,54 +720,58 @@ public class LauncherGUI extends BaseGUI {
     }
   }
 
-  protected static void specialKeyPressed() {
+  protected void specialKeyPressed ()
+  {
     launchButton.setBackground(CustomColors.LAUNCH_ALT);
     launchButton.updateUI();
     altModeEnabledPill.setVisible(true);
   }
 
-  protected static void specialKeyReleased() {
+  protected void specialKeyReleased ()
+  {
     launchButton.setBackground(CustomColors.LAUNCH);
     launchButton.updateUI();
     altModeEnabledPill.setVisible(false);
   }
 
+  public JFrame launcherGUIFrame;
+
   // Shared
-  public static JTabbedPane layeredSettingsPane = new JTabbedPane();
-  public static JPanel layeredModsPane = new JPanel();
-  public static JPanel layeredEditorsPane = new JPanel();
-  public static JButton layeredReturnButton;
+  public JTabbedPane layeredSettingsPane = new JTabbedPane();
+  public JPanel layeredModsPane = new JPanel();
+  public JPanel layeredEditorsPane = new JPanel();
+  public JButton layeredReturnButton;
 
   // Server switcher pane
-  public static JPanel serverSwitcherPane;
-  public static JScrollPane serverSwitcherPaneScrollBar;
+  public JPanel serverSwitcherPane;
+  public JScrollPane serverSwitcherPaneScrollBar;
 
   // Side pane
-  public static JButton settingsButton;
-  public static JButton modButton;
-  public static JButton editorsButton;
-  public static JButton auctionButton;
-  public static JButton playerCountTooltipButton;
-  public static JLabel playerCountLabel;
-  public static JLabel selectedServerLabel;
-  public static JButton serverInfoButton;
+  public JButton settingsButton;
+  public JButton modButton;
+  public JButton editorsButton;
+  public JButton auctionButton;
+  public JButton playerCountTooltipButton;
+  public JLabel playerCountLabel;
+  public JLabel selectedServerLabel;
+  public JButton serverInfoButton;
 
   // Main pane
-  public static JPanel mainPane;
-  public static BufferedImage banner = null;
-  public static JLabel bannerTimer;
-  public static JLabel bannerTitle;
-  public static JLabel bannerSubtitle1;
-  public static JLabel bannerSubtitle2;
-  public static JButton bannerLinkButton;
-  public static JButton launchButton;
-  public static JButton updateButton;
-  public static JButton changelogButton;
-  public static JButton playAnimatedBannersButton;
-  public static JLabel launchBackground;
-  public static JLabel launchState;
-  public static JProgressBar launchProgressBar = new JProgressBar();
-  public static JButton warningNotice;
-  public static JLabel altModeEnabledPill;
+  public JPanel mainPane;
+  public BufferedImage banner = null;
+  public JLabel bannerTimer;
+  public JLabel bannerTitle;
+  public JLabel bannerSubtitle1;
+  public JLabel bannerSubtitle2;
+  public JButton bannerLinkButton;
+  public JButton launchButton;
+  public JButton updateButton;
+  public JButton changelogButton;
+  public JButton playAnimatedBannersButton;
+  public JLabel launchBackground;
+  public JLabel launchState;
+  public JProgressBar launchProgressBar = new JProgressBar();
+  public JButton warningNotice;
+  public JLabel altModeEnabledPill;
 
 }

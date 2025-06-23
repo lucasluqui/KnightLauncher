@@ -1,9 +1,9 @@
 package com.luuqui.launcher;
 
+import com.google.inject.Inject;
 import com.luuqui.dialog.Dialog;
-import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.launcher.setting.Settings;
-import com.luuqui.launcher.setting.SettingsProperties;
+import com.luuqui.launcher.setting.SettingsManager;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -20,43 +20,51 @@ import java.util.Map;
 
 import static com.luuqui.launcher.Log.log;
 
-public class JVMPatcher extends BaseGUI {
+public class JVMPatcher extends BaseGUI
+{
+  private String path;
+  private boolean legacy;
+  private final Map<String, String> availableJVMs = new HashMap<String, String>();
 
-  public JFrame jvmPatcherFrame;
+  private int downloadAttempts = 0;
 
-  private final LauncherApp _app;
-  private final String _path;
-  private final boolean _legacy;
-  private int _downloadAttempts = 0;
-  private Map<String, String> _availableJVM = new HashMap<String, String>();
+  @Inject protected LocaleManager _localeManager;
+  @Inject protected SettingsManager _settingsManager;
+  @Inject protected ModuleManager _moduleManager;
 
-  public JVMPatcher(LauncherApp app, String path, boolean legacy) {
+  public JVMPatcher ()
+  {
     super();
-    this._app = app;
-    this._path = path;
-    this._legacy = legacy;
-    setAvailableJVMs();
-    initialize();
   }
 
-  @SuppressWarnings("static-access")
-  public void switchVisibility() {
+  public void init (String path, boolean legacy)
+  {
+    this.path = path;
+    this.legacy = legacy;
+    setAvailableJVMs();
+    compose();
+  }
+
+  public void switchVisibility ()
+  {
     this.jvmPatcherFrame.setVisible(!this.jvmPatcherFrame.isVisible());
   }
 
-  private void setAvailableJVMs() {
-    if(_legacy) {
-      _availableJVM.put("Java 8 (8u202)", "8u202");
-      _availableJVM.put("Java 8 (8u251)", "8u251");
+  private void setAvailableJVMs ()
+  {
+    if(legacy) {
+      this.availableJVMs.put("Java 8 (8u202)", "8u202");
+      this.availableJVMs.put("Java 8 (8u251)", "8u251");
     } else {
-      _availableJVM.put("Java 11 (OpenJDK 11.0.26)", "ojdk-11.0.26");
+      this.availableJVMs.put("Java 11 (OpenJDK 11.0.26)", "ojdk-11.0.26");
     }
   }
 
-  private void initialize() {
+  private void compose ()
+  {
     jvmPatcherFrame = new JFrame();
     jvmPatcherFrame.setVisible(false);
-    jvmPatcherFrame.setTitle(Locale.getValue("t.jvm_patcher"));
+    jvmPatcherFrame.setTitle(_localeManager.getValue("t.jvm_patcher"));
     jvmPatcherFrame.setBounds(100, 100, 500, 250);
     jvmPatcherFrame.setResizable(false);
     jvmPatcherFrame.setUndecorated(true);
@@ -89,7 +97,7 @@ public class JVMPatcher extends BaseGUI {
     jvmComboBox.setFont(Fonts.fontReg);
     jvmPatcherFrame.add(jvmComboBox);
 
-    for(String key : _availableJVM.keySet()) {
+    for(String key : this.availableJVMs.keySet()) {
       jvmComboBox.addItem(key);
     }
     jvmComboBox.setSelectedIndex(0);
@@ -174,7 +182,7 @@ public class JVMPatcher extends BaseGUI {
     Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 17, ColorUtil.getForegroundColor());
     closeButton = new JButton(closeIcon);
     closeButton.setBounds(jvmPatcherFrame.getWidth() - BUTTON_WIDTH, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
-    closeButton.setToolTipText(Locale.getValue("b.close"));
+    closeButton.setToolTipText(_localeManager.getValue("b.close"));
     closeButton.setFocusPainted(false);
     closeButton.setFocusable(false);
     closeButton.setBackground(null);
@@ -202,7 +210,7 @@ public class JVMPatcher extends BaseGUI {
     Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 12, ColorUtil.getForegroundColor());
     JButton minimizeButton = new JButton(minimizeIcon);
     minimizeButton.setBounds(jvmPatcherFrame.getWidth() - BUTTON_WIDTH * 2, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7);
-    minimizeButton.setToolTipText(Locale.getValue("b.minimize"));
+    minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));
     minimizeButton.setFocusPainted(false);
     minimizeButton.setFocusable(false);
     minimizeButton.setBackground(null);
@@ -217,21 +225,23 @@ public class JVMPatcher extends BaseGUI {
 
   }
 
-  private void initPatcher() {
+  private void initPatcher ()
+  {
     Thread patchThread = new Thread(this::patch);
     patchThread.start();
   }
 
-  private void patch() {
+  private void patch ()
+  {
     // Don't allow closing the window once patching starts.
     closeButton.setEnabled(false);
 
     jvmPatcherProgressBar.setMaximum(4);
     jvmPatcherProgressBar.setValue(1);
-    jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_download"));
+    jvmPatcherState.setText(_localeManager.getValue("m.jvm_patcher_download"));
     
     this.downloadPackagedJVM();
-    if(_downloadAttempts > 3) {
+    if(this.downloadAttempts > 3) {
       String downloadErrMsg = "The Java VM download couldn't be initiated after 3 attempts." +
               "\nKnight Launcher will boot without patching but be aware game performance might not be the best." +
               "\nYou can manually restart this patcher heading to the 'Game' tab within launcher's Settings.";
@@ -241,61 +251,63 @@ public class JVMPatcher extends BaseGUI {
     }
 
     jvmPatcherProgressBar.setValue(2);
-    jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_delete"));
+    jvmPatcherState.setText(_localeManager.getValue("m.jvm_patcher_delete"));
     try {
-      if (!FileUtil.fileExists(this._path + File.separator + "java_vm_unpatched")) {
-        FileUtils.moveDirectory(new File(this._path, "java_vm"), new File(this._path, "java_vm_unpatched"));
+      if (!FileUtil.fileExists(this.path + File.separator + "java_vm_unpatched")) {
+        FileUtils.moveDirectory(new File(this.path, "java_vm"), new File(this.path, "java_vm_unpatched"));
       }
     } catch (IOException e) {
       log.error(e);
     }
 
     jvmPatcherProgressBar.setValue(3);
-    jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_extract"));
-    Compressor.unzip(this._path + File.separator + "jvm_pack.zip", this._path, false);
-    new File(this._path, "jvm_pack.zip").delete();
+    jvmPatcherState.setText(_localeManager.getValue("m.jvm_patcher_extract"));
+    Compressor.unzip(this.path + File.separator + "jvm_pack.zip", this.path, false);
+    new File(this.path, "jvm_pack.zip").delete();
 
     jvmPatcherProgressBar.setValue(4);
-    jvmPatcherState.setText(Locale.getValue("m.jvm_patcher_finish"));
+    jvmPatcherState.setText(_localeManager.getValue("m.jvm_patcher_finish"));
 
     closeButton.setEnabled(true);
     finish();
   }
 
-  private void downloadPackagedJVM() {
-    String selectedJVM = _availableJVM.get(jvmComboBox.getSelectedItem().toString());
+  private void downloadPackagedJVM ()
+  {
+    String selectedJVM = this.availableJVMs.get(jvmComboBox.getSelectedItem().toString());
     String downloadUrl = LauncherGlobals.URL_JAVA_REDIST.replace("{version}", selectedJVM);
 
     boolean downloadCompleted = false;
-    while(_downloadAttempts <= 3 && !downloadCompleted) {
-      _downloadAttempts++;
-      log.info("Downloading Java VM", "url", downloadUrl, "attempts", _downloadAttempts);
+    while(this.downloadAttempts <= 3 && !downloadCompleted) {
+      this.downloadAttempts++;
+      log.info("Downloading Java VM", "url", downloadUrl, "attempts", this.downloadAttempts);
       try {
         FileUtils.copyURLToFile(
                 new URL(downloadUrl),
-                new File(this._path, "jvm_pack.zip"),
+                new File(this.path, "jvm_pack.zip"),
                 0,
                 0
         );
         downloadCompleted = true;
       } catch (IOException e) {
-        // Just keep retrying.
+        // Keep retrying.
         log.error(e);
       }
     }
   }
 
-  private void finish() {
-    SettingsProperties.setValue("launcher.jvm_patched", "true"); // Delete this when the dreaded day comes.
-    ModuleLoader.loadJarCommandLine();
-    DiscordPresenceClient.getInstance().stop();
-    ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar"}, true);
+  private void finish ()
+  {
+    _settingsManager.setValue("launcher.jvm_patched", "true"); // Delete this when the dreaded day comes.
+    _moduleManager.loadJarCommandLine();
+    //DiscordPresenceClient.getInstance().stop();
+    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar" }, true);
     jvmPatcherFrame.dispose();
     System.exit(1);
   }
 
+  public JFrame jvmPatcherFrame;
   private JButton closeButton;
-
   private JLabel headerLabel;
   private JLabel subHeaderLabel;
   private JButton buttonAccept;

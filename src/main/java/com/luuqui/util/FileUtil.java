@@ -30,13 +30,16 @@ import java.util.zip.ZipFile;
 
 import static com.luuqui.util.Log.log;
 
-public class FileUtil {
+public class FileUtil
+{
 
-  public static void createDir(String path) {
+  public static void createDir (String path)
+  {
     new File(path).mkdirs();
   }
 
-  public static boolean createFile(String path) {
+  public static boolean createFile (String path)
+  {
     File file = new File(path);
     try {
       return file.createNewFile();
@@ -46,12 +49,14 @@ public class FileUtil {
     return false;
   }
 
-  public static boolean deleteFile(String path) {
+  public static boolean deleteFile (String path)
+  {
     File file = new File(path);
     return file.delete();
   }
 
-  public static boolean recreateFile(String path) {
+  public static boolean recreateFile (String path)
+  {
     File file = new File(path);
     file.delete();
     try {
@@ -62,12 +67,13 @@ public class FileUtil {
     return false;
   }
 
-  public static void rename(File old, File dest) {
+  public static void rename (File old, File dest)
+  {
     old.renameTo(dest);
   }
 
-  public static List<String> fileNamesInDirectory(String dir) {
-
+  public static List<String> fileNamesInDirectory (String dir)
+  {
     File folder = new File(dir);
     File[] fileList = folder.listFiles();
     List<String> fileNames = new ArrayList<String>();
@@ -81,8 +87,8 @@ public class FileUtil {
     return fileNames;
   }
 
-  public static List<String> fileNamesInDirectory(String dir, String ext) {
-
+  public static List<String> fileNamesInDirectory (String dir, String ext)
+  {
     File folder = new File(dir);
     File[] fileList = folder.listFiles();
     List<String> fileNames = new ArrayList<String>();
@@ -96,8 +102,8 @@ public class FileUtil {
     return fileNames;
   }
 
-  public static List<File> filesInDirectory(String dir, String ext) {
-
+  public static List<File> filesInDirectory (String dir, String ext)
+  {
     File folder = new File(dir);
     File[] fileList = folder.listFiles();
     List<File> files = new ArrayList<File>();
@@ -111,8 +117,8 @@ public class FileUtil {
     return files;
   }
 
-  public static List<File> filesAndDirectoriesInDirectory(String dir) {
-
+  public static List<File> filesAndDirectoriesInDirectory (String dir)
+  {
     File folder = new File(dir);
     File[] fileList = folder.listFiles();
     List<File> files = new ArrayList<File>();
@@ -124,17 +130,21 @@ public class FileUtil {
     return files;
   }
 
-  public static boolean fileExists(String path) {
+  public static boolean fileExists (String path)
+  {
     File file = new File(path);
     return file.exists();
   }
 
-  public static String readFile(String path) throws IOException {
+  public static String readFile (String path)
+      throws IOException
+  {
     byte[] encoded = Files.readAllBytes(Paths.get(path));
     return new String(encoded, StandardCharsets.UTF_8);
   }
 
-  public static void writeFile(String path, String content) {
+  public static void writeFile (String path, String content)
+  {
     try (Writer writer = new BufferedWriter(new OutputStreamWriter(
             new FileOutputStream(path), StandardCharsets.UTF_8))) {
       writer.write(content);
@@ -146,21 +156,16 @@ public class FileUtil {
   /*
    * Method to convert InputStream to String
    */
-  public static String convertInputStreamToString(InputStream is) {
-
+  public static String convertInputStreamToString (InputStream is)
+  {
     BufferedReader br = null;
     StringBuilder sbContent = new StringBuilder();
 
     try {
-      /*
-       * Create BufferedReader from InputStreamReader
-       */
+      // Create BufferedReader from InputStreamReader
       br = new BufferedReader(new InputStreamReader(is));
 
-      /*
-       * read line by line and append content to
-       * StringBuilder
-       */
+      // read line by line and append content to StringBuilder
       String strLine = null;
       boolean isFirstLine = true;
 
@@ -171,10 +176,7 @@ public class FileUtil {
           sbContent.append("\n").append(strLine);
         }
 
-        /*
-         * Flag to make sure we don't append new line
-         * before the first line.
-         */
+        // Flag to make sure we don't append new line before the first line.
         isFirstLine = false;
       }
     } catch (IOException e) {
@@ -187,11 +189,13 @@ public class FileUtil {
       }
     }
 
-    //convert StringBuilder to String and return
+    // convert StringBuilder to String and return
     return sbContent.toString();
   }
 
-  public static void extractFileWithinJar(String pathInside, String pathOutside) throws IOException {
+  public static void extractFileWithinJar (String pathInside, String pathOutside)
+      throws IOException
+  {
     URL filePath = FileUtil.class.getResource(pathInside);
     File destPath = new File(pathOutside);
     FileUtils.copyURLToFile(filePath, destPath);
@@ -203,8 +207,9 @@ public class FileUtil {
    * @param cleanExistingDirs if true, all files in all directories contained in {@code jar} will
    *                          be deleted prior to unpacking the jar.
    */
-  public static void unpackJar(ZipFile jar, File target, boolean cleanExistingDirs)
-          throws IOException {
+  public static void unpackJar (ZipFile jar, File target, boolean cleanExistingDirs)
+      throws IOException
+  {
     if (cleanExistingDirs) {
       Enumeration<? extends ZipEntry> entries = jar.entries();
       while (entries.hasMoreElements()) {
@@ -258,7 +263,9 @@ public class FileUtil {
    * If {@code packedJar} has a {@code .gz} extension, it will be gunzipped first.
    */
   @SuppressWarnings({"removal", "deprecation"})
-  public static void unpackPacked200Jar(File packedJar, File target) throws IOException {
+  public static void unpackPacked200Jar(File packedJar, File target)
+      throws IOException
+  {
     try (InputStream packJarIn = new FileInputStream(packedJar);
          JarOutputStream jarOut = new JarOutputStream(new FileOutputStream(target))) {
       boolean gz = (packedJar.getName().endsWith(".gz") ||
@@ -270,7 +277,8 @@ public class FileUtil {
     }
   }
 
-  public static void copyFileToClipboard(List<File> files) {
+  public static void copyFileToClipboard (List<File> files)
+  {
     Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
       new Transferable() {
         @Override
@@ -291,7 +299,8 @@ public class FileUtil {
     );
   }
 
-  public static void purgeDirectory(File dir, String[] exceptions) {
+  public static void purgeDirectory (File dir, String[] exceptions)
+  {
     for (File file : dir.listFiles()) {
       boolean skip = false;
       for (String except : exceptions) {

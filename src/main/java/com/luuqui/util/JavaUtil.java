@@ -1,11 +1,11 @@
 package com.luuqui.util;
 
-import com.luuqui.launcher.LauncherApp;
+import com.google.inject.Inject;
 import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.launcher.flamingo.FlamingoManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,9 +18,12 @@ import java.util.Properties;
 
 import static com.luuqui.util.Log.log;
 
-public class JavaUtil {
+public class JavaUtil
+{
+  @Inject private static FlamingoManager _flamingoManager;
 
-  public static String getJVMVersionOutput(String path) {
+  public static String getJVMVersionOutput (String path)
+  {
     String output;
     if (SystemUtil.isWindows()) {
       output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", path, "-version" })[1];
@@ -57,7 +60,8 @@ public class JavaUtil {
     return version;
   }
 
-  public static String getGameJVMData() {
+  public static String getGameJVMData ()
+  {
     String path = getGameJVMDirPath() + "/release";
     String version = "";
     String osArch = "";
@@ -90,7 +94,8 @@ public class JavaUtil {
     return (version + ", " + osArch).replace("\"", "");
   }
 
-  public static String getReadableGameJVMData() {
+  public static String getReadableGameJVMData ()
+  {
     String rawJavaVMData = getGameJVMData();
 
     if(rawJavaVMData.contains("Unknown")) {
@@ -119,8 +124,8 @@ public class JavaUtil {
     }
 
     if(javaMajorVersion.equalsIgnoreCase("unknown")
-      || javaMinorVersion.equalsIgnoreCase("unknown")
-      || javaArch.equalsIgnoreCase("unknown")) {
+        || javaMinorVersion.equalsIgnoreCase("unknown")
+        || javaArch.equalsIgnoreCase("unknown")) {
       return "Unknown, probably 32-bit";
     }
 
@@ -131,18 +136,19 @@ public class JavaUtil {
     return "Java " + javaMajorVersion + " (" + javaMinorVersion + "), " + javaArch;
   }
 
-  public static String getGameJVMDirPath() {
+  public static String getGameJVMDirPath ()
+  {
     String startingDirPath = LauncherGlobals.USER_DIR;
 
-    if(LauncherApp.selectedServer != null) {
-      if(!LauncherApp.selectedServer.name.equalsIgnoreCase("Official")) {
-        startingDirPath += File.separator + "thirdparty" + File.separator + LauncherApp.selectedServer.getSanitizedName();
+    if(_flamingoManager != null && _flamingoManager.getSelectedServer() != null) {
+      if(!_flamingoManager.getSelectedServer().isOfficial()) {
+        startingDirPath += File.separator + "thirdparty" + File.separator + _flamingoManager.getSelectedServer().getSanitizedName();
       }
     }
 
     File javaVMDir = new File(startingDirPath, "/java_vm");
     if (javaVMDir.exists() && javaVMDir.isDirectory() && SystemUtil.isWindows()) {
-     return javaVMDir.getAbsolutePath();
+      return javaVMDir.getAbsolutePath();
     }
     File javaDir = new File(startingDirPath, "/java");
     if (javaDir.exists() && javaDir.isDirectory()) {
@@ -151,7 +157,8 @@ public class JavaUtil {
     return "";
   }
 
-  public static String getGameJVMExePath() {
+  public static String getGameJVMExePath ()
+  {
     String javaDir = getGameJVMDirPath();
     if (FileUtil.fileExists(javaDir + "/bin/java.exe")) {
       return javaDir + "/bin/java.exe";
@@ -163,11 +170,13 @@ public class JavaUtil {
     return "java";
   }
 
-  public static String getJavaVMCommandLineSeparator() {
+  public static String getJavaVMCommandLineSeparator ()
+  {
     return SystemUtil.isWindows() ? ";" : ":";
   }
 
-  public static synchronized void loadLibrary(File jar) {
+  public static synchronized void loadLibrary (File jar)
+  {
     try {
       // We are using reflection here to circumvent encapsulation; addURL is not public
       URLClassLoader loader = (URLClassLoader) ClassLoader.getSystemClassLoader();
@@ -191,7 +200,8 @@ public class JavaUtil {
     }
   }
 
-  public static void addToLibraryPath(String... path) {
+  public static void addToLibraryPath (String... path)
+  {
     String cmdLineSeparator = getJavaVMCommandLineSeparator();
 
     for(String p : path) {

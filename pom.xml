@@ -11,6 +11,18 @@
   <dependencies>
 
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>33.4.8-jre</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>7.0.0</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.formdev</groupId>
       <artifactId>flatlaf</artifactId>
       <version>3.6</version>
@@ -19,8 +31,7 @@
     <dependency>
       <groupId>com.github.vatbub</groupId>
       <artifactId>mslinks</artifactId>
-      <!-- do not update, requires newer jdk -->
-      <version>1.0.5</version>
+      <version>1.0.5.1</version> <!-- do not update further, requires jdk higher than 8 -->
     </dependency>
 
     <dependency>
@@ -32,7 +43,7 @@
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20240303</version>
+      <version>20250517</version>
     </dependency>
 
     <dependency>
@@ -60,12 +71,35 @@
     </dependency>
 
     <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.19.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.jhlabs</groupId>
+      <artifactId>filters</artifactId>
+      <version>2.0.235-1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.13.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- local dependencies, found in /lib/ -->
+
+    <!--
+    <dependency>
       <groupId>org.apache</groupId>
       <artifactId>commons</artifactId>
       <version>2.6</version>
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/commons-io-2.6.jar</systemPath>
     </dependency>
+    -->
 
     <dependency>
       <groupId>net.arikia.dev</groupId>
@@ -75,6 +109,7 @@
       <systemPath>${project.basedir}/lib/discord-rpc.jar</systemPath>
     </dependency>
 
+    <!--
     <dependency>
       <groupId>com.jhlabs</groupId>
       <artifactId>filters</artifactId>
@@ -82,6 +117,7 @@
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/Filters.jar</systemPath>
     </dependency>
+    -->
 
     <dependency>
       <groupId>net.sf</groupId>
@@ -91,19 +127,19 @@
       <systemPath>${project.basedir}/lib/image4j-0.7.2.jar</systemPath>
     </dependency>
 
+    <!--
+      For this local dependency, you must copy 'projectx-pcode.jar' from the game's code/ directory into the
+      project's lib/ directory, as it would be illegal for us to bundle proprietary software.
+
+      The use of this dependency is for 'com.luuqui.bootstrap.Bootstrap' to take over and load in code mods
+      when it is required to.
+    -->
     <dependency>
       <groupId>pcode</groupId>
       <artifactId>pcode</artifactId>
       <version>1.0.0</version>
       <scope>system</scope>
-      <systemPath>F:/Program Files/Spiral Knights/code/projectx-pcode.jar</systemPath>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>5.10.3</version>
-      <scope>test</scope>
+      <systemPath>${project.basedir}/lib/projectx-pcode.jar</systemPath>
     </dependency>
 
   </dependencies>

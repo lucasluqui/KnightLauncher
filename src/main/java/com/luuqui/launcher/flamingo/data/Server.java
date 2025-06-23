@@ -8,7 +8,8 @@ import java.io.IOException;
 
 import static com.luuqui.launcher.flamingo.Log.log;
 
-public class Server {
+public class Server
+{
 
   public String name;
 
@@ -50,34 +51,40 @@ public class Server {
 
   public int enabled;
 
-  public Server() {}
+  public Server () {}
 
-  public Server(String name) {
+  public Server (String name)
+  {
     this.name = name;
     this.beta = 0;
     this.enabled = 1;
   }
 
-  public String getSanitizedName() {
+  public String getSanitizedName ()
+  {
     if(this.name.equalsIgnoreCase("Official")) return "";
     return this.name.toLowerCase().replace(" ", "-")
       .replace("(", "").replace(")", "");
   }
 
-  public String getRootDirectory() {
+  public String getRootDirectory ()
+  {
     if(this.name.equalsIgnoreCase("Official")) return LauncherGlobals.USER_DIR;
     return LauncherGlobals.USER_DIR + "/thirdparty/" + this.getSanitizedName() + "/";
   }
 
-  public String getModsDirectory() {
+  public String getModsDirectory ()
+  {
     return this.getRootDirectory() + "/mods/";
   }
 
-  public boolean isOfficial() {
+  public boolean isOfficial ()
+  {
     return this.name.equalsIgnoreCase("Official");
   }
 
-  private String getLocalVersion() {
+  private String getLocalVersion ()
+  {
     try {
       return FileUtil.readFile(this.getRootDirectory() + File.separator + "version.txt");
     } catch (IOException e) {
@@ -86,12 +93,40 @@ public class Server {
     return null;
   }
 
-  public boolean isInstalled() {
+  @SuppressWarnings("all")
+  public boolean isInstalled ()
+  {
     return FileUtil.fileExists(this.getRootDirectory() + File.separator + "version.txt");
   }
 
-  public boolean isOutdated() {
+  public boolean isOutdated ()
+  {
     return !this.version.equalsIgnoreCase(getLocalVersion());
   }
 
+  @Override
+  public String toString() {
+    return "[Server " +
+        "name='" + name + '\'' +
+        ", description='" + description + '\'' +
+        ", managedBy='" + managedBy + '\'' +
+        ", beta=" + beta +
+        ", version='" + version + '\'' +
+        ", deployMethod=" + deployMethod +
+        ", deployUrl='" + deployUrl + '\'' +
+        ", playerCountUrl='" + playerCountUrl + '\'' +
+        ", siteUrl='" + siteUrl + '\'' +
+        ", communityUrl='" + communityUrl + '\'' +
+        ", sourceCodeUrl='" + sourceCodeUrl + '\'' +
+        ", announceType='" + announceType + '\'' +
+        ", announceBanner='" + announceBanner + '\'' +
+        ", announceContent='" + announceContent + '\'' +
+        ", announceBannerLink='" + announceBannerLink + '\'' +
+        ", announceBannerStartsAt=" + announceBannerStartsAt +
+        ", announceBannerEndsAt=" + announceBannerEndsAt +
+        ", fromCode='" + fromCode + '\'' +
+        ", serverIcon='" + serverIcon + '\'' +
+        ", enabled=" + enabled +
+        ']';
+  }
 }

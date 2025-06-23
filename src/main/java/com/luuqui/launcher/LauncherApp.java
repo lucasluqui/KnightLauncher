@@ -1,17 +1,17 @@
 package com.luuqui.launcher;
 
+import com.google.inject.*;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.launcher.editor.EditorsGUI;
-import com.luuqui.launcher.flamingo.Flamingo;
+import com.luuqui.launcher.flamingo.FlamingoManager;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.flamingo.data.Status;
 import com.luuqui.launcher.mod.ModListGUI;
-import com.luuqui.launcher.mod.ModLoader;
+import com.luuqui.launcher.mod.ModManager;
 import com.luuqui.launcher.setting.Settings;
-import com.luuqui.launcher.setting.SettingsEventHandler;
 import com.luuqui.launcher.setting.SettingsGUI;
-import com.luuqui.launcher.setting.SettingsProperties;
+import com.luuqui.launcher.setting.SettingsManager;
 import com.luuqui.util.*;
 import net.sf.image4j.codec.ico.ICOEncoder;
 import org.apache.commons.io.FileUtils;
@@ -26,163 +26,133 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.luuqui.launcher.Log.log;
 
-public class LauncherApp {
+@Singleton
+public class LauncherApp
+{
+  @Inject protected LauncherContext _launcherCtx;
+  @Inject protected SettingsManager _settingsManager;
+  @Inject protected LocaleManager _localeManager;
+  @Inject protected ModManager _modManager;
+  @Inject protected FlamingoManager _flamingoManager;
+  @Inject protected DiscordPresenceClient _discordPresenceClient;
+  @Inject protected ModuleManager _moduleManager;
+  @Inject protected CacheManager _cacheManager;
+  @Inject protected KeyboardController _keyboardController;
 
-  private String[] _args = null;
+  private final String[] args;
+  private final Injector injector;
 
-  protected static LauncherGUI lgui;
-  protected static SettingsGUI sgui;
-  protected static ModListGUI mgui;
-  protected static EditorsGUI egui;
-  protected static JVMPatcher jvmPatcher;
-  protected static Updater updater;
-
-  public static boolean flamingoOnline = false;
-
-  public static List<Server> serverList = new ArrayList<>();
-  public static Server selectedServer = null;
-
-  public static void main(String[] args) {
-
-    LauncherApp app = new LauncherApp();
-    app._args = args;
-
-    if (app.requiresJVMPatch()) {
-      jvmPatcher = app.composeJVMPatcher(app);
-    } else if (app.requiresUpdate()) {
-      updater = app.composeUpdater(app);
-    } else {
-      lgui = app.composeLauncherGUI(app);
-      sgui = app.composeSettingsGUI(app);
-      mgui = app.composeModListGUI(app);
-      egui = app.composeEditorsGUI(app);
-
-      ThreadingUtil.executeWithDelay(lgui::switchVisibility, 200);
-
-      app.postInitialization();
-    }
+  public LauncherApp ()
+  {
+    this.args = null;
+    this.injector = null;
   }
 
-  public LauncherApp () {
+  public LauncherApp (String[] args, Injector injector)
+  {
+    this.args = args;
+    this.injector = injector;
+  }
+
+  public static void main (String[] args)
+  {
+    Injector injector = Guice.createInjector(new LauncherModule());
+    LauncherApp app = new LauncherApp(args, injector);
+    injector.injectMembers(app);
+
+    app.init();
+  }
+
+  @SuppressWarnings("ConstantConditions")
+  private void init ()
+  {
+    if (LauncherGlobals.LAUNCHER_VERSION.contains("dev")) {
+      log.debug("Diverting logs to console");
+    }
+
     setupFileLogging();
     logVMInfo();
     logGameVMInfo();
+    setupHTTPSProtocol();
     checkTempDir();
-    SettingsProperties.setup();
+    checkDirectories();
+
+    initManagers();
+
     Stylesheet.setup();
     Fonts.setup();
-    Locale.setup();
     checkStartLocation();
-    setupHTTPSProtocol();
-    DiscordPresenceClient.getInstance().start();
-    KeyboardController.start();
-    checkDirectories();
-    Cache.setup();
 
     if (SystemUtil.isWindows() || SystemUtil.isUnix()) checkShortcut();
+
+    initInterfaces();
   }
 
-  private LauncherGUI composeLauncherGUI(LauncherApp app) {
-    try {
-      EventQueue.invokeAndWait(() -> {
-        try {
-          lgui = new LauncherGUI(app);
-        } catch (Exception e) {
-          log.error(e);
-        }
-      });
-    } catch (Exception e) {
-      log.error(e);
-    }
-    return lgui;
-  }
+  private void initManagers ()
+  {
+    _launcherCtx.init();
+    _settingsManager.init();
+    _localeManager.init();
+    _modManager.init();
+    _flamingoManager.init();
+    _moduleManager.init();
+    _cacheManager.init();
+    _keyboardController.init();
 
-  private SettingsGUI composeSettingsGUI(LauncherApp app) {
-    try {
-      EventQueue.invokeAndWait(() -> {
-        try {
-          sgui = new SettingsGUI(app);
-        } catch (Exception e) {
-          log.error(e);
-        }
-      });
-    } catch (Exception e) {
-      log.error(e);
-    }
-    return sgui;
-  }
-
-  private ModListGUI composeModListGUI(LauncherApp app) {
-    try {
-      EventQueue.invokeAndWait(() -> {
-        try {
-          mgui = new ModListGUI(app);
-        } catch (Exception e) {
-          log.error(e);
-        }
-      });
-    } catch (Exception e) {
-      log.error(e);
-    }
-    return mgui;
-  }
-
-  private EditorsGUI composeEditorsGUI(LauncherApp app) {
-    try {
-      EventQueue.invokeAndWait(() -> {
-        try {
-          egui = new EditorsGUI(app);
-        } catch (Exception e) {
-          log.error(e);
-        }
-      });
-    } catch (Exception e) {
-      log.error(e);
-    }
-    return egui;
-  }
-
-  private JVMPatcher composeJVMPatcher(LauncherApp app) {
-    String path;
-    boolean legacy;
-
-    if(_args.length > 0) {
-      // If there's any arguments it means this is a forced JVM patch and there's extra info we should parse.
-      // Set the path dir to wherever we're being forced to patch to, and set legacy to only allow legacy JVMs.
-      // This is primarily used for patching when a third party server was selected.
-      path = _args[1];
-      legacy = Boolean.parseBoolean(_args[2]);
+    if (SystemUtil.isARM() || SystemUtil.isMac()) {
+      _discordPresenceClient.init("0", true);
     } else {
-      // Organic JVM patch, set default values.
-      path = LauncherGlobals.USER_DIR;
-      //legacy = false;
-      legacy = true; // Temporarily set Official to use legacy JVMs too
+      _discordPresenceClient.init(LauncherGlobals.RPC_CLIENT_ID, false);
     }
-
-      try {
-      EventQueue.invokeAndWait(() -> {
-        try {
-          jvmPatcher = new JVMPatcher(app, path, legacy);
-        } catch (Exception e) {
-          log.error(e);
-        }
-      });
-    } catch (Exception e) {
-      log.error(e);
-    }
-    return jvmPatcher;
   }
 
-  private Updater composeUpdater(LauncherApp app) {
+  private void postInit ()
+  {
+    _moduleManager.loadModules();
+
+    checkGetdown();
+
+    if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
+      _modManager.extractSafeguard();
+    }
+
+    _launcherCtx.launcherGUI.eventHandler.updateServerList(null);
+
+    loadOnlineAssets();
+
+    new Thread(_modManager::checkInstalled).start();
+
+    _discordPresenceClient.setDetails(_localeManager.getValue("presence.launch_ready"));
+  }
+
+  private void initInterfaces ()
+  {
+    if (this.requiresJVMPatch()) {
+      this.initJVMPatcher();
+    } else if (this.requiresUpdate()) {
+      this.initUpdater();
+    } else {
+      this.initLauncherGUI();
+      this.initSettingsGUI();
+      this.initModListGUI();
+      this.initEditorsGUI();
+
+      ThreadingUtil.executeWithDelay(_launcherCtx.launcherGUI::switchVisibility, 200);
+
+      this.postInit();
+    }
+  }
+
+  private void initLauncherGUI ()
+  {
     try {
       EventQueue.invokeAndWait(() -> {
         try {
-          updater = new Updater(app);
+          _launcherCtx.launcherGUI = injector.getInstance(LauncherGUI.class);
+          _launcherCtx.launcherGUI.init();
         } catch (Exception e) {
           log.error(e);
         }
@@ -190,10 +160,106 @@ public class LauncherApp {
     } catch (Exception e) {
       log.error(e);
     }
-    return updater;
   }
 
-  private void checkDirectories() {
+  private void initSettingsGUI ()
+  {
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          _launcherCtx.settingsGUI = injector.getInstance(SettingsGUI.class);
+          _launcherCtx.settingsGUI.init();
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
+  }
+
+  private void initModListGUI ()
+  {
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          _launcherCtx.modListGUI = injector.getInstance(ModListGUI.class);
+          _launcherCtx.modListGUI.init();
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
+  }
+
+  private void initEditorsGUI ()
+  {
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          _launcherCtx.editorsGUI = injector.getInstance(EditorsGUI.class);
+          _launcherCtx.editorsGUI.init();
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
+  }
+
+  private void initJVMPatcher ()
+  {
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          _launcherCtx.jvmPatcher = injector.getInstance(JVMPatcher.class);
+
+          final String path;
+          final boolean legacy;
+
+          if (args.length > 0) {
+            // If there are any arguments, it means this is a forced JVM patch and there's extra info we should parse.
+            // Set the path dir to wherever we're being forced to patch to, and set legacy to only allow legacy JVMs.
+            // This is primarily used for patching when a third party server was selected.
+            path = args[1];
+            legacy = Boolean.parseBoolean(args[2]);
+          } else {
+            // Organic JVM patch, set default values.
+            path = LauncherGlobals.USER_DIR;
+            //legacy = false;
+            legacy = true; // Temporarily set Official to use legacy JVMs too
+          }
+          _launcherCtx.jvmPatcher.init(path, legacy);
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
+  }
+
+  private void initUpdater ()
+  {
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          _launcherCtx.updater = injector.getInstance(Updater.class);
+          _launcherCtx.updater.init();
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
+  }
+
+  private void checkDirectories ()
+  {
     // Stores /rsrc (.zip) mods.
     FileUtil.createDir("mods");
 
@@ -203,15 +269,15 @@ public class LauncherApp {
     // Miscellaneous image assets for the launcher to use.
     FileUtil.createDir("KnightLauncher/images/");
 
-    // External modules necessary for extra functionality (eg. RPC)
+    // External modules necessary for extra functionality (e.g., RPC)
     FileUtil.createDir("KnightLauncher/modules/");
 
-    // Check if the deprecated "code-mods" folder exists, in that case start migrating.
+    // Check if the deprecated "code-mods" folder exists, in that case, start migrating.
     if(FileUtil.fileExists("code-mods")) migrateLegacyCodeModsFolder();
-
   }
 
-  private void migrateLegacyCodeModsFolder() {
+  private void migrateLegacyCodeModsFolder ()
+  {
     File oldCodeModsFolder = new File("code-mods");
     File[] oldCodeModsFolderFiles = oldCodeModsFolder.listFiles();
     if(oldCodeModsFolderFiles == null) {
@@ -229,11 +295,13 @@ public class LauncherApp {
   }
 
   // Checking if we're being run inside the game's directory, "getdown-pro.jar" should always be present if so.
-  private void checkStartLocation() {
+  private void checkStartLocation ()
+  {
     if (!FileUtil.fileExists("./getdown-pro.jar")) {
-      String pathWarning = Locale.getValue("error.start_location");
+      String pathWarning = _localeManager.getValue("error.start_location");
       if (SystemUtil.isWindows()) {
-        pathWarning += Locale.getValue("error.start_location_steam_path", SteamUtil.getGamePathWindows());
+        String steamGamePath = SteamUtil.getGamePathWindows();
+        if (steamGamePath != null) pathWarning += _localeManager.getValue("error.start_location_steam_path", steamGamePath);
       }
       log.warning(pathWarning);
       Dialog.push(pathWarning, JOptionPane.WARNING_MESSAGE);
@@ -242,7 +310,8 @@ public class LauncherApp {
   }
 
   // Create a shortcut to the application if there's none.
-  private void checkShortcut() {
+  private void checkShortcut ()
+  {
     if (Settings.createShortcut
             && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME)
             && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME + ".desktop")) {
@@ -266,7 +335,8 @@ public class LauncherApp {
     }
   }
 
-  private void makeShellLink() {
+  private void makeShellLink ()
+  {
     DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
       "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
       LauncherGlobals.USER_DIR,
@@ -276,7 +346,8 @@ public class LauncherApp {
     );
   }
 
-  private void makeDesktopFile() {
+  private void makeDesktopFile ()
+  {
     File desktopFile = new File(DesktopUtil.getPathToDesktop(), LauncherGlobals.LAUNCHER_NAME + ".desktop");
     try {
       BufferedWriter out = new BufferedWriter(new FileWriter(desktopFile));
@@ -296,13 +367,15 @@ public class LauncherApp {
     }
   }
 
-  private void setupHTTPSProtocol() {
+  private void setupHTTPSProtocol ()
+  {
     System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
     System.setProperty("http.agent", "Mozilla/5.0");
     System.setProperty("https.agent", "Mozilla/5.0");
   }
 
-  private void setupFileLogging() {
+  private void setupFileLogging ()
+  {
     File logFile = new File(LauncherGlobals.USER_DIR + File.separator + "knightlauncher.log");
     File oldLogFile = new File(LauncherGlobals.USER_DIR + File.separator + "old-knightlauncher.log");
 
@@ -327,7 +400,8 @@ public class LauncherApp {
     log.info("Knight Launcher started. Running version: " + LauncherGlobals.LAUNCHER_VERSION);
   }
 
-  private void logVMInfo() {
+  private void logVMInfo ()
+  {
     log.info("------------ VM Info ------------");
     log.info("OS Name: " + System.getProperty("os.name"));
     log.info("OS Arch: " + System.getProperty("os.arch"));
@@ -340,7 +414,8 @@ public class LauncherApp {
     log.info("---------------------------------");
   }
 
-  private void logGameVMInfo() {
+  private void logGameVMInfo ()
+  {
     log.info("--------- Game VM Info ----------");
     log.info("Directory: " + JavaUtil.getGameJVMDirPath());
     log.info("Executable: " + JavaUtil.getGameJVMExePath());
@@ -350,24 +425,23 @@ public class LauncherApp {
     log.info("---------------------------------");
   }
 
-  /* Uncomment this when the dreaded day comes around.
+  // Uncomment this when the dreaded day comes around.
 
-  private boolean requiresJVMPatch() {
-    return _args.length > 0 && _args[0].equals("forceJVMPatch");
-  }
+  //private boolean requiresJVMPatch() {
+  //  return _args.length > 0 && _args[0].equals("forceJVMPatch");
+  //}
 
-  */
-
-  private boolean requiresJVMPatch() {
-    // First of all see if we're being forced to patch.
-    if(_args.length > 0 && _args[0].equals("forceJVMPatch")) {
+  private boolean requiresJVMPatch ()
+  {
+    // First see if we're being forced to patch.
+    if(this.args.length > 0 && this.args[0].equals("forceJVMPatch")) {
       return true;
     }
 
     // You need a 64-bit system to begin with.
     if(!SystemUtil.is64Bit()) return false;
 
-    // Currently Java VM patching is only supported on Windows systems and Linux installs through Steam.
+    // Currently, Java VM patching is only supported on Windows systems and Linux installs through Steam.
     if(!SystemUtil.isWindows() && !(SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam"))) return false;
 
     // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by Knight Launcher.
@@ -375,55 +449,44 @@ public class LauncherApp {
 
     if(( JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 && !javaVMVersion.contains("1.7") ) || Settings.jvmPatched) {
       Settings.jvmPatched = true;
-      SettingsProperties.setValue("launcher.jvm_patched", "true");
+      _settingsManager.setValue("launcher.jvm_patched", "true");
       return false;
     }
 
     return true;
   }
 
-  private boolean requiresUpdate() {
-    return _args.length > 0 && _args[0].equals("update");
+  private boolean requiresUpdate ()
+  {
+    return this.args.length > 0 && this.args[0].equals("update");
   }
 
-  private void postInitialization() {
-    new Thread(ModuleLoader::loadModules).start();
-    if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
-      ModLoader.extractSafeguard();
-    }
-
-    LauncherEventHandler.updateServerList(null);
-
-    loadOnlineAssets();
-    new Thread(ModLoader::checkInstalled).start();
-    DiscordPresenceClient.getInstance().setDetails(Locale.getValue("presence.launch_ready"));
-  }
-
-  private void loadOnlineAssets() {
+  private void loadOnlineAssets ()
+  {
     new Thread(this::checkVersion).start();
 
     new Thread(() -> {
 
-      Status flamingoStatus = Flamingo.getStatus();
-      if(flamingoStatus.version != null) LauncherApp.flamingoOnline = true;
-      LauncherEventHandler.updateServerList(Flamingo.getServerList());
-      SettingsEventHandler.updateAboutTab(flamingoStatus);
-      SettingsEventHandler.updateActiveBetaCodes();
-
-      getOfficialServerVersion();
+      Status flamingoStatus = _flamingoManager.getStatus();
+      if(flamingoStatus.version != null) _flamingoManager.setOnline(true);
+      _launcherCtx.launcherGUI.eventHandler.updateServerList(_flamingoManager.fetchServerList());
+      _launcherCtx.settingsGUI.eventHandler.updateAboutTab(flamingoStatus);
+      _launcherCtx.settingsGUI.eventHandler.updateActiveBetaCodes();
 
     }).start();
 
     ThreadingUtil.executeWithDelay(this::checkFlamingoStatus, 10000);
   }
 
-  private void checkFlamingoStatus() {
-    if(!LauncherApp.flamingoOnline) {
-      LauncherGUI.showWarning(Locale.getValue("error.flamingo_offline"));
+  private void checkFlamingoStatus ()
+  {
+    if(!_flamingoManager.getOnline()) {
+      _launcherCtx.launcherGUI.showWarning(_localeManager.getValue("error.flamingo_offline"));
     }
   }
 
-  protected static int getOfficialAproxPlayerCount() {
+  protected static int getOfficialApproxPlayerCount()
+  {
     int steamPlayers = SteamUtil.getCurrentPlayers("99900");
     if (steamPlayers == 0) {
       return 0;
@@ -432,10 +495,9 @@ public class LauncherApp {
     }
   }
 
-  private void checkVersion() {
-
-    if (LauncherGlobals.LAUNCHER_VERSION.contains("dev")) return;
-
+  @SuppressWarnings("all")
+  private void checkVersion ()
+  {
     String rawResponseReleases = INetUtil.getWebpageContent(
         LauncherGlobals.GITHUB_API
             + "repos/"
@@ -448,22 +510,24 @@ public class LauncherApp {
     if(rawResponseReleases != null) {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
 
-      LauncherGUI.latestRelease = jsonReleases.getString("tag_name");
-      LauncherGUI.latestChangelog = jsonReleases.getString("body");
+      _launcherCtx.launcherGUI.latestRelease = jsonReleases.getString("tag_name");
+      _launcherCtx.launcherGUI.latestChangelog = jsonReleases.getString("body");
 
-      if (!LauncherGUI.latestRelease.equalsIgnoreCase(LauncherGlobals.LAUNCHER_VERSION)) {
-        if(Settings.autoUpdate) {
-          LauncherEventHandler.updateLauncher();
+      if (!_launcherCtx.launcherGUI.latestRelease.equalsIgnoreCase(LauncherGlobals.LAUNCHER_VERSION)) {
+        if (Settings.autoUpdate && !LauncherGlobals.LAUNCHER_VERSION.contains("dev") && !LauncherGlobals.LAUNCHER_VERSION.contains("rc")) {
+          _launcherCtx.launcherGUI.eventHandler.updateLauncher();
         }
         Settings.isOutdated = true;
-        LauncherGUI.updateButton.setVisible(true);
+        _launcherCtx.launcherGUI.updateButton.setVisible(true);
       }
     } else {
       log.error("Received no response from GitHub. Possible downtime?");
     }
   }
 
-  private void getOfficialServerVersion() {
+  @Deprecated
+  private void getOfficialServerVersion ()
+  {
     URL url = null;
     try {
       url = new URL(Settings.gameGetdownFullURL + "getdown.txt");
@@ -477,48 +541,67 @@ public class LauncherApp {
       log.error(e);
     }
 
-    Server officialServer = Objects.requireNonNull(findServerByName("Official"));
+    Server officialServer = Objects.requireNonNull(_flamingoManager.findServerByName("Official"));
     officialServer.version = prop.getProperty("version");
     log.info("Latest Official server version updated", "version", officialServer.version);
   }
 
-  public static Server findServerByName(String serverName) {
-    List<Server> results = LauncherApp.serverList.stream()
-      .filter(s -> serverName.equals(s.name)).collect(Collectors.toList());
-    return results.isEmpty() ? null : results.get(0);
+  public void checkGetdown ()
+  {
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(LauncherGlobals.USER_DIR + File.separator + "getdown.txt"));
+      String firstLine = br.readLine();
+      br.close();
+
+      if(firstLine.contains("Customized")) {
+        log.info("Detected a legacy modified Getdown file. Resetting");
+        resetGetdown();
+      }
+    } catch (IOException e) {
+      log.error(e);
+      resetGetdown();
+    }
   }
 
-  public static Server findServerBySanitizedName(String sanitizedServerName) {
-    List<Server> results = LauncherApp.serverList.stream()
-      .filter(s -> sanitizedServerName.equals(s.getSanitizedName())).collect(Collectors.toList());
-    return results.isEmpty() ? null : results.get(0);
+  private void resetGetdown ()
+  {
+    int downloadAttempts = 0;
+    boolean downloadCompleted = false;
+
+    while (downloadAttempts <= 3 && !downloadCompleted) {
+      downloadAttempts++;
+      log.info("Resetting Getdown", "attempts", downloadAttempts);
+      try {
+        FileUtils.copyURLToFile(
+            new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/getdown.txt"),
+            new File(LauncherGlobals.USER_DIR, "getdown.txt"),
+            0,
+            0
+        );
+        downloadCompleted = true;
+      } catch (IOException e) {
+        // Keep retrying.
+        log.error(e);
+      }
+    }
   }
 
-  protected static void checkTempDir() {
-    // sometimes os usernames that have cyrillic characters can make Java have a
-    // bad time trying to read them for locating their TEMP path.
-    // let's give our old friend a hand and store the temp files ourselves for the time being.
+  /**
+    Sometimes OS usernames that have cyrillic characters in them can make Java have a
+    bad time trying to read them for locating their TEMP path.
+    Let's give our friend a hand and store the temp files ourselves.
+  */
+  protected void checkTempDir ()
+  {
     boolean containsCyrillic = System.getProperty("user.name").codePoints()
       .mapToObj(Character.UnicodeScript::of)
       .anyMatch(Character.UnicodeScript.CYRILLIC::equals);
     if (containsCyrillic) SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
   }
 
-  public static String getLocalGameVersion() {
-    try {
-      return FileUtil.readFile(LauncherApp.selectedServer == null ? LauncherGlobals.USER_DIR + File.separator + "version.txt" : LauncherApp.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
-    } catch (IOException e) {
-      log.error(e);
-    }
-    return "-1";
-  }
-
-  protected static void exit() {
-    DiscordPresenceClient.getInstance().stop();
-    if (!Settings.keepOpen) {
-      LauncherGUI.launcherGUIFrame.dispose();
-      System.exit(1);
-    }
+  public void exit ()
+  {
+    _launcherCtx.exit();
   }
 
 }

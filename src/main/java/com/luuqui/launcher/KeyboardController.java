@@ -1,18 +1,28 @@
 package com.luuqui.launcher;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class KeyboardController {
+@Singleton
+public class KeyboardController
+{
+  @Inject protected LauncherContext _launcherCtx;
 
-  private static Boolean shiftPressed = false;
-  private static Boolean altPressed = false;
+  private Boolean shiftPressed = false;
+  private Boolean altPressed = false;
 
-  public static void start() {
+  public KeyboardController ()
+  {
 
+  }
+
+  public void init ()
+  {
     KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(ke -> {
       switch (ke.getID()) {
-
         case KeyEvent.KEY_PRESSED:
           if (ke.getKeyCode() == KeyEvent.VK_SHIFT) {
             shiftPressed();
@@ -22,7 +32,6 @@ public class KeyboardController {
             specialKeyPressed();
           }
           break;
-
         case KeyEvent.KEY_RELEASED:
           if (ke.getKeyCode() == KeyEvent.VK_SHIFT) {
             shiftReleased();
@@ -37,31 +46,44 @@ public class KeyboardController {
     });
   }
 
-  private static void specialKeyPressed() {
-    LauncherGUI.specialKeyPressed();
+  private void specialKeyPressed ()
+  {
+    _launcherCtx.launcherGUI.specialKeyPressed();
   }
 
-  private static void specialKeyReleased() {
-    LauncherGUI.specialKeyReleased();
+  private void specialKeyReleased ()
+  {
+    _launcherCtx.launcherGUI.specialKeyReleased();
   }
 
-  private static void shiftPressed() {
-    shiftPressed = true;
+  private void shiftPressed ()
+  {
+    this.shiftPressed = true;
   }
 
-  private static void shiftReleased() {
-    shiftPressed = false;
+  private void shiftReleased ()
+  {
+    this.shiftPressed = false;
   }
 
-  private static void altPressed() {
-    altPressed = true;
+  private void altPressed ()
+  {
+    this.altPressed = true;
   }
 
-  private static void altReleased() {
-    altPressed = false;
+  private void altReleased ()
+  {
+    this.altPressed = false;
   }
 
-  public static Boolean isShiftPressed() { return shiftPressed; }
-  public static Boolean isAltPressed() { return altPressed; }
+  public Boolean isShiftPressed ()
+  {
+    return this.shiftPressed;
+  }
+
+  public Boolean isAltPressed ()
+  {
+    return this.altPressed;
+  }
 
 }
