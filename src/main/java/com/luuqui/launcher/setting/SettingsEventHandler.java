@@ -89,33 +89,26 @@ public class SettingsEventHandler
   public void customGCChangeEvent (ActionEvent action)
   {
     Settings.gameUseCustomGC = this.gui.switchUseCustomGC.isSelected();
-    String key = "game.useCustomGC";
-    if(_flamingoManager.getSelectedServer() != null) {
-      key += _flamingoManager.getSelectedServer().isOfficial() ? "" : "_" + _flamingoManager.getSelectedServer().getSanitizedName();
-    }
-
-    _settingsManager.setValue(key, this.gui.switchUseCustomGC.isSelected() ? "true" : "false");
+    Server selectedServer = _flamingoManager.getSelectedServer();
+    _settingsManager.setValue("game.useCustomGC", this.gui.switchUseCustomGC.isSelected() ? "true" : "false", selectedServer);
   }
 
   public void choiceGCChangeEvent (ItemEvent event)
   {
-    String key = "game.garbageCollector";
-    if(_flamingoManager.getSelectedServer() != null) {
-      key += _flamingoManager.getSelectedServer().isOfficial() ? "" : "_" + _flamingoManager.getSelectedServer().getSanitizedName();
-    }
+    Server selectedServer = _flamingoManager.getSelectedServer();
 
     switch (this.gui.choiceGC.getSelectedIndex()) {
       case 0:
         Settings.gameGarbageCollector = "ParallelOld";
-        _settingsManager.setValue(key, "ParallelOld");
+        _settingsManager.setValue("game.garbageCollector", "ParallelOld", selectedServer);
         break;
       case 1:
         Settings.gameGarbageCollector = "Serial";
-        _settingsManager.setValue(key, "Serial");
+        _settingsManager.setValue("game.garbageCollector", "Serial", selectedServer);
         break;
       case 2:
         Settings.gameGarbageCollector = "G1";
-        _settingsManager.setValue(key, "G1");
+        _settingsManager.setValue("game.garbageCollector", "G1", selectedServer);
         break;
     }
   }
@@ -123,34 +116,22 @@ public class SettingsEventHandler
   public void disableExplicitGCChangeEvent (ActionEvent action)
   {
     Settings.gameDisableExplicitGC = this.gui.switchExplicitGC.isSelected();
-    String key = "game.disableExplicitGC";
-    if(_flamingoManager.getSelectedServer() != null) {
-      key += _flamingoManager.getSelectedServer().isOfficial() ? "" : "_" + _flamingoManager.getSelectedServer().getSanitizedName();
-    }
-
-    _settingsManager.setValue(key, this.gui.switchExplicitGC.isSelected() ? "true" : "false");
+    Server selectedServer = _flamingoManager.getSelectedServer();
+    _settingsManager.setValue("game.disableExplicitGC", this.gui.switchExplicitGC.isSelected() ? "true" : "false", selectedServer);
   }
 
   public void saveAdditionalArgs ()
   {
     Settings.gameAdditionalArgs = this.gui.argumentsPane.getText();
-    String key = "game.additionalArgs";
-    if(_flamingoManager.getSelectedServer() != null) {
-      key += _flamingoManager.getSelectedServer().isOfficial() ? "" : "_" + _flamingoManager.getSelectedServer().getSanitizedName();
-    }
-
-    _settingsManager.setValue(key, this.gui.argumentsPane.getText());
+    Server selectedServer = _flamingoManager.getSelectedServer();
+    _settingsManager.setValue("game.additionalArgs", this.gui.argumentsPane.getText(), selectedServer);
   }
 
   public void memoryChangeEvent (int memory)
   {
     Settings.gameMemory = memory;
-    String key = "game.memory";
-    if(_flamingoManager.getSelectedServer() != null) {
-      key += _flamingoManager.getSelectedServer().isOfficial() ? "" : "_" + _flamingoManager.getSelectedServer().getSanitizedName();
-    }
-
-    _settingsManager.setValue(key, String.valueOf(memory));
+    Server selectedServer = _flamingoManager.getSelectedServer();
+    _settingsManager.setValue("game.memory", String.valueOf(memory), selectedServer);
   }
 
   public void ingameRPCChangeEvent (ActionEvent action)
@@ -169,9 +150,9 @@ public class SettingsEventHandler
   {
     String javaVMPatchDir = LauncherGlobals.USER_DIR;
     //boolean legacy = false;
-    boolean legacy = true; // Temporarily set Official to use legacy JVMs too
+    boolean legacy = true; // Temporarily set Official to use legacy JVMs too. TODO: Change when game updates to Java 10+.
 
-    if(!_flamingoManager.getSelectedServer().name.equalsIgnoreCase("Official")) {
+    if (!_flamingoManager.getSelectedServer().isOfficial()) {
       javaVMPatchDir += File.separator + "thirdparty" + File.separator + _flamingoManager.getSelectedServer().getSanitizedName();
 
       // Set legacy to true to indicate the JVM Patcher that this installation only supports Java 8 and lower JVMs.

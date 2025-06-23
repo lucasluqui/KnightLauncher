@@ -58,17 +58,15 @@ public class ModManager
 
   public void checkInstalled ()
   {
-    if(!checking) {
+    if (!checking) {
       checking = true;
 
       _launcherCtx.launcherGUI.eventHandler.updateServerSwitcher(true);
 
       Server selectedServer = _flamingoManager.getSelectedServer();
-      String selectedServerName = "";
       String modFolderPath = LauncherGlobals.USER_DIR + "/mods/";
 
       if (selectedServer != null) {
-        selectedServerName = selectedServer.getSanitizedName();
         modFolderPath = selectedServer.getModsDirectory();
       }
 
@@ -102,9 +100,7 @@ public class ModManager
       parseDisabledMods();
 
       // Check if there's a new or removed mod since the last execution, rebuild will be needed in that case.
-      String key = "modloader.appliedModsHash";
-      if(!selectedServerName.equalsIgnoreCase("")) key += "_" + selectedServerName;
-      if (Integer.parseInt(_settingsManager.getValue(key)) != getEnabledModsHash()) {
+      if (Integer.parseInt(_settingsManager.getValue("modloader.appliedModsHash", selectedServer)) != getEnabledModsHash()) {
         log.info("Hashcode doesn't match, preparing for rebuild and remount...");
         rebuildRequired = true;
         mountRequired = true;
@@ -136,9 +132,7 @@ public class ModManager
 
   public void mount ()
   {
-
     Server selectedServer = _flamingoManager.getSelectedServer();
-    String selectedServerName = selectedServer.getSanitizedName();
 
     if (Settings.doRebuilds && rebuildRequired) startFileRebuild();
 
@@ -158,32 +152,28 @@ public class ModManager
       Mod mod = localList.get(i);
       if(mod.isEnabled()) {
         if (mod instanceof Modpack) {
-          ((Modpack) mod).mount(_flamingoManager.getSelectedServer().getRootDirectory());
+          ((Modpack) mod).mount(selectedServer.getRootDirectory());
         } else if (mod instanceof ZipMod) {
-          ((ZipMod) mod).mount(_flamingoManager.getSelectedServer().getRootDirectory());
+          ((ZipMod) mod).mount(selectedServer.getRootDirectory());
         } else {
           mod.mount();
         }
-        long lastModified = new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + mod.getFileName()).lastModified();
+        long lastModified = new File(selectedServer.getRootDirectory() + "/mods/" + mod.getFileName()).lastModified();
         hashSet.add(lastModified);
         _launcherCtx._progressBar.setBarValue(i + 1);
       }
     }
 
-    String key = "modloader.appliedModsHash";
-    if(!selectedServerName.equalsIgnoreCase("")) key += "_" + selectedServerName;
-    _settingsManager.setValue(key, Integer.toString(hashSet.hashCode()));
+    _settingsManager.setValue("modloader.appliedModsHash", Integer.toString(hashSet.hashCode()), selectedServer);
 
     // Make sure no cheat mod slips in.
-    if(!_flamingoManager.getSelectedServer().isOfficial()) extractSafeguard();
+    if(!selectedServer.isOfficial()) extractSafeguard();
 
     // Clean the game from unwanted files.
     clean();
 
     // Update the last known game version.
-    String versionKey = "modloader.lastKnownVersion";
-    if(!selectedServerName.equalsIgnoreCase("")) versionKey += "_" + selectedServerName;
-    _settingsManager.setValue(versionKey, _flamingoManager.getLocalGameVersion());
+    _settingsManager.setValue("modloader.lastKnownVersion", _flamingoManager.getLocalGameVersion(), selectedServer);
 
     mountRequired = false;
     _launcherCtx._progressBar.finishTask();
@@ -216,9 +206,10 @@ public class ModManager
 
     String rootDir = LauncherGlobals.USER_DIR;
     String[] bundles = RSRC_BUNDLES;
-    if(_flamingoManager.getSelectedServer() != null) {
-      rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
-      bundles = _flamingoManager.getSelectedServer().isOfficial() ? RSRC_BUNDLES : THIRDPARTY_RSRC_BUNDLES;
+    Server selectedServer = _flamingoManager.getSelectedServer();
+    if(selectedServer != null) {
+      rootDir = selectedServer.getRootDirectory();
+      bundles = selectedServer.isOfficial() ? RSRC_BUNDLES : THIRDPARTY_RSRC_BUNDLES;
     }
 
     _launcherCtx._progressBar.startTask();
@@ -227,7 +218,7 @@ public class ModManager
     // Clear the entirety of the rsrc folder leaving only the jar and zip bundles.
     _discordPresenceClient.setDetails(_localeManager.getValue("m.purge"));
     _launcherCtx._progressBar.setState(_localeManager.getValue("m.purge"));
-    FileUtil.purgeDirectory(new File(rootDir + "/rsrc/"), new String[] {".jar", ".jarv", ".zip"});
+    FileUtil.purgeDirectory(new File(rootDir + "/rsrc/"), new String[] { ".jar", ".jarv", ".zip" });
 
     // Iterate through all bundles to rebuild the game files.
     _discordPresenceClient.setDetails(_localeManager.getValue("m.rebuild"));
@@ -235,7 +226,7 @@ public class ModManager
 
     for (int i = 0; i < bundles.length; i++) {
       _launcherCtx._progressBar.setBarValue(i + 1);
-      _discordPresenceClient.setDetails(_localeManager.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(bundles.length)}));
+      _discordPresenceClient.setDetails(_localeManager.getValue("presence.rebuilding", new String[] { String.valueOf(i + 1), String.valueOf(bundles.length) }));
       try {
         FileUtil.unpackJar(new ZipFile(rootDir + "/rsrc/" + bundles[i]), new File(rootDir + "/rsrc/"), false);
       } catch (IOException e) {
@@ -250,7 +241,7 @@ public class ModManager
     }
 
     // Strict requires resetting code and config jars to vanilla too.
-    if (_flamingoManager.getSelectedServer().isOfficial() && strict) {
+    if (selectedServer.isOfficial() && strict) {
       _discordPresenceClient.setDetails(_localeManager.getValue("m.reset_code"));
       _launcherCtx._progressBar.setState(_localeManager.getValue("m.reset_code"));
       resetCode();
@@ -320,20 +311,16 @@ public class ModManager
 
   private void parseDisabledMods ()
   {
-    String selectedServerName = "";
-    if(_flamingoManager.getSelectedServer() != null) selectedServerName = _flamingoManager.getSelectedServer().getSanitizedName();
-
-    String key = "modloader.disabledMods";
-    if(!selectedServerName.equalsIgnoreCase("")) key += "_" + selectedServerName;
-    String rawString = _settingsManager.getValue(key);
+    Server selectedServer = _flamingoManager.getSelectedServer();
+    String rawString = _settingsManager.getValue("modloader.disabledMods", selectedServer);
 
     // No mods to parse as disabled, nothing to do.
-    if(rawString.equals("")) return;
+    if (rawString.equals("")) return;
 
     String[] fileNames = rawString.split(",");
-    for(Mod mod : modList) {
-      for(int i = 0; i < fileNames.length; i++) {
-        if(mod.getFileName().equals(fileNames[i])) {
+    for (Mod mod : modList) {
+      for (int i = 0; i < fileNames.length; i++) {
+        if (mod.getFileName().equals(fileNames[i])) {
           mod.setEnabled(false);
           break;
         }
@@ -354,8 +341,9 @@ public class ModManager
   public void parseModData (Mod mod)
   {
     JSONObject modJson;
+    Server selectedServer = _flamingoManager.getSelectedServer();
     try {
-      modJson = new JSONObject(Compressor.readFileInsideZip(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + mod.getFileName(), "mod.json")).getJSONObject("mod");
+      modJson = new JSONObject(Compressor.readFileInsideZip(selectedServer.getRootDirectory() + "/mods/" + mod.getFileName(), "mod.json")).getJSONObject("mod");
     } catch (Exception e) {
       modJson = null;
     }
@@ -370,7 +358,7 @@ public class ModManager
         mod.setImage(modJson.getString("image"));
       } catch (Exception e) {
         try {
-          mod.setImage(ImageUtil.imageToBase64(ImageIO.read(Compressor.getISFromFileInsideZip(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + mod.getFileName(), "mod.png"))));
+          mod.setImage(ImageUtil.imageToBase64(ImageIO.read(Compressor.getISFromFileInsideZip(selectedServer.getRootDirectory() + "/mods/" + mod.getFileName(), "mod.png"))));
         } catch (Exception e2) {
           mod.setImage(null);
         }
@@ -419,20 +407,11 @@ public class ModManager
   private boolean gameVersionChanged ()
   {
     Server selectedServer = _flamingoManager.getSelectedServer();
-    String key = "modloader.lastKnownVersion";
 
-    if(selectedServer != null) {
-      key += _flamingoManager.getSelectedServer().isOfficial() ? "" : "_" + _flamingoManager.getSelectedServer().getSanitizedName();
-    }
-
-    String lastKnownVersion = _settingsManager.getValue(key);
+    String lastKnownVersion = _settingsManager.getValue("modloader.lastKnownVersion", selectedServer);
     String currentVersion = _flamingoManager.getLocalGameVersion();
 
-    if(!lastKnownVersion.equalsIgnoreCase(currentVersion)) {
-      return true;
-    }
-
-    return false;
+    return !lastKnownVersion.equalsIgnoreCase(currentVersion);
   }
 
   private void resetCode ()
