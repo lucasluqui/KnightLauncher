@@ -570,14 +570,11 @@ public class SettingsEventHandler
 
   public void updateServerSettings (Server server)
   {
-    String keySuffix = "";
-    if(!server.getSanitizedName().equalsIgnoreCase("")) keySuffix = "_" + server.getSanitizedName();
-
-    this.gui.memorySlider.setValue(Integer.parseInt(_settingsManager.getValue("game.memory" + keySuffix)));
-    this.gui.switchUseCustomGC.setSelected(Boolean.parseBoolean(_settingsManager.getValue("game.useCustomGC" + keySuffix)));
-    this.gui.choiceGC.setSelectedItem(_settingsManager.getValue("game.garbageCollector" + keySuffix));
-    this.gui.switchExplicitGC.setSelected(Boolean.parseBoolean(_settingsManager.getValue("game.disableExplicitGC" + keySuffix)));
-    this.gui.argumentsPane.setText(_settingsManager.getValue("game.additionalArgs" + keySuffix));
+    this.gui.memorySlider.setValue(Integer.parseInt(_settingsManager.getValue("game.memory", server)));
+    this.gui.switchUseCustomGC.setSelected(Boolean.parseBoolean(_settingsManager.getValue("game.useCustomGC", server)));
+    this.gui.choiceGC.setSelectedItem(_settingsManager.getValue("game.garbageCollector", server));
+    this.gui.switchExplicitGC.setSelected(Boolean.parseBoolean(_settingsManager.getValue("game.disableExplicitGC", server)));
+    this.gui.argumentsPane.setText(_settingsManager.getValue("game.additionalArgs", server));
 
     customGCChangeEvent(null);
     choiceGCChangeEvent(null);
