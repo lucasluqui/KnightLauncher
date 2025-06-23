@@ -4,7 +4,7 @@
     <root id="archive" name="KnightLauncher.jar">
       <element id="module-output" name="KnightLauncher" />
       <element id="dir-copy" path="$PROJECT_DIR$/assets" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/discord-rpc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/discord-rpc-1.6.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/vatbub/mslinks/1.0.5.1/mslinks-1.0.5.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont-font_awesome/4.7.0.1/jiconfont-font_awesome-4.7.0.1.jar" path-in-jar="/" />
