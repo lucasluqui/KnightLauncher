@@ -64,20 +64,20 @@ public class SystemUtil
   {
     String machineId = null;
 
-    if(isWindows()) {
+    if (isWindows()) {
       machineId = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "wmic csproduct get UUID" })[0];
 
       try {
         machineId = machineId.substring(machineId.indexOf("\n")).trim();
       } catch (Exception e) {
-        log.error(e);
+        log.info("Unable to get UUID using WMIC, probably not installed. Thanks Microsoft.");
       }
 
       // Some lazy bios manufacturers won't bother setting a valid UUID for their BIOS and thus
       // creating a case where someone might share an invalid or default UUID with someone else
       // (the infamous 03000200-0400-0500-0006-000700080009 UUID!).
       // Assuming this could be the case, we gather Windows' software GUID and add it to the mix.
-      String machineIdFailsafe = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "reg query HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid" })[0];
+      String machineIdFailsafe = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", "reg query HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid" })[0];
 
       try {
         machineIdFailsafe = machineIdFailsafe.substring(machineIdFailsafe.indexOf("\n")).trim();
@@ -100,13 +100,13 @@ public class SystemUtil
       }
     }
 
-    if(isUnix()) {
+    if (isUnix()) {
        machineId = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", "cat /etc/machine-id" })[0];
        machineId = machineId.replaceAll("\\r|\\n", "").trim();
     }
 
     // TODO: Verify this even works on Mac systems.
-    if(isMac()) {
+    if (isMac()) {
       try {
         String command = "system_profiler SPHardwareDataType | awk '/UUID/ { print $3; }'";
         StringBuffer output = new StringBuffer();
@@ -133,7 +133,12 @@ public class SystemUtil
 
   public static String getHashedMachineId ()
   {
-    String machineId = getMachineId();
+    return getHashedMachineId("");
+  }
+
+  public static String getHashedMachineId (String additionalId)
+  {
+    String machineId = getMachineId() + additionalId;
     String hashedMachineId = null;
 
     try {

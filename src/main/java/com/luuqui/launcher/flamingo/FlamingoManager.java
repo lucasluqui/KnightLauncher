@@ -1,9 +1,11 @@
 package com.luuqui.launcher.flamingo;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.flamingo.data.Status;
+import com.luuqui.launcher.setting.SettingsManager;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.RequestUtil;
 import com.luuqui.util.SystemUtil;
@@ -22,6 +24,8 @@ import static com.luuqui.launcher.flamingo.Log.log;
 @Singleton
 public class FlamingoManager
 {
+  @Inject protected SettingsManager _settingsManager;
+
   @SuppressWarnings("all")
   private final String ENDPOINT = "flamingo.luuqui.com";
 
@@ -30,13 +34,15 @@ public class FlamingoManager
 
   private List<Server> serverList = new ArrayList<>();
   private Server selectedServer = null;
+  private String machineId = null;
   private boolean online = false;
 
   public FlamingoManager () { }
 
   public void init ()
   {
-
+    String localId = getLocalId();
+    this.machineId = SystemUtil.getHashedMachineId(localId);
   }
 
   public List<Server> fetchServerList ()
@@ -44,7 +50,7 @@ public class FlamingoManager
     List<Server> servers = new ArrayList<>();
 
     try {
-      JSONObject response = sendRequest("GET", "/server-list/", new String[]{ "machineId=" + SystemUtil.getHashedMachineId() });
+      JSONObject response = sendRequest("GET", "/server-list/", new String[] { "machineId=" + this.machineId });
       log.info("Got server list from flamingo");
 
       // we got an empty server list, so empty we return it.
@@ -87,7 +93,7 @@ public class FlamingoManager
   public String activateBetaCode (String code)
   {
     try {
-      JSONObject response = sendRequest("POST", "/beta-code/activate/" + code, new String[]{"machineId=" + SystemUtil.getHashedMachineId()});
+      JSONObject response = sendRequest("POST", "/beta-code/activate/" + code, new String[] { "machineId=" + this.machineId });
       log.info("Got response for beta code activation: " + response);
 
       return response.getString("result");
@@ -148,6 +154,12 @@ public class FlamingoManager
       log.error(e);
     }
     return "-1";
+  }
+
+  public String getLocalId ()
+  {
+    _settingsManager.createKeyIfNotExists("launcher.key", TextUtil.getRandomAlphanumeric(64));
+    return _settingsManager.getValue("launcher.key");
   }
 
   public List<Server> getServerList ()
