@@ -184,7 +184,7 @@ public class LauncherGUI extends BaseGUI {
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, 16, ColorUtil.getForegroundColor());
     settingsButton = new JButton(_localeManager.getValue("b.settings"));
     settingsButton.setIcon(settingsIcon);
-    settingsButton.setBounds(28, 255, 125, 35);
+    settingsButton.setBounds(28, 275, 125, 35);
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
     settingsButton.setFont(Fonts.fontMed);
     settingsButton.setFocusPainted(false);
@@ -224,7 +224,7 @@ public class LauncherGUI extends BaseGUI {
     Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, 16, ColorUtil.getForegroundColor());
     modButton = new JButton(_localeManager.getValue("b.mods"));
     modButton.setIcon(modsIcon);
-    modButton.setBounds(28, 295, 125, 35);
+    modButton.setBounds(28, 315, 125, 35);
     modButton.setHorizontalAlignment(SwingConstants.LEFT);
     modButton.setFont(Fonts.fontMed);
     modButton.setFocusPainted(false);
@@ -265,7 +265,7 @@ public class LauncherGUI extends BaseGUI {
     Icon editorsIcon = IconFontSwing.buildIcon(FontAwesome.PENCIL, 16, ColorUtil.getForegroundColor());
     editorsButton = new JButton(_localeManager.getValue("b.editors"));
     editorsButton.setIcon(editorsIcon);
-    editorsButton.setBounds(28, 335, 125, 35);
+    editorsButton.setBounds(28, 355, 125, 35);
     editorsButton.setHorizontalAlignment(SwingConstants.LEFT);
     editorsButton.setFont(Fonts.fontMed);
     editorsButton.setFocusPainted(false);
@@ -318,6 +318,7 @@ public class LauncherGUI extends BaseGUI {
     auctionButton.setToolTipText(_localeManager.getValue("b.auction"));
     auctionButton.addActionListener(this.eventHandler::openAuctionsWebpage);
     sidePane.add(auctionButton);
+    auctionButton.setVisible(false);
 
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
     discordButton.setBounds(65, 440, 36, 36);

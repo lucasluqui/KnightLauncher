@@ -373,7 +373,7 @@ public class LauncherEventHandler
         }
         gui.serverInfoButton.setEnabled(false);
         gui.serverInfoButton.setVisible(false);
-        gui.auctionButton.setVisible(true);
+        //gui.auctionButton.setVisible(true);
       } else {
         gui.launchButton.setEnabled(selectedServer.enabled == 1);
         if(!selectedServer.isInstalled()) {
@@ -397,7 +397,7 @@ public class LauncherEventHandler
         gui.playerCountLabel.setText("Players online: Unavailable");
         gui.playerCountTooltipButton.setVisible(false);
 
-        gui.auctionButton.setVisible(false);
+        //gui.auctionButton.setVisible(false);
       }
 
       if (selectedServer.announceBanner != null) updateBanner();
