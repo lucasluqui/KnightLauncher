@@ -2,11 +2,11 @@ package com.luuqui.launcher.setting;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.LauncherContext;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.LocaleManager;
 import com.luuqui.launcher.flamingo.FlamingoManager;
+import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.util.*;
 
 import java.io.*;
@@ -69,11 +69,37 @@ public class SettingsManager
     return null;
   }
 
+  public String getValue (String key, Server server)
+  {
+    String value;
+    try (InputStream is = new FileInputStream(_propPath)) {
+      _prop.load(is);
+      value = _prop.getProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName());
+      log.info("Request for key", "key", key, "value", value);
+      return value;
+    } catch (IOException e) {
+      log.error(e);
+    }
+    return null;
+  }
+
   public void setValue (String key, String value)
   {
     try (InputStream is = new FileInputStream(_propPath)) {
-      if(migrating) _prop.load(is);
+      if (migrating) _prop.load(is);
       _prop.setProperty(key, value);
+      _prop.store(new FileOutputStream(_propPath), null);
+      log.info("Setting new key", "key", key, "value", value);
+    } catch (IOException e) {
+      log.error(e);
+    }
+  }
+
+  public void setValue (String key, String value, Server server)
+  {
+    try (InputStream is = new FileInputStream(_propPath)) {
+      if (migrating) _prop.load(is);
+      _prop.setProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName(), value);
       _prop.store(new FileOutputStream(_propPath), null);
       log.info("Setting new key", "key", key, "value", value);
     } catch (IOException e) {
