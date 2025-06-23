@@ -20,8 +20,6 @@ public class EditorsGUI extends BaseGUI
 
   @Inject protected LocaleManager _localeManager;
 
-  public JFrame editorsGUIFrame;
-
   @Inject
   public EditorsGUI ()
   {
@@ -290,6 +288,8 @@ public class EditorsGUI extends BaseGUI
     interfaceTesterImage = interfaceTesterImageUnfocused;
     particleEditorImage = particleEditorImageUnfocused;
   }
+
+  public JFrame editorsGUIFrame;
 
   public JPanel editorsPanel;
   protected JPanel editorListPane = new JPanel();
