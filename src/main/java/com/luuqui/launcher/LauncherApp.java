@@ -85,10 +85,10 @@ public class LauncherApp
     Stylesheet.setup();
     Fonts.setup();
     checkStartLocation();
-
     if (SystemUtil.isWindows() || SystemUtil.isUnix()) checkShortcut();
 
     initInterfaces();
+    postInit();
   }
 
   private void initManagers ()
@@ -109,6 +109,22 @@ public class LauncherApp
     }
   }
 
+  private void initInterfaces ()
+  {
+    if (this.requiresJVMPatch()) {
+      this.initJVMPatcher();
+    } else if (this.requiresUpdate()) {
+      this.initUpdater();
+    } else {
+      this.initLauncherGUI();
+      this.initSettingsGUI();
+      this.initModListGUI();
+      this.initEditorsGUI();
+
+      ThreadingUtil.executeWithDelay(_launcherCtx.launcherGUI::switchVisibility, 200);
+    }
+  }
+
   private void postInit ()
   {
     _moduleManager.loadModules();
@@ -126,24 +142,6 @@ public class LauncherApp
     new Thread(_modManager::checkInstalled).start();
 
     _discordPresenceClient.setDetails(_localeManager.getValue("presence.launch_ready"));
-  }
-
-  private void initInterfaces ()
-  {
-    if (this.requiresJVMPatch()) {
-      this.initJVMPatcher();
-    } else if (this.requiresUpdate()) {
-      this.initUpdater();
-    } else {
-      this.initLauncherGUI();
-      this.initSettingsGUI();
-      this.initModListGUI();
-      this.initEditorsGUI();
-
-      ThreadingUtil.executeWithDelay(_launcherCtx.launcherGUI::switchVisibility, 200);
-
-      this.postInit();
-    }
   }
 
   private void initLauncherGUI ()
