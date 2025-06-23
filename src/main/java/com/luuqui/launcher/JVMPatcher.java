@@ -29,6 +29,7 @@ public class JVMPatcher extends BaseGUI
 
   private int downloadAttempts = 0;
 
+  @Inject protected LauncherContext _launcherCtx;
   @Inject protected LocaleManager _localeManager;
   @Inject protected SettingsManager _settingsManager;
   @Inject protected ModuleManager _moduleManager;
@@ -49,7 +50,7 @@ public class JVMPatcher extends BaseGUI
 
   private void setAvailableJVMs ()
   {
-    if(legacy) {
+    if (legacy) {
       this.availableJVMs.put("Java 8 (8u202)", "8u202");
       this.availableJVMs.put("Java 8 (8u251)", "8u251");
     } else {
@@ -124,6 +125,12 @@ public class JVMPatcher extends BaseGUI
       jvmPatcherProgressBar.setVisible(true);
       this.initPatcher();
     });
+
+    closeButton.addActionListener(e -> {
+      _launcherCtx.exit();
+    });
+    closeButton.setToolTipText(_localeManager.getValue("b.close"));
+    minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));
 
     guiFrame.setLocationRelativeTo(null);
     guiFrame.setVisible(true);
