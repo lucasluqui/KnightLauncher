@@ -94,9 +94,9 @@
     <dependency>
       <groupId>net.arikia.dev</groupId>
       <artifactId>discord-rpc</artifactId>
-      <version>1.6.2</version>
+      <version>20220830184500</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/discord-rpc-1.6.2.jar</systemPath>
+      <systemPath>${project.basedir}/lib/discord-rpc-20220830184500.jar</systemPath>
     </dependency>
 
     <dependency>
