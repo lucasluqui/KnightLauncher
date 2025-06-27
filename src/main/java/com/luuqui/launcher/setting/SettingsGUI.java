@@ -311,7 +311,7 @@ public class SettingsGUI extends BaseGUI
     gamePanel.add(sep2);
 
     JLabel labelExplicitGC = new JLabel(_localeManager.getValue("m.disable_explicit_gc"));
-    labelExplicitGC.setBounds(25, 240, 275, 18);
+    labelExplicitGC.setBounds(25, 240, 300, 18);
     labelExplicitGC.setFont(Fonts.fontRegBig);
     gamePanel.add(labelExplicitGC);
 
