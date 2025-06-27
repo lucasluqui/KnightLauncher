@@ -41,7 +41,8 @@ public class Fonts
     InputStream fontMedGiantIs;
     InputStream fontCodeRegIs;
 
-    if (Settings.lang.equalsIgnoreCase("jp")) {
+    if (Settings.lang.equalsIgnoreCase("jp")
+        || Settings.lang.equalsIgnoreCase("ru")) {
       fontRegSmallIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
       fontRegIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
       fontRegBigIs = LauncherGUI.class.getResourceAsStream(fontPathRegularJP);
