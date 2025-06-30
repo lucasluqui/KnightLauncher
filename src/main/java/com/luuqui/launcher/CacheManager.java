@@ -22,7 +22,7 @@ public class CacheManager
 
   public CacheManager ()
   {
-
+    // empty.
   }
 
   public void init ()

@@ -24,12 +24,12 @@ public class LauncherContext
 
   public LauncherContext ()
   {
-
+    // empty.
   }
 
   public void init ()
   {
-
+    // empty.
   }
 
   public void exit ()

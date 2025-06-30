@@ -21,7 +21,7 @@ public class LocaleManager
 
   public LocaleManager ()
   {
-
+    // empty.
   }
 
   public void init ()

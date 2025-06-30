@@ -43,7 +43,7 @@ public class DiscordPresenceClient
 
   public DiscordPresenceClient ()
   {
-
+    // empty.
   }
 
   public DiscordPresenceClient (String clientId, boolean stub)

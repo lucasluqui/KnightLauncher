@@ -48,12 +48,12 @@ public class ModManager
 
   public ModManager ()
   {
-
+    // empty.
   }
 
   public void init ()
   {
-
+    // empty.
   }
 
   public void checkInstalled ()

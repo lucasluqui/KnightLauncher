@@ -37,7 +37,10 @@ public class FlamingoManager
   private String machineId = null;
   private boolean online = false;
 
-  public FlamingoManager () { }
+  public FlamingoManager ()
+  {
+    // empty.
+  }
 
   public void init ()
   {

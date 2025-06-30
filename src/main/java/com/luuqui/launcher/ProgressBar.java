@@ -13,7 +13,7 @@ public class ProgressBar
 
   public ProgressBar ()
   {
-
+    // empty.
   }
 
   public void setState (String newState)

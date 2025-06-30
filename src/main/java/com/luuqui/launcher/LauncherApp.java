@@ -40,6 +40,7 @@ public class LauncherApp
   @Inject protected DiscordPresenceClient _discordPresenceClient;
   @Inject protected ModuleManager _moduleManager;
   @Inject protected CacheManager _cacheManager;
+  @Inject protected DownloadManager _downloadManager;
   @Inject protected KeyboardController _keyboardController;
 
   private final String[] args;
@@ -100,6 +101,7 @@ public class LauncherApp
     _flamingoManager.init();
     _moduleManager.init();
     _cacheManager.init();
+    _downloadManager.init();
     _keyboardController.init();
 
     if (SystemUtil.isARM() || SystemUtil.isMac()) {

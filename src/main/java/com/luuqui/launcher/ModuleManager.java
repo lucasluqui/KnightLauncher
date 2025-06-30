@@ -19,12 +19,12 @@ public class ModuleManager
 
   public ModuleManager ()
   {
-
+    // empty.
   }
 
   public void init ()
   {
-
+    // empty.
   }
 
   public void loadModules ()
