@@ -111,6 +111,15 @@ public class DownloadManager
     this.clear();
   }
 
+  /**
+   * Gets the download status of an item.
+   *
+   * @param url
+   * The URL of the item that was put in queue.
+   *
+   * @return
+   * Returns true if downloaded correctly or false if failed.
+   */
   public boolean getDownloadedStatus (URL url)
   {
     return this.downloadedStatusMap.get(url);
