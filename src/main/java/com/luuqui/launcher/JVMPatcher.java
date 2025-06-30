@@ -3,18 +3,14 @@ package com.luuqui.launcher;
 import com.google.inject.Inject;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordPresenceClient;
-import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsManager;
 import com.luuqui.util.*;
-import jiconfont.icons.font_awesome.FontAwesome;
-import jiconfont.swing.IconFontSwing;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,12 +23,11 @@ public class JVMPatcher extends BaseGUI
   private boolean legacy;
   private final Map<String, String> availableJVMs = new HashMap<String, String>();
 
-  private int downloadAttempts = 0;
-
   @Inject protected LauncherContext _launcherCtx;
   @Inject protected LocaleManager _localeManager;
   @Inject protected SettingsManager _settingsManager;
   @Inject protected ModuleManager _moduleManager;
+  @Inject protected DownloadManager _downloadManager;
   @Inject protected DiscordPresenceClient _discordPresenceClient;
 
   @Inject
@@ -153,15 +148,8 @@ public class JVMPatcher extends BaseGUI
     jvmPatcherProgressBar.setValue(1);
     jvmPatcherState.setText(_localeManager.getValue("m.jvm_patcher_download"));
     
-    this.downloadPackagedJVM();
-    if(this.downloadAttempts > 3) {
-      String downloadErrMsg = "The Java VM download couldn't be initiated after 3 attempts." +
-              "\nKnight Launcher will boot without patching but be aware game performance might not be the best." +
-              "\nYou can manually restart this patcher heading to the 'Game' tab within launcher's Settings.";
-      Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
-      log.error(downloadErrMsg);
-      finish();
-    }
+    this.downloadJVM();
+    this.finish();
 
     jvmPatcherProgressBar.setValue(2);
     jvmPatcherState.setText(_localeManager.getValue("m.jvm_patcher_delete"));
@@ -185,27 +173,26 @@ public class JVMPatcher extends BaseGUI
     finish();
   }
 
-  private void downloadPackagedJVM ()
+  private void downloadJVM ()
   {
     String selectedJVM = this.availableJVMs.get(jvmComboBox.getSelectedItem().toString());
-    String downloadUrl = LauncherGlobals.URL_JAVA_REDIST.replace("{version}", selectedJVM);
 
-    boolean downloadCompleted = false;
-    while(this.downloadAttempts <= 3 && !downloadCompleted) {
-      this.downloadAttempts++;
-      log.info("Downloading Java VM", "url", downloadUrl, "attempts", this.downloadAttempts);
-      try {
-        FileUtils.copyURLToFile(
-                new URL(downloadUrl),
-                new File(this.path, "jvm_pack.zip"),
-                0,
-                0
-        );
-        downloadCompleted = true;
-      } catch (IOException e) {
-        // Keep retrying.
-        log.error(e);
-      }
+    URL downloadUrl = null;
+    try {
+      downloadUrl = new URL(LauncherGlobals.URL_JAVA_REDIST.replace("{version}", selectedJVM));
+    } catch (MalformedURLException e) {
+      log.error(e);
+    }
+
+    _downloadManager.add(downloadUrl, new File(this.path, "jvm_pack.zip"));
+    _downloadManager.processQueue();
+
+    if (!_downloadManager.getDownloadedStatus(downloadUrl)) {
+      String downloadErrMsg = "The Java VM download couldn't be initiated after 3 attempts." +
+          "\nKnight Launcher will boot without patching but be aware game performance might not be the best." +
+          "\nYou can manually restart this patcher heading to the 'Game' tab within launcher's Settings.";
+      Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
+      log.error(downloadErrMsg);
     }
   }
 
