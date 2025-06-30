@@ -3,6 +3,8 @@ package com.luuqui.launcher;
 import com.google.inject.Inject;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordPresenceClient;
+import com.luuqui.download.DownloadManager;
+import com.luuqui.download.data.URLDownloadQueue;
 import com.luuqui.launcher.setting.SettingsManager;
 import com.luuqui.util.*;
 import org.apache.commons.io.FileUtils;
@@ -184,10 +186,14 @@ public class JVMPatcher extends BaseGUI
       log.error(e);
     }
 
-    _downloadManager.add(downloadUrl, new File(this.path, "jvm_pack.zip"));
-    _downloadManager.processQueue();
+    URLDownloadQueue downloadQueue = new URLDownloadQueue(
+        "Java VM Patch", downloadUrl, new File(this.path, "jvm_pack.zip")
+    );
 
-    if (!_downloadManager.getDownloadedStatus(downloadUrl)) {
+    _downloadManager.add(downloadQueue);
+    _downloadManager.processQueues();
+
+    if (!_downloadManager.getQueueStatus(downloadQueue)) {
       String downloadErrMsg = "The Java VM download couldn't be initiated after 3 attempts." +
           "\nKnight Launcher will boot without patching but be aware game performance might not be the best." +
           "\nYou can manually restart this patcher heading to the 'Game' tab within launcher's Settings.";

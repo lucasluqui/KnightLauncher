@@ -3,6 +3,7 @@ package com.luuqui.launcher;
 import com.google.inject.*;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordPresenceClient;
+import com.luuqui.download.DownloadManager;
 import com.luuqui.launcher.editor.EditorsGUI;
 import com.luuqui.launcher.flamingo.FlamingoManager;
 import com.luuqui.launcher.flamingo.data.Server;
