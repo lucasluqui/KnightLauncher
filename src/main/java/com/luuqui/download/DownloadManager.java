@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.luuqui.launcher.Log.log;
+import static com.luuqui.download.Log.log;
 
 @Singleton
 public class DownloadManager
