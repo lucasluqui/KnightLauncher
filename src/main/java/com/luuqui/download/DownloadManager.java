@@ -113,7 +113,7 @@ public class DownloadManager
 
       while (downloadAttempts <= MAX_ATTEMPTS && !downloadCompleted) {
         downloadAttempts++;
-        log.info("Starting download of item in queue", "queue", queueName, "url", url, "localFile", localFile, "attempts", downloadAttempts);
+        log.info("Starting download attempt of item in queue", "queue", queueName, "url", url, "localFile", localFile, "attempts", downloadAttempts);
 
         try {
           FileUtils.copyURLToFile(
