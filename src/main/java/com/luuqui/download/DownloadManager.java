@@ -95,7 +95,7 @@ public class DownloadManager
   }
 
   /**
-   * Processes a single download queue.
+   * Processes a single download queue, iterating through all its items and downloading them.
    *
    * @param downloadQueue
    * The download queue to process.
@@ -141,8 +141,8 @@ public class DownloadManager
       if (this.queueStatusMap.getOrDefault(downloadQueue, true)) {
         this.queueStatusMap.put(downloadQueue, downloadCompleted);
       }
-      this.queuesInProcess -= 1;
     }
+    this.queuesInProcess -= 1;
   }
 
   /**
