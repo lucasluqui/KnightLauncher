@@ -135,7 +135,12 @@ public class DownloadManager
         log.error("Failed to download item in queue", "queue", queueName, "url", url, "localFile", localFile, "attempts", downloadAttempts);
       }
 
-      this.queueStatusMap.put(downloadQueue, downloadCompleted);
+      // Set the status map for this queue if none exists so far
+      // or update it to its latest value.
+      // Once it's set to false, it can't be set to true again, indicating at least one of them failed.
+      if (this.queueStatusMap.getOrDefault(downloadQueue, true)) {
+        this.queueStatusMap.put(downloadQueue, downloadCompleted);
+      }
       this.queuesInProcess -= 1;
     }
   }
@@ -151,7 +156,7 @@ public class DownloadManager
    */
   public boolean getQueueStatus (URLDownloadQueue downloadQueue)
   {
-    return this.queueStatusMap.get(downloadQueue);
+    return this.queueStatusMap.getOrDefault(downloadQueue, false);
   }
 
   /**
