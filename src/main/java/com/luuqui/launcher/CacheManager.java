@@ -1,6 +1,9 @@
 package com.luuqui.launcher;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.luuqui.download.DownloadManager;
+import com.luuqui.download.data.URLDownloadQueue;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.ImageUtil;
 import org.apache.commons.io.FileUtils;
@@ -18,6 +21,8 @@ import static com.luuqui.launcher.Log.log;
 @Singleton
 public class CacheManager
 {
+  @Inject protected DownloadManager _downloadManager;
+
   public String CACHE_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "cache" + File.separator;
 
   public CacheManager ()
@@ -70,12 +75,8 @@ public class CacheManager
     } else {
       try {
         File localFile = new File(localPath);
-        FileUtils.copyURLToFile(
-                new URL(url),
-                localFile,
-                0,
-                0
-        );
+        _downloadManager.add(new URLDownloadQueue(localFile.getName(), new URL(url), localFile));
+        _downloadManager.processQueues();
         log.info("Cache: Saving file to cache", "localPath", localPath);
         return localFile;
       } catch (IOException e) {

@@ -4,6 +4,8 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordPresenceClient;
+import com.luuqui.download.DownloadManager;
+import com.luuqui.download.data.URLDownloadQueue;
 import com.luuqui.launcher.flamingo.FlamingoManager;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.mod.ModManager;
@@ -11,7 +13,6 @@ import com.luuqui.launcher.setting.*;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
-import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -41,6 +42,7 @@ public class LauncherEventHandler
   protected LocaleManager _localeManager;
   protected FlamingoManager _flamingoManager;
   protected CacheManager _cacheManager;
+  protected DownloadManager _downloadManager;
   protected DiscordPresenceClient _discordPresenceClient;
 
   @Inject
@@ -50,6 +52,7 @@ public class LauncherEventHandler
                                LocaleManager localeManager,
                                FlamingoManager flamingoManager,
                                CacheManager cacheManager,
+                               DownloadManager downloadManager,
                                DiscordPresenceClient discordPresenceClient)
   {
     this._launcherCtx = launcherCtx;
@@ -58,6 +61,7 @@ public class LauncherEventHandler
     this._localeManager = localeManager;
     this._flamingoManager = flamingoManager;
     this._cacheManager = cacheManager;
+    this._downloadManager = downloadManager;
     this._discordPresenceClient = discordPresenceClient;
   }
 
@@ -116,82 +120,69 @@ public class LauncherEventHandler
         _launcherCtx._progressBar.setBarValue(0);
 
         // we did not download this third party client yet, time to get it from the deployment url.
-        if(!selectedServer.isInstalled()) {
+        if (!selectedServer.isInstalled()) {
+          log.info("Downloading a third party client", "client", sanitizedServerName);
+
           _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_download", selectedServer.name));
           _launcherCtx._progressBar.setBarValue(1);
 
-          boolean downloadCompleted = false;
-          int downloadAttempts = 0;
+          File localFile = new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
 
-          while(downloadAttempts <= 3 && !downloadCompleted) {
-            downloadAttempts++;
-            log.info("Downloading a third party client: " + sanitizedServerName,
-              "attempts", downloadAttempts);
-            try {
-              FileUtils.copyURLToFile(
+          try {
+            _downloadManager.add(new URLDownloadQueue(
+                sanitizedServerName,
                 new URL(selectedServer.deployUrl + "/" + selectedServer.version + ".zip"),
-                new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip"),
-                0,
-                0
-              );
-              Compressor.unzip(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip",
-                LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
-              FileUtil.deleteFile(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
-              downloadCompleted = true;
-            } catch (IOException e) {
-              // Keep retrying.
-              log.error(e);
-            }
+                localFile
+            ));
+          } catch (MalformedURLException e) {
+            log.error(e);
           }
+          _downloadManager.processQueues();
+
+          Compressor.unzip(localFile.getAbsolutePath(),
+              LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
+
+          FileUtil.deleteFile(localFile.getAbsolutePath());
         }
 
         // let's see if we need to update the third party client
-        if(selectedServer.isOutdated()) {
-          log.info("Updating third party client: " + selectedServer.name);
+        if (selectedServer.isOutdated()) {
+          log.info("Updating third party client", "client", selectedServer.name);
 
           _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_update", selectedServer.name));
           _launcherCtx._progressBar.setBarValue(1);
 
-          boolean downloadCompleted = false;
-          int downloadAttempts = 0;
+          File localFile = new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
 
-          while (downloadAttempts <= 3 && !downloadCompleted) {
-            downloadAttempts++;
-            log.info("Downloading a third party client: " + sanitizedServerName,
-              "attempts", downloadAttempts);
-            try {
-              FileUtils.copyURLToFile(
+          try {
+            _downloadManager.add(new URLDownloadQueue(
+                sanitizedServerName + " Update",
                 new URL(selectedServer.deployUrl + "/" + selectedServer.version + ".zip"),
-                new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip"),
-                0,
-                0
-              );
-              Compressor.unzip(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip",
-                LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
-              FileUtil.deleteFile(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
+                localFile
+            ));
+          } catch (MalformedURLException e) {
+            log.error(e);
+          }
+          _downloadManager.processQueues();
 
-              // Delete the old base.zip bundle so we have an up-to-date vanilla state zip.
-              if(FileUtil.fileExists(selectedServer.getRootDirectory() + "/rsrc/base.zip")) {
-                FileUtil.deleteFile(selectedServer.getRootDirectory() + "/rsrc/base.zip");
-                try {
-                  _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_bundle_regen", selectedServer.name));
-                  Compressor.zipFolderContents(new File(selectedServer.getRootDirectory() + "/rsrc"),
-                    new File(selectedServer.getRootDirectory() + "/rsrc/base.zip"), "base.zip");
-                } catch (Exception e) {
-                  log.error(e);
-                }
-              }
+          Compressor.unzip(localFile.getAbsolutePath(),
+              LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
 
-              // ...and we're done updating.
-              downloadCompleted = true;
-            } catch (IOException e) {
-              // Keep retrying.
+          FileUtil.deleteFile(localFile.getAbsolutePath());
+
+          // Delete the old base.zip bundle so we have an up-to-date vanilla state zip.
+          if (FileUtil.fileExists(selectedServer.getRootDirectory() + "/rsrc/base.zip")) {
+            FileUtil.deleteFile(selectedServer.getRootDirectory() + "/rsrc/base.zip");
+            try {
+              _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_bundle_regen", selectedServer.name));
+              Compressor.zipFolderContents(new File(selectedServer.getRootDirectory() + "/rsrc"),
+                  new File(selectedServer.getRootDirectory() + "/rsrc/base.zip"), "base.zip");
+            } catch (Exception e) {
               log.error(e);
             }
-
           }
         }
-        log.info("Third party client up to date: " + selectedServer.name);
+        log.info("Third party client up to date", "client", selectedServer.name);
 
         // make sure there's a base zip file we can use to clean files with.
         String rootDir = selectedServer.getRootDirectory();

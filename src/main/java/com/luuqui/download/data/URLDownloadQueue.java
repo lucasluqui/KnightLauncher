@@ -18,9 +18,9 @@ public class URLDownloadQueue {
    */
   private final HashMap<URL, File> queue;
 
-  public URLDownloadQueue ()
+  public URLDownloadQueue (String name)
   {
-    this.name = "Default download queue";
+    this.name = name;
     this.queue = new HashMap<>();
   }
 

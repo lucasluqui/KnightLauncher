@@ -4,6 +4,7 @@ import com.google.inject.*;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.download.DownloadManager;
+import com.luuqui.download.data.URLDownloadQueue;
 import com.luuqui.launcher.editor.EditorsGUI;
 import com.luuqui.launcher.flamingo.FlamingoManager;
 import com.luuqui.launcher.flamingo.data.Server;
@@ -564,27 +565,20 @@ public class LauncherApp
     }
   }
 
-  private void resetGetdown ()
-  {
-    int downloadAttempts = 0;
-    boolean downloadCompleted = false;
-
-    while (downloadAttempts <= 3 && !downloadCompleted) {
-      downloadAttempts++;
-      log.info("Resetting Getdown", "attempts", downloadAttempts);
-      try {
-        FileUtils.copyURLToFile(
-            new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/getdown.txt"),
-            new File(LauncherGlobals.USER_DIR, "getdown.txt"),
-            0,
-            0
-        );
-        downloadCompleted = true;
-      } catch (IOException e) {
-        // Keep retrying.
-        log.error(e);
-      }
+  private void resetGetdown () {
+    URLDownloadQueue downloadQueue = null;
+    try {
+      downloadQueue = new URLDownloadQueue(
+          "Getdown Reset",
+          new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/getdown.txt"),
+          new File(LauncherGlobals.USER_DIR, "getdown.txt")
+      );
+    } catch (MalformedURLException e) {
+      log.error(e);
     }
+
+    _downloadManager.add(downloadQueue);
+    _downloadManager.processQueues();
   }
 
   /**

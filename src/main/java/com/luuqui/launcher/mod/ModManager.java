@@ -3,6 +3,8 @@ package com.luuqui.launcher.mod;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.luuqui.discord.DiscordPresenceClient;
+import com.luuqui.download.DownloadManager;
+import com.luuqui.download.data.URLDownloadQueue;
 import com.luuqui.launcher.*;
 import com.luuqui.launcher.LocaleManager;
 import com.luuqui.launcher.flamingo.FlamingoManager;
@@ -17,13 +19,13 @@ import com.luuqui.util.Compressor;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.ImageUtil;
 import com.luuqui.util.JavaUtil;
-import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.zip.ZipFile;
@@ -37,6 +39,7 @@ public class ModManager
   @Inject protected LocaleManager _localeManager;
   @Inject protected SettingsManager _settingsManager;
   @Inject protected FlamingoManager _flamingoManager;
+  @Inject protected DownloadManager _downloadManager;
   @Inject protected DiscordPresenceClient _discordPresenceClient;
 
   private final LinkedList<Mod> modList = new LinkedList<>();
@@ -416,31 +419,20 @@ public class ModManager
 
   private void resetCode ()
   {
-    int downloadAttempts = 0;
-    boolean downloadCompleted = false;
-
-    while (downloadAttempts <= 3 && !downloadCompleted) {
-      downloadAttempts++;
-      log.info("Resetting code jars", "attempts", downloadAttempts);
-      try {
-        FileUtils.copyURLToFile(
-            new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-pcode.jar"),
-            new File(LauncherGlobals.USER_DIR + "/code/", "projectx-pcode.jar"),
-            0,
-            0
-        );
-        FileUtils.copyURLToFile(
-            new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-config.jar"),
-            new File(LauncherGlobals.USER_DIR + "/code/", "projectx-config.jar"),
-            0,
-            0
-        );
-        downloadCompleted = true;
-      } catch (IOException e) {
-        // Keep retrying.
-        log.error(e);
-      }
+    URLDownloadQueue downloadQueue = new URLDownloadQueue("Reset code jars");
+    try {
+      downloadQueue.addToQueue(
+          new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-pcode.jar"),
+          new File(LauncherGlobals.USER_DIR + "/code/", "projectx-pcode.jar")
+      );
+      downloadQueue.addToQueue(
+          new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-config.jar"),
+          new File(LauncherGlobals.USER_DIR + "/code/", "projectx-config.jar")
+      );
+    } catch (MalformedURLException e) {
+      log.error(e);
     }
+    _downloadManager.processQueues();
   }
 
   @SuppressWarnings("all")
