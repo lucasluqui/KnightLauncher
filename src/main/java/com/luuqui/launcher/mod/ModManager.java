@@ -419,6 +419,7 @@ public class ModManager
 
   private void resetCode ()
   {
+    log.info("Resetting code jars...");
     URLDownloadQueue downloadQueue = new URLDownloadQueue("Reset code jars");
     try {
       downloadQueue.addToQueue(

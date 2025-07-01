@@ -566,6 +566,7 @@ public class LauncherApp
   }
 
   private void resetGetdown () {
+    log.info("Resetting Getdown...");
     URLDownloadQueue downloadQueue = null;
     try {
       downloadQueue = new URLDownloadQueue(
