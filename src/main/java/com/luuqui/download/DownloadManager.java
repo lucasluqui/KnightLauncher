@@ -38,16 +38,19 @@ public class DownloadManager
   /**
    * Maximum number of retries to try to download an item in queue.
    */
+  @SuppressWarnings("all")
   private final int MAX_ATTEMPTS = 3;
 
   /**
    * Time in milliseconds until we time out a download attempt during initial connection.
    */
+  @SuppressWarnings("all")
   private final int CONNECTION_TIMEOUT = 0;
 
   /**
    * Time in milliseconds until we time out a download attempt during read.
    */
+  @SuppressWarnings("all")
   private final int READ_TIMEOUT = 0;
 
   public DownloadManager ()
@@ -77,7 +80,7 @@ public class DownloadManager
    */
   public void processQueues ()
   {
-    queuesInProcess += storedQueues.size();
+    this.queuesInProcess += storedQueues.size();
 
     for (URLDownloadQueue downloadQueue : storedQueues)
     {
@@ -133,7 +136,7 @@ public class DownloadManager
       }
 
       this.queueStatusMap.put(downloadQueue, downloadCompleted);
-      queuesInProcess -= 1;
+      this.queuesInProcess -= 1;
     }
   }
 
