@@ -411,9 +411,9 @@ public class LauncherEventHandler
     this.gui.serverSwitcherPane.removeAll();
 
     List<Server> serverList = _flamingoManager.getServerList();
-    if(!serverList.isEmpty()) {
+    if (!serverList.isEmpty()) {
       int count = 0;
-      String borderColor = ColorUtil.colorToHexString(locked ? CustomColors.INTERFACE_SERVERSWITCHER_LOCKED_HOVER_BORDER : CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER);
+      String borderColor = ColorUtil.colorToHexString(locked ? CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER_LOCKED : CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER);
 
       BufferedImage officialServerBufferedImage = ImageUtil.loadImageWithinJar("/img/server-official.png");
       officialServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(officialServerBufferedImage, 32, 32);
@@ -423,7 +423,7 @@ public class LauncherEventHandler
       defaultServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(defaultServerBufferedImage, 32, 32);
       ImageIcon defaultServerImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(defaultServerBufferedImage, 15));
 
-      for(Server server : serverList) {
+      for (Server server : serverList) {
         JPanel serverIconPane = new JPanel();
         serverIconPane.setLayout(null);
         serverIconPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
@@ -447,8 +447,8 @@ public class LauncherEventHandler
         serverIcon.setToolTipText(server.name);
         serverIconPane.add(serverIcon);
 
-        if(server == _flamingoManager.getSelectedServer()) {
-          serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + borderColor + ",2");
+        if (server == _flamingoManager.getSelectedServer()) {
+          serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + borderColor + ",2; background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND));
           serverIcon.updateUI();
         } else {
           serverIcon.addMouseListener(new MouseListener() {
@@ -462,7 +462,7 @@ public class LauncherEventHandler
             @Override public void mousePressed(MouseEvent e) {}
             @Override public void mouseReleased(MouseEvent e) {}
             @Override public void mouseEntered(MouseEvent e) {
-              serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + borderColor + ",2");
+              serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + borderColor + ",2; background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND));
               serverIcon.updateUI();
             }
             @Override public void mouseExited(MouseEvent e) {
