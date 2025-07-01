@@ -65,7 +65,7 @@ public class DiscordPresenceClient
     this.eventHandler = new DiscordEventHandlers();
     DiscordRPC.discordInitialize(this.clientId, this.eventHandler, true);
     setDetails(_localeManager.getValue("presence.starting"));
-    log.info("Discord RPC Instance is now running.");
+    log.info("Discord presence client is now running.");
   }
 
   public void setDetails (String details)
@@ -87,7 +87,7 @@ public class DiscordPresenceClient
     presence.setDetails(details);
     presence.setBigImage("icon-512", _localeManager.getValue("presence.image_desc", LauncherGlobals.LAUNCHER_VERSION));
     DiscordRPC.discordUpdatePresence(presence.build());
-    log.info("Updating presence detail", "detail", details);
+    log.info("Updating discord presence detail", "detail", details);
   }
 
   public void stop ()

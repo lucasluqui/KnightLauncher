@@ -43,7 +43,7 @@ public class CacheManager
     URL localURL;
 
     if(FileUtil.fileExists(localPath)) {
-      log.info("Cache: Loading image from cache", "localPath", localPath);
+      log.info("Loading image from cache", "localPath", localPath);
       try {
         localURL = new File(localPath).toURI().toURL();
         bufferedImage = ImageUtil.toBufferedImage(ImageUtil.getImageFromURL(localURL, width, height));
@@ -52,7 +52,7 @@ public class CacheManager
       }
     } else {
       bufferedImage = ImageUtil.toBufferedImage(ImageUtil.getImageFromURL(url, width, height));
-      log.info("Cache: Saving image to cache", "localPath", localPath);
+      log.info("Saving image to cache", "localPath", localPath);
       File cacheFile = new File(localPath);
       cacheFile.getParentFile().mkdirs();
       try {
@@ -70,14 +70,14 @@ public class CacheManager
     String localPath = getLocalPath(url);
 
     if(FileUtil.fileExists(localPath)) {
-      log.info("Cache: Loading file from cache", "localPath", localPath);
+      log.info("Loading file from cache", "localPath", localPath);
       return new File(localPath);
     } else {
       try {
         File localFile = new File(localPath);
         _downloadManager.add(new URLDownloadQueue(localFile.getName(), new URL(url), localFile));
         _downloadManager.processQueues();
-        log.info("Cache: Saving file to cache", "localPath", localPath);
+        log.info("Saving file to cache", "localPath", localPath);
         return localFile;
       } catch (IOException e) {
         log.error(e);

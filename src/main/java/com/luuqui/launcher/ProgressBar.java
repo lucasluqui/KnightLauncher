@@ -20,7 +20,7 @@ public class ProgressBar
   {
     _launcherCtx.launcherGUI.launchState.setText(newState);
     _launcherCtx.modListGUI.refreshProgressBar.setString(newState);
-    log.info(newState);
+    //log.info(newState);
   }
 
   public void startTask ()

@@ -120,7 +120,6 @@ public class DownloadManager
               READ_TIMEOUT
           );
           downloadCompleted = true;
-          this.queueStatusMap.put(downloadQueue, true);
         } catch (IOException e) {
           // Keep retrying.
           log.error(e);
@@ -130,10 +129,10 @@ public class DownloadManager
       if (downloadCompleted) {
         log.info("Downloaded item in queue", "queue", queueName, "url", url, "localFile", localFile, "attempts", downloadAttempts);
       } else {
-        this.queueStatusMap.put(downloadQueue, false);
         log.error("Failed to download item in queue", "queue", queueName, "url", url, "localFile", localFile, "attempts", downloadAttempts);
       }
 
+      this.queueStatusMap.put(downloadQueue, downloadCompleted);
       queuesInProcess -= 1;
     }
   }

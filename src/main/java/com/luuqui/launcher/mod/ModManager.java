@@ -433,6 +433,7 @@ public class ModManager
     } catch (MalformedURLException e) {
       log.error(e);
     }
+    _downloadManager.add(downloadQueue);
     _downloadManager.processQueues();
   }
 
