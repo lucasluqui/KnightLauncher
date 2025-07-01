@@ -46,6 +46,10 @@ public class FlamingoManager
   {
     String localId = getLocalId();
     this.machineId = SystemUtil.getHashedMachineId(localId);
+
+    // Make sure we at least have the official server on init.
+    Server official = new Server("Official");
+    serverList.add(official);
   }
 
   public List<Server> fetchServerList ()

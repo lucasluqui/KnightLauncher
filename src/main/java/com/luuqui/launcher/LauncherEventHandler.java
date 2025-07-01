@@ -398,9 +398,7 @@ public class LauncherEventHandler
       _launcherCtx.editorsGUI.eventHandler.selectedServerChanged();
 
       saveSelectedServer();
-
       updateServerSwitcher(false);
-      updateServerSwitcher(false); // why do we have to call this twice for it to work correctly? TODO: figure out!
     } else {
       // fallback to official in rare error scenario
       _flamingoManager.setSelectedServer(_flamingoManager.findServerByName("Official"));
