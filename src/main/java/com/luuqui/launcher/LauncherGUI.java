@@ -627,6 +627,16 @@ public class LauncherGUI extends BaseGUI {
     }
   }
 
+  public void setOnTop ()
+  {
+    layeredSettingsPane.setVisible(false);
+    layeredModsPane.setVisible(false);
+    layeredEditorsPane.setVisible(false);
+    layeredReturnButton.setVisible(false);
+
+    mainPane.setVisible(true);
+  }
+
   protected void specialKeyPressed ()
   {
     launchButton.setBackground(CustomColors.LAUNCH_ALT);
