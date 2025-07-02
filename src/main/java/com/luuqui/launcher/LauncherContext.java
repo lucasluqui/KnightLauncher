@@ -32,10 +32,10 @@ public class LauncherContext
     // empty.
   }
 
-  public void exit ()
+  public void exit (boolean force)
   {
     _discordPresenceClient.stop();
-    if (!Settings.keepOpen) {
+    if (force || !Settings.keepOpen) {
       launcherGUI.guiFrame.dispose();
       System.exit(1);
     }

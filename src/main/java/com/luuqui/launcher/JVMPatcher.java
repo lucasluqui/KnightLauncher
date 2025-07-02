@@ -125,7 +125,7 @@ public class JVMPatcher extends BaseGUI
     });
 
     closeButton.addActionListener(e -> {
-      _launcherCtx.exit();
+      _launcherCtx.exit(true);
     });
     closeButton.setToolTipText(_localeManager.getValue("b.close"));
     minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));

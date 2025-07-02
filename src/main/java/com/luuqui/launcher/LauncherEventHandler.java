@@ -784,7 +784,7 @@ public class LauncherEventHandler
   private void checkGameLaunch ()
   {
     if(isGameRunning()) {
-      _launcherCtx.exit();
+      _launcherCtx.exit(false);
 
       // re-enable server switching and launching.
       this.updateServerSwitcher(false);
@@ -793,7 +793,7 @@ public class LauncherEventHandler
       try {
         Thread.sleep(8000);
         if(isGameRunning()) {
-          _launcherCtx.exit();
+          _launcherCtx.exit(false);
         } else {
           Dialog.push(_localeManager.getValue("error.game_launch"), _localeManager.getValue("t.game_launch_error"), JOptionPane.ERROR_MESSAGE);
         }

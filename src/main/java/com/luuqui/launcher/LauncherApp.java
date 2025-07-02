@@ -595,9 +595,4 @@ public class LauncherApp
     if (containsCyrillic) SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
   }
 
-  public void exit ()
-  {
-    _launcherCtx.exit();
-  }
-
 }
