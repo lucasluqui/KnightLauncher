@@ -791,16 +791,20 @@ public class LauncherEventHandler
 
   private void checkGameLaunch ()
   {
-    if (!isGameRunning()) {
+    boolean gameRunning = isGameRunning();
+    if (!gameRunning) {
       try {
         Thread.sleep(8000);
-        if (!isGameRunning()) {
+        gameRunning = isGameRunning();
+        if (!gameRunning) {
           Dialog.push(_localeManager.getValue("error.game_launch"), _localeManager.getValue("t.game_launch_error"), JOptionPane.ERROR_MESSAGE);
         }
       } catch (InterruptedException e) {
         log.error(e);
       }
     }
+
+    if (gameRunning) _launcherCtx.exit(false);
 
     // re-enable server switching and launching.
     this.updateServerSwitcher(false);
