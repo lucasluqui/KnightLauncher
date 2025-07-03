@@ -453,7 +453,7 @@ public class LauncherEventHandler
         } else {
           serverIcon.addMouseListener(new MouseListener() {
             @Override public void mouseClicked(MouseEvent e) {
-              if(!locked) {
+              if (!locked) {
                 _flamingoManager.setSelectedServer(server);
                 selectedServerChanged();
                 saveSelectedServer(server.getSanitizedName());
@@ -462,12 +462,16 @@ public class LauncherEventHandler
             @Override public void mousePressed(MouseEvent e) {}
             @Override public void mouseReleased(MouseEvent e) {}
             @Override public void mouseEntered(MouseEvent e) {
-              serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + borderColor + ",2; background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND));
-              serverIcon.updateUI();
+              if (!locked) {
+                serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + borderColor + ",2; background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND));
+                serverIcon.updateUI();
+              }
             }
             @Override public void mouseExited(MouseEvent e) {
-              serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 0; border:0,0,0,0");
-              serverIcon.updateUI();
+              if (!locked) {
+                serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 0; border:0,0,0,0");
+                serverIcon.updateUI();
+              }
             }
           });
         }
