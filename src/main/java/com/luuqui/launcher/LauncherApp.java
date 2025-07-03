@@ -465,18 +465,17 @@ public class LauncherApp
 
   private void loadOnlineAssets ()
   {
-    new Thread(this::checkVersion).start();
-
     new Thread(() -> {
 
       Status flamingoStatus = _flamingoManager.getStatus();
-      if(flamingoStatus.version != null) _flamingoManager.setOnline(true);
+      if (flamingoStatus.version != null) _flamingoManager.setOnline(true);
       _launcherCtx.launcherGUI.eventHandler.updateServerList(_flamingoManager.fetchServerList());
       _launcherCtx.settingsGUI.eventHandler.updateAboutTab(flamingoStatus);
       _launcherCtx.settingsGUI.eventHandler.updateActiveBetaCodes();
 
     }).start();
 
+    ThreadingUtil.executeWithDelay(this::checkVersion, 3000);
     ThreadingUtil.executeWithDelay(this::checkFlamingoStatus, 10000);
   }
 

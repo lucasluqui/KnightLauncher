@@ -767,12 +767,12 @@ public class SettingsGUI extends BaseGUI
     labelFlamingoVersion = new JLabel(_localeManager.getValue("m.flamingo_version", "N/A"));
     labelFlamingoVersion.setBounds(25, 367, 600, 20);
     labelFlamingoVersion.setFont(Fonts.fontRegBig);
-    aboutPanel.add(labelFlamingoVersion);
+    //aboutPanel.add(labelFlamingoVersion);
 
     labelFlamingoUptime = new JLabel(_localeManager.getValue("m.flamingo_uptime", "N/A"));
     labelFlamingoUptime.setBounds(25, 387, 600, 20);
     labelFlamingoUptime.setFont(Fonts.fontRegBig);
-    aboutPanel.add(labelFlamingoUptime);
+    //aboutPanel.add(labelFlamingoUptime);
 
     JButton copyLogsButton = new JButton(_localeManager.getValue("b.copy_logs"));
     copyLogsButton.setFont(Fonts.fontMed);
