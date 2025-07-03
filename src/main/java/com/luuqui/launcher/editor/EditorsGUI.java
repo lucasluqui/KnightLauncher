@@ -44,7 +44,9 @@ public class EditorsGUI extends BaseGUI
     guiFrame.getContentPane().setLayout(null);
     editorsPanel = (JPanel) guiFrame.getContentPane();
 
+    Icon loadingIcon = new ImageIcon(this.getClass().getResource("/img/loading.gif"));
     editorLaunchState = new JLabel(_localeManager.getValue("m.editor_loading"));
+    editorLaunchState.setIcon(loadingIcon);
     editorLaunchState.setHorizontalAlignment(SwingConstants.CENTER);
     editorLaunchState.setBounds(192, 190, 385, 25);
     editorLaunchState.setFont(Fonts.fontRegBig);

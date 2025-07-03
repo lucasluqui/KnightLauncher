@@ -3,6 +3,8 @@ package com.luuqui.launcher;
 import com.google.inject.Inject;
 import com.luuqui.util.ThreadingUtil;
 
+import javax.swing.*;
+
 import static com.luuqui.launcher.Log.log;
 
 public class ProgressBar
@@ -34,6 +36,7 @@ public class ProgressBar
     activeTasks--;
     if(activeTasks == 0) {
       setState("Finished");
+      _launcherCtx.launcherGUI.launchState.setIcon(null);
       Thread finishDelayThread = new Thread(() -> {
         showBar(false);
       });
@@ -59,6 +62,10 @@ public class ProgressBar
     _launcherCtx.launcherGUI.launchState.setVisible(show);
     _launcherCtx.launcherGUI.launchProgressBar.setVisible(show);
     _launcherCtx.modListGUI.refreshProgressBar.setVisible(show);
+
+    if (show) {
+      _launcherCtx.launcherGUI.launchState.setIcon(new ImageIcon(this.getClass().getResource("/img/loading.gif")));
+    }
   }
 
 }
