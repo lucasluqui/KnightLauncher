@@ -603,14 +603,16 @@ public class LauncherEventHandler
 
   public void updateLauncher ()
   {
-    // delete any existing updaters from previous updates
-    //new File(LauncherGlobals.USER_DIR + "/updater.jar").delete();
     try {
       Files.copy(Paths.get(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"), Paths.get(LauncherGlobals.USER_DIR + "/updater.jar"), StandardCopyOption.REPLACE_EXISTING);
+
+      // Sleep the thread for a bit to be fully sure updater.jar isn't locked.
+      Thread.sleep(1000);
+
       ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update"}, true);
       System.exit(1);
     } catch (Exception e) {
-      String downloadErrMsg = "An error occurred while trying to update the launcher." +
+      String downloadErrMsg = "An error occurred while trying to start the launcher updater." +
           "\nPlease try again later.";
       Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
       log.error(e);
