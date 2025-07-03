@@ -407,7 +407,7 @@ public class LauncherGUI extends BaseGUI {
     bannerLinkButton.setVisible(false);
     mainPane.add(bannerLinkButton);
 
-    launchButton = new JButton(_localeManager.getValue("b.play_now"));
+    launchButton = new JButton(_localeManager.getValue("b.play"));
     launchButton.setBounds(572, 423, 200, 66);
     launchButton.setFont(Fonts.fontMedBig);
     launchButton.setFocusPainted(false);
@@ -415,7 +415,7 @@ public class LauncherGUI extends BaseGUI {
     launchButton.setBackground(CustomColors.LAUNCH);
     launchButton.setBorderPainted(false);
     launchButton.setForeground(Color.WHITE);
-    launchButton.setToolTipText(_localeManager.getValue("b.play_now"));
+    launchButton.setToolTipText(_localeManager.getValue("b.play"));
     mainPane.add(launchButton);
     launchButton.addActionListener(action -> {
       if (_keyboardController.isShiftPressed() || _keyboardController.isAltPressed()) {
@@ -520,7 +520,7 @@ public class LauncherGUI extends BaseGUI {
     Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 16, Color.WHITE);
     updateButton = new JButton(updateIcon);
     updateButton.setBounds(691, 26, 36, 36);
-    updateButton.setToolTipText(_localeManager.getValue("b.update"));
+    updateButton.setToolTipText(_localeManager.getValue("b.update_launcher"));
     updateButton.setFont(Fonts.fontMed);
     updateButton.setFocusPainted(false);
     updateButton.setFocusable(false);

@@ -354,8 +354,8 @@ public class LauncherEventHandler
 
     if (selectedServer != null) {
       if (selectedServer.isOfficial()) {
-        gui.launchButton.setText(_localeManager.getValue("b.play_now"));
-        gui.launchButton.setToolTipText(_localeManager.getValue("b.play_now"));
+        gui.launchButton.setText(_localeManager.getValue("b.play"));
+        gui.launchButton.setToolTipText(_localeManager.getValue("b.play"));
         gui.launchButton.setEnabled(selectedServer.enabled == 1);
         gui.selectedServerLabel.setText("Official");
         gui.playerCountLabel.setVisible(true);
@@ -369,14 +369,14 @@ public class LauncherEventHandler
       } else {
         gui.launchButton.setEnabled(selectedServer.enabled == 1);
         if (!selectedServer.isInstalled()) {
-          gui.launchButton.setText(_localeManager.getValue("b.install_thirdparty", selectedServer.name));
-          gui.launchButton.setToolTipText(_localeManager.getValue("b.install_thirdparty", selectedServer.name));
+          gui.launchButton.setText(_localeManager.getValue("b.install"));
+          gui.launchButton.setToolTipText(_localeManager.getValue("b.install"));
         } else if (selectedServer.isOutdated()) {
-          gui.launchButton.setText(_localeManager.getValue("b.update_thirdparty", selectedServer.name));
-          gui.launchButton.setToolTipText(_localeManager.getValue("b.update_thirdparty", selectedServer.name));
+          gui.launchButton.setText(_localeManager.getValue("b.update"));
+          gui.launchButton.setToolTipText(_localeManager.getValue("b.update"));
         } else {
-          gui.launchButton.setText(_localeManager.getValue("b.play_now"));
-          gui.launchButton.setToolTipText(_localeManager.getValue("b.play_now"));
+          gui.launchButton.setText(_localeManager.getValue("b.play"));
+          gui.launchButton.setToolTipText(_localeManager.getValue("b.play"));
         }
 
         gui.selectedServerLabel.setText("");
@@ -804,7 +804,7 @@ public class LauncherEventHandler
     this.gui.launchButton.setEnabled(true);
 
     _launcherCtx.launcherGUI.launchButton.setIcon(null);
-    _launcherCtx.launcherGUI.launchButton.setText(_localeManager.getValue("b.play_now"));
+    _launcherCtx.launcherGUI.launchButton.setText(_localeManager.getValue("b.play"));
   }
 
   private String localizeTimeRemaining (String remainingString)
