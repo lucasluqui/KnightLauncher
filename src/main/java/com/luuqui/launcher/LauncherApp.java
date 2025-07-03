@@ -509,7 +509,7 @@ public class LauncherApp
             + "latest"
     );
 
-    if(rawResponseReleases != null) {
+    if (rawResponseReleases != null) {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
 
       _launcherCtx.launcherGUI.latestRelease = jsonReleases.getString("tag_name");
@@ -517,7 +517,10 @@ public class LauncherApp
 
       if (!_launcherCtx.launcherGUI.latestRelease.equalsIgnoreCase(LauncherGlobals.LAUNCHER_VERSION)) {
         if (Settings.autoUpdate && !LauncherGlobals.LAUNCHER_VERSION.contains("dev") && !LauncherGlobals.LAUNCHER_VERSION.contains("rc")) {
-          _launcherCtx.launcherGUI.eventHandler.updateLauncher();
+          // Check if we're coming from a failed update, in that case do not autoupdate even if all other conditions matched.
+          if ( !(this.args.length > 0 && this.args[0].equals("updateFailed")) ) {
+            _launcherCtx.launcherGUI.eventHandler.updateLauncher();
+          }
         }
         Settings.isOutdated = true;
         _launcherCtx.launcherGUI.updateButton.setVisible(true);

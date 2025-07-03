@@ -21,16 +21,16 @@ import static com.luuqui.launcher.Log.log;
 
 public class JVMPatcher extends BaseGUI
 {
-  private String path;
-  private boolean legacy;
-  private final Map<String, String> availableJVMs = new HashMap<String, String>();
-
   @Inject protected LauncherContext _launcherCtx;
   @Inject protected LocaleManager _localeManager;
   @Inject protected SettingsManager _settingsManager;
   @Inject protected ModuleManager _moduleManager;
   @Inject protected DownloadManager _downloadManager;
   @Inject protected DiscordPresenceClient _discordPresenceClient;
+
+  private String path;
+  private boolean legacy;
+  private final Map<String, String> availableJVMs = new HashMap<String, String>();
 
   @Inject
   public JVMPatcher ()

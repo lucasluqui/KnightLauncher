@@ -27,7 +27,7 @@ public class FlamingoManager
   @Inject protected SettingsManager _settingsManager;
 
   @SuppressWarnings("all")
-  private final String ENDPOINT = "flamingo.luuqui.com";
+  private final String ENDPOINT = "flamingo.knightlauncher.com";
 
   @SuppressWarnings("all")
   private final int PORT = 6060;
