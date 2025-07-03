@@ -92,12 +92,14 @@ public class JVMPatcher extends BaseGUI
     jvmComboBox.setFont(Fonts.fontReg);
     guiFrame.add(jvmComboBox);
 
-    for(String key : this.availableJVMs.keySet()) {
+    for (String key : this.availableJVMs.keySet()) {
       jvmComboBox.addItem(key);
     }
     jvmComboBox.setSelectedIndex(0);
 
     jvmPatcherState = new JLabel("");
+    jvmPatcherState.setIcon(new ImageIcon(this.getClass().getResource("/img/loading.gif")));
+    jvmPatcherState.setVisible(false);
     jvmPatcherState.setBounds(26, 180, 450, 15);
     jvmPatcherState.setFont(Fonts.fontReg);
     guiFrame.getContentPane().add(jvmPatcherState);
@@ -148,6 +150,7 @@ public class JVMPatcher extends BaseGUI
 
     jvmPatcherProgressBar.setMaximum(4);
     jvmPatcherProgressBar.setValue(1);
+    jvmPatcherState.setVisible(true);
     jvmPatcherState.setText(_localeManager.getValue("m.jvm_patcher_download"));
     
     this.downloadJVM();

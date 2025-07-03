@@ -57,6 +57,7 @@ public class Updater extends BaseGUI
     guiFrame.add(launcherLogo);
 
     updaterState = new JLabel("");
+    updaterState.setIcon(new ImageIcon(this.getClass().getResource("/img/loading.gif")));
     updaterState.setHorizontalAlignment(SwingConstants.LEFT);
     updaterState.setBounds(100, 49, 375, 25);
     updaterState.setFont(Fonts.fontRegBig);
