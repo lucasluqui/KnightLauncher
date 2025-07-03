@@ -2,7 +2,6 @@ package com.luuqui.launcher.mod;
 
 import com.google.inject.Inject;
 import com.luuqui.dialog.Dialog;
-import com.luuqui.launcher.LauncherApp;
 import com.luuqui.launcher.LocaleManager;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.flamingo.FlamingoManager;

@@ -73,47 +73,45 @@ public class LauncherEventHandler
       this.updateServerSwitcher(true);
       this.gui.launchButton.setEnabled(false);
 
-      if(_flamingoManager.getSelectedServer().isOfficial()) {
+      Server selectedServer = _flamingoManager.getSelectedServer();
+      String sanitizedServerName = selectedServer.getSanitizedName();
+
+      if (selectedServer.isOfficial()) {
         // start: official servers launch procedure
-        if (_modManager.mountRequired) _modManager.mount();
+        if (_modManager.mountRequired) {
+          _modManager.mount();
+
+          // re-lock server switching and launch button after mounting.
+          this.updateServerSwitcher(true);
+          this.gui.launchButton.setEnabled(false);
+        }
+
         _launcherCtx.settingsGUI.eventHandler.saveAdditionalArgs();
         _launcherCtx.settingsGUI.eventHandler.saveConnectionSettings();
         _settingsManager.loadGameSettings();
 
         if (Settings.loadCodeMods) {
-
           ProcessUtil.run(getCodeModsStartCommand(altMode), true);
-
         } else {
-
           if (Settings.gamePlatform.startsWith("Steam")) {
-
             try {
               SteamUtil.startGameById(99900, SystemUtil.isMac());
             } catch (Exception e) {
               log.error(e);
             }
-
           } else {
-
             if (SystemUtil.isWindows()) {
               ProcessUtil.run(LauncherGlobals.GETDOWN_ARGS_WIN, true);
             } else {
               ProcessUtil.run(LauncherGlobals.GETDOWN_ARGS, true);
             }
-
           }
         }
 
-        _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch"));
-        log.info("Starting game", "platform", Settings.gamePlatform, "codeMods", Settings.loadCodeMods);
         if (Settings.useIngameRPC) ProcessUtil.run(RPC_COMMAND_LINE, true);
         // end: official servers launch procedure
       } else {
         // start: third party server launch procedure
-        Server selectedServer = _flamingoManager.getSelectedServer();
-        String sanitizedServerName = selectedServer.getSanitizedName();
-
         _launcherCtx._progressBar.startTask();
         _launcherCtx._progressBar.setBarMax(2);
         _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_data", selectedServer.name));
@@ -198,7 +196,6 @@ public class LauncherEventHandler
         // we already have the client files,
         // the client is up to date, or the download has finished.
         // and so we start it up!
-        _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_start", selectedServer.name));
         _launcherCtx._progressBar.setBarValue(2);
 
         ProcessUtil.runFromDirectory(getThirdPartyClientStartCommand(selectedServer, altMode),
@@ -208,6 +205,10 @@ public class LauncherEventHandler
         _launcherCtx._progressBar.finishTask();
       }
 
+      log.info("Starting game", "server", selectedServer, "platform", Settings.gamePlatform, "codeMods", Settings.loadCodeMods);
+      _launcherCtx._progressBar.setState(_localeManager.getValue("m.launching"));
+      _launcherCtx.launcherGUI.launchButton.setIcon(new ImageIcon(this.getClass().getResource("/img/loading.gif")));
+      _launcherCtx.launcherGUI.launchButton.setText(_localeManager.getValue("b.launching"));
       ThreadingUtil.executeWithDelay(this::checkGameLaunch, 8000);
     });
     launchThread.start();
@@ -351,8 +352,8 @@ public class LauncherEventHandler
   {
     Server selectedServer = _flamingoManager.getSelectedServer();
 
-    if(selectedServer != null) {
-      if(selectedServer.isOfficial()) {
+    if (selectedServer != null) {
+      if (selectedServer.isOfficial()) {
         gui.launchButton.setText(_localeManager.getValue("b.play_now"));
         gui.launchButton.setToolTipText(_localeManager.getValue("b.play_now"));
         gui.launchButton.setEnabled(selectedServer.enabled == 1);
@@ -367,15 +368,15 @@ public class LauncherEventHandler
         //gui.auctionButton.setVisible(true);
       } else {
         gui.launchButton.setEnabled(selectedServer.enabled == 1);
-        if(!selectedServer.isInstalled()) {
+        if (!selectedServer.isInstalled()) {
           gui.launchButton.setText(_localeManager.getValue("b.install_thirdparty", selectedServer.name));
           gui.launchButton.setToolTipText(_localeManager.getValue("b.install_thirdparty", selectedServer.name));
         } else if (selectedServer.isOutdated()) {
           gui.launchButton.setText(_localeManager.getValue("b.update_thirdparty", selectedServer.name));
           gui.launchButton.setToolTipText(_localeManager.getValue("b.update_thirdparty", selectedServer.name));
         } else {
-          gui.launchButton.setText(_localeManager.getValue("b.play_thirdparty", selectedServer.name));
-          gui.launchButton.setToolTipText(_localeManager.getValue("b.play_thirdparty", selectedServer.name));
+          gui.launchButton.setText(_localeManager.getValue("b.play_now"));
+          gui.launchButton.setToolTipText(_localeManager.getValue("b.play_now"));
         }
 
         gui.selectedServerLabel.setText("");
@@ -787,28 +788,23 @@ public class LauncherEventHandler
 
   private void checkGameLaunch ()
   {
-    if(isGameRunning()) {
-      _launcherCtx.exit(false);
-
-      // re-enable server switching and launching.
-      this.updateServerSwitcher(false);
-      this.gui.launchButton.setEnabled(true);
-    } else {
+    if (!isGameRunning()) {
       try {
         Thread.sleep(8000);
-        if(isGameRunning()) {
-          _launcherCtx.exit(false);
-        } else {
+        if (!isGameRunning()) {
           Dialog.push(_localeManager.getValue("error.game_launch"), _localeManager.getValue("t.game_launch_error"), JOptionPane.ERROR_MESSAGE);
         }
-
-        // re-enable server switching and launching.
-        this.updateServerSwitcher(false);
-        this.gui.launchButton.setEnabled(true);
       } catch (InterruptedException e) {
         log.error(e);
       }
     }
+
+    // re-enable server switching and launching.
+    this.updateServerSwitcher(false);
+    this.gui.launchButton.setEnabled(true);
+
+    _launcherCtx.launcherGUI.launchButton.setIcon(null);
+    _launcherCtx.launcherGUI.launchButton.setText(_localeManager.getValue("b.play_now"));
   }
 
   private String localizeTimeRemaining (String remainingString)
