@@ -29,12 +29,6 @@ public class LauncherGUI extends BaseGUI {
   @Inject protected DiscordPresenceClient _discordPresenceClient;
   @Inject protected KeyboardController _keyboardController;
 
-  public String currentWarning = "";
-  public String latestRelease = "";
-  public String latestChangelog = "";
-
-  public boolean displayingAnimBanner = false;
-
   @Inject
   public LauncherGUI ()
   {
@@ -104,6 +98,15 @@ public class LauncherGUI extends BaseGUI {
     mainPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     mainPane.setBounds(300, 35, 800, 550);
     guiFrame.getContentPane().add(mainPane);
+
+    bannerLoading = new JLabel(_localeManager.getValue("m.loading"));
+    bannerLoading.setIcon(new ImageIcon(this.getClass().getResource("/img/loading.gif")));
+    bannerLoading.setBounds(49, 65, 700, 340);
+    bannerLoading.setFont(Fonts.fontMedBig);
+    bannerLoading.setHorizontalAlignment(SwingConstants.CENTER);
+    bannerLoading.setVerticalAlignment(SwingConstants.CENTER);
+    mainPane.add(bannerLoading);
+    mainPane.setComponentZOrder(bannerLoading, 0);
 
     JLabel launcherLogo = new JLabel();
     BufferedImage launcherLogoImage = ImageUtil.loadImageWithinJar("/img/icon-92.png");
@@ -381,18 +384,21 @@ public class LauncherGUI extends BaseGUI {
     bannerTitle.setBounds(35, -60, 700, 340);
     bannerTitle.setFont(Fonts.fontMedGiant);
     bannerTitle.setForeground(Color.WHITE);
+    bannerTitle.setVisible(false);
     mainPane.add(bannerTitle);
 
     bannerSubtitle1 = new JLabel(_localeManager.getValue("m.banner_subtitle_default"));
     bannerSubtitle1.setBounds(40, -15, 700, 340);
     bannerSubtitle1.setFont(Fonts.fontMedBig);
     bannerSubtitle1.setForeground(Color.WHITE);
+    bannerSubtitle1.setVisible(false);
     mainPane.add(bannerSubtitle1);
 
     bannerSubtitle2 = new JLabel("");
     bannerSubtitle2.setBounds(40, 5, 700, 340);
     bannerSubtitle2.setFont(Fonts.fontMedBig);
     bannerSubtitle2.setForeground(Color.WHITE);
+    bannerSubtitle2.setVisible(false);
     mainPane.add(bannerSubtitle2);
 
     bannerLinkButton = new JButton(_localeManager.getValue("b.learn_more"));
@@ -513,7 +519,7 @@ public class LauncherGUI extends BaseGUI {
     warningNotice.setFont(Fonts.fontMed);
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
-      Dialog.push(currentWarning, _localeManager.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
+      Dialog.push(this.eventHandler.currentWarning, _localeManager.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
     });
     mainPane.add(warningNotice);
 
@@ -563,16 +569,16 @@ public class LauncherGUI extends BaseGUI {
 
   }
 
-  public void showWarning(String message)
+  public void showWarning (String message)
   {
     // we're also showing an available update, let's move the warning notice
     // slightly to the left, so they don't overlap.
-    if(updateButton.isVisible()) {
+    if (updateButton.isVisible()) {
       warningNotice.setBounds(warningNotice.getX() - 45, 26, 35, 35);
     }
 
     warningNotice.setVisible(true);
-    currentWarning = message;
+    this.eventHandler.currentWarning = message;
   }
 
   public BufferedImage processImageForBanner (BufferedImage image, double intensity)
@@ -597,12 +603,12 @@ public class LauncherGUI extends BaseGUI {
         proccesedImages.add(frame);
       }
 
-      displayingAnimBanner = true;
+      this.eventHandler.displayingAnimBanner = true;
       new Thread(() -> {
-        while(displayingAnimBanner) {
+        while (this.eventHandler.displayingAnimBanner) {
           for (int i = 0; i < proccesedImages.size(); i++) {
             // we might need to end prematurely to avoid concurrent modifications.
-            if(!displayingAnimBanner) break;
+            if (!this.eventHandler.displayingAnimBanner) break;
 
             try {
               Thread.sleep(gif.getDelay(i) * 10);
@@ -674,6 +680,7 @@ public class LauncherGUI extends BaseGUI {
   // Main pane
   public JPanel mainPane;
   public BufferedImage banner = null;
+  public JLabel bannerLoading;
   public JLabel bannerTimer;
   public JLabel bannerTitle;
   public JLabel bannerSubtitle1;

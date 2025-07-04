@@ -510,11 +510,13 @@ public class LauncherApp
 
     if (rawResponseReleases != null) {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
+      String latestRelease = jsonReleases.getString("tag_name");
+      String latestChangelog = jsonReleases.getString("body");
 
-      _launcherCtx.launcherGUI.latestRelease = jsonReleases.getString("tag_name");
-      _launcherCtx.launcherGUI.latestChangelog = jsonReleases.getString("body");
+      _launcherCtx.launcherGUI.eventHandler.latestRelease = latestRelease;
+      _launcherCtx.launcherGUI.eventHandler.latestChangelog = latestChangelog;
 
-      if (!_launcherCtx.launcherGUI.latestRelease.equalsIgnoreCase(LauncherGlobals.LAUNCHER_VERSION)) {
+      if (!latestRelease.equalsIgnoreCase(LauncherGlobals.LAUNCHER_VERSION)) {
         if (Settings.autoUpdate && !LauncherGlobals.LAUNCHER_VERSION.contains("dev") && !LauncherGlobals.LAUNCHER_VERSION.contains("rc")) {
           // Check if we're coming from a failed update, in that case do not autoupdate even if all other conditions matched.
           if ( !(this.args.length > 0 && this.args[0].equals("updateFailed")) ) {

@@ -45,6 +45,12 @@ public class LauncherEventHandler
   protected DownloadManager _downloadManager;
   protected DiscordPresenceClient _discordPresenceClient;
 
+  public String currentWarning = "";
+  public String latestRelease = "";
+  public String latestChangelog = "";
+
+  public boolean displayingAnimBanner = false;
+
   @Inject
   public LauncherEventHandler (LauncherContext launcherCtx,
                                ModManager modManager,
@@ -530,7 +536,7 @@ public class LauncherEventHandler
   public void updateBanner ()
   {
     Thread refreshThread = new Thread(() -> {
-      this.gui.displayingAnimBanner = false;
+      this.displayingAnimBanner = false;
 
       if(!_flamingoManager.getOnline()) {
         return;
@@ -546,13 +552,16 @@ public class LauncherEventHandler
         this.gui.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerUrl), bannerIntensity);
         this.gui.playAnimatedBannersButton.setVisible(true);
       }
+
+      this.gui.bannerLoading.setVisible(false);
       this.gui.mainPane.repaint();
 
       this.gui.bannerTitle.setText(selectedServer.announceContent.split("\\|")[0]);
+      this.gui.bannerTitle.setVisible(true);
 
       String bannerSubtitle = selectedServer.announceContent.split("\\|")[1];
 
-      if(bannerSubtitle.contains("\n")) {
+      if (bannerSubtitle.contains("\n")) {
         this.gui.bannerSubtitle1.setText(bannerSubtitle.split("\n")[0]);
         this.gui.bannerSubtitle2.setText(bannerSubtitle.split("\n")[1]);
         this.gui.bannerSubtitle2.setVisible(true);
@@ -560,8 +569,9 @@ public class LauncherEventHandler
         this.gui.bannerSubtitle1.setText(bannerSubtitle);
         this.gui.bannerSubtitle2.setVisible(false);
       }
+      this.gui.bannerSubtitle1.setVisible(true);
 
-      if(!selectedServer.announceBannerLink.equalsIgnoreCase("null")) {
+      if (!selectedServer.announceBannerLink.equalsIgnoreCase("null")) {
 
         ActionListener[] listeners = this.gui.bannerLinkButton.getActionListeners();
         for (ActionListener listener : listeners) {
@@ -576,9 +586,9 @@ public class LauncherEventHandler
         this.gui.bannerLinkButton.setVisible(false);
       }
 
-      if(selectedServer.announceBannerEndsAt != 0L || selectedServer.announceBannerStartsAt != 0L) {
+      if (selectedServer.announceBannerEndsAt != 0L || selectedServer.announceBannerStartsAt != 0L) {
 
-        if(selectedServer.announceBannerStartsAt > System.currentTimeMillis()) {
+        if (selectedServer.announceBannerStartsAt > System.currentTimeMillis()) {
           // The event has not yet started
           this.gui.bannerTimer.setText(_localeManager.getValue("m.banner_starts_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(selectedServer.announceBannerStartsAt))));
           this.gui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(selectedServer.announceBannerStartsAt, "PST")));
@@ -625,7 +635,7 @@ public class LauncherEventHandler
         "m.changelog_text",
         new String[] {
           LauncherGlobals.LAUNCHER_VERSION,
-          this.gui.latestRelease, this.gui.latestChangelog
+          this.latestRelease, this.latestChangelog
         }), JOptionPane.INFORMATION_MESSAGE);
   }
 
