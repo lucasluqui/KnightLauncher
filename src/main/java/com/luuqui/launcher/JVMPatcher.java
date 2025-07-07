@@ -5,6 +5,7 @@ import com.luuqui.dialog.Dialog;
 import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.download.DownloadManager;
 import com.luuqui.download.data.URLDownloadQueue;
+import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsManager;
 import com.luuqui.util.*;
 import org.apache.commons.io.FileUtils;
@@ -32,7 +33,6 @@ public class JVMPatcher extends BaseGUI
   private boolean legacy;
   private final Map<String, String> availableJVMs = new HashMap<String, String>();
 
-  @Inject
   public JVMPatcher ()
   {
     super(500, 250, true);
@@ -127,7 +127,15 @@ public class JVMPatcher extends BaseGUI
     });
 
     closeButton.addActionListener(e -> {
-      _launcherCtx.exit(true);
+      if (Settings.jvmPatched) {
+        _launcherCtx.exit(true);
+      } else {
+        Dialog.push(
+            "On your first time launching you are required to patch a 64-bit Java VM\nand thus you cannot close this window.",
+            "Java VM Patcher",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+      }
     });
     closeButton.setToolTipText(_localeManager.getValue("b.close"));
     minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));
@@ -149,12 +157,11 @@ public class JVMPatcher extends BaseGUI
     closeButton.setEnabled(false);
 
     jvmPatcherProgressBar.setMaximum(4);
-    jvmPatcherProgressBar.setValue(1);
     jvmPatcherState.setVisible(true);
+
+    jvmPatcherProgressBar.setValue(1);
     jvmPatcherState.setText(_localeManager.getValue("m.jvm_patcher_download"));
-    
     this.downloadJVM();
-    this.finish();
 
     jvmPatcherProgressBar.setValue(2);
     jvmPatcherState.setText(_localeManager.getValue("m.jvm_patcher_delete"));
