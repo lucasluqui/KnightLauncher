@@ -18,6 +18,8 @@ import com.luuqui.util.*;
 import net.sf.image4j.codec.ico.ICOEncoder;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
+import oshi.SystemInfo;
+import oshi.hardware.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -28,6 +30,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.List;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -79,6 +82,7 @@ public class LauncherApp
     setupFileLogging();
     logVMInfo();
     logGameVMInfo();
+    logHostInfo();
     setupHTTPSProtocol();
     checkTempDir();
     checkDirectories();
@@ -424,6 +428,33 @@ public class LauncherApp
     log.info("Data: " + JavaUtil.getGameJVMData());
     log.info("Version: " + JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath()));
     log.info("Arch: " + JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()));
+    log.info("---------------------------------");
+  }
+
+  private void logHostInfo ()
+  {
+    SystemInfo systemInfo = new SystemInfo();
+    HardwareAbstractionLayer hardwareAbstractLayer = systemInfo.getHardware();
+
+    log.info("----------- Host Info -----------");
+
+    CentralProcessor cpu = hardwareAbstractLayer.getProcessor();
+    CentralProcessor.ProcessorIdentifier cpuProcId = cpu.getProcessorIdentifier();
+    log.info("CPU: " + cpuProcId.getName());
+
+    List<GraphicsCard> gpus = hardwareAbstractLayer.getGraphicsCards();
+    for (int i = 0; i < gpus.size(); i++) {
+      GraphicsCard gpu = gpus.get(i);
+      log.info("GPU " + i + ": " + gpu.getVendor() + ", " + gpu.getName());
+      log.info("GPU " + i + " Driver: " + gpu.getVersionInfo());
+    }
+
+    GlobalMemory memory = hardwareAbstractLayer.getMemory();
+    log.info("Memory: " + FileUtils.byteCountToDisplaySize(memory.getTotal()));
+
+    Baseboard baseboard = hardwareAbstractLayer.getComputerSystem().getBaseboard();
+    log.info("Motherboard: " + baseboard.getManufacturer() + ", " + baseboard.getModel());
+    log.info("Motherboard Version: " + baseboard.getVersion());
     log.info("---------------------------------");
   }
 
