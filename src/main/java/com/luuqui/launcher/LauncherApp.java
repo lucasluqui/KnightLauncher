@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import oshi.SystemInfo;
 import oshi.hardware.*;
+import oshi.software.os.OperatingSystem;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -437,6 +438,9 @@ public class LauncherApp
     HardwareAbstractionLayer hardwareAbstractLayer = systemInfo.getHardware();
 
     log.info("----------- Host Info -----------");
+
+    OperatingSystem os = systemInfo.getOperatingSystem();
+    log.info("OS Version: " + os.getVersionInfo());
 
     CentralProcessor cpu = hardwareAbstractLayer.getProcessor();
     CentralProcessor.ProcessorIdentifier cpuProcId = cpu.getProcessorIdentifier();
