@@ -459,6 +459,18 @@ public class LauncherApp
     Baseboard baseboard = hardwareAbstractLayer.getComputerSystem().getBaseboard();
     log.info("Motherboard: " + baseboard.getManufacturer() + ", " + baseboard.getModel());
     log.info("Motherboard Version: " + baseboard.getVersion());
+
+    List<Display> displays = hardwareAbstractLayer.getDisplays();
+    for (int i = 0; i < displays.size(); i++) {
+      Display display = displays.get(i);
+      log.info("Display " + i + ": " + display.toString()
+          .trim()
+          .replace("\n", ", ")
+          .replace("\r", "")
+          .replaceAll(" +", " ")
+      );
+    }
+
     log.info("---------------------------------");
   }
 
