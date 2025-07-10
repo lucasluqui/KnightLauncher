@@ -122,6 +122,10 @@ public abstract class BaseGUI
       titleBar.add(minimizeButton);
       minimizeButton.addActionListener(e -> guiFrame.setState(Frame.ICONIFIED));
     }
+
+    // Little trick to avoid the window not popping up on boot sometimes.
+    guiFrame.setAlwaysOnTop(true);
+    guiFrame.setAlwaysOnTop(false);
   }
 
   public JFrame guiFrame = new JFrame();
