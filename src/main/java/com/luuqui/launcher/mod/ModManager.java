@@ -174,7 +174,9 @@ public class ModManager
     if (!globalLocaleChangeList.isEmpty()) {
       try {
         // Unpack the current projectx-config jar file.
-        FileUtil.unpackJar(new ZipFile(rootDir + "/code/projectx-config.jar"), new File(rootDir + "/code/locale-changes/"), false);
+        ZipFile projectxConfig = new ZipFile(rootDir + "/code/projectx-config.jar");
+        FileUtil.unpackJar(projectxConfig, new File(rootDir + "/code/locale-changes/"), false);
+        projectxConfig.close();
 
         // TODO: Optimize. We can clearly go bundle by bundle instead of iterating the locale changes this way.
         for (LocaleChange localeChange : this.globalLocaleChangeList) {
@@ -199,8 +201,8 @@ public class ModManager
         FileUtils.deleteDirectory(new File(rootDir + "/code/locale-changes"));
 
         // Rename the current projectx-config to old and the new one to its original name.
-        FileUtil.rename(new File(rootDir + "/code/projectx-config.jar"), new File(rootDir + "/code/projectx-config-old.jar"));
-        FileUtil.rename(new File(rootDir + "/code/projectx-config-new.jar"), new File(rootDir + "/code/projectx-config.jar"));
+        FileUtils.moveFile(new File(rootDir + "/code/projectx-config.jar"), new File(rootDir + "/code/projectx-config-old.jar"));
+        FileUtils.moveFile(new File(rootDir + "/code/projectx-config-new.jar"), new File(rootDir + "/code/projectx-config.jar"));
 
         // And finally, remove the old one. We don't need to store it as we'll fetch the original from getdown
         // when a rebuild is triggered.
