@@ -41,7 +41,7 @@ public class ZipMod extends Mod
   public void parseMetadata ()
   {
     super.parseMetadata();
-    if (this.metadata.has("locale")) {
+    if (this.metadata != null && this.metadata.has("locale")) {
       JSONObject localeJson = this.metadata.getJSONObject("locale");
       for (String bundle : localeJson.keySet()) {
         JSONObject bundleJson = localeJson.getJSONObject(bundle);

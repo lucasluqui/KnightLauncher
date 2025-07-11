@@ -90,14 +90,13 @@ public class JarMod extends Mod
   public void parseMetadata ()
   {
     super.parseMetadata();
-    try {
+    if (this.metadata != null) {
       int minJDKVersion = !this.metadata.isNull("minJDKVersion") ? Integer.parseInt(this.metadata.getString("minJDKVersion")) : 8;
       int maxJDKVersion = !this.metadata.isNull("maxJDKVersion") ? Integer.parseInt(this.metadata.getString("maxJDKVersion")) : 8;
       String pxVersion = !this.metadata.isNull("pxVersion") ? this.metadata.getString("pxVersion") : "0";
       this.setMinJDKVersion(minJDKVersion);
       this.setMaxJDKVersion(maxJDKVersion);
-      this.setPXVersion(pxVersion);
-    } catch (JSONException ignored) {}
+    }
   }
 
   public void wasAdded ()
