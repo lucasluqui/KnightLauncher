@@ -9,24 +9,17 @@ import com.luuqui.launcher.*;
 import com.luuqui.launcher.LocaleManager;
 import com.luuqui.launcher.flamingo.FlamingoManager;
 import com.luuqui.launcher.flamingo.data.Server;
-import com.luuqui.launcher.mod.data.JarMod;
-import com.luuqui.launcher.mod.data.Mod;
-import com.luuqui.launcher.mod.data.Modpack;
-import com.luuqui.launcher.mod.data.ZipMod;
+import com.luuqui.launcher.mod.data.*;
 import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsManager;
-import com.luuqui.util.Compressor;
-import com.luuqui.util.FileUtil;
-import com.luuqui.util.ImageUtil;
-import com.luuqui.util.JavaUtil;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.luuqui.util.*;
+import org.apache.commons.io.FileUtils;
 
-import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.zip.ZipFile;
 
@@ -43,6 +36,8 @@ public class ModManager
   @Inject protected DiscordPresenceClient _discordPresenceClient;
 
   private final LinkedList<Mod> modList = new LinkedList<>();
+
+  private final List<LocaleChange> globalLocaleChangeList = new ArrayList<>();
 
   public Boolean mountRequired = false;
   public Boolean rebuildRequired = false;
@@ -73,8 +68,11 @@ public class ModManager
         modFolderPath = selectedServer.getModsDirectory();
       }
 
-      // Clean the list in case something remains in it.
-      if (getModCount() > 0) clearModList();
+      // Clean both lists in case old data remains in it.
+      if (getModCount() > 0) {
+        clearModList();
+        clearLocaleChanges();
+      }
 
       // Append all .modpack, .zip, and .jar files inside the mod folder into an ArrayList.
       List<File> rawFiles = new ArrayList<>();
@@ -86,14 +84,12 @@ public class ModManager
         String fileName = file.getName();
         Mod mod = null;
         if (fileName.endsWith("zip")) {
-          mod = new ZipMod(fileName);
+          mod = new ZipMod(modFolderPath, fileName);
         } else if (fileName.endsWith("jar")) {
-          mod = new JarMod(fileName);
+          mod = new JarMod(modFolderPath, fileName);
         } else if (fileName.endsWith("modpack")) {
-          mod = new Modpack(fileName);
+          mod = new Modpack(modFolderPath, fileName);
         }
-
-        parseModData(mod);
 
         modList.add(mod);
         mod.wasAdded();
@@ -109,7 +105,7 @@ public class ModManager
         mountRequired = true;
       }
 
-      if(gameVersionChanged()) {
+      if (gameVersionChanged()) {
         log.info("Game version has changed", "new", _flamingoManager.getLocalGameVersion());
         rebuildRequired = true;
         mountRequired = true;
@@ -136,6 +132,7 @@ public class ModManager
   public void mount ()
   {
     Server selectedServer = _flamingoManager.getSelectedServer();
+    String rootDir = selectedServer.getRootDirectory();
 
     if (Settings.doRebuilds && rebuildRequired) startFileRebuild();
 
@@ -155,19 +152,63 @@ public class ModManager
       Mod mod = localList.get(i);
       if(mod.isEnabled()) {
         if (mod instanceof Modpack) {
-          ((Modpack) mod).mount(selectedServer.getRootDirectory());
+          ((Modpack) mod).mount(rootDir);
         } else if (mod instanceof ZipMod) {
-          ((ZipMod) mod).mount(selectedServer.getRootDirectory());
+          ZipMod zipMod = ((ZipMod) mod);
+          zipMod.mount(rootDir);
+          if (zipMod.hasLocaleChanges()) {
+            this.globalLocaleChangeList.addAll(zipMod.getLocaleChanges());
+          }
         } else {
           mod.mount();
         }
-        long lastModified = new File(selectedServer.getRootDirectory() + "/mods/" + mod.getFileName()).lastModified();
+        long lastModified = new File(rootDir + "/mods/" + mod.getFileName()).lastModified();
         hashSet.add(lastModified);
         _launcherCtx._progressBar.setBarValue(i + 1);
       }
     }
 
     _settingsManager.setValue("modloader.appliedModsHash", Integer.toString(hashSet.hashCode()), selectedServer);
+
+    // Load all the locale changes
+    if (!globalLocaleChangeList.isEmpty()) {
+      try {
+        // Unpack the current projectx-config jar file.
+        FileUtil.unpackJar(new ZipFile(rootDir + "/code/projectx-config.jar"), new File(rootDir + "/code/locale-changes/"), false);
+
+        // TODO: Optimize. We can clearly go bundle by bundle instead of iterating the locale changes this way.
+        for (LocaleChange localeChange : this.globalLocaleChangeList) {
+          String bundlePath = rootDir + "/code/locale-changes/rsrc/i18n/" + localeChange.getBundle();
+
+          Properties properties = new Properties();
+          properties.load(Files.newInputStream(new File(bundlePath).toPath()));
+          properties.setProperty(localeChange.getKey(), localeChange.getValue());
+          properties.store(Files.newOutputStream(new File(bundlePath).toPath()), null);
+        }
+
+        // Turn the locale changes into a jar file.
+        String[] outputCapture;
+        if (SystemUtil.isWindows()) {
+          outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
+        } else {
+          outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
+        }
+        log.debug("Locale changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
+
+        // Delete the temporary directory used to store locale changes.
+        FileUtils.deleteDirectory(new File(rootDir + "/code/locale-changes"));
+
+        // Rename the current projectx-config to old and the new one to its original name.
+        FileUtil.rename(new File(rootDir + "/code/projectx-config.jar"), new File(rootDir + "/code/projectx-config-old.jar"));
+        FileUtil.rename(new File(rootDir + "/code/projectx-config-new.jar"), new File(rootDir + "/code/projectx-config.jar"));
+
+        // And finally, remove the old one. We don't need to store it as we'll fetch the original from getdown
+        // when a rebuild is triggered.
+        FileUtils.delete(new File(rootDir + "/code/projectx-config-old.jar"));
+      } catch (Exception e) {
+        log.error(e);
+      }
+    }
 
     // Make sure no cheat mod slips in.
     if(!selectedServer.isOfficial()) extractSafeguard();
@@ -210,7 +251,7 @@ public class ModManager
     String rootDir = LauncherGlobals.USER_DIR;
     String[] bundles = RSRC_BUNDLES;
     Server selectedServer = _flamingoManager.getSelectedServer();
-    if(selectedServer != null) {
+    if (selectedServer != null) {
       rootDir = selectedServer.getRootDirectory();
       bundles = selectedServer.isOfficial() ? RSRC_BUNDLES : THIRDPARTY_RSRC_BUNDLES;
     }
@@ -243,11 +284,16 @@ public class ModManager
       new File(rootDir + "/rsrc/config/" + config).delete();
     }
 
-    // Strict requires resetting code and config jars to vanilla too.
-    if (selectedServer.isOfficial() && strict) {
+    // Reset projectx-config to clear any locale changes.
+    if (selectedServer.isOfficial()) {
       _discordPresenceClient.setDetails(_localeManager.getValue("m.reset_code"));
       _launcherCtx._progressBar.setState(_localeManager.getValue("m.reset_code"));
-      resetCode();
+      resetConfig();
+
+      // And if we're on strict mode, we do the same for projectx-code too.
+      if (strict) {
+        resetCode();
+      }
     }
 
     _launcherCtx._progressBar.setBarValue(bundles.length + 1);
@@ -312,6 +358,11 @@ public class ModManager
     modList.clear();
   }
 
+  private void clearLocaleChanges ()
+  {
+    globalLocaleChangeList.clear();
+  }
+
   private void parseDisabledMods ()
   {
     Server selectedServer = _flamingoManager.getSelectedServer();
@@ -338,45 +389,6 @@ public class ModManager
     new File(rootDir + "/rsrc/mod.png").delete();
     for (String filePath : FileUtil.fileNamesInDirectory(rootDir + "/mods", ".hash")) {
       new File(rootDir + "/mods/" + filePath).delete();
-    }
-  }
-
-  public void parseModData (Mod mod)
-  {
-    JSONObject modJson;
-    Server selectedServer = _flamingoManager.getSelectedServer();
-    try {
-      modJson = new JSONObject(Compressor.readFileInsideZip(selectedServer.getRootDirectory() + "/mods/" + mod.getFileName(), "mod.json")).getJSONObject("mod");
-    } catch (Exception e) {
-      modJson = null;
-    }
-
-    if (mod != null && modJson != null) {
-      mod.setDisplayName(modJson.getString("name"));
-      mod.setDescription(modJson.getString("description"));
-      mod.setAuthor(modJson.getString("author"));
-      mod.setVersion(modJson.getString("version"));
-
-      try {
-        mod.setImage(modJson.getString("image"));
-      } catch (Exception e) {
-        try {
-          mod.setImage(ImageUtil.imageToBase64(ImageIO.read(Compressor.getISFromFileInsideZip(selectedServer.getRootDirectory() + "/mods/" + mod.getFileName(), "mod.png"))));
-        } catch (Exception e2) {
-          mod.setImage(null);
-        }
-      }
-
-      if(mod instanceof JarMod) {
-        try {
-          int minJDKVersion = !modJson.isNull("minJDKVersion") ? Integer.parseInt(modJson.getString("minJDKVersion")) : 8;
-          int maxJDKVersion = !modJson.isNull("maxJDKVersion") ? Integer.parseInt(modJson.getString("maxJDKVersion")) : 8;
-          String pxVersion = !modJson.isNull("pxVersion") ? modJson.getString("pxVersion") : "0";
-          ((JarMod) mod).setMinJDKVersion(minJDKVersion);
-          ((JarMod) mod).setMaxJDKVersion(maxJDKVersion);
-          ((JarMod) mod).setPXVersion(pxVersion);
-        } catch (JSONException ignored) {}
-      }
     }
   }
 
@@ -417,18 +429,30 @@ public class ModManager
     return !lastKnownVersion.equalsIgnoreCase(currentVersion);
   }
 
+  private void resetConfig ()
+  {
+    log.info("Resetting config jar...");
+    URLDownloadQueue downloadQueue = new URLDownloadQueue("Reset code jars");
+    try {
+      downloadQueue.addToQueue(
+          new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-config.jar"),
+          new File(LauncherGlobals.USER_DIR + "/code/", "projectx-config.jar")
+      );
+    } catch (MalformedURLException e) {
+      log.error(e);
+    }
+    _downloadManager.add(downloadQueue);
+    _downloadManager.processQueues();
+  }
+
   private void resetCode ()
   {
-    log.info("Resetting code jars...");
+    log.info("Resetting code jar...");
     URLDownloadQueue downloadQueue = new URLDownloadQueue("Reset code jars");
     try {
       downloadQueue.addToQueue(
           new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-pcode.jar"),
           new File(LauncherGlobals.USER_DIR + "/code/", "projectx-pcode.jar")
-      );
-      downloadQueue.addToQueue(
-          new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-config.jar"),
-          new File(LauncherGlobals.USER_DIR + "/code/", "projectx-config.jar")
       );
     } catch (MalformedURLException e) {
       log.error(e);

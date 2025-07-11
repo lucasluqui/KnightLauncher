@@ -69,7 +69,7 @@ public class Server
 
   public String getRootDirectory ()
   {
-    if(this.name.equalsIgnoreCase("Official")) return LauncherGlobals.USER_DIR;
+    if (this.name.equalsIgnoreCase("Official")) return LauncherGlobals.USER_DIR;
     return LauncherGlobals.USER_DIR + "/thirdparty/" + this.getSanitizedName() + "/";
   }
 
