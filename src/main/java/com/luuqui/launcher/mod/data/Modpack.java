@@ -20,11 +20,13 @@ public class Modpack extends Mod
     super();
   }
 
-  public Modpack (String fileName)
+  public Modpack (String rootDir, String fileName)
   {
     super();
     this.displayName = fileName;
     this.fileName = fileName;
+    this.setAbsolutePath(rootDir + fileName);
+    parseMetadata();
   }
 
   public void mount () { }
@@ -32,8 +34,9 @@ public class Modpack extends Mod
   @SuppressWarnings("all")
   public void mount (String rootDir)
   {
-    for(String fileInsideZip : Compressor.getFileListFromZip(rootDir + "/mods/" + getFileName())) {
-      InputStream fileIs = Compressor.getISFromFileInsideZip(rootDir + "/mods/" + getFileName(), fileInsideZip);
+    this.setAbsolutePath(rootDir + "/mods/" + getFileName());
+    for (String fileInsideZip : Compressor.getFileListFromZip(this.getAbsolutePath())) {
+      InputStream fileIs = Compressor.getISFromFileInsideZip(this.getAbsolutePath(), fileInsideZip);
       String pathOutside = rootDir + "/mods/" + fileInsideZip;
       File tempFile = new File(pathOutside);
       try {
@@ -46,6 +49,11 @@ public class Modpack extends Mod
       tempFile.delete();
     }
     log.info("Modpack mounted successfully", "pack", this.displayName);
+  }
+
+  public void parseMetadata ()
+  {
+    super.parseMetadata();
   }
 
   public void wasAdded ()
