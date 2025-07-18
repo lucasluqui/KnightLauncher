@@ -160,7 +160,7 @@ public class EditorsEventHandler
   public void selectedServerChanged ()
   {
     if(_flamingoManager.getSelectedServer().isOfficial()) {
-      this.gui.footerLabel.setText(_localeManager.getValue("m.powered_by_spiralview", LauncherGlobals.BUNDLED_SPIRALVIEW_VERSION));
+      this.gui.footerLabel.setText(_localeManager.getValue("m.powered_by_spiralview", LauncherGlobals.SPIRALVIEW_VERSION));
     } else {
       this.gui.footerLabel.setText(_localeManager.getValue("m.viewing_editors", _flamingoManager.getSelectedServer().name));
     }

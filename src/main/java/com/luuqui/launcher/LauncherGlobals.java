@@ -8,6 +8,7 @@ public class LauncherGlobals
 {
 
   public static final String LAUNCHER_VERSION = "2.2.1";
+  public static final String SPIRALVIEW_VERSION = "2.0.11";
 
   public static final String LAUNCHER_NAME = "Knight Launcher";
 
@@ -29,8 +30,6 @@ public class LauncherGlobals
   public static final String USER_DIR = System.getProperty("user.dir");
 
   public static final String RPC_CLIENT_ID = "626524043209867274";
-
-  public static final String BUNDLED_SPIRALVIEW_VERSION = "2.0.10";
 
   public static final String[] GETDOWN_ARGS;
   public static final String[] GETDOWN_ARGS_WIN;
