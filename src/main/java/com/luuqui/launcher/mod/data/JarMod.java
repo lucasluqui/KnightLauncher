@@ -96,6 +96,7 @@ public class JarMod extends Mod
       String pxVersion = !this.metadata.isNull("pxVersion") ? this.metadata.getString("pxVersion") : "0";
       this.setMinJDKVersion(minJDKVersion);
       this.setMaxJDKVersion(maxJDKVersion);
+      this.setPXVersion(pxVersion);
     }
   }
 
