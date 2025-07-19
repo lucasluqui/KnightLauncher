@@ -38,6 +38,11 @@ public class ZipMod extends Mod
     log.info("Zip mod mounted successfully", "mod", this.displayName);
   }
 
+  public void wasAdded ()
+  {
+    log.info("Zip mod was added", "object", this.toString());
+  }
+
   public void parseMetadata ()
   {
     super.parseMetadata();
@@ -60,11 +65,6 @@ public class ZipMod extends Mod
   public List<LocaleChange> getLocaleChanges ()
   {
     return this.localeChangeList;
-  }
-
-  public void wasAdded ()
-  {
-    log.info("Zip mod was added", "object", this.toString());
   }
 
 }

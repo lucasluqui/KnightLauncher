@@ -1,7 +1,5 @@
 package com.luuqui.launcher.mod.data;
 
-import org.json.JSONException;
-
 import static com.luuqui.launcher.mod.Log.log;
 
 public class JarMod extends Mod
@@ -29,7 +27,31 @@ public class JarMod extends Mod
     this.pxVersion = "0";
     this.jdkCompatible = true;
     this.pxCompatible = true;
+    this.setAbsolutePath(rootDir + fileName);
     parseMetadata();
+  }
+
+  public void mount ()
+  {
+    log.info("Code mod mounted successfully", "mod", this.displayName);
+  }
+
+  public void wasAdded ()
+  {
+    log.info("Code mod was added", "object", this.toString());
+  }
+
+  public void parseMetadata ()
+  {
+    super.parseMetadata();
+    if (this.metadata != null) {
+      int minJDKVersion = !this.metadata.isNull("minJDKVersion") ? Integer.parseInt(this.metadata.getString("minJDKVersion")) : 8;
+      int maxJDKVersion = !this.metadata.isNull("maxJDKVersion") ? Integer.parseInt(this.metadata.getString("maxJDKVersion")) : 8;
+      String pxVersion = !this.metadata.isNull("pxVersion") ? this.metadata.getString("pxVersion") : "0";
+      this.setMinJDKVersion(minJDKVersion);
+      this.setMaxJDKVersion(maxJDKVersion);
+      this.setPXVersion(pxVersion);
+    }
   }
 
   public int getMinJDKVersion ()
@@ -80,29 +102,6 @@ public class JarMod extends Mod
   public void setPXCompatible (boolean pxCompatible)
   {
     this.pxCompatible = pxCompatible;
-  }
-
-  public void mount ()
-  {
-    log.info("Code mod mounted successfully", "mod", this.displayName);
-  }
-
-  public void parseMetadata ()
-  {
-    super.parseMetadata();
-    if (this.metadata != null) {
-      int minJDKVersion = !this.metadata.isNull("minJDKVersion") ? Integer.parseInt(this.metadata.getString("minJDKVersion")) : 8;
-      int maxJDKVersion = !this.metadata.isNull("maxJDKVersion") ? Integer.parseInt(this.metadata.getString("maxJDKVersion")) : 8;
-      String pxVersion = !this.metadata.isNull("pxVersion") ? this.metadata.getString("pxVersion") : "0";
-      this.setMinJDKVersion(minJDKVersion);
-      this.setMaxJDKVersion(maxJDKVersion);
-      this.setPXVersion(pxVersion);
-    }
-  }
-
-  public void wasAdded ()
-  {
-    log.info("Code mod was added", "object", this.toString());
   }
 
   @Override

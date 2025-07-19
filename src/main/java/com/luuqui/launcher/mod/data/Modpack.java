@@ -51,14 +51,14 @@ public class Modpack extends Mod
     log.info("Modpack mounted successfully", "pack", this.displayName);
   }
 
-  public void parseMetadata ()
-  {
-    super.parseMetadata();
-  }
-
   public void wasAdded ()
   {
     log.info("Modpack was added", "object", this.toString());
+  }
+
+  public void parseMetadata ()
+  {
+    super.parseMetadata();
   }
 
 }
