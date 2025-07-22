@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/lucasluqui/KnightLauncher/blob/main/assets/img/icon-128.png?raw=true" height="128">
+    <img src="https://github.com/lucasluqui/KnightLauncher/blob/main/src/main/java/resources/img/icon-128.png?raw=true" height="128">
 </p>
 <h1 align="center">Knight Launcher</h1>
 <p align="center">
