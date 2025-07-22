@@ -37,7 +37,7 @@ public class LauncherContext
     _discordPresenceClient.stop();
     if (force || !Settings.keepOpen) {
       launcherGUI.guiFrame.dispose();
-      System.exit(1);
+      System.exit(0);
     }
   }
 }
