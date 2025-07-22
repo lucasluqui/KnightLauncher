@@ -107,16 +107,12 @@
       <groupId>net.arikia.dev</groupId>
       <artifactId>discord-rpc</artifactId>
       <version>20220830184500</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/discord-rpc-20220830184500.jar</systemPath>
     </dependency>
 
     <dependency>
       <groupId>net.sf</groupId>
       <artifactId>image4j</artifactId>
       <version>0.7.2</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/image4j-0.7.2.jar</systemPath>
     </dependency>
 
     <!--
@@ -147,6 +143,39 @@
       </resource>
     </resources>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>3.1.4</version>
+        <executions>
+          <execution>
+            <id>install-1</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>install-file</goal>
+            </goals>
+            <configuration>
+              <groupId>net.arikia.dev</groupId>
+              <artifactId>discord-rpc</artifactId>
+              <version>20220830184500</version>
+              <file>${basedir}/lib/discord-rpc-20220830184500.jar</file>
+            </configuration>
+          </execution>
+          <execution>
+            <id>install-2</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>install-file</goal>
+            </goals>
+            <configuration>
+              <groupId>net.sf</groupId>
+              <artifactId>image4j</artifactId>
+              <version>0.7.2</version>
+              <file>${basedir}/lib/image4j-0.7.2.jar</file>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.4.2</version>
