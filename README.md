@@ -28,8 +28,19 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 * Easily launch alt accounts with lesser resources assigned avoiding losing performance on your main instance.
 * Ability to switch between official and third party servers.
 
-## Download
-Grab the latest release [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
+## Downloading
+
+1. Prerequisites:
+   - [Java](https://www.java.com/en/download/) installed.
+2. Download the latest Knight Launcher release ZIP file [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
+3. Extract the downloaded ZIP file to your Spiral Knights folder.
+   - Windows: Steam installations can be found at `<Your Steam Folder>/steamapps/common/Spiral Knights`. Standalone installations can be found at `<Your User Folder>\AppData\Local\Spiral Knights`.
+   - macOS: Steam installations can be found at `/Users/<Your User Folder>/Library/Application Support/Steam/steamapps/common/Spiral Knights/`. Standalone installations can be found at `???`. For both types of installations you'll find a `Spiral Knights.app` file which you need to open, then browse to `Contents/Resources/Java`, this is the game's folder.
+   - Linux: Steam installations are not natively supported, but the launcher will still call Steam and launch through Proton if you place Knight Launcher's JAR file in the game's folder. Standalone installations are found at `???`.
+   - Bear in mind that these are the *usual* installation locations, your mileage may vary.
+4. Double-click the `KnightLauncher-x.x.x.jar` file (`x.x.x` will vary depending on the current version). The launcher should boot up.
+5. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
+6. Not working? Open a post in [Discord's tech support channel](https://discord.gg/m6TT9PM9B7).
 
 ## Building
 To build Knight Launcher manually, follow these steps:
