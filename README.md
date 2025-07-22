@@ -40,7 +40,8 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
    - Bear in mind that these are the *usual* installation locations, your mileage may vary.
 4. Double-click the `KnightLauncher-x.x.x.jar` file (`x.x.x` will vary depending on the current version). The launcher should boot up.
 5. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
-6. Not working? Open a post in [Discord's tech support channel](https://discord.gg/m6TT9PM9B7).
+
+Still not working? Open a post in [Discord's tech support channel](https://discord.gg/m6TT9PM9B7).
 
 ## Building
 To build Knight Launcher manually, follow these steps:
