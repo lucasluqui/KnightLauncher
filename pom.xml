@@ -101,7 +101,7 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- local dependencies, found in /lib/ -->
+    <!-- start of local dependencies, found in 'lib' dir -->
 
     <dependency>
       <groupId>net.arikia.dev</groupId>
@@ -120,8 +120,8 @@
     </dependency>
 
     <!--
-      For this local dependency, you must copy 'projectx-pcode.jar' from the game's code/ directory into the
-      project's lib/ directory, as it would be illegal for us to bundle proprietary software.
+      For this local dependency, you must copy 'projectx-pcode.jar' from the game's 'code' directory into the
+      project's 'lib' directory, as it would be illegal for us to bundle proprietary software.
 
       The use of this dependency is for 'com.luuqui.bootstrap.Bootstrap' to take over and load in code mods
       when it is required to.
@@ -134,10 +134,17 @@
       <systemPath>${project.basedir}/lib/projectx-pcode.jar</systemPath>
     </dependency>
 
+    <!-- end of local dependencies -->
+
   </dependencies>
 
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
