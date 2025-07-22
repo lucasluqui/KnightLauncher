@@ -101,8 +101,8 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Start of local dependencies, found in 'lib' dir -->
-    <!-- Make sure to run 'mvn validate' at least once to install the local libraries below. -->
+    <!-- Start of local dependencies, found in 'lib' directory -->
+    <!-- Make sure to run 'mvn validate' at least once to install all the local dependencies below. -->
 
     <dependency>
       <groupId>net.arikia.dev</groupId>
@@ -131,7 +131,7 @@
       <systemPath>${project.basedir}/lib/projectx-pcode.jar</systemPath>
     </dependency>
 
-    <!-- End of local dependencies -->
+    <!-- End of local dependencies. -->
 
   </dependencies>
 
