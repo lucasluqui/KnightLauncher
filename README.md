@@ -28,8 +28,6 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 * Easily launch alt accounts with lesser resources assigned avoiding losing performance on your main instance.
 * Ability to switch between official and third party servers.
 
------
-
 ## Building
 
 1. Prerequisites 
@@ -45,8 +43,6 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
    - `mvn clean package`
 4. Copy the package created by maven to your Spiral Knights folder and run it.
    - `java -jar KnightLauncher.jar`
-
------
 
 ## Discord
 We've built an amazing community on Discord focused on both helping newcomers get along with the launcher and giving a hand to modders, come join us!
