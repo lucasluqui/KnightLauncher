@@ -139,6 +139,7 @@
   </dependencies>
 
   <build>
+    <finalName>KnightLauncher</finalName>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
       <resource>
@@ -172,6 +173,7 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <appendAssemblyId>false</appendAssemblyId>
         </configuration>
       </plugin>
       <plugin>
