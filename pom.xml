@@ -135,7 +135,7 @@
   </dependencies>
 
   <build>
-    <finalName>KnightLauncher</finalName>
+    <finalName>${artifactId}</finalName>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
       <resource>
