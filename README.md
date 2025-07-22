@@ -28,7 +28,11 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 * Easily launch alt accounts with lesser resources assigned avoiding losing performance on your main instance.
 * Ability to switch between official and third party servers.
 
+## Download
+Grab the latest release [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
+
 ## Building
+To build Knight Launcher manually, follow these steps:
 
 1. Prerequisites 
    - [Java 8 JDK](https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html) installed.
