@@ -43,7 +43,7 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 
 Still not working? Open a post in [Discord's tech support channel](https://discord.gg/m6TT9PM9B7).
 
-## Building
+## Building From Source
 To build Knight Launcher manually, follow these steps:
 
 1. Prerequisites 
@@ -73,6 +73,13 @@ https://discord.gg/RAf499a
 
 ## Credits
 
+Unless hyperlinked names shown below represent Discord usernames. Hyperlinked names correspond to GitHub accounts.
+
+### Contributors
+<a href="https://github.com/lucasluqui/KnightLauncher/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lucasluqui/KnightLauncher" />
+</a>
+
 ### Translators
 Thank you all for helping Knight Launcher, making it usable for everyone worldwide!
 - Arabic: asan_ploto.
@@ -85,6 +92,9 @@ Thank you all for helping Knight Launcher, making it usable for everyone worldwi
 - Polski: [Crowfunder](https://github.com/Crowfunder).
 - Português (Brasil): Stret, Gugaarleo.
 - Русский: Milliath, [Puzovoz](https://github.com/Puzovoz), [quardbreak](https://github.com/quardbreak).
+
+### Testing/QA
+- Nurr, yihleego, Bidoknight, Carpvindra, Mushspore, CafuneAndChill, Xan, analarmingalarm, parma, loonadra, ultrongr, milliath, Puzovoz, Stret, 3xample.
 
 ### Third Party Libraries
 The following open source libraries are used by Knight Launcher:
