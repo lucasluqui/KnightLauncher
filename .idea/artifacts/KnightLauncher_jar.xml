@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/build/artifacts/KnightLauncher_jar</output-path>
     <root id="archive" name="KnightLauncher.jar">
       <element id="module-output" name="KnightLauncher" />
-      <element id="dir-copy" path="$PROJECT_DIR$/assets" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/vatbub/mslinks/1.0.5.1/mslinks-1.0.5.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont-font_awesome/4.7.0.1/jiconfont-font_awesome-4.7.0.1.jar" path-in-jar="/" />
@@ -31,6 +30,7 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/oshi/oshi-core/6.8.2/oshi-core-6.8.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-nop/2.0.17/slf4j-nop-2.0.17.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
     </root>
   </artifact>
 </component>
