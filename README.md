@@ -34,7 +34,7 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
    - [Java](https://www.java.com/en/download/) installed.
 2. Download the latest Knight Launcher release ZIP file [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
 3. Extract the downloaded ZIP file to your Spiral Knights folder.
-   - Windows: Steam installations can be found at `<Your Steam Folder>/steamapps/common/Spiral Knights`. Standalone installations can be found at `<Your User Folder>\AppData\Local\Spiral Knights`.
+   - Windows: Steam installations can be found at `<Your Steam Folder>/steamapps/common/Spiral Knights`. Standalone installations can be found by right-clicking the Spiral Knights shortcut on your desktop and then clicking "Open File Location." You can also look for it at `<Your User Folder>\AppData\Local\Spiral Knights`.
    - macOS: Steam installations can be found at `/Users/<Your User Folder>/Library/Application Support/Steam/steamapps/common/Spiral Knights/`. Standalone installations can be found at `???`. For both types of installations you'll find a `Spiral Knights.app` file which you need to open, then browse to `Contents/Resources/Java`, this is the game's folder.
    - Linux: Steam installations are not natively supported, but the launcher will still call Steam and launch through Proton if you place Knight Launcher's JAR file in the game's folder. Standalone installations are found at `???`.
    - Bear in mind that these are the *usual* installation locations, your mileage may vary.
