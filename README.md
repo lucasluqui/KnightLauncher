@@ -39,10 +39,14 @@ To build Knight Launcher manually, follow these steps:
    - [Maven](https://maven.apache.org/download.cgi) installed:
      - Windows: Download the ZIP from the link above, extract, then add `bin/` to your `PATH`.
      - macOS (Homebrew): `brew install maven`.
-     - Linux (APT): `sudo apt install maven`.
-2. Clone the repository
+     - Linux (APT): `apt install maven`.
+   - [Git](https://git-scm.com/downloads) installed:
+     - Windows: Download the installer from [git-scm.com](https://git-scm.com/downloads) and follow the setup.
+     - macOS (Homebrew): `brew install git`.
+     - Linux (APT): `apt install git`.
+2. Clone the repository.
    - `git clone https://github.com/lucasluqui/KnightLauncher.git`
-3. Build the project
+3. Build the project.
    - `cd KnightLauncher`
    - `mvn clean package`
 4. Copy the package created by maven to your Spiral Knights folder and run it.
