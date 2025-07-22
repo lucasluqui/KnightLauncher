@@ -26,15 +26,16 @@ public class DiscordPresenceClient
   private String details;
 
   /**
-   * Used to mark this object as "stub" for when requested by ARM and macOS systems,
+   * Used to mark this object as "stub" for when requested by ARM and Mac,
    * so that it doesn't attempt to follow through with any of the calls.
    */
   private boolean stub;
 
   /**
    * The event handler which handles all the Discord bits.
+   * Abstracted to Object to avoid injecting the actual class on ARM or Mac.
    */
-  private DiscordEventHandlers eventHandler;
+  private Object eventHandler;
 
   /**
    * The locale manager to get localized presence messages.
@@ -46,24 +47,13 @@ public class DiscordPresenceClient
     // empty.
   }
 
-  public DiscordPresenceClient (String clientId, boolean stub)
-  {
-    this.clientId = clientId;
-
-    // Give ARM and macOS users a stub version of the DiscordPresenceClient object
-    // so that it knows not to do anything when prompted.
-    this.stub = stub;
-    this.eventHandler = stub ? null : new DiscordEventHandlers();
-  }
-
   public void init (String clientId, boolean stub)
   {
-    this.clientId = clientId;
     this.stub = stub;
     if (stub) return;
 
-    this.eventHandler = new DiscordEventHandlers();
-    DiscordRPC.discordInitialize(this.clientId, this.eventHandler, true);
+    this.clientId = clientId;
+    DiscordRPC.discordInitialize(this.clientId, this.getEventHandler(), true);
     setDetails(_localeManager.getValue("presence.starting"));
     log.info("Discord presence client is now running.");
   }
@@ -71,6 +61,7 @@ public class DiscordPresenceClient
   public void setDetails (String details)
   {
     if (stub) return;
+
     this.details = details;
     updatePresenceDetails(details);
   }
@@ -94,6 +85,24 @@ public class DiscordPresenceClient
   {
     if (stub) return;
     DiscordRPC.discordShutdown();
+  }
+
+  /**
+   * Return the actual event handler to interface with Discord.
+   * We have to abstract it in the attributes to avoid issues when the class is injected
+   * as we don't want that to happen in ARM or Mac.
+   *
+   * @return Discord RPC event handler.
+   */
+  private DiscordEventHandlers getEventHandler ()
+  {
+    if (this.stub) return null;
+
+    if (this.eventHandler == null) {
+      this.eventHandler = new DiscordEventHandlers();
+    }
+
+    return (DiscordEventHandlers) this.eventHandler;
   }
 
 }
