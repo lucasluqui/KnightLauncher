@@ -34,9 +34,9 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
    - [Java](https://www.java.com/en/download/) installed.
 2. Download the latest Knight Launcher release ZIP file [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
 3. Extract the downloaded ZIP file to your Spiral Knights folder.
-   - Windows: Steam installations can be found at `<Your Steam Folder>/steamapps/common/Spiral Knights`. Standalone installations can be found by right-clicking the Spiral Knights shortcut on your desktop and then clicking "Open File Location." You can also look for it at `<Your User Folder>\AppData\LocalLow\spiral`.
-   - macOS: Steam installations can be found at `/Users/<Your User Folder>/Library/Application Support/Steam/steamapps/common/Spiral Knights/`. Standalone installations can be found at `/Users/<Your User Folder>/Library/Application Support/spiral`. For both types of installations you'll find a `Spiral Knights.app` file which you need to open, then browse to `Contents/Resources/Java`, this is the game's folder.
-   - Linux: Steam installations are not natively supported, but the launcher will still call Steam and launch through Proton if you place Knight Launcher's JAR file in the game's folder. Standalone installations are found at your user's home folder then `.getdown/spiral`.
+   - **Windows**: Steam installations can be found by right-clicking the game on your Steam library and selecting "Manage" → "Browse Local Files," you can also look for it at `<Your Steam Folder>\steamapps\common\Spiral Knights`. Standalone installations can be found by right-clicking the Spiral Knights shortcut on your desktop and then clicking "Open File Location," you can also look for it at `<Your User Folder>\AppData\LocalLow\spiral`.
+   - **macOS**: Steam installations can be found at `/Users/<Your User Folder>/Library/Application Support/Steam/steamapps/common/Spiral Knights/`. Standalone installations can be found at `/Users/<Your User Folder>/Library/Application Support/spiral`. For both types of installations you'll find a `Spiral Knights.app` file which you need to open, then browse to `Contents/Resources/Java`, this is the game's folder.
+   - **Linux**: Steam installations are not natively supported, but the launcher will still call Steam and launch through Proton if you place Knight Launcher's JAR file in the game's folder. Standalone installations are found at your user's home folder then `.getdown/spiral`.
    - Bear in mind that these are the *usual* installation locations, your mileage may vary.
 4. Double-click the `KnightLauncher-x.x.x.jar` file (`x.x.x` will vary depending on the current version). The launcher should boot up.
 5. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
@@ -49,13 +49,13 @@ To build Knight Launcher manually, follow these steps:
 1. Prerequisites 
    - [Java 8 JDK](https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html) installed.
    - [Maven](https://maven.apache.org/download.cgi) installed:
-     - Windows: Download the ZIP from the link above, extract, then add `bin/` to your `PATH`.
-     - macOS (Homebrew): `brew install maven`.
-     - Linux (APT): `apt install maven`.
+     - **Windows**: Download the ZIP from the link above, extract, then add `bin/` to your `PATH`.
+     - **macOS (Homebrew)**: `brew install maven`.
+     - **Linux (APT)**: `apt install maven`.
    - [Git](https://git-scm.com/downloads) installed:
-     - Windows: Download the installer from [git-scm.com](https://git-scm.com/downloads) and follow the setup.
-     - macOS (Homebrew): `brew install git`.
-     - Linux (APT): `apt install git`.
+     - **Windows**: Download the installer from [git-scm.com](https://git-scm.com/downloads) and follow the setup.
+     - **macOS (Homebrew)**: `brew install git`.
+     - **Linux (APT)**: `apt install git`.
 2. Clone the repository.
    - `git clone https://github.com/lucasluqui/KnightLauncher.git`
 3. Copy `projectx-pcode.jar` from your Spiral Knights `code` directory into the project's `lib` directory.
