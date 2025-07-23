@@ -19,14 +19,14 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 -----
 
 ## Features
-* Install and uninstall game mods in an easy and noob friendly way without worrying about game updates.
+* Install and uninstall game mods in an easy and noob-friendly way without worrying about game updates.
 * Jump into several editors such as a model viewer and scene editor to create custom user-generated content.
 * Automatically patch your game to use a 64-bit Java VM and heavily improve your performance.
-* Reinstall your game without having to re-download anything, not a single file!
-* Intuitive and user friendly GUI for configuring advanced settings including Extra.txt.
-* Discord RPC integration that shows exactly what you're up to in game.
-* Easily launch alt accounts with lesser resources assigned avoiding losing performance on your main instance.
-* Ability to switch between official and third party servers.
+* Re-install and verify your game files with ease.
+* Intuitive and user-friendly UI for configuring advanced Java VM settings.
+* Discord integration that shows your current game activity on your Discord status. This feature is only available on Windows.
+* Launch alt accounts with lesser resources assigned to them avoiding losing performance on your main instance.
+* Future-proofed to support third party servers. Third party server support __**will not**__ be enabled while Grey Havens' Official servers are still online, unless explicitly permitted by their respective right owners and/or law.
 
 ## Downloading & Installing
 
