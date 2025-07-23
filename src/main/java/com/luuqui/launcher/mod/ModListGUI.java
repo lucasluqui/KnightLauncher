@@ -235,7 +235,7 @@ public class ModListGUI extends BaseGUI
       modPane.setBackground((count & 1) == 0 ? backgroundColors[0] : backgroundColors[1]);
 
       JLabel modImage = new JLabel();
-      BufferedImage defaultImage = ImageUtil.loadImageWithinJar("/img/default-64.png");
+      BufferedImage defaultImage = ImageUtil.loadImageWithinJar("/rsrc/img/default-64.png");
       BufferedImage image = null;
       if (mod.getImage() != null) {
         image = ImageUtil.loadImageFromBase64(mod.getImage());

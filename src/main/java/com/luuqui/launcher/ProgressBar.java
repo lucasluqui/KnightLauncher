@@ -64,7 +64,7 @@ public class ProgressBar
     _launcherCtx.modListGUI.refreshProgressBar.setVisible(show);
 
     if (show) {
-      _launcherCtx.launcherGUI.launchState.setIcon(new ImageIcon(this.getClass().getResource("/img/loading.gif")));
+      _launcherCtx.launcherGUI.launchState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     }
   }
 

@@ -26,8 +26,8 @@ public class LocaleManager
 
   public void init ()
   {
-    this.propStream = LocaleManager.class.getResourceAsStream("/lang/lang_" + Settings.lang + ".properties");
-    this.propFallbackStream = LocaleManager.class.getResourceAsStream("/lang/lang_en.properties");
+    this.propStream = LocaleManager.class.getResourceAsStream("/rsrc/lang/lang_" + Settings.lang + ".properties");
+    this.propFallbackStream = LocaleManager.class.getResourceAsStream("/rsrc/lang/lang_en.properties");
   }
 
   public String getValue (String key)

@@ -101,7 +101,7 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Start of local dependencies, found in 'lib' directory -->
+    <!-- Start of local dependencies, found in 'lib' directory. -->
     <!-- Make sure to run 'mvn validate' at least once to install all the local dependencies below. -->
 
     <dependency>

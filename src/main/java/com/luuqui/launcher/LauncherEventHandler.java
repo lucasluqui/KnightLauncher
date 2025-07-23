@@ -213,7 +213,7 @@ public class LauncherEventHandler
 
       log.info("Starting game", "server", selectedServer, "platform", Settings.gamePlatform, "codeMods", Settings.loadCodeMods);
       _launcherCtx._progressBar.setState(_localeManager.getValue("m.launching"));
-      _launcherCtx.launcherGUI.launchButton.setIcon(new ImageIcon(this.getClass().getResource("/img/loading.gif")));
+      _launcherCtx.launcherGUI.launchButton.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
       _launcherCtx.launcherGUI.launchButton.setText(_localeManager.getValue("b.launching"));
       ThreadingUtil.executeWithDelay(this::checkGameLaunch, 8000);
     });
@@ -422,11 +422,11 @@ public class LauncherEventHandler
       int count = 0;
       String borderColor = ColorUtil.colorToHexString(locked ? CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER_LOCKED : CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER);
 
-      BufferedImage officialServerBufferedImage = ImageUtil.loadImageWithinJar("/img/server-official.png");
+      BufferedImage officialServerBufferedImage = ImageUtil.loadImageWithinJar("/rsrc/img/server-official.png");
       officialServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(officialServerBufferedImage, 32, 32);
       ImageIcon officialServerImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(officialServerBufferedImage, 15));
 
-      BufferedImage defaultServerBufferedImage = ImageUtil.loadImageWithinJar("/img/default-64.png");
+      BufferedImage defaultServerBufferedImage = ImageUtil.loadImageWithinJar("/rsrc/img/default-64.png");
       defaultServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(defaultServerBufferedImage, 32, 32);
       ImageIcon defaultServerImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(defaultServerBufferedImage, 15));
 

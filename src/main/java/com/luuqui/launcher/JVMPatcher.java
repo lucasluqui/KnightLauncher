@@ -64,7 +64,7 @@ public class JVMPatcher extends BaseGUI
     guiFrame.setResizable(false);
     guiFrame.setUndecorated(true);
     guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-128.png"));
+    guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/rsrc/img/icon-128.png"));
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.getContentPane().setLayout(null);
 
@@ -98,7 +98,7 @@ public class JVMPatcher extends BaseGUI
     jvmComboBox.setSelectedIndex(0);
 
     jvmPatcherState = new JLabel("");
-    jvmPatcherState.setIcon(new ImageIcon(this.getClass().getResource("/img/loading.gif")));
+    jvmPatcherState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     jvmPatcherState.setVisible(false);
     jvmPatcherState.setBounds(26, 180, 450, 15);
     jvmPatcherState.setFont(Fonts.fontReg);

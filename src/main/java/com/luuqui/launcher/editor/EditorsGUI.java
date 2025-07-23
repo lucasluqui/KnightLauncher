@@ -45,7 +45,7 @@ public class EditorsGUI extends BaseGUI
     editorsPanel = (JPanel) guiFrame.getContentPane();
 
     editorLaunchState = new JLabel(_localeManager.getValue("m.editor_loading"));
-    editorLaunchState.setIcon(new ImageIcon(this.getClass().getResource("/img/loading.gif")));
+    editorLaunchState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     editorLaunchState.setHorizontalAlignment(SwingConstants.CENTER);
     editorLaunchState.setBounds(192, 190, 385, 25);
     editorLaunchState.setFont(Fonts.fontRegBig);
@@ -262,19 +262,19 @@ public class EditorsGUI extends BaseGUI
 
   protected void setupImages ()
   {
-    modelViewerImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/img/editor-model.png"), 740, 100);
+    modelViewerImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-model.png"), 740, 100);
     modelViewerImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(modelViewerImageFocused, null), 25);
     modelViewerImageUnfocused = new GrayscaleFilter().filter(modelViewerImageFocused, null);
 
-    sceneEditorImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/img/editor-scene.png"), 740, 100);
+    sceneEditorImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-scene.png"), 740, 100);
     sceneEditorImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(sceneEditorImageFocused, null), 25);
     sceneEditorImageUnfocused = new GrayscaleFilter().filter(sceneEditorImageFocused, null);
 
-    interfaceTesterImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/img/editor-default.png"), 740, 100);
+    interfaceTesterImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-default.png"), 740, 100);
     interfaceTesterImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(interfaceTesterImageFocused, null), 25);
     interfaceTesterImageUnfocused = new GrayscaleFilter().filter(interfaceTesterImageFocused, null);
 
-    particleEditorImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/img/editor-default.png"), 740, 100);
+    particleEditorImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-default.png"), 740, 100);
     particleEditorImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(particleEditorImageFocused, null), 25);
     particleEditorImageUnfocused = new GrayscaleFilter().filter(particleEditorImageFocused, null);
 

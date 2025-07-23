@@ -44,18 +44,18 @@ public class Updater extends BaseGUI
     guiFrame.setBounds(100, 100, this.width, this.height);
     guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     guiFrame.setUndecorated(true);
-    guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-128.png"));
+    guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/rsrc/img/icon-128.png"));
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.getContentPane().setLayout(null);
 
     JLabel launcherLogo = new JLabel();
-    BufferedImage launcherLogoImage = ImageUtil.loadImageWithinJar("/img/icon-64.png");
+    BufferedImage launcherLogoImage = ImageUtil.loadImageWithinJar("/rsrc/img/icon-64.png");
     launcherLogo.setBounds(15, 48, 64, 64);
     launcherLogo.setIcon(new ImageIcon(launcherLogoImage));
     guiFrame.add(launcherLogo);
 
     updaterState = new JLabel("");
-    updaterState.setIcon(new ImageIcon(this.getClass().getResource("/img/loading.gif")));
+    updaterState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     updaterState.setHorizontalAlignment(SwingConstants.LEFT);
     updaterState.setBounds(100, 49, 375, 25);
     updaterState.setFont(Fonts.fontRegBig);

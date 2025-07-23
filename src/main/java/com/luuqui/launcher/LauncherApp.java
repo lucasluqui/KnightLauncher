@@ -322,7 +322,7 @@ public class LauncherApp
     if (Settings.createShortcut
             && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME)
             && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME + ".desktop")) {
-      BufferedImage bimg = ImageUtil.loadImageWithinJar("/img/icon-512.png");
+      BufferedImage bimg = ImageUtil.loadImageWithinJar("/rsrc/img/icon-512.png");
       try {
         if (SystemUtil.isWindows()) {
           ICOEncoder.write(bimg, new File(LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.ico"));

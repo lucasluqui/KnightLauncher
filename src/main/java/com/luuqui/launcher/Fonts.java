@@ -11,13 +11,13 @@ import static com.luuqui.launcher.Log.log;
 
 public class Fonts
 {
-  private static final String fontPathRegular = "/fonts/Figtree-Regular.ttf";
-  private static final String fontPathMedium = "/fonts/Figtree-SemiBold.ttf";
-  private static final String fontPathRegularJP = "/fonts/NotoSansJP-Regular.otf";
-  private static final String fontPathMediumJP = "/fonts/NotoSansJP-Medium.otf";
-  private static final String fontPathRegularAR = "/fonts/Lemonada-Regular.ttf";
-  private static final String fontPathMediumAR = "/fonts/Lemonada-Medium.ttf";
-  private static final String fontPathCodeRegular = "/fonts/SourceCodePro-Regular.ttf";
+  private static final String fontPathRegular = "/rsrc/fonts/Figtree-Regular.ttf";
+  private static final String fontPathMedium = "/rsrc/fonts/Figtree-SemiBold.ttf";
+  private static final String fontPathRegularJP = "/rsrc/fonts/NotoSansJP-Regular.otf";
+  private static final String fontPathMediumJP = "/rsrc/fonts/NotoSansJP-Medium.otf";
+  private static final String fontPathRegularAR = "/rsrc/fonts/Lemonada-Regular.ttf";
+  private static final String fontPathMediumAR = "/rsrc/fonts/Lemonada-Medium.ttf";
+  private static final String fontPathCodeRegular = "/rsrc/fonts/SourceCodePro-Regular.ttf";
 
   public static Font fontRegSmall = null;
   public static Font fontReg = null;

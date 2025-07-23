@@ -57,7 +57,7 @@ public class LauncherGUI extends BaseGUI {
     guiFrame.setBounds(100, 100, this.width, this.height);
     guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     guiFrame.setUndecorated(true);
-    guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/img/icon-256.png"));
+    guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/rsrc/img/icon-256.png"));
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.getContentPane().setLayout(null);
 
@@ -100,7 +100,7 @@ public class LauncherGUI extends BaseGUI {
     guiFrame.getContentPane().add(mainPane);
 
     bannerLoading = new JLabel(_localeManager.getValue("m.loading"));
-    bannerLoading.setIcon(new ImageIcon(this.getClass().getResource("/img/loading.gif")));
+    bannerLoading.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     bannerLoading.setBounds(49, 65, 700, 340);
     bannerLoading.setFont(Fonts.fontMedBig);
     bannerLoading.setHorizontalAlignment(SwingConstants.CENTER);
@@ -109,8 +109,8 @@ public class LauncherGUI extends BaseGUI {
     mainPane.setComponentZOrder(bannerLoading, 0);
 
     JLabel launcherLogo = new JLabel();
-    BufferedImage launcherLogoImage = ImageUtil.loadImageWithinJar("/img/icon-92.png");
-    BufferedImage launcherLogoImageHover = ImageUtil.loadImageWithinJar("/img/icon-92-hover.png");
+    BufferedImage launcherLogoImage = ImageUtil.loadImageWithinJar("/rsrc/img/icon-92.png");
+    BufferedImage launcherLogoImageHover = ImageUtil.loadImageWithinJar("/rsrc/img/icon-92-hover.png");
     launcherLogo.setBounds(0, -27, 251, 200);
     launcherLogo.setHorizontalAlignment(SwingConstants.CENTER);
     launcherLogo.setIcon(new ImageIcon(launcherLogoImage));
@@ -323,7 +323,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(auctionButton);
     auctionButton.setVisible(false);
 
-    JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/img/icon-discord.png")));
+    JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherGUI.class.getResourceAsStream("/rsrc/img/icon-discord.png")));
     discordButton.setBounds(65, 440, 36, 36);
     discordButton.setToolTipText(_localeManager.getValue("b.discord"));
     discordButton.setFocusPainted(false);

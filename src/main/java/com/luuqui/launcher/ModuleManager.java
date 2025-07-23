@@ -40,7 +40,7 @@ public class ModuleManager
   {
     if (SystemUtil.isWindows() && SystemUtil.is64Bit()) {
       try {
-        FileUtil.extractFileWithinJar("/modules/skdiscordrpc/bundle.zip", LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip");
+        FileUtil.extractFileWithinJar("/rsrc/modules/skdiscordrpc/bundle.zip", LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip");
         Compressor.unzip(LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip", LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\", false);
         FileUtil.deleteFile(LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip");
         _settingsManager.setValue("launcher.ingameRPCSetup", "true");
@@ -58,9 +58,9 @@ public class ModuleManager
     try {
       int vmArch = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath());
       if (SystemUtil.isWindows() && !FileUtil.fileExists(JavaUtil.getGameJVMDirPath() + "/bin/jar.exe")) {
-        FileUtil.extractFileWithinJar("/modules/jarcmd/jar-" + vmArch + ".exe", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe");
+        FileUtil.extractFileWithinJar("/rsrc/modules/jarcmd/jar-" + vmArch + ".exe", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe");
       } else if (!FileUtil.fileExists(JavaUtil.getGameJVMDirPath() + "/bin/jar")) {
-        FileUtil.extractFileWithinJar(vmArch == 64 ? "/modules/jarcmd/jar-amd64" : "/modules/jarcmd/jar-i386", JavaUtil.getGameJVMDirPath() + "/bin/jar");
+        FileUtil.extractFileWithinJar(vmArch == 64 ? "/rsrc/modules/jarcmd/jar-amd64" : "/rsrc/modules/jarcmd/jar-i386", JavaUtil.getGameJVMDirPath() + "/bin/jar");
       }
     } catch (IOException e) {
       log.error(e);
@@ -70,7 +70,7 @@ public class ModuleManager
   public void loadSpiralview ()
   {
     try {
-      FileUtil.extractFileWithinJar("/modules/spiralview/spiralview.jar",
+      FileUtil.extractFileWithinJar("/rsrc/modules/spiralview/spiralview.jar",
         LauncherGlobals.USER_DIR + "/KnightLauncher/modules/spiralview/spiralview.jar");
     } catch (IOException e) {
       log.error(e);
