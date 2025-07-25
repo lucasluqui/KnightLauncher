@@ -94,7 +94,7 @@ public class LauncherEventHandler
 
         _launcherCtx.settingsGUI.eventHandler.saveAdditionalArgs();
         _launcherCtx.settingsGUI.eventHandler.saveConnectionSettings();
-        _settingsManager.loadGameSettings();
+        _settingsManager.applyGameSettings();
 
         if (Settings.loadCodeMods) {
           ProcessUtil.run(getCodeModsStartCommand(altMode), true);

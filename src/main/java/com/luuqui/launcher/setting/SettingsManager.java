@@ -41,22 +41,40 @@ public class SettingsManager
     try {
       if (!FileUtil.fileExists(PROP_PATH)) {
         FileUtil.extractFileWithinJar("/rsrc/config/launcher.properties", PROP_PATH);
-      } else if (FileUtil.fileExists(PROP_PATH) && getValue("PROP_VER") != null
-              && !getValue("PROP_VER").equals(PROP_VER)) {
+      }
+
+      loadProp();
+
+      if (!getValue("PROP_VER").equals(PROP_VER)) {
         log.warning("Old PROP_VER detected, beginning migration...");
         migrationMap = getAllKeyValues();
+        prop.clear();
         FileUtil.deleteFile(PROP_PATH);
         FileUtil.extractFileWithinJar("/rsrc/config/launcher.properties", PROP_PATH);
-        migrate();
+        loadProp();
+        migrateSettings();
+        prop.clear();
+        loadProp();
       }
     } catch (IOException e) {
       log.error(e);
     } finally {
-      load();
+      loadSettings();
     }
   }
 
-  public void load ()
+  private void loadProp ()
+  {
+    log.info("Loading properties file...");
+    try (InputStream is = Files.newInputStream(Paths.get(PROP_PATH))) {
+      prop.load(is);
+      log.info("Loaded properties file.");
+    } catch (IOException e) {
+      log.error(e);
+    }
+  }
+
+  private void loadSettings ()
   {
     // Launcher settings
     Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched")); // Delete this when the dreaded day comes.
@@ -89,11 +107,11 @@ public class SettingsManager
     Settings.gameGetdownFullURL = getValue("game.getdownFullURL");
     Settings.gameAdditionalArgs = getValue("game.additionalArgs");
 
-    log.info("Successfully loaded required settings from prop file.");
-    finishLoading();
+    log.info("Loaded required settings from properties file.");
+    postSettingsLoad();
   }
 
-  private void finishLoading ()
+  private void postSettingsLoad ()
   {
     if (SystemUtil.isWindows() && !SteamUtil.isRunningInSteamapps()) {
       setValue("game.platform", "Standalone");
@@ -103,98 +121,78 @@ public class SettingsManager
   public String getValue (String key)
   {
     String value;
-    try (InputStream is = new FileInputStream(PROP_PATH)) {
-      prop.load(is);
-      value = prop.getProperty(key);
-      log.info("Request for key", "key", key, "value", value);
-      return value;
-    } catch (IOException e) {
-      log.error(e);
-    }
-    return null;
+    value = prop.getProperty(key);
+    log.info("Request for key", "key", key, "value", value);
+    return value;
   }
 
   public String getValue (String key, Server server)
   {
     String value;
-    try (InputStream is = new FileInputStream(PROP_PATH)) {
-      prop.load(is);
-      if (server != null) {
-        value = prop.getProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName());
-      } else {
-        value = prop.getProperty(key);
-      }
-      log.info("Request for key", "key", key, "value", value);
-      return value;
-    } catch (IOException e) {
-      log.error(e);
+    if (server != null) {
+      value = prop.getProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName());
+    } else {
+      value = prop.getProperty(key);
     }
-    return null;
+    log.info("Request for key", "key", key, "value", value);
+    return value;
   }
 
   public void setValue (String key, String value)
   {
-    try (InputStream is = new FileInputStream(PROP_PATH)) {
-      if (migrating) prop.load(is);
-      prop.setProperty(key, value);
-      prop.store(new FileOutputStream(PROP_PATH), null);
-      log.info("Setting new key", "key", key, "value", value);
+    prop.setProperty(key, value);
+    try {
+      prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
     } catch (IOException e) {
       log.error(e);
     }
+    log.info("Setting new key", "key", key, "value", value);
   }
 
   public void setValue (String key, String value, Server server)
   {
-    try (InputStream is = new FileInputStream(PROP_PATH)) {
-      if (migrating) prop.load(is);
-      if (server != null) {
-        prop.setProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName(), value);
-      } else {
-        prop.setProperty(key, value);
-      }
-      prop.store(new FileOutputStream(PROP_PATH), null);
-      log.info("Setting new key", "key", key, "value", value);
+    if (server != null) {
+      prop.setProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName(), value);
+    } else {
+      prop.setProperty(key, value);
+    }
+    try {
+      prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
     } catch (IOException e) {
       log.error(e);
     }
+    log.info("Setting new server-specific key", "key", key, "value", value, "server", server);
   }
 
   private HashMap<String, Object> getAllKeyValues ()
   {
     HashMap<String, Object> keyValues = new HashMap<>();
-    try (InputStream is = new FileInputStream(PROP_PATH)) {
-      prop.load(is);
-      for(String key : prop.stringPropertyNames()) {
-        keyValues.put(key, getValue(key));
-      }
-      return keyValues;
-    } catch (IOException e) {
-      log.error(e);
+    for (String key : prop.stringPropertyNames()) {
+      keyValues.put(key, getValue(key));
     }
-    return null;
+    return keyValues;
   }
 
   public void createKeyIfNotExists (String key, String value)
   {
-    try (InputStream is = new FileInputStream(PROP_PATH)) {
-      if(prop.getProperty(key) == null) {
-        prop.setProperty(key, value);
-        prop.store(new FileOutputStream(PROP_PATH), null);
-        log.info("Setting new key", "key", key, "value", value);
-      } else {
-        log.info("Key already exists", "key", key, "value", value);
+    if (prop.getProperty(key) == null) {
+      prop.setProperty(key, value);
+      try {
+        prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
+      } catch (IOException e) {
+        log.error(e);
       }
-    } catch (IOException e) {
-      log.error(e);
+      log.info("Setting new key", "key", key, "value", value);
+    } else {
+      log.info("Key already exists", "key", key, "value", value);
     }
   }
 
-  private void migrate ()
+  private void migrateSettings ()
   {
     migrating = true;
-    for(String key : migrationMap.keySet()) {
-      if(key.equals("PROP_VER")) continue;
+    for (String key : migrationMap.keySet()) {
+      if (key.equals("PROP_VER")) continue;
       setValue(key, (String) migrationMap.get(key));
     }
 
@@ -203,7 +201,7 @@ public class SettingsManager
     migrating = false;
   }
 
-  public void loadGameSettings ()
+  public void applyGameSettings ()
   {
     try {
       _launcherCtx._progressBar.startTask();
@@ -216,7 +214,7 @@ public class SettingsManager
        * This is useful if a user installs Knight Launcher and had already
        * made its own extra.txt, this way it won't get deleted forever, just renamed.
        */
-      if(!FileUtil.fileExists("old-extra.txt")) {
+      if (!FileUtil.fileExists("old-extra.txt")) {
         FileUtil.rename(new File("extra.txt"), new File("old-extra.txt"));
       }
 
@@ -247,7 +245,7 @@ public class SettingsManager
       writer.println(Settings.gameAdditionalArgs);
       writer.close();
 
-      if(_flamingoManager.getSelectedServer().isOfficial()) loadConnectionSettings();
+      if (_flamingoManager.getSelectedServer().isOfficial()) loadConnectionSettings();
 
       _launcherCtx._progressBar.setBarValue(1);
       _launcherCtx._progressBar.finishTask();
@@ -283,7 +281,7 @@ public class SettingsManager
     }
 
     String[] outputCapture = null;
-    if(SystemUtil.isWindows()) {
+    if (SystemUtil.isWindows()) {
       outputCapture = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "uf", "code/config.jar", "deployment.properties" });
     } else {
       outputCapture = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "uf", "code/config.jar", "deployment.properties" });
