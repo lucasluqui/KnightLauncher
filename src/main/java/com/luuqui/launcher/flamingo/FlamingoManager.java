@@ -6,10 +6,7 @@ import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.flamingo.data.Status;
 import com.luuqui.launcher.setting.SettingsManager;
-import com.luuqui.util.FileUtil;
-import com.luuqui.util.RequestUtil;
-import com.luuqui.util.SystemUtil;
-import com.luuqui.util.TextUtil;
+import com.luuqui.util.*;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -156,6 +153,7 @@ public class FlamingoManager
   public String getLocalGameVersion ()
   {
     try {
+      Compressor.readFileInsideZip("code/config.jar", "");
       return FileUtil.readFile(this.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
     } catch (IOException e) {
       log.error(e);
