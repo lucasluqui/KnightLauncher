@@ -23,7 +23,7 @@ public class Settings
 
   // Game settings
   public static String gamePlatform = "Steam";
-  public static int gameMemory = 512;
+  public static int gameMemory = 1024;
   public static Boolean gameUseStringDeduplication = false;
   public static Boolean gameDisableExplicitGC = false;
   public static Boolean gameUndecoratedWindow = false;
