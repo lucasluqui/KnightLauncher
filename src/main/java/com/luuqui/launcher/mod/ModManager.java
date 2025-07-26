@@ -106,7 +106,7 @@ public class ModManager
       }
 
       if (gameVersionChanged()) {
-        log.info("Game version has changed", "new", _flamingoManager.getLocalGameVersion());
+        log.info("Game version has changed", "new", selectedServer.getLocalVersion());
         rebuildRequired = true;
         mountRequired = true;
       }
@@ -219,7 +219,7 @@ public class ModManager
     clean();
 
     // Update the last known game version.
-    _settingsManager.setValue("modloader.lastKnownVersion", _flamingoManager.getLocalGameVersion(), selectedServer);
+    _settingsManager.setValue("modloader.lastKnownVersion", selectedServer.getLocalVersion(), selectedServer);
 
     mountRequired = false;
     _launcherCtx._progressBar.finishTask();
@@ -397,7 +397,7 @@ public class ModManager
   private void checkModCompatibility ()
   {
     int gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
-    String pxVersion = _flamingoManager.getSelectedServer() == null ? _flamingoManager.getLocalGameVersion() : _flamingoManager.getSelectedServer().version;
+    String pxVersion = _flamingoManager.getSelectedServer().getLocalVersion();
 
     boolean hasIncompatibility = false;
     for (Mod mod : modList) {
@@ -409,7 +409,7 @@ public class ModManager
       if (mod instanceof ZipMod) {
         ZipMod zipMod = (ZipMod) mod;
 
-        if (zipMod.getType().equalsIgnoreCase("class")) {
+        if (zipMod.getType() != null && zipMod.getType().equalsIgnoreCase("class")) {
           if (!pxCompatible) {
             zipMod.setEnabled(false);
             hasIncompatibility = true;
@@ -440,7 +440,7 @@ public class ModManager
     Server selectedServer = _flamingoManager.getSelectedServer();
 
     String lastKnownVersion = _settingsManager.getValue("modloader.lastKnownVersion", selectedServer);
-    String currentVersion = _flamingoManager.getLocalGameVersion();
+    String currentVersion = selectedServer.getLocalVersion();
 
     return !lastKnownVersion.equalsIgnoreCase(currentVersion);
   }

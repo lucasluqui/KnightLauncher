@@ -9,11 +9,14 @@ import com.luuqui.launcher.setting.SettingsManager;
 import com.luuqui.util.*;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static com.luuqui.launcher.flamingo.Log.log;
@@ -153,9 +156,16 @@ public class FlamingoManager
   public String getLocalGameVersion ()
   {
     try {
-      //Compressor.readFileInsideZip("code/config.jar", "");
-      return FileUtil.readFile(this.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
+      String buildString = Compressor.readFileInsideZip(this.selectedServer.getRootDirectory() + File.separator + "code/config.jar", "build.properties");
+      Properties properties = new Properties();
+      properties.load(new ByteArrayInputStream(buildString.getBytes(StandardCharsets.UTF_8)));
+      return properties.getProperty("version");
     } catch (IOException e) {
+      try {
+        return FileUtil.readFile(this.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
+      } catch (IOException ex) {
+        log.error(ex);
+      }
       log.error(e);
     }
     return "-1";

@@ -51,6 +51,7 @@ public class ZipMod extends Mod
         config.close();
 
         Compressor.unzip(rootDir + "/mods/" + this.fileName, rootDir + "/code/class-changes/", false, Settings.fileProtection, LauncherGlobals.FILTER_LIST);
+        FileUtils.delete(new File(rootDir + "/code/class-changes/mod.json"));
 
         // Turn the class changes into a jar file.
         String[] outputCapture;

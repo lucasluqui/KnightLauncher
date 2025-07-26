@@ -246,9 +246,9 @@ public class LauncherEventHandler
     newServerList.add(official);
 
     if (servers != null) {
-      for(Server server : servers) {
+      for (Server server : servers) {
 
-        if(server.name.equalsIgnoreCase("Official")) {
+        if (server.name.equalsIgnoreCase("Official")) {
           official.playerCountUrl = _localeManager.getValue("m.players_online_official", String.valueOf(LauncherApp.getOfficialApproxPlayerCount()));
           official.announceBanner = server.announceBanner;
           official.announceContent = server.announceContent;
@@ -259,12 +259,12 @@ public class LauncherEventHandler
         }
 
         // Prevent from adding duplicate servers
-        if(_flamingoManager.findServerByName(server.name) != null) {
+        if (_flamingoManager.findServerByName(server.name) != null) {
           log.info("Tried to add duplicate server", "server", server.name);
           continue;
         }
 
-        if(server.beta == 1) server.name += " (Beta)";
+        if (server.beta == 1) server.name += " (Beta)";
 
         newServerList.add(server);
 
@@ -275,7 +275,7 @@ public class LauncherEventHandler
 
         // make sure there's a base zip file we can use to clean files with.
         String rootDir = server.getRootDirectory();
-        if(FileUtil.fileExists(rootDir + "/rsrc")
+        if (FileUtil.fileExists(rootDir + "/rsrc")
             && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
           try {
             Compressor.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");

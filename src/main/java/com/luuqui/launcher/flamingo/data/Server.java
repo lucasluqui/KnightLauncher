@@ -1,10 +1,14 @@
 package com.luuqui.launcher.flamingo.data;
 
 import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.util.Compressor;
 import com.luuqui.util.FileUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 import static com.luuqui.launcher.flamingo.Log.log;
 
@@ -62,7 +66,7 @@ public class Server
 
   public String getSanitizedName ()
   {
-    if(this.name.equalsIgnoreCase("Official")) return "";
+    if (this.name.equalsIgnoreCase("Official")) return "";
     return this.name.toLowerCase().replace(" ", "-")
       .replace("(", "").replace(")", "");
   }
@@ -83,14 +87,22 @@ public class Server
     return this.name.equalsIgnoreCase("Official");
   }
 
-  private String getLocalVersion ()
+  public String getLocalVersion ()
   {
     try {
-      return FileUtil.readFile(this.getRootDirectory() + File.separator + "version.txt");
+      String buildString = Compressor.readFileInsideZip(getRootDirectory() + File.separator + "code/config.jar", "build.properties");
+      Properties properties = new Properties();
+      properties.load(new ByteArrayInputStream(buildString.getBytes(StandardCharsets.UTF_8)));
+      return properties.getProperty("version");
     } catch (IOException e) {
+      try {
+        return FileUtil.readFile(getRootDirectory() + File.separator + "version.txt").trim();
+      } catch (IOException ex) {
+        log.error(ex);
+      }
       log.error(e);
     }
-    return null;
+    return "-1";
   }
 
   @SuppressWarnings("all")
