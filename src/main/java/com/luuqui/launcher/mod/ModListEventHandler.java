@@ -161,7 +161,7 @@ public class ModListEventHandler
     // Show the warning with a slight delay to make sure the GUI can load beforehand.
     Thread showDirectoriesWarningThread = new Thread(() -> {
       this.gui.warningNotice.setVisible(true);
-      this.gui.currentWarning = _localeManager.getValue("error.incompatible_code_mods");
+      this.gui.currentWarning = _localeManager.getValue("error.incompatible_mod");
     });
     ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
   }
