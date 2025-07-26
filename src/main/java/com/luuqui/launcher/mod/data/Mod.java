@@ -36,6 +36,18 @@ public abstract class Mod
   protected String version;
 
   /**
+   * Project X version this mod is intended for. Most mods do not need to worry about this.
+   * Used to verify when mounting 'class' type ZipMods or JarMods, as we need to make sure they're compatible
+   * with the current game version.
+   */
+  protected String pxVersion;
+
+  /**
+   * Whether it's compatible with the current game version. Set at parse time.
+   */
+  protected boolean pxCompatible;
+
+  /**
    * The mod's file name. In case no display name is set, we fall back to this.
    */
   protected String fileName;
@@ -58,15 +70,11 @@ public abstract class Mod
    */
   protected String image;
 
-  protected final String DEFAULT_DESCRIPTION = "No description found";
-  protected final String DEFAULT_AUTHOR = "Unknown";
-  protected final String DEFAULT_VERSION = "?";
-
   protected Mod ()
   {
-    this.description = DEFAULT_DESCRIPTION;
-    this.authorName = DEFAULT_AUTHOR;
-    this.version = DEFAULT_VERSION;
+    this.description = "No description found";
+    this.authorName = "Unknown";
+    this.version = "1.0";
     this.isEnabled = true;
   }
 
@@ -96,6 +104,8 @@ public abstract class Mod
       this.setDescription(this.metadata.getString("description"));
       this.setAuthor(this.metadata.getString("author"));
       this.setVersion(this.metadata.getString("version"));
+      String pxVersion = this.metadata.has("pxVersion") ? this.metadata.getString("pxVersion") : "0";
+      this.setPXVersion(pxVersion);
 
       try {
         this.setImage(this.metadata.getString("image"));
@@ -189,6 +199,26 @@ public abstract class Mod
   public void setImage (String image)
   {
     this.image = image;
+  }
+
+  public String getPXVersion ()
+  {
+    return this.pxVersion;
+  }
+
+  public void setPXVersion (String pxVersion)
+  {
+    this.pxVersion = pxVersion;
+  }
+
+  public boolean isPXCompatible ()
+  {
+    return this.pxCompatible;
+  }
+
+  public void setPXCompatible (boolean pxCompatible)
+  {
+    this.pxCompatible = pxCompatible;
   }
 
   public JSONObject getMetadata ()

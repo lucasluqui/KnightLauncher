@@ -6,10 +6,7 @@ public class JarMod extends Mod
 {
   private int minJDKVersion;
   private int maxJDKVersion;
-  private String pxVersion;
-
   private boolean jdkCompatible;
-  private boolean pxCompatible;
 
   @SuppressWarnings("unused")
   public JarMod ()
@@ -26,7 +23,7 @@ public class JarMod extends Mod
     this.maxJDKVersion = 8;
     this.pxVersion = "0";
     this.jdkCompatible = true;
-    this.pxCompatible = true;
+    this.pxCompatible = false;
     this.setAbsolutePath(rootDir + fileName);
     parseMetadata();
   }
@@ -47,10 +44,8 @@ public class JarMod extends Mod
     if (this.metadata != null) {
       int minJDKVersion = !this.metadata.isNull("minJDKVersion") ? Integer.parseInt(this.metadata.getString("minJDKVersion")) : 8;
       int maxJDKVersion = !this.metadata.isNull("maxJDKVersion") ? Integer.parseInt(this.metadata.getString("maxJDKVersion")) : 8;
-      String pxVersion = !this.metadata.isNull("pxVersion") ? this.metadata.getString("pxVersion") : "0";
       this.setMinJDKVersion(minJDKVersion);
       this.setMaxJDKVersion(maxJDKVersion);
-      this.setPXVersion(pxVersion);
     }
   }
 
@@ -82,26 +77,6 @@ public class JarMod extends Mod
   public void setJDKCompatible (boolean jdkCompatible)
   {
     this.jdkCompatible = jdkCompatible;
-  }
-
-  public String getPXVersion ()
-  {
-    return this.pxVersion;
-  }
-
-  public void setPXVersion (String pxVersion)
-  {
-    this.pxVersion = pxVersion;
-  }
-
-  public boolean isPXCompatible ()
-  {
-    return this.pxCompatible;
-  }
-
-  public void setPXCompatible (boolean pxCompatible)
-  {
-    this.pxCompatible = pxCompatible;
   }
 
   @Override

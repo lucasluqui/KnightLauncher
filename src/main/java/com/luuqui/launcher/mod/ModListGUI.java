@@ -209,12 +209,12 @@ public class ModListGUI extends BaseGUI
     updateModList(null);
   }
 
-  public void updateModList(String searchString) {
-
+  public void updateModList (String searchString)
+  {
     Color[] backgroundColors = { CustomColors.INTERFACE_MODLIST_BACKGROUND_LIGHT, CustomColors.INTERFACE_MODLIST_BACKGROUND_DARK };
     int count = 0;
 
-    if(modListPane == null) {
+    if (modListPane == null) {
       log.warning("What? how? why?! modListPane is null");
       return;
     }
@@ -223,9 +223,9 @@ public class ModListGUI extends BaseGUI
 
     for (Mod mod : _modManager.getModList()) {
 
-      if(searchString != null) {
+      if (searchString != null) {
         // mod name or author doesn't match the search string, sayonara.
-        if(!mod.getDisplayName().toLowerCase().contains(searchString.toLowerCase())
+        if (!mod.getDisplayName().toLowerCase().contains(searchString.toLowerCase())
           && !mod.getAuthor().toLowerCase().contains(searchString.toLowerCase())) continue;
       }
 
@@ -269,18 +269,34 @@ public class ModListGUI extends BaseGUI
       modBadge.setBounds(241, 50, 86, 18);
       modBadge.setHorizontalAlignment(SwingConstants.CENTER);
       modBadge.setFont(Fonts.fontRegSmall);
-      if(mod instanceof ZipMod) {
-        modBadge.setText(_localeManager.getValue("m.resource_mod"));
-        modBadge.putClientProperty(FlatClientProperties.STYLE,
-          "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND)
-            + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_FOREGROUND)
-            + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND));
-        modBadge.setBounds(
-          modBadge.getX(),
-          modBadge.getY(),
-          modBadge.getWidth() + 19,
-          modBadge.getHeight()
-        );
+      if (mod instanceof ZipMod) {
+        ZipMod zipMod = (ZipMod) mod;
+
+        if (zipMod.getType() == null) {
+          modBadge.setText(_localeManager.getValue("m.resource_mod"));
+          modBadge.putClientProperty(FlatClientProperties.STYLE,
+              "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND)
+                  + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_FOREGROUND)
+                  + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND));
+          modBadge.setBounds(
+              modBadge.getX(),
+              modBadge.getY(),
+              modBadge.getWidth() + 19,
+              modBadge.getHeight()
+          );
+        } else if (zipMod.getType().equalsIgnoreCase("class")) {
+          modBadge.setText(_localeManager.getValue("m.class_mod"));
+          modBadge.putClientProperty(FlatClientProperties.STYLE,
+              "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CLASS_BACKGROUND)
+                  + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CLASS_FOREGROUND)
+                  + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CLASS_BACKGROUND));
+          modBadge.setBounds(
+              modBadge.getX(),
+              modBadge.getY(),
+              modBadge.getWidth() + 19,
+              modBadge.getHeight()
+          );
+        }
       } else if (mod instanceof JarMod) {
         modBadge.setText(_localeManager.getValue("m.code_mod"));
         modBadge.putClientProperty(FlatClientProperties.STYLE,
@@ -327,22 +343,49 @@ public class ModListGUI extends BaseGUI
 
       modPane.add(removeButton);
 
-      if(mod instanceof JarMod) {
-        boolean isJDKCompatible = ((JarMod) mod).isJDKCompatible();
-        boolean isPXCompatible = ((JarMod) mod).isPXCompatible();
-        if(!isJDKCompatible || !isPXCompatible) {
-          JLabel jarModIncompatBadge = new JLabel();
-          jarModIncompatBadge.setBounds(340, 50, 125, 18);
-          jarModIncompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
-          jarModIncompatBadge.setFont(Fonts.fontRegSmall);
-          jarModIncompatBadge.setText(_localeManager.getValue("m.code_mod_incompatible", !isPXCompatible ? "PX" : "JDK"));
-          jarModIncompatBadge.setToolTipText(jarModIncompatBadge.getText());
-          jarModIncompatBadge.setVisible(true);
-          jarModIncompatBadge.putClientProperty(FlatClientProperties.STYLE,
+      if (mod instanceof ZipMod) {
+        ZipMod zipMod = (ZipMod) mod;
+        if (zipMod.getType() != null && zipMod.getType().equalsIgnoreCase("class")) {
+          boolean isPXCompatible = zipMod.isPXCompatible();
+
+          if (!isPXCompatible) {
+            JLabel incompatBadge = new JLabel();
+            incompatBadge.setBounds(340, 50, 125, 18);
+            incompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
+            incompatBadge.setFont(Fonts.fontRegSmall);
+            incompatBadge.setText(_localeManager.getValue("m.mod_incompatible", "PX"));
+            incompatBadge.setToolTipText(incompatBadge.getText());
+            incompatBadge.setVisible(true);
+            incompatBadge.putClientProperty(FlatClientProperties.STYLE,
+                "background:" + ColorUtil.colorToHexString(CustomColors.BRIGHT_RED)
+                    + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.MID_RED)
+                    + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.BRIGHT_RED));
+            modPane.add(incompatBadge);
+
+            enabledCheckbox.setSelected(false);
+            enabledCheckbox.setEnabled(false);
+          }
+        }
+      }
+
+      if (mod instanceof JarMod) {
+        JarMod jarMod = (JarMod) mod;
+        boolean isJDKCompatible = jarMod.isJDKCompatible();
+        boolean isPXCompatible = jarMod.isPXCompatible();
+
+        if (!isJDKCompatible || !isPXCompatible) {
+          JLabel incompatBadge = new JLabel();
+          incompatBadge.setBounds(340, 50, 125, 18);
+          incompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
+          incompatBadge.setFont(Fonts.fontRegSmall);
+          incompatBadge.setText(_localeManager.getValue("m.mod_incompatible", !isPXCompatible ? "PX" : "JDK"));
+          incompatBadge.setToolTipText(incompatBadge.getText());
+          incompatBadge.setVisible(true);
+          incompatBadge.putClientProperty(FlatClientProperties.STYLE,
                   "background:" + ColorUtil.colorToHexString(CustomColors.BRIGHT_RED)
                           + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.MID_RED)
                           + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.BRIGHT_RED));
-          modPane.add(jarModIncompatBadge);
+          modPane.add(incompatBadge);
 
           enabledCheckbox.setSelected(false);
           enabledCheckbox.setEnabled(false);

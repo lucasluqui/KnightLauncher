@@ -151,7 +151,7 @@ public class ModListEventHandler
     ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
   }
 
-  public void showIncompatibleCodeModsWarning (boolean show)
+  public void showIncompatibleModsWarning (boolean show)
   {
     if (!show) {
       this.gui.warningNotice.setVisible(false);

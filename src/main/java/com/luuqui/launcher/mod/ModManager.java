@@ -111,7 +111,7 @@ public class ModManager
         mountRequired = true;
       }
 
-      checkJarModsRequirements();
+      checkModCompatibility();
 
       // Check if there's directories in the mod folder and push a warning to the user.
       for (File file : FileUtil.filesAndDirectoriesInDirectory(modFolderPath)) {
@@ -394,23 +394,37 @@ public class ModManager
     }
   }
 
-  private void checkJarModsRequirements ()
+  private void checkModCompatibility ()
   {
     int gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
     String pxVersion = _flamingoManager.getSelectedServer() == null ? _flamingoManager.getLocalGameVersion() : _flamingoManager.getSelectedServer().version;
 
     boolean hasIncompatibility = false;
-    for(Mod mod : modList) {
-      if(mod instanceof JarMod) {
+    for (Mod mod : modList) {
+      // Parse whether the mod is compatible with the current game version.
+      // Not a strict requirement for most mods, only for ZipMods with 'class' type and JarMods.
+      boolean pxCompatible = pxVersion.equalsIgnoreCase(mod.getPXVersion());
+      mod.setPXCompatible(pxCompatible);
+
+      if (mod instanceof ZipMod) {
+        ZipMod zipMod = (ZipMod) mod;
+
+        if (zipMod.getType().equalsIgnoreCase("class")) {
+          if (!pxCompatible) {
+            zipMod.setEnabled(false);
+            hasIncompatibility = true;
+          }
+        }
+      }
+
+      if (mod instanceof JarMod) {
+        JarMod jarMod = (JarMod) mod;
+
         // Disable any jar mod below the min JDK requirements or above the max JDK requirements.
-        boolean jdkCompatible = gameJVMVersion >= ((JarMod) mod).getMinJDKVersion() && gameJVMVersion <= ((JarMod) mod).getMaxJDKVersion();
-        ((JarMod) mod).setJDKCompatible(jdkCompatible);
+        boolean jdkCompatible = gameJVMVersion >= jarMod.getMinJDKVersion() && gameJVMVersion <= jarMod.getMaxJDKVersion();
+        jarMod.setJDKCompatible(jdkCompatible);
 
-        // Disable any jar mod that isn't compatible with this pcode version.
-        boolean pxCompatible = pxVersion.equalsIgnoreCase(((JarMod) mod).getPXVersion());
-        ((JarMod) mod).setPXCompatible(pxCompatible);
-
-        if(mod.isEnabled()) mod.setEnabled(jdkCompatible && pxCompatible);
+        if (jarMod.isEnabled()) jarMod.setEnabled(jdkCompatible && pxCompatible);
 
         if((!jdkCompatible || !pxCompatible) && Settings.loadCodeMods) {
           hasIncompatibility = true;
@@ -418,7 +432,7 @@ public class ModManager
       }
     }
 
-    _launcherCtx.modListGUI.eventHandler.showIncompatibleCodeModsWarning(hasIncompatibility);
+    _launcherCtx.modListGUI.eventHandler.showIncompatibleModsWarning(hasIncompatibility);
   }
 
   private boolean gameVersionChanged ()
@@ -433,12 +447,16 @@ public class ModManager
 
   private void resetConfig ()
   {
-    log.info("Resetting config jar...");
-    URLDownloadQueue downloadQueue = new URLDownloadQueue("Reset code jars");
+    log.info("Resetting config jars...");
+    URLDownloadQueue downloadQueue = new URLDownloadQueue("Reset config jars");
     try {
       downloadQueue.addToQueue(
           new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-config.jar"),
           new File(LauncherGlobals.USER_DIR + "/code/", "projectx-config.jar")
+      );
+      downloadQueue.addToQueue(
+          new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/config.jar"),
+          new File(LauncherGlobals.USER_DIR + "/code/", "config.jar")
       );
     } catch (MalformedURLException e) {
       log.error(e);
@@ -450,7 +468,7 @@ public class ModManager
   private void resetCode ()
   {
     log.info("Resetting code jar...");
-    URLDownloadQueue downloadQueue = new URLDownloadQueue("Reset code jars");
+    URLDownloadQueue downloadQueue = new URLDownloadQueue("Reset code jar");
     try {
       downloadQueue.addToQueue(
           new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-pcode.jar"),

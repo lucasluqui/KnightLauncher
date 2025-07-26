@@ -49,6 +49,8 @@ public class CustomColors
   public static final Color INTERFACE_MODLIST_BADGE_CODE_FOREGROUND       = new Color(248, 159, 58);
   public static final Color INTERFACE_MODLIST_BADGE_PACK_BACKGROUND       = new Color(24, 217, 7);
   public static final Color INTERFACE_MODLIST_BADGE_PACK_FOREGROUND       = new Color(68, 248, 58);
+  public static final Color INTERFACE_MODLIST_BADGE_CLASS_BACKGROUND      = new Color(128, 0, 255);
+  public static final Color INTERFACE_MODLIST_BADGE_CLASS_FOREGROUND      = new Color(179, 102, 255);
 
   public static final Color INTERFACE_DEFAULT                   = new Color(179, 179, 180);
   public static final Color INTERFACE_DEFAULT_FOCUS             = new Color(97, 99, 101);
