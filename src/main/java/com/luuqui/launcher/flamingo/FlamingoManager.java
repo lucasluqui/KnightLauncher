@@ -163,7 +163,8 @@ public class FlamingoManager
       return properties.getProperty("version");
     } catch (IOException e) {
       try {
-        return FileUtil.readFile(this.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
+        String version = FileUtil.readFile(this.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
+        return version;
       } catch (IOException ex) {
         log.error(ex);
       }

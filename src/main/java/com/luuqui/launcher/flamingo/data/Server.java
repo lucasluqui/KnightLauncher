@@ -96,7 +96,8 @@ public class Server
       return properties.getProperty("version");
     } catch (IOException e) {
       try {
-        return FileUtil.readFile(getRootDirectory() + File.separator + "version.txt").trim();
+        String version = FileUtil.readFile(getRootDirectory() + File.separator + "version.txt").trim();
+        return version;
       } catch (IOException ex) {
         log.error(ex);
       }
