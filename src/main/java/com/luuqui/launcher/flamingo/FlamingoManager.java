@@ -50,6 +50,7 @@ public class FlamingoManager
     // Make sure we at least have the official server on init.
     Server official = new Server("Official");
     serverList.add(official);
+    this.selectedServer = official;
   }
 
   public List<Server> fetchServerList ()
@@ -61,9 +62,9 @@ public class FlamingoManager
       log.info("Got server list from flamingo");
 
       // we got an empty server list, so empty we return it.
-      if(response.toString().equalsIgnoreCase("{}")) return servers;
+      if (response.toString().equalsIgnoreCase("{}")) return servers;
 
-      for(Object serverJsonObj : response.getJSONArray("serverlist")) {
+      for (Object serverJsonObj : response.getJSONArray("serverlist")) {
         JSONObject serverJson = (JSONObject) serverJsonObj;
 
         Server server = new Server();
