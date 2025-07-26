@@ -153,7 +153,7 @@ public class FlamingoManager
   public String getLocalGameVersion ()
   {
     try {
-      Compressor.readFileInsideZip("code/config.jar", "");
+      //Compressor.readFileInsideZip("code/config.jar", "");
       return FileUtil.readFile(this.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
     } catch (IOException e) {
       log.error(e);

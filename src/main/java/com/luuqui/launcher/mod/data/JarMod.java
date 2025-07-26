@@ -21,9 +21,7 @@ public class JarMod extends Mod
     this.fileName = fileName;
     this.minJDKVersion = 8;
     this.maxJDKVersion = 8;
-    this.pxVersion = "0";
     this.jdkCompatible = true;
-    this.pxCompatible = false;
     this.setAbsolutePath(rootDir + fileName);
     parseMetadata();
   }

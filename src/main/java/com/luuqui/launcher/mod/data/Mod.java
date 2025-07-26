@@ -75,6 +75,8 @@ public abstract class Mod
     this.description = "No description found";
     this.authorName = "Unknown";
     this.version = "1.0";
+    this.pxVersion = "0";
+    this.pxCompatible = false;
     this.isEnabled = true;
   }
 
