@@ -150,7 +150,7 @@ public class ModListGUI extends BaseGUI
     refreshButton.setFocusable(false);
     refreshButton.setBackground(null);
     refreshButton.setBorder(null);
-    refreshButton.setToolTipText(_localeManager.getValue("b.refresh"));
+    refreshButton.setToolTipText(_localeManager.getValue("b.refresh_mount"));
     guiFrame.getContentPane().add(refreshButton);
     refreshButton.addActionListener(this.eventHandler::refreshEvent);
 
@@ -350,7 +350,7 @@ public class ModListGUI extends BaseGUI
 
           if (!isPXCompatible) {
             JLabel incompatBadge = new JLabel();
-            incompatBadge.setBounds(340, 50, 125, 18);
+            incompatBadge.setBounds(modBadge.getX() + modBadge.getWidth() + 15, modBadge.getY(), 125, 18);
             incompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
             incompatBadge.setFont(Fonts.fontRegSmall);
             incompatBadge.setText(_localeManager.getValue("m.mod_incompatible", "PX"));
@@ -375,7 +375,7 @@ public class ModListGUI extends BaseGUI
 
         if (!isJDKCompatible || !isPXCompatible) {
           JLabel incompatBadge = new JLabel();
-          incompatBadge.setBounds(340, 50, 125, 18);
+          incompatBadge.setBounds(modBadge.getX() + modBadge.getWidth() + 15, modBadge.getY(), 125, 18);
           incompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
           incompatBadge.setFont(Fonts.fontRegSmall);
           incompatBadge.setText(_localeManager.getValue("m.mod_incompatible", !isPXCompatible ? "PX" : "JDK"));
