@@ -6,6 +6,8 @@ import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -21,14 +23,15 @@ import static com.luuqui.util.Log.log;
 
 public class Compressor
 {
-
   private static final int BUFFER_SIZE = 4096;
 
-  public static void unzip(String source, String dest, Boolean force4j) {
+  public static void unzip (String source, String dest, Boolean force4j)
+  {
     unzip(source, dest, force4j, false, null);
   }
 
-  public static void unzip(String source, String dest, Boolean force4j, Boolean filter, String[] filterList) {
+  public static void unzip (String source, String dest, Boolean force4j, Boolean filter, String[] filterList)
+  {
     try {
       if(force4j || SystemUtil.isMac()) {
         unzip4j(source, dest, filter, filterList);
@@ -49,19 +52,22 @@ public class Compressor
   }
 
 
-  public static void unzip4j(String source, String dest) throws ZipException {
+  public static void unzip4j (String source, String dest)
+      throws ZipException
+  {
     unzip4j(source, dest, false, null);
   }
 
-  public static void unzip4j(String source, String dest, Boolean filter, String[] filterList) throws ZipException {
+  public static void unzip4j (String source, String dest, Boolean filter, String[] filterList)
+      throws ZipException
+  {
     ZipFile zipFile = new ZipFile(source);
 
     try {
-
       // Check if we've been given a filter list and in that case, iterate through it.
-      if(filterList != null) {
-        for(String fileName : filterList) {
-          if(zipFile.getFileHeader(fileName) != null) {
+      if (filterList != null) {
+        for (String fileName : filterList) {
+          if (zipFile.getFileHeader(fileName) != null) {
             log.info("Filter found illegal file", "source", source, "file", fileName, "filter", filter);
             if (filter) zipFile.removeFile(fileName);
           }
@@ -69,8 +75,8 @@ public class Compressor
       }
 
       // Also, check whether any of the files matches the forced filter list.
-      for(String fileName : FORCED_FILTER_LIST) {
-        if(zipFile.getFileHeader(fileName) != null) {
+      for (String fileName : FORCED_FILTER_LIST) {
+        if (zipFile.getFileHeader(fileName) != null) {
           log.info("Filter found illegal file. This is a forced filter thus filter value will be ignored.",
               "source", source, "file", fileName, "filter", filter);
           zipFile.removeFile(fileName);
@@ -83,29 +89,38 @@ public class Compressor
 
     // All done, time to extract.
     zipFile.extractAll(dest);
+
+    // Close the stream after we're done.
+    try {
+      zipFile.close();
+    } catch (IOException e) {
+      log.error(e);
+    }
   }
 
 
-  public static void unzipCustom(String zipFilePath, String destDirectory) throws IOException {
+  public static void unzipCustom (String zipFilePath, String destDirectory) throws IOException
+  {
     unzipCustom(zipFilePath, destDirectory, false, null);
   }
 
-  public static void unzipCustom(String zipFilePath, String destDirectory, Boolean filter, String[] filterList) throws IOException {
+  public static void unzipCustom (String zipFilePath, String destDirectory, Boolean filter, String[] filterList)
+      throws IOException
+  {
     FileUtil.createDir(destDirectory);
-    ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
+    ZipInputStream zipIn = new ZipInputStream(Files.newInputStream(Paths.get(zipFilePath)));
     ZipEntry entry = zipIn.getNextEntry();
+
     // iterates over entries in the zip file
     while (entry != null) {
       String filePath = destDirectory + File.separator + entry.getName();
-
       try {
-
         boolean illegalFile = false;
 
         // Check if we've been given a filter list and in that case, iterate through it.
-        if(filterList != null) {
-          for(String fileName : filterList) {
-            if(filePath.equalsIgnoreCase(fileName)) {
+        if (filterList != null) {
+          for (String fileName : filterList) {
+            if (filePath.equalsIgnoreCase(fileName)) {
               log.info("Filter found illegal file", "source", zipFilePath, "file", fileName, "filter", filter);
               if (filter) {
                 illegalFile = true;
@@ -122,8 +137,8 @@ public class Compressor
         }
 
         // Also, check whether any of the files matches the forced filter list.
-        for(String fileName : FORCED_FILTER_LIST) {
-          if(filePath.equalsIgnoreCase(fileName)) {
+        for (String fileName : FORCED_FILTER_LIST) {
+          if (filePath.equalsIgnoreCase(fileName)) {
             log.info("Filter found illegal file. This is a forced filter thus filter value will be ignored.",
                 "source", zipFilePath, "file", fileName, "filter", filter);
             illegalFile = true;
@@ -155,8 +170,10 @@ public class Compressor
   }
 
 
-  private static void extractFileSafe(ZipInputStream zipIn, String filePath) throws IOException {
-    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
+  private static void extractFileSafe (ZipInputStream zipIn, String filePath)
+      throws IOException
+  {
+    BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(Paths.get(filePath)));
     byte[] bytesIn = new byte[Settings.compressorExtractBuffer];
     int read = 0;
     while ((read = zipIn.read(bytesIn)) != -1) {
@@ -166,7 +183,8 @@ public class Compressor
   }
 
 
-  public static String readFileInsideZip(String zip, String pathInZip) {
+  public static String readFileInsideZip (String zip, String pathInZip)
+  {
     ZipFile zipFile = new ZipFile(zip);
     FileHeader fileHeader;
     String content = null;
@@ -174,21 +192,24 @@ public class Compressor
       fileHeader = zipFile.getFileHeader(pathInZip);
       InputStream inputStream = zipFile.getInputStream(fileHeader);
       content = FileUtil.convertInputStreamToString(inputStream);
+      zipFile.close();
     } catch (IOException e) {
       log.error(e);
     }
     return content;
   }
 
-  public static InputStream getISFromFileInsideZip(String zip, String pathInZip) {
+  public static InputStream getISFromFileInsideZip (String zip, String pathInZip)
+  {
     ZipFile zipFile = new ZipFile(zip);
     FileHeader fileHeader;
     InputStream inputStream = null;
     try {
       fileHeader = zipFile.getFileHeader(pathInZip);
       inputStream = zipFile.getInputStream(fileHeader);
+      zipFile.close();
     } catch (IOException e) {
-      if(e instanceof ZipException) {
+      if (e instanceof ZipException) {
         // ignore
       } else {
         log.error(e);
@@ -199,7 +220,8 @@ public class Compressor
 
 
   @SuppressWarnings("unused")
-  public static String getZipHash(String source) {
+  public static String getZipHash (String source)
+  {
     InputStream file = null;
     String hash = null;
     try {
@@ -232,7 +254,8 @@ public class Compressor
     return hash;
   }
 
-  public static List<String> getFileListFromZip(String zipPath) {
+  public static List<String> getFileListFromZip (String zipPath)
+  {
     java.util.zip.ZipFile zipFile = null;
     try {
       zipFile = new java.util.zip.ZipFile(zipPath);
@@ -252,19 +275,21 @@ public class Compressor
   }
 
   // source: https://stackoverflow.com/questions/51833423/how-to-zip-the-content-of-a-directory-in-java
-  public static void zipFolderContents(File srcFolder, File destZipFile, String zipFileName) throws Exception {
+  public static void zipFolderContents (File srcFolder, File destZipFile, String zipFileName)
+      throws Exception
+  {
     try (FileOutputStream fileWriter = new FileOutputStream(destZipFile);
          ZipOutputStream zip = new ZipOutputStream(fileWriter)) {
       addFolderToZip(srcFolder, srcFolder, zip, zipFileName);
-      fileWriter.close();
-      zip.close();
     }
   }
 
-  private static void addFileToZip(File rootPath, File srcFile, ZipOutputStream zip, String zipFileName) throws Exception {
+  private static void addFileToZip (File rootPath, File srcFile, ZipOutputStream zip, String zipFileName)
+      throws Exception
+  {
     if (srcFile.isDirectory()) {
       addFolderToZip(rootPath, srcFile, zip, zipFileName);
-    } else if(srcFile.getName().equalsIgnoreCase(zipFileName)) {
+    } else if (srcFile.getName().equalsIgnoreCase(zipFileName)) {
       // do nothing
     } else {
       byte[] buf = new byte[BUFFER_SIZE];
@@ -281,7 +306,9 @@ public class Compressor
     }
   }
 
-  private static void addFolderToZip(File rootPath, File srcFolder, ZipOutputStream zip, String zipFileName) throws Exception {
+  private static void addFolderToZip (File rootPath, File srcFolder, ZipOutputStream zip, String zipFileName)
+      throws Exception
+  {
     for (File fileName : Objects.requireNonNull(srcFolder.listFiles())) {
       addFileToZip(rootPath, fileName, zip, zipFileName);
     }
@@ -320,5 +347,4 @@ public class Compressor
       "world/dynamic/switch/toggle_lever/animation_on.dat",
       "world/dynamic/switch/toggle_lever/model.dat"
   };
-
 }
