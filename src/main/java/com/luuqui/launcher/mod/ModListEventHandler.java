@@ -221,10 +221,10 @@ public class ModListEventHandler
 
     if (response == JFileChooser.APPROVE_OPTION) {
       String path = fileChooser.getSelectedFile().getAbsolutePath();
-      if(path.endsWith(".zip") || path.endsWith(".jar") || path.endsWith(".modpack")) {
+      if (path.endsWith(".zip") || path.endsWith(".jar") || path.endsWith(".modpack")) {
         File file = new File(path);
           try {
-            FileUtils.copyFile(file, new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + file.getName()));
+            FileUtils.moveFile(file, new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + file.getName()));
             log.info("Added mod: " + file.getName());
             refreshMods(false);
           } catch (IOException e) {
