@@ -170,8 +170,9 @@ public class ModManager
 
     _settingsManager.setValue("modloader.appliedModsHash", Integer.toString(hashSet.hashCode()), selectedServer);
 
-    // Load all the locale changes
+    // Mount all the locale changes.
     if (!globalLocaleChanges.isEmpty()) {
+      log.info("Mounting locale changes...");
       try {
         // Unpack the current projectx-config jar file.
         ZipFile projectxConfig = new ZipFile(rootDir + "/code/projectx-config.jar");
@@ -222,13 +223,15 @@ public class ModManager
         // And finally, remove the old one. We don't need to store it as we'll fetch the original from getdown
         // when a rebuild is triggered.
         FileUtils.delete(new File(rootDir + "/code/projectx-config-old.jar"));
+        log.info("Locale changes mounted");
       } catch (Exception e) {
         log.error(e);
       }
     }
 
-    // Load all class modifications into config.jar.
+    // Mount all class changes into config.jar.
     // First unzip the current config.jar contents into the directory where class mods were mounted to.
+    log.info("Mounting class changes...");
     try {
       ZipFile config = new ZipFile(rootDir + "/code/config.jar");
       FileUtil.unpackJar(config, new File(rootDir + "/code/class-changes/"), false);
@@ -257,6 +260,7 @@ public class ModManager
       // And finally, remove the old one. We don't need to store it as we'll fetch the original from getdown
       // when a rebuild is triggered.
       FileUtils.delete(new File(rootDir + "/code/config-old.jar"));
+      log.info("Class changes mounted");
     } catch (IOException e) {
       log.error(e);
     }
