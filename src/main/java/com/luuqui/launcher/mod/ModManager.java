@@ -37,7 +37,7 @@ public class ModManager
 
   private final LinkedList<Mod> modList = new LinkedList<>();
 
-  private final List<LocaleChange> globalLocaleChangeList = new ArrayList<>();
+  private final List<LocaleChange> globalLocaleChanges = new ArrayList<>();
 
   public Boolean mountRequired = false;
   public Boolean rebuildRequired = false;
@@ -157,7 +157,7 @@ public class ModManager
           ZipMod zipMod = ((ZipMod) mod);
           zipMod.mount(rootDir);
           if (zipMod.hasLocaleChanges()) {
-            this.globalLocaleChangeList.addAll(zipMod.getLocaleChanges());
+            this.globalLocaleChanges.addAll(zipMod.getLocaleChanges());
           }
         } else {
           mod.mount();
@@ -171,24 +171,39 @@ public class ModManager
     _settingsManager.setValue("modloader.appliedModsHash", Integer.toString(hashSet.hashCode()), selectedServer);
 
     // Load all the locale changes
-    if (!globalLocaleChangeList.isEmpty()) {
+    if (!globalLocaleChanges.isEmpty()) {
       try {
         // Unpack the current projectx-config jar file.
         ZipFile projectxConfig = new ZipFile(rootDir + "/code/projectx-config.jar");
         FileUtil.unpackJar(projectxConfig, new File(rootDir + "/code/locale-changes/"), false);
         projectxConfig.close();
 
-        // TODO: Optimize. We can clearly go bundle by bundle instead of iterating the locale changes this way.
-        for (LocaleChange localeChange : this.globalLocaleChangeList) {
-          String bundlePath = rootDir + "/code/locale-changes/rsrc/i18n/" + localeChange.getBundle();
+        // Create per-bundle batch of locale changes.
+        HashMap<String, List<LocaleChange>> sortedLocaleChanges = new HashMap<>();
+        for (LocaleChange localeChange : this.globalLocaleChanges) {
+          if (!sortedLocaleChanges.containsKey(localeChange.getBundle())) {
+            sortedLocaleChanges.put(localeChange.getBundle(), new ArrayList<>());
+          }
+          sortedLocaleChanges.get(localeChange.getBundle()).add(localeChange);
+        }
+
+        // Iterate through each bundle's changes.
+        for (String bundle : sortedLocaleChanges.keySet()) {
+          String bundlePath = rootDir + "/code/locale-changes/rsrc/i18n/" + bundle;
 
           Properties properties = new Properties();
           properties.load(Files.newInputStream(new File(bundlePath).toPath()));
-          properties.setProperty(localeChange.getKey(), localeChange.getValue());
+
+          List<LocaleChange> localeChanges = sortedLocaleChanges.get(bundle);
+          for (LocaleChange localeChange : localeChanges) {
+            properties.setProperty(localeChange.getKey(), localeChange.getValue());
+          }
+
           properties.store(Files.newOutputStream(new File(bundlePath).toPath()), null);
+          properties.clear();
         }
 
-        // Turn the locale changes into a jar file.
+        // Turn all the locale changes back into a jar file.
         String[] outputCapture;
         if (SystemUtil.isWindows()) {
           outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
@@ -212,8 +227,42 @@ public class ModManager
       }
     }
 
+    // Load all class modifications into config.jar.
+    // First unzip the current config.jar contents into the directory where class mods were mounted to.
+    try {
+      ZipFile config = new ZipFile(rootDir + "/code/config.jar");
+      FileUtil.unpackJar(config, new File(rootDir + "/code/class-changes/"), false);
+      config.close();
+    } catch (IOException e) {
+      log.error(e);
+    }
+
+    // And now after merging their contents, we turn it back into config.jar.
+    String[] outputCapture;
+    if (SystemUtil.isWindows()) {
+      outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "." });
+    } else {
+      outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "." });
+    }
+    log.debug("Class changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
+
+    try {
+      // Delete the temporary directory used to store class changes.
+      FileUtils.deleteDirectory(new File(rootDir + "/code/class-changes"));
+
+      // Rename the current config to old and the new one to its original name.
+      FileUtils.moveFile(new File(rootDir + "/code/config.jar"), new File(rootDir + "/code/config-old.jar"));
+      FileUtils.moveFile(new File(rootDir + "/code/config-new.jar"), new File(rootDir + "/code/config.jar"));
+
+      // And finally, remove the old one. We don't need to store it as we'll fetch the original from getdown
+      // when a rebuild is triggered.
+      FileUtils.delete(new File(rootDir + "/code/config-old.jar"));
+    } catch (IOException e) {
+      log.error(e);
+    }
+
     // Make sure no cheat mod slips in.
-    if(!selectedServer.isOfficial()) extractSafeguard();
+    if (!selectedServer.isOfficial()) extractSafeguard();
 
     // Clean the game from unwanted files.
     clean();
@@ -362,7 +411,7 @@ public class ModManager
 
   private void clearLocaleChanges ()
   {
-    globalLocaleChangeList.clear();
+    globalLocaleChanges.clear();
   }
 
   private void parseDisabledMods ()
