@@ -161,7 +161,7 @@ public class SettingsManager
     } catch (IOException e) {
       log.error(e);
     }
-    log.info("Setting new server-specific key", "key", key, "value", value, "server", server);
+    log.info("Setting new server-specific key", "key", key, "value", value, "server", server == null ? "null" : server.name);
   }
 
   private HashMap<String, Object> getAllKeyValues ()
