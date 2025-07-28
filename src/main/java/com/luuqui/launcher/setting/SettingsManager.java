@@ -45,12 +45,14 @@ public class SettingsManager
 
       loadProp();
 
-      if (!getValue("PROP_VER").equals(PROP_VER)) {
-        log.warning("Old PROP_VER detected, beginning migration...");
+      String currentPropVer = getValue("PROP_VER");
+      if (!currentPropVer.equals(PROP_VER)) {
+        log.warning("PROP_VER mismatch", "expected", PROP_VER, "found", currentPropVer);
         migrationMap = getAllKeyValues();
         prop.clear();
         FileUtil.deleteFile(PROP_PATH);
         FileUtil.extractFileWithinJar("/rsrc/config/launcher.properties", PROP_PATH);
+        log.info("Extracting latest properties file...");
         loadProp();
         migrateSettings();
         prop.clear();
@@ -191,6 +193,7 @@ public class SettingsManager
   private void migrateSettings ()
   {
     migrating = true;
+    log.info("Migrating settings to new properties file...");
     for (String key : migrationMap.keySet()) {
       if (key.equals("PROP_VER")) continue;
       setValue(key, (String) migrationMap.get(key));
@@ -198,6 +201,7 @@ public class SettingsManager
 
     // Successfully migrated to newer PROP_VER.
     setValue("PROP_VER", PROP_VER);
+    log.info("Successfully migrated properties file");
     migrating = false;
   }
 
