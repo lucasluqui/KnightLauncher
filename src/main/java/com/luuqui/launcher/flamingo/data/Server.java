@@ -93,7 +93,9 @@ public class Server
       String buildString = Compressor.readFileInsideZip(getRootDirectory() + File.separator + "code/config.jar", "build.properties");
       Properties properties = new Properties();
       properties.load(new ByteArrayInputStream(buildString.getBytes(StandardCharsets.UTF_8)));
-      return properties.getProperty("version");
+      String version = properties.getProperty("version");
+      properties.clear();
+      return version;
     } catch (IOException e) {
       try {
         String version = FileUtil.readFile(getRootDirectory() + File.separator + "version.txt").trim();

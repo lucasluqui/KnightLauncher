@@ -207,7 +207,6 @@ public class Compressor
     try {
       fileHeader = zipFile.getFileHeader(pathInZip);
       inputStream = zipFile.getInputStream(fileHeader);
-      zipFile.close();
     } catch (IOException e) {
       if (e instanceof ZipException) {
         // ignore

@@ -5,6 +5,7 @@ import com.luuqui.util.ImageUtil;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
+import java.io.InputStream;
 
 public abstract class Mod
 {
@@ -113,7 +114,9 @@ public abstract class Mod
         this.setImage(this.metadata.getString("image"));
       } catch (Exception e) {
         try {
-          this.setImage(ImageUtil.imageToBase64(ImageIO.read(Compressor.getISFromFileInsideZip(this.getAbsolutePath(), "mod.png"))));
+          InputStream imageIs = Compressor.getISFromFileInsideZip(this.getAbsolutePath(), "mod.png");
+          this.setImage(ImageUtil.imageToBase64(ImageIO.read(imageIs)));
+          imageIs.close();
         } catch (Exception e2) {
           this.setImage(null);
         }

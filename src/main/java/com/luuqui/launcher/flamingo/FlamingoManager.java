@@ -160,7 +160,9 @@ public class FlamingoManager
       String buildString = Compressor.readFileInsideZip(this.selectedServer.getRootDirectory() + File.separator + "code/config.jar", "build.properties");
       Properties properties = new Properties();
       properties.load(new ByteArrayInputStream(buildString.getBytes(StandardCharsets.UTF_8)));
-      return properties.getProperty("version");
+      String version = properties.getProperty("version");
+      properties.clear();
+      return version;
     } catch (IOException e) {
       try {
         String version = FileUtil.readFile(this.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
