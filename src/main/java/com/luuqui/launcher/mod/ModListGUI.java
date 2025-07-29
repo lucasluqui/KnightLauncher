@@ -73,7 +73,7 @@ public class ModListGUI extends BaseGUI
     warningNotice.setFocusable(false);
     warningNotice.setBorderPainted(false);
     warningNotice.setForeground(Color.WHITE);
-    warningNotice.setBackground(CustomColors.MID_RED);
+    warningNotice.setBackground(CustomColors.LIGHT_RED);
     warningNotice.setFont(Fonts.fontMed);
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
@@ -140,7 +140,7 @@ public class ModListGUI extends BaseGUI
     addModButton.setFocusPainted(false);
     addModButton.setFocusable(false);
     addModButton.setForeground(Color.WHITE);
-    addModButton.setBackground(CustomColors.BRIGHT_GREEN);
+    addModButton.setBackground(CustomColors.GREEN);
     addModButton.setToolTipText(_localeManager.getValue("b.add_mod_tooltip"));
     addModButton.putClientProperty(FlatClientProperties.STYLE,
         "arc: 999; borderWidth: 0");
@@ -338,7 +338,7 @@ public class ModListGUI extends BaseGUI
 
       modPane.add(enabledCheckbox);
 
-      JButton removeButton = new JButton(IconFontSwing.buildIcon(FontAwesome.TRASH, 18, CustomColors.BUTTON_FOREGROUND_DANGER));
+      JButton removeButton = new JButton(IconFontSwing.buildIcon(FontAwesome.TRASH, 18, CustomColors.DANGER));
       removeButton.setBounds(680, 25, 25, 25);
       removeButton.setFocusPainted(false);
       removeButton.setFocusable(false);
@@ -363,9 +363,9 @@ public class ModListGUI extends BaseGUI
             incompatBadge.setToolTipText(incompatBadge.getText());
             incompatBadge.setVisible(true);
             incompatBadge.putClientProperty(FlatClientProperties.STYLE,
-                "background:" + ColorUtil.colorToHexString(CustomColors.BRIGHT_RED)
-                    + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.MID_RED)
-                    + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.BRIGHT_RED));
+                "background:" + ColorUtil.colorToHexString(CustomColors.RED)
+                    + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.LIGHT_RED)
+                    + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.RED));
             modPane.add(incompatBadge);
 
             enabledCheckbox.setSelected(false);
@@ -388,9 +388,9 @@ public class ModListGUI extends BaseGUI
           incompatBadge.setToolTipText(incompatBadge.getText());
           incompatBadge.setVisible(true);
           incompatBadge.putClientProperty(FlatClientProperties.STYLE,
-                  "background:" + ColorUtil.colorToHexString(CustomColors.BRIGHT_RED)
-                          + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.MID_RED)
-                          + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.BRIGHT_RED));
+                  "background:" + ColorUtil.colorToHexString(CustomColors.RED)
+                          + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.LIGHT_RED)
+                          + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.RED));
           modPane.add(incompatBadge);
 
           enabledCheckbox.setSelected(false);

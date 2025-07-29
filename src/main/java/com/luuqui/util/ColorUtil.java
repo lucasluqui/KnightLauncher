@@ -24,12 +24,12 @@ public class ColorUtil
 
   public static Color getGreenForegroundColor ()
   {
-    return CustomColors.BRIGHT_GREEN;
+    return CustomColors.GREEN;
   }
 
   public static Color getRedForegroundColor ()
   {
-    return CustomColors.BRIGHT_RED;
+    return CustomColors.RED;
   }
 
   public static String colorToHexString (Color color)

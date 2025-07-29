@@ -12,8 +12,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
-import static com.luuqui.launcher.setting.Log.log;
-
 public class SettingsGUI extends BaseGUI
 {
   @Inject public SettingsEventHandler eventHandler;
@@ -396,7 +394,7 @@ public class SettingsGUI extends BaseGUI
     resetGameSettingsButton.setBounds(435, 423, 180, 23);
     resetGameSettingsButton.setFocusPainted(false);
     resetGameSettingsButton.setFocusable(false);
-    resetGameSettingsButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
+    resetGameSettingsButton.setForeground(CustomColors.DANGER);
     resetGameSettingsButton.setToolTipText(_localeManager.getValue("b.reset_default"));
     gamePanel.add(resetGameSettingsButton);
     resetGameSettingsButton.addActionListener(eventHandler::resetGameSettingsButtonEvent);
@@ -531,7 +529,7 @@ public class SettingsGUI extends BaseGUI
     betaCodeClearLocalButton.setFocusPainted(false);
     betaCodeClearLocalButton.setFocusable(false);
     betaCodeClearLocalButton.setVisible(false);
-    betaCodeClearLocalButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
+    betaCodeClearLocalButton.setForeground(CustomColors.DANGER);
     betaCodeClearLocalButton.setToolTipText(_localeManager.getValue("b.beta_code_clear_local"));
     betaCodeClearLocalButton.setBounds(25, 423, 250, 25);
     betasPanel.add(betaCodeClearLocalButton);
@@ -612,7 +610,7 @@ public class SettingsGUI extends BaseGUI
     labelDisclaimer.setBounds(195, 255, 300, 18);
     labelDisclaimer.setFont(Fonts.fontReg);
     labelDisclaimer.setHorizontalAlignment(SwingConstants.LEFT);
-    labelDisclaimer.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
+    labelDisclaimer.setForeground(CustomColors.DANGER);
     advancedPanel.add(labelDisclaimer);
 
     JLabel serverAddressLabel = new JLabel(_localeManager.getValue("m.server_address"));
@@ -691,7 +689,7 @@ public class SettingsGUI extends BaseGUI
     resetConnectionSettingsButton.setBounds(435, 423, 180, 23);
     resetConnectionSettingsButton.setFocusPainted(false);
     resetConnectionSettingsButton.setFocusable(false);
-    resetConnectionSettingsButton.setForeground(CustomColors.BUTTON_FOREGROUND_DANGER);
+    resetConnectionSettingsButton.setForeground(CustomColors.DANGER);
     resetConnectionSettingsButton.setToolTipText(_localeManager.getValue("b.reset_default"));
     advancedPanel.add(resetConnectionSettingsButton);
     resetConnectionSettingsButton.addActionListener(eventHandler::resetConnectionSettingsButtonEvent);

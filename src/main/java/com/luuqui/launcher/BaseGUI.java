@@ -103,7 +103,7 @@ public abstract class BaseGUI
         @Override public void mousePressed(MouseEvent e) {}
         @Override public void mouseReleased(MouseEvent e) {}
         @Override public void mouseEntered(MouseEvent e) {
-          closeButton.setBackground(CustomColors.MID_RED);
+          closeButton.setBackground(CustomColors.LIGHT_RED);
         }
         @Override public void mouseExited(MouseEvent e) {
           closeButton.setBackground(null);

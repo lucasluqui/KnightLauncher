@@ -501,7 +501,7 @@ public class LauncherGUI extends BaseGUI {
     changelogButton.setFocusPainted(false);
     changelogButton.setFocusable(false);
     changelogButton.setBorderPainted(false);
-    changelogButton.setBackground(CustomColors.CHANGELOGS);
+    changelogButton.setBackground(CustomColors.CHANGELOG);
     changelogButton.setForeground(Color.WHITE);
     changelogButton.setVisible(true);
     mainPane.add(changelogButton);
@@ -515,7 +515,7 @@ public class LauncherGUI extends BaseGUI {
     warningNotice.setFocusable(false);
     warningNotice.setBorderPainted(false);
     warningNotice.setForeground(Color.WHITE);
-    warningNotice.setBackground(CustomColors.MID_RED);
+    warningNotice.setBackground(CustomColors.LIGHT_RED);
     warningNotice.setFont(Fonts.fontMed);
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
@@ -546,7 +546,7 @@ public class LauncherGUI extends BaseGUI {
     playAnimatedBannersButton.setFocusPainted(false);
     playAnimatedBannersButton.setFocusable(false);
     playAnimatedBannersButton.setBorderPainted(false);
-    playAnimatedBannersButton.setBackground(Settings.playAnimatedBanners ? CustomColors.INTERFACE_BUTTON_BACKGROUND : CustomColors.MID_RED);
+    playAnimatedBannersButton.setBackground(Settings.playAnimatedBanners ? CustomColors.INTERFACE_BUTTON_BACKGROUND : CustomColors.LIGHT_RED);
     playAnimatedBannersButton.setForeground(Color.WHITE);
     playAnimatedBannersButton.setVisible(false);
     mainPane.add(playAnimatedBannersButton);
