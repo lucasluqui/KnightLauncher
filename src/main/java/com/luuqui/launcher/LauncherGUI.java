@@ -193,7 +193,7 @@ public class LauncherGUI extends BaseGUI {
     settingsButton.setFocusPainted(false);
     settingsButton.setFocusable(false);
     settingsButton.setBorderPainted(false);
-    settingsButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
+    settingsButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     settingsButton.setForeground(Color.WHITE);
     settingsButton.setToolTipText(_localeManager.getValue("b.settings"));
     settingsButton.addActionListener(action -> {
@@ -234,7 +234,7 @@ public class LauncherGUI extends BaseGUI {
     modButton.setFocusable(false);
     modButton.setBorderPainted(false);
     modButton.setEnabled(true);
-    modButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
+    modButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     modButton.setForeground(Color.WHITE);
     modButton.setToolTipText(_localeManager.getValue("b.mods"));
     modButton.addActionListener(action -> {
@@ -275,7 +275,7 @@ public class LauncherGUI extends BaseGUI {
     editorsButton.setFocusable(false);
     editorsButton.setBorderPainted(false);
     editorsButton.setEnabled(true);
-    editorsButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
+    editorsButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     editorsButton.setForeground(Color.WHITE);
     editorsButton.setToolTipText(_localeManager.getValue("b.editors"));
     editorsButton.addActionListener(action -> {
@@ -316,7 +316,7 @@ public class LauncherGUI extends BaseGUI {
     auctionButton.setFocusable(false);
     auctionButton.setBorderPainted(false);
     auctionButton.setEnabled(true);
-    auctionButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
+    auctionButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     auctionButton.setForeground(Color.WHITE);
     auctionButton.setToolTipText(_localeManager.getValue("b.auction"));
     auctionButton.addActionListener(this.eventHandler::openAuctionsWebpage);
@@ -329,7 +329,7 @@ public class LauncherGUI extends BaseGUI {
     discordButton.setFocusPainted(false);
     discordButton.setFocusable(false);
     discordButton.setBorderPainted(false);
-    discordButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
+    discordButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     discordButton.setFont(Fonts.fontMed);
     sidePane.add(discordButton);
     discordButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_DISCORD));
@@ -341,7 +341,7 @@ public class LauncherGUI extends BaseGUI {
     bugButton.setFocusPainted(false);
     bugButton.setFocusable(false);
     bugButton.setBorderPainted(false);
-    bugButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
+    bugButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     bugButton.setFont(Fonts.fontMed);
     sidePane.add(bugButton);
     bugButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_BUG_REPORT));
@@ -408,7 +408,7 @@ public class LauncherGUI extends BaseGUI {
     bannerLinkButton.setFocusPainted(false);
     bannerLinkButton.setFocusable(false);
     bannerLinkButton.setOpaque(false);
-    bannerLinkButton.setBackground(CustomColors.INTERFACE_MAINPANE_BUTTON);
+    bannerLinkButton.setBackground(CustomColors.INTERFACE_MAINPANE_TRANSPARENT_BUTTON);
     bannerLinkButton.setBorderPainted(false);
     bannerLinkButton.setVisible(false);
     mainPane.add(bannerLinkButton);
@@ -446,7 +446,7 @@ public class LauncherGUI extends BaseGUI {
     launchTooltipButton.setFocusable(false);
     launchTooltipButton.setFocusPainted(false);
     launchTooltipButton.setBorderPainted(false);
-    launchTooltipButton.setBackground(CustomColors.INTERFACE_MAINPANE_BUTTON);
+    launchTooltipButton.setBackground(CustomColors.INTERFACE_MAINPANE_TRANSPARENT_BUTTON);
     launchTooltipButton.setForeground(Color.WHITE);
     launchTooltipButton.setToolTipText(launchTooltipTitle);
     launchTooltipButton.addActionListener(l -> {
@@ -546,7 +546,7 @@ public class LauncherGUI extends BaseGUI {
     playAnimatedBannersButton.setFocusPainted(false);
     playAnimatedBannersButton.setFocusable(false);
     playAnimatedBannersButton.setBorderPainted(false);
-    playAnimatedBannersButton.setBackground(Settings.playAnimatedBanners ? CustomColors.INTERFACE_SIDEPANE_BUTTON : CustomColors.MID_RED);
+    playAnimatedBannersButton.setBackground(Settings.playAnimatedBanners ? CustomColors.INTERFACE_BUTTON_BACKGROUND : CustomColors.MID_RED);
     playAnimatedBannersButton.setForeground(Color.WHITE);
     playAnimatedBannersButton.setVisible(false);
     mainPane.add(playAnimatedBannersButton);

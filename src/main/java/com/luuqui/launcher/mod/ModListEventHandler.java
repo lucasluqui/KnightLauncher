@@ -210,7 +210,7 @@ public class ModListEventHandler
   public void addModEvent (ActionEvent event)
   {
     JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Add mod");
+    fileChooser.setDialogTitle("Add a mod");
     fileChooser.setApproveButtonText("Add");
 
     FileNameExtensionFilter restrict = new FileNameExtensionFilter(".zip, .jar, .modpack", "zip", "jar", "modpack");

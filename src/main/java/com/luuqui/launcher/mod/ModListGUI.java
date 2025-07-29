@@ -153,7 +153,7 @@ public class ModListGUI extends BaseGUI
     refreshButton.setFocusPainted(false);
     refreshButton.setFocusable(false);
     refreshButton.setForeground(Color.WHITE);
-    refreshButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
+    refreshButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     refreshButton.setToolTipText(_localeManager.getValue("b.refresh_tooltip"));
     refreshButton.putClientProperty(FlatClientProperties.STYLE,
         "arc: 999; borderWidth: 0");
