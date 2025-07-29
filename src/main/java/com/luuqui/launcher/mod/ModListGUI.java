@@ -134,29 +134,35 @@ public class ModListGUI extends BaseGUI
     separator.setBounds(25, 75, 750, 2);
     guiFrame.getContentPane().add(separator);
 
-    addModButton = new JButton(IconFontSwing.buildIcon(FontAwesome.PLUS, 18, CustomColors.MID_GREEN));
-    addModButton.setBounds(25, 86, 25, 25);
+    addModButton = new JButton(_localeManager.getValue("b.add_mod"));
+    addModButton.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, 13, Color.WHITE));
+    addModButton.setBounds(25, 87, 80, 23);
     addModButton.setFocusPainted(false);
     addModButton.setFocusable(false);
-    addModButton.setBackground(null);
-    addModButton.setBorder(null);
-    addModButton.setToolTipText(_localeManager.getValue("b.add_mod"));
+    addModButton.setForeground(Color.WHITE);
+    addModButton.setBackground(CustomColors.BRIGHT_GREEN);
+    addModButton.setToolTipText(_localeManager.getValue("b.add_mod_tooltip"));
+    addModButton.putClientProperty(FlatClientProperties.STYLE,
+        "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(addModButton);
     addModButton.addActionListener(this.eventHandler::addModEvent);
 
-    refreshButton = new JButton(IconFontSwing.buildIcon(FontAwesome.REFRESH, 16, Color.WHITE));
-    refreshButton.setBounds(55, 86, 25, 25);
+    refreshButton = new JButton(_localeManager.getValue("b.refresh"));
+    refreshButton.setIcon(IconFontSwing.buildIcon(FontAwesome.REFRESH, 13, Color.WHITE));
+    refreshButton.setBounds(110, 87, 105, 23);
     refreshButton.setFocusPainted(false);
     refreshButton.setFocusable(false);
-    refreshButton.setBackground(null);
-    refreshButton.setBorder(null);
-    refreshButton.setToolTipText(_localeManager.getValue("b.refresh_mount"));
+    refreshButton.setForeground(Color.WHITE);
+    refreshButton.setBackground(CustomColors.INTERFACE_SIDEPANE_BUTTON);
+    refreshButton.setToolTipText(_localeManager.getValue("b.refresh_tooltip"));
+    refreshButton.putClientProperty(FlatClientProperties.STYLE,
+        "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(refreshButton);
     refreshButton.addActionListener(this.eventHandler::refreshEvent);
 
     refreshProgressBar = new JProgressBar();
-    refreshProgressBar.setBounds(110, 90, 100, 16);
-    refreshProgressBar.setStringPainted(true);
+    refreshProgressBar.setBounds(25, 445, 740, 2);
+    refreshProgressBar.setStringPainted(false);
     refreshProgressBar.setVisible(false);
     guiFrame.getContentPane().add(refreshProgressBar);
 
