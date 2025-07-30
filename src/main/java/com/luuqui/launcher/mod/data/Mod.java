@@ -2,10 +2,13 @@ package com.luuqui.launcher.mod.data;
 
 import com.luuqui.util.Compressor;
 import com.luuqui.util.ImageUtil;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.io.InputStream;
+
+import static com.luuqui.launcher.mod.Log.log;
 
 public abstract class Mod
 {
@@ -91,14 +94,16 @@ public abstract class Mod
    * We will only parse the most crucial bits, specific mod implementations like {@code JarMod}
    * or {@code ZipMod} can implement additional parsing.
    */
-  public void parseMetadata () {
+  public void parseMetadata ()
+  {
+    log.info("Parsing mod metadata...", "fileName", this.fileName);
+
     try {
-      this.setMetadata(
-          new JSONObject(
-              Compressor.readFileInsideZip(this.getAbsolutePath(), "mod.json")
-          ).getJSONObject("mod")
-      );
-    } catch (Exception e) {
+      String jsonString = Compressor.readFileInsideZip(this.getAbsolutePath(), "mod.json");
+      JSONObject jsonObject = new JSONObject(jsonString).getJSONObject("mod");
+      this.setMetadata(jsonObject);
+    } catch (JSONException e) {
+      log.error(e);
       this.setMetadata(null);
     }
 

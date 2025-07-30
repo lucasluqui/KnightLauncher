@@ -91,8 +91,10 @@ public class ModManager
           mod = new Modpack(modFolderPath, fileName);
         }
 
-        modList.add(mod);
-        mod.wasAdded();
+        if (mod != null) {
+          modList.add(mod);
+          mod.wasAdded();
+        }
       }
 
       // Finally, let's see which have been set as disabled.
