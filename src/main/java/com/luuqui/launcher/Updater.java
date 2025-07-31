@@ -92,6 +92,10 @@ public class Updater extends BaseGUI
     updaterProgressBar.setValue(0);
     updaterState.setText("Starting...");
 
+    if (this.newVersion == null) {
+      fail(ERR_FETCH);
+    }
+
     updaterProgressBar.setValue(1);
     updaterState.setText("Downloading version " + this.newVersion + "...");
     downloadLatestVersion();
@@ -112,10 +116,6 @@ public class Updater extends BaseGUI
 
   private void downloadLatestVersion ()
   {
-    if (this.newVersion == null) {
-      fail(ERR_FETCH);
-    }
-
     String downloadUrl = "https://github.com/"
         + LauncherGlobals.GITHUB_AUTHOR + "/"
         + LauncherGlobals.GITHUB_REPO + "/"
