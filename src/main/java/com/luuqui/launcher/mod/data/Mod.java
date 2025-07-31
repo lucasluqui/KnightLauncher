@@ -71,7 +71,8 @@ public abstract class Mod
    * A cover image for the mod. This is sourced from either a base64 string in {@code mod.json} within the key
    * {@code image}, or from a {@code mod.png} file within the mod's zip/jar/modpack file.
    *
-   * The cover image must not exceed the pixel size of 64x64.
+   * There's no set lower or upper pixel limit, but it's recommended to use a generously sized image, say 512x512.
+   * It will be resized as needed when used.
    */
   protected String image;
 
