@@ -24,8 +24,8 @@ public class Stylesheet
       log.error(e);
     }
 
-    UIManager.put("TabbedPane.underlineColor", CustomColors.KL);
-    UIManager.put("TabbedPane.inactiveUnderlineColor", CustomColors.KL);
+    UIManager.put("TabbedPane.underlineColor", CustomColors.LAUNCHER);
+    UIManager.put("TabbedPane.inactiveUnderlineColor", CustomColors.LAUNCHER);
 
     UIManager.put("Slider.thumbColor", CustomColors.INTERFACE_DEFAULT);
 

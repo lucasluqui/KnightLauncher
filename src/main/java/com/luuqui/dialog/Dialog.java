@@ -2,6 +2,7 @@ package com.luuqui.dialog;
 
 import com.luuqui.launcher.CustomColors;
 import com.luuqui.launcher.Fonts;
+import com.luuqui.launcher.LauncherGlobals;
 
 import javax.swing.*;
 
@@ -20,19 +21,20 @@ public class Dialog
 
   public static void push (String msg, int messageType)
   {
-    push(msg, "Knight Launcher", messageType);
+    push(msg, LauncherGlobals.LAUNCHER_NAME, messageType);
   }
 
   public static boolean pushWithConfirm (String msg, String title, int messageType)
   {
-    int reply = JOptionPane.showConfirmDialog(null, formatMessage(msg), title, JOptionPane.YES_NO_OPTION, messageType);
+    int reply = JOptionPane.showConfirmDialog(
+        null, formatMessage(msg), title, JOptionPane.YES_NO_OPTION, messageType);
     return reply == JOptionPane.YES_OPTION;
   }
 
   @SuppressWarnings("unused")
   public static boolean pushWithConfirm (String msg, int messageType)
   {
-    return pushWithConfirm(msg, "Knight Launcher", messageType);
+    return pushWithConfirm(msg, LauncherGlobals.LAUNCHER_NAME, messageType);
   }
 
   private static JTextArea formatMessage (String msg)

@@ -231,7 +231,7 @@ public class SettingsEventHandler
   {
     List<File> files = new ArrayList<>();
 
-    // Add Knight Launcher logs to clipboard.
+    // Add launcher logs to clipboard.
     files.add(new File(LauncherGlobals.USER_DIR + "\\knightlauncher.log"));
 
     FileUtil.copyFilesToClipboard(files);
@@ -267,7 +267,7 @@ public class SettingsEventHandler
   {
     List<File> files = new ArrayList<>();
 
-    // Add Knight Launcher logs to clipboard.
+    // Add launcher logs to clipboard.
     files.add(new File(LauncherGlobals.USER_DIR + "\\knightlauncher.log"));
 
     // Initial path where we'll pull game logs from.
@@ -497,7 +497,7 @@ public class SettingsEventHandler
   public void checkExistingArguments ()
   {
     // Port all the contents of their existing extra.txt into
-    // Knight Launcher's gameAdditionalArgs setting so that it's also preserved in-launcher.
+    // the launcher's gameAdditionalArgs setting so that it's also preserved by it.
     if(!FileUtil.fileExists("old-extra.txt")) {
       try {
         this.gui.argumentsPane.setText(FileUtil.readFile("extra.txt").trim());

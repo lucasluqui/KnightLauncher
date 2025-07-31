@@ -215,7 +215,7 @@ public class SettingsManager
 
       /**
        * Back up the current extra.txt if there's no back up already.
-       * This is useful if a user installs Knight Launcher and had already
+       * This is useful if a user installs the launcher and had already
        * made its own extra.txt, this way it won't get deleted forever, just renamed.
        */
       if (!FileUtil.fileExists("old-extra.txt")) {

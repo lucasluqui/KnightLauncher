@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public class CustomColors
 {
-  public static final Color KL              = new Color(166, 63, 103);
+  public static final Color LAUNCHER        = new Color(166, 63, 103);
   public static final Color LAUNCH          = new Color(0, 133, 255);
   public static final Color LAUNCH_ALT      = new Color(255, 85, 0);
   public static final Color UPDATE          = new Color(34, 197, 94);

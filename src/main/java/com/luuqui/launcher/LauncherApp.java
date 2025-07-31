@@ -359,7 +359,7 @@ public class LauncherApp
       BufferedWriter out = new BufferedWriter(new FileWriter(desktopFile));
       out.write("[Desktop Entry]\n");
       out.write("Version=1.5\n");
-      out.write("Name=Knight Launcher\n");
+      out.write("Name=" + LauncherGlobals.LAUNCHER_NAME + "\n");
       out.write("Comment=Open source game launcher for a certain game\n");
       out.write("Exec=java -jar KnightLauncher.jar\n");
       out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.png\n");
@@ -402,7 +402,7 @@ public class LauncherApp
       log.error(e);
     }
 
-    log.info("Knight Launcher started. Running version: " + LauncherGlobals.LAUNCHER_VERSION);
+    log.info(LauncherGlobals.LAUNCHER_NAME + " started. Running version: " + LauncherGlobals.LAUNCHER_VERSION);
   }
 
   private void logVMInfo ()
@@ -491,7 +491,7 @@ public class LauncherApp
     // Currently, Java VM patching is only supported on Windows systems and Linux installs through Steam.
     if (!SystemUtil.isWindows() && !(SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam"))) return false;
 
-    // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by Knight Launcher.
+    // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by the launcher.
     String javaVMVersion = JavaUtil.getGameJVMData();
 
     if (( JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 && !javaVMVersion.contains("1.7") ) || Settings.jvmPatched) {
