@@ -97,7 +97,7 @@ public class Updater extends BaseGUI
     downloadLatestVersion();
 
     this.updaterProgressBar.setValue(2);
-    this.updaterState.setText("Extracting latest version...");
+    this.updaterState.setText("Extracting version " + this.newVersion + " files...");
     Compressor.unzip4j(LauncherGlobals.USER_DIR + "/KnightLauncher.zip", LauncherGlobals.USER_DIR + "/");
 
     updaterProgressBar.setValue(3);
@@ -112,37 +112,16 @@ public class Updater extends BaseGUI
 
   private void downloadLatestVersion ()
   {
-    boolean fetchedVersion = false;
-    String rawResponseReleases = null;
-    while (this.fetchAttempts < 3 && !fetchedVersion) {
-      log.info("Fetching latest version", "attempts", this.fetchAttempts);
-      rawResponseReleases = INetUtil.getWebpageContent(
-          LauncherGlobals.GITHUB_API
-              + "repos/"
-              + LauncherGlobals.GITHUB_AUTHOR + "/"
-              + LauncherGlobals.GITHUB_REPO + "/"
-              + "releases/"
-              + "latest"
-      );
-      if (rawResponseReleases != null) {
-        fetchedVersion = true;
-      }
-      fetchAttempts++;
-    }
-
-    if (rawResponseReleases == null) {
+    if (this.newVersion == null) {
       fail(ERR_FETCH);
     }
-
-    JSONObject jsonReleases = new JSONObject(rawResponseReleases);
-    String latestRelease = jsonReleases.getString("tag_name");
 
     String downloadUrl = "https://github.com/"
         + LauncherGlobals.GITHUB_AUTHOR + "/"
         + LauncherGlobals.GITHUB_REPO + "/"
         + "releases/download/"
-        + latestRelease + "/"
-        + "KnightLauncher-" + latestRelease + ".zip";
+        + this.newVersion + "/"
+        + "KnightLauncher-" + this.newVersion + ".zip";
 
     URLDownloadQueue downloadQueue = null;
     try {
