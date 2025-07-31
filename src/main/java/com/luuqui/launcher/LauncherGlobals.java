@@ -18,9 +18,9 @@ public class LauncherGlobals
   public static final String GITHUB_BRANCH = "main";
 
   public static final String CDN_ENDPOINT = "cdn.knightlauncher.com";
-  public static final String CDN_VERSION = "v2";
+  public static final String CDN_VERSION = "2";
 
-  public static final String URL_CDN = "https://" + CDN_ENDPOINT + "/knightlauncher/" + CDN_VERSION + "/";
+  public static final String URL_CDN = "https://" + CDN_ENDPOINT + "/knightlauncher/v" + CDN_VERSION + "/";
   public static final String URL_JAVA_REDIST = URL_CDN + "java/windows/{version}/redist.zip";
   public static final String URL_DISCORD = "https://discord.gg/RAf499a";
   public static final String URL_GET_MODS = "https://discord.gg/fAR8qtrat2";
