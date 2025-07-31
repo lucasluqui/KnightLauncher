@@ -267,7 +267,7 @@ public class LauncherApp
 
   private void checkDirectories ()
   {
-    // Stores /rsrc (.zip) mods.
+    // Stores all mods.
     FileUtil.createDir("mods");
 
     // Stores clients for third-party servers.
@@ -280,7 +280,7 @@ public class LauncherApp
     FileUtil.createDir("KnightLauncher/modules/");
 
     // Check if the deprecated "code-mods" folder exists, in that case, start migrating.
-    if(FileUtil.fileExists("code-mods")) migrateLegacyCodeModsFolder();
+    if (FileUtil.fileExists("code-mods")) migrateLegacyCodeModsFolder();
   }
 
   private void migrateLegacyCodeModsFolder ()
@@ -367,7 +367,6 @@ public class LauncherApp
       out.write("Path=" + LauncherGlobals.USER_DIR + "/\n");
       out.write("Type=Application\n");
       out.write("Categories=Game;\n");
-      out.close();
       out.close();
     } catch (IOException e) {
       log.error(e);
@@ -528,7 +527,7 @@ public class LauncherApp
 
   private void checkFlamingoStatus ()
   {
-    if(!_flamingoManager.getOnline()) {
+    if (!_flamingoManager.getOnline()) {
       _launcherCtx.launcherGUI.showWarning(_localeManager.getValue("error.flamingo_offline"));
     }
   }
@@ -578,27 +577,6 @@ public class LauncherApp
     }
   }
 
-  @Deprecated
-  private void getOfficialServerVersion ()
-  {
-    URL url = null;
-    try {
-      url = new URL(Settings.gameGetdownFullURL + "getdown.txt");
-    } catch (MalformedURLException e) {
-      log.error(e);
-    }
-    Properties prop = new Properties();
-    try {
-      prop.load(url.openStream());
-    } catch (IOException e) {
-      log.error(e);
-    }
-
-    Server officialServer = Objects.requireNonNull(_flamingoManager.findServerByName("Official"));
-    officialServer.version = prop.getProperty("version");
-    log.info("Latest Official server version updated", "version", officialServer.version);
-  }
-
   public void checkGetdown ()
   {
     try {
@@ -606,7 +584,7 @@ public class LauncherApp
       String firstLine = br.readLine();
       br.close();
 
-      if(firstLine.contains("Customized")) {
+      if (firstLine.contains("Customized")) {
         log.info("Detected a legacy modified Getdown file. Resetting");
         resetGetdown();
       }

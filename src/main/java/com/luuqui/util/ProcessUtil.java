@@ -19,7 +19,6 @@ public class ProcessUtil
     } catch (IOException e) {
       log.error(e);
     } finally {
-
       // No need to keep the process alive.
       if (process != null && !keepAlive) process.destroy();
     }
@@ -35,7 +34,6 @@ public class ProcessUtil
     } catch (IOException e) {
       log.error(e);
     } finally {
-
       // No need to keep the process alive.
       if (process != null && !keepAlive) process.destroy();
     }
@@ -51,13 +49,12 @@ public class ProcessUtil
       // sending important stuff through stderr like -version.
       String stdout = IOUtils.toString(process.getInputStream(), Charset.defaultCharset());
       String stderr = IOUtils.toString(process.getErrorStream(), Charset.defaultCharset());
-      return new String[] {stdout, stderr};
+      return new String[] { stdout, stderr };
     } catch (IOException e) {
       log.error(e);
     } finally {
-
       // No need to keep the process active.
-      if(process != null) process.destroy();
+      if (process != null) process.destroy();
     }
     return new String[1];
   }

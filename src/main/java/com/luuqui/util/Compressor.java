@@ -32,34 +32,32 @@ public class Compressor
 
   public static void unzip (String source, String dest, Boolean force4j, Boolean filter, String[] filterList)
   {
-    try {
-      if(force4j || SystemUtil.isMac()) {
-        unzip4j(source, dest, filter, filterList);
-        return;
-      }
+    if (force4j || SystemUtil.isMac()) {
+      unzip4j(source, dest, filter, filterList);
+      return;
+    }
 
-      switch (Settings.compressorUnzipMethod) {
-        case "custom":
+    switch (Settings.compressorUnzipMethod) {
+      case "custom":
+        try {
           unzipCustom(source, dest, filter, filterList);
-          break;
-        default:
-          unzip4j(source, dest, filter, filterList);
-          break;
-      }
-    } catch (IOException e) {
-      log.error(e);
+        } catch (IOException e) {
+          log.error(e);
+        }
+        break;
+      default:
+        unzip4j(source, dest, filter, filterList);
+        break;
     }
   }
 
 
   public static void unzip4j (String source, String dest)
-      throws ZipException
   {
     unzip4j(source, dest, false, null);
   }
 
   public static void unzip4j (String source, String dest, Boolean filter, String[] filterList)
-      throws ZipException
   {
     ZipFile zipFile = new ZipFile(source);
 
@@ -82,24 +80,28 @@ public class Compressor
           zipFile.removeFile(fileName);
         }
       }
-
-    } catch (Exception e) {
+    } catch (IOException e) {
       log.error(e);
     }
 
     // All done, time to extract.
-    zipFile.extractAll(dest);
-
-    // Close the stream after we're done.
     try {
-      zipFile.close();
+      zipFile.extractAll(dest);
+      zipFile.close(); // Try to close the stream after we're done.
     } catch (IOException e) {
+      try {
+        zipFile.close();
+      } catch (IOException ex) {
+        log.error("Could not close zip file");
+        log.error(ex);
+      }
       log.error(e);
     }
   }
 
 
-  public static void unzipCustom (String zipFilePath, String destDirectory) throws IOException
+  public static void unzipCustom (String zipFilePath, String destDirectory)
+      throws IOException
   {
     unzipCustom(zipFilePath, destDirectory, false, null);
   }
