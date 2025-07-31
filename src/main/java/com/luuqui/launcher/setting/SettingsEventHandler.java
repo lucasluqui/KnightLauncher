@@ -234,7 +234,7 @@ public class SettingsEventHandler
     // Add Knight Launcher logs to clipboard.
     files.add(new File(LauncherGlobals.USER_DIR + "\\knightlauncher.log"));
 
-    FileUtil.copyFileToClipboard(files);
+    FileUtil.copyFilesToClipboard(files);
   }
 
   public void copyGameLogEvent(ActionEvent action) {
@@ -260,7 +260,7 @@ public class SettingsEventHandler
 
     files.removeIf(file -> !FileUtil.fileExists(file.getAbsolutePath()));
 
-    FileUtil.copyFileToClipboard(files);
+    FileUtil.copyFilesToClipboard(files);
   }
 
   public void copyLogsEvent (ActionEvent action)
@@ -291,7 +291,7 @@ public class SettingsEventHandler
     files.removeIf(file -> !FileUtil.fileExists(file.getAbsolutePath()));
 
     // ...And we add them to the clipboard.
-    FileUtil.copyFileToClipboard(files);
+    FileUtil.copyFilesToClipboard(files);
   }
 
   public void openRootFolderEvent (ActionEvent event)

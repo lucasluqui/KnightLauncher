@@ -277,7 +277,7 @@ public class FileUtil
     }
   }
 
-  public static void copyFileToClipboard (List<File> files)
+  public static void copyFilesToClipboard (List<File> files)
   {
     Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
       new Transferable() {

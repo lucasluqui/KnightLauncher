@@ -96,7 +96,6 @@ public class LauncherApp
     if (SystemUtil.isWindows() || SystemUtil.isUnix()) checkShortcut();
 
     initInterfaces();
-    postInit();
   }
 
   private void initManagers ()
@@ -120,16 +119,16 @@ public class LauncherApp
 
   private void initInterfaces ()
   {
-    this.initLauncherGUI();
-    this.initSettingsGUI();
-    this.initModListGUI();
-    this.initEditorsGUI();
-
     if (this.requiresJVMPatch()) {
       this.initJVMPatcher();
     } else if (this.requiresUpdate()) {
       this.initUpdater();
     } else {
+      this.initLauncherGUI();
+      this.initSettingsGUI();
+      this.initModListGUI();
+      this.initEditorsGUI();
+      postInit();
       ThreadingUtil.executeWithDelay(_launcherCtx.launcherGUI::switchVisibility, 200);
     }
   }
@@ -255,7 +254,7 @@ public class LauncherApp
       EventQueue.invokeAndWait(() -> {
         try {
           _launcherCtx.updater = injector.getInstance(Updater.class);
-          _launcherCtx.updater.init();
+          _launcherCtx.updater.init(this.args[1]);
         } catch (Exception e) {
           log.error(e);
         }
@@ -566,7 +565,7 @@ public class LauncherApp
         if (Settings.autoUpdate && !LauncherGlobals.LAUNCHER_VERSION.contains("dev") && !LauncherGlobals.LAUNCHER_VERSION.contains("rc")) {
           // Check if we're coming from a failed update, in that case do not autoupdate even if all other conditions matched.
           if ( !(this.args.length > 0 && this.args[0].equals("updateFailed")) ) {
-            _launcherCtx.launcherGUI.eventHandler.updateLauncher();
+            _launcherCtx.launcherGUI.eventHandler.updateLauncher(latestRelease);
           }
         }
         Settings.isOutdated = true;

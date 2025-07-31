@@ -21,6 +21,8 @@ public class INetUtil
                       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
       connection.setDefaultUseCaches(false);
       connection.setUseCaches(false);
+      connection.setConnectTimeout(10000);
+      connection.setReadTimeout(10000);
       connection.connect();
 
       BufferedReader r = new BufferedReader(new InputStreamReader(connection.getInputStream(),

@@ -26,6 +26,7 @@ public class Updater extends BaseGUI
   @Inject protected DownloadManager _downloadManager;
   @Inject protected DiscordPresenceClient _discordPresenceClient;
 
+  private String newVersion = "";
   private int fetchAttempts = 0;
 
   public Updater ()
@@ -33,8 +34,9 @@ public class Updater extends BaseGUI
     super(500, 125, true);
   }
 
-  public void init ()
+  public void init (String newVersion)
   {
+    this.newVersion = newVersion;
     compose();
     startUpdate();
   }
@@ -91,7 +93,7 @@ public class Updater extends BaseGUI
     updaterState.setText("Starting...");
 
     updaterProgressBar.setValue(1);
-    updaterState.setText("Downloading latest version...");
+    updaterState.setText("Downloading version " + this.newVersion + "...");
     downloadLatestVersion();
 
     this.updaterProgressBar.setValue(2);
@@ -183,7 +185,7 @@ public class Updater extends BaseGUI
     List<File> files = new ArrayList<>();
     files.add(new File(LauncherGlobals.USER_DIR + File.separator + "knightlauncher.log"));
     files.add(new File(LauncherGlobals.USER_DIR + File.separator + "old-knightlauncher.log"));
-    FileUtil.copyFileToClipboard(files);
+    FileUtil.copyFilesToClipboard(files);
     errMsg += "\n\nRelevant log files were automatically copied to your clipboard.";
 
     Dialog.push(errMsg, JOptionPane.ERROR_MESSAGE);

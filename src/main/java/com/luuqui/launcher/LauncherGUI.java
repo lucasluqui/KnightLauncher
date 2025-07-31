@@ -535,7 +535,7 @@ public class LauncherGUI extends BaseGUI {
     updateButton.setForeground(Color.WHITE);
     updateButton.setVisible(false);
     mainPane.add(updateButton);
-    updateButton.addActionListener(l -> this.eventHandler.updateLauncher());
+    updateButton.addActionListener(l -> this.eventHandler.updateLauncher(_launcherCtx.launcherGUI.eventHandler.latestRelease));
 
     Icon playAnimatedBannersIconEnabled = IconFontSwing.buildIcon(FontAwesome.EYE, 18, Color.WHITE);
     Icon playAnimatedBannersIconDisabled = IconFontSwing.buildIcon(FontAwesome.EYE_SLASH, 18, Color.WHITE);

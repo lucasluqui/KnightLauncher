@@ -219,7 +219,7 @@ public class JVMPatcher extends BaseGUI
     _discordPresenceClient.stop();
     ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar" }, true);
     guiFrame.dispose();
-    System.exit(1);
+    System.exit(0);
   }
 
   private JLabel headerLabel;

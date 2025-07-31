@@ -611,7 +611,7 @@ public class LauncherEventHandler
     refreshThread.start();
   }
 
-  public void updateLauncher ()
+  public void updateLauncher (String newVersion)
   {
     try {
       Files.copy(Paths.get(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"), Paths.get(LauncherGlobals.USER_DIR + "/updater.jar"), StandardCopyOption.REPLACE_EXISTING);
@@ -619,7 +619,7 @@ public class LauncherEventHandler
       // Sleep the thread for a bit to be fully sure updater.jar isn't locked.
       Thread.sleep(1000);
 
-      ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update"}, true);
+      ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update", newVersion}, true);
       _launcherCtx.exit(true);
     } catch (Exception e) {
       String downloadErrMsg = "An error occurred while trying to start the launcher updater." +
@@ -628,6 +628,13 @@ public class LauncherEventHandler
       for (StackTraceElement stElement : e.getStackTrace()) {
         downloadErrMsg += "\n" + stElement.toString();
       }
+
+      List<File> files = new ArrayList<>();
+      files.add(new File(LauncherGlobals.USER_DIR + File.separator + "knightlauncher.log"));
+      files.add(new File(LauncherGlobals.USER_DIR + File.separator + "old-knightlauncher.log"));
+      FileUtil.copyFilesToClipboard(files);
+      downloadErrMsg += "\n\nRelevant log files were automatically copied to your clipboard.";
+
       Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
       log.error(e);
     }
