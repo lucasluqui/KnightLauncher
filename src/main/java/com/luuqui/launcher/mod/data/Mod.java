@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
+import java.io.IOException;
 import java.io.InputStream;
 
 import static com.luuqui.launcher.mod.Log.log;
@@ -102,7 +103,12 @@ public abstract class Mod
       String jsonString = Compressor.readFileInsideZip(this.getAbsolutePath(), "mod.json");
       JSONObject jsonObject = new JSONObject(jsonString).getJSONObject("mod");
       this.setMetadata(jsonObject);
+    } catch (IOException e) {
+      log.error("Could not parse mod metadata from mod.json file. File probably does not exist");
+      log.error(e);
+      this.setMetadata(null);
     } catch (JSONException e) {
+      log.error("Failed parsing mod metadata from mod.json file");
       log.error(e);
       this.setMetadata(null);
     }

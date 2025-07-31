@@ -184,18 +184,13 @@ public class Compressor
 
 
   public static String readFileInsideZip (String zip, String pathInZip)
+      throws IOException
   {
     ZipFile zipFile = new ZipFile(zip);
-    FileHeader fileHeader;
-    String content = null;
-    try {
-      fileHeader = zipFile.getFileHeader(pathInZip);
-      InputStream inputStream = zipFile.getInputStream(fileHeader);
-      content = FileUtil.convertInputStreamToString(inputStream);
-      zipFile.close();
-    } catch (IOException e) {
-      log.error(e);
-    }
+    FileHeader fileHeader = zipFile.getFileHeader(pathInZip);
+    InputStream inputStream = zipFile.getInputStream(fileHeader);
+    String content = FileUtil.convertInputStreamToString(inputStream);
+    zipFile.close();
     return content;
   }
 
