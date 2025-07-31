@@ -620,10 +620,14 @@ public class LauncherEventHandler
       Thread.sleep(1000);
 
       ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update"}, true);
-      System.exit(1);
+      _launcherCtx.exit(true);
     } catch (Exception e) {
       String downloadErrMsg = "An error occurred while trying to start the launcher updater." +
           "\nPlease try again later.";
+      downloadErrMsg += "\n\nError: " + e;
+      for (StackTraceElement stElement : e.getStackTrace()) {
+        downloadErrMsg += "\n" + stElement.toString();
+      }
       Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
       log.error(e);
     }

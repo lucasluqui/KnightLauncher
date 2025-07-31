@@ -6,7 +6,6 @@ import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.download.DownloadManager;
 import com.luuqui.download.data.URLDownloadQueue;
 import com.luuqui.util.*;
-import net.lingala.zip4j.exception.ZipException;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -14,8 +13,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.luuqui.launcher.Log.log;
+import static com.luuqui.launcher.Updater.ErrorCode.ERR_DOWNLOAD;
+import static com.luuqui.launcher.Updater.ErrorCode.ERR_FETCH;
 
 public class Updater extends BaseGUI
 {
@@ -93,11 +96,7 @@ public class Updater extends BaseGUI
 
     this.updaterProgressBar.setValue(2);
     this.updaterState.setText("Extracting latest version...");
-    try {
-      Compressor.unzip4j(LauncherGlobals.USER_DIR + "/KnightLauncher.zip", LauncherGlobals.USER_DIR + "/");
-    } catch (ZipException e) {
-      log.error(e);
-    }
+    Compressor.unzip4j(LauncherGlobals.USER_DIR + "/KnightLauncher.zip", LauncherGlobals.USER_DIR + "/");
 
     updaterProgressBar.setValue(3);
     updaterState.setText("Cleaning leftover files...");
@@ -130,11 +129,7 @@ public class Updater extends BaseGUI
     }
 
     if (rawResponseReleases == null) {
-      log.error("Couldn't fetch latest version, stopping launcher update", "attempts", this.fetchAttempts);
-      String downloadErrMsg = "The updater failed to fetch the latest version after 3 attempts." +
-          "\nBooting back into current version, try updating later.";
-      Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
-      finish(false);
+      fail(ERR_FETCH);
     }
 
     JSONObject jsonReleases = new JSONObject(rawResponseReleases);
@@ -162,13 +157,37 @@ public class Updater extends BaseGUI
     _downloadManager.processQueues();
 
     if (!_downloadManager.getQueueStatus(downloadQueue)) {
-      log.error("Couldn't download latest version, stopping launcher update");
-      String downloadErrMsg = "The update couldn't be initiated after 3 download attempts." +
-          "\nBooting back into current version, try updating later.";
-      Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
-      log.error(downloadErrMsg);
-      finish(false);
+      fail(ERR_DOWNLOAD);
     }
+  }
+
+  private void fail (ErrorCode errorCode)
+  {
+    String errMsg = "";
+
+    switch (errorCode) {
+      case ERR_FETCH:
+        log.error("Couldn't fetch latest version, stopping launcher update", "attempts", this.fetchAttempts);
+        errMsg += "The updater failed to fetch the latest version after 3 attempts." +
+            "\nBooting back into current version, try updating later.";
+        break;
+      case ERR_DOWNLOAD:
+        log.error("Couldn't download latest version, stopping launcher update");
+        errMsg += "The update couldn't be initiated after 3 download attempts." +
+            "\nBooting back into current version, try updating later.";
+        break;
+      default:
+        break;
+    }
+
+    List<File> files = new ArrayList<>();
+    files.add(new File(LauncherGlobals.USER_DIR + File.separator + "knightlauncher.log"));
+    files.add(new File(LauncherGlobals.USER_DIR + File.separator + "old-knightlauncher.log"));
+    FileUtil.copyFileToClipboard(files);
+    errMsg += "\n\nRelevant log files were automatically copied to your clipboard.";
+
+    Dialog.push(errMsg, JOptionPane.ERROR_MESSAGE);
+    finish(false);
   }
 
   private void finish (boolean success)
@@ -184,11 +203,17 @@ public class Updater extends BaseGUI
     ProcessUtil.run(startParams, true);
 
     this.guiFrame.dispose();
-    System.exit(1);
+    System.exit(0);
   }
 
   private JProgressBar updaterProgressBar;
   private JLabel updaterState;
+
+  enum ErrorCode
+  {
+    ERR_FETCH,
+    ERR_DOWNLOAD
+  }
 
 }
 
