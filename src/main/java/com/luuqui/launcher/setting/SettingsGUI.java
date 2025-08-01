@@ -784,12 +784,12 @@ public class SettingsGUI extends BaseGUI
       Dialog.push(_localeManager.getValue("m.logs_copied"), JOptionPane.INFORMATION_MESSAGE);
     });
 
-    JButton openRootFolderButton = new JButton(_localeManager.getValue("b.open_root_folder"));
+    JButton openRootFolderButton = new JButton(_localeManager.getValue("b.open_game_folder"));
     openRootFolderButton.setFont(Fonts.fontMed);
     openRootFolderButton.setBounds(235, 423, 200, 23);
     openRootFolderButton.setFocusPainted(false);
     openRootFolderButton.setFocusable(false);
-    openRootFolderButton.setToolTipText(_localeManager.getValue("b.open_root_folder"));
+    openRootFolderButton.setToolTipText(_localeManager.getValue("b.open_game_folder"));
     aboutPanel.add(openRootFolderButton);
     openRootFolderButton.addActionListener(eventHandler::openRootFolderEvent);
 

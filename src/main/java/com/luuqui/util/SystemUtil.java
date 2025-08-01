@@ -45,11 +45,8 @@ public class SystemUtil
 
   public static boolean isARM ()
   {
-    boolean isARM = false;
-    if (System.getProperty("os.arch").contains("arm")) {
-      isARM = true;
-    }
-    return isARM;
+    return System.getProperty("os.arch").contains("arm")
+        || System.getProperty("os.arch").contains("aarch");
   }
 
   @Deprecated
