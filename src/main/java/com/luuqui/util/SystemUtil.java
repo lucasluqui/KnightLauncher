@@ -38,7 +38,7 @@ public class SystemUtil
     if (isWindows()) {
       is64Bit = (System.getenv("ProgramFiles(x86)") != null);
     } else {
-      is64Bit = (System.getProperty("os.arch").indexOf("64") != -1);
+      is64Bit = (System.getProperty("os.arch").contains("64"));
     }
     return is64Bit;
   }
