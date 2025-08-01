@@ -851,6 +851,6 @@ public class LauncherEventHandler
     return !SystemUtil.isWindows() || ProcessUtil.isProcessRunning("java.exe", _flamingoManager.getSelectedServer().isOfficial() ? "Spiral Knights" : _flamingoManager.getSelectedServer().name);
   }
 
-  private final String[] RPC_COMMAND_LINE = new String[] { ".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe" };
+  private final String[] RPC_COMMAND_LINE = new String[] { ".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe", LauncherGlobals.LAUNCHER_VERSION };
 
 }
