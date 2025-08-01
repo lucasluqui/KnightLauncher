@@ -16,6 +16,7 @@ public class SystemUtil
 {
 
   private static final String OS = System.getProperty("os.name").toLowerCase();
+  private static final String ARCH = System.getProperty("os.arch").toLowerCase();
 
   public static boolean isWindows ()
   {
@@ -38,15 +39,15 @@ public class SystemUtil
     if (isWindows()) {
       is64Bit = (System.getenv("ProgramFiles(x86)") != null);
     } else {
-      is64Bit = (System.getProperty("os.arch").contains("64"));
+      is64Bit = (ARCH.contains("64"));
     }
     return is64Bit;
   }
 
   public static boolean isARM ()
   {
-    return System.getProperty("os.arch").contains("arm")
-        || System.getProperty("os.arch").contains("aarch");
+    return ARCH.contains("arm")
+        || ARCH.contains("aarch");
   }
 
   @Deprecated
@@ -62,7 +63,7 @@ public class SystemUtil
     String machineId = null;
 
     if (isWindows()) {
-      machineId = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "wmic csproduct get UUID" })[0];
+      machineId = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", "wmic csproduct get UUID" })[0];
 
       try {
         machineId = machineId.substring(machineId.indexOf("\n")).trim();
@@ -83,13 +84,13 @@ public class SystemUtil
       }
 
       // Some systems return an empty string when trying to get the failsafe, so let's not add it when that's the case.
-      if(!machineIdFailsafe.isEmpty()) {
+      if (!machineIdFailsafe.isEmpty()) {
         machineIdFailsafe = machineIdFailsafe.split("REG_SZ")[1].trim();
         machineId += machineIdFailsafe;
       } else {
         // Let's make sure they don't also have an invalid UUID before letting them through without the failsafe
         // If they do send them to the NullPointerException realm.
-        if(machineId != null && (machineId.equalsIgnoreCase("03000200-0400-0500-0006-000700080009")
+        if (machineId != null && (machineId.equalsIgnoreCase("03000200-0400-0500-0006-000700080009")
           || machineId.equalsIgnoreCase("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
           || machineId.equalsIgnoreCase("00000000-0000-0000-0000-000000000000"))) {
           machineId = null;
