@@ -56,8 +56,18 @@ public class SettingsEventHandler
 
   public void rebuildsChangeEvent (ActionEvent event)
   {
-    Settings.doRebuilds = this.gui.switchCleaning.isSelected();
-    _settingsManager.setValue("launcher.rebuilds", this.gui.switchCleaning.isSelected() ? "true" : "false");
+    // Only display a warning if the user is disabling this setting.
+    boolean confirm = true;
+    if (!this.gui.switchCleaning.isSelected()) {
+      confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.settings_warning"), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
+    }
+
+    if (confirm) {
+      Settings.doRebuilds = this.gui.switchCleaning.isSelected();
+      _settingsManager.setValue("launcher.rebuilds", this.gui.switchCleaning.isSelected() ? "true" : "false");
+    }
+
+    this.gui.switchCleaning.setSelected(Settings.doRebuilds);
   }
 
   public void keepOpenChangeEvent (ActionEvent event)
@@ -149,8 +159,18 @@ public class SettingsEventHandler
 
   public void filePurgingChangeEvent (ActionEvent action)
   {
-    Settings.filePurging = this.gui.switchFilePurging.isSelected();
-    _settingsManager.setValue("launcher.filePurging", this.gui.switchAutoUpdate.isSelected() ? "true" : "false");
+    // Only display a warning if the user is disabling this setting.
+    boolean confirm = true;
+    if (!this.gui.switchFilePurging.isSelected()) {
+      confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.settings_warning"), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
+    }
+
+    if (confirm) {
+      Settings.filePurging = this.gui.switchFilePurging.isSelected();
+      _settingsManager.setValue("launcher.filePurging", this.gui.switchAutoUpdate.isSelected() ? "true" : "false");
+    }
+
+    this.gui.switchFilePurging.setSelected(Settings.filePurging);
   }
 
   public void jvmPatchEvent (ActionEvent action)
