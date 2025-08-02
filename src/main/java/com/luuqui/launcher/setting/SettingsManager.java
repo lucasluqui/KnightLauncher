@@ -23,7 +23,7 @@ public class SettingsManager
   @Inject protected LocaleManager _localeManager;
   @Inject protected FlamingoManager _flamingoManager;
 
-  private final String PROP_VER = "24";
+  private final String PROP_VER = "25";
   private final String PROP_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
 
   private final Properties prop = new Properties();
