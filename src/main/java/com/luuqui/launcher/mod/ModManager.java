@@ -117,7 +117,7 @@ public class ModManager
 
       // Check if there's directories in the mod folder and push a warning to the user.
       for (File file : FileUtil.filesAndDirectoriesInDirectory(modFolderPath)) {
-        if(file.isDirectory()) {
+        if (file.isDirectory()) {
           _launcherCtx.modListGUI.eventHandler.showDirectoriesWarning(true);
           break;
         }
@@ -317,9 +317,11 @@ public class ModManager
     _launcherCtx._progressBar.setBarMax(bundles.length + 1);
 
     // Clear the entirety of the rsrc folder leaving only the jar and zip bundles.
-    _discordPresenceClient.setDetails(_localeManager.getValue("m.purge"));
-    _launcherCtx._progressBar.setState(_localeManager.getValue("m.purge"));
-    FileUtil.purgeDirectory(new File(rootDir + "/rsrc/"), new String[] { ".jar", ".jarv", ".zip" });
+    if (Settings.filePurging) {
+      _discordPresenceClient.setDetails(_localeManager.getValue("m.purge"));
+      _launcherCtx._progressBar.setState(_localeManager.getValue("m.purge"));
+      FileUtil.purgeDirectory(new File(rootDir + "/rsrc/"), new String[] { ".jar", ".jarv", ".zip" });
+    }
 
     // Iterate through all bundles to rebuild the game files.
     _discordPresenceClient.setDetails(_localeManager.getValue("m.rebuild"));
