@@ -130,22 +130,22 @@ public class SettingsGUI extends BaseGUI
     sep1.setBounds(10, 100, 600, 16);
     launcherSubPanel.add(sep1);
 
-    JLabel labelKeepOpen = new JLabel(_localeManager.getValue("m.keep_open"));
-    labelKeepOpen.setBounds(10, 115, 350, 20);
-    labelKeepOpen.setFont(Fonts.fontRegBig);
-    launcherSubPanel.add(labelKeepOpen);
+    labelFilePurging = new JLabel(_localeManager.getValue("m.file_purging"));
+    labelFilePurging.setBounds(10, 115, 350, 20);
+    labelFilePurging.setFont(Fonts.fontRegBig);
+    launcherSubPanel.add(labelFilePurging);
 
-    JLabel labelKeepOpenExplained = new JLabel(_localeManager.getValue("m.keep_open_explained"));
-    labelKeepOpenExplained.setBounds(10, 135, 600, 16);
-    labelKeepOpenExplained.setFont(Fonts.fontReg);
-    launcherSubPanel.add(labelKeepOpenExplained);
+    labelFilePurgingExplained = new JLabel(_localeManager.getValue("m.file_purging_explained"));
+    labelFilePurgingExplained.setBounds(10, 135, 600, 16);
+    labelFilePurgingExplained.setFont(Fonts.fontReg);
+    launcherSubPanel.add(labelFilePurgingExplained);
 
-    switchKeepOpen = new JCheckBox("");
-    switchKeepOpen.setBounds(575, 120, 30, 23);
-    switchKeepOpen.setFocusPainted(false);
-    launcherSubPanel.add(switchKeepOpen);
-    switchKeepOpen.setSelected(Settings.keepOpen);
-    switchKeepOpen.addActionListener(eventHandler::keepOpenChangeEvent);
+    switchFilePurging = new JCheckBox("");
+    switchFilePurging.setBounds(575, 120, 30, 23);
+    switchFilePurging.setFocusPainted(false);
+    launcherSubPanel.add(switchFilePurging);
+    switchFilePurging.setSelected(Settings.filePurging);
+    switchFilePurging.addActionListener(eventHandler::filePurgingChangeEvent);
 
     JSeparator sep2 = new JSeparator();
     sep2.setBounds(10, 165, 600, 16);
@@ -172,22 +172,22 @@ public class SettingsGUI extends BaseGUI
     sep3.setBounds(10, 230, 600, 16);
     launcherSubPanel.add(sep3);
 
-    JLabel labelAutoUpdate = new JLabel(_localeManager.getValue("m.autoupdate"));
-    labelAutoUpdate.setBounds(10, 245, 350, 20);
-    labelAutoUpdate.setFont(Fonts.fontRegBig);
-    launcherSubPanel.add(labelAutoUpdate);
+    JLabel labelKeepOpen = new JLabel(_localeManager.getValue("m.keep_open"));
+    labelKeepOpen.setBounds(10, 245, 350, 20);
+    labelKeepOpen.setFont(Fonts.fontRegBig);
+    launcherSubPanel.add(labelKeepOpen);
 
-    JLabel labelAutoUpdateExplained = new JLabel(_localeManager.getValue("m.autoupdate_explained"));
-    labelAutoUpdateExplained.setBounds(10, 265, 600, 16);
-    labelAutoUpdateExplained.setFont(Fonts.fontReg);
-    launcherSubPanel.add(labelAutoUpdateExplained);
+    JLabel labelKeepOpenExplained = new JLabel(_localeManager.getValue("m.keep_open_explained"));
+    labelKeepOpenExplained.setBounds(10, 265, 600, 16);
+    labelKeepOpenExplained.setFont(Fonts.fontReg);
+    launcherSubPanel.add(labelKeepOpenExplained);
 
-    switchAutoUpdate = new JCheckBox("");
-    switchAutoUpdate.setBounds(575, 250, 30, 23);
-    switchAutoUpdate.setFocusPainted(false);
-    launcherSubPanel.add(switchAutoUpdate);
-    switchAutoUpdate.setSelected(Settings.autoUpdate);
-    switchAutoUpdate.addActionListener(eventHandler::autoUpdateChangeEvent);
+    switchKeepOpen = new JCheckBox("");
+    switchKeepOpen.setBounds(575, 250, 30, 23);
+    switchKeepOpen.setFocusPainted(false);
+    launcherSubPanel.add(switchKeepOpen);
+    switchKeepOpen.setSelected(Settings.keepOpen);
+    switchKeepOpen.addActionListener(eventHandler::keepOpenChangeEvent);
 
     JSeparator sep4 = new JSeparator();
     sep4.setBounds(10, 295, 600, 16);
@@ -215,22 +215,22 @@ public class SettingsGUI extends BaseGUI
     sep5.setBounds(10, 360, 600, 16);
     launcherSubPanel.add(sep5);
 
-    labelFilePurging = new JLabel(_localeManager.getValue("m.file_purging"));
-    labelFilePurging.setBounds(10, 375, 350, 20);
-    labelFilePurging.setFont(Fonts.fontRegBig);
-    launcherSubPanel.add(labelFilePurging);
+    JLabel labelAutoUpdate = new JLabel(_localeManager.getValue("m.autoupdate"));
+    labelAutoUpdate.setBounds(10, 375, 350, 20);
+    labelAutoUpdate.setFont(Fonts.fontRegBig);
+    launcherSubPanel.add(labelAutoUpdate);
 
-    labelFilePurgingExplained = new JLabel(_localeManager.getValue("m.file_purging_explained"));
-    labelFilePurgingExplained.setBounds(10, 395, 600, 16);
-    labelFilePurgingExplained.setFont(Fonts.fontReg);
-    launcherSubPanel.add(labelFilePurgingExplained);
+    JLabel labelAutoUpdateExplained = new JLabel(_localeManager.getValue("m.autoupdate_explained"));
+    labelAutoUpdateExplained.setBounds(10, 395, 600, 16);
+    labelAutoUpdateExplained.setFont(Fonts.fontReg);
+    launcherSubPanel.add(labelAutoUpdateExplained);
 
-    switchFilePurging = new JCheckBox("");
-    switchFilePurging.setBounds(575, 380, 30, 23);
-    switchFilePurging.setFocusPainted(false);
-    launcherSubPanel.add(switchFilePurging);
-    switchFilePurging.setSelected(Settings.filePurging);
-    switchFilePurging.addActionListener(eventHandler::filePurgingChangeEvent);
+    switchAutoUpdate = new JCheckBox("");
+    switchAutoUpdate.setBounds(575, 380, 30, 23);
+    switchAutoUpdate.setFocusPainted(false);
+    launcherSubPanel.add(switchAutoUpdate);
+    switchAutoUpdate.setSelected(Settings.autoUpdate);
+    switchAutoUpdate.addActionListener(eventHandler::autoUpdateChangeEvent);
 
     return launcherPanel;
   }
