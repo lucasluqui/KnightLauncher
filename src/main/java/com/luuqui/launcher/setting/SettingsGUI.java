@@ -66,131 +66,148 @@ public class SettingsGUI extends BaseGUI
     launcherPanel.setLayout(null);
     launcherPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
-
     JLabel headerLabel = new JLabel(_localeManager.getValue("tab.launcher"));
     headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
     headerLabel.setBounds(25, 11, 450, 60);
     headerLabel.setFont(Fonts.fontMedGiant);
     launcherPanel.add(headerLabel);
 
-    JLabel labelLanguage = new JLabel(_localeManager.getValue("m.language"));
-    labelLanguage.setBounds(25, 90, 175, 20);
-    labelLanguage.setFont(Fonts.fontRegBig);
-    launcherPanel.add(labelLanguage);
+    launcherSubPanel = new JPanel();
+    launcherSubPanel.setBounds(15, 90, 630, 350);
+    launcherSubPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    launcherSubPanel.setLayout(null);
+    launcherSubPanel.setBorder(null);
+    launcherPanel.setComponentZOrder(launcherSubPanel, 0);
 
-    choiceLanguage = new JComboBox<String>();
-    choiceLanguage.setBounds(110, 90, 150, 20);
+    launcherSubPanelScroll = new JScrollPane(launcherSubPanel);
+    launcherSubPanelScroll.setBounds(15, 90, 630, 350);
+    launcherSubPanelScroll.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    launcherSubPanelScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+    launcherSubPanelScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    launcherSubPanelScroll.setBorder(null);
+    launcherSubPanelScroll.putClientProperty(FlatClientProperties.STYLE, "border:0,0,0,0");
+    launcherSubPanelScroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND));
+    launcherSubPanelScroll.getVerticalScrollBar().setUnitIncrement(16);
+    launcherPanel.add(launcherSubPanelScroll);
+    launcherPanel.setComponentZOrder(launcherSubPanelScroll, 0);
+
+    JLabel labelLanguage = new JLabel(_localeManager.getValue("m.language"));
+    labelLanguage.setBounds(10, 0, 175, 20);
+    labelLanguage.setFont(Fonts.fontRegBig);
+    launcherSubPanel.add(labelLanguage);
+
+    choiceLanguage = new JComboBox<>();
+    choiceLanguage.setBounds(95, 0, 150, 20);
     choiceLanguage.setFocusable(false);
     choiceLanguage.setFont(Fonts.fontReg);
     for (String lang : _localeManager.AVAILABLE_LANGUAGES) {
       choiceLanguage.addItem(lang);
     }
-    launcherPanel.add(choiceLanguage);
+    launcherSubPanel.add(choiceLanguage);
     choiceLanguage.setSelectedItem(_localeManager.getLangName(Settings.lang));
     choiceLanguage.addItemListener(eventHandler::languageChangeEvent);
 
     JLabel labelCleaning = new JLabel(_localeManager.getValue("m.rebuilds"));
-    labelCleaning.setBounds(25, 140, 350, 20);
+    labelCleaning.setBounds(10, 50, 350, 20);
     labelCleaning.setFont(Fonts.fontRegBig);
-    launcherPanel.add(labelCleaning);
+    launcherSubPanel.add(labelCleaning);
 
     JLabel labelCleaningExplained = new JLabel(_localeManager.getValue("m.file_cleaning_explained"));
-    labelCleaningExplained.setBounds(25, 160, 600, 16);
+    labelCleaningExplained.setBounds(10, 70, 600, 16);
     labelCleaningExplained.setFont(Fonts.fontReg);
-    launcherPanel.add(labelCleaningExplained);
+    launcherSubPanel.add(labelCleaningExplained);
 
     switchCleaning = new JCheckBox("");
-    switchCleaning.setBounds(590, 145, 30, 23);
+    switchCleaning.setBounds(575, 55, 30, 23);
     switchCleaning.setFocusPainted(false);
-    launcherPanel.add(switchCleaning);
+    launcherSubPanel.add(switchCleaning);
     switchCleaning.setSelected(Settings.doRebuilds);
     switchCleaning.addActionListener(eventHandler::rebuildsChangeEvent);
 
-    JSeparator sep = new JSeparator();
-    sep.setBounds(25, 190, 600, 16);
-    launcherPanel.add(sep);
+    JSeparator sep1 = new JSeparator();
+    sep1.setBounds(10, 100, 600, 16);
+    launcherSubPanel.add(sep1);
 
     JLabel labelKeepOpen = new JLabel(_localeManager.getValue("m.keep_open"));
-    labelKeepOpen.setBounds(25, 205, 350, 20);
+    labelKeepOpen.setBounds(10, 115, 350, 20);
     labelKeepOpen.setFont(Fonts.fontRegBig);
-    launcherPanel.add(labelKeepOpen);
+    launcherSubPanel.add(labelKeepOpen);
 
     JLabel labelKeepOpenExplained = new JLabel(_localeManager.getValue("m.keep_open_explained"));
-    labelKeepOpenExplained.setBounds(25, 225, 600, 16);
+    labelKeepOpenExplained.setBounds(10, 135, 600, 16);
     labelKeepOpenExplained.setFont(Fonts.fontReg);
-    launcherPanel.add(labelKeepOpenExplained);
+    launcherSubPanel.add(labelKeepOpenExplained);
 
     switchKeepOpen = new JCheckBox("");
-    switchKeepOpen.setBounds(590, 210, 30, 23);
+    switchKeepOpen.setBounds(575, 120, 30, 23);
     switchKeepOpen.setFocusPainted(false);
-    launcherPanel.add(switchKeepOpen);
+    launcherSubPanel.add(switchKeepOpen);
     switchKeepOpen.setSelected(Settings.keepOpen);
     switchKeepOpen.addActionListener(eventHandler::keepOpenChangeEvent);
 
     JSeparator sep2 = new JSeparator();
-    sep2.setBounds(25, 255, 600, 16);
-    launcherPanel.add(sep2);
+    sep2.setBounds(10, 165, 600, 16);
+    launcherSubPanel.add(sep2);
 
     JLabel labelShortcut = new JLabel(_localeManager.getValue("m.create_shortcut"));
-    labelShortcut.setBounds(25, 270, 225, 20);
+    labelShortcut.setBounds(10, 180, 225, 20);
     labelShortcut.setFont(Fonts.fontRegBig);
-    launcherPanel.add(labelShortcut);
+    launcherSubPanel.add(labelShortcut);
 
     JLabel labelShortcutExplained = new JLabel(_localeManager.getValue("m.create_shortcut_explained"));
-    labelShortcutExplained.setBounds(25, 290, 600, 16);
+    labelShortcutExplained.setBounds(10, 200, 600, 16);
     labelShortcutExplained.setFont(Fonts.fontReg);
-    launcherPanel.add(labelShortcutExplained);
+    launcherSubPanel.add(labelShortcutExplained);
 
     switchShortcut = new JCheckBox("");
-    switchShortcut.setBounds(590, 275, 30, 23);
+    switchShortcut.setBounds(575, 185, 30, 23);
     switchShortcut.setFocusPainted(false);
-    launcherPanel.add(switchShortcut);
+    launcherSubPanel.add(switchShortcut);
     switchShortcut.setSelected(Settings.createShortcut);
     switchShortcut.addActionListener(eventHandler::createShortcutChangeEvent);
 
-    JSeparator sepAutoUpdate = new JSeparator();
-    sepAutoUpdate.setBounds(25, 320, 600, 16);
-    launcherPanel.add(sepAutoUpdate);
+    JSeparator sep3 = new JSeparator();
+    sep3.setBounds(10, 230, 600, 16);
+    launcherSubPanel.add(sep3);
 
     JLabel labelAutoUpdate = new JLabel(_localeManager.getValue("m.autoupdate"));
-    labelAutoUpdate.setBounds(25, 335, 350, 20);
+    labelAutoUpdate.setBounds(10, 245, 350, 20);
     labelAutoUpdate.setFont(Fonts.fontRegBig);
-    launcherPanel.add(labelAutoUpdate);
+    launcherSubPanel.add(labelAutoUpdate);
 
     JLabel labelAutoUpdateExplained = new JLabel(_localeManager.getValue("m.autoupdate_explained"));
-    labelAutoUpdateExplained.setBounds(25, 355, 600, 16);
+    labelAutoUpdateExplained.setBounds(10, 265, 600, 16);
     labelAutoUpdateExplained.setFont(Fonts.fontReg);
-    launcherPanel.add(labelAutoUpdateExplained);
+    launcherSubPanel.add(labelAutoUpdateExplained);
 
     switchAutoUpdate = new JCheckBox("");
-    switchAutoUpdate.setBounds(590, 340, 30, 23);
+    switchAutoUpdate.setBounds(575, 250, 30, 23);
     switchAutoUpdate.setFocusPainted(false);
-    launcherPanel.add(switchAutoUpdate);
+    launcherSubPanel.add(switchAutoUpdate);
     switchAutoUpdate.setSelected(Settings.autoUpdate);
     switchAutoUpdate.addActionListener(eventHandler::autoUpdateChangeEvent);
 
-    if(SystemUtil.isWindows() && SystemUtil.is64Bit()) {
-      sepDiscord = new JSeparator();
-      sepDiscord.setBounds(25, 385, 600, 16);
-      launcherPanel.add(sepDiscord);
+    JSeparator sep4 = new JSeparator();
+    sep4.setBounds(10, 295, 600, 16);
+    launcherSubPanel.add(sep4);
 
-      labelUseIngameRPC = new JLabel(_localeManager.getValue("m.use_ingame_rpc"));
-      labelUseIngameRPC.setBounds(25, 400, 350, 20);
-      labelUseIngameRPC.setFont(Fonts.fontRegBig);
-      launcherPanel.add(labelUseIngameRPC);
+    labelDiscordIntegration = new JLabel(_localeManager.getValue("m.use_ingame_rpc"));
+    labelDiscordIntegration.setBounds(10, 310, 350, 20);
+    labelDiscordIntegration.setFont(Fonts.fontRegBig);
+    launcherSubPanel.add(labelDiscordIntegration);
 
-      labelUseIngameRPCExplained = new JLabel(_localeManager.getValue("m.use_ingame_rpc_explained"));
-      labelUseIngameRPCExplained.setBounds(25, 420, 600, 16);
-      labelUseIngameRPCExplained.setFont(Fonts.fontReg);
-      launcherPanel.add(labelUseIngameRPCExplained);
+    labelDiscordIntegrationExplained = new JLabel(_localeManager.getValue("m.use_ingame_rpc_explained"));
+    labelDiscordIntegrationExplained.setBounds(10, 330, 600, 16);
+    labelDiscordIntegrationExplained.setFont(Fonts.fontReg);
+    launcherSubPanel.add(labelDiscordIntegrationExplained);
 
-      switchUseIngameRPC = new JCheckBox("");
-      switchUseIngameRPC.setBounds(590, 405, 30, 23);
-      switchUseIngameRPC.setFocusPainted(false);
-      launcherPanel.add(switchUseIngameRPC);
-      switchUseIngameRPC.setSelected(Settings.useIngameRPC);
-      switchUseIngameRPC.addActionListener(eventHandler::ingameRPCChangeEvent);
-    }
+    switchDiscordIntegration = new JCheckBox("");
+    switchDiscordIntegration.setBounds(575, 315, 30, 23);
+    switchDiscordIntegration.setFocusPainted(false);
+    switchDiscordIntegration.setEnabled(SystemUtil.isWindows() && SystemUtil.is64Bit());
+    launcherSubPanel.add(switchDiscordIntegration);
+    switchDiscordIntegration.setSelected(Settings.useIngameRPC);
+    switchDiscordIntegration.addActionListener(eventHandler::ingameRPCChangeEvent);
 
     return launcherPanel;
   }
@@ -809,7 +826,7 @@ public class SettingsGUI extends BaseGUI
   public JCheckBox switchUseCustomGC;
   public JSlider memorySlider;
   public JLabel memoryValue;
-  public JCheckBox switchUseIngameRPC = new JCheckBox();
+  public JCheckBox switchDiscordIntegration = new JCheckBox();
   public JCheckBox switchAutoUpdate;
   public JEditorPane argumentsPane;
   public JLabel labelDisclaimer = new JLabel();
@@ -832,10 +849,11 @@ public class SettingsGUI extends BaseGUI
   public JLabel activeCodesBackground = new JLabel();
   public JLabel labelPlatform = new JLabel();
   public JLabel labelMemory = new JLabel();
-  public JLabel labelUseIngameRPC = new JLabel();
-  public JLabel labelUseIngameRPCExplained = new JLabel();
-  public JSeparator sepDiscord = new JSeparator();
+  public JLabel labelDiscordIntegration = new JLabel();
+  public JLabel labelDiscordIntegrationExplained = new JLabel();
   public JPanel activeCodesPane = new JPanel();
   public JScrollPane activeCodesPaneScrollBar = new JScrollPane();
+  public JPanel launcherSubPanel = new JPanel();
+  public JScrollPane launcherSubPanelScroll = new JScrollPane();
 
 }

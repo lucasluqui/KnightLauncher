@@ -137,8 +137,8 @@ public class SettingsEventHandler
 
   public void ingameRPCChangeEvent (ActionEvent action)
   {
-    Settings.useIngameRPC = this.gui.switchUseIngameRPC.isSelected();
-    _settingsManager.setValue("launcher.useIngameRPC", this.gui.switchUseIngameRPC.isSelected() ? "true" : "false");
+    Settings.useIngameRPC = this.gui.switchDiscordIntegration.isSelected();
+    _settingsManager.setValue("launcher.useIngameRPC", this.gui.switchDiscordIntegration.isSelected() ? "true" : "false");
   }
 
   public void autoUpdateChangeEvent (ActionEvent action)
@@ -425,13 +425,9 @@ public class SettingsEventHandler
   {
     Server selectedServer = _flamingoManager.getSelectedServer();
 
-    if(selectedServer != null) {
-      if(selectedServer.name.equalsIgnoreCase("Official")) {
-        this.gui.switchUseIngameRPC.setEnabled(true);
-        this.gui.switchUseIngameRPC.setVisible(true);
-        this.gui.labelUseIngameRPC.setVisible(true);
-        this.gui.labelUseIngameRPCExplained.setVisible(true);
-        this.gui.sepDiscord.setVisible(true);
+    if (selectedServer != null) {
+      if (selectedServer.name.equalsIgnoreCase("Official")) {
+        this.gui.switchDiscordIntegration.setEnabled(SystemUtil.isWindows() && SystemUtil.is64Bit());
         this.gui.labelPlatform.setVisible(true);
         this.gui.choicePlatform.setEnabled(true);
         this.gui.choicePlatform.setVisible(true);
@@ -445,11 +441,7 @@ public class SettingsEventHandler
         this.gui.getdownURLTextField.setEnabled(true);
         this.gui.resetConnectionSettingsButton.setEnabled(true);
       } else {
-        this.gui.switchUseIngameRPC.setEnabled(false);
-        this.gui.switchUseIngameRPC.setVisible(false);
-        this.gui.labelUseIngameRPC.setVisible(false);
-        this.gui.labelUseIngameRPCExplained.setVisible(false);
-        this.gui.sepDiscord.setVisible(false);
+        this.gui.switchDiscordIntegration.setEnabled(false);
         this.gui.labelPlatform.setVisible(false);
         this.gui.choicePlatform.setEnabled(false);
         this.gui.choicePlatform.setVisible(false);
