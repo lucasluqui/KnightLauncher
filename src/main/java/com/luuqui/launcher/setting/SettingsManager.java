@@ -82,6 +82,7 @@ public class SettingsManager
     Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched")); // Delete this when the dreaded day comes.
     Settings.lang = getValue("launcher.lang");
     Settings.doRebuilds = Boolean.parseBoolean(getValue("launcher.rebuilds"));
+    Settings.filePurging = Boolean.parseBoolean(getValue("launcher.filePurging"));
     Settings.keepOpen = Boolean.parseBoolean(getValue("launcher.keepOpen"));
     Settings.createShortcut = Boolean.parseBoolean(getValue("launcher.createShortcut"));
     Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));

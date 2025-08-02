@@ -147,6 +147,12 @@ public class SettingsEventHandler
     _settingsManager.setValue("launcher.autoUpdate", this.gui.switchAutoUpdate.isSelected() ? "true" : "false");
   }
 
+  public void filePurgingChangeEvent (ActionEvent action)
+  {
+    Settings.filePurging = this.gui.switchFilePurging.isSelected();
+    _settingsManager.setValue("launcher.filePurging", this.gui.switchAutoUpdate.isSelected() ? "true" : "false");
+  }
+
   public void jvmPatchEvent (ActionEvent action)
   {
     String javaVMPatchDir = LauncherGlobals.USER_DIR;

@@ -5,6 +5,7 @@ public class Settings
   // Launcher settings
   public static String lang = "en";
   public static Boolean doRebuilds = true;
+  public static Boolean filePurging = true;
   public static Boolean keepOpen = false;
   public static Boolean createShortcut = true;
   public static Boolean autoUpdate = true;

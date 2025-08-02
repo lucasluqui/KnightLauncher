@@ -9,6 +9,7 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
@@ -73,7 +74,8 @@ public class SettingsGUI extends BaseGUI
     launcherPanel.add(headerLabel);
 
     launcherSubPanel = new JPanel();
-    launcherSubPanel.setBounds(15, 90, 630, 350);
+    launcherSubPanel.setBounds(15, 90, 0, 0);
+    launcherSubPanel.setPreferredSize(new Dimension(630, 425));
     launcherSubPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     launcherSubPanel.setLayout(null);
     launcherSubPanel.setBorder(null);
@@ -208,6 +210,27 @@ public class SettingsGUI extends BaseGUI
     launcherSubPanel.add(switchDiscordIntegration);
     switchDiscordIntegration.setSelected(Settings.useIngameRPC);
     switchDiscordIntegration.addActionListener(eventHandler::ingameRPCChangeEvent);
+
+    JSeparator sep5 = new JSeparator();
+    sep5.setBounds(10, 360, 600, 16);
+    launcherSubPanel.add(sep5);
+
+    labelFilePurging = new JLabel(_localeManager.getValue("m.file_purging"));
+    labelFilePurging.setBounds(10, 375, 350, 20);
+    labelFilePurging.setFont(Fonts.fontRegBig);
+    launcherSubPanel.add(labelFilePurging);
+
+    labelFilePurgingExplained = new JLabel(_localeManager.getValue("m.file_purging_explained"));
+    labelFilePurgingExplained.setBounds(10, 395, 600, 16);
+    labelFilePurgingExplained.setFont(Fonts.fontReg);
+    launcherSubPanel.add(labelFilePurgingExplained);
+
+    switchFilePurging = new JCheckBox("");
+    switchFilePurging.setBounds(575, 380, 30, 23);
+    switchFilePurging.setFocusPainted(false);
+    launcherSubPanel.add(switchFilePurging);
+    switchFilePurging.setSelected(Settings.filePurging);
+    switchFilePurging.addActionListener(eventHandler::filePurgingChangeEvent);
 
     return launcherPanel;
   }
@@ -855,5 +878,8 @@ public class SettingsGUI extends BaseGUI
   public JScrollPane activeCodesPaneScrollBar = new JScrollPane();
   public JPanel launcherSubPanel = new JPanel();
   public JScrollPane launcherSubPanelScroll = new JScrollPane();
+  public JLabel labelFilePurging;
+  public JLabel labelFilePurgingExplained;
+  public JCheckBox switchFilePurging;
 
 }
