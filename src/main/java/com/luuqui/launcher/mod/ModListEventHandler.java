@@ -239,8 +239,8 @@ public class ModListEventHandler
   @SuppressWarnings("all")
   public void removeModEvent (Mod mod)
   {
-    boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.destructive_action"), _localeManager.getValue("b.remove_mod", mod.getDisplayName()), JOptionPane.WARNING_MESSAGE);
-    if(confirm) {
+    boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.destructive_action"), _localeManager.getValue("b.remove_mod_tooltip", mod.getDisplayName()), JOptionPane.WARNING_MESSAGE);
+    if (confirm) {
       new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + mod.getFileName()).delete();
       log.info("Removed mod: " + mod);
       refreshMods(false);
