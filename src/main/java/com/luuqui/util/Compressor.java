@@ -312,6 +312,7 @@ public class Compressor
 
   private static final String[] FORCED_FILTER_LIST = new String[] {
       "item/live/statue/model.dat",
+      "model/conditional/distance.dat",
       "world/dynamic/switch/button/model.dat",
       "world/dynamic/switch/button/model_pressure.dat",
       "world/dynamic/switch/button/model_pressure_onetime.dat",
