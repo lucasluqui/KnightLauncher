@@ -5,6 +5,7 @@ import com.luuqui.launcher.Fonts;
 import com.luuqui.launcher.LauncherGlobals;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Dialog
 {
@@ -40,7 +41,7 @@ public class Dialog
   private static JTextArea formatMessage (String msg)
   {
     JTextArea message = new JTextArea(msg);
-    message.setFont(Fonts.fontReg);
+    message.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     message.setForeground(CustomColors.INTERFACE_DEFAULT);
     message.setBackground(CustomColors.INTERFACE_DEFAULT_BACKGROUND);
     message.setEditable(false);

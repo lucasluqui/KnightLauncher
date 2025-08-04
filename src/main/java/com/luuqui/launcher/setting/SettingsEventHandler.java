@@ -396,10 +396,10 @@ public class SettingsEventHandler
     if(response.equalsIgnoreCase("not_exists")) return 5;
 
     // the code was successfully activated, we update the server list and return a success code to the GUI.
-    if(response.equalsIgnoreCase("success")) {
+    if (response.equalsIgnoreCase("success")) {
       addBetaCode(code);
       _launcherCtx.launcherGUI.eventHandler.updateServerList(_flamingoManager.fetchServerList());
-      updateActiveBetaCodes();
+      this.gui.updateActiveBetaCodes();
       return 1;
     }
 
@@ -528,63 +528,7 @@ public class SettingsEventHandler
 
   public void updateActiveBetaCodes ()
   {
-    List<Server> entitledServers = new ArrayList<>();
-
-    for(Server server : _flamingoManager.getServerList()) {
-      if(server.fromCode == null) continue;
-      if(!server.fromCode.equalsIgnoreCase("null")) {
-        entitledServers.add(server);
-      }
-    }
-
-    if(!entitledServers.isEmpty()) {
-      int count = 0;
-      for(Server server : entitledServers) {
-        JPanel activeCodePane = new JPanel();
-        activeCodePane.setLayout(null);
-        activeCodePane.setBackground(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
-        activeCodePane.setBounds(0, count * 35, 449, 35);
-
-        JLabel activeCodeBadge = new JLabel(server.fromCode);
-        activeCodeBadge.setBounds(5, 5, 150, 18);
-        activeCodeBadge.setHorizontalAlignment(SwingConstants.CENTER);
-        activeCodeBadge.setFont(Fonts.fontRegSmall);
-        activeCodeBadge.putClientProperty(FlatClientProperties.STYLE,
-            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_BACKGROUND)
-                + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_FOREGROUND)
-                + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_BACKGROUND));
-        activeCodePane.add(activeCodeBadge);
-
-        JLabel activeCodeText = new JLabel();
-        activeCodeText.setBounds(165, 5, 265, 18);
-        activeCodeText.setText(_localeManager.getValue("m.beta_code_entitling", server.name));
-        activeCodeText.setHorizontalAlignment(SwingConstants.LEFT);
-        activeCodeText.setFont(Fonts.fontRegSmall);
-        activeCodePane.add(activeCodeText);
-
-        this.gui.activeCodesPane.add(activeCodePane);
-        count++;
-      }
-    }
-
-    this.gui.activeCodesLabel.setVisible(!entitledServers.isEmpty());
-    this.gui.activeCodesBackground.setVisible(!entitledServers.isEmpty());
-    this.gui.activeCodesPane.setVisible(!entitledServers.isEmpty());
-    this.gui.activeCodesPaneScrollBar.setVisible(!entitledServers.isEmpty());
-
-    this.gui.activeCodesPane.setLayout(null);
-
-    this.gui.activeCodesPane.setPreferredSize(new Dimension(449, entitledServers.size() * 35));
-
-    this.gui.activeCodesPaneScrollBar.setBounds(
-        this.gui.activeCodesPaneScrollBar.getX(),
-        this.gui.activeCodesPaneScrollBar.getY(),
-        this.gui.activeCodesPaneScrollBar.getWidth(),
-        115
-    );
-
-    this.gui.activeCodesPane.updateUI();
-    this.gui.activeCodesPaneScrollBar.updateUI();
+    this.gui.updateActiveBetaCodes();
   }
 
   public void updateServerSettings (Server server)
@@ -630,4 +574,5 @@ public class SettingsEventHandler
   private final String DEFAULT_PORT = "47624";
   private final String DEFAULT_PUBLIC_KEY = "a5ed0dc3892b9472cfb668e236064e989e95945dad18f3d7e7d8e474d6e03de38bc044c3429b9ca649d0881d601c0eb8ffebc3756f0503f73a8ca1760943ea0e8921ad6f8102026586db3133844bbadbcfcfc666d23982d7684511fbf6cd8bb1d02a14270d0854098d16fe88f99c05825b0fe1b6fd497709106f2c418796aaf7aab7c92f26fcd9fbb3c43df48075fed8dd931273a7b0a333c8de5967797874c1944aed65b47f0792b273a529ac22a2dce08dad04eeebeeff67c7bc99b97682bff488038b28e24f4b5eea77ed966caede52f2c1ecf2b403110a9765daa81ddf718129a040823bead3a0bdca70ef6d08f483757a6d3b6e01fbbcb32006b7872bcd#10001";
   private final String DEFAULT_GETDOWN_URL = "http://gamemedia2.spiralknights.com/spiral/client/";
+
 }

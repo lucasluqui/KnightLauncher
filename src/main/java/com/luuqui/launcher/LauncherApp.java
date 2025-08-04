@@ -90,8 +90,9 @@ public class LauncherApp
 
     initManagers();
 
-    Stylesheet.setup();
     Fonts.setup();
+    Stylesheet.setup();
+
     checkStartLocation();
     if (SystemUtil.isWindows() || SystemUtil.isUnix()) checkShortcut();
 

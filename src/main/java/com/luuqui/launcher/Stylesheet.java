@@ -6,6 +6,8 @@ import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 
+import java.awt.*;
+
 import static com.luuqui.launcher.Log.log;
 
 public class Stylesheet
@@ -54,6 +56,11 @@ public class Stylesheet
     UIManager.put("Component.focusedBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("Component.focusColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("Component.hoverBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
+
+    UIManager.put("ToolTip.font", Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    UIManager.put("Button.font", Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    UIManager.put("TitlePane.font", Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    UIManager.put("ProgressBar.font", Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
   }
 
 }

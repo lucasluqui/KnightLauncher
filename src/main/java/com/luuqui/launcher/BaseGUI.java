@@ -92,7 +92,6 @@ public abstract class BaseGUI
       closeButton.setFocusable(false);
       closeButton.setBackground(null);
       closeButton.setBorder(null);
-      closeButton.setFont(Fonts.fontMed);
       titleBar.add(closeButton);
       //closeButton.addActionListener(e -> {
       //    _discordPresenceClient.stop();
@@ -118,7 +117,6 @@ public abstract class BaseGUI
       minimizeButton.setFocusable(false);
       minimizeButton.setBackground(null);
       minimizeButton.setBorder(null);
-      minimizeButton.setFont(Fonts.fontMed);
       titleBar.add(minimizeButton);
       minimizeButton.addActionListener(e -> guiFrame.setState(Frame.ICONIFIED));
     }

@@ -11,6 +11,7 @@ import com.luuqui.util.*;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -70,26 +71,26 @@ public class JVMPatcher extends BaseGUI
 
     headerLabel = new JLabel("Patch your game to use a compatible 64-bit Java VM");
     headerLabel.setBounds(0, 50, 500, 37);
-    headerLabel.setFont(Fonts.fontMed);
+    headerLabel.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
     guiFrame.getContentPane().add(headerLabel);
 
     subHeaderLabel = new JLabel("You can always restart this patcher from the Settings menu");
     subHeaderLabel.setBounds(0, 75, 500, 37);
-    subHeaderLabel.setFont(Fonts.fontReg);
+    subHeaderLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     subHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
     guiFrame.getContentPane().add(subHeaderLabel);
 
     JLabel jvmSelectLabel = new JLabel("Select a Java version to install");
     jvmSelectLabel.setBounds(0, 115, 500, 37);
-    jvmSelectLabel.setFont(Fonts.fontMed);
+    jvmSelectLabel.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     jvmSelectLabel.setHorizontalAlignment(SwingConstants.CENTER);
     guiFrame.getContentPane().add(jvmSelectLabel);
 
     jvmComboBox = new JComboBox<>();
     jvmComboBox.setBounds(125, 145, 255, 20);
     jvmComboBox.setFocusable(false);
-    jvmComboBox.setFont(Fonts.fontReg);
+    jvmComboBox.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     guiFrame.add(jvmComboBox);
 
     for (String key : this.availableJVMs.keySet()) {
@@ -101,7 +102,7 @@ public class JVMPatcher extends BaseGUI
     jvmPatcherState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     jvmPatcherState.setVisible(false);
     jvmPatcherState.setBounds(26, 180, 450, 15);
-    jvmPatcherState.setFont(Fonts.fontReg);
+    jvmPatcherState.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     guiFrame.getContentPane().add(jvmPatcherState);
 
     jvmPatcherProgressBar = new JProgressBar();
@@ -112,7 +113,7 @@ public class JVMPatcher extends BaseGUI
     buttonAccept = new JButton("Start patching");
     buttonAccept.setFocusPainted(false);
     buttonAccept.setFocusable(false);
-    buttonAccept.setFont(Fonts.fontMed);
+    buttonAccept.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     buttonAccept.setBounds(150, 200, 200, 25);
     guiFrame.getContentPane().add(buttonAccept);
     buttonAccept.addActionListener(l -> {

@@ -56,13 +56,13 @@ public class ModListGUI extends BaseGUI
     labelModCount = new JLabel();
     labelModCount.setHorizontalAlignment(SwingConstants.LEFT);
     labelModCount.setBounds(25, 2, 188, 40);
-    labelModCount.setFont(Fonts.fontMedGiant);
+    labelModCount.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
     guiFrame.getContentPane().add(labelModCount);
 
     labelModCountText = new JLabel(_localeManager.getValue("m.mods_installed"));
     labelModCountText.setHorizontalAlignment(SwingConstants.LEFT);
     labelModCountText.setBounds(26, 47, 188, 14);
-    labelModCountText.setFont(Fonts.fontReg);
+    labelModCountText.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     guiFrame.getContentPane().add(labelModCountText);
 
     Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
@@ -74,7 +74,7 @@ public class ModListGUI extends BaseGUI
     warningNotice.setBorderPainted(false);
     warningNotice.setForeground(Color.WHITE);
     warningNotice.setBackground(CustomColors.LIGHT_RED);
-    warningNotice.setFont(Fonts.fontMed);
+    warningNotice.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
       Dialog.push(currentWarning, _localeManager.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
@@ -86,7 +86,7 @@ public class ModListGUI extends BaseGUI
     JButton modStoreButton = new JButton(_localeManager.getValue("b.mod_store"));
     modStoreButton.setIcon(modStoreIcon);
     modStoreButton.setBounds(240, 5, 175, 25);
-    modStoreButton.setFont(Fonts.fontMed);
+    modStoreButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     modStoreButton.setFocusPainted(false);
     modStoreButton.setFocusable(false);
     modStoreButton.setEnabled(false);
@@ -96,7 +96,7 @@ public class ModListGUI extends BaseGUI
 
     JButton getModsButton = new JButton(_localeManager.getValue("b.get_mods"));
     getModsButton.setBounds(420, 5, 175, 25);
-    getModsButton.setFont(Fonts.fontMed);
+    getModsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     getModsButton.setFocusPainted(false);
     getModsButton.setFocusable(false);
     getModsButton.setToolTipText(_localeManager.getValue("b.get_mods"));
@@ -105,7 +105,7 @@ public class ModListGUI extends BaseGUI
 
     JButton modFolderButton = new JButton(_localeManager.getValue("b.open_mods_folder"));
     modFolderButton.setBounds(600, 5, 175, 25);
-    modFolderButton.setFont(Fonts.fontMed);
+    modFolderButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     modFolderButton.setFocusPainted(false);
     modFolderButton.setFocusable(false);
     modFolderButton.setToolTipText(_localeManager.getValue("b.open_mods_folder"));
@@ -114,7 +114,7 @@ public class ModListGUI extends BaseGUI
 
     enableAllModsButton = new JButton(_localeManager.getValue("b.enable_all_mods"));
     enableAllModsButton.setBounds(420, 35, 175, 25 );
-    enableAllModsButton.setFont(Fonts.fontMed);
+    enableAllModsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     enableAllModsButton.setFocusPainted(false);
     enableAllModsButton.setFocusable(false);
     enableAllModsButton.setToolTipText(_localeManager.getValue("b.enable_all_mods"));
@@ -123,7 +123,7 @@ public class ModListGUI extends BaseGUI
 
     disableAllModsButton = new JButton(_localeManager.getValue("b.disable_all_mods"));
     disableAllModsButton.setBounds(600, 35, 175, 25);
-    disableAllModsButton.setFont(Fonts.fontMed);
+    disableAllModsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     disableAllModsButton.setFocusPainted(false);
     disableAllModsButton.setFocusable(false);
     disableAllModsButton.setToolTipText(_localeManager.getValue("b.disable_all_mods"));
@@ -168,7 +168,7 @@ public class ModListGUI extends BaseGUI
 
     searchBox = new JTextField();
     searchBox.setBounds(250, 85, 300, 27);
-    searchBox.setFont(Fonts.fontCodeReg);
+    searchBox.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
     searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, _localeManager.getValue("m.modlist_searchbox_placeholder"));
     guiFrame.getContentPane().add(searchBox);
     searchBox.addActionListener(l -> eventHandler.searchMod());
@@ -195,14 +195,14 @@ public class ModListGUI extends BaseGUI
 
     displayedModsLabel = new JLabel();
     displayedModsLabel.setBounds(25, 451, 300, 15);
-    displayedModsLabel.setFont(Fonts.fontReg);
+    displayedModsLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     displayedModsLabel.setHorizontalAlignment(SwingConstants.LEFT);
     displayedModsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
     guiFrame.getContentPane().add(displayedModsLabel);
 
     viewingModsLabel = new JLabel(_localeManager.getValue("m.viewing_mods", "Official"));
     viewingModsLabel.setBounds(25, 451, 740, 15);
-    viewingModsLabel.setFont(Fonts.fontReg);
+    viewingModsLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     viewingModsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     viewingModsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
     guiFrame.getContentPane().add(viewingModsLabel);
@@ -262,14 +262,14 @@ public class ModListGUI extends BaseGUI
       JLabel modName = new JLabel();
       modName.setText(mod.getDisplayName());
       modName.setToolTipText(mod.getDisplayName());
-      modName.setFont(Fonts.fontMed);
+      modName.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
       modName.setBounds(125, 6, 250, 25);
       modPane.add(modName);
 
       JTextArea modDescription = new JTextArea();
       modDescription.setText(mod.getDescription());
       modDescription.setToolTipText(mod.getDescription());
-      modDescription.setFont(Fonts.fontReg);
+      modDescription.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
       modDescription.setLineWrap(true);
       modDescription.setBackground(CustomColors.INTERFACE_MODLIST_BACKGROUND_LIGHT);
       modDescription.setBounds(119, 25, 455, 55);
@@ -277,14 +277,14 @@ public class ModListGUI extends BaseGUI
 
       JLabel modFooter = new JLabel();
       modFooter.setText(_localeManager.getValue("m.mod_footer", new String[] { mod.getVersion(), mod.getAuthor() }));
-      modFooter.setFont(Fonts.fontRegSmall);
+      modFooter.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
       modFooter.setBounds(235, 95, 250, 25);
       modPane.add(modFooter);
 
       JLabel modBadge = new JLabel();
       modBadge.setBounds(125, 97, 86, 18);
       modBadge.setHorizontalAlignment(SwingConstants.CENTER);
-      modBadge.setFont(Fonts.fontRegSmall);
+      modBadge.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
       if (mod instanceof ZipMod) {
         ZipMod zipMod = (ZipMod) mod;
 
@@ -335,7 +335,7 @@ public class ModListGUI extends BaseGUI
 
       JLabel enabledCheckboxLabel = new JLabel(_localeManager.getValue("m.enabled"));
       enabledCheckboxLabel.setBounds(495, 92, 75, 25);
-      enabledCheckboxLabel.setFont(Fonts.fontReg);
+      enabledCheckboxLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
       enabledCheckboxLabel.setHorizontalAlignment(SwingConstants.RIGHT);
       modPane.add(enabledCheckboxLabel);
 
@@ -380,7 +380,7 @@ public class ModListGUI extends BaseGUI
             JLabel incompatBadge = new JLabel();
             incompatBadge.setBounds(modBadge.getX() + modBadge.getWidth() + 15, modBadge.getY(), 125, 18);
             incompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
-            incompatBadge.setFont(Fonts.fontRegSmall);
+            incompatBadge.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
             incompatBadge.setText(_localeManager.getValue("m.mod_incompatible", "PX"));
             incompatBadge.setToolTipText(incompatBadge.getText());
             incompatBadge.setVisible(true);
@@ -405,7 +405,7 @@ public class ModListGUI extends BaseGUI
           JLabel incompatBadge = new JLabel();
           incompatBadge.setBounds(modBadge.getX() + modBadge.getWidth() + 15, modBadge.getY(), 125, 18);
           incompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
-          incompatBadge.setFont(Fonts.fontRegSmall);
+          incompatBadge.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
           incompatBadge.setText(_localeManager.getValue("m.mod_incompatible", !isPXCompatible ? "PX" : "JDK"));
           incompatBadge.setToolTipText(incompatBadge.getText());
           incompatBadge.setVisible(true);

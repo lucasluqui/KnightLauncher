@@ -102,7 +102,7 @@ public class LauncherGUI extends BaseGUI {
     bannerLoading = new JLabel(_localeManager.getValue("m.loading"));
     bannerLoading.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     bannerLoading.setBounds(49, 65, 700, 340);
-    bannerLoading.setFont(Fonts.fontMedBig);
+    bannerLoading.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
     bannerLoading.setHorizontalAlignment(SwingConstants.CENTER);
     bannerLoading.setVerticalAlignment(SwingConstants.CENTER);
     mainPane.add(bannerLoading);
@@ -136,14 +136,14 @@ public class LauncherGUI extends BaseGUI {
     });
 
     JLabel launcherName = new JLabel(LauncherGlobals.LAUNCHER_NAME);
-    launcherName.setFont(Fonts.fontMedBig);
+    launcherName.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
     launcherName.setHorizontalAlignment(SwingConstants.CENTER);
     launcherName.setVerticalAlignment(SwingConstants.CENTER);
     launcherName.setBounds(0, 100, 250, 80);
     sidePane.add(launcherName);
 
     selectedServerLabel = new JLabel("Official");
-    selectedServerLabel.setFont(Fonts.fontMed);
+    selectedServerLabel.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     selectedServerLabel.setVisible(true);
     selectedServerLabel.setBounds(28, 185, 120, 20);
     sidePane.add(selectedServerLabel);
@@ -161,7 +161,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon playerCountIcon = IconFontSwing.buildIcon(FontAwesome.USERS, 14, CustomColors.INTERFACE_DEFAULT);
     playerCountLabel = new JLabel(_localeManager.getValue("m.players_online_load"));
-    playerCountLabel.setFont(Fonts.fontReg);
+    playerCountLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     playerCountLabel.setIcon(playerCountIcon);
     playerCountLabel.setBounds(28, 210, 200, 18);
     sidePane.add(playerCountLabel);
@@ -189,7 +189,7 @@ public class LauncherGUI extends BaseGUI {
     settingsButton.setIcon(settingsIcon);
     settingsButton.setBounds(28, 275, 125, 35);
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
-    settingsButton.setFont(Fonts.fontMed);
+    settingsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     settingsButton.setFocusPainted(false);
     settingsButton.setFocusable(false);
     settingsButton.setBorderPainted(false);
@@ -229,7 +229,7 @@ public class LauncherGUI extends BaseGUI {
     modButton.setIcon(modsIcon);
     modButton.setBounds(28, 315, 125, 35);
     modButton.setHorizontalAlignment(SwingConstants.LEFT);
-    modButton.setFont(Fonts.fontMed);
+    modButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     modButton.setFocusPainted(false);
     modButton.setFocusable(false);
     modButton.setBorderPainted(false);
@@ -270,7 +270,7 @@ public class LauncherGUI extends BaseGUI {
     editorsButton.setIcon(editorsIcon);
     editorsButton.setBounds(28, 355, 125, 35);
     editorsButton.setHorizontalAlignment(SwingConstants.LEFT);
-    editorsButton.setFont(Fonts.fontMed);
+    editorsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     editorsButton.setFocusPainted(false);
     editorsButton.setFocusable(false);
     editorsButton.setBorderPainted(false);
@@ -311,7 +311,7 @@ public class LauncherGUI extends BaseGUI {
     auctionButton.setIcon(auctionIcon);
     auctionButton.setBounds(28, 375, 125, 35);
     auctionButton.setHorizontalAlignment(SwingConstants.LEFT);
-    auctionButton.setFont(Fonts.fontMed);
+    auctionButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     auctionButton.setFocusPainted(false);
     auctionButton.setFocusable(false);
     auctionButton.setBorderPainted(false);
@@ -330,7 +330,6 @@ public class LauncherGUI extends BaseGUI {
     discordButton.setFocusable(false);
     discordButton.setBorderPainted(false);
     discordButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
-    discordButton.setFont(Fonts.fontMed);
     sidePane.add(discordButton);
     discordButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_DISCORD));
 
@@ -342,7 +341,6 @@ public class LauncherGUI extends BaseGUI {
     bugButton.setFocusable(false);
     bugButton.setBorderPainted(false);
     bugButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
-    bugButton.setFont(Fonts.fontMed);
     sidePane.add(bugButton);
     bugButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_BUG_REPORT));
 
@@ -354,12 +352,11 @@ public class LauncherGUI extends BaseGUI {
     donateButton.setFocusable(false);
     donateButton.setBorderPainted(false);
     donateButton.setBackground(CustomColors.PREMIUM);
-    donateButton.setFont(Fonts.fontMed);
     sidePane.add(donateButton);
     donateButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_DONATE));
 
     JLabel launcherVersion = new JLabel("v" + LauncherGlobals.LAUNCHER_VERSION);
-    launcherVersion.setFont(Fonts.fontRegSmall);
+    launcherVersion.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
     launcherVersion.setForeground(CustomColors.INTERFACE_SIDEPANE_FOOTNOTE);
     launcherVersion.setHorizontalAlignment(SwingConstants.RIGHT);
     launcherVersion.setBounds(10, 493, 230, 15);
@@ -369,7 +366,7 @@ public class LauncherGUI extends BaseGUI {
     bannerTimer = new JLabel("");
     bannerTimer.setIcon(timerIcon);
     bannerTimer.setBounds(40, 50, 225, 25);
-    bannerTimer.setFont(Fonts.fontReg);
+    bannerTimer.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     bannerTimer.setForeground(Color.WHITE);
     bannerTimer.setHorizontalAlignment(SwingConstants.CENTER);
     bannerTimer.setVerticalAlignment(SwingConstants.CENTER);
@@ -382,28 +379,28 @@ public class LauncherGUI extends BaseGUI {
 
     bannerTitle = new JLabel(_localeManager.getValue("m.banner_title_default"));
     bannerTitle.setBounds(35, -60, 700, 340);
-    bannerTitle.setFont(Fonts.fontMedGiant);
+    bannerTitle.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
     bannerTitle.setForeground(Color.WHITE);
     bannerTitle.setVisible(false);
     mainPane.add(bannerTitle);
 
     bannerSubtitle1 = new JLabel(_localeManager.getValue("m.banner_subtitle_default"));
     bannerSubtitle1.setBounds(40, -15, 700, 340);
-    bannerSubtitle1.setFont(Fonts.fontMedBig);
+    bannerSubtitle1.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
     bannerSubtitle1.setForeground(Color.WHITE);
     bannerSubtitle1.setVisible(false);
     mainPane.add(bannerSubtitle1);
 
     bannerSubtitle2 = new JLabel("");
     bannerSubtitle2.setBounds(40, 5, 700, 340);
-    bannerSubtitle2.setFont(Fonts.fontMedBig);
+    bannerSubtitle2.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
     bannerSubtitle2.setForeground(Color.WHITE);
     bannerSubtitle2.setVisible(false);
     mainPane.add(bannerSubtitle2);
 
     bannerLinkButton = new JButton(_localeManager.getValue("b.learn_more"));
     bannerLinkButton.setBounds(40, 195, 110, 25);
-    bannerLinkButton.setFont(Fonts.fontMed);
+    bannerLinkButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     bannerLinkButton.setForeground(Color.WHITE);
     bannerLinkButton.setFocusPainted(false);
     bannerLinkButton.setFocusable(false);
@@ -415,7 +412,7 @@ public class LauncherGUI extends BaseGUI {
 
     launchButton = new JButton(_localeManager.getValue("b.play"));
     launchButton.setBounds(572, 423, 200, 66);
-    launchButton.setFont(Fonts.fontMedBig);
+    launchButton.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
     launchButton.setFocusPainted(false);
     launchButton.setFocusable(false);
     launchButton.setBackground(CustomColors.LAUNCH);
@@ -458,7 +455,7 @@ public class LauncherGUI extends BaseGUI {
     altModeEnabledPill = new JLabel(_localeManager.getValue("m.alt_mode_enabled"));
     altModeEnabledPill.setIcon(altModeIcon);
     altModeEnabledPill.setBounds(572, 399, 200, 20);
-    altModeEnabledPill.setFont(Fonts.fontReg);
+    altModeEnabledPill.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     altModeEnabledPill.setForeground(Color.WHITE);
     altModeEnabledPill.setHorizontalAlignment(SwingConstants.CENTER);
     altModeEnabledPill.setVerticalAlignment(SwingConstants.CENTER);
@@ -482,7 +479,7 @@ public class LauncherGUI extends BaseGUI {
     launchState = new JLabel("");
     launchState.setHorizontalAlignment(SwingConstants.LEFT);
     launchState.setBounds(35, 420, 505, 25);
-    launchState.setFont(Fonts.fontRegBig);
+    launchState.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
     launchState.setVisible(false);
     mainPane.add(launchState);
     mainPane.setComponentZOrder(launchState, 0);
@@ -497,7 +494,7 @@ public class LauncherGUI extends BaseGUI {
     changelogButton = new JButton(changelogIcon);
     changelogButton.setBounds(736, 26, 36, 36);
     changelogButton.setToolTipText(_localeManager.getValue("m.changelog"));
-    changelogButton.setFont(Fonts.fontMed);
+    changelogButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     changelogButton.setFocusPainted(false);
     changelogButton.setFocusable(false);
     changelogButton.setBorderPainted(false);
@@ -516,7 +513,7 @@ public class LauncherGUI extends BaseGUI {
     warningNotice.setBorderPainted(false);
     warningNotice.setForeground(Color.WHITE);
     warningNotice.setBackground(CustomColors.LIGHT_RED);
-    warningNotice.setFont(Fonts.fontMed);
+    warningNotice.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
       Dialog.push(this.eventHandler.currentWarning, _localeManager.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
@@ -527,7 +524,7 @@ public class LauncherGUI extends BaseGUI {
     updateButton = new JButton(updateIcon);
     updateButton.setBounds(691, 26, 36, 36);
     updateButton.setToolTipText(_localeManager.getValue("b.update_launcher"));
-    updateButton.setFont(Fonts.fontMed);
+    updateButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     updateButton.setFocusPainted(false);
     updateButton.setFocusable(false);
     updateButton.setBorderPainted(false);
@@ -542,7 +539,7 @@ public class LauncherGUI extends BaseGUI {
     playAnimatedBannersButton = new JButton(Settings.playAnimatedBanners ? playAnimatedBannersIconEnabled : playAnimatedBannersIconDisabled);
     playAnimatedBannersButton.setBounds(736, 71, 36, 36);
     playAnimatedBannersButton.setToolTipText(_localeManager.getValue(Settings.playAnimatedBanners ? "m.animated_banners_disable" : "m.animated_banners_enable"));
-    playAnimatedBannersButton.setFont(Fonts.fontMed);
+    playAnimatedBannersButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     playAnimatedBannersButton.setFocusPainted(false);
     playAnimatedBannersButton.setFocusable(false);
     playAnimatedBannersButton.setBorderPainted(false);

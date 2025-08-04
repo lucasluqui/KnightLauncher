@@ -9,6 +9,7 @@ import com.luuqui.util.*;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.MalformedURLException;
@@ -63,7 +64,7 @@ public class Updater extends BaseGUI
     updaterState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     updaterState.setHorizontalAlignment(SwingConstants.LEFT);
     updaterState.setBounds(100, 49, 375, 25);
-    updaterState.setFont(Fonts.fontRegBig);
+    updaterState.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
     updaterState.setVisible(true);
     guiFrame.add(updaterState);
 

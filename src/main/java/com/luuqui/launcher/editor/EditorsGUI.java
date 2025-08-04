@@ -48,7 +48,7 @@ public class EditorsGUI extends BaseGUI
     editorLaunchState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     editorLaunchState.setHorizontalAlignment(SwingConstants.CENTER);
     editorLaunchState.setBounds(192, 190, 385, 25);
-    editorLaunchState.setFont(Fonts.fontRegBig);
+    editorLaunchState.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
     editorLaunchState.setVisible(false);
     guiFrame.getContentPane().add(editorLaunchState);
 
@@ -87,7 +87,7 @@ public class EditorsGUI extends BaseGUI
 
     JLabel modelViewerLabel = new JLabel();
     modelViewerLabel.setText(_localeManager.getValue("m.model_viewer"));
-    modelViewerLabel.setFont(Fonts.fontMedGiant);
+    modelViewerLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
     modelViewerLabel.setHorizontalAlignment(SwingConstants.CENTER);
     modelViewerLabel.setVerticalAlignment(SwingConstants.CENTER);
     modelViewerLabel.setBounds(0, 0, 740, 100);
@@ -122,7 +122,7 @@ public class EditorsGUI extends BaseGUI
 
     JLabel sceneEditorLabel = new JLabel();
     sceneEditorLabel.setText(_localeManager.getValue("m.scene_editor"));
-    sceneEditorLabel.setFont(Fonts.fontMedGiant);
+    sceneEditorLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
     sceneEditorLabel.setHorizontalAlignment(SwingConstants.CENTER);
     sceneEditorLabel.setVerticalAlignment(SwingConstants.CENTER);
     sceneEditorLabel.setBounds(0, 0, 740, 100);
@@ -157,7 +157,7 @@ public class EditorsGUI extends BaseGUI
 
     JLabel interfaceTesterLabel = new JLabel();
     interfaceTesterLabel.setText(_localeManager.getValue("m.interface_tester"));
-    interfaceTesterLabel.setFont(Fonts.fontMedGiant);
+    interfaceTesterLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
     interfaceTesterLabel.setHorizontalAlignment(SwingConstants.CENTER);
     interfaceTesterLabel.setVerticalAlignment(SwingConstants.CENTER);
     interfaceTesterLabel.setBounds(0, 0, 740, 100);
@@ -192,7 +192,7 @@ public class EditorsGUI extends BaseGUI
 
     JLabel particleEditorLabel = new JLabel();
     particleEditorLabel.setText(_localeManager.getValue("m.particle_editor"));
-    particleEditorLabel.setFont(Fonts.fontMedGiant);
+    particleEditorLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
     particleEditorLabel.setHorizontalAlignment(SwingConstants.CENTER);
     particleEditorLabel.setVerticalAlignment(SwingConstants.CENTER);
     particleEditorLabel.setBounds(0, 0, 740, 100);
@@ -221,7 +221,7 @@ public class EditorsGUI extends BaseGUI
 
     footerLabel = new JLabel();
     footerLabel.setBounds(30, 449, 740, 15);
-    footerLabel.setFont(Fonts.fontReg);
+    footerLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     footerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     footerLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
     guiFrame.getContentPane().add(footerLabel);
