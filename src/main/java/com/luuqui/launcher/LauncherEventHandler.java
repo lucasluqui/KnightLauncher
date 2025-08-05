@@ -211,7 +211,7 @@ public class LauncherEventHandler
         _launcherCtx._progressBar.finishTask();
       }
 
-      log.info("Starting game", "server", selectedServer, "platform", Settings.gamePlatform, "codeMods", Settings.loadCodeMods);
+      log.info("Starting game", "server", selectedServer.name, "platform", Settings.gamePlatform, "codeMods", Settings.loadCodeMods);
       _launcherCtx._progressBar.setState(_localeManager.getValue("m.launching"));
       _launcherCtx.launcherGUI.launchButton.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
       _launcherCtx.launcherGUI.launchButton.setText(_localeManager.getValue("b.launching"));

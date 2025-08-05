@@ -186,6 +186,7 @@ public class ModListEventHandler
     _settingsManager.createKeyIfNotExists("modloader.appliedModsHash_" + serverName, "0");
     _settingsManager.createKeyIfNotExists("modloader.disabledMods_" + serverName, "");
     _settingsManager.createKeyIfNotExists("modloader.lastKnownVersion_" + serverName, "0");
+    _settingsManager.createKeyIfNotExists("modloader.forcedMountsForCurrentVersion_" + serverName, "0");
   }
 
   @SuppressWarnings("unused")

@@ -39,6 +39,11 @@ public class ModManager
 
   private final List<LocaleChange> globalLocaleChanges = new ArrayList<>();
 
+  /**
+   * Number of times a forced mod mount will be required for a known version.
+   */
+  private final int FORCED_MOUNTS_PER_VERSION = 2;
+
   public Boolean mountRequired = false;
   public Boolean rebuildRequired = false;
 
@@ -100,6 +105,18 @@ public class ModManager
       // Finally, let's see which have been set as disabled.
       parseDisabledMods();
 
+      // Mounting after a game update sometimes causes getdown to re-validate files again, making that
+      // first mount essentially useless, so with this setting we make sure mods are force mounted at least 2 times
+      // with the current known version.
+      int forcedMountsForCurrentVersion = Integer.parseInt(
+          _settingsManager.getValue("modloader.forcedMountsForCurrentVersion", selectedServer));
+      if (forcedMountsForCurrentVersion < FORCED_MOUNTS_PER_VERSION) {
+        log.info("Forced mounts quota for current version not met",
+            "forcedMounts", forcedMountsForCurrentVersion);
+        rebuildRequired = true;
+        mountRequired = true;
+      }
+
       // Check if there's a new or removed mod since the last execution, rebuild will be needed in that case.
       if (Integer.parseInt(_settingsManager.getValue("modloader.appliedModsHash", selectedServer)) != getEnabledModsHash()) {
         log.info("Hashcode doesn't match, preparing for rebuild and remount...");
@@ -107,8 +124,10 @@ public class ModManager
         mountRequired = true;
       }
 
+      // If the game version has changed since the last time mods were mounted, then we schedule a new mount.
       if (gameVersionChanged()) {
         log.info("Game version has changed", "new", selectedServer.getLocalVersion());
+        _settingsManager.setValue("modloader.forcedMountsForCurrentVersion", "0", selectedServer);
         rebuildRequired = true;
         mountRequired = true;
       }
@@ -275,6 +294,15 @@ public class ModManager
 
     // Update the last known game version.
     _settingsManager.setValue("modloader.lastKnownVersion", selectedServer.getLocalVersion(), selectedServer);
+
+    // Increment the forced mount counter for this known version if it's below 2.
+    int forcedMountsForCurrentVersion = Integer.parseInt(
+        _settingsManager.getValue("modloader.forcedMountsForCurrentVersion"));
+    if (forcedMountsForCurrentVersion < FORCED_MOUNTS_PER_VERSION) {
+      forcedMountsForCurrentVersion++;
+      _settingsManager.setValue("modloader.forcedMountsForCurrentVersion",
+          Integer.toString(forcedMountsForCurrentVersion));
+    }
 
     mountRequired = false;
     _launcherCtx._progressBar.finishTask();
