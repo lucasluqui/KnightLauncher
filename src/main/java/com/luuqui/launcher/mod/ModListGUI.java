@@ -12,6 +12,7 @@ import com.luuqui.util.ColorUtil;
 import com.luuqui.util.ImageUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
+import org.apache.commons.text.WordUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,19 +66,19 @@ public class ModListGUI extends BaseGUI
     labelModCountText.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     guiFrame.getContentPane().add(labelModCountText);
 
-    Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
-    warningNotice = new JButton(warningNoticeIcon);
-    warningNotice.setBounds(125, 24, 36, 36);
-    warningNotice.setToolTipText(_localeManager.getValue("m.warning_notice"));
+    warningNotice = new JButton(_localeManager.getValue("m.warning"));
+    warningNotice.setIcon(IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 13, Color.WHITE));
+    warningNotice.setBounds(650, 87, 110, 23);
+    warningNotice.setToolTipText(_localeManager.getValue("m.warning"));
     warningNotice.setFocusPainted(false);
     warningNotice.setFocusable(false);
-    warningNotice.setBorderPainted(false);
     warningNotice.setForeground(Color.WHITE);
     warningNotice.setBackground(CustomColors.LIGHT_RED);
-    warningNotice.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    warningNotice.putClientProperty(FlatClientProperties.STYLE,
+        "arc: 999; borderWidth: 0");
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
-      Dialog.push(currentWarning, _localeManager.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
+      Dialog.push(currentWarning, _localeManager.getValue("t.warning"), JOptionPane.ERROR_MESSAGE);
     });
     guiFrame.getContentPane().add(warningNotice);
 
@@ -188,9 +189,9 @@ public class ModListGUI extends BaseGUI
     modListPaneScrollBar = new JScrollPane(modListPane);
     modListPaneScrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     modListPaneScrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    modListPaneScrollBar.setBounds(25, 120, 750, Math.min(325, _modManager.getModCount() * 130));
+    modListPaneScrollBar.setBounds(25, 120, 750, Math.min(325, _modManager.getModCount() * 143));
     modListPaneScrollBar.setBorder(null);
-    modListPaneScrollBar.getVerticalScrollBar().setUnitIncrement(16);
+    modListPaneScrollBar.getVerticalScrollBar().setUnitIncrement(20);
     guiFrame.getContentPane().add(modListPaneScrollBar);
 
     displayedModsLabel = new JLabel();
@@ -222,67 +223,70 @@ public class ModListGUI extends BaseGUI
 
     modListPane.removeAll();
 
-    BufferedImage modImageBuffImg = ImageUtil.loadImageWithinJar("/rsrc/img/default-64.png");
-    modImageBuffImg = ImageUtil.resizeImagePreserveTransparency(modImageBuffImg, 110, 110);
+    BufferedImage defaultModImageBuffImg = ImageUtil.loadImageWithinJar("/rsrc/img/icon-default.png");
+    defaultModImageBuffImg = ImageUtil.resizeImagePreserveTransparency(
+        defaultModImageBuffImg, 128, 128);
 
     for (Mod mod : _modManager.getModList()) {
 
       if (searchString != null) {
         // mod name or author doesn't match the search string, sayonara.
         if (!mod.getDisplayName().toLowerCase().contains(searchString.toLowerCase())
-          && !mod.getAuthor().toLowerCase().contains(searchString.toLowerCase())) continue;
+            && !mod.getAuthor().toLowerCase().contains(searchString.toLowerCase())) continue;
       }
 
       JPanel modPaneBackgroundLeft = new JPanel();
       modPaneBackgroundLeft.setLayout(null);
-      modPaneBackgroundLeft.setBounds(0, count * 130, 715, 125);
+      modPaneBackgroundLeft.setBounds(0, count * 143, 715, 138);
       modPaneBackgroundLeft.putClientProperty(FlatClientProperties.STYLE, "border: 0,0,0,0; arc:25");
       modPaneBackgroundLeft.setBackground(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND);
 
       JPanel modPane = new JPanel();
       modPane.setLayout(null);
-      modPane.setBounds(10, count * 130, 715, 125);
+      modPane.setBounds(10, count * 143, 715, 138);
       modPane.setBackground(CustomColors.INTERFACE_MODLIST_BACKGROUND_LIGHT);
 
       JPanel modPaneBackgroundRight = new JPanel();
       modPaneBackgroundRight.setLayout(null);
-      modPaneBackgroundRight.setBounds(20, count * 130, 715, 125);
+      modPaneBackgroundRight.setBounds(20, count * 143, 715, 138);
       modPaneBackgroundRight.putClientProperty(FlatClientProperties.STYLE, "border: 0,0,0,0; arc:25");
       modPaneBackgroundRight.setBackground(CustomColors.INTERFACE_MODLIST_BACKGROUND_LIGHT);
 
       JLabel modImage = new JLabel();
+      BufferedImage modImageBuffImg = null;
       if (mod.getImage() != null) {
         modImageBuffImg = ImageUtil.loadImageFromBase64(mod.getImage());
-        modImageBuffImg = ImageUtil.resizeImagePreserveTransparency(modImageBuffImg, 110, 110);
+        modImageBuffImg = ImageUtil.resizeImagePreserveTransparency(modImageBuffImg, 128, 128);
       }
-      modImage.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(modImageBuffImg, 25)));
-      modImage.setBounds(7, 8, 110, 110);
+      modImage.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(
+          modImageBuffImg == null ? defaultModImageBuffImg : modImageBuffImg, 25)));
+      modImage.setBounds(5, 5, 128, 128);
       modPane.add(modImage);
 
       JLabel modName = new JLabel();
       modName.setText(mod.getDisplayName());
       modName.setToolTipText(mod.getDisplayName());
-      modName.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-      modName.setBounds(125, 6, 250, 25);
+      modName.setFont(Fonts.getFont("defaultMedium", 16.0f, Font.PLAIN));
+      modName.setBounds(143, 8, 350, 25);
       modPane.add(modName);
 
       JTextArea modDescription = new JTextArea();
-      modDescription.setText(mod.getDescription());
-      modDescription.setToolTipText(mod.getDescription());
+      modDescription.setBounds(137, 30, 455, 55);
+      modDescription.setText(WordUtils.wrap(mod.getDescription(), 70));
       modDescription.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
-      modDescription.setLineWrap(true);
+      modDescription.setEditable(false);
+      modDescription.setEnabled(false);
       modDescription.setBackground(CustomColors.INTERFACE_MODLIST_BACKGROUND_LIGHT);
-      modDescription.setBounds(119, 25, 455, 55);
       modPane.add(modDescription);
 
       JLabel modFooter = new JLabel();
-      modFooter.setText(_localeManager.getValue("m.mod_footer", new String[] { mod.getVersion(), mod.getAuthor() }));
+      modFooter.setText(_localeManager.getValue("m.mod_footer", new String[]{mod.getVersion(), mod.getAuthor()}));
       modFooter.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
-      modFooter.setBounds(235, 95, 250, 25);
+      modFooter.setBounds(253, 107, 250, 25);
       modPane.add(modFooter);
 
       JLabel modBadge = new JLabel();
-      modBadge.setBounds(125, 97, 86, 18);
+      modBadge.setBounds(143, 110, 86, 18);
       modBadge.setHorizontalAlignment(SwingConstants.CENTER);
       modBadge.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
       if (mod instanceof ZipMod) {
@@ -317,16 +321,16 @@ public class ModListGUI extends BaseGUI
       } else if (mod instanceof JarMod) {
         modBadge.setText(_localeManager.getValue("m.code_mod"));
         modBadge.putClientProperty(FlatClientProperties.STYLE,
-          "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND)
-            + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_FOREGROUND)
-            + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND));
+            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND)
+                + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_FOREGROUND)
+                + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND));
         modPaneBackgroundLeft.setBackground(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND);
       } else if (mod instanceof Modpack) {
         modBadge.setText(_localeManager.getValue("m.modpack"));
         modBadge.putClientProperty(FlatClientProperties.STYLE,
-          "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND)
-            + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_FOREGROUND)
-            + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND));
+            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND)
+                + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_FOREGROUND)
+                + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND));
         modPaneBackgroundLeft.setBackground(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND);
       }
       modBadge.setVisible(true);
@@ -334,13 +338,13 @@ public class ModListGUI extends BaseGUI
       modPane.add(modBadge);
 
       JLabel enabledCheckboxLabel = new JLabel(_localeManager.getValue("m.enabled"));
-      enabledCheckboxLabel.setBounds(495, 92, 75, 25);
+      enabledCheckboxLabel.setBounds(495, 105, 75, 25);
       enabledCheckboxLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
       enabledCheckboxLabel.setHorizontalAlignment(SwingConstants.RIGHT);
       modPane.add(enabledCheckboxLabel);
 
       JCheckBox enabledCheckbox = new JCheckBox();
-      enabledCheckbox.setBounds(575, 92, 25, 25);
+      enabledCheckbox.setBounds(575, 105, 25, 25);
       enabledCheckbox.setEnabled(true);
       enabledCheckbox.setVisible(true);
       enabledCheckbox.setFocusable(false);
@@ -359,7 +363,7 @@ public class ModListGUI extends BaseGUI
 
       JButton removeButton = new JButton(_localeManager.getValue("b.remove_mod"));
       removeButton.setIcon(IconFontSwing.buildIcon(FontAwesome.TRASH, 13, Color.WHITE));
-      removeButton.setBounds(605, 92, 110, 23);
+      removeButton.setBounds(605, 105, 110, 23);
       removeButton.setFocusPainted(false);
       removeButton.setFocusable(false);
       removeButton.setForeground(Color.WHITE);
@@ -410,9 +414,9 @@ public class ModListGUI extends BaseGUI
           incompatBadge.setToolTipText(incompatBadge.getText());
           incompatBadge.setVisible(true);
           incompatBadge.putClientProperty(FlatClientProperties.STYLE,
-                  "background:" + ColorUtil.colorToHexString(CustomColors.RED)
-                          + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.LIGHT_RED)
-                          + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.RED));
+              "background:" + ColorUtil.colorToHexString(CustomColors.RED)
+                  + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.LIGHT_RED)
+                  + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.RED));
           modPane.add(incompatBadge);
 
           enabledCheckbox.setSelected(false);
@@ -431,13 +435,13 @@ public class ModListGUI extends BaseGUI
 
     modListPane.setLayout(null);
 
-    modListPane.setPreferredSize(new Dimension(750, count * 130));
+    modListPane.setPreferredSize(new Dimension(750, count * 143));
 
     modListPaneScrollBar.setBounds(
       modListPaneScrollBar.getX(),
       modListPaneScrollBar.getY(),
       modListPaneScrollBar.getWidth(),
-      Math.min(325, count * 130)
+      Math.min(325, count * 143)
     );
 
     displayedModsLabel.setText(_localeManager.getValue("m.modlist_footer", new String[] { String.valueOf(count), String.valueOf(_modManager.getModCount()) }));
