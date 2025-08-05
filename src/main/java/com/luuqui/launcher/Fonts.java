@@ -13,8 +13,8 @@ public class Fonts
 {
   private static final String PATH_REGULAR = "/rsrc/fonts/Figtree-Regular.ttf";
   private static final String PATH_MEDIUM = "/rsrc/fonts/Figtree-SemiBold.ttf";
-  private static final String PATH_JP_REGULAR = "/rsrc/fonts/NotoSansJP-Regular.ttf";
-  private static final String PATH_JP_MEDIUM = "/rsrc/fonts/NotoSansJP-Medium.ttf";
+  private static final String PATH_JP_REGULAR = "/rsrc/fonts/MPLUS1p-Regular.ttf";
+  private static final String PATH_JP_MEDIUM = "/rsrc/fonts/MPLUS1p-Medium.ttf";
   private static final String PATH_AR_REGULAR = "/rsrc/fonts/Lemonada-Regular.ttf";
   private static final String PATH_AR_MEDIUM = "/rsrc/fonts/Lemonada-Medium.ttf";
   private static final String PATH_CODE_REGULAR = "/rsrc/fonts/SourceCodePro-Regular.ttf";
