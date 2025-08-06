@@ -197,7 +197,7 @@ public class ModManager
       try {
         // Unpack the current projectx-config jar file.
         ZipFile projectxConfig = new ZipFile(rootDir + "/code/projectx-config.jar");
-        FileUtil.unpackJar(projectxConfig, new File(rootDir + "/code/locale-changes/"), false);
+        ZipUtil.unpackJar(projectxConfig, new File(rootDir + "/code/locale-changes/"), false);
         projectxConfig.close();
 
         // Create per-bundle batch of locale changes.
@@ -255,7 +255,7 @@ public class ModManager
     log.info("Mounting class changes...");
     try {
       ZipFile config = new ZipFile(rootDir + "/code/config.jar");
-      FileUtil.unpackJar(config, new File(rootDir + "/code/class-changes/"), false);
+      ZipUtil.unpackJar(config, new File(rootDir + "/code/class-changes/"), false);
       config.close();
     } catch (IOException e) {
       log.error(e);
@@ -359,7 +359,7 @@ public class ModManager
       _launcherCtx._progressBar.setBarValue(i + 1);
       _discordPresenceClient.setDetails(_localeManager.getValue("presence.rebuilding", new String[] { String.valueOf(i + 1), String.valueOf(bundles.length) }));
       try {
-        FileUtil.unpackJar(new ZipFile(rootDir + "/rsrc/" + bundles[i]), new File(rootDir + "/rsrc/"), false);
+        ZipUtil.unpackJar(new ZipFile(rootDir + "/rsrc/" + bundles[i]), new File(rootDir + "/rsrc/"), false);
       } catch (IOException e) {
         log.error(e);
       }
@@ -402,7 +402,7 @@ public class ModManager
   {
     try {
       log.info("Extracting safeguard...");
-      FileUtil.extractFileWithinJar("/rsrc/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip");
+      ZipUtil.extractFileWithinJar("/rsrc/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip");
       ZipUtil.unzip(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/rsrc/", false);
       log.info("Extracted safeguard.");
     } catch (IOException e) {

@@ -41,7 +41,7 @@ public class SettingsManager
   {
     try {
       if (!FileUtil.fileExists(PROP_PATH)) {
-        FileUtil.extractFileWithinJar("/rsrc/config/launcher.properties", PROP_PATH);
+        ZipUtil.extractFileWithinJar("/rsrc/config/launcher.properties", PROP_PATH);
       }
 
       loadProp();
@@ -52,7 +52,7 @@ public class SettingsManager
         migrationMap = getAllKeyValues();
         prop.clear();
         FileUtil.deleteFile(PROP_PATH);
-        FileUtil.extractFileWithinJar("/rsrc/config/launcher.properties", PROP_PATH);
+        ZipUtil.extractFileWithinJar("/rsrc/config/launcher.properties", PROP_PATH);
         log.info("Extracting latest properties file...");
         loadProp();
         migrateSettings();

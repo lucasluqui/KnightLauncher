@@ -7,26 +7,16 @@
 
 package com.luuqui.util;
 
-import com.samskivert.util.Logger;
-import org.apache.commons.io.FileUtils;
-
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.*;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.jar.JarOutputStream;
-import java.util.jar.Pack200;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import static com.luuqui.util.Log.log;
 
@@ -191,90 +181,6 @@ public class FileUtil
 
     // convert StringBuilder to String and return
     return sbContent.toString();
-  }
-
-  public static void extractFileWithinJar (String pathInside, String pathOutside)
-      throws IOException
-  {
-    URL filePath = FileUtil.class.getResource(pathInside);
-    File destPath = new File(pathOutside);
-    FileUtils.copyURLToFile(filePath, destPath);
-  }
-
-  /**
-   * Unpacks the specified jar file into the specified target directory.
-   *
-   * @param cleanExistingDirs if true, all files in all directories contained in {@code jar} will
-   *                          be deleted prior to unpacking the jar.
-   */
-  public static void unpackJar (ZipFile jar, File target, boolean cleanExistingDirs)
-      throws IOException
-  {
-    if (cleanExistingDirs) {
-      Enumeration<? extends ZipEntry> entries = jar.entries();
-      while (entries.hasMoreElements()) {
-        ZipEntry entry = entries.nextElement();
-        if (entry.isDirectory()) {
-          File efile = new File(target, entry.getName());
-          if (efile.exists()) {
-            for (File f : efile.listFiles()) {
-              if (!f.isDirectory())
-                f.delete();
-            }
-          }
-        }
-      }
-    }
-
-    Enumeration<? extends ZipEntry> entries = jar.entries();
-    while (entries.hasMoreElements()) {
-      ZipEntry entry = entries.nextElement();
-      File efile = new File(target, entry.getName());
-
-      // if we're unpacking a normal jar file, it will have special path
-      // entries that allow us to create our directories first
-      if (entry.isDirectory()) {
-        if (!efile.exists() && !efile.mkdir()) {
-          log.warning("Failed to create jar entry path", "jar", jar, "entry", entry);
-        }
-        continue;
-      }
-
-      // but some do not, so we want to ensure that our directories exist
-      // prior to getting down and funky
-      File parent = new File(efile.getParent());
-      if (!parent.exists() && !parent.mkdirs()) {
-        log.warning("Failed to create jar entry parent", "jar", jar, "parent", parent);
-        continue;
-      }
-
-      try (BufferedOutputStream fout = new BufferedOutputStream(new FileOutputStream(efile));
-           InputStream jin = jar.getInputStream(entry)) {
-        StreamUtil.copy(jin, fout);
-      } catch (Exception e) {
-        throw new IOException(
-                Logger.format("Failure unpacking", "jar", jar, "entry", efile), e);
-      }
-    }
-  }
-
-  /**
-   * Unpacks a pack200 packed jar file from {@code packedJar} into {@code target}.
-   * If {@code packedJar} has a {@code .gz} extension, it will be gunzipped first.
-   */
-  @SuppressWarnings({"removal", "deprecation"})
-  public static void unpackPacked200Jar(File packedJar, File target)
-      throws IOException
-  {
-    try (InputStream packJarIn = new FileInputStream(packedJar);
-         JarOutputStream jarOut = new JarOutputStream(new FileOutputStream(target))) {
-      boolean gz = (packedJar.getName().endsWith(".gz") ||
-              packedJar.getName().endsWith(".gz_new"));
-      try (InputStream packJarIn2 = (gz ? new GZIPInputStream(packJarIn) : packJarIn)) {
-        Pack200.Unpacker unpacker = Pack200.newUnpacker();
-        unpacker.unpack(packJarIn2, jarOut);
-      }
-    }
   }
 
   public static void copyFilesToClipboard (List<File> files)
