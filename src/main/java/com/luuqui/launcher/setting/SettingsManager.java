@@ -10,6 +10,7 @@ import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.util.*;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -250,7 +251,7 @@ public class SettingsManager
       writer.println(Settings.gameAdditionalArgs);
       writer.close();
 
-      if (_flamingoManager.getSelectedServer().isOfficial()) loadConnectionSettings();
+      if (_flamingoManager.getSelectedServer().isOfficial()) applyConnectionSettings();
 
       _launcherCtx._progressBar.setBarValue(1);
       _launcherCtx._progressBar.finishTask();
@@ -259,16 +260,27 @@ public class SettingsManager
     }
   }
 
-  private void loadConnectionSettings ()
+  private void applyConnectionSettings ()
   {
+    String deployPropStr = null;
     try {
-      FileUtil.extractFileWithinJar("/rsrc/config/deployment.properties", LauncherGlobals.USER_DIR + "/deployment.properties");
+      deployPropStr = ZipUtil.readFileInsideZip(
+          LauncherGlobals.USER_DIR + File.separator + "code" + File.separator + "config.jar",
+          "deployment.properties");
+
     } catch (IOException e) {
       log.error(e);
     }
+
+    if (deployPropStr == null) {
+      log.error("Failed to read deployment.properties, cannot apply connection settings");
+      return;
+    }
+
     Properties properties = new Properties();
     try {
-      properties.load(Files.newInputStream(new File(LauncherGlobals.USER_DIR + "/deployment.properties").toPath()));
+      InputStream stream = new ByteArrayInputStream(deployPropStr.getBytes(StandardCharsets.UTF_8));
+      properties.load(stream);
     } catch (IOException e) {
       log.error(e);
     }
@@ -280,7 +292,9 @@ public class SettingsManager
     properties.setProperty("client_root_url", Settings.gameGetdownURL);
 
     try {
-      properties.store(Files.newOutputStream(new File(LauncherGlobals.USER_DIR + "/deployment.properties").toPath()), null);
+      properties.store(
+          Files.newOutputStream(
+              new File(LauncherGlobals.USER_DIR + "/deployment.properties").toPath()), null);
     } catch (IOException e) {
       log.error(e);
     }
@@ -306,5 +320,4 @@ public class SettingsManager
       return MAX_ALLOWED_MEMORY_32_BIT;
     }
   }
-
 }
