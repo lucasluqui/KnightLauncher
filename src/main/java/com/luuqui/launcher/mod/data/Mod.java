@@ -1,6 +1,6 @@
 package com.luuqui.launcher.mod.data;
 
-import com.luuqui.util.Compressor;
+import com.luuqui.util.ZipUtil;
 import com.luuqui.util.ImageUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -101,7 +101,7 @@ public abstract class Mod
     log.info("Parsing mod metadata...", "fileName", this.fileName);
 
     try {
-      String jsonString = Compressor.readFileInsideZip(this.getAbsolutePath(), "mod.json");
+      String jsonString = ZipUtil.readFileInsideZip(this.getAbsolutePath(), "mod.json");
       JSONObject jsonObject = new JSONObject(jsonString).getJSONObject("mod");
       this.setMetadata(jsonObject);
     } catch (IOException e) {
@@ -126,7 +126,7 @@ public abstract class Mod
         this.setImage(this.metadata.getString("image"));
       } catch (Exception e) {
         try {
-          InputStream imageIs = Compressor.getISFromFileInsideZip(this.getAbsolutePath(), "mod.png");
+          InputStream imageIs = ZipUtil.getISFromFileInsideZip(this.getAbsolutePath(), "mod.png");
           this.setImage(ImageUtil.imageToBase64(ImageIO.read(imageIs)));
           imageIs.close();
         } catch (Exception e2) {

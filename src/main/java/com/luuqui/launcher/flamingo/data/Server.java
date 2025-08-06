@@ -1,7 +1,7 @@
 package com.luuqui.launcher.flamingo.data;
 
 import com.luuqui.launcher.LauncherGlobals;
-import com.luuqui.util.Compressor;
+import com.luuqui.util.ZipUtil;
 import com.luuqui.util.FileUtil;
 
 import java.io.ByteArrayInputStream;
@@ -90,7 +90,7 @@ public class Server
   public String getLocalVersion ()
   {
     try {
-      String buildString = Compressor.readFileInsideZip(getRootDirectory() + File.separator + "code/config.jar", "build.properties");
+      String buildString = ZipUtil.readFileInsideZip(getRootDirectory() + File.separator + "code/config.jar", "build.properties");
       Properties properties = new Properties();
       properties.load(new ByteArrayInputStream(buildString.getBytes(StandardCharsets.UTF_8)));
       String version = properties.getProperty("version");

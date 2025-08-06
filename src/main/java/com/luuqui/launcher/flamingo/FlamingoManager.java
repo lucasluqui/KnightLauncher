@@ -157,7 +157,7 @@ public class FlamingoManager
   public String getLocalGameVersion ()
   {
     try {
-      String buildString = Compressor.readFileInsideZip(this.selectedServer.getRootDirectory() + File.separator + "code/config.jar", "build.properties");
+      String buildString = ZipUtil.readFileInsideZip(this.selectedServer.getRootDirectory() + File.separator + "code/config.jar", "build.properties");
       Properties properties = new Properties();
       properties.load(new ByteArrayInputStream(buildString.getBytes(StandardCharsets.UTF_8)));
       String version = properties.getProperty("version");

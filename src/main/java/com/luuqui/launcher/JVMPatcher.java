@@ -176,7 +176,7 @@ public class JVMPatcher extends BaseGUI
 
     jvmPatcherProgressBar.setValue(3);
     jvmPatcherState.setText(_localeManager.getValue("m.jvm_patcher_extract"));
-    Compressor.unzip(this.path + File.separator + "jvm_pack.zip", this.path, false);
+    ZipUtil.unzip(this.path + File.separator + "jvm_pack.zip", this.path, false);
     new File(this.path, "jvm_pack.zip").delete();
 
     jvmPatcherProgressBar.setValue(4);

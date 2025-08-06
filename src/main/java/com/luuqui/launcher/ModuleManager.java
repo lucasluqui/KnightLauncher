@@ -3,7 +3,7 @@ package com.luuqui.launcher;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.luuqui.launcher.setting.SettingsManager;
-import com.luuqui.util.Compressor;
+import com.luuqui.util.ZipUtil;
 import com.luuqui.util.FileUtil;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.SystemUtil;
@@ -41,7 +41,7 @@ public class ModuleManager
     if (SystemUtil.isWindows() && SystemUtil.is64Bit()) {
       try {
         FileUtil.extractFileWithinJar("/rsrc/modules/skdiscordrpc/bundle.zip", LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip");
-        Compressor.unzip(LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip", LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\", false);
+        ZipUtil.unzip(LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip", LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\", false);
         FileUtil.deleteFile(LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\skdiscordrpc\\bundle.zip");
         _settingsManager.setValue("launcher.ingameRPCSetup", "true");
       } catch (IOException e) {

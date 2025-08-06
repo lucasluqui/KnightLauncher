@@ -6,7 +6,6 @@ import com.luuqui.discord.DiscordPresenceClient;
 import com.luuqui.download.DownloadManager;
 import com.luuqui.download.data.URLDownloadQueue;
 import com.luuqui.util.*;
-import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -103,7 +102,7 @@ public class Updater extends BaseGUI
 
     this.updaterProgressBar.setValue(2);
     this.updaterState.setText("Extracting version " + this.newVersion + " files...");
-    Compressor.unzip4j(LauncherGlobals.USER_DIR + "/KnightLauncher.zip", LauncherGlobals.USER_DIR + "/");
+    ZipUtil.unzip4j(LauncherGlobals.USER_DIR + "/KnightLauncher.zip", LauncherGlobals.USER_DIR + "/");
 
     updaterProgressBar.setValue(3);
     updaterState.setText("Cleaning leftover files...");

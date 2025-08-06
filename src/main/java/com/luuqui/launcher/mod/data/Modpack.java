@@ -2,7 +2,7 @@ package com.luuqui.launcher.mod.data;
 
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.setting.Settings;
-import com.luuqui.util.Compressor;
+import com.luuqui.util.ZipUtil;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -35,8 +35,8 @@ public class Modpack extends Mod
   public void mount (String rootDir)
   {
     this.setAbsolutePath(rootDir + "/mods/" + getFileName());
-    for (String fileInsideZip : Compressor.getFileListFromZip(this.getAbsolutePath())) {
-      InputStream fileIs = Compressor.getISFromFileInsideZip(this.getAbsolutePath(), fileInsideZip);
+    for (String fileInsideZip : ZipUtil.getFileListFromZip(this.getAbsolutePath())) {
+      InputStream fileIs = ZipUtil.getISFromFileInsideZip(this.getAbsolutePath(), fileInsideZip);
       String pathOutside = rootDir + "/mods/" + fileInsideZip;
       File tempFile = new File(pathOutside);
       try {
@@ -44,7 +44,7 @@ public class Modpack extends Mod
       } catch (IOException e) {
         log.error(e);
       }
-      Compressor.unzip(pathOutside, rootDir + "/rsrc/", false, Settings.fileProtection, LauncherGlobals.FILTER_LIST);
+      ZipUtil.unzip(pathOutside, rootDir + "/rsrc/", false, Settings.fileProtection, LauncherGlobals.FILTER_LIST);
       log.info("Mod from modpack mounted successfully", "pack", this.displayName, "mod", fileInsideZip);
       tempFile.delete();
     }

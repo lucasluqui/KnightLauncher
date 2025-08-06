@@ -143,7 +143,7 @@ public class LauncherEventHandler
           }
           _downloadManager.processQueues();
 
-          Compressor.unzip(localFile.getAbsolutePath(),
+          ZipUtil.unzip(localFile.getAbsolutePath(),
               LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
 
           FileUtil.deleteFile(localFile.getAbsolutePath());
@@ -169,7 +169,7 @@ public class LauncherEventHandler
           }
           _downloadManager.processQueues();
 
-          Compressor.unzip(localFile.getAbsolutePath(),
+          ZipUtil.unzip(localFile.getAbsolutePath(),
               LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
 
           FileUtil.deleteFile(localFile.getAbsolutePath());
@@ -179,7 +179,7 @@ public class LauncherEventHandler
             FileUtil.deleteFile(selectedServer.getRootDirectory() + "/rsrc/base.zip");
             try {
               _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_bundle_regen", selectedServer.name));
-              Compressor.zipFolderContents(new File(selectedServer.getRootDirectory() + "/rsrc"),
+              ZipUtil.zipFolderContents(new File(selectedServer.getRootDirectory() + "/rsrc"),
                   new File(selectedServer.getRootDirectory() + "/rsrc/base.zip"), "base.zip");
             } catch (Exception e) {
               log.error(e);
@@ -193,7 +193,7 @@ public class LauncherEventHandler
         if(FileUtil.fileExists(rootDir + "/rsrc")
           && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
           try {
-            Compressor.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
+            ZipUtil.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
           } catch (Exception e) {
             log.error(e);
           }
@@ -278,7 +278,7 @@ public class LauncherEventHandler
         if (FileUtil.fileExists(rootDir + "/rsrc")
             && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
           try {
-            Compressor.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
+            ZipUtil.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
           } catch (Exception e) {
             log.error(e);
           }
