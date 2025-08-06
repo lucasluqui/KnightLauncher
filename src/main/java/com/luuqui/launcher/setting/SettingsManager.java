@@ -306,7 +306,9 @@ public class SettingsManager
       outputCapture = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "uf", "code/config.jar", "deployment.properties" });
     }
     log.debug("Connection settings capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
+
     FileUtil.deleteFile(LauncherGlobals.USER_DIR + "/deployment.properties");
+    properties.clear();
   }
 
   public int getMaxAllowedMemoryAlloc ()
