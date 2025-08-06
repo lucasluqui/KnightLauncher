@@ -40,13 +40,13 @@ public class ZipMod extends Mod
   {
     if (this.type == null) {
       log.info("Mounting Zip mod", "mod", this.displayName);
-      ZipUtil.unzip(rootDir + "/mods/" + this.fileName, rootDir + "/rsrc/", false, Settings.fileProtection, LauncherGlobals.FILTER_LIST);
+      ZipUtil.unzip(rootDir + "/mods/" + this.fileName, rootDir + "/rsrc/", false, Settings.fileProtection ? LauncherGlobals.FILTER_LIST : null);
       log.info("Zip mod mounted successfully", "mod", this.displayName);
     } else {
       log.info("Mounting Zip mod with " + this.type + " type", "mod", this.displayName);
       if (this.type.equalsIgnoreCase("class")) {
         try {
-          ZipUtil.unzip(rootDir + "/mods/" + this.fileName, rootDir + "/code/class-changes/", false, Settings.fileProtection, LauncherGlobals.FILTER_LIST);
+          ZipUtil.unzip(rootDir + "/mods/" + this.fileName, rootDir + "/code/class-changes/", false, Settings.fileProtection ? LauncherGlobals.FILTER_LIST : null);
           FileUtils.delete(new File(rootDir + "/code/class-changes/mod.json"));
         } catch (IOException e) {
           log.error(e);

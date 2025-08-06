@@ -44,7 +44,7 @@ public class Modpack extends Mod
       } catch (IOException e) {
         log.error(e);
       }
-      ZipUtil.unzip(pathOutside, rootDir + "/rsrc/", false, Settings.fileProtection, LauncherGlobals.FILTER_LIST);
+      ZipUtil.unzip(pathOutside, rootDir + "/rsrc/", false, Settings.fileProtection ? LauncherGlobals.FILTER_LIST : null);
       log.info("Mod from modpack mounted successfully", "pack", this.displayName, "mod", fileInsideZip);
       tempFile.delete();
     }

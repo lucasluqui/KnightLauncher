@@ -33,26 +33,26 @@ public class ZipUtil
 
   public static void unzip (String source, String dest, Boolean force4j)
   {
-    unzip(source, dest, force4j, false, null);
+    unzip(source, dest, force4j, null);
   }
 
-  public static void unzip (String source, String dest, Boolean force4j, Boolean filter, String[] filterList)
+  public static void unzip (String source, String dest, Boolean force4j, String[] filterList)
   {
     if (force4j || SystemUtil.isMac()) {
-      unzip4j(source, dest, filter, filterList);
+      unzip4j(source, dest, filterList);
       return;
     }
 
     switch (Settings.compressorUnzipMethod) {
       case "custom":
         try {
-          unzipCustom(source, dest, filter, filterList);
+          unzipCustom(source, dest, filterList);
         } catch (IOException e) {
           log.error(e);
         }
         break;
       default:
-        unzip4j(source, dest, filter, filterList);
+        unzip4j(source, dest, filterList);
         break;
     }
   }
@@ -60,10 +60,10 @@ public class ZipUtil
 
   public static void unzip4j (String source, String dest)
   {
-    unzip4j(source, dest, false, null);
+    unzip4j(source, dest, null);
   }
 
-  public static void unzip4j (String source, String dest, Boolean filter, String[] filterList)
+  public static void unzip4j (String source, String dest, String[] filterList)
   {
     ZipFile zipFile = new ZipFile(source);
 
@@ -72,8 +72,8 @@ public class ZipUtil
       if (filterList != null) {
         for (String fileName : filterList) {
           if (zipFile.getFileHeader(fileName) != null) {
-            log.info("Filter found illegal file", "source", source, "file", fileName, "filter", filter);
-            if (filter) zipFile.removeFile(fileName);
+            log.info("Filter found illegal file", "source", source, "file", fileName);
+            zipFile.removeFile(fileName);
           }
         }
       }
@@ -82,7 +82,7 @@ public class ZipUtil
       for (String fileName : FORCED_FILTER_LIST) {
         if (zipFile.getFileHeader(fileName) != null) {
           log.info("Filter found illegal file. This is a forced filter thus filter value will be ignored.",
-              "source", source, "file", fileName, "filter", filter);
+              "source", source, "file", fileName);
           zipFile.removeFile(fileName);
         }
       }
@@ -109,10 +109,10 @@ public class ZipUtil
   public static void unzipCustom (String zipFilePath, String destDirectory)
       throws IOException
   {
-    unzipCustom(zipFilePath, destDirectory, false, null);
+    unzipCustom(zipFilePath, destDirectory, null);
   }
 
-  public static void unzipCustom (String zipFilePath, String destDirectory, Boolean filter, String[] filterList)
+  public static void unzipCustom (String zipFilePath, String destDirectory, String[] filterList)
       throws IOException
   {
     FileUtil.createDir(destDirectory);
@@ -129,10 +129,8 @@ public class ZipUtil
         if (filterList != null) {
           for (String fileName : filterList) {
             if (filePath.equalsIgnoreCase(fileName)) {
-              log.info("Filter found illegal file", "source", zipFilePath, "file", fileName, "filter", filter);
-              if (filter) {
-                illegalFile = true;
-              }
+              log.info("Filter found illegal file", "source", zipFilePath, "file", fileName);
+              illegalFile = true;
               break;
             }
           }
@@ -148,7 +146,7 @@ public class ZipUtil
         for (String fileName : FORCED_FILTER_LIST) {
           if (filePath.equalsIgnoreCase(fileName)) {
             log.info("Filter found illegal file. This is a forced filter thus filter value will be ignored.",
-                "source", zipFilePath, "file", fileName, "filter", filter);
+                "source", zipFilePath, "file", fileName);
             illegalFile = true;
             break;
           }
