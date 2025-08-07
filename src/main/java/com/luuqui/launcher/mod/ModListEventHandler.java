@@ -61,7 +61,7 @@ public class ModListEventHandler
       _modManager.checkInstalled();
 
       if (mount) {
-        if (_modManager.rebuildRequired && Settings.doRebuilds) {
+        if (_modManager.getRebuildRequired() && Settings.doRebuilds) {
           _modManager.startFileRebuild();
         }
         _modManager.mount();
@@ -104,8 +104,8 @@ public class ModListEventHandler
     _settingsManager.setValue("modloader.disabledMods" + keySuffix,
         disabledMods.equals("") ? mod.getFileName() : disabledMods + "," + mod.getFileName());
     mod.setEnabled(false);
-    _modManager.mountRequired = true;
-    _modManager.rebuildRequired = true;
+    _modManager.setMountRequired(true);
+    _modManager.setRebuildRequired(true);
   }
 
   @SuppressWarnings("all")
@@ -132,8 +132,8 @@ public class ModListEventHandler
     }
     _settingsManager.setValue("modloader.disabledMods" + keySuffix, disabledMods);
     mod.setEnabled(true);
-    _modManager.mountRequired = true;
-    _modManager.rebuildRequired = true;
+    _modManager.setMountRequired(true);
+    _modManager.setRebuildRequired(true);
   }
 
   public void showDirectoriesWarning (boolean show)

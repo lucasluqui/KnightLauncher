@@ -17,6 +17,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -35,19 +36,40 @@ public class ModManager
   @Inject protected DownloadManager _downloadManager;
   @Inject protected DiscordPresenceClient _discordPresenceClient;
 
+  /**
+   * Holds a list of all mods.
+   */
   private final LinkedList<Mod> modList = new LinkedList<>();
 
+  /**
+   * Holds a list of all LocaleChange objects across all mods.
+   */
   private final List<LocaleChange> globalLocaleChanges = new ArrayList<>();
+
+  /**
+   * Properties file with game files mapped to their last time they were modified by a game update.
+   */
+  private final Properties lastChanged = new Properties();
 
   /**
    * Number of times a forced mod mount will be required for a known version.
    */
   private final int FORCED_MOUNTS_PER_VERSION = 2;
 
-  public Boolean mountRequired = false;
-  public Boolean rebuildRequired = false;
+  /**
+   * Flags whether a mod mounting is required.
+   */
+  private Boolean mountRequired = false;
 
-  public Boolean checking = false;
+  /**
+   * Flags whether a file rebuild is required.
+   */
+  private Boolean rebuildRequired = false;
+
+  /**
+   * Flags whether we're currently parsing files in the mods directory.
+   */
+  private Boolean checking = false;
 
   public ModManager ()
   {
@@ -56,7 +78,11 @@ public class ModManager
 
   public void init ()
   {
-    // empty.
+    try (InputStream is = ModManager.class.getResourceAsStream("/rsrc/config/last-changed.properties")) {
+      lastChanged.load(is);
+    } catch (IOException e) {
+      log.error(e);
+    }
   }
 
   public void checkInstalled ()
@@ -410,16 +436,11 @@ public class ModManager
     }
   }
 
-  public int getModCount ()
-  {
-    return modList.size();
-  }
-
   public int getEnabledModCount ()
   {
     int count = 0;
-    for(Mod mod : modList) {
-      if(mod.isEnabled()) count++;
+    for (Mod mod : modList) {
+      if (mod.isEnabled()) count++;
     }
     return count;
   }
@@ -432,12 +453,6 @@ public class ModManager
       if(mod.isEnabled()) hashSet.add(lastModified);
     }
     return hashSet.hashCode();
-  }
-
-  public LinkedList<Mod> getModList ()
-  {
-    // We don't want to return the actual object, so let's clone it.
-    return new LinkedList<>(modList);
   }
 
   private void clearModList ()
@@ -564,6 +579,42 @@ public class ModManager
     }
     _downloadManager.add(downloadQueue);
     _downloadManager.processQueues();
+  }
+
+  public int getModCount ()
+  {
+    return modList.size();
+  }
+
+  public LinkedList<Mod> getModList ()
+  {
+    // We don't want to return the actual object, so let's clone it.
+    return new LinkedList<>(modList);
+  }
+
+  public Boolean getMountRequired ()
+  {
+    return this.mountRequired;
+  }
+
+  public void setMountRequired (Boolean mountRequired)
+  {
+    this.mountRequired = mountRequired;
+  }
+
+  public Boolean getRebuildRequired ()
+  {
+    return this.rebuildRequired;
+  }
+
+  public void setRebuildRequired (Boolean rebuildRequired)
+  {
+    this.rebuildRequired = rebuildRequired;
+  }
+
+  public Properties getLastChanged ()
+  {
+    return this.lastChanged;
   }
 
   @SuppressWarnings("all")

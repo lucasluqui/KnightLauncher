@@ -1,6 +1,5 @@
 package com.luuqui.launcher.setting;
 
-import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.*;
@@ -12,7 +11,6 @@ import com.luuqui.util.*;
 import com.sun.management.OperatingSystemMXBean;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
@@ -78,7 +76,7 @@ public class SettingsEventHandler
 
   public void forceRebuildEvent ()
   {
-    _modManager.mountRequired = true;
+    _modManager.setMountRequired(true);
     new Thread(_modManager::startStrictFileRebuild).start();
     _launcherCtx.launcherGUI.setOnTop();
   }

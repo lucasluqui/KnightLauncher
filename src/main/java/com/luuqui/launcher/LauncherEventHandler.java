@@ -84,7 +84,7 @@ public class LauncherEventHandler
 
       if (selectedServer.isOfficial()) {
         // start: official servers launch procedure
-        if (_modManager.mountRequired) {
+        if (_modManager.getMountRequired()) {
           _modManager.mount();
 
           // re-lock server switching and launch button after mounting.
