@@ -1,11 +1,10 @@
 package com.luuqui.bootstrap;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import com.luuqui.launcher.LauncherGlobals;
+import com.luuqui.util.FileUtil;
+import org.apache.commons.io.FileUtils;
+
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -62,6 +61,7 @@ public class Bootstrap
   public static void main (String[] args) throws Exception
   {
     loadJarMods();
+    checkSteamAppIdFile();
     com.threerings.projectx.client.ProjectXApp.main(args);
   }
 
@@ -204,6 +204,29 @@ public class Bootstrap
       logger.warning("Failed to read '" + file.getName() + "'");
       e.printStackTrace();
       return null;
+    }
+  }
+
+  static void checkSteamAppIdFile ()
+  {
+    String steamAppIdFilePath = LauncherGlobals.USER_DIR + File.separator + "steam_appid.txt";
+
+    if (!FileUtil.fileExists(steamAppIdFilePath)) {
+      // File doesn't exist and we're running on a steam path.
+      if (LauncherGlobals.USER_DIR.contains("steamapps")) {
+        try {
+          FileUtils.writeStringToFile(
+              new File(steamAppIdFilePath), "99900");
+        } catch (IOException e) {
+          logger.warning("Failed to create steam_appid.txt file for steam install");
+          e.printStackTrace();
+        }
+      }
+    } else {
+      // File exists and we're running outside of a steam path.
+      if (!LauncherGlobals.USER_DIR.contains("steamapps")) {
+        FileUtil.deleteFile(steamAppIdFilePath);
+      }
     }
   }
 
