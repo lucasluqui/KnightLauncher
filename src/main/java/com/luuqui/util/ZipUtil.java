@@ -87,22 +87,17 @@ public class ZipUtil
 
         if (extract) zipFile.extractFile(fileHeader, dest);
       }
+      zipFile.close();
     } catch (IOException e) {
       log.error(e);
-    }
-    return clean;
-  }
-
-  private static void checkZipFileBackup (ZipFile zipFile)
-  {
-    String absolutePath = zipFile.getFile().getAbsolutePath();
-    if (!FileUtil.fileExists(absolutePath + ".bak")) {
       try {
-        FileUtils.copyFile(zipFile.getFile(), new File(absolutePath + ".bak"));
-      } catch (IOException e) {
-        log.error(e);
+        zipFile.close();
+      } catch (IOException ex) {
+        log.error("Could not close zip file");
+        log.error(ex);
       }
     }
+    return clean;
   }
 
   private static void doUnzip (ZipFile zipFile, String dest)
@@ -118,6 +113,19 @@ public class ZipUtil
         log.error(ex);
       }
       log.error(e);
+    }
+  }
+
+  @Deprecated
+  private static void createZipFileBackup (ZipFile zipFile)
+  {
+    String absolutePath = zipFile.getFile().getAbsolutePath();
+    if (!FileUtil.fileExists(absolutePath + ".bak")) {
+      try {
+        FileUtils.copyFile(zipFile.getFile(), new File(absolutePath + ".bak"));
+      } catch (IOException e) {
+        log.error(e);
+      }
     }
   }
 
