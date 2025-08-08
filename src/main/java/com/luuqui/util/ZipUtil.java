@@ -37,23 +37,24 @@ public class ZipUtil
   {
     ZipFile zipFile = new ZipFile(source);
 
-    // Make sure a backup of this zip file exists before we, potentially, make any changes to it.
-    checkZipFileBackup(zipFile);
-
     boolean clean = true;
     try {
       for (FileHeader fileHeader : new ArrayList<>(zipFile.getFileHeaders())) {
+        boolean extract = true;
         String fileHeaderFileName = fileHeader.getFileName();
+
+        // no extension, and we don't want to extract directories.
+        if (!fileHeaderFileName.contains(".")) continue;
 
         if (filter != null) {
           for (String filterFileName : filter) {
 
             // File is inside the filter list we got passed.
             if (fileHeaderFileName.equalsIgnoreCase(filterFileName)) {
-              zipFile.removeFile(fileHeader);
               clean = false;
+              extract = false;
               log.info(
-                  "Removed file found in filter list",
+                  "Ignored file found in filter list",
                   "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
             }
           }
@@ -63,10 +64,10 @@ public class ZipUtil
 
           // File is inside the forced filter list.
           if (fileHeaderFileName.equalsIgnoreCase(forcedFilterFileName)) {
-            zipFile.removeFile(fileHeader);
             clean = false;
+            extract = false;
             log.info(
-                "Removed file found in forced filter list",
+                "Ignored file found in forced filter list",
                 "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
           }
         }
@@ -76,20 +77,19 @@ public class ZipUtil
 
           // File is older than the vanilla counterpart.
           if (fileHeader.getLastModifiedTime() < stamp) {
-            zipFile.removeFile(fileHeader);
             clean = false;
+            extract = false;
             log.info(
-                "Removed file older than vanilla counterpart",
+                "Ignored file older than vanilla counterpart",
                 "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
           }
         }
+
+        if (extract) zipFile.extractFile(fileHeader, dest);
       }
     } catch (IOException e) {
       log.error(e);
     }
-
-    doUnzip(zipFile, dest);
-    if (clean) FileUtil.deleteFile(source + ".bak");
     return clean;
   }
 
