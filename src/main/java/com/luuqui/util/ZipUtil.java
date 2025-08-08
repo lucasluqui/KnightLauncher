@@ -33,13 +33,14 @@ public class ZipUtil
     doUnzip(new ZipFile(source), dest);
   }
 
-  public static void controlledUnzip (String source, String dest, String[] filter, Properties stamps)
+  public static Boolean controlledUnzip (String source, String dest, String[] filter, Properties stamps)
   {
     ZipFile zipFile = new ZipFile(source);
 
     // Make sure a backup of this zip file exists before we, potentially, make any changes to it.
     checkZipFileBackup(zipFile);
 
+    boolean clean = true;
     try {
       for (FileHeader fileHeader : zipFile.getFileHeaders()) {
         String fileHeaderFileName = fileHeader.getFileName();
@@ -50,6 +51,7 @@ public class ZipUtil
             // File is inside the filter list we got passed.
             if (fileHeaderFileName.equalsIgnoreCase(filterFileName)) {
               zipFile.removeFile(fileHeader);
+              clean = false;
               log.info(
                   "Removed file found in filter list",
                   "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
@@ -62,6 +64,7 @@ public class ZipUtil
           // File is inside the forced filter list.
           if (fileHeaderFileName.equalsIgnoreCase(forcedFilterFileName)) {
             zipFile.removeFile(fileHeader);
+            clean = false;
             log.info(
                 "Removed file found in forced filter list",
                 "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
@@ -74,6 +77,7 @@ public class ZipUtil
           // File is older than the vanilla counterpart.
           if (fileHeader.getLastModifiedTime() < stamp) {
             zipFile.removeFile(fileHeader);
+            clean = false;
             log.info(
                 "Removed file older than vanilla counterpart",
                 "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
@@ -85,6 +89,7 @@ public class ZipUtil
     }
 
     doUnzip(zipFile, dest);
+    return clean;
   }
 
   private static void checkZipFileBackup (ZipFile zipFile)
@@ -188,7 +193,7 @@ public class ZipUtil
     zipIn.close();
   }
 
-
+  @Deprecated
   private static void extractFileSafe (ZipInputStream zipIn, String filePath)
       throws IOException
   {
