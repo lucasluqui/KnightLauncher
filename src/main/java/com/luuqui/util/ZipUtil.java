@@ -42,7 +42,7 @@ public class ZipUtil
 
     boolean clean = true;
     try {
-      for (FileHeader fileHeader : zipFile.getFileHeaders()) {
+      for (FileHeader fileHeader : new ArrayList<>(zipFile.getFileHeaders())) {
         String fileHeaderFileName = fileHeader.getFileName();
 
         if (filter != null) {
