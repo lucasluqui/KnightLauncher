@@ -143,8 +143,8 @@ public class LauncherEventHandler
           }
           _downloadManager.processQueues();
 
-          ZipUtil.unzip(localFile.getAbsolutePath(),
-              LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
+          ZipUtil.normalUnzip(localFile.getAbsolutePath(),
+              LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName);
 
           FileUtil.deleteFile(localFile.getAbsolutePath());
         }
@@ -169,8 +169,8 @@ public class LauncherEventHandler
           }
           _downloadManager.processQueues();
 
-          ZipUtil.unzip(localFile.getAbsolutePath(),
-              LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName, false);
+          ZipUtil.normalUnzip(localFile.getAbsolutePath(),
+              LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName);
 
           FileUtil.deleteFile(localFile.getAbsolutePath());
 

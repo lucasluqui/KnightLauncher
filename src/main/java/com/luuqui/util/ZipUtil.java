@@ -14,10 +14,7 @@ import java.nio.file.Paths;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Pack200;
 import java.util.zip.GZIPInputStream;
@@ -31,66 +28,79 @@ public class ZipUtil
 {
   private static final int BUFFER_SIZE = 4096;
 
-  public static void unzip (String source, String dest, Boolean force4j)
+  public static void normalUnzip (String source, String dest)
   {
-    unzip(source, dest, force4j, null);
+    doUnzip(new ZipFile(source), dest);
   }
 
-  public static void unzip (String source, String dest, Boolean force4j, String[] filterList)
-  {
-    if (force4j || SystemUtil.isMac()) {
-      unzip4j(source, dest, filterList);
-      return;
-    }
-
-    switch (Settings.compressorUnzipMethod) {
-      case "custom":
-        try {
-          unzipCustom(source, dest, filterList);
-        } catch (IOException e) {
-          log.error(e);
-        }
-        break;
-      default:
-        unzip4j(source, dest, filterList);
-        break;
-    }
-  }
-
-
-  public static void unzip4j (String source, String dest)
-  {
-    unzip4j(source, dest, null);
-  }
-
-  public static void unzip4j (String source, String dest, String[] filterList)
+  public static void controlledUnzip (String source, String dest, String[] filter, Properties stamps)
   {
     ZipFile zipFile = new ZipFile(source);
 
+    // Make sure a backup of this zip file exists before we, potentially, make any changes to it.
+    checkZipFileBackup(zipFile);
+
     try {
-      // Check if we've been given a filter list and in that case, iterate through it.
-      if (filterList != null) {
-        for (String fileName : filterList) {
-          if (zipFile.getFileHeader(fileName) != null) {
-            log.info("Filter found illegal file", "source", source, "file", fileName);
-            zipFile.removeFile(fileName);
+      for (FileHeader fileHeader : zipFile.getFileHeaders()) {
+        String fileHeaderFileName = fileHeader.getFileName();
+
+        if (filter != null) {
+          for (String filterFileName : filter) {
+
+            // File is inside the filter list we got passed.
+            if (fileHeaderFileName.equalsIgnoreCase(filterFileName)) {
+              zipFile.removeFile(fileHeader);
+              log.info(
+                  "Removed file found in filter list",
+                  "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
+            }
           }
         }
-      }
 
-      // Also, check whether any of the files matches the forced filter list.
-      for (String fileName : FORCED_FILTER_LIST) {
-        if (zipFile.getFileHeader(fileName) != null) {
-          log.info("Filter found illegal file. This is a forced filter thus filter value will be ignored.",
-              "source", source, "file", fileName);
-          zipFile.removeFile(fileName);
+        for (String forcedFilterFileName : FORCED_FILTER_LIST) {
+
+          // File is inside the forced filter list.
+          if (fileHeaderFileName.equalsIgnoreCase(forcedFilterFileName)) {
+            zipFile.removeFile(fileHeader);
+            log.info(
+                "Removed file found in forced filter list",
+                "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
+          }
+        }
+
+        if (stamps.containsKey(fileHeaderFileName)) {
+          long stamp = Long.parseLong(stamps.getProperty(fileHeaderFileName));
+
+          // File is older than the vanilla counterpart.
+          if (fileHeader.getLastModifiedTime() < stamp) {
+            zipFile.removeFile(fileHeader);
+            log.info(
+                "Removed file older than vanilla counterpart",
+                "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
+          }
         }
       }
     } catch (IOException e) {
       log.error(e);
     }
 
-    // All done, time to extract.
+    doUnzip(zipFile, dest);
+  }
+
+  private static void checkZipFileBackup (ZipFile zipFile)
+  {
+    String absolutePath = zipFile.getFile().getAbsolutePath();
+    if (!FileUtil.fileExists(absolutePath + ".bak")) {
+      try {
+        FileUtils.copyFile(zipFile.getFile(), new File(absolutePath + ".bak"));
+      } catch (IOException e) {
+        log.error(e);
+      }
+    }
+  }
+
+  private static void doUnzip (ZipFile zipFile, String dest)
+  {
     try {
       zipFile.extractAll(dest);
       zipFile.close(); // Try to close the stream after we're done.
@@ -105,14 +115,15 @@ public class ZipUtil
     }
   }
 
-
+  @Deprecated
   public static void unzipCustom (String zipFilePath, String destDirectory)
       throws IOException
   {
-    unzipCustom(zipFilePath, destDirectory, null);
+    unzipCustom(zipFilePath, destDirectory, null, null);
   }
 
-  public static void unzipCustom (String zipFilePath, String destDirectory, String[] filterList)
+  @Deprecated
+  public static void unzipCustom (String zipFilePath, String destDirectory, String[] filterList, Properties stamps)
       throws IOException
   {
     FileUtil.createDir(destDirectory);
@@ -134,12 +145,6 @@ public class ZipUtil
               break;
             }
           }
-
-          if (illegalFile) {
-            zipIn.closeEntry();
-            entry = zipIn.getNextEntry();
-            continue;
-          }
         }
 
         // Also, check whether any of the files matches the forced filter list.
@@ -152,12 +157,20 @@ public class ZipUtil
           }
         }
 
+        if (stamps.containsKey(filePath)) {
+          long stamp = Long.parseLong(stamps.getProperty(filePath));
+
+          // File is older than the vanilla counterpart.
+          if (entry.getTime() < stamp) {
+            illegalFile = true;
+          }
+        }
+
         if (illegalFile) {
           zipIn.closeEntry();
           entry = zipIn.getNextEntry();
           continue;
         }
-
       } catch (Exception e) {
         log.error(e);
       }

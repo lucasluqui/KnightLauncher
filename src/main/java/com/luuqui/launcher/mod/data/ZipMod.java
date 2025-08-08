@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static com.luuqui.launcher.mod.Log.log;
 
@@ -36,17 +37,17 @@ public class ZipMod extends Mod
 
   public void mount () { }
 
-  public void mount (String rootDir)
+  public void mount (String rootDir, Properties stamps)
   {
     if (this.type == null) {
       log.info("Mounting Zip mod", "mod", this.displayName);
-      ZipUtil.unzip(rootDir + "/mods/" + this.fileName, rootDir + "/rsrc/", false, Settings.fileProtection ? LauncherGlobals.FILTER_LIST : null);
+      ZipUtil.controlledUnzip(rootDir + "/mods/" + this.fileName, rootDir + "/rsrc/", Settings.fileProtection ? LauncherGlobals.FILTER_LIST : null, stamps);
       log.info("Zip mod mounted successfully", "mod", this.displayName);
     } else {
       log.info("Mounting Zip mod with " + this.type + " type", "mod", this.displayName);
       if (this.type.equalsIgnoreCase("class")) {
         try {
-          ZipUtil.unzip(rootDir + "/mods/" + this.fileName, rootDir + "/code/class-changes/", false, Settings.fileProtection ? LauncherGlobals.FILTER_LIST : null);
+          ZipUtil.controlledUnzip(rootDir + "/mods/" + this.fileName, rootDir + "/code/class-changes/", Settings.fileProtection ? LauncherGlobals.FILTER_LIST : null, stamps);
           FileUtils.delete(new File(rootDir + "/code/class-changes/mod.json"));
         } catch (IOException e) {
           log.error(e);

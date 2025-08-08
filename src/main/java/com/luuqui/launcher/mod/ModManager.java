@@ -199,10 +199,10 @@ public class ModManager
       Mod mod = localList.get(i);
       if(mod.isEnabled()) {
         if (mod instanceof Modpack) {
-          ((Modpack) mod).mount(rootDir);
+          ((Modpack) mod).mount(rootDir, lastChanged);
         } else if (mod instanceof ZipMod) {
           ZipMod zipMod = ((ZipMod) mod);
-          zipMod.mount(rootDir);
+          zipMod.mount(rootDir, lastChanged);
           if (zipMod.hasLocaleChanges()) {
             this.globalLocaleChanges.addAll(zipMod.getLocaleChanges());
           }
@@ -429,7 +429,7 @@ public class ModManager
     try {
       log.info("Extracting safeguard...");
       ZipUtil.extractFileWithinJar("/rsrc/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip");
-      ZipUtil.unzip(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/rsrc/", false);
+      ZipUtil.normalUnzip(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/rsrc/");
       log.info("Extracted safeguard.");
     } catch (IOException e) {
       log.error(e);
