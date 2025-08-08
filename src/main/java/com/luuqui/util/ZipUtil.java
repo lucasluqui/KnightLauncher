@@ -89,6 +89,7 @@ public class ZipUtil
     }
 
     doUnzip(zipFile, dest);
+    if (clean) FileUtil.deleteFile(source + ".bak");
     return clean;
   }
 
