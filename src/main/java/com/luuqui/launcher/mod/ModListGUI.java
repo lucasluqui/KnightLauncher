@@ -382,7 +382,7 @@ public class ModListGUI extends BaseGUI
 
           if (!isPXCompatible) {
             JLabel incompatBadge = new JLabel();
-            incompatBadge.setBounds(modBadge.getX(), modBadge.getY() + modBadge.getHeight() + 5, 125, 18);
+            incompatBadge.setBounds(modBadge.getX(), modBadge.getY() - modBadge.getHeight() - 5, 125, 18);
             incompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
             incompatBadge.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
             incompatBadge.setText(_localeManager.getValue("m.mod_incompatible", "PX"));
@@ -407,7 +407,7 @@ public class ModListGUI extends BaseGUI
 
         if (!isJDKCompatible || !isPXCompatible) {
           JLabel incompatBadge = new JLabel();
-          incompatBadge.setBounds(modBadge.getX(), modBadge.getY() + modBadge.getHeight() + 5, 125, 18);
+          incompatBadge.setBounds(modBadge.getX(), modBadge.getY() - modBadge.getHeight() - 5, 125, 18);
           incompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
           incompatBadge.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
           incompatBadge.setText(_localeManager.getValue("m.mod_incompatible", !isPXCompatible ? "PX" : "JDK"));
