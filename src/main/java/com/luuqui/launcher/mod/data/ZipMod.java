@@ -101,7 +101,7 @@ public class ZipMod extends Mod
 
         // File is inside the forced filter list.
         if (fileHeaderFileName.equalsIgnoreCase(forcedFilterFileName)) {
-          validState = 1;
+          validState = 2;
           log.info(
               "Ignored file header found in forced filter list",
               "fileName", this.getFileName(), "header", fileHeaderFileName);
@@ -113,7 +113,7 @@ public class ZipMod extends Mod
 
         // File is older than the vanilla counterpart.
         if (fileHeader.getLastModifiedTime() < stamp) {
-          validState = 1;
+          validState = 3;
           log.info(
               "Ignored file header older than vanilla counterpart",
               "fileName", this.getFileName(), "header", fileHeaderFileName);
