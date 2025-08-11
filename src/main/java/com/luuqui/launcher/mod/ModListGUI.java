@@ -67,13 +67,13 @@ public class ModListGUI extends BaseGUI
     guiFrame.getContentPane().add(labelModCountText);
 
     warningNotice = new JButton(_localeManager.getValue("m.warning"));
-    warningNotice.setIcon(IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 13, Color.WHITE));
+    warningNotice.setIcon(IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 13, Color.BLACK));
     warningNotice.setBounds(650, 87, 110, 23);
     warningNotice.setToolTipText(_localeManager.getValue("m.warning"));
     warningNotice.setFocusPainted(false);
     warningNotice.setFocusable(false);
-    warningNotice.setForeground(Color.WHITE);
-    warningNotice.setBackground(CustomColors.LIGHT_RED);
+    warningNotice.setForeground(Color.BLACK);
+    warningNotice.setBackground(CustomColors.WARNING);
     warningNotice.putClientProperty(FlatClientProperties.STYLE,
         "arc: 999; borderWidth: 0");
     warningNotice.setVisible(false);
@@ -372,57 +372,21 @@ public class ModListGUI extends BaseGUI
       removeButton.putClientProperty(FlatClientProperties.STYLE,
           "arc: 999; borderWidth: 0");
       removeButton.addActionListener(l -> eventHandler.removeModEvent(mod));
-
       modPane.add(removeButton);
 
-      if (mod instanceof ZipMod) {
-        ZipMod zipMod = (ZipMod) mod;
-        if (zipMod.getType() != null && zipMod.getType().equalsIgnoreCase("class")) {
-          boolean isPXCompatible = zipMod.isPXCompatible();
-
-          if (!isPXCompatible) {
-            JLabel incompatBadge = new JLabel();
-            incompatBadge.setBounds(modBadge.getX(), modBadge.getY() - modBadge.getHeight() - 5, 125, 18);
-            incompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
-            incompatBadge.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
-            incompatBadge.setText(_localeManager.getValue("m.mod_incompatible", "PX"));
-            incompatBadge.setToolTipText(incompatBadge.getText());
-            incompatBadge.setVisible(true);
-            incompatBadge.putClientProperty(FlatClientProperties.STYLE,
-                "background:" + ColorUtil.colorToHexString(CustomColors.RED)
-                    + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.LIGHT_RED)
-                    + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.RED));
-            modPane.add(incompatBadge);
-
-            enabledCheckbox.setSelected(false);
-            enabledCheckbox.setEnabled(false);
-          }
-        }
-      }
-
-      if (mod instanceof JarMod) {
-        JarMod jarMod = (JarMod) mod;
-        boolean isJDKCompatible = jarMod.isJDKCompatible();
-        boolean isPXCompatible = jarMod.isPXCompatible();
-
-        if (!isJDKCompatible || !isPXCompatible) {
-          JLabel incompatBadge = new JLabel();
-          incompatBadge.setBounds(modBadge.getX(), modBadge.getY() - modBadge.getHeight() - 5, 125, 18);
-          incompatBadge.setHorizontalAlignment(SwingConstants.CENTER);
-          incompatBadge.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
-          incompatBadge.setText(_localeManager.getValue("m.mod_incompatible", !isPXCompatible ? "PX" : "JDK"));
-          incompatBadge.setToolTipText(incompatBadge.getText());
-          incompatBadge.setVisible(true);
-          incompatBadge.putClientProperty(FlatClientProperties.STYLE,
-              "background:" + ColorUtil.colorToHexString(CustomColors.RED)
-                  + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.LIGHT_RED)
-                  + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.RED));
-          modPane.add(incompatBadge);
-
-          enabledCheckbox.setSelected(false);
-          enabledCheckbox.setEnabled(false);
-        }
-      }
+      JButton warningButton = new JButton(_localeManager.getValue("m.warning"));
+      warningButton.setIcon(IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 13, Color.BLACK));
+      warningButton.setBounds(605, 75, 110, 23);
+      warningButton.setToolTipText(_localeManager.getValue("m.warning"));
+      warningButton.setFocusPainted(false);
+      warningButton.setFocusable(false);
+      warningButton.setForeground(Color.BLACK);
+      warningButton.setBackground(CustomColors.WARNING);
+      warningButton.putClientProperty(FlatClientProperties.STYLE,
+          "arc: 999; borderWidth: 0");
+      warningButton.setVisible(mod.showWarningMessage());
+      warningButton.addActionListener(l -> eventHandler.showWarningEvent(mod));
+      modPane.add(warningButton);
 
       modListPane.add(modPane);
       modListPane.add(modPaneBackgroundLeft);

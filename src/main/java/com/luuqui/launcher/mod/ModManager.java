@@ -13,6 +13,7 @@ import com.luuqui.launcher.mod.data.*;
 import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsManager;
 import com.luuqui.util.*;
+import net.lingala.zip4j.model.FileHeader;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -500,7 +501,6 @@ public class ModManager
     int gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
     String pxVersion = _flamingoManager.getSelectedServer().getLocalVersion();
 
-    boolean hasIncompatibility = false;
     for (Mod mod : modList) {
       // Parse whether the mod is compatible with the current game version.
       // Not a strict requirement for most mods, only for ZipMods with 'class' type and JarMods.
@@ -510,10 +510,20 @@ public class ModManager
       if (mod instanceof ZipMod) {
         ZipMod zipMod = (ZipMod) mod;
 
+        // Parse any invalid file header warnings.
+        if (zipMod.hasInvalidFileHeaders()) {
+          List<String> invalidFileHeaders = new ArrayList<>();
+          for (Map.Entry<FileHeader, Integer> entry : zipMod.getFileHeaderData().getFileHeaders().entrySet()) {
+            if (entry.getValue() > 0) invalidFileHeaders.add(entry.getKey().getFileName());
+          }
+          zipMod.addWarningMessage(_localeManager.getValue("m.warning_file_headers", String.join("\n", invalidFileHeaders)));
+        }
+
+        // Parse any incompatible PX warnings.
         if (zipMod.getType() != null && zipMod.getType().equalsIgnoreCase("class")) {
           if (!pxCompatible) {
             zipMod.setEnabled(false);
-            hasIncompatibility = true;
+            zipMod.addWarningMessage(_localeManager.getValue("m.warning_incompatible_px"));
           }
         }
       }
@@ -528,12 +538,13 @@ public class ModManager
         if (jarMod.isEnabled()) jarMod.setEnabled(jdkCompatible && pxCompatible);
 
         if((!jdkCompatible || !pxCompatible) && Settings.loadCodeMods) {
-          hasIncompatibility = true;
+          if (!jdkCompatible)
+            jarMod.addWarningMessage(_localeManager.getValue("m.warning_incompatible_jdk"));
+          if (!pxCompatible)
+            jarMod.addWarningMessage(_localeManager.getValue("m.warning_incompatible_px"));
         }
       }
     }
-
-    _launcherCtx.modListGUI.eventHandler.showIncompatibleModsWarning(hasIncompatibility);
   }
 
   private boolean gameVersionChanged ()

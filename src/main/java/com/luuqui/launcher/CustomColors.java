@@ -18,6 +18,7 @@ public class CustomColors
   public static final Color RED           = new Color(194, 0, 0);
   public static final Color GREEN         = new Color(0, 194, 65);
   public static final Color DANGER        = new Color(251, 91, 91);
+  public static final Color WARNING       = new Color(251, 198, 91);
 
   public static final Color INTERFACE_DEFAULT                   = new Color(179, 179, 180);
   public static final Color INTERFACE_DEFAULT_FOCUS             = new Color(97, 99, 101);

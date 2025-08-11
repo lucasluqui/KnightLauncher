@@ -247,4 +247,10 @@ public class ModListEventHandler
       refreshMods(false);
     }
   }
+
+  public void showWarningEvent (Mod mod)
+  {
+    Dialog.push(
+        _localeManager.getValue("m.mod_warnings", new String[] { mod.getDisplayName(), mod.getWarningMessage() }), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
+  }
 }

@@ -17,6 +17,7 @@ public class ZipMod extends Mod
   private final List<LocaleChange> localeChanges = new ArrayList<>();
   private final FileHeaderData fileHeaderData = new FileHeaderData();
   protected String type;
+  protected Boolean hasInvalidFileHeaders;
 
   @SuppressWarnings("unused")
   public ZipMod ()
@@ -31,6 +32,7 @@ public class ZipMod extends Mod
     this.fileName = fileName;
     this.setAbsolutePath(rootDir + fileName);
 
+    this.hasInvalidFileHeaders = false;
     parseFileHeaderData(filter, stamps);
     parseMetadata();
   }
@@ -90,6 +92,7 @@ public class ZipMod extends Mod
           // File is inside the filter list we got passed.
           if (fileHeaderFileName.equalsIgnoreCase(filterFileName)) {
             validState = 1;
+            this.hasInvalidFileHeaders = true;
             log.info(
                 "Ignored file header found in filter list",
                 "fileName", this.getFileName(), "header", fileHeaderFileName);
@@ -102,6 +105,7 @@ public class ZipMod extends Mod
         // File is inside the forced filter list.
         if (fileHeaderFileName.equalsIgnoreCase(forcedFilterFileName)) {
           validState = 2;
+          this.hasInvalidFileHeaders = true;
           log.info(
               "Ignored file header found in forced filter list",
               "fileName", this.getFileName(), "header", fileHeaderFileName);
@@ -114,6 +118,7 @@ public class ZipMod extends Mod
         // File is older than the vanilla counterpart.
         if (fileHeader.getLastModifiedTime() < stamp) {
           validState = 3;
+          this.hasInvalidFileHeaders = true;
           log.info(
               "Ignored file header older than vanilla counterpart",
               "fileName", this.getFileName(), "header", fileHeaderFileName);
@@ -152,6 +157,16 @@ public class ZipMod extends Mod
   public List<LocaleChange> getLocaleChanges ()
   {
     return this.localeChanges;
+  }
+
+  public FileHeaderData getFileHeaderData ()
+  {
+    return this.fileHeaderData;
+  }
+
+  public Boolean hasInvalidFileHeaders ()
+  {
+    return this.hasInvalidFileHeaders;
   }
 
   public String getType ()

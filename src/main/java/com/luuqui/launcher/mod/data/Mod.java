@@ -76,6 +76,11 @@ public abstract class Mod
    */
   protected String image;
 
+  /**
+   * Any warning message related to this mod that we should display to the user.
+   */
+  protected String warningMessage = "";
+
   protected Mod ()
   {
     this.description = "No description found";
@@ -134,6 +139,21 @@ public abstract class Mod
         }
       }
     }
+  }
+
+  public String getWarningMessage ()
+  {
+    return this.warningMessage;
+  }
+
+  public void addWarningMessage (String warning)
+  {
+    this.warningMessage += warningMessage.isEmpty() ? warning : "\n\n" + warning;
+  }
+
+  public Boolean showWarningMessage ()
+  {
+    return !this.warningMessage.isEmpty();
   }
 
   public String getDisplayName ()
