@@ -28,12 +28,22 @@ public class ZipUtil
 {
   private static final int BUFFER_SIZE = 4096;
 
-  public static void normalUnzip (String source, String dest)
+  public static void unzip (String source, String dest)
   {
     doUnzip(new ZipFile(source), dest);
   }
 
-  public static Boolean controlledUnzip (String source, String dest, String[] filter, Properties stamps)
+  public static void unzipFileHeader (ZipFile zipFile, FileHeader fileHeader, String dest, boolean close)
+  {
+    try {
+      zipFile.extractFile(fileHeader, dest);
+      if (close) closeZip(zipFile);
+    } catch (ZipException e) {
+      log.error(e);
+    }
+  }
+
+  public static Boolean controlledUnzip (String source, String dest, String[] forcedFilterList, String[] filter, Properties stamps)
   {
     ZipFile zipFile = new ZipFile(source);
 
@@ -60,7 +70,7 @@ public class ZipUtil
           }
         }
 
-        for (String forcedFilterFileName : FORCED_FILTER_LIST) {
+        for (String forcedFilterFileName : forcedFilterList) {
 
           // File is inside the forced filter list.
           if (fileHeaderFileName.equalsIgnoreCase(forcedFilterFileName)) {
@@ -87,15 +97,9 @@ public class ZipUtil
 
         if (extract) zipFile.extractFile(fileHeader, dest);
       }
-      zipFile.close();
+      closeZip(zipFile);
     } catch (IOException e) {
       log.error(e);
-      try {
-        zipFile.close();
-      } catch (IOException ex) {
-        log.error("Could not close zip file");
-        log.error(ex);
-      }
     }
     return clean;
   }
@@ -104,16 +108,35 @@ public class ZipUtil
   {
     try {
       zipFile.extractAll(dest);
-      zipFile.close(); // Try to close the stream after we're done.
+      closeZip(zipFile); // Try to close the stream after we're done.
     } catch (IOException e) {
-      try {
-        zipFile.close();
-      } catch (IOException ex) {
-        log.error("Could not close zip file");
-        log.error(ex);
-      }
       log.error(e);
     }
+  }
+
+  public static void closeZip (ZipFile zipFile)
+  {
+    try {
+      zipFile.close();
+    } catch (IOException e) {
+      log.error("Failed to close zip file");
+      log.error(e);
+    }
+  }
+
+  public static List<FileHeader> getZipFileHeaders (String source)
+  {
+    ZipFile zipFile = new ZipFile(source);
+    List<FileHeader> fileHeaders = new ArrayList<>();
+
+    try {
+      fileHeaders = zipFile.getFileHeaders();
+      closeZip(zipFile);
+    } catch (ZipException e) {
+      log.error(e);
+    }
+
+    return fileHeaders;
   }
 
   @Deprecated
@@ -130,14 +153,14 @@ public class ZipUtil
   }
 
   @Deprecated
-  public static void unzipCustom (String zipFilePath, String destDirectory)
+  public static void unzipCustom (String zipFilePath, String destDirectory, String[] forcedFilterList)
       throws IOException
   {
-    unzipCustom(zipFilePath, destDirectory, null, null);
+    unzipCustom(zipFilePath, destDirectory, forcedFilterList, null, null);
   }
 
   @Deprecated
-  public static void unzipCustom (String zipFilePath, String destDirectory, String[] filterList, Properties stamps)
+  public static void unzipCustom (String zipFilePath, String destDirectory, String[] forcedFilterList, String[] filterList, Properties stamps)
       throws IOException
   {
     FileUtil.createDir(destDirectory);
@@ -162,7 +185,7 @@ public class ZipUtil
         }
 
         // Also, check whether any of the files matches the forced filter list.
-        for (String fileName : FORCED_FILTER_LIST) {
+        for (String fileName : forcedFilterList) {
           if (filePath.equalsIgnoreCase(fileName)) {
             log.info("Filter found illegal file. This is a forced filter thus filter value will be ignored.",
                 "source", zipFilePath, "file", fileName);
@@ -424,38 +447,4 @@ public class ZipUtil
       addFileToZip(rootPath, fileName, zip, zipFileName);
     }
   }
-
-  private static final String[] FORCED_FILTER_LIST = new String[] {
-      "item/live/statue/model.dat",
-      "world/dynamic/switch/button/model.dat",
-      "world/dynamic/switch/button/model_pressure.dat",
-      "world/dynamic/switch/button/model_pressure_onetime.dat",
-      "world/dynamic/switch/button/model_pressure_statue.dat",
-      "world/dynamic/switch/button/model_whitespace.dat",
-      "world/dynamic/switch/button/parts/animation_down.dat",
-      "world/dynamic/switch/button/parts/animation_hide.dat",
-      "world/dynamic/switch/button/parts/animation_show.dat",
-      "world/dynamic/switch/button/parts/animation_up.dat",
-      "world/dynamic/switch/button/parts/animation_whitespace_down.dat",
-      "world/dynamic/switch/button/parts/animation_whitespace_up.dat",
-      "world/dynamic/switch/button/parts/fx_down.dat",
-      "world/dynamic/switch/button_large/fx_whitespace-hit.dat",
-      "world/dynamic/switch/button_large/fx_whitespace.dat",
-      "world/dynamic/switch/button_large/model.dat",
-      "world/dynamic/switch/button_large/model_horde.dat",
-      "world/dynamic/switch/button_large/model_whitespace.dat",
-      "world/dynamic/switch/clockwork_button/glow.dat",
-      "world/dynamic/switch/clockwork_button/model.dat",
-      "world/dynamic/switch/clockwork_button/animation/state_down.dat",
-      "world/dynamic/switch/clockwork_button/animation/state_up.dat",
-      "world/dynamic/switch/multistate/model.dat",
-      "world/dynamic/switch/multistate/parts/animation_disabled.dat",
-      "world/dynamic/switch/multistate/parts/animation_green.dat",
-      "world/dynamic/switch/multistate/parts/animation_red.dat",
-      "world/dynamic/switch/multistate/parts/animation_violet.dat",
-      "world/dynamic/switch/multistate/parts/animation_yellow.dat",
-      "world/dynamic/switch/toggle_lever/animation_off.dat",
-      "world/dynamic/switch/toggle_lever/animation_on.dat",
-      "world/dynamic/switch/toggle_lever/model.dat"
-  };
 }

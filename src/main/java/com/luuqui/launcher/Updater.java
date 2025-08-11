@@ -102,7 +102,7 @@ public class Updater extends BaseGUI
 
     this.updaterProgressBar.setValue(2);
     this.updaterState.setText("Extracting version " + this.newVersion + " files...");
-    ZipUtil.normalUnzip(LauncherGlobals.USER_DIR + "/KnightLauncher.zip", LauncherGlobals.USER_DIR + "/");
+    ZipUtil.unzip(LauncherGlobals.USER_DIR + "/KnightLauncher.zip", LauncherGlobals.USER_DIR + "/");
 
     updaterProgressBar.setValue(3);
     updaterState.setText("Cleaning leftover files...");

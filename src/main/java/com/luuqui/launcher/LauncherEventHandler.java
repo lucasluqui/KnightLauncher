@@ -143,7 +143,7 @@ public class LauncherEventHandler
           }
           _downloadManager.processQueues();
 
-          ZipUtil.normalUnzip(localFile.getAbsolutePath(),
+          ZipUtil.unzip(localFile.getAbsolutePath(),
               LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName);
 
           FileUtil.deleteFile(localFile.getAbsolutePath());
@@ -169,7 +169,7 @@ public class LauncherEventHandler
           }
           _downloadManager.processQueues();
 
-          ZipUtil.normalUnzip(localFile.getAbsolutePath(),
+          ZipUtil.unzip(localFile.getAbsolutePath(),
               LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName);
 
           FileUtil.deleteFile(localFile.getAbsolutePath());

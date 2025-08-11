@@ -254,4 +254,37 @@ public abstract class Mod
     return "[Mod displayName=" + this.displayName + ",description=" + this.description + ",author=" + this.authorName + ",version=" + this.version + ",fileName=" + this.fileName + ",isEnabled=" + this.isEnabled + "]";
   }
 
+  protected final String[] FORCED_FILTER_LIST = new String[] {
+      "item/live/statue/model.dat",
+      "world/dynamic/switch/button/model.dat",
+      "world/dynamic/switch/button/model_pressure.dat",
+      "world/dynamic/switch/button/model_pressure_onetime.dat",
+      "world/dynamic/switch/button/model_pressure_statue.dat",
+      "world/dynamic/switch/button/model_whitespace.dat",
+      "world/dynamic/switch/button/parts/animation_down.dat",
+      "world/dynamic/switch/button/parts/animation_hide.dat",
+      "world/dynamic/switch/button/parts/animation_show.dat",
+      "world/dynamic/switch/button/parts/animation_up.dat",
+      "world/dynamic/switch/button/parts/animation_whitespace_down.dat",
+      "world/dynamic/switch/button/parts/animation_whitespace_up.dat",
+      "world/dynamic/switch/button/parts/fx_down.dat",
+      "world/dynamic/switch/button_large/fx_whitespace-hit.dat",
+      "world/dynamic/switch/button_large/fx_whitespace.dat",
+      "world/dynamic/switch/button_large/model.dat",
+      "world/dynamic/switch/button_large/model_horde.dat",
+      "world/dynamic/switch/button_large/model_whitespace.dat",
+      "world/dynamic/switch/clockwork_button/glow.dat",
+      "world/dynamic/switch/clockwork_button/model.dat",
+      "world/dynamic/switch/clockwork_button/animation/state_down.dat",
+      "world/dynamic/switch/clockwork_button/animation/state_up.dat",
+      "world/dynamic/switch/multistate/model.dat",
+      "world/dynamic/switch/multistate/parts/animation_disabled.dat",
+      "world/dynamic/switch/multistate/parts/animation_green.dat",
+      "world/dynamic/switch/multistate/parts/animation_red.dat",
+      "world/dynamic/switch/multistate/parts/animation_violet.dat",
+      "world/dynamic/switch/multistate/parts/animation_yellow.dat",
+      "world/dynamic/switch/toggle_lever/animation_off.dat",
+      "world/dynamic/switch/toggle_lever/animation_on.dat",
+      "world/dynamic/switch/toggle_lever/model.dat"
+  };
 }

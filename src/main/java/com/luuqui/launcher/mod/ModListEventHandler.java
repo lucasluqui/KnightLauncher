@@ -175,7 +175,7 @@ public class ModListEventHandler
   {
     Server selectedServer = _flamingoManager.getSelectedServer();
 
-    if(selectedServer != null) {
+    if (selectedServer != null) {
       new Thread(_modManager::checkInstalled).start();
       this.gui.viewingModsLabel.setText(_localeManager.getValue("m.viewing_mods", selectedServer.name));
     }

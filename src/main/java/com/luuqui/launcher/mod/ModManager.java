@@ -115,7 +115,8 @@ public class ModManager
         String fileName = file.getName();
         Mod mod = null;
         if (fileName.endsWith("zip")) {
-          mod = new ZipMod(modFolderPath, fileName);
+          mod = new ZipMod(
+              modFolderPath, fileName, Settings.fileProtection ? this.FILTER_LIST : null, lastChanged);
         } else if (fileName.endsWith("jar")) {
           mod = new JarMod(modFolderPath, fileName);
         } else if (fileName.endsWith("modpack")) {
@@ -429,7 +430,7 @@ public class ModManager
     try {
       log.info("Extracting safeguard...");
       ZipUtil.extractFileWithinJar("/rsrc/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip");
-      ZipUtil.normalUnzip(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/rsrc/");
+      ZipUtil.unzip(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/rsrc/");
       log.info("Extracted safeguard.");
     } catch (IOException e) {
       log.error(e);
