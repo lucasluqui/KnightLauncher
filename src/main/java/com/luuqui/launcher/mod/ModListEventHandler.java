@@ -232,7 +232,7 @@ public class ModListEventHandler
             log.error(e);
           }
       } else {
-        Dialog.push(_localeManager.getValue("error.mod_file_format"), _localeManager.getValue("t.add_mod_error"), JOptionPane.ERROR_MESSAGE);
+        Dialog.push(_localeManager.getValue("error.mod_file_format"), _localeManager.getValue("t.error"), JOptionPane.ERROR_MESSAGE);
       }
     }
   }
@@ -240,7 +240,7 @@ public class ModListEventHandler
   @SuppressWarnings("all")
   public void removeModEvent (Mod mod)
   {
-    boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.destructive_action"), _localeManager.getValue("b.remove_mod_tooltip", mod.getDisplayName()), JOptionPane.WARNING_MESSAGE);
+    boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.destructive_action"), _localeManager.getValue("m.remove_mod", mod.getDisplayName()), JOptionPane.WARNING_MESSAGE);
     if (confirm) {
       new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + mod.getFileName()).delete();
       log.info("Removed mod: " + mod);

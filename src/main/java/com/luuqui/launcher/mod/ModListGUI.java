@@ -104,12 +104,12 @@ public class ModListGUI extends BaseGUI
     guiFrame.getContentPane().add(getModsButton);
     getModsButton.addActionListener(this.eventHandler::getModsEvent);
 
-    JButton modFolderButton = new JButton(_localeManager.getValue("b.open_mods_folder"));
+    JButton modFolderButton = new JButton(_localeManager.getValue("b.open_mods_dir"));
     modFolderButton.setBounds(600, 5, 175, 25);
     modFolderButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     modFolderButton.setFocusPainted(false);
     modFolderButton.setFocusable(false);
-    modFolderButton.setToolTipText(_localeManager.getValue("b.open_mods_folder"));
+    modFolderButton.setToolTipText(_localeManager.getValue("b.open_mods_dir"));
     guiFrame.getContentPane().add(modFolderButton);
     modFolderButton.addActionListener(this.eventHandler::openModsFolderEvent);
 
@@ -135,14 +135,14 @@ public class ModListGUI extends BaseGUI
     separator.setBounds(25, 75, 750, 2);
     guiFrame.getContentPane().add(separator);
 
-    addModButton = new JButton(_localeManager.getValue("b.add_mod"));
+    addModButton = new JButton(_localeManager.getValue("b.add"));
     addModButton.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, 13, Color.WHITE));
     addModButton.setBounds(25, 87, 80, 23);
     addModButton.setFocusPainted(false);
     addModButton.setFocusable(false);
     addModButton.setForeground(Color.WHITE);
     addModButton.setBackground(CustomColors.GREEN);
-    addModButton.setToolTipText(_localeManager.getValue("b.add_mod_tooltip"));
+    addModButton.setToolTipText(_localeManager.getValue("m.add_mod_tooltip"));
     addModButton.putClientProperty(FlatClientProperties.STYLE,
         "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(addModButton);
@@ -155,7 +155,7 @@ public class ModListGUI extends BaseGUI
     refreshButton.setFocusable(false);
     refreshButton.setForeground(Color.WHITE);
     refreshButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
-    refreshButton.setToolTipText(_localeManager.getValue("b.refresh_tooltip"));
+    refreshButton.setToolTipText(_localeManager.getValue("m.refresh_tooltip"));
     refreshButton.putClientProperty(FlatClientProperties.STYLE,
         "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(refreshButton);
@@ -361,14 +361,14 @@ public class ModListGUI extends BaseGUI
 
       modPane.add(enabledCheckbox);
 
-      JButton removeButton = new JButton(_localeManager.getValue("b.remove_mod"));
+      JButton removeButton = new JButton(_localeManager.getValue("b.remove"));
       removeButton.setIcon(IconFontSwing.buildIcon(FontAwesome.TRASH, 13, Color.WHITE));
       removeButton.setBounds(605, 105, 110, 23);
       removeButton.setFocusPainted(false);
       removeButton.setFocusable(false);
       removeButton.setForeground(Color.WHITE);
       removeButton.setBackground(CustomColors.DANGER);
-      removeButton.setToolTipText(_localeManager.getValue("b.remove_mod_tooltip", mod.getDisplayName()));
+      removeButton.setToolTipText(_localeManager.getValue("m.remove_mod", mod.getDisplayName()));
       removeButton.putClientProperty(FlatClientProperties.STYLE,
           "arc: 999; borderWidth: 0");
       removeButton.addActionListener(l -> eventHandler.removeModEvent(mod));

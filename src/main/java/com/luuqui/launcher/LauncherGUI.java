@@ -336,7 +336,7 @@ public class LauncherGUI extends BaseGUI {
     Icon bugIcon = IconFontSwing.buildIcon(FontAwesome.BUG, 17, Color.WHITE);
     JButton bugButton = new JButton(bugIcon);
     bugButton.setBounds(107, 440, 36, 36);
-    bugButton.setToolTipText(_localeManager.getValue("b.bug_report"));
+    bugButton.setToolTipText(_localeManager.getValue("b.bugs"));
     bugButton.setFocusPainted(false);
     bugButton.setFocusable(false);
     bugButton.setBorderPainted(false);
@@ -346,7 +346,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon donateIcon = IconFontSwing.buildIcon(FontAwesome.USD, 17, Color.WHITE);
     JButton donateButton = new JButton(donateIcon);
-    donateButton.setBounds(149, 440, 36, 36);
+    donateButton.setBounds(152, 440, 36, 36);
     donateButton.setToolTipText(_localeManager.getValue("b.donate"));
     donateButton.setFocusPainted(false);
     donateButton.setFocusable(false);
@@ -355,7 +355,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(donateButton);
     donateButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_DONATE));
 
-    JLabel launcherVersion = new JLabel("v" + LauncherGlobals.LAUNCHER_VERSION);
+    JLabel launcherVersion = new JLabel("v" + LauncherGlobals.LAUNCHER_VERSION + " ");
     launcherVersion.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
     launcherVersion.setForeground(CustomColors.INTERFACE_SIDEPANE_FOOTNOTE);
     launcherVersion.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -523,7 +523,7 @@ public class LauncherGUI extends BaseGUI {
     Icon updateIcon = IconFontSwing.buildIcon(FontAwesome.CLOUD_DOWNLOAD, 16, Color.WHITE);
     updateButton = new JButton(updateIcon);
     updateButton.setBounds(691, 26, 36, 36);
-    updateButton.setToolTipText(_localeManager.getValue("b.update_launcher"));
+    updateButton.setToolTipText(_localeManager.getValue("b.update"));
     updateButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     updateButton.setFocusPainted(false);
     updateButton.setFocusable(false);

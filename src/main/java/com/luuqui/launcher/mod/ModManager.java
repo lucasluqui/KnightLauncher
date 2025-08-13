@@ -423,7 +423,7 @@ public class ModManager
       _launcherCtx.settingsGUI.forceRebuildButton.setEnabled(true);
     } catch (Exception ignored) {}
 
-    _discordPresenceClient.setDetails(_localeManager.getValue("presence.launch_ready"));
+    _discordPresenceClient.setDetails(_localeManager.getValue("presence.ready"));
   }
 
   public void extractSafeguard ()
