@@ -76,10 +76,6 @@ public class LauncherApp
   @SuppressWarnings("ConstantConditions")
   private void init ()
   {
-    if (LauncherGlobals.LAUNCHER_VERSION.contains("dev")) {
-      log.debug("Diverting logs to console");
-    }
-
     setupFileLogging();
     logVMInfo();
     logGameVMInfo();
@@ -322,8 +318,8 @@ public class LauncherApp
   private void checkShortcut ()
   {
     if (Settings.createShortcut
-            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME)
-            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + LauncherGlobals.LAUNCHER_NAME + ".desktop")) {
+            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName())
+            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName() + ".desktop")) {
       BufferedImage bimg = ImageUtil.loadImageWithinJar("/rsrc/img/icon-512.png");
       try {
         if (SystemUtil.isWindows()) {
@@ -350,19 +346,19 @@ public class LauncherApp
       "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
       LauncherGlobals.USER_DIR,
       LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-512.ico",
-      "Start " + LauncherGlobals.LAUNCHER_NAME,
-      LauncherGlobals.LAUNCHER_NAME
+      "Start " + BuildConfig.getName(),
+      BuildConfig.getName()
     );
   }
 
   private void makeDesktopFile ()
   {
-    File desktopFile = new File(DesktopUtil.getPathToDesktop(), LauncherGlobals.LAUNCHER_NAME + ".desktop");
+    File desktopFile = new File(DesktopUtil.getPathToDesktop(), BuildConfig.getName() + ".desktop");
     try {
       BufferedWriter out = new BufferedWriter(new FileWriter(desktopFile));
       out.write("[Desktop Entry]\n");
       out.write("Version=1.5\n");
-      out.write("Name=" + LauncherGlobals.LAUNCHER_NAME + "\n");
+      out.write("Name=" + BuildConfig.getName() + "\n");
       out.write("Comment=Open source game launcher for a certain game\n");
       out.write("Exec=java -jar KnightLauncher.jar\n");
       out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.png\n");
@@ -405,7 +401,7 @@ public class LauncherApp
       log.error(e);
     }
 
-    log.info(LauncherGlobals.LAUNCHER_NAME + " started. Running version: " + LauncherGlobals.LAUNCHER_VERSION);
+    log.info(BuildConfig.getName() + " started. Running version: " + BuildConfig.getVersion());
   }
 
   private void logVMInfo ()
@@ -564,8 +560,10 @@ public class LauncherApp
       _launcherCtx.launcherGUI.eventHandler.latestRelease = latestRelease;
       _launcherCtx.launcherGUI.eventHandler.latestChangelog = latestChangelog;
 
-      if (!latestRelease.equalsIgnoreCase(LauncherGlobals.LAUNCHER_VERSION)) {
-        if (Settings.autoUpdate && !LauncherGlobals.LAUNCHER_VERSION.contains("dev") && !LauncherGlobals.LAUNCHER_VERSION.contains("rc")) {
+      String currentVersion = BuildConfig.getVersion();
+
+      if (!latestRelease.equalsIgnoreCase(currentVersion)) {
+        if (Settings.autoUpdate && !currentVersion.contains("SNAPSHOT")) {
           // Check if we're coming from a failed update, in that case do not autoupdate even if all other conditions matched.
           if ( !(this.args.length > 0 && this.args[0].equals("updateFailed")) ) {
             _launcherCtx.launcherGUI.eventHandler.updateLauncher(latestRelease);

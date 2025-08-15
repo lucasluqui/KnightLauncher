@@ -6,12 +6,6 @@ import java.io.File;
 
 public class LauncherGlobals
 {
-
-  public static final String LAUNCHER_VERSION = "2.3.4";
-  public static final String SPIRALVIEW_VERSION = "2.0.11";
-
-  public static final String LAUNCHER_NAME = "Knight Launcher";
-
   public static final String GITHUB_API = "https://api.github.com/";
   public static final String GITHUB_AUTHOR = "lucasluqui";
   public static final String GITHUB_REPO = "KnightLauncher";

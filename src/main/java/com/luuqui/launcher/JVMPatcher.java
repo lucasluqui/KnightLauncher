@@ -206,7 +206,7 @@ public class JVMPatcher extends BaseGUI
 
     if (!_downloadManager.getQueueStatus(downloadQueue)) {
       String downloadErrMsg = "The Java VM download couldn't be initiated after 3 attempts." +
-          "\n" + LauncherGlobals.LAUNCHER_NAME + " will boot without patching but be aware game performance might not be the best." +
+          "\n" + BuildConfig.getName() + " will boot without patching but be aware game performance might not be the best." +
           "\nYou can manually restart this patcher heading to the 'Game' tab within the launcher's Settings menu.";
       Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
       log.error(downloadErrMsg);

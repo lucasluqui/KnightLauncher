@@ -2,10 +2,7 @@ package com.luuqui.launcher.editor;
 
 import com.google.inject.Inject;
 import com.luuqui.dialog.Dialog;
-import com.luuqui.launcher.LauncherApp;
-import com.luuqui.launcher.LauncherGlobals;
-import com.luuqui.launcher.LocaleManager;
-import com.luuqui.launcher.ModuleManager;
+import com.luuqui.launcher.*;
 import com.luuqui.launcher.flamingo.FlamingoManager;
 import com.luuqui.util.JavaUtil;
 import com.luuqui.util.ProcessUtil;
@@ -160,7 +157,7 @@ public class EditorsEventHandler
   public void selectedServerChanged ()
   {
     if(_flamingoManager.getSelectedServer().isOfficial()) {
-      this.gui.footerLabel.setText(_localeManager.getValue("m.powered_by_spiralview", LauncherGlobals.SPIRALVIEW_VERSION));
+      this.gui.footerLabel.setText(_localeManager.getValue("m.powered_by_spiralview", BuildConfig.getSpiralviewVersion()));
     } else {
       this.gui.footerLabel.setText(_localeManager.getValue("m.viewing_editors", _flamingoManager.getSelectedServer().name));
     }

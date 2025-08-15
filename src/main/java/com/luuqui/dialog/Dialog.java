@@ -1,5 +1,6 @@
 package com.luuqui.dialog;
 
+import com.luuqui.launcher.BuildConfig;
 import com.luuqui.launcher.CustomColors;
 import com.luuqui.launcher.Fonts;
 import com.luuqui.launcher.LauncherGlobals;
@@ -22,7 +23,7 @@ public class Dialog
 
   public static void push (String msg, int messageType)
   {
-    push(msg, LauncherGlobals.LAUNCHER_NAME, messageType);
+    push(msg, BuildConfig.getName(), messageType);
   }
 
   public static boolean pushWithConfirm (String msg, String title, int messageType)
@@ -35,7 +36,7 @@ public class Dialog
   @SuppressWarnings("unused")
   public static boolean pushWithConfirm (String msg, int messageType)
   {
-    return pushWithConfirm(msg, LauncherGlobals.LAUNCHER_NAME, messageType);
+    return pushWithConfirm(msg, BuildConfig.getName(), messageType);
   }
 
   private static JTextArea formatMessage (String msg)

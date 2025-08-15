@@ -645,7 +645,7 @@ public class LauncherEventHandler
     Dialog.push(_localeManager.getValue(
         "m.changelog_text",
         new String[] {
-          LauncherGlobals.LAUNCHER_VERSION,
+          BuildConfig.getVersion(),
           this.latestRelease, this.latestChangelog
         }), JOptionPane.INFORMATION_MESSAGE);
   }
@@ -851,6 +851,6 @@ public class LauncherEventHandler
     return !SystemUtil.isWindows() || ProcessUtil.isProcessRunning("java.exe", _flamingoManager.getSelectedServer().isOfficial() ? "Spiral Knights" : _flamingoManager.getSelectedServer().name);
   }
 
-  private final String[] RPC_COMMAND_LINE = new String[] { ".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe", LauncherGlobals.LAUNCHER_VERSION };
+  private final String[] RPC_COMMAND_LINE = new String[] { ".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe", BuildConfig.getVersion() };
 
 }

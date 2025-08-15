@@ -858,7 +858,7 @@ public class SettingsGUI extends BaseGUI
 
     aboutPanel.setComponentZOrder(creditsPaneScrollBar, 0);
 
-    labelFlamingoStatus = new JLabel(_localeManager.getValue("m.kl_version", LauncherGlobals.LAUNCHER_VERSION));
+    labelFlamingoStatus = new JLabel(_localeManager.getValue("m.kl_version", BuildConfig.getVersion()));
     labelFlamingoStatus.setBounds(25, 327, 600, 20);
     labelFlamingoStatus.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
     aboutPanel.add(labelFlamingoStatus);

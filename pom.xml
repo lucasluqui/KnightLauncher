@@ -2,14 +2,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>KnightLauncher</groupId>
+
+  <groupId>com.luuqui</groupId>
   <artifactId>KnightLauncher</artifactId>
-  <version>2.3.4</version>
-  <name>KnightLauncher</name>
+  <version>2.3.5-SNAPSHOT</version>
+
+  <name>Knight Launcher</name>
   <description>Open source game launcher for Spiral Knights.</description>
 
-  <dependencies>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
 
+  <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
@@ -138,15 +144,18 @@
     </dependency>
 
     <!-- End of local dependencies. -->
-
   </dependencies>
 
   <build>
-    <finalName>${artifactId}</finalName>
+    <finalName>${project.artifactId}</finalName>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
       <resource>
         <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/resources/rsrc/build</directory>
+        <filtering>true</filtering>
       </resource>
     </resources>
     <plugins>
@@ -184,17 +193,6 @@
         </executions>
       </plugin>
       <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.4.2</version>
-        <configuration>
-          <archive>
-            <manifest>
-              <mainClass>com.luuqui.launcher.LauncherApp</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.7.1</version>
         <executions>
@@ -209,6 +207,11 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>com.luuqui.launcher.LauncherApp</mainClass>
+            </manifest>
+          </archive>
           <appendAssemblyId>false</appendAssemblyId>
         </configuration>
       </plugin>

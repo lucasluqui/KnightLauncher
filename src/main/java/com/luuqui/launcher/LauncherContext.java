@@ -11,14 +11,12 @@ import com.luuqui.launcher.setting.SettingsGUI;
 @Singleton
 public class LauncherContext
 {
-
   public LauncherGUI launcherGUI;
   public SettingsGUI settingsGUI;
   public ModListGUI modListGUI;
   public EditorsGUI editorsGUI;
   public JVMPatcher jvmPatcher;
   public Updater updater;
-
   @Inject private DiscordPresenceClient _discordPresenceClient;
   @Inject public ProgressBar _progressBar = new ProgressBar();
 

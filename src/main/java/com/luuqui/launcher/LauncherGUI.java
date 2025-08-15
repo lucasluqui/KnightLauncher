@@ -52,7 +52,7 @@ public class LauncherGUI extends BaseGUI {
   private void compose ()
   {
     guiFrame.setVisible(false);
-    guiFrame.setTitle(_localeManager.getValue("t.main", LauncherGlobals.LAUNCHER_VERSION));
+    guiFrame.setTitle(_localeManager.getValue("t.main", BuildConfig.getVersion()));
     guiFrame.setResizable(false);
     guiFrame.setBounds(100, 100, this.width, this.height);
     guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -135,7 +135,7 @@ public class LauncherGUI extends BaseGUI {
       }
     });
 
-    JLabel launcherName = new JLabel(LauncherGlobals.LAUNCHER_NAME);
+    JLabel launcherName = new JLabel(BuildConfig.getName());
     launcherName.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
     launcherName.setHorizontalAlignment(SwingConstants.CENTER);
     launcherName.setVerticalAlignment(SwingConstants.CENTER);
@@ -355,7 +355,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(donateButton);
     donateButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_DONATE));
 
-    JLabel launcherVersion = new JLabel("v" + LauncherGlobals.LAUNCHER_VERSION + " ");
+    JLabel launcherVersion = new JLabel("v" + BuildConfig.getVersion() + " ");
     launcherVersion.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
     launcherVersion.setForeground(CustomColors.INTERFACE_SIDEPANE_FOOTNOTE);
     launcherVersion.setHorizontalAlignment(SwingConstants.RIGHT);

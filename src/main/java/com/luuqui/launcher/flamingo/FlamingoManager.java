@@ -2,6 +2,7 @@ package com.luuqui.launcher.flamingo;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.luuqui.launcher.BuildConfig;
 import com.luuqui.launcher.LauncherGlobals;
 import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.flamingo.data.Status;
@@ -133,7 +134,7 @@ public class FlamingoManager
   {
     try {
       request = Arrays.copyOf(request, request.length + 1);
-      request[request.length - 1] = "version=" + TextUtil.extractNumericFromString(LauncherGlobals.LAUNCHER_VERSION);
+      request[request.length - 1] = "version=" + TextUtil.extractNumericFromString(BuildConfig.getVersion());
       return RequestUtil.makeRequest(method, "http://" + ENDPOINT + ":" + PORT + endpoint, request);
     } catch (Exception e) {
       throw new Exception();

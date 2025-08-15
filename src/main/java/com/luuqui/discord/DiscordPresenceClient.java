@@ -2,6 +2,7 @@ package com.luuqui.discord;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.luuqui.launcher.BuildConfig;
 import com.luuqui.launcher.LocaleManager;
 import com.luuqui.launcher.LauncherGlobals;
 import net.arikia.dev.drpc.DiscordEventHandlers;
@@ -76,7 +77,7 @@ public class DiscordPresenceClient
   {
     DiscordRichPresence.Builder presence = new DiscordRichPresence.Builder(_localeManager.getValue("presence.using"));
     presence.setDetails(details);
-    presence.setBigImage("icon-512", "Knight Launcher " + LauncherGlobals.LAUNCHER_VERSION);
+    presence.setBigImage("icon-512", "Knight Launcher " + BuildConfig.getVersion());
     DiscordRPC.discordUpdatePresence(presence.build());
     log.info("Updating discord presence detail", "detail", details);
   }
