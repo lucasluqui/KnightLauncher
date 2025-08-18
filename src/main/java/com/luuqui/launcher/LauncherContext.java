@@ -8,6 +8,8 @@ import com.luuqui.launcher.mod.ModListGUI;
 import com.luuqui.launcher.setting.Settings;
 import com.luuqui.launcher.setting.SettingsGUI;
 
+import static com.luuqui.launcher.Log.log;
+
 @Singleton
 public class LauncherContext
 {
@@ -34,7 +36,11 @@ public class LauncherContext
   {
     _discordPresenceClient.stop();
     if (force || !Settings.keepOpen) {
-      launcherGUI.guiFrame.dispose();
+      try {
+        launcherGUI.guiFrame.dispose();
+      } catch (NullPointerException e) {
+        log.error("Failed to dispose main GUI Frame on exit");
+      }
       System.exit(0);
     }
   }
