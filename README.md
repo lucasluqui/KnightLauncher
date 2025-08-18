@@ -92,20 +92,12 @@ Unless hyperlinked names shown below represent Discord usernames. Hyperlinked na
 </a>
 
 ### Translators
-Thank you all for helping Knight Launcher, making it usable for everyone worldwide!
-- Arabic: asan_ploto.
-- Chinese: [yihleego](https://github.com/yihleego).
-- Deutsch: Biral, Airbee.
-- Eesti: [Thyrux](https://github.com/Thyrux).
-- Français: PtitKrugger.
-- Italiano: [Lawn](https://github.com/Foyylaroni), Kaos.
-- Japanese: Armin.
-- Polski: [Crowfunder](https://github.com/Crowfunder).
-- Português (Brasil): Stret, Gugaarleo.
-- Русский: Milliath, [Puzovoz](https://github.com/Puzovoz), [quardbreak](https://github.com/quardbreak).
+Translators are credited in their respective language file, [click here to browse](https://github.com/lucasluqui/KnightLauncher/tree/main/src/main/resources/rsrc/lang).
 
-### Testing/QA
-- Nurr, yihleego, Bidoknight, Carpvindra, Mushspore, CafuneAndChill, Xan, analarmingalarm, parma, loonadra, ultrongr, milliath, Puzovoz, Stret, 3xample.
+Thank you all for helping to make Knight Launcher usable for everyone worldwide!
+
+### QA/Testing
+- Nurr, yihleego, Bidoknight, Carpvindra, Mushspore, CafuneAndChill, Xan, analarmingalarm, parma, loonadra, ultrongr, milliath, Puzovoz, Stret, 3xample, top_platinum, Criptobeta.
 
 ### Third Party Libraries
 The following open source libraries are used by Knight Launcher:
@@ -113,6 +105,7 @@ The following open source libraries are used by Knight Launcher:
 - [Guava](https://github.com/google/guava)
 - [Guice](https://github.com/google/guice)
 - [Apache Commons IO](https://github.com/apache/commons-io)
+- [Apache Commons Text](https://github.com/apache/commons-text)
 - [Image4J](https://github.com/imcdonagh/image4j)
 - [Zip4J](https://github.com/srikanth-lingala/zip4j)
 - [flatlaf](https://github.com/JFormDesigner/FlatLaf)
