@@ -315,7 +315,7 @@ public class ModManager
     }
 
     // Make sure no cheat mod slips in.
-    if (!selectedServer.isOfficial()) extractSafeguard();
+    if (selectedServer.isOfficial()) extractSafeguard();
 
     // Clean the game from unwanted files.
     clean();
