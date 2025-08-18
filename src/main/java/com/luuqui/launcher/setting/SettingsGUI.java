@@ -9,6 +9,7 @@ import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
+import org.apache.commons.text.WordUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -852,7 +853,15 @@ public class SettingsGUI extends BaseGUI
     credits.setBackground(null);
     credits.setEditable(false);
     credits.setHighlighter(null);
-    credits.setText(_localeManager.getValue("m.credits_text"));
+    credits.setAlignmentX(0);
+    credits.setText(_localeManager.getValue(
+        "m.credits_template", new String[] {
+            WordUtils.wrap(_localeManager.getValue("m.credits_contributors"), 90),
+            _localeManager.getValue("m.credits_translators"),
+            WordUtils.wrap(_localeManager.getValue("m.credits_qa"), 90),
+            WordUtils.wrap(_localeManager.getValue("m.credits_libs"), 90)
+        })
+    );
     creditsPane.add(credits);
     credits.setCaretPosition(0);
 
