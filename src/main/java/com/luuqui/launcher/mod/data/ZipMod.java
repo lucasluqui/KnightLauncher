@@ -113,15 +113,20 @@ public class ZipMod extends Mod
       }
 
       if (stamps.containsKey(fileHeaderFileName)) {
-        long stamp = Long.parseLong(stamps.getProperty(fileHeaderFileName));
+        long vanillaStamp = Long.parseLong(stamps.getProperty(fileHeaderFileName));
+        long modStamp = fileHeader.getLastModifiedTimeEpoch();
 
         // File is older than the vanilla counterpart.
-        if (fileHeader.getLastModifiedTime() < stamp) {
+        if (modStamp < vanillaStamp) {
           validState = 3;
           this.hasInvalidFileHeaders = true;
           log.info(
               "Ignored file header older than vanilla counterpart",
-              "fileName", this.getFileName(), "header", fileHeaderFileName);
+              "fileName", this.getFileName(),
+              "header", fileHeaderFileName,
+              "modStamp", modStamp,
+              "vanillaStamp", vanillaStamp
+          );
         }
       }
 
