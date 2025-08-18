@@ -512,11 +512,49 @@ public class ModManager
 
         // Parse any invalid file header warnings.
         if (zipMod.hasInvalidFileHeaders()) {
-          List<String> invalidFileHeaders = new ArrayList<>();
+          List<String> protectedFileHeaders = new ArrayList<>();
+          List<String> illegalFileHeaders = new ArrayList<>();
+          List<String> outdatedFileHeaders = new ArrayList<>();
+
           for (Map.Entry<FileHeader, Integer> entry : zipMod.getFileHeaderData().getFileHeaders().entrySet()) {
-            if (entry.getValue() > 0) invalidFileHeaders.add(entry.getKey().getFileName());
+            if (entry.getValue() == 1) {
+              protectedFileHeaders.add(entry.getKey().getFileName());
+            } else if (entry.getValue() == 2) {
+              illegalFileHeaders.add(entry.getKey().getFileName());
+            } else if (entry.getValue() == 3) {
+              outdatedFileHeaders.add(entry.getKey().getFileName());
+            }
           }
-          zipMod.addWarningMessage(_localeManager.getValue("m.warning_file_headers", String.join("\n", invalidFileHeaders)));
+
+          if (!protectedFileHeaders.isEmpty()) {
+            zipMod.addWarningMessage(_localeManager.getValue(
+                "m.warning_file_headers",
+                new String[] {
+                    String.join("\n", protectedFileHeaders),
+                    _localeManager.getValue("m.warning_file_headers_protected")
+                })
+            );
+          }
+
+          if (!illegalFileHeaders.isEmpty()) {
+            zipMod.addWarningMessage(_localeManager.getValue(
+                "m.warning_file_headers",
+                new String[] {
+                    String.join("\n", illegalFileHeaders),
+                    _localeManager.getValue("m.warning_file_headers_illegal")
+                })
+            );
+          }
+
+          if (!outdatedFileHeaders.isEmpty()) {
+            zipMod.addWarningMessage(_localeManager.getValue(
+                "m.warning_file_headers",
+                new String[] {
+                    String.join("\n", outdatedFileHeaders),
+                    _localeManager.getValue("m.warning_file_headers_outdated")
+                })
+            );
+          }
         }
 
         // Parse any incompatible PX warnings.
