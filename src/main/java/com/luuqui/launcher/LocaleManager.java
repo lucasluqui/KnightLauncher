@@ -5,6 +5,8 @@ import com.luuqui.launcher.setting.Settings;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Properties;
 
@@ -13,11 +15,8 @@ import static com.luuqui.launcher.Log.log;
 @Singleton
 public class LocaleManager
 {
-  private final Properties prop = new Properties();
-  private InputStream propStream = null;
-
-  private final Properties propFallback = new Properties();
-  private InputStream propFallbackStream = null;
+  private final Properties _lang = new Properties();
+  private final Properties _langFallback = new Properties();
 
   public LocaleManager ()
   {
@@ -26,8 +25,24 @@ public class LocaleManager
 
   public void init ()
   {
-    this.propStream = LocaleManager.class.getResourceAsStream("/rsrc/lang/lang_" + Settings.lang + ".properties");
-    this.propFallbackStream = LocaleManager.class.getResourceAsStream("/rsrc/lang/lang_en.properties");
+    InputStream langStream = LocaleManager.class.getResourceAsStream("/rsrc/lang/lang_" + Settings.lang + ".properties");
+    InputStream langFallbackStream = LocaleManager.class.getResourceAsStream("/rsrc/lang/lang_en.properties");
+
+    try (final InputStreamReader in = new InputStreamReader(
+        langStream, StandardCharsets.UTF_8)) {
+      _lang.load(in);
+    } catch (IOException e) {
+      log.error("Failed to load language file");
+      log.error(e);
+    }
+
+    try (final InputStreamReader in = new InputStreamReader(
+        langFallbackStream, StandardCharsets.UTF_8)) {
+      _langFallback.load(in);
+    } catch (IOException e) {
+      log.error("Failed to load fallback language file");
+      log.error(e);
+    }
   }
 
   public String getValue (String key)
@@ -35,21 +50,11 @@ public class LocaleManager
     String value = null;
 
     // Look for this key's value on the selected language properties file.
-    try {
-      prop.load(propStream);
-      value = prop.getProperty(key);
-    } catch (IOException e) {
-      log.error(e);
-    }
+    value = _lang.getProperty(key);
 
     // The value is still null, we look on the fallback properties file instead (English).
     if (value == null) {
-      try {
-        propFallback.load(propFallbackStream);
-        value = propFallback.getProperty(key);
-      } catch (IOException e) {
-        log.error(e);
-      }
+      value = _langFallback.getProperty(key);
     }
 
     // Is it still null? We return the key, and that's it, otherwise the value we found.
@@ -61,25 +66,15 @@ public class LocaleManager
     String value = null;
 
     // Look for this key's value on the selected language properties file.
-    try {
-      prop.load(propStream);
-      value = prop.getProperty(key);
+    value = _lang.getProperty(key);
 
-      // Format it.
-      if (value != null) value = MessageFormat.format(prop.getProperty(key), arg);
-    } catch (IOException e) {
-      log.error(e);
-    }
+    // Format it.
+    if (value != null) value = MessageFormat.format(_lang.getProperty(key), arg);
 
     // The value is still null, we look on the fallback properties file instead (English).
     if (value == null) {
-      try {
-        propFallback.load(propFallbackStream);
-        value = propFallback.getProperty(key);
-        if (value != null) value = MessageFormat.format(propFallback.getProperty(key), arg);
-      } catch (IOException e) {
-        log.error(e);
-      }
+      value = _langFallback.getProperty(key);
+      if (value != null) value = MessageFormat.format(_langFallback.getProperty(key), arg);
     }
 
     // Is it still null? We return the key, and that's it, otherwise the value we found.
@@ -91,25 +86,15 @@ public class LocaleManager
     String value = null;
 
     // Look for this key's value on the selected language properties file.
-    try {
-      prop.load(propStream);
-      value = prop.getProperty(key);
+    value = _lang.getProperty(key);
 
-      // Format it (multiple).
-      if (value != null) value = MessageFormat.format(prop.getProperty(key), (Object[]) args);
-    } catch (IOException e) {
-      log.error(e);
-    }
+    // Format it (multiple).
+    if (value != null) value = MessageFormat.format(_lang.getProperty(key), (Object[]) args);
 
     // The value is still null, we look on the fallback properties file instead (English).
     if (value == null) {
-      try {
-        propFallback.load(propFallbackStream);
-        value = propFallback.getProperty(key);
-        if (value != null) value = MessageFormat.format(propFallback.getProperty(key), (Object[]) args);
-      } catch (IOException e) {
-        log.error(e);
-      }
+      value = _langFallback.getProperty(key);
+      if (value != null) value = MessageFormat.format(_langFallback.getProperty(key), (Object[]) args);
     }
 
     // Is it still null? We return the key, and that's it, otherwise the value we found.
