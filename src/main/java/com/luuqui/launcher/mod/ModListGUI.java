@@ -2,6 +2,8 @@ package com.luuqui.launcher.mod;
 
 import com.google.inject.Inject;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.jhlabs.image.GaussianFilter;
+import com.jhlabs.image.GrayscaleFilter;
 import com.luuqui.dialog.Dialog;
 import com.luuqui.launcher.*;
 import com.luuqui.launcher.mod.data.JarMod;
@@ -18,6 +20,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 import static com.luuqui.launcher.mod.Log.log;
@@ -25,11 +29,9 @@ import static com.luuqui.launcher.mod.Log.log;
 public class ModListGUI extends BaseGUI
 {
   @Inject public ModListEventHandler eventHandler;
-
   @Inject protected ModManager _modManager;
   @Inject protected LocaleManager _localeManager;
-
-  protected String currentWarning = "";
+  protected String globalWarningMessage = "";
 
   @Inject
   public ModListGUI ()
@@ -39,6 +41,7 @@ public class ModListGUI extends BaseGUI
 
   public void init ()
   {
+    setupImages();
     compose();
   }
 
@@ -66,41 +69,75 @@ public class ModListGUI extends BaseGUI
     labelModCountText.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     guiFrame.getContentPane().add(labelModCountText);
 
-    warningNotice = new JButton(_localeManager.getValue("m.warning"));
-    warningNotice.setIcon(IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 13, Color.BLACK));
-    warningNotice.setBounds(650, 87, 110, 23);
-    warningNotice.setToolTipText(_localeManager.getValue("m.warning"));
-    warningNotice.setFocusPainted(false);
-    warningNotice.setFocusable(false);
-    warningNotice.setForeground(Color.BLACK);
-    warningNotice.setBackground(CustomColors.WARNING);
-    warningNotice.putClientProperty(FlatClientProperties.STYLE,
+    globalWarningButton = new JButton(_localeManager.getValue("m.warning"));
+    globalWarningButton.setIcon(IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 13, Color.BLACK));
+    globalWarningButton.setBounds(650, 87, 110, 23);
+    globalWarningButton.setToolTipText(_localeManager.getValue("m.warning"));
+    globalWarningButton.setFocusPainted(false);
+    globalWarningButton.setFocusable(false);
+    globalWarningButton.setForeground(Color.BLACK);
+    globalWarningButton.setBackground(CustomColors.WARNING);
+    globalWarningButton.putClientProperty(FlatClientProperties.STYLE,
         "arc: 999; borderWidth: 0");
-    warningNotice.setVisible(false);
-    warningNotice.addActionListener(l -> {
-      Dialog.push(currentWarning, _localeManager.getValue("t.warning"), JOptionPane.ERROR_MESSAGE);
+    globalWarningButton.setVisible(false);
+    globalWarningButton.addActionListener(l -> {
+      Dialog.push(globalWarningMessage, _localeManager.getValue("t.warning"), JOptionPane.ERROR_MESSAGE);
     });
-    guiFrame.getContentPane().add(warningNotice);
+    guiFrame.getContentPane().add(globalWarningButton);
 
+    JPanel modStoreButtonPane = new JPanel() {
+      @Override
+      protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(modStoreButtonImage, 0, 0, null);
+      }
+    };
 
-    Icon modStoreIcon = IconFontSwing.buildIcon(FontAwesome.SEARCH, 10, Color.WHITE);
-    JButton modStoreButton = new JButton(_localeManager.getValue("b.mod_store"));
-    modStoreButton.setIcon(modStoreIcon);
-    modStoreButton.setBounds(240, 5, 175, 25);
-    modStoreButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-    modStoreButton.setFocusPainted(false);
-    modStoreButton.setFocusable(false);
-    modStoreButton.setEnabled(false);
-    modStoreButton.setToolTipText(_localeManager.getValue("m.coming_soon"));
-    guiFrame.getContentPane().add(modStoreButton);
-    //getModsButton.addActionListener(this.eventHandler::openModStore);
+    modStoreButtonPane.setLayout(null);
+    modStoreButtonPane.setBounds(250, 5, 165, 55);
+    modStoreButtonPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    modStoreButtonPane.setToolTipText(_localeManager.getValue("m.coming_soon"));
+
+    JLabel modStoreButtonLabel = new JLabel();
+    modStoreButtonLabel.setIcon(IconFontSwing.buildIcon(FontAwesome.SHOPPING_CART, 16, Color.WHITE));
+    modStoreButtonLabel.setBounds(0, 0, 165, 55);
+    modStoreButtonLabel.setText(_localeManager.getValue("b.mod_store"));
+    modStoreButtonLabel.setFont(Fonts.getFont("defaultMedium", 16.0f, Font.PLAIN));
+    modStoreButtonLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    modStoreButtonLabel.setVerticalAlignment(SwingConstants.CENTER);
+    modStoreButtonPane.add(modStoreButtonLabel);
+
+    modStoreButtonPane.addMouseListener(new MouseListener() {
+      @Override public void mouseClicked(MouseEvent e) { /* this.eventHandler.openModStore(); */ }
+      @Override public void mousePressed(MouseEvent e) { /* this.eventHandler.openModStore(); */ }
+      @Override public void mouseReleased(MouseEvent e) { /* this.eventHandler.openModStore(); */ }
+      @Override public void mouseEntered(MouseEvent e) {
+        /*
+        modStoreButtonPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        modStoreButtonImage = modStoreButtonImageFocused;
+        modStoreButtonPane.repaint();
+         */
+      }
+      @Override public void mouseExited(MouseEvent e) {
+        /*
+        modStoreButtonPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        modStoreButtonImage = modStoreButtonImageUnfocused;
+        modStoreButtonPane.repaint();
+         */
+      }
+    });
+    guiFrame.add(modStoreButtonPane);
 
     JButton getModsButton = new JButton(_localeManager.getValue("b.get_mods"));
     getModsButton.setBounds(420, 5, 175, 25);
     getModsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     getModsButton.setFocusPainted(false);
     getModsButton.setFocusable(false);
+    getModsButton.setForeground(Color.WHITE);
+    getModsButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     getModsButton.setToolTipText(_localeManager.getValue("b.get_mods"));
+    getModsButton.putClientProperty(FlatClientProperties.STYLE,
+        "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(getModsButton);
     getModsButton.addActionListener(this.eventHandler::getModsEvent);
 
@@ -109,7 +146,11 @@ public class ModListGUI extends BaseGUI
     modFolderButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     modFolderButton.setFocusPainted(false);
     modFolderButton.setFocusable(false);
+    modFolderButton.setForeground(Color.WHITE);
+    modFolderButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     modFolderButton.setToolTipText(_localeManager.getValue("b.open_mods_dir"));
+    modFolderButton.putClientProperty(FlatClientProperties.STYLE,
+        "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(modFolderButton);
     modFolderButton.addActionListener(this.eventHandler::openModsFolderEvent);
 
@@ -118,7 +159,11 @@ public class ModListGUI extends BaseGUI
     enableAllModsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     enableAllModsButton.setFocusPainted(false);
     enableAllModsButton.setFocusable(false);
+    enableAllModsButton.setForeground(Color.WHITE);
+    enableAllModsButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     enableAllModsButton.setToolTipText(_localeManager.getValue("b.enable_all_mods"));
+    enableAllModsButton.putClientProperty(FlatClientProperties.STYLE,
+        "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(enableAllModsButton);
     enableAllModsButton.addActionListener(this.eventHandler::enableAllModsEvent);
 
@@ -127,7 +172,11 @@ public class ModListGUI extends BaseGUI
     disableAllModsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     disableAllModsButton.setFocusPainted(false);
     disableAllModsButton.setFocusable(false);
+    disableAllModsButton.setForeground(Color.WHITE);
+    disableAllModsButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     disableAllModsButton.setToolTipText(_localeManager.getValue("b.disable_all_mods"));
+    disableAllModsButton.putClientProperty(FlatClientProperties.STYLE,
+        "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(disableAllModsButton);
     disableAllModsButton.addActionListener(this.eventHandler::disableAllModsEvent);
 
@@ -169,19 +218,17 @@ public class ModListGUI extends BaseGUI
 
     searchBox = new JTextField();
     searchBox.setBounds(250, 85, 300, 27);
-    searchBox.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
+    searchBox.setFont(Fonts.getFont("codeRegular", 11.0f, Font.ITALIC));
+    searchBox.setBackground(CustomColors.INTERFACE_TEXTFIELD_BACKGROUND);
+    searchBox.setForeground(Color.WHITE);
     searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, _localeManager.getValue("m.modlist_searchbox_placeholder"));
+    searchBox.putClientProperty(FlatClientProperties.STYLE,
+        "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(searchBox);
     searchBox.addActionListener(l -> eventHandler.searchMod());
     searchBox.addKeyListener(new KeyAdapter() {
       public void keyReleased(KeyEvent e) { eventHandler.searchMod(); }
     });
-
-    JButton searchButton = new JButton(_localeManager.getValue("m.search"));
-    searchButton.setBounds(475, 85, 80, 26);
-    guiFrame.getContentPane().add(searchButton);
-    searchButton.addActionListener(l -> this.eventHandler.searchMod());
-    searchButton.setVisible(false);
 
     modListPane = new JPanel();
     modListPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
@@ -213,7 +260,6 @@ public class ModListGUI extends BaseGUI
 
   public void updateModList (String searchString)
   {
-    Color[] backgroundColors = { CustomColors.INTERFACE_MODLIST_BACKGROUND_LIGHT, CustomColors.INTERFACE_MODLIST_BACKGROUND_DARK };
     int count = 0;
 
     if (modListPane == null) {
@@ -424,6 +470,17 @@ public class ModListGUI extends BaseGUI
     );
 
     modListPane.updateUI();
+
+    // Put the scroll bar back to the top after updating.
+    SwingUtilities.invokeLater(() -> modListPaneScrollBar.getViewport().setViewPosition(new Point(0, 0)));
+  }
+
+  private void setupImages ()
+  {
+    modStoreButtonImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/mod-store-btn.png"), 165, 55);
+    modStoreButtonImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(5f).filter(modStoreButtonImageFocused, null), 25);
+    modStoreButtonImageUnfocused = new GrayscaleFilter().filter(modStoreButtonImageFocused, null);
+    modStoreButtonImage = modStoreButtonImageUnfocused;
   }
 
   public JPanel modListPanel;
@@ -439,6 +496,9 @@ public class ModListGUI extends BaseGUI
   public JLabel displayedModsLabel = new JLabel();
   public JLabel viewingModsLabel = new JLabel();
   public JLabel labelModCountText;
-  public JButton warningNotice = new JButton();
+  public JButton globalWarningButton = new JButton();
+  public BufferedImage modStoreButtonImage = null;
+  public BufferedImage modStoreButtonImageFocused = null;
+  public BufferedImage modStoreButtonImageUnfocused = null;
 
 }

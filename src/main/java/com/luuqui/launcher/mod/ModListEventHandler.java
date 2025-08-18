@@ -26,7 +26,6 @@ import static com.luuqui.launcher.mod.Log.log;
 public class ModListEventHandler
 {
   @Inject private ModListGUI gui;
-
   protected ModManager _modManager;
   protected LocaleManager _localeManager;
   protected SettingsManager _settingsManager;
@@ -139,29 +138,14 @@ public class ModListEventHandler
   public void showDirectoriesWarning (boolean show)
   {
     if (!show) {
-      this.gui.warningNotice.setVisible(false);
+      this.gui.globalWarningButton.setVisible(false);
       return;
     }
 
     // Show the warning with a slight delay to make sure the GUI can load beforehand.
     Thread showDirectoriesWarningThread = new Thread(() -> {
-      this.gui.warningNotice.setVisible(true);
-      this.gui.currentWarning = _localeManager.getValue("error.folders_within_mods_folder");
-    });
-    ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
-  }
-
-  public void showIncompatibleModsWarning (boolean show)
-  {
-    if (!show) {
-      this.gui.warningNotice.setVisible(false);
-      return;
-    }
-
-    // Show the warning with a slight delay to make sure the GUI can load beforehand.
-    Thread showDirectoriesWarningThread = new Thread(() -> {
-      this.gui.warningNotice.setVisible(true);
-      this.gui.currentWarning = _localeManager.getValue("error.incompatible_mod");
+      this.gui.globalWarningButton.setVisible(true);
+      this.gui.globalWarningMessage = _localeManager.getValue("error.folders_within_mods_folder");
     });
     ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
   }

@@ -743,7 +743,7 @@ public class SettingsGUI extends BaseGUI
 
     portTextField = new JTextField();
     portTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
-    portTextField.setBounds(280, 304, 55, 25);
+    portTextField.setBounds(280, 304, 65, 25);
     advancedPanel.add(portTextField);
     portTextField.setText(String.valueOf(Settings.gamePort));
 
@@ -801,6 +801,8 @@ public class SettingsGUI extends BaseGUI
     advancedPanel.add(resetConnectionSettingsButton);
     resetConnectionSettingsButton.addActionListener(eventHandler::resetConnectionSettingsButtonEvent);
 
+    serverAddressTextField.setCaretPosition(0);
+    portTextField.setCaretPosition(0);
     publicKeyTextField.setCaretPosition(0);
     getdownURLTextField.setCaretPosition(0);
 
