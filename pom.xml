@@ -5,10 +5,25 @@
 
   <groupId>com.luuqui</groupId>
   <artifactId>KnightLauncher</artifactId>
+  <packaging>jar</packaging>
   <version>2.3.5-SNAPSHOT</version>
 
   <name>Knight Launcher</name>
   <description>Open source game launcher for Spiral Knights.</description>
+
+  <licenses>
+    <license>
+      <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>luuqui</id>
+      <name>Lucas Allegri</name>
+      <email>contact@luuqui.com</email>
+    </developer>
+  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,91 +36,76 @@
       <artifactId>guava</artifactId>
       <version>33.4.8-jre</version>
     </dependency>
-
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
       <version>7.0.0</version>
     </dependency>
-
     <dependency>
       <groupId>com.formdev</groupId>
       <artifactId>flatlaf</artifactId>
       <version>3.6</version>
     </dependency>
-
     <dependency>
       <groupId>com.github.vatbub</groupId>
       <artifactId>mslinks</artifactId>
       <version>1.0.5.1</version> <!-- Do not update further, requires a JDK higher than 8. -->
     </dependency>
-
     <dependency>
       <groupId>net.lingala.zip4j</groupId>
       <artifactId>zip4j</artifactId>
       <version>2.11.5</version>
     </dependency>
-
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <version>20250517</version>
     </dependency>
-
     <dependency>
       <groupId>com.github.jiconfont</groupId>
       <artifactId>jiconfont-swing</artifactId>
       <version>1.0.1</version>
     </dependency>
-
     <dependency>
       <groupId>com.github.jiconfont</groupId>
       <artifactId>jiconfont-font_awesome</artifactId>
       <version>4.7.0.1</version>
     </dependency>
-
     <dependency>
       <groupId>com.samskivert</groupId>
       <artifactId>samskivert</artifactId>
       <version>1.9</version>
     </dependency>
-
     <dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api-osgi</artifactId>
       <version>2.2.7</version>
     </dependency>
-
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>2.19.0</version>
     </dependency>
-
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
       <version>1.14.0</version>
     </dependency>
-
     <dependency>
       <groupId>com.jhlabs</groupId>
       <artifactId>filters</artifactId>
       <version>2.0.235-1</version>
     </dependency>
-
     <dependency>
       <groupId>com.github.oshi</groupId>
       <artifactId>oshi-core</artifactId>
       <version>6.8.2</version>
     </dependency>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-nop</artifactId>
       <version>2.0.17</version>
     </dependency>
-
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -115,13 +115,11 @@
 
     <!-- Start of local dependencies, found in 'lib' directory. -->
     <!-- Make sure to run 'mvn validate' at least once to install all the local dependencies below. -->
-
     <dependency>
       <groupId>net.arikia.dev</groupId>
       <artifactId>discord-rpc</artifactId>
       <version>20220830184500</version>
     </dependency>
-
     <dependency>
       <groupId>net.sf</groupId>
       <artifactId>image4j</artifactId>
@@ -142,8 +140,6 @@
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/projectx-pcode.jar</systemPath>
     </dependency>
-
-    <!-- End of local dependencies. -->
   </dependencies>
 
   <build>
