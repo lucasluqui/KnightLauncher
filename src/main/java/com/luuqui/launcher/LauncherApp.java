@@ -32,6 +32,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -342,13 +343,18 @@ public class LauncherApp
 
   private void makeShellLink ()
   {
-    DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
-      "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
-      LauncherGlobals.USER_DIR,
-      LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-512.ico",
-      "Start " + BuildConfig.getName(),
-      BuildConfig.getName()
-    );
+    try {
+      DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
+          "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
+          LauncherGlobals.USER_DIR,
+          LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-512.ico",
+          "Start " + BuildConfig.getName(),
+          BuildConfig.getName()
+      );
+    } catch (Exception e) {
+      log.error("Failed to create shell link");
+      log.error(e);
+    }
   }
 
   private void makeDesktopFile ()
