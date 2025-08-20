@@ -149,7 +149,7 @@ public class LauncherApp
     if (!_flamingoManager.getSelectedServer().isOfficial())
       new Thread(_modManager::checkInstalled).start();
 
-    _discordPresenceClient.setDetails(_localeManager.getValue("presence.launch_ready"));
+    _discordPresenceClient.setDetails(_localeManager.getValue("presence.ready"));
   }
 
   private void initLauncherGUI ()
