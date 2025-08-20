@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.luuqui.launcher.BuildConfig;
 import com.luuqui.launcher.LocaleManager;
-import com.luuqui.launcher.LauncherGlobals;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
@@ -33,10 +32,10 @@ public class DiscordPresenceClient
   private boolean stub;
 
   /**
-   * The event handler which handles all the Discord bits.
+   * The event handlers which bother with all the Discord RPC callback bits.
    * Abstracted to Object to avoid injecting the actual class on ARM or Mac.
    */
-  private Object eventHandler;
+  private Object eventHandlers;
 
   /**
    * The locale manager to get localized presence messages.
@@ -54,7 +53,7 @@ public class DiscordPresenceClient
     if (stub) return;
 
     this.clientId = clientId;
-    DiscordRPC.discordInitialize(this.clientId, this.getEventHandler(), true);
+    DiscordRPC.discordInitialize(this.clientId, this.getEventHandlers(), true);
     setDetails(_localeManager.getValue("presence.starting"));
     log.info("Discord presence client is now running.");
   }
@@ -89,21 +88,24 @@ public class DiscordPresenceClient
   }
 
   /**
-   * Return the actual event handler to interface with Discord.
+   * Return the actual event handlers to interface with Discord RPC callbacks.
    * We have to abstract it in the attributes to avoid issues when the class is injected
    * as we don't want that to happen in ARM or Mac.
    *
-   * @return Discord RPC event handler.
+   * @return Discord RPC event handlers.
    */
-  private DiscordEventHandlers getEventHandler ()
+  private DiscordEventHandlers getEventHandlers ()
   {
     if (this.stub) return null;
 
-    if (this.eventHandler == null) {
-      this.eventHandler = new DiscordEventHandlers();
+    if (this.eventHandlers == null) {
+      this.eventHandlers = new DiscordEventHandlers.Builder()
+          .setErroredEventHandler((errCode, err) -> log.error("Discord presence error " + errCode + ": " + err))
+          .setReadyEventHandler((user) -> log.info("Discord presence registered for user: " + user.username))
+          .build();
     }
 
-    return (DiscordEventHandlers) this.eventHandler;
+    return (DiscordEventHandlers) this.eventHandlers;
   }
 
 }
