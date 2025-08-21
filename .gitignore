@@ -25,9 +25,10 @@ bin/
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+# Ignore any compilation output
 /target/
 
-# Properties file
+# KL Properties file
 KnightLauncher.properties
 
 # Rsrc folder
@@ -35,3 +36,6 @@ rsrc/
 
 # IDEA run configurations
 .idea/runConfigurations/
+
+# Settings file
+settings.xml
