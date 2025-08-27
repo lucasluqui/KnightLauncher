@@ -24,7 +24,7 @@ public class SettingsManager
   @Inject protected LocaleManager _localeManager;
   @Inject protected FlamingoManager _flamingoManager;
 
-  private final String PROP_VER = "26";
+  private final String PROP_VER = "27";
   private final String PROP_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
 
   private final Properties prop = new Properties();
@@ -93,6 +93,7 @@ public class SettingsManager
     Settings.playAnimatedBanners = Boolean.parseBoolean(getValue("launcher.playAnimatedBanners"));
     Settings.loadCodeMods = Boolean.parseBoolean(getValue("launcher.loadCodeMods"));
     Settings.fileProtection = Boolean.parseBoolean(getValue("launcher.fileProtection"));
+    Settings.betasEnabled = Boolean.parseBoolean(getValue("launcher.betasEnabled"));
 
     // Compressor settings
     Settings.compressorUnzipMethod = getValue("compressor.unzipMethod");

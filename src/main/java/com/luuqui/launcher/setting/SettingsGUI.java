@@ -35,7 +35,7 @@ public class SettingsGUI extends BaseGUI
   public void init ()
   {
     compose();
-    eventHandler.checkBetaCodes();
+    if (Settings.betasEnabled) eventHandler.checkBetaCodes();
   }
 
   private void compose ()
@@ -58,7 +58,9 @@ public class SettingsGUI extends BaseGUI
 
     tabbedPane.addTab(_localeManager.getValue("tab.launcher"), createLauncherPanel());
     tabbedPane.addTab(_localeManager.getValue("tab.game"), createGamePanel());
-    tabbedPane.addTab(_localeManager.getValue("tab.betas"), createBetasPanel());
+    if (Settings.betasEnabled) {
+      tabbedPane.addTab(_localeManager.getValue("tab.betas"), createBetasPanel());
+    }
     tabbedPane.addTab(_localeManager.getValue("tab.advanced"), createAdvancedPanel());
     tabbedPane.addTab(_localeManager.getValue("tab.about"), createAboutPanel());
 
