@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.luuqui</groupId>
+  <groupId>com.lucasluqui</groupId>
   <artifactId>KnightLauncher</artifactId>
   <packaging>jar</packaging>
   <version>2.3.6-SNAPSHOT</version>
@@ -19,9 +19,9 @@
 
   <developers>
     <developer>
-      <id>luuqui</id>
+      <id>lucasluqui</id>
       <name>Lucas Allegri</name>
-      <email>contact@luuqui.com</email>
+      <email>contact@lucasluqui.com</email>
     </developer>
   </developers>
 
@@ -130,7 +130,7 @@
       For this local dependency, you must copy 'projectx-pcode.jar' from the game's 'code' directory into the
       project's 'lib' directory, as it would be illegal for us to bundle proprietary software.
 
-      The use of this dependency is for 'com.luuqui.bootstrap.Bootstrap' to take over and load in code mods
+      The use of this dependency is for 'com.lucasluqui.bootstrap.Bootstrap' to take over and load in code mods
       when it is required to.
     -->
     <dependency>
@@ -213,7 +213,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>com.luuqui.launcher.LauncherApp</mainClass>
+              <mainClass>com.lucasluqui.launcher.LauncherApp</mainClass>
             </manifest>
           </archive>
           <appendAssemblyId>false</appendAssemblyId>
