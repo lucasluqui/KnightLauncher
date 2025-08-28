@@ -446,11 +446,11 @@ public class LauncherGUI extends BaseGUI {
     altModeEnabledLabel.setVisible(false);
     mainPane.add(altModeEnabledLabel);
 
-    BufferedImage launchBackgroundImage = ImageUtil.generatePlainColorImage(460, 85, new Color(0, 0, 0));
-    launchBackgroundImage = (BufferedImage) ImageUtil.addRoundedCorners(launchBackgroundImage, 25);
+    BufferedImage launchBackgroundImage = ImageUtil.generatePlainColorImage(446, 80, Color.BLACK);
+    launchBackgroundImage = (BufferedImage) ImageUtil.addRoundedCorners(launchBackgroundImage, 35);
     ImageUtil.setAlpha(launchBackgroundImage, (byte) 191);
     launchBackground = new JLabel("");
-    launchBackground.setBounds(20, 407, 460, 85);
+    launchBackground.setBounds(28, 409, 446, 80);
     launchBackground.setIcon(new ImageIcon(launchBackgroundImage));
     launchBackground.setVisible(false);
     mainPane.add(launchBackground);
@@ -458,15 +458,16 @@ public class LauncherGUI extends BaseGUI {
 
     launchState = new JLabel("");
     launchState.setHorizontalAlignment(SwingConstants.LEFT);
-    launchState.setBounds(35, 417, 455, 25);
+    launchState.setBounds(43, 419, 416, 25);
     launchState.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
     launchState.setVisible(false);
     mainPane.add(launchState);
     mainPane.setComponentZOrder(launchState, 0);
 
     launchProgressBar = new JProgressBar();
-    launchProgressBar.setBounds(35, 447, 430, 25);
+    launchProgressBar.setBounds(43, 449, 416, 25);
     launchProgressBar.setVisible(false);
+    launchProgressBar.putClientProperty(FlatClientProperties.STYLE, "arc: 35;");
     mainPane.add(launchProgressBar);
     mainPane.setComponentZOrder(launchProgressBar, 0);
 
