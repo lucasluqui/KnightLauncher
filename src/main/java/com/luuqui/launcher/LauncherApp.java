@@ -7,7 +7,6 @@ import com.luuqui.download.DownloadManager;
 import com.luuqui.download.data.URLDownloadQueue;
 import com.luuqui.launcher.editor.EditorsGUI;
 import com.luuqui.launcher.flamingo.FlamingoManager;
-import com.luuqui.launcher.flamingo.data.Server;
 import com.luuqui.launcher.flamingo.data.Status;
 import com.luuqui.launcher.mod.ModListGUI;
 import com.luuqui.launcher.mod.ModManager;
@@ -30,9 +29,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.*;
 import java.util.List;
-import java.util.regex.PatternSyntaxException;
 
 import static com.luuqui.launcher.Log.log;
 
@@ -94,6 +91,11 @@ public class LauncherApp
     if (SystemUtil.isWindows() || SystemUtil.isUnix()) checkShortcut();
 
     initInterfaces();
+
+    if (!this.requiresJVMPatch() && !this.requiresUpdate()) {
+      initFinished();
+      ThreadingUtil.executeWithDelay(_launcherCtx.launcherGUI::switchVisibility, 200);
+    }
   }
 
   private void initManagers ()
@@ -126,12 +128,10 @@ public class LauncherApp
       this.initSettingsGUI();
       this.initModListGUI();
       this.initEditorsGUI();
-      postInit();
-      ThreadingUtil.executeWithDelay(_launcherCtx.launcherGUI::switchVisibility, 200);
     }
   }
 
-  private void postInit ()
+  private void initFinished ()
   {
     _moduleManager.loadModules();
 

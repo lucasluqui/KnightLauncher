@@ -197,30 +197,7 @@ public class LauncherGUI extends BaseGUI {
     settingsButton.setForeground(Color.WHITE);
     settingsButton.setToolTipText(_localeManager.getValue("b.settings"));
     settingsButton.addActionListener(action -> {
-      mainPane.setVisible(false);
-      layeredModsPane.setVisible(false);
-      layeredEditorsPane.setVisible(false);
-
-      layeredSettingsPane = _launcherCtx.settingsGUI.tabbedPane;
-      layeredSettingsPane.setBounds(300, 75, 800, 550);
-      guiFrame.add(layeredSettingsPane);
-      layeredSettingsPane.setVisible(true);
-
-      layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
-      layeredReturnButton.setBounds(305, 40, 25, 25);
-      layeredReturnButton.setVisible(true);
-      layeredReturnButton.setFocusable(false);
-      layeredReturnButton.setFocusPainted(false);
-      layeredReturnButton.setBorder(null);
-      layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-      layeredReturnButton.addActionListener(l -> {
-        layeredSettingsPane.setVisible(false);
-        layeredModsPane.setVisible(false);
-        layeredEditorsPane.setVisible(false);
-        mainPane.setVisible(true);
-        layeredReturnButton.setVisible(false);
-      });
-      guiFrame.add(layeredReturnButton);
+      showSettingsMenu();
     });
     sidePane.add(settingsButton);
 
@@ -238,30 +215,7 @@ public class LauncherGUI extends BaseGUI {
     modButton.setForeground(Color.WHITE);
     modButton.setToolTipText(_localeManager.getValue("b.mods"));
     modButton.addActionListener(action -> {
-      mainPane.setVisible(false);
-      layeredSettingsPane.setVisible(false);
-      layeredEditorsPane.setVisible(false);
-
-      layeredModsPane = _launcherCtx.modListGUI.modListPanel;
-      layeredModsPane.setBounds(300, 75, 800, 550);
-      guiFrame.add(layeredModsPane);
-      layeredModsPane.setVisible(true);
-
-      layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
-      layeredReturnButton.setBounds(305, 40, 25, 25);
-      layeredReturnButton.setVisible(true);
-      layeredReturnButton.setFocusable(false);
-      layeredReturnButton.setFocusPainted(false);
-      layeredReturnButton.setBorder(null);
-      layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-      layeredReturnButton.addActionListener(l -> {
-        layeredSettingsPane.setVisible(false);
-        layeredModsPane.setVisible(false);
-        layeredEditorsPane.setVisible(false);
-        mainPane.setVisible(true);
-        layeredReturnButton.setVisible(false);
-      });
-      guiFrame.add(layeredReturnButton);
+      showModsMenu();
     });
     sidePane.add(modButton);
 
@@ -279,30 +233,7 @@ public class LauncherGUI extends BaseGUI {
     editorsButton.setForeground(Color.WHITE);
     editorsButton.setToolTipText(_localeManager.getValue("b.editors"));
     editorsButton.addActionListener(action -> {
-      mainPane.setVisible(false);
-      layeredSettingsPane.setVisible(false);
-      layeredModsPane.setVisible(false);
-
-      layeredEditorsPane = _launcherCtx.editorsGUI.editorsPanel;
-      layeredEditorsPane.setBounds(300, 75, 800, 550);
-      guiFrame.add(layeredEditorsPane);
-      layeredEditorsPane.setVisible(true);
-
-      layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
-      layeredReturnButton.setBounds(305, 40, 25, 25);
-      layeredReturnButton.setVisible(true);
-      layeredReturnButton.setFocusable(false);
-      layeredReturnButton.setFocusPainted(false);
-      layeredReturnButton.setBorder(null);
-      layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-      layeredReturnButton.addActionListener(l -> {
-        layeredSettingsPane.setVisible(false);
-        layeredModsPane.setVisible(false);
-        layeredEditorsPane.setVisible(false);
-        mainPane.setVisible(true);
-        layeredReturnButton.setVisible(false);
-      });
-      guiFrame.add(layeredReturnButton);
+      showEditorsMenu();
     });
     sidePane.add(editorsButton);
 
@@ -411,13 +342,15 @@ public class LauncherGUI extends BaseGUI {
     mainPane.add(bannerLinkButton);
 
     launchButton = new JButton(_localeManager.getValue("b.play"));
-    launchButton.setBounds(572, 423, 200, 66);
-    launchButton.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
+    launchButton.setBounds(500, 423, 210, 52);
+    launchButton.setFont(Fonts.getFont("defaultMedium", 15.0f, Font.PLAIN));
     launchButton.setFocusPainted(false);
     launchButton.setFocusable(false);
     launchButton.setBackground(CustomColors.LAUNCH);
     launchButton.setBorderPainted(false);
     launchButton.setForeground(Color.WHITE);
+    launchButton.putClientProperty(FlatClientProperties.STYLE,
+        "arc: 999; borderWidth: 0");
     launchButton.setToolTipText(_localeManager.getValue("b.play"));
     mainPane.add(launchButton);
     launchButton.addActionListener(action -> {
@@ -433,44 +366,81 @@ public class LauncherGUI extends BaseGUI {
       }
     });
 
-    String launchTooltipTitle = _localeManager.getValue("m.alt_mode");
-    String launchTooltipText = _localeManager.getValue("m.alt_mode_text");
-    Icon launchTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 16, Color.WHITE);
-    JButton launchTooltipButton = new JButton();
-    launchTooltipButton.setIcon(launchTooltipButtonIcon);
-    launchTooltipButton.setBounds(548, 424, 20, 20);
-    launchTooltipButton.setEnabled(true);
-    launchTooltipButton.setFocusable(false);
-    launchTooltipButton.setFocusPainted(false);
-    launchTooltipButton.setBorderPainted(false);
-    launchTooltipButton.setBackground(CustomColors.INTERFACE_MAINPANE_TRANSPARENT_BUTTON);
-    launchTooltipButton.setForeground(Color.WHITE);
-    launchTooltipButton.setToolTipText(launchTooltipTitle);
-    launchTooltipButton.addActionListener(l -> {
-      Dialog.push(launchTooltipText, launchTooltipTitle, JOptionPane.INFORMATION_MESSAGE);
-    });
-    mainPane.add(launchTooltipButton);
+    Icon launchMenuIcon = IconFontSwing.buildIcon(FontAwesome.BARS, 24, Color.WHITE);
+    launchPopupMenuButton = new JButton(launchMenuIcon);
+    launchPopupMenuButton.setBounds(720, 424, 52, 52);
+    launchPopupMenuButton.setOpaque(false);
+    launchPopupMenuButton.setBorderPainted(false);
+    launchPopupMenuButton.setBackground(CustomColors.INTERFACE_MAINPANE_TRANSPARENT_BUTTON);
+    launchPopupMenuButton.putClientProperty(FlatClientProperties.STYLE,
+        "arc: 999; borderWidth: 0");
+    mainPane.add(launchPopupMenuButton);
 
-    Icon altModeIcon = IconFontSwing.buildIcon(FontAwesome.USER_PLUS, 16, Color.WHITE);
-    altModeEnabledPill = new JLabel(_localeManager.getValue("m.alt_mode_enabled"));
-    altModeEnabledPill.setIcon(altModeIcon);
-    altModeEnabledPill.setBounds(572, 399, 200, 20);
-    altModeEnabledPill.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
-    altModeEnabledPill.setForeground(Color.WHITE);
-    altModeEnabledPill.setHorizontalAlignment(SwingConstants.CENTER);
-    altModeEnabledPill.setVerticalAlignment(SwingConstants.CENTER);
-    altModeEnabledPill.putClientProperty(FlatClientProperties.STYLE,
+    JPopupMenu launchPopupMenu = new JPopupMenu();
+    launchPopupMenu.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    launchPopupMenu.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    launchPopupMenu.putClientProperty(FlatClientProperties.STYLE,
+        "borderColor: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND) + "; borderCornerRadius: 999;");
+
+    JMenuItem gameSettingsMenuItem = new JMenuItem(new AbstractAction("Game Settings") {
+      public void actionPerformed (ActionEvent e) {
+        eventHandler.gameSettingsEvent();
+      }
+    });
+    gameSettingsMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    gameSettingsMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
+
+    JMenuItem repairGameFilesMenuItem = new JMenuItem(new AbstractAction("Repair Game Files") {
+      public void actionPerformed (ActionEvent e) {
+        eventHandler.repairGameFilesEvent();
+      }
+    });
+    repairGameFilesMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    repairGameFilesMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
+
+    JMenuItem altModeMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.alt_mode_title")) {
+      public void actionPerformed (ActionEvent e) {
+        Dialog.push(
+            _localeManager.getValue("m.alt_mode_text"),
+            _localeManager.getValue("m.alt_mode_title"),
+            JOptionPane.INFORMATION_MESSAGE);
+      }
+    });
+    altModeMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    altModeMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
+
+    launchPopupMenu.add(gameSettingsMenuItem);
+    launchPopupMenu.add(repairGameFilesMenuItem);
+    launchPopupMenu.add(altModeMenuItem);
+
+    launchPopupMenuButton.addMouseListener(new MouseAdapter() {
+      public void mousePressed (MouseEvent e) {
+        if (launchPopupMenuButton.isEnabled()) {
+          launchPopupMenu.show(mainPane, 583, 290);
+        }
+      }
+    });
+
+    Icon altModeEnabledIcon = IconFontSwing.buildIcon(FontAwesome.USER_PLUS, 16, Color.WHITE);
+    altModeEnabledLabel = new JLabel(_localeManager.getValue("m.alt_mode"));
+    altModeEnabledLabel.setIcon(altModeEnabledIcon);
+    altModeEnabledLabel.setBounds(540, 480, 130, 20);
+    altModeEnabledLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    altModeEnabledLabel.setForeground(Color.WHITE);
+    altModeEnabledLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    altModeEnabledLabel.setVerticalAlignment(SwingConstants.CENTER);
+    altModeEnabledLabel.putClientProperty(FlatClientProperties.STYLE,
         "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND)
             + "AA; foreground:" + ColorUtil.colorToHexString(Color.WHITE)
             + "; arc:999;");
-    altModeEnabledPill.setVisible(false);
-    mainPane.add(altModeEnabledPill);
+    altModeEnabledLabel.setVisible(false);
+    mainPane.add(altModeEnabledLabel);
 
-    BufferedImage launchBackgroundImage = ImageUtil.generatePlainColorImage(500, 85, new Color(0, 0, 0));
+    BufferedImage launchBackgroundImage = ImageUtil.generatePlainColorImage(460, 85, new Color(0, 0, 0));
     launchBackgroundImage = (BufferedImage) ImageUtil.addRoundedCorners(launchBackgroundImage, 25);
     ImageUtil.setAlpha(launchBackgroundImage, (byte) 191);
     launchBackground = new JLabel("");
-    launchBackground.setBounds(20, 410, 500, 85);
+    launchBackground.setBounds(20, 407, 460, 85);
     launchBackground.setIcon(new ImageIcon(launchBackgroundImage));
     launchBackground.setVisible(false);
     mainPane.add(launchBackground);
@@ -478,14 +448,14 @@ public class LauncherGUI extends BaseGUI {
 
     launchState = new JLabel("");
     launchState.setHorizontalAlignment(SwingConstants.LEFT);
-    launchState.setBounds(35, 420, 505, 25);
+    launchState.setBounds(35, 417, 455, 25);
     launchState.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
     launchState.setVisible(false);
     mainPane.add(launchState);
     mainPane.setComponentZOrder(launchState, 0);
 
     launchProgressBar = new JProgressBar();
-    launchProgressBar.setBounds(35, 450, 470, 25);
+    launchProgressBar.setBounds(35, 447, 430, 25);
     launchProgressBar.setVisible(false);
     mainPane.add(launchProgressBar);
     mainPane.setComponentZOrder(launchProgressBar, 0);
@@ -630,6 +600,90 @@ public class LauncherGUI extends BaseGUI {
     }
   }
 
+  public void showSettingsMenu ()
+  {
+    mainPane.setVisible(false);
+    layeredModsPane.setVisible(false);
+    layeredEditorsPane.setVisible(false);
+
+    layeredSettingsPane = _launcherCtx.settingsGUI.tabbedPane;
+    layeredSettingsPane.setBounds(300, 75, 800, 550);
+    guiFrame.add(layeredSettingsPane);
+    layeredSettingsPane.setVisible(true);
+
+    layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
+    layeredReturnButton.setBounds(305, 40, 25, 25);
+    layeredReturnButton.setVisible(true);
+    layeredReturnButton.setFocusable(false);
+    layeredReturnButton.setFocusPainted(false);
+    layeredReturnButton.setBorder(null);
+    layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    layeredReturnButton.addActionListener(l -> {
+      layeredSettingsPane.setVisible(false);
+      layeredModsPane.setVisible(false);
+      layeredEditorsPane.setVisible(false);
+      mainPane.setVisible(true);
+      layeredReturnButton.setVisible(false);
+    });
+    guiFrame.add(layeredReturnButton);
+  }
+
+  public void showModsMenu ()
+  {
+    mainPane.setVisible(false);
+    layeredSettingsPane.setVisible(false);
+    layeredEditorsPane.setVisible(false);
+
+    layeredModsPane = _launcherCtx.modListGUI.modListPanel;
+    layeredModsPane.setBounds(300, 75, 800, 550);
+    guiFrame.add(layeredModsPane);
+    layeredModsPane.setVisible(true);
+
+    layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
+    layeredReturnButton.setBounds(305, 40, 25, 25);
+    layeredReturnButton.setVisible(true);
+    layeredReturnButton.setFocusable(false);
+    layeredReturnButton.setFocusPainted(false);
+    layeredReturnButton.setBorder(null);
+    layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    layeredReturnButton.addActionListener(l -> {
+      layeredSettingsPane.setVisible(false);
+      layeredModsPane.setVisible(false);
+      layeredEditorsPane.setVisible(false);
+      mainPane.setVisible(true);
+      layeredReturnButton.setVisible(false);
+    });
+    guiFrame.add(layeredReturnButton);
+  }
+
+  public void showEditorsMenu ()
+  {
+    mainPane.setVisible(false);
+    layeredSettingsPane.setVisible(false);
+    layeredModsPane.setVisible(false);
+
+    layeredEditorsPane = _launcherCtx.editorsGUI.editorsPanel;
+    layeredEditorsPane.setBounds(300, 75, 800, 550);
+    guiFrame.add(layeredEditorsPane);
+    layeredEditorsPane.setVisible(true);
+
+    layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
+    layeredReturnButton.setBounds(305, 40, 25, 25);
+    layeredReturnButton.setVisible(true);
+    layeredReturnButton.setFocusable(false);
+    layeredReturnButton.setFocusPainted(false);
+    layeredReturnButton.setBorder(null);
+    layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    layeredReturnButton.addActionListener(l -> {
+      layeredSettingsPane.setVisible(false);
+      layeredModsPane.setVisible(false);
+      layeredEditorsPane.setVisible(false);
+      mainPane.setVisible(true);
+      layeredReturnButton.setVisible(false);
+    });
+    guiFrame.add(layeredReturnButton);
+  }
+
   public void setOnTop ()
   {
     layeredSettingsPane.setVisible(false);
@@ -644,14 +698,14 @@ public class LauncherGUI extends BaseGUI {
   {
     launchButton.setBackground(CustomColors.LAUNCH_ALT);
     launchButton.updateUI();
-    altModeEnabledPill.setVisible(true);
+    altModeEnabledLabel.setVisible(true);
   }
 
   protected void specialKeyReleased ()
   {
     launchButton.setBackground(CustomColors.LAUNCH);
     launchButton.updateUI();
-    altModeEnabledPill.setVisible(false);
+    altModeEnabledLabel.setVisible(false);
   }
 
   // Shared
@@ -684,6 +738,7 @@ public class LauncherGUI extends BaseGUI {
   public JLabel bannerSubtitle2;
   public JButton bannerLinkButton;
   public JButton launchButton;
+  public JButton launchPopupMenuButton;
   public JButton updateButton;
   public JButton changelogButton;
   public JButton playAnimatedBannersButton;
@@ -691,6 +746,6 @@ public class LauncherGUI extends BaseGUI {
   public JLabel launchState;
   public JProgressBar launchProgressBar = new JProgressBar();
   public JButton warningNotice;
-  public JLabel altModeEnabledPill;
+  public JLabel altModeEnabledLabel;
 
 }

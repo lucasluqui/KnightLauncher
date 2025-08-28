@@ -221,7 +221,7 @@ public class LauncherEventHandler
 
   }
 
-  public void launchGameAltEvent()
+  public void launchGameAltEvent ()
   {
     Thread launchAltThread = new Thread(() -> {
 
@@ -320,6 +320,20 @@ public class LauncherEventHandler
   public void openAuctionsWebpage (ActionEvent action)
   {
     DesktopUtil.openWebpage("https://www.sk-ah.com");
+  }
+
+  public void repairGameFilesEvent () {
+    Thread repairThread = new Thread(() -> {
+      _modManager.setMountRequired(true);
+      _modManager.startStrictFileRebuild();
+      _modManager.mount();
+    });
+    repairThread.start();
+  }
+
+  public void gameSettingsEvent () {
+    this.gui.showSettingsMenu();
+    _launcherCtx.settingsGUI.tabbedPane.setSelectedIndex(1);
   }
 
   public void displaySelectedServerInfo ()

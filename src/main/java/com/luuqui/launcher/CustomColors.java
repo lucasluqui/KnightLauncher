@@ -38,6 +38,7 @@ public class CustomColors
   public static final Color INTERFACE_SIDEPANE_FOOTNOTE         = new Color(79, 84, 100);
 
   public static final Color INTERFACE_MAINPANE_BACKGROUND           = new Color(56, 60, 71);
+  public static final Color INTERFACE_MAINPANE_BACKGROUND_FOCUS     = new Color(67, 72, 86);
   public static final Color INTERFACE_MAINPANE_SUBBACKGROUND        = new Color(45, 48, 57);
   public static final Color INTERFACE_MAINPANE_TRANSPARENT_BUTTON   = new Color(INTERFACE_MAINPANE_BACKGROUND.getRed(), INTERFACE_MAINPANE_BACKGROUND.getGreen(), INTERFACE_MAINPANE_BACKGROUND.getBlue(), 150);
   public static final Color INTERFACE_MAINPANE_FOOTNOTE             = new Color(90, 96, 114);

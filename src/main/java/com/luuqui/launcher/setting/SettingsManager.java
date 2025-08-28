@@ -43,7 +43,6 @@ public class SettingsManager
       if (!FileUtil.fileExists(PROP_PATH)) {
         ZipUtil.extractFileWithinJar("/rsrc/config/launcher.properties", PROP_PATH);
       }
-
       loadProp();
 
       String currentPropVer = getValue("PROP_VER");
@@ -63,6 +62,7 @@ public class SettingsManager
       log.error(e);
     } finally {
       loadSettings();
+      initFinished();
     }
   }
 
@@ -112,11 +112,10 @@ public class SettingsManager
     Settings.gameGetdownFullURL = getValue("game.getdownFullURL");
     Settings.gameAdditionalArgs = getValue("game.additionalArgs");
 
-    log.info("Loaded required settings from properties file.");
-    postSettingsLoad();
+    log.info("Loaded required settings from properties file");
   }
 
-  private void postSettingsLoad ()
+  private void initFinished ()
   {
     if (SystemUtil.isWindows() && !SteamUtil.isRunningInSteamapps()) {
       setValue("game.platform", "Standalone");

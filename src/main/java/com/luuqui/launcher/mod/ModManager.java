@@ -187,8 +187,10 @@ public class ModManager
 
     _launcherCtx.launcherGUI.eventHandler.updateServerSwitcher(true);
     _launcherCtx.launcherGUI.launchButton.setEnabled(false);
+    _launcherCtx.launcherGUI.launchPopupMenuButton.setEnabled(false);
     _launcherCtx.launcherGUI.settingsButton.setEnabled(false);
     _launcherCtx.launcherGUI.modButton.setEnabled(false);
+    _launcherCtx.settingsGUI.forceRebuildButton.setEnabled(false);
 
     _launcherCtx._progressBar.startTask();
     _launcherCtx._progressBar.setBarMax(getEnabledModCount());
@@ -337,8 +339,10 @@ public class ModManager
 
     _launcherCtx.launcherGUI.eventHandler.updateServerSwitcher(false);
     _launcherCtx.launcherGUI.launchButton.setEnabled(true);
+    _launcherCtx.launcherGUI.launchPopupMenuButton.setEnabled(true);
     _launcherCtx.launcherGUI.settingsButton.setEnabled(true);
     _launcherCtx.launcherGUI.modButton.setEnabled(true);
+    _launcherCtx.settingsGUI.forceRebuildButton.setEnabled(true);
   }
 
   public void startFileRebuild ()
@@ -356,6 +360,7 @@ public class ModManager
     try {
       _launcherCtx.launcherGUI.eventHandler.updateServerSwitcher(true);
       _launcherCtx.launcherGUI.launchButton.setEnabled(false);
+      _launcherCtx.launcherGUI.launchPopupMenuButton.setEnabled(false);
       _launcherCtx.launcherGUI.settingsButton.setEnabled(false);
       _launcherCtx.launcherGUI.modButton.setEnabled(false);
       _launcherCtx.settingsGUI.forceRebuildButton.setEnabled(false);
@@ -418,6 +423,7 @@ public class ModManager
     try {
       _launcherCtx.launcherGUI.eventHandler.updateServerSwitcher(false);
       _launcherCtx.launcherGUI.launchButton.setEnabled(true);
+      _launcherCtx.launcherGUI.launchPopupMenuButton.setEnabled(true);
       _launcherCtx.launcherGUI.settingsButton.setEnabled(true);
       _launcherCtx.launcherGUI.modButton.setEnabled(true);
       _launcherCtx.settingsGUI.forceRebuildButton.setEnabled(true);
