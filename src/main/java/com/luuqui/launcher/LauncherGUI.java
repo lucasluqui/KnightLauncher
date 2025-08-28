@@ -366,12 +366,13 @@ public class LauncherGUI extends BaseGUI {
       }
     });
 
-    Icon launchMenuIcon = IconFontSwing.buildIcon(FontAwesome.BARS, 24, Color.WHITE);
-    launchPopupMenuButton = new JButton(launchMenuIcon);
+    Icon launchPopupMenuIcon = IconFontSwing.buildIcon(FontAwesome.BARS, 24, Color.WHITE);
+    launchPopupMenuButton = new JButton(launchPopupMenuIcon);
     launchPopupMenuButton.setBounds(720, 424, 52, 52);
     launchPopupMenuButton.setOpaque(false);
     launchPopupMenuButton.setBorderPainted(false);
     launchPopupMenuButton.setBackground(CustomColors.INTERFACE_MAINPANE_TRANSPARENT_BUTTON);
+    launchPopupMenuButton.setToolTipText(_localeManager.getValue("m.launch_popup_tooltip"));
     launchPopupMenuButton.putClientProperty(FlatClientProperties.STYLE,
         "arc: 999; borderWidth: 0");
     mainPane.add(launchPopupMenuButton);
@@ -382,7 +383,7 @@ public class LauncherGUI extends BaseGUI {
     launchPopupMenu.putClientProperty(FlatClientProperties.STYLE,
         "borderColor: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND) + "; borderCornerRadius: 999;");
 
-    JMenuItem gameSettingsMenuItem = new JMenuItem(new AbstractAction("Game Settings") {
+    JMenuItem gameSettingsMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.game_settings")) {
       public void actionPerformed (ActionEvent e) {
         eventHandler.gameSettingsEvent();
       }
@@ -390,13 +391,21 @@ public class LauncherGUI extends BaseGUI {
     gameSettingsMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     gameSettingsMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
 
-    JMenuItem repairGameFilesMenuItem = new JMenuItem(new AbstractAction("Repair Game Files") {
+    JMenuItem repairGameFilesMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.repair_game_files")) {
       public void actionPerformed (ActionEvent e) {
         eventHandler.repairGameFilesEvent();
       }
     });
     repairGameFilesMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     repairGameFilesMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
+
+    JMenuItem openGameFolderMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("b.open_game_dir")) {
+      public void actionPerformed (ActionEvent e) {
+        eventHandler.openGameFolderEvent();
+      }
+    });
+    openGameFolderMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    openGameFolderMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
 
     JMenuItem altModeMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.alt_mode_title")) {
       public void actionPerformed (ActionEvent e) {
@@ -411,12 +420,13 @@ public class LauncherGUI extends BaseGUI {
 
     launchPopupMenu.add(gameSettingsMenuItem);
     launchPopupMenu.add(repairGameFilesMenuItem);
+    launchPopupMenu.add(openGameFolderMenuItem);
     launchPopupMenu.add(altModeMenuItem);
 
     launchPopupMenuButton.addMouseListener(new MouseAdapter() {
       public void mousePressed (MouseEvent e) {
         if (launchPopupMenuButton.isEnabled()) {
-          launchPopupMenu.show(mainPane, 583, 290);
+          launchPopupMenu.show(mainPane, 583, 250);
         }
       }
     });

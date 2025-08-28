@@ -336,6 +336,10 @@ public class LauncherEventHandler
     _launcherCtx.settingsGUI.tabbedPane.setSelectedIndex(1);
   }
 
+  public void openGameFolderEvent () {
+    _launcherCtx.settingsGUI.eventHandler.openRootFolderEvent(null);
+  }
+
   public void displaySelectedServerInfo ()
   {
     Server selectedServer = _flamingoManager.getSelectedServer();
