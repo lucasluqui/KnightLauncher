@@ -380,8 +380,9 @@ public class LauncherGUI extends BaseGUI {
     JPopupMenu launchPopupMenu = new JPopupMenu();
     launchPopupMenu.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     launchPopupMenu.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    launchPopupMenu.putClientProperty(FlatClientProperties.POPUP_BORDER_CORNER_RADIUS, 5);
     launchPopupMenu.putClientProperty(FlatClientProperties.STYLE,
-        "borderColor: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND) + "; borderCornerRadius: 999;");
+        "borderColor: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND) + "; borderInsets: 5,5,5,5;");
 
     JMenuItem gameSettingsMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.game_settings")) {
       public void actionPerformed (ActionEvent e) {
@@ -426,7 +427,7 @@ public class LauncherGUI extends BaseGUI {
     launchPopupMenuButton.addMouseListener(new MouseAdapter() {
       public void mousePressed (MouseEvent e) {
         if (launchPopupMenuButton.isEnabled()) {
-          launchPopupMenu.show(mainPane, 583, 250);
+          launchPopupMenu.show(mainPane, 575, 245);
         }
       }
     });
