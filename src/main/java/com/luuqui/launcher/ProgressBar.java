@@ -10,8 +10,9 @@ import static com.luuqui.launcher.Log.log;
 public class ProgressBar
 {
   @Inject protected LauncherContext _launcherCtx;
-
   private int activeTasks = 0;
+  private long lastTaskStartedAt = 0;
+  private final long HIDE_BAR_TIME = 8000;
 
   public ProgressBar ()
   {
@@ -22,25 +23,28 @@ public class ProgressBar
   {
     _launcherCtx.launcherGUI.launchState.setText(newState);
     _launcherCtx.modListGUI.refreshProgressBar.setString(newState);
-    //log.info(newState);
   }
 
   public void startTask ()
   {
     activeTasks++;
+    lastTaskStartedAt = System.currentTimeMillis();
     showBar(true);
   }
 
   public void finishTask ()
   {
     activeTasks--;
-    if(activeTasks == 0) {
+    if (activeTasks == 0) {
       setState("Finished");
       _launcherCtx.launcherGUI.launchState.setIcon(null);
       Thread finishDelayThread = new Thread(() -> {
-        showBar(false);
+        long now = System.currentTimeMillis();
+        if (now - lastTaskStartedAt > HIDE_BAR_TIME) {
+          showBar(false);
+        }
       });
-      ThreadingUtil.executeWithDelay(finishDelayThread, 8000);
+      ThreadingUtil.executeWithDelay(finishDelayThread, HIDE_BAR_TIME);
     }
   }
 

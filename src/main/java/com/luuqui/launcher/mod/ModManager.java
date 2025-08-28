@@ -438,8 +438,9 @@ public class ModManager
       log.info("Extracting safeguard...");
       ZipUtil.extractFileWithinJar("/rsrc/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip");
       ZipUtil.unzip(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip", LauncherGlobals.USER_DIR + "/rsrc/");
-      log.info("Extracted safeguard.");
+      log.info("Extracted safeguard");
     } catch (IOException e) {
+      log.info("Failed to extract safeguard");
       log.error(e);
     }
   }
