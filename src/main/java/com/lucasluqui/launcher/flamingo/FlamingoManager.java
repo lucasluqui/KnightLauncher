@@ -3,6 +3,7 @@ package com.lucasluqui.launcher.flamingo;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.lucasluqui.launcher.BuildConfig;
+import com.lucasluqui.launcher.DeployConfig;
 import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.flamingo.data.Status;
@@ -27,11 +28,8 @@ public class FlamingoManager
 {
   @Inject protected SettingsManager _settingsManager;
 
-  @SuppressWarnings("all")
-  private final String ENDPOINT = "flamingo.knightlauncher.com";
-
-  @SuppressWarnings("all")
-  private final int PORT = 6060;
+  private final String ADDRESS = DeployConfig.getFlamingoAddress();
+  private final int PORT = DeployConfig.getFlamingoPort();
 
   private List<Server> serverList = new ArrayList<>();
   private Server selectedServer = null;
@@ -135,7 +133,7 @@ public class FlamingoManager
     try {
       request = Arrays.copyOf(request, request.length + 1);
       request[request.length - 1] = "version=" + TextUtil.extractNumericFromString(BuildConfig.getVersion());
-      return RequestUtil.makeRequest(method, "http://" + ENDPOINT + ":" + PORT + endpoint, request);
+      return RequestUtil.makeRequest(method, "http://" + ADDRESS + ":" + PORT + endpoint, request);
     } catch (Exception e) {
       throw new Exception();
     }

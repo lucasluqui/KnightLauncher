@@ -30,5 +30,4 @@ public class BuildConfig
   {
     return _build.getValue("dev", false);
   }
-
 }

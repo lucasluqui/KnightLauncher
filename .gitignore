@@ -39,3 +39,6 @@ rsrc/
 
 # Settings file
 settings.xml
+
+# Deploy settings
+deploy.properties
