@@ -147,6 +147,12 @@
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
       <resource>
+        <directory>./</directory>
+        <includes>
+          <include>deploy.properties</include>
+        </includes>
+      </resource>
+      <resource>
         <directory>src/main/resources</directory>
       </resource>
       <resource>
