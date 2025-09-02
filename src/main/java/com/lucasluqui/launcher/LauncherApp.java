@@ -74,7 +74,9 @@ public class LauncherApp
   @SuppressWarnings("ConstantConditions")
   private void init ()
   {
-    setupFileLogging();
+    setupLogging();
+    log.info(BuildConfig.getName() + " started. Running version: " + BuildConfig.getVersion());
+
     logVMInfo();
     logGameVMInfo();
     logHostInfo();
@@ -384,7 +386,7 @@ public class LauncherApp
     System.setProperty("https.agent", "Mozilla/5.0");
   }
 
-  private void setupFileLogging ()
+  private void setupLogging()
   {
     File logFile = new File(LauncherGlobals.USER_DIR + File.separator + "knightlauncher.log");
     File oldLogFile = new File(LauncherGlobals.USER_DIR + File.separator + "old-knightlauncher.log");
@@ -406,8 +408,6 @@ public class LauncherApp
     } catch (IOException e) {
       log.error(e);
     }
-
-    log.info(BuildConfig.getName() + " started. Running version: " + BuildConfig.getVersion());
   }
 
   private void logVMInfo ()
