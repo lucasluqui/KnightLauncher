@@ -128,15 +128,16 @@ public class FlamingoManager
   }
 
   private JSONObject sendRequest (String method, String endpoint, String[] request)
-      throws Exception
   {
     try {
       request = Arrays.copyOf(request, request.length + 1);
       request[request.length - 1] = "version=" + TextUtil.extractNumericFromString(BuildConfig.getVersion());
       return RequestUtil.makeRequest(method, "http://" + ADDRESS + ":" + PORT + endpoint, request);
     } catch (Exception e) {
-      throw new Exception();
+      log.error("Request failed");
+      log.error(e);
     }
+    return null;
   }
 
   public Server findServerByName (String serverName)

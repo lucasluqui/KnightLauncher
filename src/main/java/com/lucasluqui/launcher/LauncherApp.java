@@ -630,4 +630,11 @@ public class LauncherApp
     if (containsCyrillic) SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
   }
 
+  public static class LauncherModule extends AbstractModule
+  {
+    @Override protected void configure ()
+    {
+      super.configure();
+    }
+  }
 }
