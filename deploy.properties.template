@@ -1,6 +1,6 @@
 # KL environment.
 # Valid values: prod, dev.
-env=${project.env}
+env=${env}
 
 # Production config.
 prod.flamingo.addr=flamingo.knightlauncher.com

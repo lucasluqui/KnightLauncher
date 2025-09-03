@@ -68,11 +68,12 @@ To build Knight Launcher manually, follow these steps:
 2. Clone the repository.
    - `git clone https://github.com/lucasluqui/KnightLauncher.git`
 3. Copy `projectx-pcode.jar` from your Spiral Knights `code` directory into the project's `lib` directory.
-4. Copy `deploy.properties.template` and paste it in the repository's root removing the `.template` ext.
+4. Create a copy of `deploy.properties.template` in the repository's root directory then remove the `.template` extension. Fill any missing values.
 5. Validate all Maven dependencies.
    - `mvn validate`
-6. Build the package using Maven.
+6. Build the package using Maven. By default, it will build for a development environment, you can target prod instead by adding `-Denv=prod`.
    - `mvn clean package`
+   - `mvn -Denv=prod clean package`
 7. Copy the package built by Maven to your Spiral Knights folder and run it.
    - `java -jar KnightLauncher.jar`
 
