@@ -25,9 +25,4 @@ public class BuildConfig
   {
     return _build.getValue("spiralview_version", "0");
   }
-
-  public static boolean isDev ()
-  {
-    return _build.getValue("dev", false);
-  }
 }

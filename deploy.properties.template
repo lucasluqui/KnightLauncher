@@ -1,2 +1,11 @@
-flamingo.addr=flamingo.knightlauncher.com
-flamingo.port=6060
+# KL environment.
+# Valid values: prod, dev.
+env=dev
+
+# Production config.
+prod.flamingo.addr=flamingo.knightlauncher.com
+prod.flamingo.port=6060
+
+# Development config.
+dev.flamingo.addr=127.0.0.1
+dev.flamingo.port=6060

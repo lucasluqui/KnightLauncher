@@ -30,6 +30,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import static com.lucasluqui.launcher.Log.log;
 
@@ -401,6 +405,10 @@ public class LauncherApp
       FileUtil.rename(logFile, oldLogFile);
     }
 
+    if (DeployConfig.isDev()) {
+      setupDebugLogging();
+    }
+
     try {
       PrintStream printStream = new PrintStream(new BufferedOutputStream(Files.newOutputStream(logFile.toPath())), true);
       System.setOut(printStream);
@@ -408,6 +416,18 @@ public class LauncherApp
     } catch (IOException e) {
       log.error(e);
     }
+  }
+
+  private void setupDebugLogging ()
+  {
+    Logger rootLogger = LogManager
+        .getLogManager()
+        .getLogger("");
+    rootLogger.setLevel(Level.ALL);
+    for (Handler handler : rootLogger.getHandlers()) {
+      handler.setLevel(Level.ALL);
+    }
+    log.debug("Enabled debug logging");
   }
 
   private void logVMInfo ()
