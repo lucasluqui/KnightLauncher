@@ -12,6 +12,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
+import java.util.Objects;
 
 import static com.lucasluqui.util.Log.log;
 
@@ -236,4 +237,20 @@ public class ImageUtil
     }
   }
 
+  public static byte[] bufferedImageToByteArray (BufferedImage image, String format)
+  {
+    Objects.requireNonNull(image, "Image cannot be null");
+
+    try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+      boolean success = ImageIO.write(image, format, baos);
+      if (!success) {
+        throw new IOException("No suitable writer found for format: " + format);
+      }
+      return baos.toByteArray();
+    } catch (IOException | IllegalArgumentException e) {
+      log.error(e);
+    }
+
+    return null;
+  }
 }
