@@ -1,5 +1,7 @@
-# KL environment.
-# Valid values: prod, dev.
+# Knight Launcher environment
+#
+# Don't manually modify this.
+# Defaults to dev, use -Denv=prod when running Maven to build for prod.
 env=${env}
 
 # Production config.
