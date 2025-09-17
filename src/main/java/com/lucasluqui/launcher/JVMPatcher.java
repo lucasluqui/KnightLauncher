@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -67,6 +68,7 @@ public class JVMPatcher extends BaseGUI
     guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/rsrc/img/icon-128.png"));
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    guiFrame.setShape(new RoundRectangle2D.Double(0, 0, this.width, this.height, 15, 15));
     guiFrame.getContentPane().setLayout(null);
 
     headerLabel = new JLabel("Patch your game to use a compatible 64-bit Java VM");
