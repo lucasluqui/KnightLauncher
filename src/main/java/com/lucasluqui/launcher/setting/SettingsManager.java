@@ -80,7 +80,7 @@ public class SettingsManager
   private void loadSettings ()
   {
     // Launcher settings
-    Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched")); // Delete this when the dreaded day comes.
+    Settings.jvmPatched = Boolean.parseBoolean(getValue("launcher.jvm_patched"));
     Settings.lang = getValue("launcher.lang");
     Settings.doRebuilds = Boolean.parseBoolean(getValue("launcher.rebuilds"));
     Settings.filePurging = Boolean.parseBoolean(getValue("launcher.filePurging"));

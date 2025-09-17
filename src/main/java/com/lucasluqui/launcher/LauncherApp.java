@@ -239,10 +239,19 @@ public class LauncherApp
             path = args[1];
             legacy = Boolean.parseBoolean(args[2]);
           } else {
-            // Organic JVM patch, set default values.
+            // Organic JVM patch.
             path = LauncherGlobals.USER_DIR;
-            //legacy = false;
-            legacy = true; // Temporarily set Official to use legacy JVMs too
+            int gameJVMVersion = 0;
+            try {
+              gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
+            } catch (Exception e) {
+              gameJVMVersion = 8;
+              log.error("Failed to get game Java VM version", e);
+            }
+
+            // If the game's Java VM version is 8 or lower, mark it as legacy so that only
+            // legacy Java VMs are offered to patch.
+            legacy = gameJVMVersion <= 8;
           }
           _launcherCtx.jvmPatcher.init(path, legacy);
         } catch (Exception e) {
@@ -496,12 +505,6 @@ public class LauncherApp
 
     log.info("---------------------------------");
   }
-
-  // Uncomment this when the dreaded day comes around.
-
-  //private boolean requiresJVMPatch() {
-  //  return _args.length > 0 && _args[0].equals("forceJVMPatch");
-  //}
 
   private boolean requiresJVMPatch ()
   {

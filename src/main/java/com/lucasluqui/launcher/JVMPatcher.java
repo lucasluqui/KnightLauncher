@@ -215,7 +215,7 @@ public class JVMPatcher extends BaseGUI
 
   private void finish ()
   {
-    _settingsManager.setValue("launcher.jvm_patched", "true"); // Delete this when the dreaded day comes.
+    _settingsManager.setValue("launcher.jvm_patched", "true");
     _moduleManager.loadJarCommandLine();
     _discordPresenceClient.stop();
     ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar" }, true);
