@@ -174,15 +174,19 @@ public class SettingsEventHandler
   public void jvmPatchEvent (ActionEvent action)
   {
     String javaVMPatchDir = LauncherGlobals.USER_DIR;
-    //boolean legacy = false;
-    boolean legacy = true; // Temporarily set Official to use legacy JVMs too. TODO: Change when game updates to Java 10+.
+    int gameJVMVersion = 0;
+    try {
+      gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
+    } catch (Exception e) {
+      gameJVMVersion = 8;
+      log.error("Failed to get game Java VM version", e);
+    }
 
+    // If the game's Java VM version is 8 or lower, mark it as legacy so that only
+    // legacy Java VMs are offered to patch.
+    final boolean legacy = gameJVMVersion <= 8;
     if (!_flamingoManager.getSelectedServer().isOfficial()) {
       javaVMPatchDir += File.separator + "thirdparty" + File.separator + _flamingoManager.getSelectedServer().getSanitizedName();
-
-      // Set legacy to true to indicate the JVM Patcher that this installation only supports Java 8 and lower JVMs.
-      // Ideally, all servers should follow Official and support newer Java versions at the same pace, but that's not the case.
-      legacy = true;
     }
 
     ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar", "forceJVMPatch", javaVMPatchDir, String.valueOf(legacy)}, true);
