@@ -269,6 +269,7 @@ public class SettingsGUI extends BaseGUI
     gameTabViewingSettingsLabel.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
     gameTabViewingSettingsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
     gamePanel.add(gameTabViewingSettingsLabel);
+    gameTabViewingSettingsLabel.setVisible(false);
 
     labelPlatform = new JLabel(_localeManager.getValue("m.platform"));
     labelPlatform.setBounds(25, 90, 125, 18);
@@ -282,7 +283,7 @@ public class SettingsGUI extends BaseGUI
     gamePanel.add(choicePlatform);
     choicePlatform.addItem(_localeManager.getValue("o.steam"));
     choicePlatform.addItem(_localeManager.getValue("o.standalone"));
-    if(SystemUtil.isWindows() && !SteamUtil.isRunningInSteamapps()) {
+    if (SystemUtil.isWindows() && !SteamUtil.isRunningInSteamapps()) {
       choicePlatform.removeItem(_localeManager.getValue("o.steam"));
     }
     choicePlatform.setSelectedItem(Settings.gamePlatform);
@@ -395,8 +396,6 @@ public class SettingsGUI extends BaseGUI
     forceRebuildButton.setFocusable(false);
     gamePanel.add(forceRebuildButton);
     forceRebuildButton.addActionListener(action -> {
-      //SettingsGUI.settingsGUIFrame.setVisible(false);
-      //LauncherGUI.launcherGUIFrame.setVisible(true);
       eventHandler.forceRebuildEvent();
     });
 
@@ -423,26 +422,33 @@ public class SettingsGUI extends BaseGUI
     gamePanel.add(jvmPatchButton);
     jvmPatchButton.addActionListener(eventHandler::jvmPatchEvent);
 
-    if(((SystemUtil.isWindows() && SystemUtil.is64Bit() ) || ( SystemUtil.isUnix() && Settings.gamePlatform.equalsIgnoreCase("Steam")))) {
+    if (((SystemUtil.isWindows() && SystemUtil.is64Bit() ) || ( SystemUtil.isUnix() && Settings.gamePlatform.equalsIgnoreCase("Steam")))) {
       jvmPatchButton.setEnabled(true);
       jvmPatchButton.setToolTipText(null);
     }
 
     JButton loadRecommendedSettingsButton = new JButton(_localeManager.getValue("b.recommended_settings"));
+    loadRecommendedSettingsButton.setBounds(195, 423, 230, 25);
     loadRecommendedSettingsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-    loadRecommendedSettingsButton.setBounds(195, 423, 230, 23);
     loadRecommendedSettingsButton.setFocusPainted(false);
     loadRecommendedSettingsButton.setFocusable(false);
+    loadRecommendedSettingsButton.setForeground(Color.WHITE);
+    loadRecommendedSettingsButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
+    loadRecommendedSettingsButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     loadRecommendedSettingsButton.setToolTipText(_localeManager.getValue("b.recommended_settings"));
     gamePanel.add(loadRecommendedSettingsButton);
     loadRecommendedSettingsButton.addActionListener(eventHandler::loadRecommendedSettingsButtonEvent);
 
     resetGameSettingsButton = new JButton(_localeManager.getValue("b.reset_default"));
+    resetGameSettingsButton.setBounds(435, 423, 180, 25);
     resetGameSettingsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-    resetGameSettingsButton.setBounds(435, 423, 180, 23);
     resetGameSettingsButton.setFocusPainted(false);
     resetGameSettingsButton.setFocusable(false);
-    resetGameSettingsButton.setForeground(CustomColors.DANGER);
+    resetGameSettingsButton.setForeground(Color.WHITE);
+    resetGameSettingsButton.setBackground(CustomColors.DANGER);
+    resetGameSettingsButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     resetGameSettingsButton.setToolTipText(_localeManager.getValue("b.reset_default"));
     gamePanel.add(resetGameSettingsButton);
     resetGameSettingsButton.addActionListener(eventHandler::resetGameSettingsButtonEvent);
@@ -481,11 +487,15 @@ public class SettingsGUI extends BaseGUI
     betasPanel.add(betaCodeResultLabel);
 
     JButton betaCodeButton = new JButton(_localeManager.getValue("b.activate"));
+    betaCodeButton.setBounds(290, 112, 100, 25);
     betaCodeButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     betaCodeButton.setFocusPainted(false);
     betaCodeButton.setFocusable(false);
+    betaCodeButton.setForeground(Color.WHITE);
+    betaCodeButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
+    betaCodeButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     betaCodeButton.setToolTipText(_localeManager.getValue("b.activate"));
-    betaCodeButton.setBounds(290, 112, 100, 25);
     betasPanel.add(betaCodeButton);
     betaCodeButton.addActionListener(action -> {
       int result = eventHandler.activateBetaCode(betaCodeTextField.getText(), false);
@@ -553,12 +563,16 @@ public class SettingsGUI extends BaseGUI
     betasPanel.add(betaCodeSpecialResultLabel);
 
     betaCodeRevalidateButton = new JButton(_localeManager.getValue("b.beta_code_revalidate"));
+    betaCodeRevalidateButton.setBounds(25, 388, 250, 25);
     betaCodeRevalidateButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     betaCodeRevalidateButton.setFocusPainted(false);
     betaCodeRevalidateButton.setFocusable(false);
     betaCodeRevalidateButton.setVisible(false);
+    betaCodeClearLocalButton.setForeground(Color.WHITE);
+    betaCodeClearLocalButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
+    betaCodeClearLocalButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     betaCodeRevalidateButton.setToolTipText(_localeManager.getValue("b.beta_code_revalidate"));
-    betaCodeRevalidateButton.setBounds(25, 388, 250, 25);
     betasPanel.add(betaCodeRevalidateButton);
     betaCodeRevalidateButton.addActionListener(action -> {
       eventHandler.revalidateBetaCodes();
@@ -573,13 +587,16 @@ public class SettingsGUI extends BaseGUI
     });
 
     betaCodeClearLocalButton = new JButton(_localeManager.getValue("b.beta_code_clear_local"));
+    betaCodeClearLocalButton.setBounds(25, 423, 250, 25);
     betaCodeClearLocalButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     betaCodeClearLocalButton.setFocusPainted(false);
     betaCodeClearLocalButton.setFocusable(false);
     betaCodeClearLocalButton.setVisible(false);
-    betaCodeClearLocalButton.setForeground(CustomColors.DANGER);
+    betaCodeClearLocalButton.setForeground(Color.WHITE);
+    betaCodeClearLocalButton.setBackground(CustomColors.DANGER);
+    betaCodeClearLocalButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     betaCodeClearLocalButton.setToolTipText(_localeManager.getValue("b.beta_code_clear_local"));
-    betaCodeClearLocalButton.setBounds(25, 423, 250, 25);
     betasPanel.add(betaCodeClearLocalButton);
     betaCodeClearLocalButton.addActionListener(action -> {
       boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.destructive_action"), _localeManager.getValue("b.beta_code_clear_local"), JOptionPane.WARNING_MESSAGE);
@@ -678,6 +695,7 @@ public class SettingsGUI extends BaseGUI
     advancedTabViewingSettingsLabel.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
     advancedTabViewingSettingsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
     advancedPanel.add(advancedTabViewingSettingsLabel);
+    advancedTabViewingSettingsLabel.setVisible(false);
 
     JLabel labelArguments = new JLabel(_localeManager.getValue("m.extratxt_write_arguments") + " (Extra.txt)");
     labelArguments.setBounds(25, 90, 600, 20);
@@ -795,10 +813,13 @@ public class SettingsGUI extends BaseGUI
 
     resetConnectionSettingsButton = new JButton(_localeManager.getValue("b.reset_default"));
     resetConnectionSettingsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-    resetConnectionSettingsButton.setBounds(435, 423, 180, 23);
+    resetConnectionSettingsButton.setBounds(435, 423, 180, 25);
     resetConnectionSettingsButton.setFocusPainted(false);
     resetConnectionSettingsButton.setFocusable(false);
-    resetConnectionSettingsButton.setForeground(CustomColors.DANGER);
+    resetConnectionSettingsButton.setForeground(Color.WHITE);
+    resetConnectionSettingsButton.setBackground(CustomColors.DANGER);
+    resetConnectionSettingsButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     resetConnectionSettingsButton.setToolTipText(_localeManager.getValue("b.reset_default"));
     advancedPanel.add(resetConnectionSettingsButton);
     resetConnectionSettingsButton.addActionListener(eventHandler::resetConnectionSettingsButtonEvent);
@@ -893,9 +914,13 @@ public class SettingsGUI extends BaseGUI
 
     JButton copyLogsButton = new JButton(_localeManager.getValue("b.copy_logs"));
     copyLogsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-    copyLogsButton.setBounds(25, 423, 200, 23);
+    copyLogsButton.setBounds(25, 423, 200, 25);
     copyLogsButton.setFocusPainted(false);
     copyLogsButton.setFocusable(false);
+    copyLogsButton.setForeground(Color.WHITE);
+    copyLogsButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
+    copyLogsButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     copyLogsButton.setToolTipText(_localeManager.getValue("b.copy_logs"));
     aboutPanel.add(copyLogsButton);
     copyLogsButton.addActionListener(l -> {
@@ -905,9 +930,13 @@ public class SettingsGUI extends BaseGUI
 
     JButton openRootFolderButton = new JButton(_localeManager.getValue("b.open_game_dir"));
     openRootFolderButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-    openRootFolderButton.setBounds(235, 423, 200, 23);
+    openRootFolderButton.setBounds(235, 423, 200, 25);
     openRootFolderButton.setFocusPainted(false);
     openRootFolderButton.setFocusable(false);
+    openRootFolderButton.setForeground(Color.WHITE);
+    openRootFolderButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
+    openRootFolderButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     openRootFolderButton.setToolTipText(_localeManager.getValue("b.open_game_dir"));
     aboutPanel.add(openRootFolderButton);
     openRootFolderButton.addActionListener(eventHandler::openRootFolderEvent);

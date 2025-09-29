@@ -539,8 +539,15 @@ public class SettingsEventHandler
     disableExplicitGCChangeEvent(null);
     saveAdditionalArgs();
 
-    this.gui.gameTabViewingSettingsLabel.setText(_localeManager.getValue("m.viewing_settings", server.name));
-    this.gui.advancedTabViewingSettingsLabel.setText(_localeManager.getValue("m.viewing_settings", server.name));
+    if (server.isOfficial()) {
+      this.gui.gameTabViewingSettingsLabel.setVisible(false);
+      this.gui.advancedTabViewingSettingsLabel.setVisible(false);
+    } else {
+      this.gui.gameTabViewingSettingsLabel.setVisible(true);
+      this.gui.advancedTabViewingSettingsLabel.setVisible(true);
+      this.gui.gameTabViewingSettingsLabel.setText(_localeManager.getValue("m.viewing_settings", server.name));
+      this.gui.advancedTabViewingSettingsLabel.setText(_localeManager.getValue("m.viewing_settings", server.name));
+    }
   }
 
   public void checkServerSettingsKeys (String serverName)

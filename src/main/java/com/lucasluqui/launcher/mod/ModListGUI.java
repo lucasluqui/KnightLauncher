@@ -414,9 +414,9 @@ public class ModListGUI extends BaseGUI
       removeButton.setFocusable(false);
       removeButton.setForeground(Color.WHITE);
       removeButton.setBackground(CustomColors.DANGER);
-      removeButton.setToolTipText(_localeManager.getValue("m.remove_mod", mod.getDisplayName()));
       removeButton.putClientProperty(FlatClientProperties.STYLE,
-          "arc: 999; borderWidth: 0");
+        "arc: 999; borderWidth: 0");
+      removeButton.setToolTipText(_localeManager.getValue("m.remove_mod", mod.getDisplayName()));
       removeButton.addActionListener(l -> eventHandler.removeModEvent(mod));
       modPane.add(removeButton);
 
