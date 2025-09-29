@@ -62,7 +62,7 @@ public class SettingsEventHandler
 
     if (confirm) {
       Settings.doRebuilds = this.gui.switchCleaning.isSelected();
-      _settingsManager.setValue("launcher.rebuilds", this.gui.switchCleaning.isSelected() ? "true" : "false");
+      _settingsManager.setValue("launcher.rebuilds", String.valueOf(this.gui.switchCleaning.isSelected()));
     }
 
     this.gui.switchCleaning.setSelected(Settings.doRebuilds);
@@ -71,7 +71,7 @@ public class SettingsEventHandler
   public void keepOpenChangeEvent (ActionEvent event)
   {
     Settings.keepOpen = this.gui.switchKeepOpen.isSelected();
-    _settingsManager.setValue("launcher.keepOpen", this.gui.switchKeepOpen.isSelected() ? "true" : "false");
+    _settingsManager.setValue("launcher.keepOpen", String.valueOf(this.gui.switchKeepOpen.isSelected()));
   }
 
   public void forceRebuildEvent ()
@@ -84,7 +84,7 @@ public class SettingsEventHandler
   public void createShortcutChangeEvent (ActionEvent event)
   {
     Settings.createShortcut = this.gui.switchShortcut.isSelected();
-    _settingsManager.setValue("launcher.createShortcut", this.gui.switchShortcut.isSelected() ? "true" : "false");
+    _settingsManager.setValue("launcher.createShortcut", String.valueOf(this.gui.switchShortcut.isSelected()));
   }
 
   public void languageChangeEvent (ItemEvent event)
@@ -99,7 +99,7 @@ public class SettingsEventHandler
   {
     Settings.gameUseCustomGC = this.gui.switchUseCustomGC.isSelected();
     Server selectedServer = _flamingoManager.getSelectedServer();
-    _settingsManager.setValue("game.useCustomGC", this.gui.switchUseCustomGC.isSelected() ? "true" : "false", selectedServer);
+    _settingsManager.setValue("game.useCustomGC", String.valueOf(this.gui.switchUseCustomGC.isSelected()), selectedServer);
   }
 
   public void choiceGCChangeEvent (ItemEvent event)
@@ -126,7 +126,7 @@ public class SettingsEventHandler
   {
     Settings.gameDisableExplicitGC = this.gui.switchExplicitGC.isSelected();
     Server selectedServer = _flamingoManager.getSelectedServer();
-    _settingsManager.setValue("game.disableExplicitGC", this.gui.switchExplicitGC.isSelected() ? "true" : "false", selectedServer);
+    _settingsManager.setValue("game.disableExplicitGC", String.valueOf(this.gui.switchExplicitGC.isSelected()), selectedServer);
   }
 
   public void saveAdditionalArgs ()
@@ -146,13 +146,13 @@ public class SettingsEventHandler
   public void ingameRPCChangeEvent (ActionEvent action)
   {
     Settings.useIngameRPC = this.gui.switchDiscordIntegration.isSelected();
-    _settingsManager.setValue("launcher.useIngameRPC", this.gui.switchDiscordIntegration.isSelected() ? "true" : "false");
+    _settingsManager.setValue("launcher.useIngameRPC", String.valueOf(this.gui.switchDiscordIntegration.isSelected()));
   }
 
   public void autoUpdateChangeEvent (ActionEvent action)
   {
     Settings.autoUpdate = this.gui.switchAutoUpdate.isSelected();
-    _settingsManager.setValue("launcher.autoUpdate", this.gui.switchAutoUpdate.isSelected() ? "true" : "false");
+    _settingsManager.setValue("launcher.autoUpdate", String.valueOf(this.gui.switchAutoUpdate.isSelected()));
   }
 
   public void filePurgingChangeEvent (ActionEvent action)
@@ -165,7 +165,7 @@ public class SettingsEventHandler
 
     if (confirm) {
       Settings.filePurging = this.gui.switchFilePurging.isSelected();
-      _settingsManager.setValue("launcher.filePurging", this.gui.switchFilePurging.isSelected() ? "true" : "false");
+      _settingsManager.setValue("launcher.filePurging", String.valueOf(this.gui.switchFilePurging.isSelected()));
     }
 
     this.gui.switchFilePurging.setSelected(Settings.filePurging);
@@ -227,7 +227,6 @@ public class SettingsEventHandler
     this.gui.switchExplicitGC.setSelected(DEFAULT_DISABLE_EXPLICIT_GC);
     this.gui.argumentsPane.setText(DEFAULT_ADDITIONAL_ARGS);
 
-
     customGCChangeEvent(null);
     choiceGCChangeEvent(null);
     disableExplicitGCChangeEvent(null);
@@ -249,7 +248,6 @@ public class SettingsEventHandler
     this.gui.choiceGC.setSelectedItem(RECOMMENDED_GC);
     this.gui.switchExplicitGC.setSelected(RECOMMENDED_DISABLE_EXPLICIT_GC);
 
-
     customGCChangeEvent(null);
     choiceGCChangeEvent(null);
     disableExplicitGCChangeEvent(null);
@@ -265,14 +263,15 @@ public class SettingsEventHandler
     FileUtil.copyFilesToClipboard(files);
   }
 
-  public void copyGameLogEvent(ActionEvent action) {
+  public void copyGameLogEvent (ActionEvent action)
+  {
     List<File> files = new ArrayList<>();
 
     // Initial path where we'll pull game logs from.
     String path = LauncherGlobals.USER_DIR;
 
     // Check if a third party server is selected, in that case, modify the path to copy their logs instead.
-    if(!_flamingoManager.getSelectedServer().name.equalsIgnoreCase("Official")) {
+    if (!_flamingoManager.getSelectedServer().name.equalsIgnoreCase("Official")) {
       path += "\\thirdparty\\" + _flamingoManager.getSelectedServer().getSanitizedName();
     }
 
@@ -302,7 +301,7 @@ public class SettingsEventHandler
     String path = LauncherGlobals.USER_DIR;
 
     // Check if a third party server is selected, in that case, modify the path to copy their logs instead.
-    if(!_flamingoManager.getSelectedServer().name.equalsIgnoreCase("Official")) {
+    if (!_flamingoManager.getSelectedServer().name.equalsIgnoreCase("Official")) {
       path += "\\thirdparty\\" + _flamingoManager.getSelectedServer().getSanitizedName();
     }
 
@@ -325,7 +324,7 @@ public class SettingsEventHandler
   public void openRootFolderEvent (ActionEvent event)
   {
     String rootDir = LauncherGlobals.USER_DIR;
-    if(_flamingoManager.getSelectedServer() != null) {
+    if (_flamingoManager.getSelectedServer() != null) {
       rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
     }
     DesktopUtil.openDir(rootDir);
@@ -333,7 +332,7 @@ public class SettingsEventHandler
 
   public void updateAboutTab (Status status)
   {
-    if(status.version != null) {
+    if (status.version != null) {
       long uptime = System.currentTimeMillis() - status.uptime;
       String uptimeString = Duration.ofMillis(uptime)
         .toString()
@@ -345,7 +344,7 @@ public class SettingsEventHandler
       this.gui.labelFlamingoStatus.setText(_localeManager.getValue("m.flamingo_status", _localeManager.getValue("m.online")));
       this.gui.labelFlamingoVersion.setText(_localeManager.getValue("m.flamingo_version", status.version));
 
-      if(uptimeString.isEmpty()) {
+      if (uptimeString.isEmpty()) {
         this.gui.labelFlamingoUptime.setText(_localeManager.getValue("m.flamingo_uptime", _localeManager.getValue("m.recently_restarted")));
       } else {
         this.gui.labelFlamingoUptime.setText(_localeManager.getValue("m.flamingo_uptime", uptimeString));
@@ -372,30 +371,30 @@ public class SettingsEventHandler
       .trim();
 
     // If the code is empty, do nothing
-    if(code.isEmpty()) return -1;
+    if (code.isEmpty()) return -1;
 
     // Contains any more invalid characters.
-    if(!code.matches("^[0-9A-Za-z\\s-]+$")) return -1;
+    if (!code.matches("^[0-9A-Za-z\\s-]+$")) return -1;
 
     // Get the currently loaded codes
     String codes = _settingsManager.getValue("launcher.betaCodes");
 
     // This beta code is already present in local properties. We return '2' indicating duplicate.
-    if(codes != null && codes.contains(code) && !force) return 2;
+    if (codes != null && codes.contains(code) && !force) return 2;
 
     String response = _flamingoManager.activateBetaCode(code);
 
     // someone already activated this code.
-    if(response.equalsIgnoreCase("already_used")) return 3;
+    if (response.equalsIgnoreCase("already_used")) return 3;
 
     // this machine id already activated this code, we add it anyways to avoid further requests from this machine.
-    if(response.equalsIgnoreCase("already_used_same")) {
+    if (response.equalsIgnoreCase("already_used_same")) {
       addBetaCode(code);
       return 4;
     }
 
     // this code does not exist.
-    if(response.equalsIgnoreCase("not_exists")) return 5;
+    if (response.equalsIgnoreCase("not_exists")) return 5;
 
     // the code was successfully activated, we update the server list and return a success code to the GUI.
     if (response.equalsIgnoreCase("success")) {
@@ -414,13 +413,13 @@ public class SettingsEventHandler
     if (_settingsManager.getValue("launcher.betaCodes").equalsIgnoreCase("")) return;
 
     String[] betaCodes;
-    if(_settingsManager.getValue("launcher.betaCodes").contains(",")) {
+    if (_settingsManager.getValue("launcher.betaCodes").contains(",")) {
       betaCodes = _settingsManager.getValue("launcher.betaCodes").split(",");
     } else {
       betaCodes = new String[] { _settingsManager.getValue("launcher.betaCodes") };
     }
 
-    for(String betaCode : betaCodes) {
+    for (String betaCode : betaCodes) {
       activateBetaCode(betaCode, true);
     }
   }
@@ -436,11 +435,11 @@ public class SettingsEventHandler
     String codes = _settingsManager.getValue("launcher.betaCodes");
 
     // Check if there are any codes to properly format the code string
-    if(codes.equalsIgnoreCase("")) {
+    if (codes.equalsIgnoreCase("")) {
       codes += code;
     } else {
       // don't add duplicates
-      if(codes.contains(code)) return;
+      if (codes.contains(code)) return;
 
       codes += "," + code;
     }
@@ -498,7 +497,7 @@ public class SettingsEventHandler
       boolean is64Bit = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64;
       try {
         this.gui.memorySlider.setMaximum(is64Bit ? 4096 : 1024);
-        if(this.gui.memorySlider.getValue() >= 256) {
+        if (this.gui.memorySlider.getValue() >= 256) {
           memoryChangeEvent(this.gui.memorySlider.getValue());
         }
       } catch (Exception ignored) {}
@@ -508,7 +507,7 @@ public class SettingsEventHandler
 
   public void checkBetaCodes ()
   {
-    if(!_settingsManager.getValue("launcher.betaCodes").trim().isEmpty()) {
+    if (!_settingsManager.getValue("launcher.betaCodes").trim().isEmpty()) {
       this.gui.betaCodeRevalidateButton.setVisible(true);
       this.gui.betaCodeClearLocalButton.setVisible(true);
     }
@@ -518,7 +517,7 @@ public class SettingsEventHandler
   {
     // Port all the contents of their existing extra.txt into
     // the launcher's gameAdditionalArgs setting so that it's also preserved by it.
-    if(!FileUtil.fileExists("old-extra.txt")) {
+    if (!FileUtil.fileExists("old-extra.txt")) {
       try {
         this.gui.argumentsPane.setText(FileUtil.readFile("extra.txt").trim());
         this.gui.eventHandler.saveAdditionalArgs();
@@ -576,5 +575,4 @@ public class SettingsEventHandler
   private final String DEFAULT_PORT = "47624";
   private final String DEFAULT_PUBLIC_KEY = "a5ed0dc3892b9472cfb668e236064e989e95945dad18f3d7e7d8e474d6e03de38bc044c3429b9ca649d0881d601c0eb8ffebc3756f0503f73a8ca1760943ea0e8921ad6f8102026586db3133844bbadbcfcfc666d23982d7684511fbf6cd8bb1d02a14270d0854098d16fe88f99c05825b0fe1b6fd497709106f2c418796aaf7aab7c92f26fcd9fbb3c43df48075fed8dd931273a7b0a333c8de5967797874c1944aed65b47f0792b273a529ac22a2dce08dad04eeebeeff67c7bc99b97682bff488038b28e24f4b5eea77ed966caede52f2c1ecf2b403110a9765daa81ddf718129a040823bead3a0bdca70ef6d08f483757a6d3b6e01fbbcb32006b7872bcd#10001";
   private final String DEFAULT_GETDOWN_URL = "http://gamemedia2.spiralknights.com/spiral/client/";
-
 }
