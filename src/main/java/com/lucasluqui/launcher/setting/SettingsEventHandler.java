@@ -174,17 +174,11 @@ public class SettingsEventHandler
   public void jvmPatchEvent (ActionEvent action)
   {
     String javaVMPatchDir = LauncherGlobals.USER_DIR;
-    int gameJVMVersion = 0;
-    try {
-      gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
-    } catch (Exception e) {
-      gameJVMVersion = 8;
-      log.error("Failed to get game Java VM version", e);
-    }
 
     // If the game's Java VM version is 8 or lower, mark it as legacy so that only
     // legacy Java VMs are offered to patch.
-    final boolean legacy = gameJVMVersion <= 8;
+    final boolean legacy = JavaUtil.isLegacy();
+
     if (!_flamingoManager.getSelectedServer().isOfficial()) {
       javaVMPatchDir += File.separator + "thirdparty" + File.separator + _flamingoManager.getSelectedServer().getSanitizedName();
     }

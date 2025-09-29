@@ -241,17 +241,10 @@ public class LauncherApp
           } else {
             // Organic JVM patch.
             path = LauncherGlobals.USER_DIR;
-            int gameJVMVersion = 0;
-            try {
-              gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
-            } catch (Exception e) {
-              gameJVMVersion = 8;
-              log.error("Failed to get game Java VM version", e);
-            }
 
             // If the game's Java VM version is 8 or lower, mark it as legacy so that only
             // legacy Java VMs are offered to patch.
-            legacy = gameJVMVersion <= 8;
+            legacy = JavaUtil.isLegacy();
           }
           _launcherCtx.jvmPatcher.init(path, legacy);
         } catch (Exception e) {

@@ -33,20 +33,21 @@ public class JavaUtil
     return output;
   }
 
-  public static int getJVMArch(String path) {
+  public static int getJVMArch (String path)
+  {
     String output = getJVMVersionOutput(path);
 
     // We got no output, can't do any checks.
-    if(output.isEmpty()) return 0;
+    if (output.isEmpty()) return 0;
 
     // Matches a 64-bit JVM.
-    if(output.contains("64-Bit") || output.contains("PE32+")) return 64;
+    if (output.contains("64-Bit") || output.contains("PE32+")) return 64;
 
     // No results matched. We assume it's 32-bit.
     return 32;
   }
 
-  public static int getJVMVersion(String path) {
+  public static int getJVMVersion (String path) {
     String output = getJVMVersionOutput(path);
     int version = 0;
 
@@ -66,7 +67,7 @@ public class JavaUtil
     String version = "";
     String osArch = "";
 
-    if(FileUtil.fileExists(path)) {
+    if (FileUtil.fileExists(path)) {
       Properties releaseFile = new Properties();
       try {
         releaseFile.load(Files.newInputStream(new File(path).toPath()));
@@ -87,7 +88,7 @@ public class JavaUtil
       }
     }
 
-    if(version.isEmpty() || osArch.isEmpty()) {
+    if (version.isEmpty() || osArch.isEmpty()) {
       return "Unknown Java VM";
     }
 
@@ -98,7 +99,7 @@ public class JavaUtil
   {
     String rawJavaVMData = getGameJVMData();
 
-    if(rawJavaVMData.contains("Unknown")) {
+    if (rawJavaVMData.contains("Unknown")) {
       return "Unknown, probably 32-bit";
     }
 
@@ -109,7 +110,7 @@ public class JavaUtil
     boolean postJava8Versioning = !rawJavaVMData.startsWith("1.");
 
     try {
-      if(postJava8Versioning) {
+      if (postJava8Versioning) {
         // versioning for Java 10 onwards. e.g. "15.0.2"
         javaMajorVersion = rawJavaVMData;
         javaMinorVersion = rawJavaVMData;
@@ -123,13 +124,13 @@ public class JavaUtil
       log.error(e);
     }
 
-    if(javaMajorVersion.equalsIgnoreCase("unknown")
+    if (javaMajorVersion.equalsIgnoreCase("unknown")
         || javaMinorVersion.equalsIgnoreCase("unknown")
         || javaArch.equalsIgnoreCase("unknown")) {
       return "Unknown, probably 32-bit";
     }
 
-    if(postJava8Versioning) {
+    if (postJava8Versioning) {
       return "Java " + javaMajorVersion + ", " + javaArch;
     }
 
@@ -170,6 +171,18 @@ public class JavaUtil
     return "java";
   }
 
+  public static boolean isLegacy ()
+  {
+    int gameJVMVersion = 8;
+    try {
+      gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
+    } catch (Exception e) {
+      log.error("Failed to get game Java VM version", e);
+    }
+
+    return gameJVMVersion <= 8;
+  }
+
   public static String getJavaVMCommandLineSeparator ()
   {
     return SystemUtil.isWindows() ? ";" : ":";
@@ -204,7 +217,7 @@ public class JavaUtil
   {
     String cmdLineSeparator = getJavaVMCommandLineSeparator();
 
-    for(String p : path) {
+    for (String p : path) {
       System.setProperty("java.library.path", p + cmdLineSeparator + System.getProperty("java.library.path"));
     }
 
@@ -216,5 +229,4 @@ public class JavaUtil
       log.error(e);
     }
   }
-
 }
