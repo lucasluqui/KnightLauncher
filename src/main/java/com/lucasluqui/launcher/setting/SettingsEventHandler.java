@@ -165,7 +165,7 @@ public class SettingsEventHandler
 
     if (confirm) {
       Settings.filePurging = this.gui.switchFilePurging.isSelected();
-      _settingsManager.setValue("launcher.filePurging", this.gui.switchAutoUpdate.isSelected() ? "true" : "false");
+      _settingsManager.setValue("launcher.filePurging", this.gui.switchFilePurging.isSelected() ? "true" : "false");
     }
 
     this.gui.switchFilePurging.setSelected(Settings.filePurging);
