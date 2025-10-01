@@ -290,13 +290,13 @@ public class ModListGUI extends BaseGUI
       JPanel modPane = new JPanel();
       modPane.setLayout(null);
       modPane.setBounds(10, count * 143, 715, 138);
-      modPane.setBackground(CustomColors.INTERFACE_MODLIST_BACKGROUND_LIGHT);
+      modPane.setBackground(CustomColors.INTERFACE_MODLIST_BADGE_BACKGROUND);
 
       JPanel modPaneBackgroundRight = new JPanel();
       modPaneBackgroundRight.setLayout(null);
       modPaneBackgroundRight.setBounds(20, count * 143, 715, 138);
       modPaneBackgroundRight.putClientProperty(FlatClientProperties.STYLE, "border: 0,0,0,0; arc:25");
-      modPaneBackgroundRight.setBackground(CustomColors.INTERFACE_MODLIST_BACKGROUND_LIGHT);
+      modPaneBackgroundRight.setBackground(CustomColors.INTERFACE_MODLIST_BADGE_BACKGROUND);
 
       JLabel modImage = new JLabel();
       BufferedImage modImageBuffImg = null;
@@ -322,7 +322,7 @@ public class ModListGUI extends BaseGUI
       modDescription.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
       modDescription.setEditable(false);
       modDescription.setEnabled(false);
-      modDescription.setBackground(CustomColors.INTERFACE_MODLIST_BACKGROUND_LIGHT);
+      modDescription.setBackground(CustomColors.INTERFACE_MODLIST_BADGE_BACKGROUND);
       modPane.add(modDescription);
 
       JLabel modFooter = new JLabel();

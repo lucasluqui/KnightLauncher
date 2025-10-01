@@ -10,15 +10,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.RoundRectangle2D;
 
 public abstract class BaseGUI
 {
   protected int pY = 0, pX = 0;
 
-  protected int width = 0;
-  protected int height = 0;
+  protected int width;
+  protected int height;
 
-  protected boolean displayTitleBar = false;
+  protected boolean displayTitleBar;
 
   public BaseGUI (int width, int height, boolean displayTitleBar)
   {
@@ -36,6 +37,8 @@ public abstract class BaseGUI
   private void compose ()
   {
     guiFrame.setBounds(0, 0, width, height);
+    guiFrame.setGlassPane(new BorderPane());
+    guiFrame.getGlassPane().setVisible(true);
 
     if (displayTitleBar) {
       titleBar = new JPanel();
@@ -124,6 +127,39 @@ public abstract class BaseGUI
     // Little trick to avoid the window not popping up on boot sometimes.
     guiFrame.setAlwaysOnTop(true);
     guiFrame.setAlwaysOnTop(false);
+  }
+
+  private class BorderPane extends JPanel
+  {
+    BorderPane ()
+    {
+      setOpaque(false);
+      setFocusable(false);
+      setEnabled(false);
+    }
+
+    @Override
+    protected void paintComponent (Graphics g)
+    {
+      super.paintComponent(g);
+      Graphics2D g2 = (Graphics2D) g.create();
+
+      g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+        RenderingHints.VALUE_ANTIALIAS_ON);
+
+      Shape border = new RoundRectangle2D.Double(
+        0.5,
+        0.5,
+        width - 1,
+        height - 1,
+        15, 15);
+
+      g2.setColor(CustomColors.INTERFACE_DEFAULT_WINDOW_BORDER);
+      g2.setStroke(new BasicStroke(1));
+      g2.draw(border);
+
+      g2.dispose();
+    }
   }
 
   public JFrame guiFrame = new JFrame();

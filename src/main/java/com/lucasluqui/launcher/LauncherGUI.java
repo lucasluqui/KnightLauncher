@@ -11,6 +11,7 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
@@ -59,8 +60,8 @@ public class LauncherGUI extends BaseGUI {
     guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     guiFrame.setUndecorated(true);
     guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/rsrc/img/icon-256.png"));
-    guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.setShape(new RoundRectangle2D.Double(0, 0, this.width, this.height, 15, 15));
+    guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.getContentPane().setLayout(null);
 
     serverSwitcherPane = new JPanel();
@@ -87,7 +88,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.setBounds(50, 35, 250, 550);
     guiFrame.getContentPane().add(sidePane);
 
-    banner = ImageUtil.generatePlainColorImage(800, 550, CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    banner = ImageUtil.loadImageWithinJar("/rsrc/img/banner-loading.png");
 
     mainPane = new JPanel() {
       @Override
@@ -103,10 +104,14 @@ public class LauncherGUI extends BaseGUI {
 
     bannerLoading = new JLabel(_localeManager.getValue("m.loading"));
     bannerLoading.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
-    bannerLoading.setBounds(49, 65, 700, 340);
+    bannerLoading.setBounds(325, 235, 150, 45);
     bannerLoading.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
     bannerLoading.setHorizontalAlignment(SwingConstants.CENTER);
     bannerLoading.setVerticalAlignment(SwingConstants.CENTER);
+    bannerLoading.putClientProperty(FlatClientProperties.STYLE,
+      "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND)
+        + "AA; foreground:" + ColorUtil.colorToHexString(Color.WHITE)
+        + "; arc:999;");
     mainPane.add(bannerLoading);
     mainPane.setComponentZOrder(bannerLoading, 0);
 

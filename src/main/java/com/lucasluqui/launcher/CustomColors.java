@@ -23,6 +23,7 @@ public class CustomColors
   public static final Color INTERFACE_DEFAULT                   = new Color(179, 179, 180);
   public static final Color INTERFACE_DEFAULT_FOCUS             = new Color(97, 99, 101);
   public static final Color INTERFACE_DEFAULT_BACKGROUND        = new Color(60, 63, 65);
+  public static final Color INTERFACE_DEFAULT_WINDOW_BORDER     = new Color(46, 46, 46, 110);
 
   public static final Color INTERFACE_COMPONENT_FOCUS           = new Color(140, 140, 140);
 
@@ -48,9 +49,7 @@ public class CustomColors
   public static final Color INTERFACE_SETTINGS_BADGE_CODE_BACKGROUND      = new Color(140, 140, 140);
   public static final Color INTERFACE_SETTINGS_BADGE_CODE_FOREGROUND      = new Color(179, 179, 180);
 
-  public static final Color INTERFACE_MODLIST_BACKGROUND_LIGHT            = new Color(45, 48, 57);
-  public static final Color INTERFACE_MODLIST_BACKGROUND_DARK             = new Color(34, 36, 43);
-  public static final Color INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND   = new Color(0, 174, 255);
+  public static final Color INTERFACE_MODLIST_BADGE_BACKGROUND            = new Color(45, 48, 57);public static final Color INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND   = new Color(0, 174, 255);
   public static final Color INTERFACE_MODLIST_BADGE_RESOURCE_FOREGROUND   = new Color(102, 207, 255);
   public static final Color INTERFACE_MODLIST_BADGE_CODE_BACKGROUND       = new Color(217, 119, 7);
   public static final Color INTERFACE_MODLIST_BADGE_CODE_FOREGROUND       = new Color(248, 159, 58);
