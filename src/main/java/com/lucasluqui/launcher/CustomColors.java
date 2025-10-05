@@ -36,6 +36,7 @@ public class CustomColors
   public static final Color INTERFACE_SERVERSWITCHER_HOVER_BORDER_LOCKED    = new Color(251, 91, 91);
 
   public static final Color INTERFACE_SIDEPANE_BACKGROUND       = new Color(45, 48, 57);
+  public static final Color INTERFACE_SIDEPANE_SUBBACKGROUND    = new Color(38, 41, 48);
   public static final Color INTERFACE_SIDEPANE_FOOTNOTE         = new Color(79, 84, 100);
 
   public static final Color INTERFACE_MAINPANE_BACKGROUND           = new Color(56, 60, 71);

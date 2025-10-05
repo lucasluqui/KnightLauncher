@@ -155,7 +155,7 @@ public class ModListGUI extends BaseGUI
     modFolderButton.addActionListener(this.eventHandler::openModsFolderEvent);
 
     enableAllModsButton = new JButton(_localeManager.getValue("b.enable_all_mods"));
-    enableAllModsButton.setBounds(420, 35, 175, 25 );
+    enableAllModsButton.setBounds(420, 35, 175, 25);
     enableAllModsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     enableAllModsButton.setFocusPainted(false);
     enableAllModsButton.setFocusable(false);

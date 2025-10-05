@@ -143,7 +143,7 @@ public class LauncherGUI extends BaseGUI {
     });
 
     JLabel launcherName = new JLabel(BuildConfig.getName());
-    launcherName.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
+    launcherName.setFont(Fonts.getFont("defaultMedium", 15.0f, Font.PLAIN));
     launcherName.setHorizontalAlignment(SwingConstants.CENTER);
     launcherName.setVerticalAlignment(SwingConstants.CENTER);
     launcherName.setBounds(0, 100, 250, 80);
@@ -151,39 +151,51 @@ public class LauncherGUI extends BaseGUI {
 
     selectedServerLabel = new JLabel("Official");
     selectedServerLabel.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-    selectedServerLabel.setVisible(true);
+    selectedServerLabel.setVisible(false);
     selectedServerLabel.setBounds(28, 185, 120, 20);
     sidePane.add(selectedServerLabel);
 
     serverInfoButton = new JButton();
-    serverInfoButton.setBounds(28, 185, 130, 20);
+    serverInfoButton.setBounds(35, 215, 178, 25);
     serverInfoButton.setEnabled(false);
     serverInfoButton.setVisible(false);
     serverInfoButton.setFocusable(false);
     serverInfoButton.setFocusPainted(false);
+    serverInfoButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     serverInfoButton.setForeground(Color.WHITE);
+    serverInfoButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     serverInfoButton.setToolTipText(_localeManager.getValue("m.server_info"));
     serverInfoButton.addActionListener(l -> this.eventHandler.displaySelectedServerInfo());
     sidePane.add(serverInfoButton);
 
-    Icon playerCountIcon = IconFontSwing.buildIcon(FontAwesome.USERS, 14, CustomColors.INTERFACE_DEFAULT);
-    playerCountLabel = new JLabel(_localeManager.getValue("m.players_online_load"));
-    playerCountLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
-    playerCountLabel.setIcon(playerCountIcon);
-    playerCountLabel.setBounds(28, 210, 200, 18);
+    Icon playerCountTitleIcon = IconFontSwing.buildIcon(FontAwesome.USERS, 17, CustomColors.INTERFACE_DEFAULT);
+    JLabel playerCountTitleLabel = new JLabel(_localeManager.getValue("m.players_online"));
+    playerCountTitleLabel.setIcon(playerCountTitleIcon);
+    playerCountTitleLabel.setBounds(35, 190, 200, 18);
+    playerCountTitleLabel.setFont(Fonts.getFont("defaultMedium", 13.0f, Font.ITALIC));
+    sidePane.add(playerCountTitleLabel);
+
+    playerCountLabel = new JLabel("");
+    playerCountLabel.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+    playerCountLabel.setBounds(25, 190, 190, 18);
+    playerCountLabel.setFont(Fonts.getFont("defaultMedium", 13.0f, Font.ITALIC));
+    playerCountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+    playerCountLabel.setVisible(false);
     sidePane.add(playerCountLabel);
 
     String playerCountTooltipTitle = _localeManager.getValue("m.players_online");
     String playerCountTooltipText = _localeManager.getValue("m.players_online_text");
-    Icon playerCountTooltipButtonIcon = IconFontSwing.buildIcon(FontAwesome.QUESTION, 12, Color.WHITE);
-    playerCountTooltipButton = new JButton();
-    playerCountTooltipButton.setIcon(playerCountTooltipButtonIcon);
-    playerCountTooltipButton.setBounds(173, 213, 13, 13);
+    playerCountTooltipButton = new JButton(_localeManager.getValue("b.learn_more"));
+    playerCountTooltipButton.setBounds(35, 215, 178, 25);
     playerCountTooltipButton.setEnabled(true);
     playerCountTooltipButton.setFocusable(false);
     playerCountTooltipButton.setFocusPainted(false);
     playerCountTooltipButton.setBorderPainted(false);
+    playerCountTooltipButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     playerCountTooltipButton.setForeground(Color.WHITE);
+    playerCountTooltipButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     playerCountTooltipButton.setToolTipText(playerCountTooltipTitle);
     playerCountTooltipButton.addActionListener(l -> {
       Dialog.push(playerCountTooltipText, playerCountTooltipTitle, JOptionPane.INFORMATION_MESSAGE);
@@ -284,7 +296,7 @@ public class LauncherGUI extends BaseGUI {
 
     Icon donateIcon = IconFontSwing.buildIcon(FontAwesome.USD, 17, Color.WHITE);
     JButton donateButton = new JButton(donateIcon);
-    donateButton.setBounds(152, 440, 36, 36);
+    donateButton.setBounds(149, 440, 36, 36);
     donateButton.setToolTipText(_localeManager.getValue("b.donate"));
     donateButton.setFocusPainted(false);
     donateButton.setFocusable(false);

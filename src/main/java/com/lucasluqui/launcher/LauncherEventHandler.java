@@ -249,7 +249,7 @@ public class LauncherEventHandler
       for (Server server : servers) {
 
         if (server.name.equalsIgnoreCase("Official")) {
-          official.playerCountUrl = _localeManager.getValue("m.players_online_official", String.valueOf(LauncherApp.getOfficialApproxPlayerCount()));
+          official.playerCountUrl = "~" + LauncherApp.getOfficialApproxPlayerCount() + " ";
           official.announceBanner = server.announceBanner;
           official.announceContent = server.announceContent;
           official.announceBannerLink = server.announceBannerLink;
@@ -385,6 +385,8 @@ public class LauncherEventHandler
         gui.playerCountLabel.setVisible(true);
         if (selectedServer.playerCountUrl != null) {
           gui.playerCountLabel.setText(selectedServer.playerCountUrl);
+          gui.playerCountLabel.setVisible(true);
+          gui.playerCountLabel.setIcon(null);
           gui.playerCountTooltipButton.setVisible(true);
         }
         gui.serverInfoButton.setEnabled(false);
@@ -410,7 +412,8 @@ public class LauncherEventHandler
         gui.serverInfoButton.setText(selectedServer.name);
 
         // TODO: Fetch player count.
-        gui.playerCountLabel.setText("Players online: Unavailable");
+        gui.playerCountLabel.setText("??? ");
+        gui.playerCountLabel.setIcon(null);
         gui.playerCountTooltipButton.setVisible(false);
 
         //gui.auctionButton.setVisible(false);
