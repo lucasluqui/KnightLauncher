@@ -156,7 +156,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(selectedServerLabel);
 
     serverInfoButton = new JButton();
-    serverInfoButton.setBounds(35, 215, 178, 25);
+    serverInfoButton.setBounds(35, 213, 178, 25);
     serverInfoButton.setEnabled(false);
     serverInfoButton.setVisible(false);
     serverInfoButton.setFocusable(false);
@@ -172,13 +172,13 @@ public class LauncherGUI extends BaseGUI {
     Icon playerCountTitleIcon = IconFontSwing.buildIcon(FontAwesome.USERS, 17, CustomColors.INTERFACE_DEFAULT);
     JLabel playerCountTitleLabel = new JLabel(_localeManager.getValue("m.players_online"));
     playerCountTitleLabel.setIcon(playerCountTitleIcon);
-    playerCountTitleLabel.setBounds(35, 190, 200, 18);
+    playerCountTitleLabel.setBounds(35, 188, 200, 20);
     playerCountTitleLabel.setFont(Fonts.getFont("defaultMedium", 13.0f, Font.ITALIC));
     sidePane.add(playerCountTitleLabel);
 
     playerCountLabel = new JLabel("");
     playerCountLabel.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
-    playerCountLabel.setBounds(25, 190, 190, 18);
+    playerCountLabel.setBounds(25, 188, 190, 20);
     playerCountLabel.setFont(Fonts.getFont("defaultMedium", 13.0f, Font.ITALIC));
     playerCountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     playerCountLabel.setVisible(false);
@@ -187,7 +187,7 @@ public class LauncherGUI extends BaseGUI {
     String playerCountTooltipTitle = _localeManager.getValue("m.players_online");
     String playerCountTooltipText = _localeManager.getValue("m.players_online_text");
     playerCountTooltipButton = new JButton(_localeManager.getValue("b.learn_more"));
-    playerCountTooltipButton.setBounds(35, 215, 178, 25);
+    playerCountTooltipButton.setBounds(35, 213, 178, 25);
     playerCountTooltipButton.setEnabled(true);
     playerCountTooltipButton.setFocusable(false);
     playerCountTooltipButton.setFocusPainted(false);
