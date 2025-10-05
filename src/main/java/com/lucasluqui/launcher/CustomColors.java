@@ -25,7 +25,9 @@ public class CustomColors
   public static final Color INTERFACE_DEFAULT_BACKGROUND        = new Color(60, 63, 65);
   public static final Color INTERFACE_DEFAULT_WINDOW_BORDER     = new Color(46, 46, 46, 110);
 
-  public static final Color INTERFACE_COMPONENT_FOCUS           = new Color(140, 140, 140);
+  public static final Color INTERFACE_COMPONENT_BACKGROUND            = new Color(116, 124, 139);
+  public static final Color INTERFACE_COMPONENT_SELECTED_BACKGROUND   = new Color(107, 114, 128);
+  public static final Color INTERFACE_COMPONENT_FOCUS                 = new Color(140, 140, 140);
 
   public static final Color INTERFACE_BUTTON_BACKGROUND         = new Color(107, 114, 128);
   public static final Color INTERFACE_TEXTFIELD_BACKGROUND      = new Color(107, 114, 128);

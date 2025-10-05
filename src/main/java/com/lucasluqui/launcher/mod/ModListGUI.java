@@ -219,7 +219,7 @@ public class ModListGUI extends BaseGUI
     searchBox = new JTextField();
     searchBox.setBounds(250, 85, 300, 27);
     searchBox.setFont(Fonts.getFont("codeRegular", 11.0f, Font.ITALIC));
-    searchBox.setBackground(CustomColors.INTERFACE_TEXTFIELD_BACKGROUND);
+    searchBox.setBackground(CustomColors.INTERFACE_COMPONENT_BACKGROUND);
     searchBox.setForeground(Color.WHITE);
     searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, _localeManager.getValue("m.modlist_searchbox_placeholder"));
     searchBox.putClientProperty(FlatClientProperties.STYLE,

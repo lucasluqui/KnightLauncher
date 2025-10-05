@@ -649,6 +649,8 @@ public class LauncherGUI extends BaseGUI {
     layeredReturnButton.setFocusPainted(false);
     layeredReturnButton.setBorder(null);
     layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    layeredReturnButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     layeredReturnButton.addActionListener(l -> {
       layeredSettingsPane.setVisible(false);
       layeredModsPane.setVisible(false);
@@ -677,6 +679,8 @@ public class LauncherGUI extends BaseGUI {
     layeredReturnButton.setFocusPainted(false);
     layeredReturnButton.setBorder(null);
     layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    layeredReturnButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     layeredReturnButton.addActionListener(l -> {
       layeredSettingsPane.setVisible(false);
       layeredModsPane.setVisible(false);
@@ -705,6 +709,8 @@ public class LauncherGUI extends BaseGUI {
     layeredReturnButton.setFocusPainted(false);
     layeredReturnButton.setBorder(null);
     layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    layeredReturnButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     layeredReturnButton.addActionListener(l -> {
       layeredSettingsPane.setVisible(false);
       layeredModsPane.setVisible(false);

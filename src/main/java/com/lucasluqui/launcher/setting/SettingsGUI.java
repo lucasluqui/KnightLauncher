@@ -391,9 +391,13 @@ public class SettingsGUI extends BaseGUI
 
     Icon startIcon = IconFontSwing.buildIcon(FontAwesome.SHARE, 16, ColorUtil.getForegroundColor());
     forceRebuildButton = new JButton(startIcon);
-    forceRebuildButton.setBounds(585, 310, 30, 23);
+    forceRebuildButton.setBounds(575, 310, 40, 23);
     forceRebuildButton.setFocusPainted(false);
     forceRebuildButton.setFocusable(false);
+    forceRebuildButton.setForeground(Color.WHITE);
+    forceRebuildButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
+    forceRebuildButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     gamePanel.add(forceRebuildButton);
     forceRebuildButton.addActionListener(action -> {
       eventHandler.forceRebuildEvent();
@@ -414,10 +418,14 @@ public class SettingsGUI extends BaseGUI
     gamePanel.add(labelJVMPatchExplained);
 
     jvmPatchButton = new JButton(startIcon);
-    jvmPatchButton.setBounds(585, 375, 30, 23);
+    jvmPatchButton.setBounds(575, 375, 40, 23);
     jvmPatchButton.setFocusPainted(false);
     jvmPatchButton.setFocusable(false);
     jvmPatchButton.setEnabled(false);
+    jvmPatchButton.setForeground(Color.WHITE);
+    jvmPatchButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
+    jvmPatchButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     jvmPatchButton.setToolTipText(_localeManager.getValue("error.unsupported_64bit"));
     gamePanel.add(jvmPatchButton);
     jvmPatchButton.addActionListener(eventHandler::jvmPatchEvent);
@@ -475,8 +483,10 @@ public class SettingsGUI extends BaseGUI
     betasPanel.add(betaCodeLabel);
 
     betaCodeTextField = new JTextField();
-    betaCodeTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
     betaCodeTextField.setBounds(25, 112, 250, 25);
+    betaCodeTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
+    betaCodeTextField.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     betasPanel.add(betaCodeTextField);
 
     JLabel betaCodeResultLabel = new JLabel("");
@@ -568,9 +578,9 @@ public class SettingsGUI extends BaseGUI
     betaCodeRevalidateButton.setFocusPainted(false);
     betaCodeRevalidateButton.setFocusable(false);
     betaCodeRevalidateButton.setVisible(false);
-    betaCodeClearLocalButton.setForeground(Color.WHITE);
-    betaCodeClearLocalButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
-    betaCodeClearLocalButton.putClientProperty(FlatClientProperties.STYLE,
+    betaCodeRevalidateButton.setForeground(Color.WHITE);
+    betaCodeRevalidateButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
+    betaCodeRevalidateButton.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
     betaCodeRevalidateButton.setToolTipText(_localeManager.getValue("b.beta_code_revalidate"));
     betasPanel.add(betaCodeRevalidateButton);
@@ -703,8 +713,12 @@ public class SettingsGUI extends BaseGUI
     advancedPanel.add(labelArguments);
 
     argumentsPane = new JEditorPane();
-    argumentsPane.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
     argumentsPane.setBounds(25, 117, 615, 100);
+    argumentsPane.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
+    argumentsPane.setBackground(CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+    argumentsPane.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
+    argumentsPane.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     advancedPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
     argumentsPane.addFocusListener(new FocusListener() {
@@ -715,9 +729,12 @@ public class SettingsGUI extends BaseGUI
     });
 
     JScrollPane scrollBar = new JScrollPane(argumentsPane);
+    scrollBar.setBounds(25, 117, 590, 100);
     scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollBar.setBounds(25, 117, 590, 100);
+    scrollBar.getVerticalScrollBar().setBackground(CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+    scrollBar.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 10; borderWidth: 0");
     advancedPanel.add(scrollBar);
 
     argumentsPane.setCaretPosition(0);
@@ -741,14 +758,17 @@ public class SettingsGUI extends BaseGUI
     advancedPanel.add(labelDisclaimer);
 
     JLabel serverAddressLabel = new JLabel(_localeManager.getValue("m.server_address"));
-    serverAddressLabel.setHorizontalAlignment(SwingConstants.LEFT);
     serverAddressLabel.setBounds(25, 269, 450, 50);
+    serverAddressLabel.setHorizontalAlignment(SwingConstants.LEFT);
     serverAddressLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     advancedPanel.add(serverAddressLabel);
 
     serverAddressTextField = new JTextField();
-    serverAddressTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
     serverAddressTextField.setBounds(25, 304, 250, 25);
+    serverAddressTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
+    serverAddressTextField.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
+    serverAddressTextField.putClientProperty(FlatClientProperties.STYLE,
+    "arc: 999; borderWidth: 0");
     serverAddressTextField.addActionListener(e -> {
       eventHandler.saveConnectionSettings();
     });
@@ -756,14 +776,17 @@ public class SettingsGUI extends BaseGUI
     serverAddressTextField.setText(Settings.gameEndpoint);
 
     JLabel portLabel = new JLabel(_localeManager.getValue("m.port"));
-    portLabel.setHorizontalAlignment(SwingConstants.LEFT);
     portLabel.setBounds(280, 269, 450, 50);
+    portLabel.setHorizontalAlignment(SwingConstants.LEFT);
     portLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     advancedPanel.add(portLabel);
 
     portTextField = new JTextField();
-    portTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
     portTextField.setBounds(280, 304, 65, 25);
+    portTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
+    portTextField.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
+    portTextField.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     advancedPanel.add(portTextField);
     portTextField.setText(String.valueOf(Settings.gamePort));
 
@@ -774,30 +797,36 @@ public class SettingsGUI extends BaseGUI
     advancedPanel.add(publicKeyLabel);
 
     publicKeyTextField = new JTextField();
-    publicKeyTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
     publicKeyTextField.setBounds(25, 363, 355, 30);
+    publicKeyTextField.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
+    publicKeyTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
+    publicKeyTextField.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
 
     JScrollBar publicKeyScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
     JPanel publicKeyPanel = new JPanel();
+    publicKeyPanel.setBounds(25, 363, 355, 38);
     publicKeyPanel.setLayout(new BoxLayout(publicKeyPanel, BoxLayout.Y_AXIS));
     BoundedRangeModel publicKeyBRM = publicKeyTextField.getHorizontalVisibility();
     publicKeyScrollBar.setModel(publicKeyBRM);
     publicKeyPanel.add(publicKeyTextField);
     publicKeyPanel.add(publicKeyScrollBar);
-    publicKeyPanel.setBounds(25, 363, 355, 38);
 
     advancedPanel.add(publicKeyPanel);
     publicKeyTextField.setText(Settings.gamePublicKey);
 
     JLabel getdownURLLabel = new JLabel(_localeManager.getValue("m.getdown_url"));
-    getdownURLLabel.setHorizontalAlignment(SwingConstants.LEFT);
     getdownURLLabel.setBounds(25, 387, 450, 50);
+    getdownURLLabel.setHorizontalAlignment(SwingConstants.LEFT);
     getdownURLLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     advancedPanel.add(getdownURLLabel);
 
     getdownURLTextField = new JTextField();
-    getdownURLTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
     getdownURLTextField.setBounds(25, 422, 355, 30);
+    getdownURLTextField.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
+    getdownURLTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
+    getdownURLTextField.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
 
     JScrollBar getdownURLScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
     JPanel getdownURLPanel = new JPanel();

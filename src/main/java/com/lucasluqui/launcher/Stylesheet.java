@@ -31,13 +31,20 @@ public class Stylesheet
 
     UIManager.put("Slider.thumbColor", CustomColors.INTERFACE_DEFAULT);
 
-    UIManager.put("ComboBox.selectionBackground", CustomColors.INTERFACE_DEFAULT_FOCUS);
+    UIManager.put("ComboBox.background", CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+    UIManager.put("ComboBox.popupBackground", CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+    UIManager.put("ComboBox.buttonBackground", CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+    UIManager.put("ComboBox.selectionBackground", CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
 
-    UIManager.put("TextField.selectionBackground", CustomColors.INTERFACE_DEFAULT_FOCUS);
+    UIManager.put("TextField.background", CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+    UIManager.put("TextField.selectionBackground", CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
+    UIManager.put("TextField.caretForeground", Color.WHITE);
 
-    UIManager.put("TextArea.selectionBackground", CustomColors.INTERFACE_DEFAULT_FOCUS);
+    UIManager.put("TextArea.background", CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+    UIManager.put("TextArea.selectionBackground", CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
+    UIManager.put("TextArea.caretForeground", Color.WHITE);
 
-    UIManager.put("EditorPane.selectionBackground", CustomColors.INTERFACE_DEFAULT_FOCUS);
+    UIManager.put("EditorPane.selectionBackground", CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
 
     UIManager.put("ScrollPane.smoothScrolling", true);
 
@@ -52,7 +59,10 @@ public class Stylesheet
     UIManager.put("CheckBox.icon.focusedBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("CheckBox.icon.focusColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("CheckBox.icon.hoverBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
+    UIManager.put("CheckBox.icon.background", CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+    UIManager.put("CheckBox.icon.selectedBackground", CustomColors.INTERFACE_COMPONENT_BACKGROUND);
 
+    UIManager.put("Component.borderColor", CustomColors.INTERFACE_COMPONENT_BACKGROUND);
     UIManager.put("Component.focusedBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("Component.focusColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("Component.hoverBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
