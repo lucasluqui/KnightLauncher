@@ -110,7 +110,7 @@ public class SettingsManager
     Settings.gamePublicKey = getValue("game.publicKey");
     Settings.gameGetdownURL = getValue("game.getdownURL");
     Settings.gameGetdownFullURL = getValue("game.getdownFullURL");
-    Settings.gameAdditionalArgs = getValue("game.additionalArgs");
+    Settings.gameAdditionalArgs = getValue("game.additionalArgs", "");
 
     log.info("Loaded required settings from properties file");
   }
@@ -124,13 +124,23 @@ public class SettingsManager
 
   public String getValue (String key)
   {
+    return getValue(key, "0");
+  }
+
+  public String getValue (String key, String defVal)
+  {
     String value;
     value = prop.getProperty(key);
     log.info("Request for key", "key", key, "value", value);
-    return value;
+    return value != null ? value : defVal;
   }
 
   public String getValue (String key, Server server)
+  {
+    return getValue(key, "0", server);
+  }
+
+  public String getValue (String key, String defVal, Server server)
   {
     String value;
     if (server != null) {
@@ -139,7 +149,7 @@ public class SettingsManager
       value = prop.getProperty(key);
     }
     log.info("Request for key", "key", key, "value", value);
-    return value;
+    return value != null ? value : defVal;
   }
 
   public void setValue (String key, String value)
