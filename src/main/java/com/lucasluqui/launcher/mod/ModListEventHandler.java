@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static com.lucasluqui.launcher.mod.Log.log;
 
@@ -122,7 +123,7 @@ public class ModListEventHandler
     String disabledMods = _settingsManager.getValue("modloader.disabledMods" + keySuffix);
     if (disabledMods.contains(",")) {
       ArrayList<String> disabledModsList = new ArrayList<>(Arrays.asList(disabledMods.split(",")));
-      disabledModsList.remove(mod.getFileName());
+      disabledModsList.removeIf(mod.getFileName()::equals);
       disabledMods = "";
       for (String disabledMod : disabledModsList) {
         if (disabledMods.equals("")) {
