@@ -570,6 +570,11 @@ public class ModManager
             zipMod.setEnabled(false);
             zipMod.addWarningMessage(_localeManager.getValue("m.warning_incompatible_px"));
           }
+        } else if (zipMod.getType() == null) {
+          // Resource mods don't need to match game version.
+          if (zipMod.getType() == null) {
+            mod.setPXCompatible(true);
+          }
         }
       }
 

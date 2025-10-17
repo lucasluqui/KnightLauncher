@@ -391,7 +391,7 @@ public class ModListGUI extends BaseGUI
 
       JCheckBox enabledCheckbox = new JCheckBox();
       enabledCheckbox.setBounds(575, 105, 25, 25);
-      enabledCheckbox.setEnabled(true);
+      enabledCheckbox.setEnabled(mod.isPXCompatible());
       enabledCheckbox.setVisible(true);
       enabledCheckbox.setFocusable(false);
       enabledCheckbox.setFocusPainted(false);

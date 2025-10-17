@@ -110,17 +110,22 @@ public class ModListEventHandler
   @SuppressWarnings("all")
   public void enableMod (Mod mod)
   {
+    if (!mod.isPXCompatible()) {
+      log.info("Tried to enable mod that isn't compatible with the current game version", "mod", mod);
+      return;
+    }
+
     String keySuffix = "";
-    if(_flamingoManager.getSelectedServer() != null) {
+    if (_flamingoManager.getSelectedServer() != null) {
       keySuffix = _flamingoManager.getSelectedServer().isOfficial() ? "" : "_" + _flamingoManager.getSelectedServer().getSanitizedName();
     }
     String disabledMods = _settingsManager.getValue("modloader.disabledMods" + keySuffix);
-    if(disabledMods.contains(",")) {
+    if (disabledMods.contains(",")) {
       ArrayList<String> disabledModsList = new ArrayList<>(Arrays.asList(disabledMods.split(",")));
       disabledModsList.remove(mod.getFileName());
       disabledMods = "";
-      for(String disabledMod : disabledModsList) {
-        if(disabledMods.equals("")) {
+      for (String disabledMod : disabledModsList) {
+        if (disabledMods.equals("")) {
           disabledMods += disabledMod;
         } else {
           disabledMods += "," + disabledMod;
@@ -176,7 +181,7 @@ public class ModListEventHandler
   @SuppressWarnings("unused")
   public void enableAllModsEvent (ActionEvent event)
   {
-    for(Mod mod : _modManager.getModList()) {
+    for (Mod mod : _modManager.getModList()) {
       enableMod(mod);
     }
     refreshMods(false);
@@ -185,7 +190,7 @@ public class ModListEventHandler
   @SuppressWarnings("unused")
   public void disableAllModsEvent (ActionEvent event)
   {
-    for(Mod mod : _modManager.getModList()) {
+    for (Mod mod : _modManager.getModList()) {
       disableMod(mod);
     }
     refreshMods(false);

@@ -89,7 +89,7 @@ public class ZipMod extends Mod
       if (filter != null) {
         for (String filterFileName : filter) {
           // File is inside the filter list we got passed.
-          if (fileHeaderFileName.contains(filterFileName)) {
+          if (fileHeaderFileName.equalsIgnoreCase(filterFileName)) {
             validState = 1;
             this.hasInvalidFileHeaders = true;
             log.info(
