@@ -717,8 +717,7 @@ public class SettingsGUI extends BaseGUI
     argumentsPane.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
     argumentsPane.setBackground(CustomColors.INTERFACE_COMPONENT_BACKGROUND);
     argumentsPane.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
-    argumentsPane.putClientProperty(FlatClientProperties.STYLE,
-      "arc: 999; borderWidth: 0");
+    argumentsPane.putClientProperty(FlatClientProperties.STYLE, "borderWidth: 0");
     advancedPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
     argumentsPane.addFocusListener(new FocusListener() {
