@@ -1,5 +1,8 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
+    <editorconfig>
+      <option name="ENABLED" value="false" />
+    </editorconfig>
     <codeStyleSettings language="JAVA">
       <option name="CLASS_BRACE_STYLE" value="2" />
       <option name="METHOD_BRACE_STYLE" value="2" />
