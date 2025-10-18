@@ -33,7 +33,7 @@ public abstract class BaseGUI
   public void switchVisibility ()
   {
     this.guiFrame.setVisible(!this.guiFrame.isVisible());
-  };
+  }
 
   private void compose ()
   {
@@ -52,34 +52,42 @@ public abstract class BaseGUI
        * Based on Paul Samsotha's reply @ StackOverflow
        * link: https://stackoverflow.com/questions/24476496/drag-and-resize-undecorated-jframe
        */
-      titleBar.addMouseListener(new MouseAdapter() {
-        public void mousePressed(MouseEvent me) {
+      titleBar.addMouseListener(new MouseAdapter()
+      {
+        public void mousePressed (MouseEvent me)
+        {
           pX = me.getX();
           pY = me.getY();
         }
       });
-      titleBar.addMouseListener(new MouseAdapter() {
+      titleBar.addMouseListener(new MouseAdapter()
+      {
         @Override
-        public void mousePressed(MouseEvent me) {
+        public void mousePressed (MouseEvent me)
+        {
           pX = me.getX();
           pY = me.getY();
         }
 
         @Override
-        public void mouseDragged(MouseEvent me) {
+        public void mouseDragged (MouseEvent me)
+        {
           guiFrame.setLocation(guiFrame.getLocation().x + me.getX() - pX,
-              guiFrame.getLocation().y + me.getY() - pY);
+            guiFrame.getLocation().y + me.getY() - pY);
         }
       });
-      titleBar.addMouseMotionListener(new MouseMotionListener() {
+      titleBar.addMouseMotionListener(new MouseMotionListener()
+      {
         @Override
-        public void mouseDragged(MouseEvent me) {
+        public void mouseDragged (MouseEvent me)
+        {
           guiFrame.setLocation(guiFrame.getLocation().x + me.getX() - pX,
-              guiFrame.getLocation().y + me.getY() - pY);
+            guiFrame.getLocation().y + me.getY() - pY);
         }
 
         @Override
-        public void mouseMoved(MouseEvent arg0) {
+        public void mouseMoved (MouseEvent arg0)
+        {
           // Auto-generated method stub
         }
       });
@@ -101,14 +109,32 @@ public abstract class BaseGUI
       //    _discordPresenceClient.stop();
       //    System.exit(0);
       //});
-      closeButton.addMouseListener(new MouseListener() {
-        @Override public void mouseClicked(MouseEvent e) {}
-        @Override public void mousePressed(MouseEvent e) {}
-        @Override public void mouseReleased(MouseEvent e) {}
-        @Override public void mouseEntered(MouseEvent e) {
+      closeButton.addMouseListener(new MouseListener()
+      {
+        @Override
+        public void mouseClicked (MouseEvent e)
+        {
+        }
+
+        @Override
+        public void mousePressed (MouseEvent e)
+        {
+        }
+
+        @Override
+        public void mouseReleased (MouseEvent e)
+        {
+        }
+
+        @Override
+        public void mouseEntered (MouseEvent e)
+        {
           closeButton.setBackground(CustomColors.LIGHT_RED);
         }
-        @Override public void mouseExited(MouseEvent e) {
+
+        @Override
+        public void mouseExited (MouseEvent e)
+        {
           closeButton.setBackground(null);
         }
       });

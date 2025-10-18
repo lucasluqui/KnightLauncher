@@ -3,7 +3,10 @@ package com.lucasluqui.launcher.editor;
 import com.google.inject.Inject;
 import com.jhlabs.image.GaussianFilter;
 import com.jhlabs.image.GrayscaleFilter;
-import com.lucasluqui.launcher.*;
+import com.lucasluqui.launcher.BaseGUI;
+import com.lucasluqui.launcher.CustomColors;
+import com.lucasluqui.launcher.Fonts;
+import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.util.ImageUtil;
 
 import javax.swing.*;
@@ -74,9 +77,11 @@ public class EditorsGUI extends BaseGUI
     editorListPaneScroll.getVerticalScrollBar().setUnitIncrement(16);
     guiFrame.getContentPane().add(editorListPaneScroll);
 
-    JPanel modelViewerPane = new JPanel() {
+    JPanel modelViewerPane = new JPanel()
+    {
       @Override
-      protected void paintComponent(Graphics g) {
+      protected void paintComponent (Graphics g)
+      {
         super.paintComponent(g);
         g.drawImage(modelViewerImage, 0, 0, null);
       }
@@ -93,25 +98,48 @@ public class EditorsGUI extends BaseGUI
     modelViewerLabel.setBounds(0, 0, 740, 100);
     modelViewerPane.add(modelViewerLabel);
 
-    modelViewerPane.addMouseListener(new MouseListener() {
-      @Override public void mouseClicked(MouseEvent e) { eventHandler.startModelViewer(null); }
-      @Override public void mousePressed(MouseEvent e) { eventHandler.startModelViewer(null); }
-      @Override public void mouseReleased(MouseEvent e) { eventHandler.startModelViewer(null); }
-      @Override public void mouseEntered(MouseEvent e) {
+    modelViewerPane.addMouseListener(new MouseListener()
+    {
+      @Override
+      public void mouseClicked (MouseEvent e)
+      {
+        eventHandler.startModelViewer(null);
+      }
+
+      @Override
+      public void mousePressed (MouseEvent e)
+      {
+        eventHandler.startModelViewer(null);
+      }
+
+      @Override
+      public void mouseReleased (MouseEvent e)
+      {
+        eventHandler.startModelViewer(null);
+      }
+
+      @Override
+      public void mouseEntered (MouseEvent e)
+      {
         modelViewerPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         modelViewerImage = modelViewerImageFocused;
         modelViewerPane.repaint();
       }
-      @Override public void mouseExited(MouseEvent e) {
+
+      @Override
+      public void mouseExited (MouseEvent e)
+      {
         modelViewerPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         modelViewerImage = modelViewerImageUnfocused;
         modelViewerPane.repaint();
       }
     });
 
-    JPanel sceneEditorPane = new JPanel() {
+    JPanel sceneEditorPane = new JPanel()
+    {
       @Override
-      protected void paintComponent(Graphics g) {
+      protected void paintComponent (Graphics g)
+      {
         super.paintComponent(g);
         g.drawImage(sceneEditorImage, 0, 0, null);
       }
@@ -128,25 +156,48 @@ public class EditorsGUI extends BaseGUI
     sceneEditorLabel.setBounds(0, 0, 740, 100);
     sceneEditorPane.add(sceneEditorLabel);
 
-    sceneEditorPane.addMouseListener(new MouseListener() {
-      @Override public void mouseClicked(MouseEvent e) { eventHandler.startSceneEditor(null); }
-      @Override public void mousePressed(MouseEvent e) { eventHandler.startSceneEditor(null); }
-      @Override public void mouseReleased(MouseEvent e) { eventHandler.startSceneEditor(null); }
-      @Override public void mouseEntered(MouseEvent e) {
+    sceneEditorPane.addMouseListener(new MouseListener()
+    {
+      @Override
+      public void mouseClicked (MouseEvent e)
+      {
+        eventHandler.startSceneEditor(null);
+      }
+
+      @Override
+      public void mousePressed (MouseEvent e)
+      {
+        eventHandler.startSceneEditor(null);
+      }
+
+      @Override
+      public void mouseReleased (MouseEvent e)
+      {
+        eventHandler.startSceneEditor(null);
+      }
+
+      @Override
+      public void mouseEntered (MouseEvent e)
+      {
         sceneEditorPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         sceneEditorImage = sceneEditorImageFocused;
         sceneEditorPane.repaint();
       }
-      @Override public void mouseExited(MouseEvent e) {
+
+      @Override
+      public void mouseExited (MouseEvent e)
+      {
         sceneEditorPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         sceneEditorImage = sceneEditorImageUnfocused;
         sceneEditorPane.repaint();
       }
     });
 
-    JPanel interfaceTesterPane = new JPanel() {
+    JPanel interfaceTesterPane = new JPanel()
+    {
       @Override
-      protected void paintComponent(Graphics g) {
+      protected void paintComponent (Graphics g)
+      {
         super.paintComponent(g);
         g.drawImage(interfaceTesterImage, 0, 0, null);
       }
@@ -163,25 +214,48 @@ public class EditorsGUI extends BaseGUI
     interfaceTesterLabel.setBounds(0, 0, 740, 100);
     interfaceTesterPane.add(interfaceTesterLabel);
 
-    interfaceTesterPane.addMouseListener(new MouseListener() {
-      @Override public void mouseClicked(MouseEvent e) { eventHandler.startInterfaceTester(null); }
-      @Override public void mousePressed(MouseEvent e) { eventHandler.startInterfaceTester(null); }
-      @Override public void mouseReleased(MouseEvent e) { eventHandler.startInterfaceTester(null); }
-      @Override public void mouseEntered(MouseEvent e) {
+    interfaceTesterPane.addMouseListener(new MouseListener()
+    {
+      @Override
+      public void mouseClicked (MouseEvent e)
+      {
+        eventHandler.startInterfaceTester(null);
+      }
+
+      @Override
+      public void mousePressed (MouseEvent e)
+      {
+        eventHandler.startInterfaceTester(null);
+      }
+
+      @Override
+      public void mouseReleased (MouseEvent e)
+      {
+        eventHandler.startInterfaceTester(null);
+      }
+
+      @Override
+      public void mouseEntered (MouseEvent e)
+      {
         interfaceTesterPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         interfaceTesterImage = interfaceTesterImageFocused;
         interfaceTesterPane.repaint();
       }
-      @Override public void mouseExited(MouseEvent e) {
+
+      @Override
+      public void mouseExited (MouseEvent e)
+      {
         interfaceTesterPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         interfaceTesterImage = interfaceTesterImageUnfocused;
         interfaceTesterPane.repaint();
       }
     });
 
-    JPanel particleEditorPane = new JPanel() {
+    JPanel particleEditorPane = new JPanel()
+    {
       @Override
-      protected void paintComponent(Graphics g) {
+      protected void paintComponent (Graphics g)
+      {
         super.paintComponent(g);
         g.drawImage(particleEditorImage, 0, 0, null);
       }
@@ -198,16 +272,37 @@ public class EditorsGUI extends BaseGUI
     particleEditorLabel.setBounds(0, 0, 740, 100);
     particleEditorPane.add(particleEditorLabel);
 
-    particleEditorPane.addMouseListener(new MouseListener() {
-      @Override public void mouseClicked(MouseEvent e) { eventHandler.startParticleEditor(null); }
-      @Override public void mousePressed(MouseEvent e) { eventHandler.startParticleEditor(null); }
-      @Override public void mouseReleased(MouseEvent e) { eventHandler.startParticleEditor(null); }
-      @Override public void mouseEntered(MouseEvent e) {
+    particleEditorPane.addMouseListener(new MouseListener()
+    {
+      @Override
+      public void mouseClicked (MouseEvent e)
+      {
+        eventHandler.startParticleEditor(null);
+      }
+
+      @Override
+      public void mousePressed (MouseEvent e)
+      {
+        eventHandler.startParticleEditor(null);
+      }
+
+      @Override
+      public void mouseReleased (MouseEvent e)
+      {
+        eventHandler.startParticleEditor(null);
+      }
+
+      @Override
+      public void mouseEntered (MouseEvent e)
+      {
         particleEditorPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         particleEditorImage = particleEditorImageFocused;
         particleEditorPane.repaint();
       }
-      @Override public void mouseExited(MouseEvent e) {
+
+      @Override
+      public void mouseExited (MouseEvent e)
+      {
         particleEditorPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         particleEditorImage = particleEditorImageUnfocused;
         particleEditorPane.repaint();
@@ -232,7 +327,7 @@ public class EditorsGUI extends BaseGUI
   protected void startFakeProgress ()
   {
     this.editorLaunchState.setText(_localeManager.getValue("m.editor_loading"));
-    for(int i = editorLaunchFakeProgressBar.getMinimum(); i <= editorLaunchFakeProgressBar.getMaximum(); i++) {
+    for (int i = editorLaunchFakeProgressBar.getMinimum(); i <= editorLaunchFakeProgressBar.getMaximum(); i++) {
       final int percent = i;
       SwingUtilities.invokeLater(() -> editorLaunchFakeProgressBar.setValue(percent));
       rotateFakeLabel(i);
@@ -247,7 +342,7 @@ public class EditorsGUI extends BaseGUI
 
   protected void rotateFakeLabel (int pot)
   {
-    switch(pot) {
+    switch (pot) {
       case 30:
         this.editorLaunchState.setText(_localeManager.getValue("m.editor_fake_loading_1"));
         break;

@@ -29,7 +29,9 @@ public class Modpack extends Mod
     parseMetadata();
   }
 
-  public void mount () { }
+  public void mount ()
+  {
+  }
 
   @SuppressWarnings("all")
   public void mount (String rootDir, String[] filter, Properties stamps)

@@ -9,8 +9,8 @@ import com.samskivert.util.Logger;
 public class Log
 {
 
-    /**
-     * The {@link Logger} reference.
-     */
-    public static Logger log = Logger.getLogger("com.lucasluqui");
+  /**
+   * The {@link Logger} reference.
+   */
+  public static Logger log = Logger.getLogger("com.lucasluqui");
 }

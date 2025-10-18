@@ -1,6 +1,6 @@
 package com.lucasluqui.launcher.mod.data;
 
-import com.lucasluqui.util.*;
+import com.lucasluqui.util.ZipUtil;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
 import org.json.JSONObject;
@@ -37,7 +37,9 @@ public class ZipMod extends Mod
     parseMetadata();
   }
 
-  public void mount () { }
+  public void mount ()
+  {
+  }
 
   public void mount (String rootDir, String[] filter, Properties stamps)
   {
@@ -48,7 +50,7 @@ public class ZipMod extends Mod
 
       for (Map.Entry<FileHeader, Integer> entry : fileHeaderData.getFileHeaders().entrySet()) {
         if (entry.getValue() < 1) ZipUtil.unzipFileHeader(
-            zipFile, entry.getKey(), rootDir + "/rsrc/", false);
+          zipFile, entry.getKey(), rootDir + "/rsrc/", false);
         ZipUtil.closeZip(zipFile);
       }
 
@@ -58,7 +60,7 @@ public class ZipMod extends Mod
       if (this.type.equalsIgnoreCase("class")) {
         for (Map.Entry<FileHeader, Integer> entry : fileHeaderData.getFileHeaders().entrySet()) {
           if (entry.getValue() < 1) ZipUtil.unzipFileHeader(
-              zipFile, entry.getKey(), rootDir + "/code/class-changes/", false);
+            zipFile, entry.getKey(), rootDir + "/code/class-changes/", false);
           ZipUtil.closeZip(zipFile);
         }
       }
@@ -93,8 +95,8 @@ public class ZipMod extends Mod
             validState = 1;
             this.hasInvalidFileHeaders = true;
             log.info(
-                "Ignored file header found in filter list",
-                "fileName", this.getFileName(), "header", fileHeaderFileName);
+              "Ignored file header found in filter list",
+              "fileName", this.getFileName(), "header", fileHeaderFileName);
           }
         }
       }
@@ -106,8 +108,8 @@ public class ZipMod extends Mod
           validState = 2;
           this.hasInvalidFileHeaders = true;
           log.info(
-              "Ignored file header found in forced filter list",
-              "fileName", this.getFileName(), "header", fileHeaderFileName);
+            "Ignored file header found in forced filter list",
+            "fileName", this.getFileName(), "header", fileHeaderFileName);
         }
       }
 
@@ -120,11 +122,11 @@ public class ZipMod extends Mod
           validState = 3;
           this.hasInvalidFileHeaders = true;
           log.info(
-              "Ignored file header older than vanilla counterpart",
-              "fileName", this.getFileName(),
-              "header", fileHeaderFileName,
-              "modStamp", modStamp,
-              "vanillaStamp", vanillaStamp
+            "Ignored file header older than vanilla counterpart",
+            "fileName", this.getFileName(),
+            "header", fileHeaderFileName,
+            "modStamp", modStamp,
+            "vanillaStamp", vanillaStamp
           );
         }
       }

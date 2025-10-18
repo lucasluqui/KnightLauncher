@@ -29,7 +29,7 @@ public class LocaleManager
     InputStream langFallbackStream = LocaleManager.class.getResourceAsStream("/rsrc/lang/lang_en.properties");
 
     try (final InputStreamReader in = new InputStreamReader(
-        langStream, StandardCharsets.UTF_8)) {
+      langStream, StandardCharsets.UTF_8)) {
       _lang.load(in);
     } catch (IOException e) {
       log.error("Failed to load language file");
@@ -37,7 +37,7 @@ public class LocaleManager
     }
 
     try (final InputStreamReader in = new InputStreamReader(
-        langFallbackStream, StandardCharsets.UTF_8)) {
+      langFallbackStream, StandardCharsets.UTF_8)) {
       _langFallback.load(in);
     } catch (IOException e) {
       log.error("Failed to load fallback language file");
@@ -168,19 +168,19 @@ public class LocaleManager
   }
 
   public String[] AVAILABLE_LANGUAGES = {
-      "English",
-      "Arabic",
-      "Deutsch",
-      "Español",
-      "Eesti",
-      "Français",
-      "Italiano",
-      "Japanese",
-      "Polski",
-      "Português (Brasil)",
-      "Russian",
-      "Chinese (Simplified)",
-      "Chinese (Traditional)",
+    "English",
+    "Arabic",
+    "Deutsch",
+    "Español",
+    "Eesti",
+    "Français",
+    "Italiano",
+    "Japanese",
+    "Polski",
+    "Português (Brasil)",
+    "Russian",
+    "Chinese (Simplified)",
+    "Chinese (Traditional)",
   };
 
 }

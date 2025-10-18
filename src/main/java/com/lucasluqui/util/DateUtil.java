@@ -15,11 +15,11 @@ public class DateUtil
     long hoursRemaining = minutesRemaining / 60L;
     long daysRemaining = hoursRemaining / 24L;
 
-    if(daysRemaining > 0L) {
+    if (daysRemaining > 0L) {
       return daysRemaining + " {d}";
-    } else if(hoursRemaining > 0L) {
+    } else if (hoursRemaining > 0L) {
       return hoursRemaining + " {h}";
-    } else if(minutesRemaining > 0L) {
+    } else if (minutesRemaining > 0L) {
       return minutesRemaining + " {m}";
     } else {
       return "";
@@ -37,10 +37,10 @@ public class DateUtil
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM", java.util.Locale.ENGLISH);
 
     return dateFormat.format(calendar.getTime()) + " "
-        + getDayNumberWithSuffix(calendar.get(Calendar.DATE)) + " "
-        + calendar.get(Calendar.HOUR_OF_DAY) + ":" + getMinuteWithTrailingZero(calendar.get(Calendar.MINUTE)) + " "
-        + (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM") + " "
-        + TIMEZONE;
+      + getDayNumberWithSuffix(calendar.get(Calendar.DATE)) + " "
+      + calendar.get(Calendar.HOUR_OF_DAY) + ":" + getMinuteWithTrailingZero(calendar.get(Calendar.MINUTE)) + " "
+      + (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM") + " "
+      + TIMEZONE;
   }
 
   private static String getDayNumberWithSuffix (int date)

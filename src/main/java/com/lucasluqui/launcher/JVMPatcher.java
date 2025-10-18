@@ -7,7 +7,10 @@ import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
-import com.lucasluqui.util.*;
+import com.lucasluqui.util.FileUtil;
+import com.lucasluqui.util.ImageUtil;
+import com.lucasluqui.util.ProcessUtil;
+import com.lucasluqui.util.ZipUtil;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -134,9 +137,9 @@ public class JVMPatcher extends BaseGUI
         _launcherCtx.exit(true);
       } else {
         Dialog.push(
-            "On your first time launching you are required to patch a 64-bit Java VM\nand thus you cannot close this window.",
-            "Java VM Patcher",
-            JOptionPane.INFORMATION_MESSAGE
+          "On your first time launching you are required to patch a 64-bit Java VM\nand thus you cannot close this window.",
+          "Java VM Patcher",
+          JOptionPane.INFORMATION_MESSAGE
         );
       }
     });
@@ -200,7 +203,7 @@ public class JVMPatcher extends BaseGUI
     }
 
     URLDownloadQueue downloadQueue = new URLDownloadQueue(
-        "Java VM Patch", downloadUrl, new File(this.path, "jvm_pack.zip")
+      "Java VM Patch", downloadUrl, new File(this.path, "jvm_pack.zip")
     );
 
     _downloadManager.add(downloadQueue);
@@ -208,8 +211,8 @@ public class JVMPatcher extends BaseGUI
 
     if (!_downloadManager.getQueueStatus(downloadQueue)) {
       String downloadErrMsg = "The Java VM download couldn't be initiated after 3 attempts." +
-          "\n" + BuildConfig.getName() + " will boot without patching but be aware game performance might not be the best." +
-          "\nYou can manually restart this patcher heading to the 'Game' tab within the launcher's Settings menu.";
+        "\n" + BuildConfig.getName() + " will boot without patching but be aware game performance might not be the best." +
+        "\nYou can manually restart this patcher heading to the 'Game' tab within the launcher's Settings menu.";
       Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
       log.error(downloadErrMsg);
     }
@@ -220,7 +223,7 @@ public class JVMPatcher extends BaseGUI
     _settingsManager.setValue("launcher.jvm_patched", "true");
     _moduleManager.loadJarCommandLine();
     _discordPresenceClient.stop();
-    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar" }, true);
+    ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar"}, true);
     guiFrame.dispose();
     System.exit(0);
   }

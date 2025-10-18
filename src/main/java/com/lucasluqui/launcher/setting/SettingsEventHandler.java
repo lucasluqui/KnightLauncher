@@ -2,7 +2,9 @@ package com.lucasluqui.launcher.setting;
 
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
-import com.lucasluqui.launcher.*;
+import com.lucasluqui.launcher.LauncherContext;
+import com.lucasluqui.launcher.LauncherGlobals;
+import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.flamingo.data.Status;
@@ -89,7 +91,7 @@ public class SettingsEventHandler
 
   public void languageChangeEvent (ItemEvent event)
   {
-    if(event.getStateChange() == ItemEvent.SELECTED) return; // Prevent triggering 2 times
+    if (event.getStateChange() == ItemEvent.SELECTED) return; // Prevent triggering 2 times
     Settings.lang = _localeManager.getLangCode((String) this.gui.choiceLanguage.getSelectedItem());
     _settingsManager.setValue("launcher.lang", _localeManager.getLangCode((String) this.gui.choiceLanguage.getSelectedItem()));
     Dialog.push(_localeManager.getValue("m.prompt_restart_required"), JOptionPane.INFORMATION_MESSAGE);
@@ -183,7 +185,7 @@ public class SettingsEventHandler
       javaVMPatchDir += File.separator + "thirdparty" + File.separator + _flamingoManager.getSelectedServer().getSanitizedName();
     }
 
-    ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar", "forceJVMPatch", javaVMPatchDir, String.valueOf(legacy)}, true);
+    ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar", "forceJVMPatch", javaVMPatchDir, String.valueOf(legacy)}, true);
     this.gui.guiFrame.dispose();
     System.exit(1);
   }
@@ -330,9 +332,9 @@ public class SettingsEventHandler
       long uptime = System.currentTimeMillis() - status.uptime;
       String uptimeString = Duration.ofMillis(uptime)
         .toString()
-        .replace( "PT" , "" )
-        .replace( "H" , " " + _localeManager.getValue("m.hours").toLowerCase() + " " )
-        .replace( "M" , " " + _localeManager.getValue("m.minutes").toLowerCase() + " " );
+        .replace("PT", "")
+        .replace("H", " " + _localeManager.getValue("m.hours").toLowerCase() + " ")
+        .replace("M", " " + _localeManager.getValue("m.minutes").toLowerCase() + " ");
       uptimeString = uptimeString.substring(0, uptimeString.length() - 7);
 
       this.gui.labelFlamingoStatus.setText(_localeManager.getValue("m.flamingo_status", _localeManager.getValue("m.online")));
@@ -410,7 +412,7 @@ public class SettingsEventHandler
     if (_settingsManager.getValue("launcher.betaCodes").contains(",")) {
       betaCodes = _settingsManager.getValue("launcher.betaCodes").split(",");
     } else {
-      betaCodes = new String[] { _settingsManager.getValue("launcher.betaCodes") };
+      betaCodes = new String[]{_settingsManager.getValue("launcher.betaCodes")};
     }
 
     for (String betaCode : betaCodes) {

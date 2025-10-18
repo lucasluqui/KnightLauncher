@@ -9,7 +9,8 @@ import com.lucasluqui.download.data.URLDownloadQueue;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.mod.ModManager;
-import com.lucasluqui.launcher.setting.*;
+import com.lucasluqui.launcher.setting.Settings;
+import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -27,7 +28,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.lucasluqui.launcher.Log.log;
@@ -134,9 +136,9 @@ public class LauncherEventHandler
 
           try {
             _downloadManager.add(new URLDownloadQueue(
-                sanitizedServerName,
-                new URL(selectedServer.deployUrl + "/" + selectedServer.version + ".zip"),
-                localFile
+              sanitizedServerName,
+              new URL(selectedServer.deployUrl + "/" + selectedServer.version + ".zip"),
+              localFile
             ));
           } catch (MalformedURLException e) {
             log.error(e);
@@ -144,7 +146,7 @@ public class LauncherEventHandler
           _downloadManager.processQueues();
 
           ZipUtil.unzip(localFile.getAbsolutePath(),
-              LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName);
+            LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName);
 
           FileUtil.deleteFile(localFile.getAbsolutePath());
         }
@@ -160,9 +162,9 @@ public class LauncherEventHandler
 
           try {
             _downloadManager.add(new URLDownloadQueue(
-                sanitizedServerName + " Update",
-                new URL(selectedServer.deployUrl + "/" + selectedServer.version + ".zip"),
-                localFile
+              sanitizedServerName + " Update",
+              new URL(selectedServer.deployUrl + "/" + selectedServer.version + ".zip"),
+              localFile
             ));
           } catch (MalformedURLException e) {
             log.error(e);
@@ -170,7 +172,7 @@ public class LauncherEventHandler
           _downloadManager.processQueues();
 
           ZipUtil.unzip(localFile.getAbsolutePath(),
-              LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName);
+            LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName);
 
           FileUtil.deleteFile(localFile.getAbsolutePath());
 
@@ -180,7 +182,7 @@ public class LauncherEventHandler
             try {
               _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_bundle_regen", selectedServer.name));
               ZipUtil.zipFolderContents(new File(selectedServer.getRootDirectory() + "/rsrc"),
-                  new File(selectedServer.getRootDirectory() + "/rsrc/base.zip"), "base.zip");
+                new File(selectedServer.getRootDirectory() + "/rsrc/base.zip"), "base.zip");
             } catch (Exception e) {
               log.error(e);
             }
@@ -190,7 +192,7 @@ public class LauncherEventHandler
 
         // make sure there's a base zip file we can use to clean files with.
         String rootDir = selectedServer.getRootDirectory();
-        if(FileUtil.fileExists(rootDir + "/rsrc")
+        if (FileUtil.fileExists(rootDir + "/rsrc")
           && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
           try {
             ZipUtil.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
@@ -225,7 +227,7 @@ public class LauncherEventHandler
   {
     Thread launchAltThread = new Thread(() -> {
 
-      if(_flamingoManager.getSelectedServer().isOfficial()) {
+      if (_flamingoManager.getSelectedServer().isOfficial()) {
         // official servers alt launch procedure
         ProcessUtil.run(LauncherGlobals.ALT_CLIENT_ARGS, true);
         _discordPresenceClient.stop();
@@ -276,7 +278,7 @@ public class LauncherEventHandler
         // make sure there's a base zip file we can use to clean files with.
         String rootDir = server.getRootDirectory();
         if (FileUtil.fileExists(rootDir + "/rsrc")
-            && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
+          && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
           try {
             ZipUtil.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
           } catch (Exception e) {
@@ -307,13 +309,13 @@ public class LauncherEventHandler
   public void saveSelectedServer ()
   {
     String serverName = _flamingoManager.getSelectedServer().getSanitizedName();
-    if(serverName.isEmpty()) serverName = "official";
+    if (serverName.isEmpty()) serverName = "official";
     _settingsManager.setValue("launcher.selectedServerName", serverName);
   }
 
   public void saveSelectedServer (String serverName)
   {
-    if(serverName.isEmpty()) serverName = "official";
+    if (serverName.isEmpty()) serverName = "official";
     _settingsManager.setValue("launcher.selectedServerName", serverName);
   }
 
@@ -322,7 +324,8 @@ public class LauncherEventHandler
     DesktopUtil.openWebpage("https://www.sk-ah.com");
   }
 
-  public void repairGameFilesEvent () {
+  public void repairGameFilesEvent ()
+  {
     Thread repairThread = new Thread(() -> {
       _modManager.setMountRequired(true);
       _modManager.startStrictFileRebuild();
@@ -331,12 +334,14 @@ public class LauncherEventHandler
     repairThread.start();
   }
 
-  public void gameSettingsEvent () {
+  public void gameSettingsEvent ()
+  {
     this.gui.showSettingsMenu();
     _launcherCtx.settingsGUI.tabbedPane.setSelectedIndex(1);
   }
 
-  public void openGameFolderEvent () {
+  public void openGameFolderEvent ()
+  {
     _launcherCtx.settingsGUI.eventHandler.openRootFolderEvent(null);
   }
 
@@ -346,7 +351,7 @@ public class LauncherEventHandler
 
     String infoString = _localeManager.getValue(
       "m.server_info_text",
-      new String[] {
+      new String[]{
         selectedServer.name,
         selectedServer.description,
         selectedServer.version,
@@ -354,13 +359,13 @@ public class LauncherEventHandler
       }
     );
 
-    if(!selectedServer.siteUrl.equalsIgnoreCase("null"))
+    if (!selectedServer.siteUrl.equalsIgnoreCase("null"))
       infoString += _localeManager.getValue("m.server_info_text_siteurl", selectedServer.siteUrl);
 
-    if(!selectedServer.communityUrl.equalsIgnoreCase("null"))
+    if (!selectedServer.communityUrl.equalsIgnoreCase("null"))
       infoString += _localeManager.getValue("m.server_info_text_communityurl", selectedServer.communityUrl);
 
-    if(!selectedServer.sourceCodeUrl.equalsIgnoreCase("null"))
+    if (!selectedServer.sourceCodeUrl.equalsIgnoreCase("null"))
       infoString += _localeManager.getValue("m.server_info_text_sourcecode", selectedServer.sourceCodeUrl);
 
     infoString += _localeManager.getValue("m.server_info_text_disclaimer");
@@ -460,11 +465,11 @@ public class LauncherEventHandler
         JLabel serverIcon = new JLabel();
         serverIcon.setBounds(4, 4, 42, 42);
         serverIcon.setHorizontalAlignment(SwingConstants.CENTER);
-        if(server.isOfficial()) {
+        if (server.isOfficial()) {
           serverIcon.setIcon(officialServerImageIcon);
         } else {
           ImageIcon serverIconImageIcon;
-          if(server.serverIcon.equalsIgnoreCase("null")) {
+          if (server.serverIcon.equalsIgnoreCase("null")) {
             serverIconImageIcon = defaultServerImageIcon;
           } else {
             BufferedImage serverIconBufferedImage = _cacheManager.fetchImage(server.serverIcon, 32, 32);
@@ -479,23 +484,40 @@ public class LauncherEventHandler
           serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + borderColor + ",2; background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND));
           serverIcon.updateUI();
         } else {
-          serverIcon.addMouseListener(new MouseListener() {
-            @Override public void mouseClicked(MouseEvent e) {
+          serverIcon.addMouseListener(new MouseListener()
+          {
+            @Override
+            public void mouseClicked (MouseEvent e)
+            {
               if (!locked) {
                 _flamingoManager.setSelectedServer(server);
                 selectedServerChanged();
                 saveSelectedServer(server.getSanitizedName());
               }
             }
-            @Override public void mousePressed(MouseEvent e) {}
-            @Override public void mouseReleased(MouseEvent e) {}
-            @Override public void mouseEntered(MouseEvent e) {
+
+            @Override
+            public void mousePressed (MouseEvent e)
+            {
+            }
+
+            @Override
+            public void mouseReleased (MouseEvent e)
+            {
+            }
+
+            @Override
+            public void mouseEntered (MouseEvent e)
+            {
               if (!locked) {
                 serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + borderColor + ",2; background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND));
                 serverIcon.updateUI();
               }
             }
-            @Override public void mouseExited(MouseEvent e) {
+
+            @Override
+            public void mouseExited (MouseEvent e)
+            {
               if (!locked) {
                 serverIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 0; border:0,0,0,0");
                 serverIcon.updateUI();
@@ -520,17 +542,34 @@ public class LauncherEventHandler
       addServerIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, 18, Color.WHITE));
       addServerIcon.setVisible(false);
       addServerPane.add(addServerIcon);
-      addServerIcon.addMouseListener(new MouseListener() {
-        @Override public void mouseClicked(MouseEvent e) {
+      addServerIcon.addMouseListener(new MouseListener()
+      {
+        @Override
+        public void mouseClicked (MouseEvent e)
+        {
           Dialog.push(_localeManager.getValue("m.add_server_text"), _localeManager.getValue("m.add_server"), JOptionPane.INFORMATION_MESSAGE);
         }
-        @Override public void mousePressed(MouseEvent e) {}
-        @Override public void mouseReleased(MouseEvent e) {}
-        @Override public void mouseEntered(MouseEvent e) {
+
+        @Override
+        public void mousePressed (MouseEvent e)
+        {
+        }
+
+        @Override
+        public void mouseReleased (MouseEvent e)
+        {
+        }
+
+        @Override
+        public void mouseEntered (MouseEvent e)
+        {
           addServerIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 15; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER) + ",2");
           addServerIcon.updateUI();
         }
-        @Override public void mouseExited(MouseEvent e) {
+
+        @Override
+        public void mouseExited (MouseEvent e)
+        {
           addServerIcon.putClientProperty(FlatClientProperties.STYLE, "arc: 0; border:0,0,0,0");
           addServerIcon.updateUI();
         }
@@ -559,14 +598,14 @@ public class LauncherEventHandler
     Thread refreshThread = new Thread(() -> {
       this.displayingAnimBanner = false;
 
-      if(!_flamingoManager.getOnline()) {
+      if (!_flamingoManager.getOnline()) {
         return;
       }
 
       Server selectedServer = _flamingoManager.getSelectedServer();
       String bannerUrl = selectedServer.announceBanner.split("\\|")[0];
       double bannerIntensity = Double.parseDouble(selectedServer.announceBanner.split("\\|")[1]);
-      if(!bannerUrl.contains(".gif")) {
+      if (!bannerUrl.contains(".gif")) {
         this.gui.banner = this.gui.processImageForBanner(_cacheManager.fetchImage(bannerUrl, 800, 550), bannerIntensity);
         this.gui.playAnimatedBannersButton.setVisible(false);
       } else {
@@ -640,11 +679,11 @@ public class LauncherEventHandler
       // Sleep the thread for a bit to be fully sure updater.jar isn't locked.
       Thread.sleep(1000);
 
-      ProcessUtil.run(new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update", newVersion}, true);
+      ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update", newVersion}, true);
       _launcherCtx.exit(true);
     } catch (Exception e) {
       String downloadErrMsg = "An error occurred while trying to start the launcher updater." +
-          "\nPlease try again later.";
+        "\nPlease try again later.";
       downloadErrMsg += "\n\nError: " + e;
       for (StackTraceElement stElement : e.getStackTrace()) {
         downloadErrMsg += "\n" + stElement.toString();
@@ -664,11 +703,11 @@ public class LauncherEventHandler
   public void showLatestChangelog ()
   {
     Dialog.push(_localeManager.getValue(
-        "m.changelog_text",
-        new String[] {
-          BuildConfig.getVersion(),
-          this.latestRelease, this.latestChangelog
-        }), JOptionPane.INFORMATION_MESSAGE);
+      "m.changelog_text",
+      new String[]{
+        BuildConfig.getVersion(),
+        this.latestRelease, this.latestChangelog
+      }), JOptionPane.INFORMATION_MESSAGE);
   }
 
   public void switchBannerAnimations ()
@@ -687,31 +726,32 @@ public class LauncherEventHandler
   {
     List<String> argsList = new ArrayList<>();
 
-    if(SystemUtil.isWindows()) {
+    if (SystemUtil.isWindows()) {
       argsList.add(LauncherGlobals.USER_DIR + File.separator + "java_vm" + File.separator + "bin" + File.separator + "java");
       argsList.add("-classpath");
       argsList.add(LauncherGlobals.USER_DIR + File.separator + "./code/config.jar;" +
-          LauncherGlobals.USER_DIR + File.separator + "./code/projectx-config.jar;" +
-          LauncherGlobals.USER_DIR + File.separator + "./code/projectx-pcode.jar;" +
-          LauncherGlobals.USER_DIR + File.separator + "./code/lwjgl.jar;" +
-          LauncherGlobals.USER_DIR + File.separator + "./code/lwjgl_util.jar;" +
-          LauncherGlobals.USER_DIR + File.separator + "./code/jinput.jar;" +
-          LauncherGlobals.USER_DIR + File.separator + "./code/jutils.jar;" +
-          LauncherGlobals.USER_DIR + File.separator + "./code/jshortcut.jar;" +
-          LauncherGlobals.USER_DIR + File.separator + "./code/commons-beanutils.jar;" +
-          LauncherGlobals.USER_DIR + File.separator + "./code/commons-digester.jar;" +
-          LauncherGlobals.USER_DIR + File.separator + "./code/commons-logging.jar;" +
-          LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar;");
+        LauncherGlobals.USER_DIR + File.separator + "./code/projectx-config.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/projectx-pcode.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/lwjgl.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/lwjgl_util.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/jinput.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/jutils.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/jshortcut.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/commons-beanutils.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/commons-digester.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/commons-logging.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar;");
       argsList.add("-Dcom.threerings.getdown=false");
-      if(Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
-      if(Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld")) argsList.add("-XX:+UseParallelGC");
-      if(Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+      if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
+      if (Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld"))
+        argsList.add("-XX:+UseParallelGC");
+      if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
       argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
       argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
 
-      if(!Settings.gameAdditionalArgs.isEmpty()) {
+      if (!Settings.gameAdditionalArgs.isEmpty()) {
         argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
       }
 
@@ -725,26 +765,27 @@ public class LauncherEventHandler
       argsList.add(LauncherGlobals.USER_DIR + File.separator + "java" + File.separator + "bin" + File.separator + "java");
       argsList.add("-classpath");
       argsList.add(LauncherGlobals.USER_DIR + File.separator + "code/config.jar:" +
-          LauncherGlobals.USER_DIR + File.separator + "code/projectx-config.jar:" +
-          LauncherGlobals.USER_DIR + File.separator + "code/projectx-pcode.jar:" +
-          LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar:" +
-          LauncherGlobals.USER_DIR + File.separator + "code/lwjgl.jar:" +
-          LauncherGlobals.USER_DIR + File.separator + "code/lwjgl_util.jar:" +
-          LauncherGlobals.USER_DIR + File.separator + "code/jinput.jar:" +
-          LauncherGlobals.USER_DIR + File.separator + "code/jshortcut.jar:" +
-          LauncherGlobals.USER_DIR + File.separator + "code/commons-beanutils.jar:" +
-          LauncherGlobals.USER_DIR + File.separator + "code/commons-digester.jar:" +
-          LauncherGlobals.USER_DIR + File.separator + "code/commons-logging.jar:");
+        LauncherGlobals.USER_DIR + File.separator + "code/projectx-config.jar:" +
+        LauncherGlobals.USER_DIR + File.separator + "code/projectx-pcode.jar:" +
+        LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar:" +
+        LauncherGlobals.USER_DIR + File.separator + "code/lwjgl.jar:" +
+        LauncherGlobals.USER_DIR + File.separator + "code/lwjgl_util.jar:" +
+        LauncherGlobals.USER_DIR + File.separator + "code/jinput.jar:" +
+        LauncherGlobals.USER_DIR + File.separator + "code/jshortcut.jar:" +
+        LauncherGlobals.USER_DIR + File.separator + "code/commons-beanutils.jar:" +
+        LauncherGlobals.USER_DIR + File.separator + "code/commons-digester.jar:" +
+        LauncherGlobals.USER_DIR + File.separator + "code/commons-logging.jar:");
       argsList.add("-Dcom.threerings.getdown=false");
-      if(Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
-      if(Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld")) argsList.add("-XX:+UseParallelGC");
-      if(Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+      if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
+      if (Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld"))
+        argsList.add("-XX:+UseParallelGC");
+      if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
       argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
       argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
 
-      if(!Settings.gameAdditionalArgs.isEmpty()) {
+      if (!Settings.gameAdditionalArgs.isEmpty()) {
         argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
       }
 
@@ -764,7 +805,7 @@ public class LauncherEventHandler
     List<String> argsList = new ArrayList<>();
     String sanitizedServerName = server.getSanitizedName();
 
-    if(SystemUtil.isWindows()) {
+    if (SystemUtil.isWindows()) {
       argsList.add(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "java_vm" + File.separator + "bin" + File.separator + "java");
       argsList.add("-classpath");
       argsList.add(LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/config.jar;" +
@@ -778,15 +819,16 @@ public class LauncherEventHandler
         LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-digester.jar;" +
         LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-logging.jar;");
       argsList.add("-Dcom.threerings.getdown=false");
-      if(Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
-      if(Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld")) argsList.add("-XX:+UseParallelGC");
-      if(Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+      if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
+      if (Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld"))
+        argsList.add("-XX:+UseParallelGC");
+      if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
       argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
       argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
 
-      if(!Settings.gameAdditionalArgs.isEmpty()) {
+      if (!Settings.gameAdditionalArgs.isEmpty()) {
         argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
       }
 
@@ -810,15 +852,16 @@ public class LauncherEventHandler
         LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-digester.jar:" +
         LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-logging.jar:");
       argsList.add("-Dcom.threerings.getdown=false");
-      if(Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
-      if(Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld")) argsList.add("-XX:+UseParallelGC");
-      if(Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+      if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
+      if (Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld"))
+        argsList.add("-XX:+UseParallelGC");
+      if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
       argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
       argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
 
-      if(!Settings.gameAdditionalArgs.isEmpty()) {
+      if (!Settings.gameAdditionalArgs.isEmpty()) {
         argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
       }
 
@@ -862,8 +905,8 @@ public class LauncherEventHandler
   {
     if (remainingString.isEmpty()) return _localeManager.getValue("m.less_than_minute");
     return remainingString.replace("{d}", _localeManager.getValue("m.days"))
-        .replace("{h}", _localeManager.getValue("m.hours"))
-        .replace("{m}", _localeManager.getValue("m.minutes"));
+      .replace("{h}", _localeManager.getValue("m.hours"))
+      .replace("{m}", _localeManager.getValue("m.minutes"));
   }
 
   private boolean isGameRunning ()
@@ -872,6 +915,6 @@ public class LauncherEventHandler
     return !SystemUtil.isWindows() || ProcessUtil.isProcessRunning("java.exe", _flamingoManager.getSelectedServer().isOfficial() ? "Spiral Knights" : _flamingoManager.getSelectedServer().name);
   }
 
-  private final String[] RPC_COMMAND_LINE = new String[] { ".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe", BuildConfig.getVersion() };
+  private final String[] RPC_COMMAND_LINE = new String[]{".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe", BuildConfig.getVersion()};
 
 }

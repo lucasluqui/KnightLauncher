@@ -67,12 +67,14 @@ public final class GifDecoder
     private byte[] bytes; // Data array
 
     // To avoid costly bounds checks, 'in' needs 2 more 0-bytes at the end
-    private void init(final byte[] bytes) {
+    private void init (final byte[] bytes)
+    {
       this.bytes = bytes;
       nextBitToRead = 0;
     }
 
-    private int read() {
+    private int read ()
+    {
       // Byte indices: (bitPos / 8), (bitPos / 8) + 1, (bitPos / 8) + 2
       int byteIndex = nextBitToRead >>> 3; // Byte = bit / 8
       int bitsToShiftRight = nextBitToRead & 7; // & 7 is the same as MODULO 8
@@ -86,7 +88,8 @@ public final class GifDecoder
       return buffer & bitMask; // Kill the unwanted higher bits
     }
 
-    private void setNumberOfBitsToRead(final int numberOfBitsToRead) {
+    private void setNumberOfBitsToRead (final int numberOfBitsToRead)
+    {
       this.numberOfBitsToRead = numberOfBitsToRead;
       bitMask = (1 << numberOfBitsToRead) - 1;
     }
@@ -200,7 +203,7 @@ public final class GifDecoder
     private final CodeTable codes = new CodeTable();
     private Graphics2D g;
 
-    private int[] decode(final GifFrame fr, final int[] activeColTbl)
+    private int[] decode (final GifFrame fr, final int[] activeColTbl)
     {
       codes.init(fr, activeColTbl, bits);
       bits.init(fr.data); // Incoming codes
@@ -243,7 +246,8 @@ public final class GifDecoder
           }
           codes.add(prevValsAndK); // Previous indices + K
         }
-      } catch (final ArrayIndexOutOfBoundsException ignored) {}
+      } catch (final ArrayIndexOutOfBoundsException ignored) {
+      }
       return out;
     }
 
@@ -327,7 +331,7 @@ public final class GifDecoder
      *
      * @return 32 bit ARGB color in the form 0xAARRGGBB
      */
-    public final int getBackgroundColor ()
+    public int getBackgroundColor ()
     {
       final GifFrame frame = frames.get(0);
       if (frame.hasLocColTbl) {
@@ -345,7 +349,7 @@ public final class GifDecoder
      * @param index Index of the current frame, 0 to N-1
      * @return Delay as number of hundredths (1/100) of a second
      */
-    public final int getDelay (final int index)
+    public int getDelay (final int index)
     {
       return frames.get(index).delay;
     }
@@ -384,7 +388,7 @@ public final class GifDecoder
     /**
      * @return The number of frames contained in this GIF image
      */
-    public final int getFrameCount ()
+    public int getFrameCount ()
     {
       return frames.size();
     }
@@ -392,7 +396,7 @@ public final class GifDecoder
     /**
      * @return The height of the GIF image
      */
-    public final int getHeight ()
+    public int getHeight ()
     {
       return h;
     }
@@ -400,7 +404,7 @@ public final class GifDecoder
     /**
      * @return The width of the GIF image
      */
-    public final int getWidth ()
+    public int getWidth ()
     {
       return w;
     }
@@ -414,7 +418,7 @@ public final class GifDecoder
    * @throws IOException If the image violates the GIF specification or is truncated.
    */
   public static GifImage read (final byte[] in)
-      throws IOException
+    throws IOException
   {
     final GifDecoder decoder = new GifDecoder();
     final GifImage img = decoder.new GifImage();
@@ -495,7 +499,7 @@ public final class GifDecoder
    *                     specification or the GIF is truncated.
    */
   public static GifImage read (final InputStream is)
-      throws IOException
+    throws IOException
   {
     final byte[] data = new byte[is.available()];
     is.read(data, 0, data.length);
@@ -567,7 +571,7 @@ public final class GifDecoder
    * @throws IOException If the GIF header/trailer is missing, incomplete or unknown
    */
   static int readHeader (final byte[] in, final GifImage img)
-      throws IOException
+    throws IOException
   {
     if (in.length < 6) { // Check first 6 bytes
       throw new IOException("Image is truncated.");

@@ -1,8 +1,8 @@
 package com.lucasluqui.launcher.flamingo.data;
 
 import com.lucasluqui.launcher.LauncherGlobals;
-import com.lucasluqui.util.ZipUtil;
 import com.lucasluqui.util.FileUtil;
+import com.lucasluqui.util.ZipUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -14,7 +14,6 @@ import static com.lucasluqui.launcher.flamingo.Log.log;
 
 public class Server
 {
-
   public String name;
 
   public String description;
@@ -55,7 +54,9 @@ public class Server
 
   public int enabled;
 
-  public Server () {}
+  public Server ()
+  {
+  }
 
   public Server (String name)
   {
@@ -120,28 +121,29 @@ public class Server
   }
 
   @Override
-  public String toString() {
+  public String toString ()
+  {
     return "[Server " +
-        "name='" + name + '\'' +
-        ", description='" + description + '\'' +
-        ", managedBy='" + managedBy + '\'' +
-        ", beta=" + beta +
-        ", version='" + version + '\'' +
-        ", deployMethod=" + deployMethod +
-        ", deployUrl='" + deployUrl + '\'' +
-        ", playerCountUrl='" + playerCountUrl + '\'' +
-        ", siteUrl='" + siteUrl + '\'' +
-        ", communityUrl='" + communityUrl + '\'' +
-        ", sourceCodeUrl='" + sourceCodeUrl + '\'' +
-        ", announceType='" + announceType + '\'' +
-        ", announceBanner='" + announceBanner + '\'' +
-        ", announceContent='" + announceContent + '\'' +
-        ", announceBannerLink='" + announceBannerLink + '\'' +
-        ", announceBannerStartsAt=" + announceBannerStartsAt +
-        ", announceBannerEndsAt=" + announceBannerEndsAt +
-        ", fromCode='" + fromCode + '\'' +
-        ", serverIcon='" + serverIcon + '\'' +
-        ", enabled=" + enabled +
-        ']';
+      "name='" + name + '\'' +
+      ", description='" + description + '\'' +
+      ", managedBy='" + managedBy + '\'' +
+      ", beta=" + beta +
+      ", version='" + version + '\'' +
+      ", deployMethod=" + deployMethod +
+      ", deployUrl='" + deployUrl + '\'' +
+      ", playerCountUrl='" + playerCountUrl + '\'' +
+      ", siteUrl='" + siteUrl + '\'' +
+      ", communityUrl='" + communityUrl + '\'' +
+      ", sourceCodeUrl='" + sourceCodeUrl + '\'' +
+      ", announceType='" + announceType + '\'' +
+      ", announceBanner='" + announceBanner + '\'' +
+      ", announceContent='" + announceContent + '\'' +
+      ", announceBannerLink='" + announceBannerLink + '\'' +
+      ", announceBannerStartsAt=" + announceBannerStartsAt +
+      ", announceBannerEndsAt=" + announceBannerEndsAt +
+      ", fromCode='" + fromCode + '\'' +
+      ", serverIcon='" + serverIcon + '\'' +
+      ", enabled=" + enabled +
+      ']';
   }
 }

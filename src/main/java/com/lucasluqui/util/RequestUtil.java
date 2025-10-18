@@ -11,16 +11,16 @@ public class RequestUtil
 {
 
   public static JSONObject makeRequest (String method, String endpoint, String[] params)
-      throws Exception
+    throws Exception
   {
     StringBuilder result = new StringBuilder();
 
     // parse params
-    if(params.length > 0) {
+    if (params.length > 0) {
       endpoint += "?" + params[0];
     }
-    if(params.length > 1) {
-      for(int i = 1; params.length > i; i++) {
+    if (params.length > 1) {
+      for (int i = 1; params.length > i; i++) {
         endpoint += "&" + params[i];
       }
     }

@@ -3,7 +3,6 @@ package com.lucasluqui.dialog;
 import com.lucasluqui.launcher.BuildConfig;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
-import com.lucasluqui.launcher.LauncherGlobals;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +28,7 @@ public class Dialog
   public static boolean pushWithConfirm (String msg, String title, int messageType)
   {
     int reply = JOptionPane.showConfirmDialog(
-        null, formatMessage(msg), title, JOptionPane.YES_NO_OPTION, messageType);
+      null, formatMessage(msg), title, JOptionPane.YES_NO_OPTION, messageType);
     return reply == JOptionPane.YES_OPTION;
   }
 

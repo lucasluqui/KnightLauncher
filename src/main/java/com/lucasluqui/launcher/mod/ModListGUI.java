@@ -1,11 +1,14 @@
 package com.lucasluqui.launcher.mod;
 
-import com.google.inject.Inject;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.google.inject.Inject;
 import com.jhlabs.image.GaussianFilter;
 import com.jhlabs.image.GrayscaleFilter;
 import com.lucasluqui.dialog.Dialog;
-import com.lucasluqui.launcher.*;
+import com.lucasluqui.launcher.BaseGUI;
+import com.lucasluqui.launcher.CustomColors;
+import com.lucasluqui.launcher.Fonts;
+import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.mod.data.JarMod;
 import com.lucasluqui.launcher.mod.data.Mod;
 import com.lucasluqui.launcher.mod.data.Modpack;
@@ -78,16 +81,18 @@ public class ModListGUI extends BaseGUI
     globalWarningButton.setForeground(Color.BLACK);
     globalWarningButton.setBackground(CustomColors.WARNING);
     globalWarningButton.putClientProperty(FlatClientProperties.STYLE,
-        "arc: 999; borderWidth: 0");
+      "arc: 999; borderWidth: 0");
     globalWarningButton.setVisible(false);
     globalWarningButton.addActionListener(l -> {
       Dialog.push(globalWarningMessage, _localeManager.getValue("t.warning"), JOptionPane.ERROR_MESSAGE);
     });
     guiFrame.getContentPane().add(globalWarningButton);
 
-    JPanel modStoreButtonPane = new JPanel() {
+    JPanel modStoreButtonPane = new JPanel()
+    {
       @Override
-      protected void paintComponent(Graphics g) {
+      protected void paintComponent (Graphics g)
+      {
         super.paintComponent(g);
         g.drawImage(modStoreButtonImage, 0, 0, null);
       }
@@ -107,18 +112,33 @@ public class ModListGUI extends BaseGUI
     modStoreButtonLabel.setVerticalAlignment(SwingConstants.CENTER);
     modStoreButtonPane.add(modStoreButtonLabel);
 
-    modStoreButtonPane.addMouseListener(new MouseListener() {
-      @Override public void mouseClicked(MouseEvent e) { /* this.eventHandler.openModStore(); */ }
-      @Override public void mousePressed(MouseEvent e) { /* this.eventHandler.openModStore(); */ }
-      @Override public void mouseReleased(MouseEvent e) { /* this.eventHandler.openModStore(); */ }
-      @Override public void mouseEntered(MouseEvent e) {
+    modStoreButtonPane.addMouseListener(new MouseListener()
+    {
+      @Override
+      public void mouseClicked (MouseEvent e)
+      { /* this.eventHandler.openModStore(); */ }
+
+      @Override
+      public void mousePressed (MouseEvent e)
+      { /* this.eventHandler.openModStore(); */ }
+
+      @Override
+      public void mouseReleased (MouseEvent e)
+      { /* this.eventHandler.openModStore(); */ }
+
+      @Override
+      public void mouseEntered (MouseEvent e)
+      {
         /*
         modStoreButtonPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         modStoreButtonImage = modStoreButtonImageFocused;
         modStoreButtonPane.repaint();
          */
       }
-      @Override public void mouseExited(MouseEvent e) {
+
+      @Override
+      public void mouseExited (MouseEvent e)
+      {
         /*
         modStoreButtonPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         modStoreButtonImage = modStoreButtonImageUnfocused;
@@ -137,7 +157,7 @@ public class ModListGUI extends BaseGUI
     getModsButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     getModsButton.setToolTipText(_localeManager.getValue("b.get_mods"));
     getModsButton.putClientProperty(FlatClientProperties.STYLE,
-        "arc: 999; borderWidth: 0");
+      "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(getModsButton);
     getModsButton.addActionListener(this.eventHandler::getModsEvent);
 
@@ -150,7 +170,7 @@ public class ModListGUI extends BaseGUI
     modFolderButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     modFolderButton.setToolTipText(_localeManager.getValue("b.open_mods_dir"));
     modFolderButton.putClientProperty(FlatClientProperties.STYLE,
-        "arc: 999; borderWidth: 0");
+      "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(modFolderButton);
     modFolderButton.addActionListener(this.eventHandler::openModsFolderEvent);
 
@@ -163,7 +183,7 @@ public class ModListGUI extends BaseGUI
     enableAllModsButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     enableAllModsButton.setToolTipText(_localeManager.getValue("b.enable_all_mods"));
     enableAllModsButton.putClientProperty(FlatClientProperties.STYLE,
-        "arc: 999; borderWidth: 0");
+      "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(enableAllModsButton);
     enableAllModsButton.addActionListener(this.eventHandler::enableAllModsEvent);
 
@@ -176,7 +196,7 @@ public class ModListGUI extends BaseGUI
     disableAllModsButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     disableAllModsButton.setToolTipText(_localeManager.getValue("b.disable_all_mods"));
     disableAllModsButton.putClientProperty(FlatClientProperties.STYLE,
-        "arc: 999; borderWidth: 0");
+      "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(disableAllModsButton);
     disableAllModsButton.addActionListener(this.eventHandler::disableAllModsEvent);
 
@@ -193,7 +213,7 @@ public class ModListGUI extends BaseGUI
     addModButton.setBackground(CustomColors.GREEN);
     addModButton.setToolTipText(_localeManager.getValue("m.add_mod_tooltip"));
     addModButton.putClientProperty(FlatClientProperties.STYLE,
-        "arc: 999; borderWidth: 0");
+      "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(addModButton);
     addModButton.addActionListener(this.eventHandler::addModEvent);
 
@@ -206,7 +226,7 @@ public class ModListGUI extends BaseGUI
     refreshButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     refreshButton.setToolTipText(_localeManager.getValue("m.refresh_tooltip"));
     refreshButton.putClientProperty(FlatClientProperties.STYLE,
-        "arc: 999; borderWidth: 0");
+      "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(refreshButton);
     refreshButton.addActionListener(this.eventHandler::refreshEvent);
 
@@ -223,11 +243,15 @@ public class ModListGUI extends BaseGUI
     searchBox.setForeground(Color.WHITE);
     searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, _localeManager.getValue("m.modlist_searchbox_placeholder"));
     searchBox.putClientProperty(FlatClientProperties.STYLE,
-        "arc: 999; borderWidth: 0");
+      "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(searchBox);
     searchBox.addActionListener(l -> eventHandler.searchMod());
-    searchBox.addKeyListener(new KeyAdapter() {
-      public void keyReleased(KeyEvent e) { eventHandler.searchMod(); }
+    searchBox.addKeyListener(new KeyAdapter()
+    {
+      public void keyReleased (KeyEvent e)
+      {
+        eventHandler.searchMod();
+      }
     });
 
     modListPane = new JPanel();
@@ -271,14 +295,14 @@ public class ModListGUI extends BaseGUI
 
     BufferedImage defaultModImageBuffImg = ImageUtil.loadImageWithinJar("/rsrc/img/icon-default.png");
     defaultModImageBuffImg = ImageUtil.resizeImagePreserveTransparency(
-        defaultModImageBuffImg, 128, 128);
+      defaultModImageBuffImg, 128, 128);
 
     for (Mod mod : _modManager.getModList()) {
 
       if (searchString != null) {
         // mod name or author doesn't match the search string, sayonara.
         if (!mod.getDisplayName().toLowerCase().contains(searchString.toLowerCase())
-            && !mod.getAuthor().toLowerCase().contains(searchString.toLowerCase())) continue;
+          && !mod.getAuthor().toLowerCase().contains(searchString.toLowerCase())) continue;
       }
 
       JPanel modPaneBackgroundLeft = new JPanel();
@@ -305,7 +329,7 @@ public class ModListGUI extends BaseGUI
         modImageBuffImg = ImageUtil.resizeImagePreserveTransparency(modImageBuffImg, 128, 128);
       }
       modImage.setIcon(new ImageIcon(ImageUtil.addRoundedCorners(
-          modImageBuffImg == null ? defaultModImageBuffImg : modImageBuffImg, 25)));
+        modImageBuffImg == null ? defaultModImageBuffImg : modImageBuffImg, 25)));
       modImage.setBounds(5, 5, 128, 128);
       modPane.add(modImage);
 
@@ -341,42 +365,42 @@ public class ModListGUI extends BaseGUI
         if (zipMod.getType() == null) {
           modBadge.setText(_localeManager.getValue("m.resource_mod"));
           modBadge.putClientProperty(FlatClientProperties.STYLE,
-              "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND)
-                  + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_FOREGROUND)
-                  + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND));
+            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND)
+              + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_FOREGROUND)
+              + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_RESOURCE_BACKGROUND));
           modBadge.setBounds(
-              modBadge.getX(),
-              modBadge.getY(),
-              modBadge.getWidth() + 19,
-              modBadge.getHeight()
+            modBadge.getX(),
+            modBadge.getY(),
+            modBadge.getWidth() + 19,
+            modBadge.getHeight()
           );
         } else if (zipMod.getType().equalsIgnoreCase("class")) {
           modBadge.setText(_localeManager.getValue("m.class_mod"));
           modBadge.putClientProperty(FlatClientProperties.STYLE,
-              "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CLASS_BACKGROUND)
-                  + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CLASS_FOREGROUND)
-                  + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CLASS_BACKGROUND));
+            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CLASS_BACKGROUND)
+              + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CLASS_FOREGROUND)
+              + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CLASS_BACKGROUND));
           modBadge.setBounds(
-              modBadge.getX(),
-              modBadge.getY(),
-              modBadge.getWidth() + 19,
-              modBadge.getHeight()
+            modBadge.getX(),
+            modBadge.getY(),
+            modBadge.getWidth() + 19,
+            modBadge.getHeight()
           );
           modPaneBackgroundLeft.setBackground(CustomColors.INTERFACE_MODLIST_BADGE_CLASS_BACKGROUND);
         }
       } else if (mod instanceof JarMod) {
         modBadge.setText(_localeManager.getValue("m.code_mod"));
         modBadge.putClientProperty(FlatClientProperties.STYLE,
-            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND)
-                + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_FOREGROUND)
-                + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND));
+          "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND)
+            + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_FOREGROUND)
+            + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND));
         modPaneBackgroundLeft.setBackground(CustomColors.INTERFACE_MODLIST_BADGE_CODE_BACKGROUND);
       } else if (mod instanceof Modpack) {
         modBadge.setText(_localeManager.getValue("m.modpack"));
         modBadge.putClientProperty(FlatClientProperties.STYLE,
-            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND)
-                + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_FOREGROUND)
-                + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND));
+          "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND)
+            + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_FOREGROUND)
+            + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND));
         modPaneBackgroundLeft.setBackground(CustomColors.INTERFACE_MODLIST_BADGE_PACK_BACKGROUND);
       }
       modBadge.setVisible(true);
@@ -429,7 +453,7 @@ public class ModListGUI extends BaseGUI
       warningButton.setForeground(Color.BLACK);
       warningButton.setBackground(CustomColors.WARNING);
       warningButton.putClientProperty(FlatClientProperties.STYLE,
-          "arc: 999; borderWidth: 0");
+        "arc: 999; borderWidth: 0");
       warningButton.setVisible(mod.showWarningMessage());
       warningButton.addActionListener(l -> eventHandler.showWarningEvent(mod));
       modPane.add(warningButton);
@@ -454,7 +478,7 @@ public class ModListGUI extends BaseGUI
       Math.min(325, count * 143)
     );
 
-    displayedModsLabel.setText(_localeManager.getValue("m.modlist_footer", new String[] { String.valueOf(count), String.valueOf(_modManager.getModCount()) }));
+    displayedModsLabel.setText(_localeManager.getValue("m.modlist_footer", new String[]{String.valueOf(count), String.valueOf(_modManager.getModCount())}));
     displayedModsLabel.setBounds(
       displayedModsLabel.getX(),
       modListPaneScrollBar.getHeight() + modListPaneScrollBar.getY() + 6,

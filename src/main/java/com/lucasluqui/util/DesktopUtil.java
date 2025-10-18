@@ -27,7 +27,7 @@ public class DesktopUtil
   public static void openWebpage (URI uri)
   {
     if (SystemUtil.isUnix()) {
-      ProcessUtil.run(new String[] {"xdg-open", uri.toString()}, true);
+      ProcessUtil.run(new String[]{"xdg-open", uri.toString()}, true);
       return;
     }
     Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
@@ -57,10 +57,10 @@ public class DesktopUtil
   public static void createShellLink (String target, String args, String workDir, String ico, String hover, String name)
   {
     ShellLink sl = ShellLink.createLink(target)
-            .setCMDArgs(args)
-            .setWorkingDir(workDir)
-            .setIconLocation(ico)
-            .setName(hover);
+      .setCMDArgs(args)
+      .setWorkingDir(workDir)
+      .setIconLocation(ico)
+      .setName(hover);
     try {
       sl.saveTo(getPathToDesktop() + "/" + name + ".lnk");
     } catch (IOException e) {

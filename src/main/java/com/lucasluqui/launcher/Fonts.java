@@ -32,7 +32,7 @@ public class Fonts
     InputStream fontCodeRegIs;
 
     if (Settings.lang.equalsIgnoreCase("jp")
-        || Settings.lang.equalsIgnoreCase("ru")) {
+      || Settings.lang.equalsIgnoreCase("ru")) {
       fontRegIs = LauncherGUI.class.getResourceAsStream(PATH_JP_REGULAR);
       fontMedIs = LauncherGUI.class.getResourceAsStream(PATH_JP_MEDIUM);
       sizeMultiplier = 1.1f;
@@ -60,9 +60,10 @@ public class Fonts
     }
   }
 
-  public static Font getFont (String fontName, float size, int style) {
+  public static Font getFont (String fontName, float size, int style)
+  {
     if (Settings.lang.equalsIgnoreCase("zh-hans")
-        || Settings.lang.equalsIgnoreCase("zh-hant")) {
+      || Settings.lang.equalsIgnoreCase("zh-hant")) {
       return FONT_NULL;
     }
 

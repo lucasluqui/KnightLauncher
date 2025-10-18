@@ -49,7 +49,7 @@ public class ProcessUtil
       // sending important stuff through stderr like -version.
       String stdout = IOUtils.toString(process.getInputStream(), Charset.defaultCharset());
       String stderr = IOUtils.toString(process.getErrorStream(), Charset.defaultCharset());
-      return new String[] { stdout, stderr };
+      return new String[]{stdout, stderr};
     } catch (IOException e) {
       log.error(e);
     } finally {
@@ -61,7 +61,7 @@ public class ProcessUtil
 
   public static boolean isProcessRunning (String processExecutable, String processTitle)
   {
-    String[] output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", "tasklist /v /fo csv /fi \"imagename eq " + processExecutable + "\"" });
+    String[] output = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", "tasklist /v /fo csv /fi \"imagename eq " + processExecutable + "\""});
     log.info("isProcessRunning", "output (stdout)", output[0].replace("\r", "").replace("\n", "|"), "output (stderr)", output[1]);
 
     // We return true if we find either the process title requested or an "ERROR" string due to some

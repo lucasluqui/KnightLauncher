@@ -51,12 +51,10 @@ public class ImageUtil
       URL _url = new URL(url);
       is = _url.openStream();
       imageBytes = IOUtils.toByteArray(is);
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       log.error(e);
       // Perform any other exception handling that's appropriate.
-    }
-    finally {
+    } finally {
       if (is != null) {
         try {
           is.close();
@@ -127,7 +125,7 @@ public class ImageUtil
 
   public static BufferedImage loadImageFromBase64 (String data)
   {
-    if(data == null) return null;
+    if (data == null) return null;
 
     String base64Image = data.contains(",") ? data.split(",")[1] : data;
     byte[] imageBytes = DatatypeConverter.parseBase64Binary(base64Image);
@@ -141,14 +139,13 @@ public class ImageUtil
   }
 
   public static String imageToBase64 (BufferedImage image)
-      throws UncheckedIOException
+    throws UncheckedIOException
   {
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     try {
       ImageIO.write(image, "png", os);
       return Base64.getEncoder().encodeToString(os.toByteArray());
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
   }
@@ -175,14 +172,14 @@ public class ImageUtil
   // https://stackoverflow.com/questions/43106992/how-do-i-fade-the-edges-of-an-image-in-java-example-given
   public static BufferedImage fadeEdges (BufferedImage sourceImage, double intensity)
   {
-    for(int i = 0; i < sourceImage.getWidth(); i++) { // i is the x coord
-      for(int j = 0; j < sourceImage.getHeight(); j++) { // j is the y coord
+    for (int i = 0; i < sourceImage.getWidth(); i++) { // i is the x coord
+      for (int j = 0; j < sourceImage.getHeight(); j++) { // j is the y coord
         int color = sourceImage.getRGB(i, j);
         int r = (color >> 16) & 0xff; // extract red value
         int g = (color >> 8) & 0xff;
         int b = color & 0xff;
         //pixel's distance from center
-        double dist = Math.sqrt( Math.pow(i - sourceImage.getWidth() / 2, 2) + Math.pow(j - sourceImage.getHeight() / 2, 2) );
+        double dist = Math.sqrt(Math.pow(i - sourceImage.getWidth() / 2, 2) + Math.pow(j - sourceImage.getHeight() / 2, 2));
         r = (int) Math.max(0, r - dist * intensity); // r - dist * intensity makes px darker
         g = (int) Math.max(0, g - dist * intensity); // Math.max makes sure r is always >= 0
         b = (int) Math.max(0, b - dist * intensity);
@@ -195,8 +192,7 @@ public class ImageUtil
 
   public static BufferedImage toBufferedImage (Image img)
   {
-    if (img instanceof BufferedImage)
-    {
+    if (img instanceof BufferedImage) {
       return (BufferedImage) img;
     }
 
@@ -224,8 +220,8 @@ public class ImageUtil
   public static void setAlpha (BufferedImage input, byte alpha)
   {
     alpha %= 0xff;
-    for (int cx=0;cx<input.getWidth();cx++) {
-      for (int cy=0;cy<input.getHeight();cy++) {
+    for (int cx = 0; cx < input.getWidth(); cx++) {
+      for (int cy = 0; cy < input.getHeight(); cy++) {
         int color = input.getRGB(cx, cy);
 
         int mc = (alpha << 24) | 0x00ffffff;

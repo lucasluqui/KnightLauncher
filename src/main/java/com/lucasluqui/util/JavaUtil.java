@@ -13,7 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.Properties;
 
 import static com.lucasluqui.util.Log.log;
@@ -26,9 +25,9 @@ public class JavaUtil
   {
     String output;
     if (SystemUtil.isWindows()) {
-      output = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", path, "-version" })[1];
+      output = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", path, "-version"})[1];
     } else {
-      output = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", path + " -version" })[1];
+      output = ProcessUtil.runAndCapture(new String[]{"/bin/bash", "-c", path + " -version"})[1];
     }
     return output;
   }
@@ -47,7 +46,8 @@ public class JavaUtil
     return 32;
   }
 
-  public static int getJVMVersion (String path) {
+  public static int getJVMVersion (String path)
+  {
     String output = getJVMVersionOutput(path);
     int version = 0;
 
@@ -125,8 +125,8 @@ public class JavaUtil
     }
 
     if (javaMajorVersion.equalsIgnoreCase("unknown")
-        || javaMinorVersion.equalsIgnoreCase("unknown")
-        || javaArch.equalsIgnoreCase("unknown")) {
+      || javaMinorVersion.equalsIgnoreCase("unknown")
+      || javaArch.equalsIgnoreCase("unknown")) {
       return "Unknown, probably 32-bit";
     }
 
@@ -141,8 +141,8 @@ public class JavaUtil
   {
     String startingDirPath = LauncherGlobals.USER_DIR;
 
-    if(_flamingoManager != null && _flamingoManager.getSelectedServer() != null) {
-      if(!_flamingoManager.getSelectedServer().isOfficial()) {
+    if (_flamingoManager != null && _flamingoManager.getSelectedServer() != null) {
+      if (!_flamingoManager.getSelectedServer().isOfficial()) {
         startingDirPath += File.separator + "thirdparty" + File.separator + _flamingoManager.getSelectedServer().getSanitizedName();
       }
     }
@@ -196,7 +196,7 @@ public class JavaUtil
       URL url = jar.toURI().toURL();
 
       // Disallow if already loaded
-      for (URL it : Arrays.asList(loader.getURLs())) {
+      for (URL it : loader.getURLs()) {
         if (it.equals(url)) {
           return;
         }

@@ -294,7 +294,7 @@ public class LauncherApp
   {
     File oldCodeModsFolder = new File("code-mods");
     File[] oldCodeModsFolderFiles = oldCodeModsFolder.listFiles();
-    if(oldCodeModsFolderFiles == null) {
+    if (oldCodeModsFolderFiles == null) {
       oldCodeModsFolder.delete();
     } else {
       for (File file : oldCodeModsFolderFiles) {
@@ -315,7 +315,8 @@ public class LauncherApp
       String pathWarning = _localeManager.getValue("error.start_location");
       if (SystemUtil.isWindows()) {
         String steamGamePath = SteamUtil.getGamePathWindows();
-        if (steamGamePath != null) pathWarning += _localeManager.getValue("error.start_location_steam_path", steamGamePath);
+        if (steamGamePath != null)
+          pathWarning += _localeManager.getValue("error.start_location_steam_path", steamGamePath);
       }
       log.warning(pathWarning);
       Dialog.push(pathWarning, JOptionPane.WARNING_MESSAGE);
@@ -327,8 +328,8 @@ public class LauncherApp
   private void checkShortcut ()
   {
     if (Settings.createShortcut
-            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName())
-            && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName() + ".desktop")) {
+      && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName())
+      && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName() + ".desktop")) {
       BufferedImage bimg = ImageUtil.loadImageWithinJar("/rsrc/img/icon-512.png");
       try {
         if (SystemUtil.isWindows()) {
@@ -353,11 +354,11 @@ public class LauncherApp
   {
     try {
       DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
-          "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
-          LauncherGlobals.USER_DIR,
-          LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-512.ico",
-          "Start " + BuildConfig.getName(),
-          BuildConfig.getName()
+        "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
+        LauncherGlobals.USER_DIR,
+        LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-512.ico",
+        "Start " + BuildConfig.getName(),
+        BuildConfig.getName()
       );
     } catch (Exception e) {
       log.error("Failed to create shell link");
@@ -392,7 +393,7 @@ public class LauncherApp
     System.setProperty("https.agent", "Mozilla/5.0");
   }
 
-  private void setupLogging()
+  private void setupLogging ()
   {
     File logFile = new File(LauncherGlobals.USER_DIR + File.separator + "knightlauncher.log");
     File oldLogFile = new File(LauncherGlobals.USER_DIR + File.separator + "old-knightlauncher.log");
@@ -423,8 +424,8 @@ public class LauncherApp
   private void setupDebugLogging ()
   {
     Logger rootLogger = LogManager
-        .getLogManager()
-        .getLogger("");
+      .getLogManager()
+      .getLogger("");
     rootLogger.setLevel(Level.ALL);
     for (Handler handler : rootLogger.getHandlers()) {
       handler.setLevel(Level.ALL);
@@ -489,10 +490,10 @@ public class LauncherApp
     for (int i = 0; i < displays.size(); i++) {
       Display display = displays.get(i);
       log.info("Display " + i + ": " + display.toString()
-          .trim()
-          .replace("\n", ", ")
-          .replace("\r", "")
-          .replaceAll(" +", " ")
+        .trim()
+        .replace("\n", ", ")
+        .replace("\r", "")
+        .replaceAll(" +", " ")
       );
     }
 
@@ -515,7 +516,7 @@ public class LauncherApp
     // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by the launcher.
     String javaVMVersion = JavaUtil.getGameJVMData();
 
-    if (( JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 && !javaVMVersion.contains("1.7") ) || Settings.jvmPatched) {
+    if ((JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 && !javaVMVersion.contains("1.7")) || Settings.jvmPatched) {
       Settings.jvmPatched = true;
       _settingsManager.setValue("launcher.jvm_patched", "true");
       return false;
@@ -552,7 +553,7 @@ public class LauncherApp
     }
   }
 
-  protected static int getOfficialApproxPlayerCount()
+  protected static int getOfficialApproxPlayerCount ()
   {
     int steamPlayers = SteamUtil.getCurrentPlayers("99900");
     if (steamPlayers == 0) {
@@ -566,12 +567,12 @@ public class LauncherApp
   private void checkVersion ()
   {
     String rawResponseReleases = INetUtil.getWebpageContent(
-        LauncherGlobals.GITHUB_API
-            + "repos/"
-            + LauncherGlobals.GITHUB_AUTHOR + "/"
-            + LauncherGlobals.GITHUB_REPO + "/"
-            + "releases/"
-            + "latest"
+      LauncherGlobals.GITHUB_API
+        + "repos/"
+        + LauncherGlobals.GITHUB_AUTHOR + "/"
+        + LauncherGlobals.GITHUB_REPO + "/"
+        + "releases/"
+        + "latest"
     );
 
     if (rawResponseReleases != null) {
@@ -587,7 +588,7 @@ public class LauncherApp
       if (!latestRelease.equalsIgnoreCase(currentVersion)) {
         if (Settings.autoUpdate && !currentVersion.contains("SNAPSHOT")) {
           // Check if we're coming from a failed update, in that case do not autoupdate even if all other conditions matched.
-          if ( !(this.args.length > 0 && this.args[0].equals("updateFailed")) ) {
+          if (!(this.args.length > 0 && this.args[0].equals("updateFailed"))) {
             _launcherCtx.launcherGUI.eventHandler.updateLauncher(latestRelease);
           }
         }
@@ -616,14 +617,15 @@ public class LauncherApp
     }
   }
 
-  private void resetGetdown () {
+  private void resetGetdown ()
+  {
     log.info("Resetting Getdown...");
     URLDownloadQueue downloadQueue = null;
     try {
       downloadQueue = new URLDownloadQueue(
-          "Getdown Reset",
-          new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/getdown.txt"),
-          new File(LauncherGlobals.USER_DIR, "getdown.txt")
+        "Getdown Reset",
+        new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/getdown.txt"),
+        new File(LauncherGlobals.USER_DIR, "getdown.txt")
       );
     } catch (MalformedURLException e) {
       log.error(e);
@@ -634,10 +636,10 @@ public class LauncherApp
   }
 
   /**
-    Sometimes OS usernames that have cyrillic characters in them can make Java have a
-    bad time trying to read them for locating their TEMP path.
-    Let's give our friend a hand and store the temp files ourselves.
-  */
+   * Sometimes OS usernames that have cyrillic characters in them can make Java have a
+   * bad time trying to read them for locating their TEMP path.
+   * Let's give our friend a hand and store the temp files ourselves.
+   */
   protected void checkTempDir ()
   {
     boolean containsCyrillic = System.getProperty("user.name").codePoints()

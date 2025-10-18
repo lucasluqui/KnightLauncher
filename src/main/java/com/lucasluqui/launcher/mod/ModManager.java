@@ -5,7 +5,8 @@ import com.google.inject.Singleton;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
-import com.lucasluqui.launcher.*;
+import com.lucasluqui.launcher.LauncherContext;
+import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
@@ -117,7 +118,7 @@ public class ModManager
         Mod mod = null;
         if (fileName.endsWith("zip")) {
           mod = new ZipMod(
-              modFolderPath, fileName, Settings.fileProtection ? this.FILTER_LIST : null, lastChanged);
+            modFolderPath, fileName, Settings.fileProtection ? this.FILTER_LIST : null, lastChanged);
         } else if (fileName.endsWith("jar")) {
           mod = new JarMod(modFolderPath, fileName);
         } else if (fileName.endsWith("modpack")) {
@@ -137,10 +138,10 @@ public class ModManager
       // first mount essentially useless, so with this setting we make sure mods are force mounted at least 2 times
       // with the current known version.
       int forcedMountsForCurrentVersion = Integer.parseInt(
-          _settingsManager.getValue("modloader.forcedMountsForCurrentVersion", selectedServer));
+        _settingsManager.getValue("modloader.forcedMountsForCurrentVersion", selectedServer));
       if (forcedMountsForCurrentVersion < FORCED_MOUNTS_PER_VERSION) {
         log.info("Forced mounts quota for current version not met",
-            "forcedMounts", forcedMountsForCurrentVersion);
+          "forcedMounts", forcedMountsForCurrentVersion);
         rebuildRequired = true;
         mountRequired = true;
       }
@@ -258,9 +259,9 @@ public class ModManager
         // Turn all the locale changes back into a jar file.
         String[] outputCapture;
         if (SystemUtil.isWindows()) {
-          outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
+          outputCapture = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "."});
         } else {
-          outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
+          outputCapture = ProcessUtil.runAndCapture(new String[]{"/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "."});
         }
         log.debug("Locale changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
 
@@ -294,9 +295,9 @@ public class ModManager
     // And now after merging their contents, we turn it back into config.jar.
     String[] outputCapture;
     if (SystemUtil.isWindows()) {
-      outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "." });
+      outputCapture = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "."});
     } else {
-      outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "." });
+      outputCapture = ProcessUtil.runAndCapture(new String[]{"/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "."});
     }
     log.debug("Class changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
 
@@ -327,11 +328,11 @@ public class ModManager
 
     // Increment the forced mount counter for this known version if it's below 2.
     int forcedMountsForCurrentVersion = Integer.parseInt(
-        _settingsManager.getValue("modloader.forcedMountsForCurrentVersion"));
+      _settingsManager.getValue("modloader.forcedMountsForCurrentVersion"));
     if (forcedMountsForCurrentVersion < FORCED_MOUNTS_PER_VERSION) {
       forcedMountsForCurrentVersion++;
       _settingsManager.setValue("modloader.forcedMountsForCurrentVersion",
-          Integer.toString(forcedMountsForCurrentVersion));
+        Integer.toString(forcedMountsForCurrentVersion));
     }
 
     mountRequired = false;
@@ -381,7 +382,7 @@ public class ModManager
     if (Settings.filePurging) {
       _discordPresenceClient.setDetails(_localeManager.getValue("m.purge"));
       _launcherCtx._progressBar.setState(_localeManager.getValue("m.purge"));
-      FileUtil.purgeDirectory(new File(rootDir + "/rsrc/"), new String[] { ".jar", ".jarv", ".zip" });
+      FileUtil.purgeDirectory(new File(rootDir + "/rsrc/"), new String[]{".jar", ".jarv", ".zip"});
     }
 
     // Iterate through all bundles to rebuild the game files.
@@ -390,7 +391,7 @@ public class ModManager
 
     for (int i = 0; i < bundles.length; i++) {
       _launcherCtx._progressBar.setBarValue(i + 1);
-      _discordPresenceClient.setDetails(_localeManager.getValue("presence.rebuilding", new String[] { String.valueOf(i + 1), String.valueOf(bundles.length) }));
+      _discordPresenceClient.setDetails(_localeManager.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(bundles.length)}));
       try {
         ZipUtil.unpackJar(new ZipFile(rootDir + "/rsrc/" + bundles[i]), new File(rootDir + "/rsrc/"), false);
       } catch (IOException e) {
@@ -457,9 +458,9 @@ public class ModManager
   private int getEnabledModsHash ()
   {
     Set<Long> hashSet = new HashSet<>();
-    for(Mod mod : modList) {
+    for (Mod mod : modList) {
       long lastModified = new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + mod.getFileName()).lastModified();
-      if(mod.isEnabled()) hashSet.add(lastModified);
+      if (mod.isEnabled()) hashSet.add(lastModified);
     }
     return hashSet.hashCode();
   }
@@ -535,31 +536,31 @@ public class ModManager
 
           if (!protectedFileHeaders.isEmpty()) {
             zipMod.addWarningMessage(_localeManager.getValue(
-                "m.warning_file_headers",
-                new String[] {
-                    String.join("\n", protectedFileHeaders),
-                    _localeManager.getValue("m.warning_file_headers_protected")
-                })
+              "m.warning_file_headers",
+              new String[]{
+                String.join("\n", protectedFileHeaders),
+                _localeManager.getValue("m.warning_file_headers_protected")
+              })
             );
           }
 
           if (!illegalFileHeaders.isEmpty()) {
             zipMod.addWarningMessage(_localeManager.getValue(
-                "m.warning_file_headers",
-                new String[] {
-                    String.join("\n", illegalFileHeaders),
-                    _localeManager.getValue("m.warning_file_headers_illegal")
-                })
+              "m.warning_file_headers",
+              new String[]{
+                String.join("\n", illegalFileHeaders),
+                _localeManager.getValue("m.warning_file_headers_illegal")
+              })
             );
           }
 
           if (!outdatedFileHeaders.isEmpty()) {
             zipMod.addWarningMessage(_localeManager.getValue(
-                "m.warning_file_headers",
-                new String[] {
-                    String.join("\n", outdatedFileHeaders),
-                    _localeManager.getValue("m.warning_file_headers_outdated")
-                })
+              "m.warning_file_headers",
+              new String[]{
+                String.join("\n", outdatedFileHeaders),
+                _localeManager.getValue("m.warning_file_headers_outdated")
+              })
             );
           }
         }
@@ -587,7 +588,7 @@ public class ModManager
 
         if (jarMod.isEnabled()) jarMod.setEnabled(jdkCompatible && pxCompatible);
 
-        if((!jdkCompatible || !pxCompatible) && Settings.loadCodeMods) {
+        if ((!jdkCompatible || !pxCompatible) && Settings.loadCodeMods) {
           if (!jdkCompatible)
             jarMod.addWarningMessage(_localeManager.getValue("m.warning_incompatible_jdk"));
           if (!pxCompatible)
@@ -613,12 +614,12 @@ public class ModManager
     URLDownloadQueue downloadQueue = new URLDownloadQueue("Reset config jars");
     try {
       downloadQueue.addToQueue(
-          new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-config.jar"),
-          new File(LauncherGlobals.USER_DIR + "/code/", "projectx-config.jar")
+        new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-config.jar"),
+        new File(LauncherGlobals.USER_DIR + "/code/", "projectx-config.jar")
       );
       downloadQueue.addToQueue(
-          new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/config.jar"),
-          new File(LauncherGlobals.USER_DIR + "/code/", "config.jar")
+        new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/config.jar"),
+        new File(LauncherGlobals.USER_DIR + "/code/", "config.jar")
       );
     } catch (MalformedURLException e) {
       log.error(e);
@@ -633,8 +634,8 @@ public class ModManager
     URLDownloadQueue downloadQueue = new URLDownloadQueue("Reset code jar");
     try {
       downloadQueue.addToQueue(
-          new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-pcode.jar"),
-          new File(LauncherGlobals.USER_DIR + "/code/", "projectx-pcode.jar")
+        new URL("http://gamemedia2.spiralknights.com/spiral/" + _flamingoManager.getLocalGameVersion() + "/code/projectx-pcode.jar"),
+        new File(LauncherGlobals.USER_DIR + "/code/", "projectx-pcode.jar")
       );
     } catch (MalformedURLException e) {
       log.error(e);
@@ -691,7 +692,7 @@ public class ModManager
 
     private void addMod (Mod mod)
     {
-      if(mod.isEnabled()) this.installedMods.add(mod);
+      if (mod.isEnabled()) this.installedMods.add(mod);
     }
 
     private int getModCount ()
@@ -701,120 +702,120 @@ public class ModManager
   }
 
   private final String[] RSRC_BUNDLES = {
-      "full-music-bundle.jar",
-      "full-rest-bundle.jar",
-      "intro-bundle.jar"
+    "full-music-bundle.jar",
+    "full-rest-bundle.jar",
+    "intro-bundle.jar"
   };
 
   private final String[] THIRDPARTY_RSRC_BUNDLES = {
-      "base.zip"
+    "base.zip"
   };
 
-  private final String[] FILTER_LIST = new String[] {
-      "config/accessory.dat",
-      "config/accessory.xml",
-      "config/actor.dat",
-      "config/actor.xml",
-      "config/area.dat",
-      "config/area.xml",
-      "config/attack.dat",
-      "config/attack.xml",
-      "config/battle_sprite.dat",
-      "config/battle_sprite.xml",
-      //"config/behavior.dat",
-      //"config/behavior.xml",
-      "config/catalog.dat",
-      "config/catalog.xml",
-      "config/conversation.dat",
-      "config/conversation.xml",
-      "config/cursor.dat",
-      "config/cursor.xml",
-      "config/depot_catalog.dat",
-      "config/depot_catalog.xml",
-      "config/depth_scale.dat",
-      "config/depth_scale.xml",
-      "config/description.dat",
-      "config/description.xml",
-      "config/effect.dat",
-      "config/effect.xml",
-      "config/emote.dat",
-      "config/emote.xml",
-      "config/event.dat",
-      "config/event.xml",
-      "config/fire_action.dat",
-      "config/fire_action.xml",
-      "config/font.dat",
-      "config/font.xml",
-      "config/forge_property.dat",
-      "config/forge_property.xml",
-      "config/gift.dat",
-      "config/gift.xml",
-      "config/ground.dat",
-      "config/ground.xml",
-      "config/harness.dat",
-      "config/harness.xml",
-      "config/interact.dat",
-      "config/interact.xml",
-      "config/interface_script.dat",
-      "config/interface_script.xml",
-      "config/item.dat",
-      "config/item.xml",
-      "config/item_depth_weight.dat",
-      "config/item_depth_weight.xml",
-      "config/item_property.dat",
-      "config/item_property.xml",
-      "config/level_table.dat",
-      "config/level_table.xml",
-      "config/material.dat",
-      "config/material.xml",
-      "config/mission.dat",
-      "config/mission.xml",
-      "config/mission_group.dat",
-      "config/mission_group.xml",
-      "config/mission_property.dat",
-      "config/mission_property.xml",
-      "config/parameterized_handler.dat",
-      "config/parameterized_handler.xml",
-      "config/path.dat",
-      "config/path.xml",
-      "config/placeable.dat",
-      "config/placeable.xml",
-      "config/recipe.dat",
-      "config/recipe.xml",
-      "config/recipe_property.dat",
-      "config/recipe_property.xml",
-      "config/render_effect.dat",
-      "config/render_effect.xml",
-      "config/render_queue.dat",
-      "config/render_queue.xml",
-      "config/render_scheme.dat",
-      "config/render_scheme.xml",
-      "config/scene_global.dat",
-      "config/scene_global.xml",
-      "config/shader.dat",
-      "config/shader.xml",
-      "config/sounder.dat",
-      "config/sounder.xml",
-      //"config/spawn_table.dat",
-      //"config/spawn_table.xml",
-      "config/status_condition.dat",
-      "config/status_condition.xml",
-      "config/style.dat",
-      "config/style.xml",
-      "config/texture.dat",
-      "config/texture.xml",
-      "config/tile.dat",
-      "config/tile.xml",
-      "config/tile_replacement.dat",
-      "config/tile_replacement.xml",
-      "config/uplink.dat",
-      "config/uplink.xml",
-      "config/variant.dat",
-      "config/variant.xml",
-      //"config/variant_table.dat",
-      //"config/variant_table.xml",
-      "config/wall.dat",
-      "config/wall.xml",
+  private final String[] FILTER_LIST = new String[]{
+    "config/accessory.dat",
+    "config/accessory.xml",
+    "config/actor.dat",
+    "config/actor.xml",
+    "config/area.dat",
+    "config/area.xml",
+    "config/attack.dat",
+    "config/attack.xml",
+    "config/battle_sprite.dat",
+    "config/battle_sprite.xml",
+    //"config/behavior.dat",
+    //"config/behavior.xml",
+    "config/catalog.dat",
+    "config/catalog.xml",
+    "config/conversation.dat",
+    "config/conversation.xml",
+    "config/cursor.dat",
+    "config/cursor.xml",
+    "config/depot_catalog.dat",
+    "config/depot_catalog.xml",
+    "config/depth_scale.dat",
+    "config/depth_scale.xml",
+    "config/description.dat",
+    "config/description.xml",
+    "config/effect.dat",
+    "config/effect.xml",
+    "config/emote.dat",
+    "config/emote.xml",
+    "config/event.dat",
+    "config/event.xml",
+    "config/fire_action.dat",
+    "config/fire_action.xml",
+    "config/font.dat",
+    "config/font.xml",
+    "config/forge_property.dat",
+    "config/forge_property.xml",
+    "config/gift.dat",
+    "config/gift.xml",
+    "config/ground.dat",
+    "config/ground.xml",
+    "config/harness.dat",
+    "config/harness.xml",
+    "config/interact.dat",
+    "config/interact.xml",
+    "config/interface_script.dat",
+    "config/interface_script.xml",
+    "config/item.dat",
+    "config/item.xml",
+    "config/item_depth_weight.dat",
+    "config/item_depth_weight.xml",
+    "config/item_property.dat",
+    "config/item_property.xml",
+    "config/level_table.dat",
+    "config/level_table.xml",
+    "config/material.dat",
+    "config/material.xml",
+    "config/mission.dat",
+    "config/mission.xml",
+    "config/mission_group.dat",
+    "config/mission_group.xml",
+    "config/mission_property.dat",
+    "config/mission_property.xml",
+    "config/parameterized_handler.dat",
+    "config/parameterized_handler.xml",
+    "config/path.dat",
+    "config/path.xml",
+    "config/placeable.dat",
+    "config/placeable.xml",
+    "config/recipe.dat",
+    "config/recipe.xml",
+    "config/recipe_property.dat",
+    "config/recipe_property.xml",
+    "config/render_effect.dat",
+    "config/render_effect.xml",
+    "config/render_queue.dat",
+    "config/render_queue.xml",
+    "config/render_scheme.dat",
+    "config/render_scheme.xml",
+    "config/scene_global.dat",
+    "config/scene_global.xml",
+    "config/shader.dat",
+    "config/shader.xml",
+    "config/sounder.dat",
+    "config/sounder.xml",
+    //"config/spawn_table.dat",
+    //"config/spawn_table.xml",
+    "config/status_condition.dat",
+    "config/status_condition.xml",
+    "config/style.dat",
+    "config/style.xml",
+    "config/texture.dat",
+    "config/texture.xml",
+    "config/tile.dat",
+    "config/tile.xml",
+    "config/tile_replacement.dat",
+    "config/tile_replacement.xml",
+    "config/uplink.dat",
+    "config/uplink.xml",
+    "config/variant.dat",
+    "config/variant.xml",
+    //"config/variant_table.dat",
+    //"config/variant_table.xml",
+    "config/wall.dat",
+    "config/wall.xml",
   };
 
 }

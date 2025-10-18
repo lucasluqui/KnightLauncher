@@ -11,7 +11,6 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
@@ -21,7 +20,8 @@ import java.util.ArrayList;
 
 import static com.lucasluqui.launcher.Log.log;
 
-public class LauncherGUI extends BaseGUI {
+public class LauncherGUI extends BaseGUI
+{
 
   @Inject public LauncherEventHandler eventHandler;
 
@@ -50,7 +50,9 @@ public class LauncherGUI extends BaseGUI {
     }
   }
 
-  /** @wbp.parser.entryPoint */
+  /**
+   * @wbp.parser.entryPoint
+   */
   private void compose ()
   {
     guiFrame.setVisible(false);
@@ -100,9 +102,11 @@ public class LauncherGUI extends BaseGUI {
 
     banner = ImageUtil.loadImageWithinJar("/rsrc/img/banner-loading.png");
 
-    mainPane = new JPanel() {
+    mainPane = new JPanel()
+    {
       @Override
-      protected void paintComponent(Graphics g) {
+      protected void paintComponent (Graphics g)
+      {
         super.paintComponent(g);
         g.drawImage(banner, 0, 0, null);
       }
@@ -132,17 +136,34 @@ public class LauncherGUI extends BaseGUI {
     launcherLogo.setHorizontalAlignment(SwingConstants.CENTER);
     launcherLogo.setIcon(new ImageIcon(launcherLogoImage));
     sidePane.add(launcherLogo);
-    launcherLogo.addMouseListener(new MouseListener() {
-      @Override public void mouseClicked(MouseEvent e) {
+    launcherLogo.addMouseListener(new MouseListener()
+    {
+      @Override
+      public void mouseClicked (MouseEvent e)
+      {
         returnToHome();
       }
-      @Override public void mousePressed(MouseEvent e) {}
-      @Override public void mouseReleased(MouseEvent e) {}
-      @Override public void mouseEntered(MouseEvent e) {
+
+      @Override
+      public void mousePressed (MouseEvent e)
+      {
+      }
+
+      @Override
+      public void mouseReleased (MouseEvent e)
+      {
+      }
+
+      @Override
+      public void mouseEntered (MouseEvent e)
+      {
         launcherLogo.setIcon(new ImageIcon(launcherLogoImageHover));
         launcherLogo.updateUI();
       }
-      @Override public void mouseExited(MouseEvent e) {
+
+      @Override
+      public void mouseExited (MouseEvent e)
+      {
         launcherLogo.setIcon(new ImageIcon(launcherLogoImage));
         launcherLogo.updateUI();
       }
@@ -327,9 +348,9 @@ public class LauncherGUI extends BaseGUI {
     bannerTimer.setHorizontalAlignment(SwingConstants.CENTER);
     bannerTimer.setVerticalAlignment(SwingConstants.CENTER);
     bannerTimer.putClientProperty(FlatClientProperties.STYLE,
-            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND)
-                    + "AA; foreground:" + ColorUtil.colorToHexString(Color.WHITE)
-                    + "; arc:999;");
+      "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND)
+        + "AA; foreground:" + ColorUtil.colorToHexString(Color.WHITE)
+        + "; arc:999;");
     bannerTimer.setVisible(false);
     mainPane.add(bannerTimer);
 
@@ -375,13 +396,13 @@ public class LauncherGUI extends BaseGUI {
     launchButton.setBorderPainted(false);
     launchButton.setForeground(Color.WHITE);
     launchButton.putClientProperty(FlatClientProperties.STYLE,
-        "arc: 999; borderWidth: 0");
+      "arc: 999; borderWidth: 0");
     launchButton.setToolTipText(_localeManager.getValue("b.play"));
     mainPane.add(launchButton);
     launchButton.addActionListener(action -> {
       if (_keyboardController.isShiftPressed() || _keyboardController.isAltPressed()) {
         // TODO: Consolidate alt launching inside LauncherEventHandler::launchGameEvent for both.
-        if(_flamingoManager.getSelectedServer().isOfficial()) {
+        if (_flamingoManager.getSelectedServer().isOfficial()) {
           this.eventHandler.launchGameAltEvent();
         } else {
           this.eventHandler.launchGameEvent(true);
@@ -399,7 +420,7 @@ public class LauncherGUI extends BaseGUI {
     launchPopupMenuButton.setBackground(CustomColors.INTERFACE_MAINPANE_TRANSPARENT_BUTTON);
     launchPopupMenuButton.setToolTipText(_localeManager.getValue("m.launch_popup_tooltip"));
     launchPopupMenuButton.putClientProperty(FlatClientProperties.STYLE,
-        "arc: 999; borderWidth: 0");
+      "arc: 999; borderWidth: 0");
     mainPane.add(launchPopupMenuButton);
 
     JPopupMenu launchPopupMenu = new JPopupMenu();
@@ -407,38 +428,46 @@ public class LauncherGUI extends BaseGUI {
     launchPopupMenu.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     launchPopupMenu.putClientProperty(FlatClientProperties.POPUP_BORDER_CORNER_RADIUS, 5);
     launchPopupMenu.putClientProperty(FlatClientProperties.STYLE,
-        "borderColor: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND) + "; borderInsets: 5,5,5,5;");
+      "borderColor: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND) + "; borderInsets: 5,5,5,5;");
 
-    JMenuItem gameSettingsMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.game_settings")) {
-      public void actionPerformed (ActionEvent e) {
+    JMenuItem gameSettingsMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.game_settings"))
+    {
+      public void actionPerformed (ActionEvent e)
+      {
         eventHandler.gameSettingsEvent();
       }
     });
     gameSettingsMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     gameSettingsMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
 
-    JMenuItem repairGameFilesMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.repair_game_files")) {
-      public void actionPerformed (ActionEvent e) {
+    JMenuItem repairGameFilesMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.repair_game_files"))
+    {
+      public void actionPerformed (ActionEvent e)
+      {
         eventHandler.repairGameFilesEvent();
       }
     });
     repairGameFilesMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     repairGameFilesMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
 
-    JMenuItem openGameFolderMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("b.open_game_dir")) {
-      public void actionPerformed (ActionEvent e) {
+    JMenuItem openGameFolderMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("b.open_game_dir"))
+    {
+      public void actionPerformed (ActionEvent e)
+      {
         eventHandler.openGameFolderEvent();
       }
     });
     openGameFolderMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
     openGameFolderMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
 
-    JMenuItem altModeMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.alt_mode_title")) {
-      public void actionPerformed (ActionEvent e) {
+    JMenuItem altModeMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.alt_mode_title"))
+    {
+      public void actionPerformed (ActionEvent e)
+      {
         Dialog.push(
-            _localeManager.getValue("m.alt_mode_text"),
-            _localeManager.getValue("m.alt_mode_title"),
-            JOptionPane.INFORMATION_MESSAGE);
+          _localeManager.getValue("m.alt_mode_text"),
+          _localeManager.getValue("m.alt_mode_title"),
+          JOptionPane.INFORMATION_MESSAGE);
       }
     });
     altModeMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
@@ -449,8 +478,10 @@ public class LauncherGUI extends BaseGUI {
     launchPopupMenu.add(openGameFolderMenuItem);
     launchPopupMenu.add(altModeMenuItem);
 
-    launchPopupMenuButton.addMouseListener(new MouseAdapter() {
-      public void mousePressed (MouseEvent e) {
+    launchPopupMenuButton.addMouseListener(new MouseAdapter()
+    {
+      public void mousePressed (MouseEvent e)
+      {
         if (launchPopupMenuButton.isEnabled()) {
           launchPopupMenu.show(mainPane, 575, 245);
         }
@@ -466,9 +497,9 @@ public class LauncherGUI extends BaseGUI {
     altModeEnabledLabel.setHorizontalAlignment(SwingConstants.CENTER);
     altModeEnabledLabel.setVerticalAlignment(SwingConstants.CENTER);
     altModeEnabledLabel.putClientProperty(FlatClientProperties.STYLE,
-        "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND)
-            + "AA; foreground:" + ColorUtil.colorToHexString(Color.WHITE)
-            + "; arc:999;");
+      "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND)
+        + "AA; foreground:" + ColorUtil.colorToHexString(Color.WHITE)
+        + "; arc:999;");
     altModeEnabledLabel.setVisible(false);
     mainPane.add(altModeEnabledLabel);
 
@@ -557,16 +588,18 @@ public class LauncherGUI extends BaseGUI {
     playAnimatedBannersButton.addActionListener(l -> this.eventHandler.switchBannerAnimations());
 
     closeButton.addActionListener(e -> {
-        _launcherCtx.exit(true);
+      _launcherCtx.exit(true);
     });
     closeButton.setToolTipText(_localeManager.getValue("b.close"));
     minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));
 
     guiFrame.setLocationRelativeTo(null);
 
-    guiFrame.addWindowListener(new WindowAdapter() {
+    guiFrame.addWindowListener(new WindowAdapter()
+    {
       @Override
-      public void windowClosed(WindowEvent windowEvent) {
+      public void windowClosed (WindowEvent windowEvent)
+      {
         _discordPresenceClient.stop();
       }
     });
@@ -603,7 +636,7 @@ public class LauncherGUI extends BaseGUI {
       for (int i = 0; i < frameCount; i++) {
         BufferedImage frame = gif.getFrame(i);
         frame = ImageUtil.resizeImage(frame, 800, 550);
-        if(intensity > 0) ImageUtil.fadeEdges(frame, intensity);
+        if (intensity > 0) ImageUtil.fadeEdges(frame, intensity);
         proccesedImages.add(frame);
       }
 
@@ -615,12 +648,12 @@ public class LauncherGUI extends BaseGUI {
             if (!this.eventHandler.displayingAnimBanner) break;
 
             try {
-              Thread.sleep(gif.getDelay(i) * 10);
+              Thread.sleep(gif.getDelay(i) * 10L);
             } catch (InterruptedException e) {
               log.error(e);
             }
 
-            if(Settings.playAnimatedBanners) {
+            if (Settings.playAnimatedBanners) {
               // set the new frame.
               banner = proccesedImages.get(i);
               mainPane.repaint();

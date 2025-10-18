@@ -47,15 +47,15 @@ public class SystemUtil
   public static boolean isARM ()
   {
     return ARCH.contains("arm")
-        || ARCH.contains("aarch");
+      || ARCH.contains("aarch");
   }
 
   @Deprecated
   public static boolean hasValidJavaHome ()
   {
     return System.getProperty("java.home").contains("1.6") ||
-            System.getProperty("java.home").contains("1.7") ||
-            System.getProperty("java.home").contains("1.8");
+      System.getProperty("java.home").contains("1.7") ||
+      System.getProperty("java.home").contains("1.8");
   }
 
   private static String getMachineId ()
@@ -63,7 +63,7 @@ public class SystemUtil
     String machineId = null;
 
     if (isWindows()) {
-      machineId = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", "wmic csproduct get UUID" })[0];
+      machineId = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", "wmic csproduct get UUID"})[0];
 
       try {
         machineId = machineId.substring(machineId.indexOf("\n")).trim();
@@ -75,7 +75,7 @@ public class SystemUtil
       // creating a case where someone might share an invalid or default UUID with someone else
       // (the infamous 03000200-0400-0500-0006-000700080009 UUID!).
       // Assuming this could be the case, we gather Windows' software GUID and add it to the mix.
-      String machineIdFailsafe = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", "reg query HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid" })[0];
+      String machineIdFailsafe = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", "reg query HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid"})[0];
 
       try {
         machineIdFailsafe = machineIdFailsafe.substring(machineIdFailsafe.indexOf("\n")).trim();
@@ -99,8 +99,8 @@ public class SystemUtil
     }
 
     if (isUnix()) {
-       machineId = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", "cat /etc/machine-id" })[0];
-       machineId = machineId.replaceAll("\\r|\\n", "").trim();
+      machineId = ProcessUtil.runAndCapture(new String[]{"/bin/bash", "-c", "cat /etc/machine-id"})[0];
+      machineId = machineId.replaceAll("\\r|\\n", "").trim();
     }
 
     // TODO: Verify this even works on Mac systems.
@@ -117,7 +117,7 @@ public class SystemUtil
           output.append(line + "\n");
         }
 
-        machineId = output.toString().substring(output.indexOf("UUID: "), output.length()).replace("UUID: ", "");
+        machineId = output.substring(output.indexOf("UUID: "), output.length()).replace("UUID: ", "");
 
         SerNumProcess.waitFor();
         sNumReader.close();
@@ -166,8 +166,8 @@ public class SystemUtil
     } catch (NoSuchFieldException e) {
       Class[] classes = Collections.class.getDeclaredClasses();
       Map<String, String> env = System.getenv();
-      for(Class cl : classes) {
-        if("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
+      for (Class cl : classes) {
+        if ("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
           Field field = null;
           try {
             field = cl.getDeclaredField("m");

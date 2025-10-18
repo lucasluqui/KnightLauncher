@@ -9,20 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.logging.FileHandler;
+import java.util.*;
+import java.util.logging.*;
 import java.util.logging.Formatter;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 import java.util.zip.ZipFile;
 
 /**
@@ -91,7 +80,7 @@ public class Bootstrap
     for (File file : files) {
       String filename = file.getName();
       if (filename.endsWith(".jar")
-          && !disabledJarMods.contains(filename)) {
+        && !disabledJarMods.contains(filename)) {
         jars.add(file);
       }
     }
@@ -216,7 +205,7 @@ public class Bootstrap
       if (LauncherGlobals.USER_DIR.contains("steamapps")) {
         try {
           FileUtils.writeStringToFile(
-              new File(steamAppIdFilePath), "99900");
+            new File(steamAppIdFilePath), "99900");
         } catch (IOException e) {
           logger.warning("Failed to create steam_appid.txt file for steam install");
           e.printStackTrace();
@@ -259,13 +248,13 @@ public class Bootstrap
         throwable = sw.toString();
       }
       return String.format(format,
-          dat,
-          source,
-          record.getLoggerName(),
-          //record.getLevel().getLocalizedLevelName(),
-          record.getLevel().getName(),
-          message,
-          throwable);
+        dat,
+        source,
+        record.getLoggerName(),
+        //record.getLevel().getLocalizedLevelName(),
+        record.getLevel().getName(),
+        message,
+        throwable);
     }
   }
 

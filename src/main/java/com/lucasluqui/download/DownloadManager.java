@@ -66,8 +66,7 @@ public class DownloadManager
   /**
    * Adds an URL download queue to store.
    *
-   * @param downloadQueue
-   * The URL download queue object we'll have to store for further processing.
+   * @param downloadQueue The URL download queue object we'll have to store for further processing.
    */
   public void add (URLDownloadQueue downloadQueue)
   {
@@ -82,8 +81,7 @@ public class DownloadManager
   {
     this.queuesInProcess += storedQueues.size();
 
-    for (URLDownloadQueue downloadQueue : storedQueues)
-    {
+    for (URLDownloadQueue downloadQueue : storedQueues) {
       try {
         EventQueue.invokeAndWait(() -> processQueue(downloadQueue));
       } catch (Exception e) {
@@ -97,8 +95,7 @@ public class DownloadManager
   /**
    * Processes a single download queue, iterating through all its items and downloading them.
    *
-   * @param downloadQueue
-   * The download queue to process.
+   * @param downloadQueue The download queue to process.
    */
   private void processQueue (URLDownloadQueue downloadQueue)
   {
@@ -117,10 +114,10 @@ public class DownloadManager
 
         try {
           FileUtils.copyURLToFile(
-              url,
-              localFile,
-              CONNECTION_TIMEOUT,
-              READ_TIMEOUT
+            url,
+            localFile,
+            CONNECTION_TIMEOUT,
+            READ_TIMEOUT
           );
           downloadCompleted = true;
         } catch (IOException e) {
@@ -148,11 +145,8 @@ public class DownloadManager
   /**
    * Gets the status of a download queue.
    *
-   * @param downloadQueue
-   * The download queue object to search for.
-   *
-   * @return
-   * Returns true if this queue was downloaded correctly or false if failed or not found.
+   * @param downloadQueue The download queue object to search for.
+   * @return Returns true if this queue was downloaded correctly or false if failed or not found.
    */
   public boolean getQueueStatus (URLDownloadQueue downloadQueue)
   {

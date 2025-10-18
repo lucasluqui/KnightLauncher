@@ -64,8 +64,8 @@ public class ZipUtil
               clean = false;
               extract = false;
               log.info(
-                  "Ignored file found in filter list",
-                  "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
+                "Ignored file found in filter list",
+                "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
             }
           }
         }
@@ -77,8 +77,8 @@ public class ZipUtil
             clean = false;
             extract = false;
             log.info(
-                "Ignored file found in forced filter list",
-                "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
+              "Ignored file found in forced filter list",
+              "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
           }
         }
 
@@ -90,8 +90,8 @@ public class ZipUtil
             clean = false;
             extract = false;
             log.info(
-                "Ignored file older than vanilla counterpart",
-                "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
+              "Ignored file older than vanilla counterpart",
+              "zip", zipFile.getFile().getName(), "file", fileHeaderFileName);
           }
         }
 
@@ -154,14 +154,14 @@ public class ZipUtil
 
   @Deprecated
   public static void unzipCustom (String zipFilePath, String destDirectory, String[] forcedFilterList)
-      throws IOException
+    throws IOException
   {
     unzipCustom(zipFilePath, destDirectory, forcedFilterList, null, null);
   }
 
   @Deprecated
   public static void unzipCustom (String zipFilePath, String destDirectory, String[] forcedFilterList, String[] filterList, Properties stamps)
-      throws IOException
+    throws IOException
   {
     FileUtil.createDir(destDirectory);
     ZipInputStream zipIn = new ZipInputStream(Files.newInputStream(Paths.get(zipFilePath)));
@@ -188,7 +188,7 @@ public class ZipUtil
         for (String fileName : forcedFilterList) {
           if (filePath.equalsIgnoreCase(fileName)) {
             log.info("Filter found illegal file. This is a forced filter thus filter value will be ignored.",
-                "source", zipFilePath, "file", fileName);
+              "source", zipFilePath, "file", fileName);
             illegalFile = true;
             break;
           }
@@ -227,7 +227,7 @@ public class ZipUtil
 
   @Deprecated
   private static void extractFileSafe (ZipInputStream zipIn, String filePath)
-      throws IOException
+    throws IOException
   {
     BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(Paths.get(filePath)));
     byte[] bytesIn = new byte[Settings.compressorExtractBuffer];
@@ -239,7 +239,7 @@ public class ZipUtil
   }
 
   public static void extractFileWithinJar (String pathInside, String pathOutside)
-      throws IOException
+    throws IOException
   {
     URL filePath = FileUtil.class.getResource(pathInside);
     File destPath = new File(pathOutside);
@@ -253,7 +253,7 @@ public class ZipUtil
    *                          be deleted prior to unpacking the jar.
    */
   public static void unpackJar (java.util.zip.ZipFile jar, File target, boolean cleanExistingDirs)
-      throws IOException
+    throws IOException
   {
     if (cleanExistingDirs) {
       Enumeration<? extends ZipEntry> entries = jar.entries();
@@ -298,7 +298,7 @@ public class ZipUtil
         StreamUtil.copy(jin, fout);
       } catch (Exception e) {
         throw new IOException(
-            Logger.format("Failure unpacking", "jar", jar, "entry", efile), e);
+          Logger.format("Failure unpacking", "jar", jar, "entry", efile), e);
       }
     }
   }
@@ -308,13 +308,13 @@ public class ZipUtil
    * If {@code packedJar} has a {@code .gz} extension, it will be gunzipped first.
    */
   @SuppressWarnings({"removal", "deprecation"})
-  public static void unpackPacked200Jar(File packedJar, File target)
-      throws IOException
+  public static void unpackPacked200Jar (File packedJar, File target)
+    throws IOException
   {
     try (InputStream packJarIn = new FileInputStream(packedJar);
          JarOutputStream jarOut = new JarOutputStream(new FileOutputStream(target))) {
       boolean gz = (packedJar.getName().endsWith(".gz") ||
-          packedJar.getName().endsWith(".gz_new"));
+        packedJar.getName().endsWith(".gz_new"));
       try (InputStream packJarIn2 = (gz ? new GZIPInputStream(packJarIn) : packJarIn)) {
         Pack200.Unpacker unpacker = Pack200.newUnpacker();
         unpacker.unpack(packJarIn2, jarOut);
@@ -324,7 +324,7 @@ public class ZipUtil
 
 
   public static String readFileInsideZip (String zip, String pathInZip)
-      throws IOException
+    throws IOException
   {
     ZipFile zipFile = new ZipFile(zip);
     FileHeader fileHeader = zipFile.getFileHeader(pathInZip);
@@ -410,7 +410,7 @@ public class ZipUtil
 
   // source: https://stackoverflow.com/questions/51833423/how-to-zip-the-content-of-a-directory-in-java
   public static void zipFolderContents (File srcFolder, File destZipFile, String zipFileName)
-      throws Exception
+    throws Exception
   {
     try (FileOutputStream fileWriter = new FileOutputStream(destZipFile);
          ZipOutputStream zip = new ZipOutputStream(fileWriter)) {
@@ -419,7 +419,7 @@ public class ZipUtil
   }
 
   private static void addFileToZip (File rootPath, File srcFile, ZipOutputStream zip, String zipFileName)
-      throws Exception
+    throws Exception
   {
     if (srcFile.isDirectory()) {
       addFolderToZip(rootPath, srcFile, zip, zipFileName);
@@ -441,7 +441,7 @@ public class ZipUtil
   }
 
   private static void addFolderToZip (File rootPath, File srcFolder, ZipOutputStream zip, String zipFileName)
-      throws Exception
+    throws Exception
   {
     for (File fileName : Objects.requireNonNull(srcFolder.listFiles())) {
       addFileToZip(rootPath, fileName, zip, zipFileName);

@@ -2,8 +2,8 @@ package com.lucasluqui.launcher.mod;
 
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
-import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.LauncherGlobals;
+import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.mod.data.Mod;
@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import static com.lucasluqui.launcher.mod.Log.log;
 
@@ -87,7 +86,7 @@ public class ModListEventHandler
   public void openModsFolderEvent (ActionEvent action)
   {
     String rootDir = LauncherGlobals.USER_DIR;
-    if(_flamingoManager.getSelectedServer() != null) {
+    if (_flamingoManager.getSelectedServer() != null) {
       rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
     }
     DesktopUtil.openDir(rootDir + "/mods");
@@ -97,12 +96,12 @@ public class ModListEventHandler
   public void disableMod (Mod mod)
   {
     String keySuffix = "";
-    if(_flamingoManager.getSelectedServer() != null) {
+    if (_flamingoManager.getSelectedServer() != null) {
       keySuffix = _flamingoManager.getSelectedServer().isOfficial() ? "" : "_" + _flamingoManager.getSelectedServer().getSanitizedName();
     }
     String disabledMods = _settingsManager.getValue("modloader.disabledMods" + keySuffix);
     _settingsManager.setValue("modloader.disabledMods" + keySuffix,
-        disabledMods.equals("") ? mod.getFileName() : disabledMods + "," + mod.getFileName());
+      disabledMods.equals("") ? mod.getFileName() : disabledMods + "," + mod.getFileName());
     mod.setEnabled(false);
     _modManager.setMountRequired(true);
     _modManager.setRebuildRequired(true);
@@ -214,13 +213,13 @@ public class ModListEventHandler
       String path = fileChooser.getSelectedFile().getAbsolutePath();
       if (path.endsWith(".zip") || path.endsWith(".jar") || path.endsWith(".modpack")) {
         File file = new File(path);
-          try {
-            FileUtils.moveFile(file, new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + file.getName()));
-            log.info("Added mod: " + file.getName());
-            refreshMods(false);
-          } catch (IOException e) {
-            log.error(e);
-          }
+        try {
+          FileUtils.moveFile(file, new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + file.getName()));
+          log.info("Added mod: " + file.getName());
+          refreshMods(false);
+        } catch (IOException e) {
+          log.error(e);
+        }
       } else {
         Dialog.push(_localeManager.getValue("error.mod_file_format"), _localeManager.getValue("t.error"), JOptionPane.ERROR_MESSAGE);
       }
@@ -241,6 +240,6 @@ public class ModListEventHandler
   public void showWarningEvent (Mod mod)
   {
     Dialog.push(
-        _localeManager.getValue("m.mod_warnings", new String[] { mod.getDisplayName(), mod.getWarningMessage() }), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
+      _localeManager.getValue("m.mod_warnings", new String[]{mod.getDisplayName(), mod.getWarningMessage()}), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
   }
 }

@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.lucasluqui.util.Log.log;
@@ -69,7 +70,7 @@ public class FileUtil
     List<String> fileNames = new ArrayList<String>();
 
     for (int i = 0; i < fileList.length; i++) {
-      if (fileList[i].isDirectory() == false) {
+      if (!fileList[i].isDirectory()) {
         fileNames.add(fileList[i].getName());
       }
     }
@@ -84,7 +85,7 @@ public class FileUtil
     List<String> fileNames = new ArrayList<String>();
 
     for (int i = 0; i < fileList.length; i++) {
-      if (fileList[i].isDirectory() == false && fileList[i].toString().endsWith(ext)) {
+      if (!fileList[i].isDirectory() && fileList[i].toString().endsWith(ext)) {
         fileNames.add(fileList[i].getName());
       }
     }
@@ -99,7 +100,7 @@ public class FileUtil
     List<File> files = new ArrayList<File>();
 
     for (int i = 0; i < fileList.length; i++) {
-      if (fileList[i].isDirectory() == false && fileList[i].toString().endsWith(ext)) {
+      if (!fileList[i].isDirectory() && fileList[i].toString().endsWith(ext)) {
         files.add(fileList[i]);
       }
     }
@@ -127,7 +128,7 @@ public class FileUtil
   }
 
   public static String readFile (String path)
-      throws IOException
+    throws IOException
   {
     byte[] encoded = Files.readAllBytes(Paths.get(path));
     return new String(encoded, StandardCharsets.UTF_8);
@@ -136,7 +137,7 @@ public class FileUtil
   public static void writeFile (String path, String content)
   {
     try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-            new FileOutputStream(path), StandardCharsets.UTF_8))) {
+      new FileOutputStream(path), StandardCharsets.UTF_8))) {
       writer.write(content);
     } catch (IOException e) {
       log.error(e);
@@ -186,19 +187,23 @@ public class FileUtil
   public static void copyFilesToClipboard (List<File> files)
   {
     Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
-      new Transferable() {
+      new Transferable()
+      {
         @Override
-        public DataFlavor[] getTransferDataFlavors() {
-          return new DataFlavor[] { DataFlavor.javaFileListFlavor };
+        public DataFlavor[] getTransferDataFlavors ()
+        {
+          return new DataFlavor[]{DataFlavor.javaFileListFlavor};
         }
 
         @Override
-        public boolean isDataFlavorSupported(DataFlavor flavor) {
+        public boolean isDataFlavorSupported (DataFlavor flavor)
+        {
           return DataFlavor.javaFileListFlavor.equals(flavor);
         }
 
         @Override
-        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+        public Object getTransferData (DataFlavor flavor) throws UnsupportedFlavorException, IOException
+        {
           return files;
         }
       }, null

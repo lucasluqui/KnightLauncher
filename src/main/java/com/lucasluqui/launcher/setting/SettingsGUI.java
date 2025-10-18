@@ -13,7 +13,10 @@ import org.apache.commons.text.WordUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -287,9 +290,11 @@ public class SettingsGUI extends BaseGUI
       choicePlatform.removeItem(_localeManager.getValue("o.steam"));
     }
     choicePlatform.setSelectedItem(Settings.gamePlatform);
-    choicePlatform.addItemListener(new ItemListener() {
+    choicePlatform.addItemListener(new ItemListener()
+    {
       @Override
-      public void itemStateChanged(ItemEvent event) {
+      public void itemStateChanged (ItemEvent event)
+      {
         eventHandler.platformChangeEvent(event);
       }
     });
@@ -430,7 +435,7 @@ public class SettingsGUI extends BaseGUI
     gamePanel.add(jvmPatchButton);
     jvmPatchButton.addActionListener(eventHandler::jvmPatchEvent);
 
-    if (((SystemUtil.isWindows() && SystemUtil.is64Bit() ) || ( SystemUtil.isUnix() && Settings.gamePlatform.equalsIgnoreCase("Steam")))) {
+    if (((SystemUtil.isWindows() && SystemUtil.is64Bit()) || (SystemUtil.isUnix() && Settings.gamePlatform.equalsIgnoreCase("Steam")))) {
       jvmPatchButton.setEnabled(true);
       jvmPatchButton.setToolTipText(null);
     }
@@ -512,13 +517,27 @@ public class SettingsGUI extends BaseGUI
 
       // TODO: use enums.
       switch (result) {
-        case -1: betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_invalid")); break;
-        case 0: betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_error")); break;
-        case 1: betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_success")); break;
-        case 2: betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_duplicate")); break;
-        case 3: betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_already_used")); break;
-        case 4: betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_already_used_same")); break;
-        case 5: betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_not_exists")); break;
+        case -1:
+          betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_invalid"));
+          break;
+        case 0:
+          betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_error"));
+          break;
+        case 1:
+          betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_success"));
+          break;
+        case 2:
+          betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_duplicate"));
+          break;
+        case 3:
+          betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_already_used"));
+          break;
+        case 4:
+          betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_already_used_same"));
+          break;
+        case 5:
+          betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_not_exists"));
+          break;
       }
 
       betaCodeResultLabel.setVisible(true);
@@ -650,9 +669,9 @@ public class SettingsGUI extends BaseGUI
         activeCodeBadge.setHorizontalAlignment(SwingConstants.CENTER);
         activeCodeBadge.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
         activeCodeBadge.putClientProperty(FlatClientProperties.STYLE,
-            "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_BACKGROUND)
-                + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_FOREGROUND)
-                + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_BACKGROUND));
+          "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_BACKGROUND)
+            + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_FOREGROUND)
+            + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_BACKGROUND));
         activeCodePane.add(activeCodeBadge);
 
         JLabel activeCodeText = new JLabel();
@@ -677,10 +696,10 @@ public class SettingsGUI extends BaseGUI
     activeCodesPane.setPreferredSize(new Dimension(449, entitledServers.size() * 35));
 
     activeCodesPaneScrollBar.setBounds(
-        activeCodesPaneScrollBar.getX(),
-        activeCodesPaneScrollBar.getY(),
-        activeCodesPaneScrollBar.getWidth(),
-        115
+      activeCodesPaneScrollBar.getX(),
+      activeCodesPaneScrollBar.getY(),
+      activeCodesPaneScrollBar.getWidth(),
+      115
     );
 
     activeCodesPane.updateUI();
@@ -720,11 +739,18 @@ public class SettingsGUI extends BaseGUI
     argumentsPane.putClientProperty(FlatClientProperties.STYLE, "borderWidth: 0");
     advancedPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
-    argumentsPane.addFocusListener(new FocusListener() {
-      @Override public void focusLost(FocusEvent e) {
+    argumentsPane.addFocusListener(new FocusListener()
+    {
+      @Override
+      public void focusLost (FocusEvent e)
+      {
         eventHandler.saveAdditionalArgs();
       }
-      @Override public void focusGained(FocusEvent e) {}
+
+      @Override
+      public void focusGained (FocusEvent e)
+      {
+      }
     });
 
     JScrollPane scrollBar = new JScrollPane(argumentsPane);
@@ -767,7 +793,7 @@ public class SettingsGUI extends BaseGUI
     serverAddressTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
     serverAddressTextField.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
     serverAddressTextField.putClientProperty(FlatClientProperties.STYLE,
-    "arc: 999; borderWidth: 0");
+      "arc: 999; borderWidth: 0");
     serverAddressTextField.addActionListener(e -> {
       eventHandler.saveConnectionSettings();
     });
@@ -908,12 +934,12 @@ public class SettingsGUI extends BaseGUI
     credits.setHighlighter(null);
     credits.setAlignmentX(0);
     credits.setText(_localeManager.getValue(
-        "m.credits_template", new String[] {
-            WordUtils.wrap(_localeManager.getValue("m.credits_contributors"), 90),
-            _localeManager.getValue("m.credits_translators"),
-            WordUtils.wrap(_localeManager.getValue("m.credits_qa"), 90),
-            WordUtils.wrap(_localeManager.getValue("m.credits_libs"), 90)
-        })
+      "m.credits_template", new String[]{
+        WordUtils.wrap(_localeManager.getValue("m.credits_contributors"), 90),
+        _localeManager.getValue("m.credits_translators"),
+        WordUtils.wrap(_localeManager.getValue("m.credits_qa"), 90),
+        WordUtils.wrap(_localeManager.getValue("m.credits_libs"), 90)
+      })
     );
     creditsPane.add(credits);
     credits.setCaretPosition(0);

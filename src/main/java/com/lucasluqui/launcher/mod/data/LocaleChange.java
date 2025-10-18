@@ -21,8 +21,8 @@ public class LocaleChange
    * The object which will hold the information for a single locale change.
    *
    * @param bundle The localization bundle that governs this KV.
-   * @param key Key to add or modify.
-   * @param value New value to set the key to.
+   * @param key    Key to add or modify.
+   * @param value  New value to set the key to.
    */
   public LocaleChange (String bundle, String key, String value)
   {

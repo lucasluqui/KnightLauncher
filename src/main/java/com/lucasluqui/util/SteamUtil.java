@@ -12,11 +12,11 @@ public class SteamUtil
 {
 
   public static void startGameById (int id, boolean dialog)
-      throws Exception
+    throws Exception
   {
     // Special procedure for unix systems where we might not be able to get the darn desktop.
     if (SystemUtil.isUnix()) {
-      ProcessUtil.run(new String[] {"steam", "steam://rungameid/" + id}, true);
+      ProcessUtil.run(new String[]{"steam", "steam://rungameid/" + id}, true);
       return;
     }
 
@@ -30,7 +30,7 @@ public class SteamUtil
   {
     try {
       return WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "Software\\Valve\\Steam", "SteamPath", 0)
-              + "/steamapps/common/Spiral Knights";
+        + "/steamapps/common/Spiral Knights";
     } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
       log.error(e);
     }

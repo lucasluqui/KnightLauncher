@@ -5,7 +5,10 @@ import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
-import com.lucasluqui.util.*;
+import com.lucasluqui.util.FileUtil;
+import com.lucasluqui.util.ImageUtil;
+import com.lucasluqui.util.ProcessUtil;
+import com.lucasluqui.util.ZipUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +31,7 @@ public class Updater extends BaseGUI
   @Inject protected DiscordPresenceClient _discordPresenceClient;
 
   private String newVersion = "";
-  private int fetchAttempts = 0;
+  private final int fetchAttempts = 0;
 
   public Updater ()
   {
@@ -119,18 +122,18 @@ public class Updater extends BaseGUI
   private void downloadLatestVersion ()
   {
     String downloadUrl = "https://github.com/"
-        + LauncherGlobals.GITHUB_AUTHOR + "/"
-        + LauncherGlobals.GITHUB_REPO + "/"
-        + "releases/download/"
-        + this.newVersion + "/"
-        + "KnightLauncher-" + this.newVersion + ".zip";
+      + LauncherGlobals.GITHUB_AUTHOR + "/"
+      + LauncherGlobals.GITHUB_REPO + "/"
+      + "releases/download/"
+      + this.newVersion + "/"
+      + "KnightLauncher-" + this.newVersion + ".zip";
 
     URLDownloadQueue downloadQueue = null;
     try {
       downloadQueue = new URLDownloadQueue(
-          "Launcher update",
-          new URL(downloadUrl),
-          new File(LauncherGlobals.USER_DIR + "/KnightLauncher.zip")
+        "Launcher update",
+        new URL(downloadUrl),
+        new File(LauncherGlobals.USER_DIR + "/KnightLauncher.zip")
       );
     } catch (MalformedURLException e) {
       log.error(e);
@@ -152,12 +155,12 @@ public class Updater extends BaseGUI
       case ERR_FETCH:
         log.error("Couldn't fetch latest version, stopping launcher update", "attempts", this.fetchAttempts);
         errMsg += "The updater failed to fetch the latest version after 3 attempts." +
-            "\nBooting back into current version, try updating later.";
+          "\nBooting back into current version, try updating later.";
         break;
       case ERR_DOWNLOAD:
         log.error("Couldn't download latest version, stopping launcher update");
         errMsg += "The update couldn't be initiated after 3 download attempts." +
-            "\nBooting back into current version, try updating later.";
+          "\nBooting back into current version, try updating later.";
         break;
       default:
         break;
@@ -179,9 +182,9 @@ public class Updater extends BaseGUI
 
     String[] startParams;
     if (success) {
-      startParams = new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "/KnightLauncher.jar" };
+      startParams = new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/KnightLauncher.jar"};
     } else {
-      startParams = new String[] { "java", "-jar", LauncherGlobals.USER_DIR + "/KnightLauncher.jar", "updateFailed" };
+      startParams = new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/KnightLauncher.jar", "updateFailed"};
     }
     ProcessUtil.run(startParams, true);
 

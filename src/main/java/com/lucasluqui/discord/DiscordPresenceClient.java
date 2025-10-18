@@ -100,9 +100,9 @@ public class DiscordPresenceClient
 
     if (this.eventHandlers == null) {
       this.eventHandlers = new DiscordEventHandlers.Builder()
-          .setErroredEventHandler((errCode, err) -> log.error("Discord presence error " + errCode + ": " + err))
-          .setReadyEventHandler((user) -> log.info("Discord presence registered for user: " + user.username))
-          .build();
+        .setErroredEventHandler((errCode, err) -> log.error("Discord presence error " + errCode + ": " + err))
+        .setReadyEventHandler((user) -> log.info("Discord presence registered for user: " + user.username))
+        .build();
     }
 
     return (DiscordEventHandlers) this.eventHandlers;

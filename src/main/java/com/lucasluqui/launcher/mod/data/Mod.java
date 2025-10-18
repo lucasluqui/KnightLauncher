@@ -1,7 +1,7 @@
 package com.lucasluqui.launcher.mod.data;
 
-import com.lucasluqui.util.ZipUtil;
 import com.lucasluqui.util.ImageUtil;
+import com.lucasluqui.util.ZipUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,7 +70,7 @@ public abstract class Mod
   /**
    * A cover image for the mod. This is sourced from either a base64 string in {@code mod.json} within the key
    * {@code image}, or from a {@code mod.png} file within the mod's zip/jar/modpack file.
-   *
+   * <p>
    * There's no set lower or upper pixel limit, but it's recommended to use a generously sized image, say 512x512.
    * It will be resized as needed when used.
    */
@@ -92,12 +92,13 @@ public abstract class Mod
   }
 
   public abstract void mount ();
+
   public abstract void wasAdded ();
 
   /**
    * Parses metadata information about this mod contained in the {@code mod.json} file.
    * This includes information like mod display name, description, author, version, etc.
-   *
+   * <p>
    * We will only parse the most crucial bits, specific mod implementations like {@code JarMod}
    * or {@code ZipMod} can implement additional parsing.
    */
@@ -274,37 +275,37 @@ public abstract class Mod
     return "[Mod displayName=" + this.displayName + ",description=" + this.description + ",author=" + this.authorName + ",version=" + this.version + ",fileName=" + this.fileName + ",isEnabled=" + this.isEnabled + "]";
   }
 
-  protected final String[] FORCED_FILTER_LIST = new String[] {
-      "item/live/statue/model.dat",
-      "world/dynamic/switch/button/model.dat",
-      "world/dynamic/switch/button/model_pressure.dat",
-      "world/dynamic/switch/button/model_pressure_onetime.dat",
-      "world/dynamic/switch/button/model_pressure_statue.dat",
-      "world/dynamic/switch/button/model_whitespace.dat",
-      "world/dynamic/switch/button/parts/animation_down.dat",
-      "world/dynamic/switch/button/parts/animation_hide.dat",
-      "world/dynamic/switch/button/parts/animation_show.dat",
-      "world/dynamic/switch/button/parts/animation_up.dat",
-      "world/dynamic/switch/button/parts/animation_whitespace_down.dat",
-      "world/dynamic/switch/button/parts/animation_whitespace_up.dat",
-      "world/dynamic/switch/button/parts/fx_down.dat",
-      "world/dynamic/switch/button_large/fx_whitespace-hit.dat",
-      "world/dynamic/switch/button_large/fx_whitespace.dat",
-      "world/dynamic/switch/button_large/model.dat",
-      "world/dynamic/switch/button_large/model_horde.dat",
-      "world/dynamic/switch/button_large/model_whitespace.dat",
-      "world/dynamic/switch/clockwork_button/glow.dat",
-      "world/dynamic/switch/clockwork_button/model.dat",
-      "world/dynamic/switch/clockwork_button/animation/state_down.dat",
-      "world/dynamic/switch/clockwork_button/animation/state_up.dat",
-      "world/dynamic/switch/multistate/model.dat",
-      "world/dynamic/switch/multistate/parts/animation_disabled.dat",
-      "world/dynamic/switch/multistate/parts/animation_green.dat",
-      "world/dynamic/switch/multistate/parts/animation_red.dat",
-      "world/dynamic/switch/multistate/parts/animation_violet.dat",
-      "world/dynamic/switch/multistate/parts/animation_yellow.dat",
-      "world/dynamic/switch/toggle_lever/animation_off.dat",
-      "world/dynamic/switch/toggle_lever/animation_on.dat",
-      "world/dynamic/switch/toggle_lever/model.dat"
+  protected final String[] FORCED_FILTER_LIST = new String[]{
+    "item/live/statue/model.dat",
+    "world/dynamic/switch/button/model.dat",
+    "world/dynamic/switch/button/model_pressure.dat",
+    "world/dynamic/switch/button/model_pressure_onetime.dat",
+    "world/dynamic/switch/button/model_pressure_statue.dat",
+    "world/dynamic/switch/button/model_whitespace.dat",
+    "world/dynamic/switch/button/parts/animation_down.dat",
+    "world/dynamic/switch/button/parts/animation_hide.dat",
+    "world/dynamic/switch/button/parts/animation_show.dat",
+    "world/dynamic/switch/button/parts/animation_up.dat",
+    "world/dynamic/switch/button/parts/animation_whitespace_down.dat",
+    "world/dynamic/switch/button/parts/animation_whitespace_up.dat",
+    "world/dynamic/switch/button/parts/fx_down.dat",
+    "world/dynamic/switch/button_large/fx_whitespace-hit.dat",
+    "world/dynamic/switch/button_large/fx_whitespace.dat",
+    "world/dynamic/switch/button_large/model.dat",
+    "world/dynamic/switch/button_large/model_horde.dat",
+    "world/dynamic/switch/button_large/model_whitespace.dat",
+    "world/dynamic/switch/clockwork_button/glow.dat",
+    "world/dynamic/switch/clockwork_button/model.dat",
+    "world/dynamic/switch/clockwork_button/animation/state_down.dat",
+    "world/dynamic/switch/clockwork_button/animation/state_up.dat",
+    "world/dynamic/switch/multistate/model.dat",
+    "world/dynamic/switch/multistate/parts/animation_disabled.dat",
+    "world/dynamic/switch/multistate/parts/animation_green.dat",
+    "world/dynamic/switch/multistate/parts/animation_red.dat",
+    "world/dynamic/switch/multistate/parts/animation_violet.dat",
+    "world/dynamic/switch/multistate/parts/animation_yellow.dat",
+    "world/dynamic/switch/toggle_lever/animation_off.dat",
+    "world/dynamic/switch/toggle_lever/animation_on.dat",
+    "world/dynamic/switch/toggle_lever/model.dat"
   };
 }

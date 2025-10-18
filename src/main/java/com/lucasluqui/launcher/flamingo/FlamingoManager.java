@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.lucasluqui.launcher.BuildConfig;
 import com.lucasluqui.launcher.DeployConfig;
-import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.flamingo.data.Status;
 import com.lucasluqui.launcher.setting.SettingsManager;
@@ -57,7 +56,7 @@ public class FlamingoManager
     List<Server> servers = new ArrayList<>();
 
     try {
-      JSONObject response = sendRequest("GET", "/server-list/", new String[] { "machineId=" + this.machineId });
+      JSONObject response = sendRequest("GET", "/server-list/", new String[]{"machineId=" + this.machineId});
       log.info("Got server list from flamingo");
 
       // we got an empty server list, so empty we return it.
@@ -100,7 +99,7 @@ public class FlamingoManager
   public String activateBetaCode (String code)
   {
     try {
-      JSONObject response = sendRequest("POST", "/beta-code/activate/" + code, new String[] { "machineId=" + this.machineId });
+      JSONObject response = sendRequest("POST", "/beta-code/activate/" + code, new String[]{"machineId=" + this.machineId});
       log.info("Got response for beta code activation: " + response);
 
       return response.getString("result");
@@ -143,14 +142,14 @@ public class FlamingoManager
   public Server findServerByName (String serverName)
   {
     List<Server> results = getServerList().stream()
-        .filter(s -> serverName.equals(s.name)).collect(Collectors.toList());
+      .filter(s -> serverName.equals(s.name)).collect(Collectors.toList());
     return results.isEmpty() ? null : results.get(0);
   }
 
   public Server findServerBySanitizedName (String sanitizedServerName)
   {
     List<Server> results = getServerList().stream()
-        .filter(s -> sanitizedServerName.equals(s.getSanitizedName())).collect(Collectors.toList());
+      .filter(s -> sanitizedServerName.equals(s.getSanitizedName())).collect(Collectors.toList());
     return results.isEmpty() ? null : results.get(0);
   }
 

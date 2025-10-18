@@ -5,7 +5,6 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
-
 import java.awt.*;
 
 import static com.lucasluqui.launcher.Log.log;

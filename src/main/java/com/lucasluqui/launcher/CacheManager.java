@@ -6,7 +6,6 @@ import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
 import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.ImageUtil;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.imageio.ImageIO;
@@ -42,7 +41,7 @@ public class CacheManager
     BufferedImage bufferedImage = null;
     URL localURL;
 
-    if(FileUtil.fileExists(localPath)) {
+    if (FileUtil.fileExists(localPath)) {
       log.info("Loading image from cache", "localPath", localPath);
       try {
         localURL = new File(localPath).toURI().toURL();
@@ -69,7 +68,7 @@ public class CacheManager
   {
     String localPath = getLocalPath(url);
 
-    if(FileUtil.fileExists(localPath)) {
+    if (FileUtil.fileExists(localPath)) {
       log.info("Loading file from cache", "localPath", localPath);
       return new File(localPath);
     } else {

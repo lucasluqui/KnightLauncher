@@ -72,7 +72,7 @@ public final class StreamUtil
    * Copies the contents of the supplied input stream to the supplied output stream.
    */
   public static <T extends OutputStream> T copy (InputStream in, T out)
-          throws IOException
+    throws IOException
   {
     byte[] buffer = new byte[4096];
     for (int read = 0; (read = in.read(buffer)) > 0; ) {
@@ -85,7 +85,7 @@ public final class StreamUtil
    * Reads the contents of the supplied stream into a byte array.
    */
   public static byte[] toByteArray (InputStream stream)
-          throws IOException
+    throws IOException
   {
     return copy(stream, new ByteArrayOutputStream()).toByteArray();
   }

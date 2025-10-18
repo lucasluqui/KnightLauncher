@@ -13,7 +13,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Properties;
 
 import static com.lucasluqui.launcher.setting.Log.log;
 
@@ -275,8 +276,8 @@ public class SettingsManager
     String deployPropStr = null;
     try {
       deployPropStr = ZipUtil.readFileInsideZip(
-          LauncherGlobals.USER_DIR + File.separator + "code" + File.separator + "config.jar",
-          "deployment.properties");
+        LauncherGlobals.USER_DIR + File.separator + "code" + File.separator + "config.jar",
+        "deployment.properties");
 
     } catch (IOException e) {
       log.error(e);
@@ -303,17 +304,17 @@ public class SettingsManager
 
     try {
       properties.store(
-          Files.newOutputStream(
-              new File(LauncherGlobals.USER_DIR + "/deployment.properties").toPath()), null);
+        Files.newOutputStream(
+          new File(LauncherGlobals.USER_DIR + "/deployment.properties").toPath()), null);
     } catch (IOException e) {
       log.error(e);
     }
 
     String[] outputCapture = null;
     if (SystemUtil.isWindows()) {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{ "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "uf", "code/config.jar", "deployment.properties" });
+      outputCapture = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "uf", "code/config.jar", "deployment.properties"});
     } else {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{ "/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "uf", "code/config.jar", "deployment.properties" });
+      outputCapture = ProcessUtil.runAndCapture(new String[]{"/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "uf", "code/config.jar", "deployment.properties"});
     }
     log.debug("Connection settings capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
 
