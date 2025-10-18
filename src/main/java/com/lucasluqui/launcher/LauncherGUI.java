@@ -64,6 +64,16 @@ public class LauncherGUI extends BaseGUI {
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.getContentPane().setLayout(null);
 
+    returnButton.setBounds(305, 40, 25, 25);
+    returnButton.setToolTipText(_localeManager.getValue("b.back"));
+    returnButton.addActionListener(l -> {
+      layeredSettingsPane.setVisible(false);
+      layeredModsPane.setVisible(false);
+      layeredEditorsPane.setVisible(false);
+      mainPane.setVisible(true);
+      returnButton.setVisible(false);
+    });
+
     serverSwitcherPane = new JPanel();
     serverSwitcherPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     serverSwitcherPane.setVisible(true);
@@ -124,11 +134,7 @@ public class LauncherGUI extends BaseGUI {
     sidePane.add(launcherLogo);
     launcherLogo.addMouseListener(new MouseListener() {
       @Override public void mouseClicked(MouseEvent e) {
-        layeredSettingsPane.setVisible(false);
-        layeredModsPane.setVisible(false);
-        layeredEditorsPane.setVisible(false);
-        mainPane.setVisible(true);
-        layeredReturnButton.setVisible(false);
+        returnToHome();
       }
       @Override public void mousePressed(MouseEvent e) {}
       @Override public void mouseReleased(MouseEvent e) {}
@@ -641,24 +647,7 @@ public class LauncherGUI extends BaseGUI {
     layeredSettingsPane.setBounds(300, 75, 800, 550);
     guiFrame.add(layeredSettingsPane);
     layeredSettingsPane.setVisible(true);
-
-    layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
-    layeredReturnButton.setBounds(305, 40, 25, 25);
-    layeredReturnButton.setVisible(true);
-    layeredReturnButton.setFocusable(false);
-    layeredReturnButton.setFocusPainted(false);
-    layeredReturnButton.setBorder(null);
-    layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    layeredReturnButton.putClientProperty(FlatClientProperties.STYLE,
-      "arc: 999; borderWidth: 0");
-    layeredReturnButton.addActionListener(l -> {
-      layeredSettingsPane.setVisible(false);
-      layeredModsPane.setVisible(false);
-      layeredEditorsPane.setVisible(false);
-      mainPane.setVisible(true);
-      layeredReturnButton.setVisible(false);
-    });
-    guiFrame.add(layeredReturnButton);
+    returnButton.setVisible(true);
   }
 
   public void showModsMenu ()
@@ -671,24 +660,7 @@ public class LauncherGUI extends BaseGUI {
     layeredModsPane.setBounds(300, 75, 800, 550);
     guiFrame.add(layeredModsPane);
     layeredModsPane.setVisible(true);
-
-    layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
-    layeredReturnButton.setBounds(305, 40, 25, 25);
-    layeredReturnButton.setVisible(true);
-    layeredReturnButton.setFocusable(false);
-    layeredReturnButton.setFocusPainted(false);
-    layeredReturnButton.setBorder(null);
-    layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    layeredReturnButton.putClientProperty(FlatClientProperties.STYLE,
-      "arc: 999; borderWidth: 0");
-    layeredReturnButton.addActionListener(l -> {
-      layeredSettingsPane.setVisible(false);
-      layeredModsPane.setVisible(false);
-      layeredEditorsPane.setVisible(false);
-      mainPane.setVisible(true);
-      layeredReturnButton.setVisible(false);
-    });
-    guiFrame.add(layeredReturnButton);
+    returnButton.setVisible(true);
   }
 
   public void showEditorsMenu ()
@@ -701,32 +673,15 @@ public class LauncherGUI extends BaseGUI {
     layeredEditorsPane.setBounds(300, 75, 800, 550);
     guiFrame.add(layeredEditorsPane);
     layeredEditorsPane.setVisible(true);
-
-    layeredReturnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
-    layeredReturnButton.setBounds(305, 40, 25, 25);
-    layeredReturnButton.setVisible(true);
-    layeredReturnButton.setFocusable(false);
-    layeredReturnButton.setFocusPainted(false);
-    layeredReturnButton.setBorder(null);
-    layeredReturnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    layeredReturnButton.putClientProperty(FlatClientProperties.STYLE,
-      "arc: 999; borderWidth: 0");
-    layeredReturnButton.addActionListener(l -> {
-      layeredSettingsPane.setVisible(false);
-      layeredModsPane.setVisible(false);
-      layeredEditorsPane.setVisible(false);
-      mainPane.setVisible(true);
-      layeredReturnButton.setVisible(false);
-    });
-    guiFrame.add(layeredReturnButton);
+    returnButton.setVisible(true);
   }
 
-  public void setOnTop ()
+  public void returnToHome ()
   {
     layeredSettingsPane.setVisible(false);
     layeredModsPane.setVisible(false);
     layeredEditorsPane.setVisible(false);
-    layeredReturnButton.setVisible(false);
+    returnButton.setVisible(false);
 
     mainPane.setVisible(true);
   }
@@ -749,7 +704,6 @@ public class LauncherGUI extends BaseGUI {
   public JTabbedPane layeredSettingsPane = new JTabbedPane();
   public JPanel layeredModsPane = new JPanel();
   public JPanel layeredEditorsPane = new JPanel();
-  public JButton layeredReturnButton;
 
   // Server switcher pane
   public JPanel serverSwitcherPane;

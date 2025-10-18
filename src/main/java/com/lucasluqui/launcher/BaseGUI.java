@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.lucasluqui.util.ColorUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -124,6 +125,16 @@ public abstract class BaseGUI
       minimizeButton.addActionListener(e -> guiFrame.setState(Frame.ICONIFIED));
     }
 
+    returnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
+    returnButton.setVisible(false);
+    returnButton.setFocusable(false);
+    returnButton.setFocusPainted(false);
+    returnButton.setBorder(null);
+    returnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    returnButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
+    guiFrame.add(returnButton);
+
     // Little trick to avoid the window not popping up on boot sometimes.
     guiFrame.setAlwaysOnTop(true);
     guiFrame.setAlwaysOnTop(false);
@@ -164,6 +175,7 @@ public abstract class BaseGUI
 
   public JFrame guiFrame = new JFrame();
   protected JPanel titleBar;
+  protected JButton returnButton;
   protected JButton closeButton;
   protected JButton minimizeButton;
 }

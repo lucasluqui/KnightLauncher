@@ -78,7 +78,7 @@ public class SettingsEventHandler
   {
     _modManager.setMountRequired(true);
     new Thread(_modManager::startStrictFileRebuild).start();
-    _launcherCtx.launcherGUI.setOnTop();
+    _launcherCtx.launcherGUI.returnToHome();
   }
 
   public void createShortcutChangeEvent (ActionEvent event)
