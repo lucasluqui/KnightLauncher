@@ -18,6 +18,7 @@ jobs:
         with:
           java-version: '8'
           distribution: 'temurin'
+          cache: 'maven'
 
       - name: Fetch Spiral Knights version
         id: fetch-version
@@ -35,7 +36,15 @@ jobs:
           # Clean up
           rm getdown.txt
 
+      - name: Cache projectx-pcode.jar
+        id: cache-projectx
+        uses: actions/cache@v4
+        with:
+          path: lib/projectx-pcode.jar
+          key: projectx-pcode-${{ steps.fetch-version.outputs.version }}
+
       - name: Download projectx-pcode.jar
+        if: steps.cache-projectx.outputs.cache-hit != 'true'
         run: |
           # Construct the URL using the version
           JAR_URL="http://gamemedia2.spiralknights.com/spiral/${{ steps.fetch-version.outputs.version }}/code/projectx-pcode.jar"
@@ -43,6 +52,7 @@ jobs:
           echo "Downloading from: $JAR_URL"
 
           # Download the jar file to lib directory
+          mkdir -p lib
           curl -sSL "$JAR_URL" -o lib/projectx-pcode.jar
 
           # Verify the file was downloaded
