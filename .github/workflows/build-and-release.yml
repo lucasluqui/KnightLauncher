@@ -109,7 +109,7 @@ jobs:
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.extract-version.outputs.version }}
+          tag_name: ${{ steps.extract-version.outputs.version }}
           name: Knight Launcher ${{ steps.extract-version.outputs.version }}
           draft: false
           prerelease: false
