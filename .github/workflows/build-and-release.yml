@@ -1,0 +1,116 @@
+name: Build and Release
+
+on:
+  workflow_dispatch
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+
+      - name: Fetch Spiral Knights version
+        id: fetch-version
+        run: |
+          # Download getdown.txt to get the version
+          curl -sSL https://gamemedia2.spiralknights.com/spiral/client/getdown.txt -o getdown.txt
+
+          # Extract version number from the first line
+          VERSION=$(grep '^version = ' getdown.txt | head -1 | sed 's/version = //')
+          echo "SK_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          echo "Spiral Knights version: $VERSION"
+
+          # Clean up
+          rm getdown.txt
+
+      - name: Download projectx-pcode.jar
+        run: |
+          # Construct the URL using the version
+          JAR_URL="http://gamemedia2.spiralknights.com/spiral/${{ steps.fetch-version.outputs.version }}/code/projectx-pcode.jar"
+
+          echo "Downloading from: $JAR_URL"
+
+          # Download the jar file to lib directory
+          curl -sSL "$JAR_URL" -o lib/projectx-pcode.jar
+
+          # Verify the file was downloaded
+          if [ -f lib/projectx-pcode.jar ]; then
+            echo "Successfully downloaded projectx-pcode.jar"
+            ls -lh lib/projectx-pcode.jar
+          else
+            echo "Failed to download projectx-pcode.jar"
+            exit 1
+          fi
+
+      - name: Create deploy.properties
+        run: |
+          # Create deploy.properties from template for production build
+          cp deploy.properties.template deploy.properties
+
+          # The Maven build will replace ${env} with 'prod' via -Denv=prod
+          echo "Created deploy.properties from template"
+
+      - name: Validate Maven dependencies
+        run: mvn validate
+
+      - name: Build with Maven
+        run: mvn -Denv=prod clean package
+
+      - name: Extract version from pom.xml
+        id: extract-version
+        run: |
+          VERSION=$(grep '<version>' pom.xml | head -1 | sed 's/.*<version>\(.*\)<\/version>.*/\1/')
+          VERSION=${VERSION%-SNAPSHOT}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create README.txt
+        run: |
+          cat > README.txt << 'EOF'
+          Place the .jar file in your game's root directory and then double click it.
+          If that does not work, drag and drop the .bat or .sh script file (depending of your operating system) to that same directory
+          and double click it.
+
+          .BAT script (Windows):
+          https://github.com/lucasluqui/KnightLauncher/blob/main/scripts/KnightLauncher_windows.bat
+
+          .SH script (macOS, Linux):
+          https://github.com/lucasluqui/KnightLauncher/blob/main/scripts/KnightLauncher_mac_linux.sh
+
+
+          For a more detailed guide please click the following link:
+          https://github.com/lucasluqui/KnightLauncher?tab=readme-ov-file#downloading--installing
+
+          Thanks for downloading Knight Launcher!
+
+          ---------------------------------------------------------------
+
+          Author: https://github.com/lucasluqui
+          Source: https://github.com/lucasluqui/KnightLauncher
+          Releases: https://github.com/lucasluqui/KnightLauncher/releases
+          Discord: https://discord.gg/8rE4GeAMza
+          EOF
+
+      - name: Create ZIP archive
+        run: zip -j "KnightLauncher-${{ steps.extract-version.outputs.version }}.zip" target/KnightLauncher.jar README.txt
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.extract-version.outputs.version }}
+          name: Knight Launcher ${{ steps.extract-version.outputs.version }}
+          draft: false
+          prerelease: false
+          files: KnightLauncher-${{ steps.extract-version.outputs.version }}.zip
