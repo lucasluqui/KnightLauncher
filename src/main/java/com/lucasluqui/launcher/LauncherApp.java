@@ -578,9 +578,6 @@ public class LauncherApp
     if (rawResponseReleases != null) {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
       String latestRelease = jsonReleases.getString("tag_name");
-      if (latestRelease.startsWith("v")) {
-        latestRelease = latestRelease.substring(1);
-      }
       String latestChangelog = jsonReleases.getString("body");
 
       _launcherCtx.launcherGUI.eventHandler.latestRelease = latestRelease;
