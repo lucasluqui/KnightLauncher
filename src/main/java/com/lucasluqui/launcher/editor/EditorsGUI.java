@@ -135,64 +135,6 @@ public class EditorsGUI extends BaseGUI
       }
     });
 
-    JPanel sceneEditorPane = new JPanel()
-    {
-      @Override
-      protected void paintComponent (Graphics g)
-      {
-        super.paintComponent(g);
-        g.drawImage(sceneEditorImage, 0, 0, null);
-      }
-    };
-    sceneEditorPane.setLayout(null);
-    sceneEditorPane.setBounds(0, 0, 740, 100);
-    sceneEditorPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-
-    JLabel sceneEditorLabel = new JLabel();
-    sceneEditorLabel.setText(_localeManager.getValue("m.scene_editor"));
-    sceneEditorLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
-    sceneEditorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    sceneEditorLabel.setVerticalAlignment(SwingConstants.CENTER);
-    sceneEditorLabel.setBounds(0, 0, 740, 100);
-    sceneEditorPane.add(sceneEditorLabel);
-
-    sceneEditorPane.addMouseListener(new MouseListener()
-    {
-      @Override
-      public void mouseClicked (MouseEvent e)
-      {
-        eventHandler.startSceneEditor(null);
-      }
-
-      @Override
-      public void mousePressed (MouseEvent e)
-      {
-        eventHandler.startSceneEditor(null);
-      }
-
-      @Override
-      public void mouseReleased (MouseEvent e)
-      {
-        eventHandler.startSceneEditor(null);
-      }
-
-      @Override
-      public void mouseEntered (MouseEvent e)
-      {
-        sceneEditorPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        sceneEditorImage = sceneEditorImageFocused;
-        sceneEditorPane.repaint();
-      }
-
-      @Override
-      public void mouseExited (MouseEvent e)
-      {
-        sceneEditorPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        sceneEditorImage = sceneEditorImageUnfocused;
-        sceneEditorPane.repaint();
-      }
-    });
-
     JPanel interfaceTesterPane = new JPanel()
     {
       @Override
@@ -310,7 +252,6 @@ public class EditorsGUI extends BaseGUI
     });
 
     editorListPane.add(modelViewerPane);
-    editorListPane.add(sceneEditorPane);
     editorListPane.add(interfaceTesterPane);
     editorListPane.add(particleEditorPane);
 
