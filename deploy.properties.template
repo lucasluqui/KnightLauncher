@@ -1,5 +1,5 @@
-# Knight Launcher environment
-#
+# Knight Launcher deployment settings file
+
 # Don't manually modify this.
 # Defaults to dev, use -Denv=prod when running Maven to build for prod.
 env=${env}
