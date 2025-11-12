@@ -20,7 +20,7 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 
 ## Features
 - Install and uninstall game mods in an easy and noob-friendly way without worrying about game updates.
-- Jump into several editors such as a model viewer and a scene editor to create custom user-generated content.
+- Jump into several editors to create custom user-generated content or simply preview game models.
 - Automatically patch your game to use a 64-bit Java VM to improve the game's performance.
 - Re-install and verify your game files with ease.
 - Intuitive and user-friendly UI for configuring advanced Java VM settings.
