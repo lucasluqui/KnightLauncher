@@ -18,6 +18,7 @@ public class Settings
   public static Boolean loadCodeMods = false;
   public static Boolean fileProtection = true;
   public static Boolean betasEnabled = false;
+  public static Boolean showLegacySceneEditor = false;
 
   // Compressor settings
   public static String compressorUnzipMethod = "4j";

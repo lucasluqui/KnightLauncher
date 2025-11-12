@@ -7,6 +7,7 @@ import com.lucasluqui.launcher.BaseGUI;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.launcher.LocaleManager;
+import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.util.ImageUtil;
 
 import javax.swing.*;
@@ -134,6 +135,67 @@ public class EditorsGUI extends BaseGUI
         modelViewerPane.repaint();
       }
     });
+    editorListPane.add(modelViewerPane);
+
+    if (Settings.showLegacySceneEditor) {
+      JPanel sceneEditorPane = new JPanel()
+      {
+        @Override
+        protected void paintComponent (Graphics g)
+        {
+          super.paintComponent(g);
+          g.drawImage(sceneEditorImage, 0, 0, null);
+        }
+      };
+      sceneEditorPane.setLayout(null);
+      sceneEditorPane.setBounds(0, 0, 740, 100);
+      sceneEditorPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+
+      JLabel sceneEditorLabel = new JLabel();
+      sceneEditorLabel.setText(_localeManager.getValue("m.scene_editor"));
+      sceneEditorLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
+      sceneEditorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+      sceneEditorLabel.setVerticalAlignment(SwingConstants.CENTER);
+      sceneEditorLabel.setBounds(0, 0, 740, 100);
+      sceneEditorPane.add(sceneEditorLabel);
+      sceneEditorPane.addMouseListener(new MouseListener()
+      {
+        @Override
+        public void mouseClicked (MouseEvent e)
+        {
+          eventHandler.startSceneEditor(null);
+        }
+
+        @Override
+        public void mousePressed (MouseEvent e)
+        {
+          eventHandler.startSceneEditor(null);
+        }
+
+        @Override
+        public void mouseReleased (MouseEvent e)
+        {
+          eventHandler.startSceneEditor(null);
+        }
+
+        @Override
+        public void mouseEntered (MouseEvent e)
+        {
+          sceneEditorPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+          sceneEditorImage = sceneEditorImageFocused;
+          sceneEditorPane.repaint();
+        }
+
+        @Override
+        public void mouseExited (MouseEvent e)
+        {
+          sceneEditorPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+          sceneEditorImage = sceneEditorImageUnfocused;
+          sceneEditorPane.repaint();
+        }
+      });
+      editorListPane.add(sceneEditorPane);
+    }
 
     JPanel interfaceTesterPane = new JPanel()
     {
@@ -192,6 +254,7 @@ public class EditorsGUI extends BaseGUI
         interfaceTesterPane.repaint();
       }
     });
+    editorListPane.add(interfaceTesterPane);
 
     JPanel particleEditorPane = new JPanel()
     {
@@ -250,9 +313,6 @@ public class EditorsGUI extends BaseGUI
         particleEditorPane.repaint();
       }
     });
-
-    editorListPane.add(modelViewerPane);
-    editorListPane.add(interfaceTesterPane);
     editorListPane.add(particleEditorPane);
 
     footerLabel = new JLabel();

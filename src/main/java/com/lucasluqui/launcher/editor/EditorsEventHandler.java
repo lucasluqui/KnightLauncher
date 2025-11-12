@@ -53,11 +53,14 @@ public class EditorsEventHandler
   @SuppressWarnings("unused")
   public void startSceneEditor (ActionEvent actionEvent)
   {
-    this.gui.editorLaunchFakeProgressBar.setMaximum(155);
-    if (_flamingoManager.getSelectedServer().isOfficial()) {
-      startEditor("com.lucasluqui.spiralview.SceneEditorHook", "", false);
-    } else {
-      startEditor("com.threerings.tudey.tools.SceneEditor", "", true);
+    boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.scene_editor_legacy_warning"), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
+    if (confirm) {
+      this.gui.editorLaunchFakeProgressBar.setMaximum(155);
+      if (_flamingoManager.getSelectedServer().isOfficial()) {
+        startEditor("com.lucasluqui.spiralview.SceneEditorHook", "", false);
+      } else {
+        startEditor("com.threerings.tudey.tools.SceneEditor", "", true);
+      }
     }
   }
 
