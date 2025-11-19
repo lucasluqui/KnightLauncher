@@ -32,6 +32,34 @@ public class LauncherContext
     // empty.
   }
 
+  public void block ()
+  {
+    try {
+      launcherGUI.eventHandler.updateServerSwitcher(true);
+      launcherGUI.closeButton.setEnabled(false);
+      launcherGUI.launchButton.setEnabled(false);
+      launcherGUI.launchPopupMenuButton.setEnabled(false);
+      launcherGUI.settingsButton.setEnabled(false);
+      launcherGUI.modButton.setEnabled(false);
+      launcherGUI.editorsButton.setEnabled(false);
+      settingsGUI.forceRebuildButton.setEnabled(false);
+    } catch (Exception ignored) {}
+  }
+
+  public void unblock ()
+  {
+    try {
+      launcherGUI.eventHandler.updateServerSwitcher(false);
+      launcherGUI.closeButton.setEnabled(true);
+      launcherGUI.launchButton.setEnabled(true);
+      launcherGUI.launchPopupMenuButton.setEnabled(true);
+      launcherGUI.settingsButton.setEnabled(true);
+      launcherGUI.modButton.setEnabled(true);
+      launcherGUI.editorsButton.setEnabled(true);
+      settingsGUI.forceRebuildButton.setEnabled(true);
+    } catch (Exception ignored) {}
+  }
+
   public void exit (boolean force)
   {
     _discordPresenceClient.stop();

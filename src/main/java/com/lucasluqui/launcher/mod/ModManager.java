@@ -91,8 +91,7 @@ public class ModManager
   {
     if (!checking) {
       checking = true;
-
-      _launcherCtx.launcherGUI.eventHandler.updateServerSwitcher(true);
+      _launcherCtx.block();
 
       Server selectedServer = _flamingoManager.getSelectedServer();
       String modFolderPath = LauncherGlobals.USER_DIR + "/mods/";
@@ -174,7 +173,7 @@ public class ModManager
 
       _launcherCtx.modListGUI.labelModCount.setText(String.valueOf(getModList().size()));
       _launcherCtx.modListGUI.updateModList(null);
-      _launcherCtx.launcherGUI.eventHandler.updateServerSwitcher(false);
+      _launcherCtx.unblock();
       checking = false;
     }
   }
@@ -186,12 +185,7 @@ public class ModManager
 
     if (Settings.doRebuilds && rebuildRequired) startFileRebuild();
 
-    _launcherCtx.launcherGUI.eventHandler.updateServerSwitcher(true);
-    _launcherCtx.launcherGUI.launchButton.setEnabled(false);
-    _launcherCtx.launcherGUI.launchPopupMenuButton.setEnabled(false);
-    _launcherCtx.launcherGUI.settingsButton.setEnabled(false);
-    _launcherCtx.launcherGUI.modButton.setEnabled(false);
-    _launcherCtx.settingsGUI.forceRebuildButton.setEnabled(false);
+    _launcherCtx.block();
 
     _launcherCtx._progressBar.startTask();
     _launcherCtx._progressBar.setBarMax(getEnabledModCount());
@@ -338,12 +332,7 @@ public class ModManager
     mountRequired = false;
     _launcherCtx._progressBar.finishTask();
 
-    _launcherCtx.launcherGUI.eventHandler.updateServerSwitcher(false);
-    _launcherCtx.launcherGUI.launchButton.setEnabled(true);
-    _launcherCtx.launcherGUI.launchPopupMenuButton.setEnabled(true);
-    _launcherCtx.launcherGUI.settingsButton.setEnabled(true);
-    _launcherCtx.launcherGUI.modButton.setEnabled(true);
-    _launcherCtx.settingsGUI.forceRebuildButton.setEnabled(true);
+    _launcherCtx.unblock();
   }
 
   public void startFileRebuild ()
@@ -358,14 +347,7 @@ public class ModManager
 
   private void rebuildFiles (boolean strict)
   {
-    try {
-      _launcherCtx.launcherGUI.eventHandler.updateServerSwitcher(true);
-      _launcherCtx.launcherGUI.launchButton.setEnabled(false);
-      _launcherCtx.launcherGUI.launchPopupMenuButton.setEnabled(false);
-      _launcherCtx.launcherGUI.settingsButton.setEnabled(false);
-      _launcherCtx.launcherGUI.modButton.setEnabled(false);
-      _launcherCtx.settingsGUI.forceRebuildButton.setEnabled(false);
-    } catch (Exception ignored) {}
+    _launcherCtx.block();
 
     String rootDir = LauncherGlobals.USER_DIR;
     String[] bundles = RSRC_BUNDLES;
@@ -421,15 +403,7 @@ public class ModManager
     _launcherCtx._progressBar.finishTask();
     rebuildRequired = false;
 
-    try {
-      _launcherCtx.launcherGUI.eventHandler.updateServerSwitcher(false);
-      _launcherCtx.launcherGUI.launchButton.setEnabled(true);
-      _launcherCtx.launcherGUI.launchPopupMenuButton.setEnabled(true);
-      _launcherCtx.launcherGUI.settingsButton.setEnabled(true);
-      _launcherCtx.launcherGUI.modButton.setEnabled(true);
-      _launcherCtx.settingsGUI.forceRebuildButton.setEnabled(true);
-    } catch (Exception ignored) {}
-
+    _launcherCtx.unblock();
     _discordPresenceClient.setDetails(_localeManager.getValue("presence.ready"));
   }
 

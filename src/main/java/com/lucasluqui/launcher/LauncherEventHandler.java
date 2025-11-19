@@ -77,9 +77,8 @@ public class LauncherEventHandler
   {
     Thread launchThread = new Thread(() -> {
 
-      // disable server switching and launch button during launch procedure
-      this.updateServerSwitcher(true);
-      this.gui.launchButton.setEnabled(false);
+      // block interactions with the launcher
+      _launcherCtx.block();
 
       Server selectedServer = _flamingoManager.getSelectedServer();
       String sanitizedServerName = selectedServer.getSanitizedName();
@@ -893,9 +892,8 @@ public class LauncherEventHandler
 
     if (gameRunning) _launcherCtx.exit(false);
 
-    // re-enable server switching and launching.
-    this.updateServerSwitcher(false);
-    this.gui.launchButton.setEnabled(true);
+    // unblock launcher interactions
+    _launcherCtx.unblock();
 
     _launcherCtx.launcherGUI.launchButton.setIcon(null);
     _launcherCtx.launcherGUI.launchButton.setText(_localeManager.getValue("b.play"));
