@@ -65,6 +65,16 @@ public class EditorsEventHandler
   }
 
   @SuppressWarnings("unused")
+  public void startCrucibleEditor (ActionEvent actionEvent)
+  {
+    boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.crucible_editor_warning"), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
+    if (confirm) {
+      this.gui.editorLaunchFakeProgressBar.setMaximum(155);
+      startCrucibleEditor((String) null);
+    }
+  }
+
+  @SuppressWarnings("unused")
   public void startInterfaceTester (ActionEvent actionEvent)
   {
     this.gui.editorLaunchFakeProgressBar.setMaximum(110);
@@ -141,6 +151,51 @@ public class EditorsEventHandler
       editorCmdLine.add(arg);
 
       ProcessUtil.runFromDirectory(editorCmdLine.toArray(new String[editorCmdLine.size()]), rootDir, true);
+      initEditorTask();
+    }
+  }
+
+  private void startCrucibleEditor (String arg)
+  {
+    if (!isBooting) {
+      isBooting = true;
+      new Thread(this::startedBooting).start();
+
+      String libSeparator = JavaUtil.getJavaVMCommandLineSeparator();
+      String javaVMPath = JavaUtil.getGameJVMExePath();
+
+      String classpath = "";
+      String rootDir = LauncherGlobals.USER_DIR;
+      classpath += rootDir + File.separator + "./code/config.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/projectx-config.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/projectx-pcode.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl_util.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/jinput.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/jutils.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/jshortcut.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-beanutils.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-digester.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-logging.jar" + libSeparator;
+
+      List<String> editorCmdLine = new ArrayList<>();
+      editorCmdLine.add(javaVMPath);
+      editorCmdLine.add("-classpath");
+      editorCmdLine.add(classpath);
+      editorCmdLine.add("-Xms2G");
+      editorCmdLine.add("-Xmx2G");
+      editorCmdLine.add("-Dcom.threerings.getdown=false");
+      editorCmdLine.add("-XX:SoftRefLRUPolicyMSPerMB=10");
+      editorCmdLine.add("-Dorg.lwjgl.util.NoChecks=true");
+      editorCmdLine.add("-Dsun.java2d.d3d=false");
+      editorCmdLine.add("-XX:+AggressiveOpts");
+      editorCmdLine.add("-Dappdir=" + rootDir + File.separator + ".");
+      editorCmdLine.add("-Dresource_dir=" + rootDir + File.separator + "./rsrc");
+      editorCmdLine.add("-Dcrucible.dir=../crucible");
+      editorCmdLine.add("-Djava.library.path=" + rootDir + File.separator + "./native");
+      editorCmdLine.add("com.threerings.projectx.tools.CrucibleSceneEditor");
+
+      ProcessUtil.runFromDirectory(editorCmdLine.toArray(new String[0]), rootDir, true);
       initEditorTask();
     }
   }

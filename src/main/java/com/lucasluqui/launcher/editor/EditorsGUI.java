@@ -78,65 +78,6 @@ public class EditorsGUI extends BaseGUI
     editorListPaneScroll.getVerticalScrollBar().setUnitIncrement(16);
     guiFrame.getContentPane().add(editorListPaneScroll);
 
-    JPanel modelViewerPane = new JPanel()
-    {
-      @Override
-      protected void paintComponent (Graphics g)
-      {
-        super.paintComponent(g);
-        g.drawImage(modelViewerImage, 0, 0, null);
-      }
-    };
-    modelViewerPane.setLayout(null);
-    modelViewerPane.setBounds(0, 0, 740, 100);
-    modelViewerPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-
-    JLabel modelViewerLabel = new JLabel();
-    modelViewerLabel.setText(_localeManager.getValue("m.model_viewer"));
-    modelViewerLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
-    modelViewerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    modelViewerLabel.setVerticalAlignment(SwingConstants.CENTER);
-    modelViewerLabel.setBounds(0, 0, 740, 100);
-    modelViewerPane.add(modelViewerLabel);
-
-    modelViewerPane.addMouseListener(new MouseListener()
-    {
-      @Override
-      public void mouseClicked (MouseEvent e)
-      {
-        eventHandler.startModelViewer(null);
-      }
-
-      @Override
-      public void mousePressed (MouseEvent e)
-      {
-        eventHandler.startModelViewer(null);
-      }
-
-      @Override
-      public void mouseReleased (MouseEvent e)
-      {
-        eventHandler.startModelViewer(null);
-      }
-
-      @Override
-      public void mouseEntered (MouseEvent e)
-      {
-        modelViewerPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        modelViewerImage = modelViewerImageFocused;
-        modelViewerPane.repaint();
-      }
-
-      @Override
-      public void mouseExited (MouseEvent e)
-      {
-        modelViewerPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        modelViewerImage = modelViewerImageUnfocused;
-        modelViewerPane.repaint();
-      }
-    });
-    editorListPane.add(modelViewerPane);
-
     if (Settings.showLegacySceneEditor) {
       JPanel sceneEditorPane = new JPanel()
       {
@@ -195,7 +136,124 @@ public class EditorsGUI extends BaseGUI
         }
       });
       editorListPane.add(sceneEditorPane);
+    } else {
+      JPanel crucibleEditorPane = new JPanel()
+      {
+        @Override
+        protected void paintComponent (Graphics g)
+        {
+          super.paintComponent(g);
+          g.drawImage(crucibleEditorImage, 0, 0, null);
+        }
+      };
+      crucibleEditorPane.setLayout(null);
+      crucibleEditorPane.setBounds(0, 0, 740, 100);
+      crucibleEditorPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+
+      JLabel crucibleEditorLabel = new JLabel();
+      crucibleEditorLabel.setText(_localeManager.getValue("m.crucible_editor"));
+      crucibleEditorLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
+      crucibleEditorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+      crucibleEditorLabel.setVerticalAlignment(SwingConstants.CENTER);
+      crucibleEditorLabel.setBounds(0, 0, 740, 100);
+      crucibleEditorPane.add(crucibleEditorLabel);
+      crucibleEditorPane.addMouseListener(new MouseListener()
+      {
+        @Override
+        public void mouseClicked (MouseEvent e)
+        {
+          eventHandler.startCrucibleEditor(null);
+        }
+
+        @Override
+        public void mousePressed (MouseEvent e)
+        {
+          eventHandler.startCrucibleEditor(null);
+        }
+
+        @Override
+        public void mouseReleased (MouseEvent e)
+        {
+          eventHandler.startCrucibleEditor(null);
+        }
+
+        @Override
+        public void mouseEntered (MouseEvent e)
+        {
+          crucibleEditorPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+          crucibleEditorImage = crucibleEditorImageFocused;
+          crucibleEditorPane.repaint();
+        }
+
+        @Override
+        public void mouseExited (MouseEvent e)
+        {
+          crucibleEditorPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+          crucibleEditorImage = crucibleEditorImageUnfocused;
+          crucibleEditorPane.repaint();
+        }
+      });
+      editorListPane.add(crucibleEditorPane);
     }
+
+    JPanel modelViewerPane = new JPanel()
+    {
+      @Override
+      protected void paintComponent (Graphics g)
+      {
+        super.paintComponent(g);
+        g.drawImage(modelViewerImage, 0, 0, null);
+      }
+    };
+    modelViewerPane.setLayout(null);
+    modelViewerPane.setBounds(0, 0, 740, 100);
+    modelViewerPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+
+    JLabel modelViewerLabel = new JLabel();
+    modelViewerLabel.setText(_localeManager.getValue("m.model_viewer"));
+    modelViewerLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
+    modelViewerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    modelViewerLabel.setVerticalAlignment(SwingConstants.CENTER);
+    modelViewerLabel.setBounds(0, 0, 740, 100);
+    modelViewerPane.add(modelViewerLabel);
+
+    modelViewerPane.addMouseListener(new MouseListener()
+    {
+      @Override
+      public void mouseClicked (MouseEvent e)
+      {
+        eventHandler.startModelViewer(null);
+      }
+
+      @Override
+      public void mousePressed (MouseEvent e)
+      {
+        eventHandler.startModelViewer(null);
+      }
+
+      @Override
+      public void mouseReleased (MouseEvent e)
+      {
+        eventHandler.startModelViewer(null);
+      }
+
+      @Override
+      public void mouseEntered (MouseEvent e)
+      {
+        modelViewerPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        modelViewerImage = modelViewerImageFocused;
+        modelViewerPane.repaint();
+      }
+
+      @Override
+      public void mouseExited (MouseEvent e)
+      {
+        modelViewerPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        modelViewerImage = modelViewerImageUnfocused;
+        modelViewerPane.repaint();
+      }
+    });
+    editorListPane.add(modelViewerPane);
 
     JPanel interfaceTesterPane = new JPanel()
     {
@@ -320,6 +378,7 @@ public class EditorsGUI extends BaseGUI
     footerLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     footerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     footerLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
+    footerLabel.setVisible(false);
     guiFrame.getContentPane().add(footerLabel);
 
   }
@@ -358,13 +417,19 @@ public class EditorsGUI extends BaseGUI
 
   protected void setupImages ()
   {
+    if (Settings.showLegacySceneEditor) {
+      sceneEditorImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-scene.png"), 740, 100);
+      sceneEditorImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(sceneEditorImageFocused, null), 25);
+      sceneEditorImageUnfocused = new GrayscaleFilter().filter(sceneEditorImageFocused, null);
+    } else {
+      crucibleEditorImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-crucible.png"), 740, 100);
+      crucibleEditorImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(crucibleEditorImageFocused, null), 25);
+      crucibleEditorImageUnfocused = new GrayscaleFilter().filter(crucibleEditorImageFocused, null);
+    }
+
     modelViewerImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-model.png"), 740, 100);
     modelViewerImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(modelViewerImageFocused, null), 25);
     modelViewerImageUnfocused = new GrayscaleFilter().filter(modelViewerImageFocused, null);
-
-    sceneEditorImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-scene.png"), 740, 100);
-    sceneEditorImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(sceneEditorImageFocused, null), 25);
-    sceneEditorImageUnfocused = new GrayscaleFilter().filter(sceneEditorImageFocused, null);
 
     interfaceTesterImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-default.png"), 740, 100);
     interfaceTesterImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(interfaceTesterImageFocused, null), 25);
@@ -374,8 +439,9 @@ public class EditorsGUI extends BaseGUI
     particleEditorImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(particleEditorImageFocused, null), 25);
     particleEditorImageUnfocused = new GrayscaleFilter().filter(particleEditorImageFocused, null);
 
-    modelViewerImage = modelViewerImageUnfocused;
     sceneEditorImage = sceneEditorImageUnfocused;
+    crucibleEditorImage = crucibleEditorImageUnfocused;
+    modelViewerImage = modelViewerImageUnfocused;
     interfaceTesterImage = interfaceTesterImageUnfocused;
     particleEditorImage = particleEditorImageUnfocused;
   }
@@ -387,19 +453,21 @@ public class EditorsGUI extends BaseGUI
   protected JProgressBar editorLaunchFakeProgressBar;
   protected JLabel footerLabel;
 
-  protected BufferedImage modelViewerImage = null;
   protected BufferedImage sceneEditorImage = null;
+  protected BufferedImage crucibleEditorImage = null;
+  protected BufferedImage modelViewerImage = null;
   protected BufferedImage interfaceTesterImage = null;
   protected BufferedImage particleEditorImage = null;
 
-  protected BufferedImage modelViewerImageUnfocused = null;
   protected BufferedImage sceneEditorImageUnfocused = null;
+  protected BufferedImage crucibleEditorImageUnfocused = null;
+  protected BufferedImage modelViewerImageUnfocused = null;
   protected BufferedImage interfaceTesterImageUnfocused = null;
   protected BufferedImage particleEditorImageUnfocused = null;
 
-  protected BufferedImage modelViewerImageFocused = null;
   protected BufferedImage sceneEditorImageFocused = null;
+  protected BufferedImage crucibleEditorImageFocused = null;
+  protected BufferedImage modelViewerImageFocused = null;
   protected BufferedImage interfaceTesterImageFocused = null;
   protected BufferedImage particleEditorImageFocused = null;
-
 }
