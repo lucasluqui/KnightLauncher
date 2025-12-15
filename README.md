@@ -26,7 +26,7 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 - Intuitive and user-friendly UI for configuring advanced Java VM settings.
 - Discord integration that shows your current game activity on your Discord status. This feature is only available on Windows.
 - Launch alt accounts with lesser resources assigned to them avoiding losing performance on your main instance.
-- Future-proofed to support third party servers. Third party server support __**will not**__ be enabled while Grey Havens' Official servers are still online, unless explicitly permitted by their respective right owners and/or law.
+- Future-proofed to support third party servers. Third party server support <ins>**will not**</ins> be enabled while Grey Havens' Official servers are still online, unless explicitly permitted by their respective right owners and/or law.
 - And more...
 
 ## Downloading & Installing
@@ -34,13 +34,22 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 1. Prerequisites:
    - [Java](https://www.java.com/en/download/) installed.
 2. Download the latest Knight Launcher release ZIP file [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
-3. Extract the downloaded `KnightLauncher-x.x.x.zip` ZIP file to your Spiral Knights folder (`x.x.x` will vary depending on the current version).
-   - **Windows**: Steam installations can be found by right-clicking the game on your Steam library and selecting "Manage" → "Browse Local Files," you can also look for it at `<Your Steam Folder>\steamapps\common\Spiral Knights`. Standalone installations can be found by right-clicking the Spiral Knights shortcut on your desktop and then clicking "Open File Location," you can also look for it at `<Your User Folder>\AppData\LocalLow\spiral`.
-   - **macOS**: Steam installations can be found at `/Users/<Your User Folder>/Library/Application Support/Steam/steamapps/common/Spiral Knights/`. Standalone installations can be found at `/Users/<Your User Folder>/Library/Application Support/spiral`. For both types of installations you'll find a `Spiral Knights.app` file which you need to open, then browse to `Contents/Resources/Java`, this is the game's folder.
-   - **Linux**: Steam installations are not natively supported, but the launcher will still call Steam and launch through Proton if you place Knight Launcher's JAR file in the game's folder. Standalone installations are found at your user's home folder then `.getdown/spiral`.
-   - Bear in mind that these are the *usual* installation locations, your mileage may vary.
-4. Double-click the `KnightLauncher.jar` JAR file. The launcher should now boot up.
-5. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
+3. Extract the downloaded `KnightLauncher-x.x.x.zip` ZIP file to your Spiral Knights directory (`x.x.x` will vary depending on the current version).
+   - <ins>**Windows**</ins>:
+     - **Steam**: Steam installations can be found by right-clicking the game on your Steam library and selecting "Manage" → "Browse Local Files," you can also look for it at `<Your Steam Folder>\steamapps\common\Spiral Knights`.
+     - **Standalone**: Standalone installations can be found by right-clicking the Spiral Knights shortcut on your desktop and then clicking "Open File Location," you can also look for it at `<Your User Folder>\AppData\LocalLow\spiral`.
+   - <ins>**macOS**</ins>:
+     - **Steam**: Steam installations can be found by right-clicking the game on your Steam library, selecting "Manage" → "Browse Local Files," then right click the "Spiral Knights" application file and select "Show Package Contents". Once this is done, browse to `Contents/Resources/Java`. This is where you must extract the zip file you downloaded earlier.
+     - **Standalone**: Standalone installations can be found by searching "Spiral Knights" in Applications, then right click on the result and select "Show in Finder", finally right click the "Spiral Knights" Application file and select "Show Package Contents", and browse to `Contents/Resources/Java`. This is where you must extract the zip file you downloaded earlier.
+   - <ins>**Linux**</ins>:
+     - **Steam**: Steam installations are not natively supported, but the launcher will still call Steam and launch through Proton if you place Knight Launcher's JAR file in the game's directory.
+     - **Standalone**: Standalone installations are found at your user's home folder then `.getdown/spiral`.
+
+> [!NOTE]
+> Bear in mind that those are the *usual* installation locations, your mileage may vary.
+
+5. Double-click the `KnightLauncher.jar` JAR file. The launcher should now boot up.
+6. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
 
 Still not working? Open a post in [Discord's tech support channel](https://discord.gg/m6TT9PM9B7).
 
