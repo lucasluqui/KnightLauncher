@@ -49,7 +49,8 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 > Bear in mind that those are the *usual* installation locations, your mileage may vary.
 
 5. Double-click the `KnightLauncher.jar` JAR file. The launcher should now boot up.
-6. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
+   - **For macOS users**: If a window pops up displaying "macOS cannot verify that this app is free from malware" click on "Done", then go to your System Settings → Privacy & Security, scroll to the very bottom of this panel, and where it says "KnightLauncher.jar was blocked to protect your Mac." click on "Open Anyway", then "Open Anyway" again on the pop up message that appears afterwards, and finally verify using Touch ID or your user's password. This should prevent the first pop up from appearing again.
+7. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
 
 Still not working? Open a post in [Discord's tech support channel](https://discord.gg/m6TT9PM9B7).
 
