@@ -32,7 +32,10 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 ## Downloading & Installing
 
 1. Prerequisites:
-   - [Java](https://www.java.com/en/download/) installed.
+   - Java installed.
+     - **Windows**: You can get the Java installer [from here](https://www.java.com/en/download/).
+     - **macOS**: Java is already installed by default.
+     - **Linux**: Open your terminal and run any of these to install Java, depending on your package manager: `apt install default-jre`, `yum install java`, `pacman -S jre-openjdk`, `apk add openjdk8`. 
 2. Download the latest Knight Launcher release ZIP file [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
 3. Extract the downloaded `KnightLauncher-x.x.x.zip` ZIP file to your Spiral Knights directory (`x.x.x` will vary depending on the current version).
    - <ins>**Windows**</ins>:
@@ -52,7 +55,7 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
    - **For macOS users**: If a window pops up displaying "macOS cannot verify that this app is free from malware" click on "Done", then go to your System Settings → Privacy & Security, scroll to the very bottom of this panel, and where it says "KnightLauncher.jar was blocked to protect your Mac." click on "Open Anyway", then "Open Anyway" again on the pop up message that appears afterwards, and finally verify using Touch ID or your user's password. This should prevent the first pop up from appearing again.
 7. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
 
-Still not working? Open a post in [Discord's tech support channel](https://discord.gg/m6TT9PM9B7).
+Still not working? Open a thread in [Discord's tech support channel](https://discord.gg/m6TT9PM9B7) so the community can help you.
 
 ## Updating
 
