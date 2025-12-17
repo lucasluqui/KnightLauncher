@@ -8,6 +8,7 @@ import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.SystemUtil;
 import com.lucasluqui.util.ZipUtil;
 
+import java.io.File;
 import java.io.IOException;
 
 import static com.lucasluqui.launcher.Log.log;
@@ -32,6 +33,7 @@ public class ModuleManager
     Thread moduleThread = new Thread(() -> {
       loadIngameRPC();
       loadJarCommandLine();
+      if (SystemUtil.isUnix()) loadFroth();
     });
     moduleThread.start();
   }
@@ -62,6 +64,16 @@ public class ModuleManager
       } else if (!FileUtil.fileExists(JavaUtil.getGameJVMDirPath() + "/bin/jar")) {
         ZipUtil.extractFileWithinJar(vmArch == 64 ? "/rsrc/modules/jarcmd/jar-amd64" : "/rsrc/modules/jarcmd/jar-i386", JavaUtil.getGameJVMDirPath() + "/bin/jar");
       }
+    } catch (IOException e) {
+      log.error(e);
+    }
+  }
+
+  protected void loadFroth ()
+  {
+    try {
+      ZipUtil.extractFileWithinJar("/rsrc/modules/froth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth.so");
+      ZipUtil.extractFileWithinJar("/rsrc/modules/froth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth64.so");
     } catch (IOException e) {
       log.error(e);
     }
