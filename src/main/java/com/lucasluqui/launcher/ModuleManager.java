@@ -72,8 +72,8 @@ public class ModuleManager
   protected void loadFroth ()
   {
     try {
-      ZipUtil.extractFileWithinJar("/rsrc/modules/froth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth.so");
-      ZipUtil.extractFileWithinJar("/rsrc/modules/froth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth64.so");
+      ZipUtil.extractFileWithinJar("/rsrc/modules/linuxfroth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth.so");
+      ZipUtil.extractFileWithinJar("/rsrc/modules/linuxfroth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth64.so");
     } catch (IOException e) {
       log.error(e);
     }
