@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher;
 
+import com.apple.eawt.Application;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
@@ -9,12 +10,14 @@ import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
+import org.madlonkay.desktopsupport.DesktopSupport;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -65,6 +68,12 @@ public class LauncherGUI extends BaseGUI
     guiFrame.setShape(new RoundRectangle2D.Double(0, 0, this.width, this.height, 15, 15));
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.getContentPane().setLayout(null);
+
+    // macOS shenanigans to get the app to have a dock image.
+    Image image = Toolkit.getDefaultToolkit().getImage(
+      LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "images" + File.separator + "icon-512.png"
+    );
+    DesktopSupport.getSupport().setDockIconImage(image);
 
     returnButton.setBounds(305, 40, 25, 25);
     returnButton.setToolTipText(_localeManager.getValue("b.back"));
