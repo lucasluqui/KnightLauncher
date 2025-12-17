@@ -124,7 +124,13 @@ public class FileUtil
   public static boolean fileExists (String path)
   {
     File file = new File(path);
-    return file.exists();
+    boolean exists = false;
+    try {
+      exists = file.exists();
+    } catch (SecurityException e) {
+      log.error(e);
+    }
+    return exists;
   }
 
   public static String readFile (String path)
