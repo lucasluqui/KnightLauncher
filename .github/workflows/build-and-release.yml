@@ -121,6 +121,6 @@ jobs:
         with:
           tag_name: ${{ steps.extract-version.outputs.version }}
           name: Knight Launcher ${{ steps.extract-version.outputs.version }}
-          draft: false
-          prerelease: true
+          draft: true
+          prerelease: false
           files: KnightLauncher-${{ steps.extract-version.outputs.version }}.zip
