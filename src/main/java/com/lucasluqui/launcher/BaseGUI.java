@@ -2,6 +2,7 @@ package com.lucasluqui.launcher;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.lucasluqui.util.ColorUtil;
+import com.lucasluqui.util.SystemUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
@@ -98,33 +99,30 @@ public abstract class BaseGUI
 
       Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 17, ColorUtil.getForegroundColor());
       closeButton = new JButton(closeIcon);
-      closeButton.setBounds(guiFrame.getWidth() - BUTTON_WIDTH, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+
+      if (SystemUtil.isMac()) {
+        closeButton.setBounds(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+      } else {
+        closeButton.setBounds(guiFrame.getWidth() - BUTTON_WIDTH, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+      }
+
       closeButton.setToolTipText("{SET}");
       closeButton.setFocusPainted(false);
       closeButton.setFocusable(false);
       closeButton.setBackground(null);
       closeButton.setBorder(null);
       titleBar.add(closeButton);
-      //closeButton.addActionListener(e -> {
-      //    _discordPresenceClient.stop();
-      //    System.exit(0);
-      //});
+
       closeButton.addMouseListener(new MouseListener()
       {
         @Override
-        public void mouseClicked (MouseEvent e)
-        {
-        }
+        public void mouseClicked (MouseEvent e) {}
 
         @Override
-        public void mousePressed (MouseEvent e)
-        {
-        }
+        public void mousePressed (MouseEvent e) {}
 
         @Override
-        public void mouseReleased (MouseEvent e)
-        {
-        }
+        public void mouseReleased (MouseEvent e) {}
 
         @Override
         public void mouseEntered (MouseEvent e)
@@ -141,7 +139,13 @@ public abstract class BaseGUI
 
       Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 12, ColorUtil.getForegroundColor());
       minimizeButton = new JButton(minimizeIcon);
-      minimizeButton.setBounds(guiFrame.getWidth() - BUTTON_WIDTH * 2, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7);
+
+      if (SystemUtil.isMac()) {
+        minimizeButton.setBounds(BUTTON_WIDTH, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7);
+      } else {
+        minimizeButton.setBounds(guiFrame.getWidth() - BUTTON_WIDTH * 2, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7);
+      }
+
       minimizeButton.setToolTipText("{SET}");
       minimizeButton.setFocusPainted(false);
       minimizeButton.setFocusable(false);
