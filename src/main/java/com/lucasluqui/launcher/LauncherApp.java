@@ -559,7 +559,7 @@ public class LauncherApp
     if (steamPlayers == 0) {
       return 0;
     } else {
-      return Math.round(steamPlayers * 1.6f);
+      return Math.round(steamPlayers * 1.4f);
     }
   }
 
