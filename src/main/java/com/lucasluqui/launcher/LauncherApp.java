@@ -29,6 +29,9 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -94,7 +97,7 @@ public class LauncherApp
     Stylesheet.setup();
 
     checkStartLocation();
-    if (SystemUtil.isWindows() || SystemUtil.isUnix()) checkShortcut();
+    checkShortcut();
 
     initInterfaces();
 
@@ -327,16 +330,31 @@ public class LauncherApp
   // Create a shortcut to the application if there's none.
   private void checkShortcut ()
   {
-    if (Settings.createShortcut
-      && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName())
-      && !FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName() + ".desktop")) {
+    if (SystemUtil.isWindows() && FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName())) {
+      return;
+    }
+
+    if (SystemUtil.isUnix() && FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName() + ".desktop")) {
+      return;
+    }
+
+    if (SystemUtil.isMac() && FileUtil.fileExists(System.getProperty("user.home") + "/Applications/Knight Launcher.app")) {
+      return;
+    }
+
+    if (Settings.createShortcut) {
       BufferedImage bimg = ImageUtil.loadImageWithinJar("/rsrc/img/icon-512.png");
       try {
         if (SystemUtil.isWindows()) {
           ICOEncoder.write(bimg, new File(LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.ico"));
-        } else {
+        } else if (SystemUtil.isUnix()) {
           File outputfile = new File(LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.png");
           ImageIO.write(bimg, "png", outputfile);
+        } else if (SystemUtil.isMac()) {
+          ZipUtil.extractFileWithinJar(
+            "/rsrc/img/icon-512.icns",
+            LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "images" + File.separator + "icon-512.icns"
+          );
         }
       } catch (IOException e) {
         log.error(e);
@@ -344,8 +362,10 @@ public class LauncherApp
 
       if (SystemUtil.isWindows()) {
         makeShellLink();
-      } else {
+      } else if (SystemUtil.isUnix()) {
         makeDesktopFile();
+      } else if (SystemUtil.isMac()) {
+        makeApplicationFile();
       }
     }
   }
@@ -381,6 +401,80 @@ public class LauncherApp
       out.write("Type=Application\n");
       out.write("Categories=Game;\n");
       out.close();
+    } catch (IOException e) {
+      log.error(e);
+    }
+  }
+
+  private void makeApplicationFile ()
+  {
+    String appName = "Knight Launcher";
+    String appExec = "launch";
+    String bundleId = "com.lucasluqui.knightlauncher";
+
+    Path applicationsDir = Paths.get(
+      System.getProperty("user.home"),
+      "Applications"
+    );
+
+    Path appBundle = applicationsDir.resolve(appName + ".app");
+    Path contents = appBundle.resolve("Contents");
+    Path macos = contents.resolve("MacOS");
+    Path resources = contents.resolve("Resources");
+
+    try {
+      Files.createDirectories(macos);
+      Files.createDirectories(resources);
+    } catch (IOException e) {
+      log.error(e);
+    }
+
+    Path launcher = macos.resolve(appExec);
+    String launcherScript =
+      "#!/bin/bash\n" +
+      "cd \"" + LauncherGlobals.USER_DIR + "\"\n" +
+      "java -jar KnightLauncher.jar\n";
+
+    try {
+      Files.write(launcher, launcherScript.getBytes("UTF-8"));
+    } catch (IOException e) {
+      log.error(e);
+    }
+    launcher.toFile().setExecutable(true);
+
+    String plist =
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+      "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\"\n" +
+      " \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n" +
+      "<plist version=\"1.0\">\n" +
+      "<dict>\n" +
+      "    <key>CFBundleExecutable</key>\n" +
+      "    <string>" + appExec + "</string>\n" +
+      "    <key>CFBundleIdentifier</key>\n" +
+      "    <string>" + bundleId + "</string>\n" +
+      "    <key>CFBundleName</key>\n" +
+      "    <string>" + appName + "</string>\n" +
+      "    <key>CFBundlePackageType</key>\n" +
+      "    <string>APPL</string>\n" +
+      "    <key>CFBundleIconFile</key>\n" +
+      "    <string>app</string>\n" +
+      "    <key>CFBundleVersion</key>\n" +
+      "    <string>1.0</string>\n" +
+      "</dict>\n" +
+      "</plist>\n";
+
+    try {
+      Files.write(contents.resolve("Info.plist"), plist.getBytes("UTF-8"));
+    } catch (IOException e) {
+      log.error(e);
+    }
+
+    try {
+      Files.copy(
+        Paths.get(LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.icns"),
+        resources.resolve("app.icns"),
+        StandardCopyOption.REPLACE_EXISTING
+      );
     } catch (IOException e) {
       log.error(e);
     }
