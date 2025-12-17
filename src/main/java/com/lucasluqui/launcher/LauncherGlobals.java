@@ -26,6 +26,7 @@ public class LauncherGlobals
   public static final String RPC_CLIENT_ID = "626524043209867274";
 
   public static final String[] GETDOWN_ARGS;
+  public static final String[] GETDOWN_ARGS_MAC;
   public static final String[] GETDOWN_ARGS_WIN;
   public static final String[] ALT_CLIENT_ARGS;
 
@@ -33,7 +34,7 @@ public class LauncherGlobals
     final String javaPath = JavaUtil.getGameJVMExePath();
     final String javaSeparator = JavaUtil.getJavaVMCommandLineSeparator();
 
-    GETDOWN_ARGS = new String[]{
+    GETDOWN_ARGS = new String[] {
       javaPath,
       "-Dsun.java2d.d3d=false",
       "-Dcheck_unpacked=true",
@@ -43,7 +44,17 @@ public class LauncherGlobals
       "client"
     };
 
-    GETDOWN_ARGS_WIN = new String[]{
+    GETDOWN_ARGS_MAC = new String[] {
+      "java",
+      "-Dsun.java2d.d3d=false",
+      "-Dcheck_unpacked=true",
+      "-jar",
+      "./getdown-pro.jar",
+      ".",
+      "client"
+    };
+
+    GETDOWN_ARGS_WIN = new String[] {
       javaPath,
       "-Dsun.java2d.d3d=false",
       "-Dcheck_unpacked=true",
@@ -53,7 +64,7 @@ public class LauncherGlobals
       "client"
     };
 
-    ALT_CLIENT_ARGS = new String[]{
+    ALT_CLIENT_ARGS = new String[] {
       javaPath,
       "-classpath",
       USER_DIR + File.separator + "./code/config.jar" + javaSeparator +
