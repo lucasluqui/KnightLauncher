@@ -42,6 +42,15 @@ public class LauncherGUI extends BaseGUI
   public void init ()
   {
     try {
+      // macOS shenanigans to get the app to have a dock image.
+      if (SystemUtil.isMac()) {
+        Image image = Toolkit.getDefaultToolkit().getImage(
+          LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "images" + File.separator + "icon-512.png"
+        );
+        DesktopSupport.getSupport().setDockIconImage(image);
+      }
+
+      // Now proceed to create the main launcher GUI.
       compose();
     } catch (UnsatisfiedLinkError e) {
       // Some Windows installations don't allow you to write to the default temp dir and throw this error instead
@@ -67,12 +76,6 @@ public class LauncherGUI extends BaseGUI
     guiFrame.setShape(new RoundRectangle2D.Double(0, 0, this.width, this.height, 15, 15));
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.getContentPane().setLayout(null);
-
-    // macOS shenanigans to get the app to have a dock image.
-    Image image = Toolkit.getDefaultToolkit().getImage(
-      LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "images" + File.separator + "icon-512.png"
-    );
-    DesktopSupport.getSupport().setDockIconImage(image);
 
     returnButton.setBounds(305, 40, 25, 25);
     returnButton.setToolTipText(_localeManager.getValue("b.back"));
