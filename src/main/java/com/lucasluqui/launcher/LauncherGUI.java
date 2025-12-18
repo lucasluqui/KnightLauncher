@@ -1,6 +1,5 @@
 package com.lucasluqui.launcher;
 
-import com.apple.eawt.Application;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
