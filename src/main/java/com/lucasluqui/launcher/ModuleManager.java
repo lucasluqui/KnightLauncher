@@ -2,6 +2,7 @@ package com.lucasluqui.launcher;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.JavaUtil;
@@ -71,11 +72,13 @@ public class ModuleManager
 
   protected void loadFroth ()
   {
-    try {
-      ZipUtil.extractFileWithinJar("/rsrc/modules/linuxfroth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth.so");
-      ZipUtil.extractFileWithinJar("/rsrc/modules/linuxfroth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth64.so");
-    } catch (IOException e) {
-      log.error(e);
+    if (Settings.gamePlatform.equalsIgnoreCase("Steam")) {
+      try {
+        ZipUtil.extractFileWithinJar("/rsrc/modules/linuxfroth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth.so");
+        ZipUtil.extractFileWithinJar("/rsrc/modules/linuxfroth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth64.so");
+      } catch (IOException e) {
+        log.error(e);
+      }
     }
   }
 
