@@ -147,8 +147,13 @@ public class JavaUtil
       }
     }
 
+    /*
+      Exclude linux users from possibly matching a java_vm directory.
+      They might have installed from Steam which downloads Windows files
+      which also have a java_vm folder, but meant to be run with Proton...
+     */
     File javaVMDir = new File(startingDirPath, "java_vm");
-    if (javaVMDir.exists() && javaVMDir.isDirectory()) {
+    if (javaVMDir.exists() && javaVMDir.isDirectory() && !SystemUtil.isUnix()) {
       return javaVMDir.getAbsolutePath();
     }
 
