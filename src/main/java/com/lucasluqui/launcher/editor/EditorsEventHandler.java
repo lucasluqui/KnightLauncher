@@ -6,6 +6,7 @@ import com.lucasluqui.launcher.BuildConfig;
 import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.ModuleManager;
+import com.lucasluqui.launcher.editor.data.Editor;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.ProcessUtil;
@@ -26,6 +27,8 @@ public class EditorsEventHandler
   protected FlamingoManager _flamingoManager;
   protected ModuleManager _moduleManager;
 
+  public List<Editor> editors = new ArrayList<>();
+
   public boolean isBooting = false;
   public boolean spiralviewExtracted = false;
 
@@ -39,65 +42,45 @@ public class EditorsEventHandler
     this._moduleManager = _moduleManager;
   }
 
-  @SuppressWarnings("unused")
-  public void startModelViewer (ActionEvent actionEvent)
+  public void startEditor (Editor editor)
   {
-    this.gui.editorLaunchFakeProgressBar.setMaximum(150);
-    if (_flamingoManager.getSelectedServer().isOfficial()) {
-      startEditor("com.lucasluqui.spiralview.ModelViewerHook", "rsrc/character/pc/model.dat", false);
-    } else {
-      startEditor("com.threerings.opengl.model.tools.ModelViewer", _flamingoManager.getSelectedServer().getRootDirectory() + "rsrc/character/pc/model.dat", true);
-    }
-  }
+    this.gui.editorLaunchFakeProgressBar.setMaximum(editor.stallTime);
 
-  @SuppressWarnings("unused")
-  public void startSceneEditor (ActionEvent actionEvent)
-  {
-    boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.scene_editor_legacy_warning"), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
-    if (confirm) {
-      this.gui.editorLaunchFakeProgressBar.setMaximum(155);
-      if (_flamingoManager.getSelectedServer().isOfficial()) {
-        startEditor("com.lucasluqui.spiralview.SceneEditorHook", "", false);
-      } else {
-        startEditor("com.threerings.tudey.tools.SceneEditor", "", true);
+    if (_flamingoManager.getSelectedServer().isOfficial()) {
+      // Any attempts to start the legacy Scene Editor must first show a warning.
+      if (editor.name.equalsIgnoreCase("editor_scene_legacy")) {
+        boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.scene_editor_legacy_warning"), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
+        if (confirm) {
+          startEditor(editor.className, editor.arg, false);
+        }
+        return;
       }
-    }
-  }
 
-  @SuppressWarnings("unused")
-  public void startCrucibleEditor (ActionEvent actionEvent)
-  {
-    boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.crucible_editor_warning"), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
-    if (confirm) {
-      this.gui.editorLaunchFakeProgressBar.setMaximum(155);
-      startCrucibleEditor((String) null);
-    }
-  }
+      // Similar case for the Crucible Editor.
+      if (editor.name.equalsIgnoreCase("editor_crucible")) {
+        boolean confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.crucible_editor_warning"), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
+        if (confirm) {
+          startCrucibleEditor();
+        }
+        return;
+      }
 
-  @SuppressWarnings("unused")
-  public void startInterfaceTester (ActionEvent actionEvent)
-  {
-    this.gui.editorLaunchFakeProgressBar.setMaximum(110);
-    if (_flamingoManager.getSelectedServer().isOfficial()) {
-      startEditor("com.lucasluqui.spiralview.InterfaceTesterHook", "", false);
+      // Not any of them, move on.
+      startEditor(editor.className, editor.arg, false);
     } else {
-      Dialog.push(_localeManager.getValue("error.not_supported"), _localeManager.getValue("t.error"), JOptionPane.ERROR_MESSAGE);
-    }
-  }
+      // Check if this editor is supported by third parties first.
+      if (editor.classNameThirdParty == null) {
+        Dialog.push(_localeManager.getValue("error.not_supported"), _localeManager.getValue("t.error"), JOptionPane.ERROR_MESSAGE);
+        return;
+      }
 
-  @SuppressWarnings("unused")
-  public void startParticleEditor (ActionEvent actionEvent)
-  {
-    this.gui.editorLaunchFakeProgressBar.setMaximum(125);
-    if (_flamingoManager.getSelectedServer().isOfficial()) {
-      startEditor("com.lucasluqui.spiralview.ParticleEditorHook", "", false);
-    } else {
-      startEditor("com.threerings.opengl.effect.tools.ParticleEditor", "", true);
+      // All clear, move on.
+      startEditor(editor.classNameThirdParty, editor.arg, true);
     }
   }
 
   @SuppressWarnings("all")
-  private void startEditor (String editor, String arg, boolean thirdparty)
+  private void startEditor (String editorClassName, String arg, boolean thirdparty)
   {
     if (!spiralviewExtracted) {
       _moduleManager.loadSpiralview();
@@ -147,7 +130,7 @@ public class EditorsEventHandler
       editorCmdLine.add("-Dappdir=" + rootDir + File.separator + "./");
       editorCmdLine.add("-Dresource_dir=" + rootDir + File.separator + "./rsrc");
       editorCmdLine.add("-Djava.library.path=" + rootDir + File.separator + "./native");
-      editorCmdLine.add(editor);
+      editorCmdLine.add(editorClassName);
       editorCmdLine.add(arg);
 
       ProcessUtil.runFromDirectory(editorCmdLine.toArray(new String[editorCmdLine.size()]), rootDir, true);
@@ -155,7 +138,7 @@ public class EditorsEventHandler
     }
   }
 
-  private void startCrucibleEditor (String arg)
+  private void startCrucibleEditor ()
   {
     if (!isBooting) {
       isBooting = true;
@@ -219,7 +202,7 @@ public class EditorsEventHandler
 
   private void initEditorTask ()
   {
-    // wip.
+    // wip for discord integration.
   }
 
   public void selectedServerChanged ()

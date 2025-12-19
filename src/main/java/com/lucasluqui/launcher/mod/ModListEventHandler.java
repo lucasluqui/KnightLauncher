@@ -166,7 +166,12 @@ public class ModListEventHandler
 
     if (selectedServer != null) {
       new Thread(_modManager::checkInstalled).start();
-      this.gui.viewingModsLabel.setText(_localeManager.getValue("m.viewing_mods", selectedServer.name));
+
+      if (selectedServer.isOfficial()) {
+        this.gui.viewingModsLabel.setVisible(false);
+      } else {
+        this.gui.viewingModsLabel.setText(_localeManager.getValue("m.viewing_mods", selectedServer.name));
+      }
     }
   }
 
