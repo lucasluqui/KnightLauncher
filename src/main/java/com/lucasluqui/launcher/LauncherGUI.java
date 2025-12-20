@@ -43,11 +43,16 @@ public class LauncherGUI extends BaseGUI
   {
     try {
       // macOS shenanigans to get the app to have a dock image.
+      // Tends to fail on anything that's not 26+ (Tahoe).
       if (SystemUtil.isMac()) {
-        Image image = Toolkit.getDefaultToolkit().getImage(
-          LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "images" + File.separator + "icon-512.png"
-        );
-        DesktopSupport.getSupport().setDockIconImage(image);
+        try {
+          Image image = Toolkit.getDefaultToolkit().getImage(
+            LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "images" + File.separator + "icon-512.png"
+          );
+          DesktopSupport.getSupport().setDockIconImage(image);
+        } catch (Exception e) {
+          log.error("Failed to set macOS dock image", e);
+        }
       }
 
       // Now proceed to create the main launcher GUI.
