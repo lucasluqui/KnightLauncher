@@ -261,7 +261,7 @@ public class ModManager
         if (SystemUtil.isWindows()) {
           outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
         } else if (SystemUtil.isMac()) {
-          outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "jar", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
+          outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "jar cvf code/projectx-config-new.jar -C code/locale-changes/ ." });
         } else {
           outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "\"" + JavaUtil.getGameJVMDirPath() + "/bin/jar" + "\"", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
         }
