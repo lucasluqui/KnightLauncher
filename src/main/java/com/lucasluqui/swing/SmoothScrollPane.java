@@ -10,7 +10,7 @@ public final class SmoothScrollPane extends JScrollPane
   private static final double SMOOTHING = 0.15;
   private static final int SCROLL_SPEED = 50;
 
-  private static final int UNIT_INCREMENT = 60;
+  private static final int UNIT_INCREMENT = 16;
 
   private double targetY;
   private final Timer animator;
