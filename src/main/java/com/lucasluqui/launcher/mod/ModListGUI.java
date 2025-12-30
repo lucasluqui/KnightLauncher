@@ -13,6 +13,7 @@ import com.lucasluqui.launcher.mod.data.JarMod;
 import com.lucasluqui.launcher.mod.data.Mod;
 import com.lucasluqui.launcher.mod.data.Modpack;
 import com.lucasluqui.launcher.mod.data.ZipMod;
+import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.ColorUtil;
 import com.lucasluqui.util.ImageUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -257,7 +258,7 @@ public class ModListGUI extends BaseGUI
     modListPane = new JPanel();
     modListPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
-    modListPaneScrollBar = new JScrollPane(modListPane);
+    modListPaneScrollBar = new SmoothScrollPane(modListPane);
     modListPaneScrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     modListPaneScrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     modListPaneScrollBar.setBounds(25, 120, 750, Math.min(325, _modManager.getModCount() * 143));
@@ -509,7 +510,7 @@ public class ModListGUI extends BaseGUI
 
   public JPanel modListPanel;
   public JPanel modListPane = new JPanel();
-  public JScrollPane modListPaneScrollBar = new JScrollPane();
+  public SmoothScrollPane modListPaneScrollBar = new SmoothScrollPane();
   public JLabel labelModCount;
   public JButton addModButton;
   public JButton refreshButton;

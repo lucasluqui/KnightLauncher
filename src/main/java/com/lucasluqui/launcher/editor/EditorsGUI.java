@@ -9,6 +9,7 @@ import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.editor.data.Editor;
 import com.lucasluqui.launcher.setting.Settings;
+import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.ImageUtil;
 
 import javax.swing.*;
@@ -71,14 +72,13 @@ public class EditorsGUI extends BaseGUI
     editorListPane.setLayout(layout);
     editorListPane.setPreferredSize(new Dimension(740, 440));
 
-    editorListPaneScroll = new JScrollPane(editorListPane);
+    editorListPaneScroll = new SmoothScrollPane(editorListPane);
     editorListPaneScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     editorListPaneScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     editorListPaneScroll.setBounds(30, 0, 760, 444);
     editorListPaneScroll.setBorder(null);
     editorListPaneScroll.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     editorListPaneScroll.setForeground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    editorListPaneScroll.getVerticalScrollBar().setUnitIncrement(16);
     guiFrame.getContentPane().add(editorListPaneScroll);
 
     footerLabel = new JLabel();
@@ -288,7 +288,7 @@ public class EditorsGUI extends BaseGUI
 
   public JPanel editorsPanel;
   protected JPanel editorListPane = new JPanel();
-  protected JScrollPane editorListPaneScroll = new JScrollPane();
+  protected SmoothScrollPane editorListPaneScroll = new SmoothScrollPane();
   protected JLabel editorLaunchState;
   protected JProgressBar editorLaunchFakeProgressBar;
   protected JLabel footerLabel;

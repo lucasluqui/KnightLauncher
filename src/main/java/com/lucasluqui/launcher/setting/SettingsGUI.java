@@ -6,6 +6,7 @@ import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.launcher.*;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
+import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -92,7 +93,7 @@ public class SettingsGUI extends BaseGUI
     launcherSubPanel.setBorder(null);
     launcherPanel.setComponentZOrder(launcherSubPanel, 0);
 
-    launcherSubPanelScroll = new JScrollPane(launcherSubPanel);
+    launcherSubPanelScroll = new SmoothScrollPane(launcherSubPanel);
     launcherSubPanelScroll.setBounds(15, 90, 630, 350);
     launcherSubPanelScroll.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     launcherSubPanelScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -100,7 +101,6 @@ public class SettingsGUI extends BaseGUI
     launcherSubPanelScroll.setBorder(null);
     launcherSubPanelScroll.putClientProperty(FlatClientProperties.STYLE, "border:0,0,0,0");
     launcherSubPanelScroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND));
-    launcherSubPanelScroll.getVerticalScrollBar().setUnitIncrement(16);
     launcherPanel.add(launcherSubPanelScroll);
     launcherPanel.setComponentZOrder(launcherSubPanelScroll, 0);
 
@@ -571,7 +571,7 @@ public class SettingsGUI extends BaseGUI
     activeCodesPane.setVisible(false);
     betasPanel.setComponentZOrder(activeCodesPane, 0);
 
-    activeCodesPaneScrollBar = new JScrollPane(activeCodesPane);
+    activeCodesPaneScrollBar = new SmoothScrollPane(activeCodesPane);
     activeCodesPaneScrollBar.setBounds(38, 232, 449, 105);
     activeCodesPaneScrollBar.setBackground(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
     activeCodesPaneScrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -579,7 +579,6 @@ public class SettingsGUI extends BaseGUI
     activeCodesPaneScrollBar.setBorder(null);
     activeCodesPaneScrollBar.putClientProperty(FlatClientProperties.STYLE, "border:0,0,0,0");
     activeCodesPaneScrollBar.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND));
-    activeCodesPaneScrollBar.getVerticalScrollBar().setUnitIncrement(16);
     activeCodesPaneScrollBar.setVisible(false);
     betasPanel.add(activeCodesPaneScrollBar);
     betasPanel.setComponentZOrder(activeCodesPaneScrollBar, 0);
@@ -1036,9 +1035,9 @@ public class SettingsGUI extends BaseGUI
   public JLabel labelDiscordIntegration = new JLabel();
   public JLabel labelDiscordIntegrationExplained = new JLabel();
   public JPanel activeCodesPane = new JPanel();
-  public JScrollPane activeCodesPaneScrollBar = new JScrollPane();
+  public SmoothScrollPane activeCodesPaneScrollBar = new SmoothScrollPane();
   public JPanel launcherSubPanel = new JPanel();
-  public JScrollPane launcherSubPanelScroll = new JScrollPane();
+  public SmoothScrollPane launcherSubPanelScroll = new SmoothScrollPane();
   public JLabel labelFilePurging;
   public JLabel labelFilePurgingExplained;
   public JCheckBox switchFilePurging;
