@@ -250,21 +250,32 @@ public class ModManager
           properties.clear();
         }
 
+        // Make sure there's no remnants of previous runs.
+        try {
+          FileUtils.delete(new File(rootDir + "/code/projectx-config-old.jar"));
+          FileUtils.delete(new File(rootDir + "/code/projectx-config-new.jar"));
+        } catch (Exception ignored) {}
+
         // Turn all the locale changes back into a jar file.
         String[] outputCapture;
         if (SystemUtil.isWindows()) {
-          outputCapture = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "."});
+          outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
+        } else if (SystemUtil.isMac()) {
+          outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "jar", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
         } else {
-          outputCapture = ProcessUtil.runAndCapture(new String[]{"/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "."});
+          outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "\"" + JavaUtil.getGameJVMDirPath() + "/bin/jar" + "\"", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
         }
-        log.debug("Locale changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
+        log.info("Locale changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
 
         // Delete the temporary directory used to store locale changes.
         FileUtils.deleteDirectory(new File(rootDir + "/code/locale-changes"));
 
+
         // Rename the current projectx-config to old and the new one to its original name.
-        FileUtils.moveFile(new File(rootDir + "/code/projectx-config.jar"), new File(rootDir + "/code/projectx-config-old.jar"));
-        FileUtils.moveFile(new File(rootDir + "/code/projectx-config-new.jar"), new File(rootDir + "/code/projectx-config.jar"));
+        if (FileUtil.fileExists(rootDir + "/code/projectx-config-new.jar")) {
+          FileUtils.moveFile(new File(rootDir + "/code/projectx-config.jar"), new File(rootDir + "/code/projectx-config-old.jar"));
+          FileUtils.moveFile(new File(rootDir + "/code/projectx-config-new.jar"), new File(rootDir + "/code/projectx-config.jar"));
+        }
 
         // And finally, remove the old one. We don't need to store it as we'll fetch the original from getdown
         // when a rebuild is triggered.
@@ -286,22 +297,32 @@ public class ModManager
       log.error(e);
     }
 
+    // Make sure there's no remnants of previous runs.
+    try {
+      FileUtils.delete(new File(rootDir + "/code/config-old.jar"));
+      FileUtils.delete(new File(rootDir + "/code/config-new.jar"));
+    } catch (Exception ignored) {}
+
     // And now after merging their contents, we turn it back into config.jar.
     String[] outputCapture;
     if (SystemUtil.isWindows()) {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "."});
+      outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "." });
+    } else if (SystemUtil.isMac()) {
+      outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "jar cvf code/config-new.jar -C code/class-changes/ ." });
     } else {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{"/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "."});
+      outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "\"" + JavaUtil.getGameJVMDirPath() + "/bin/jar" + "\"", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "." });
     }
-    log.debug("Class changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
+    log.info("Class changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
 
     try {
       // Delete the temporary directory used to store class changes.
       FileUtils.deleteDirectory(new File(rootDir + "/code/class-changes"));
 
       // Rename the current config to old and the new one to its original name.
-      FileUtils.moveFile(new File(rootDir + "/code/config.jar"), new File(rootDir + "/code/config-old.jar"));
-      FileUtils.moveFile(new File(rootDir + "/code/config-new.jar"), new File(rootDir + "/code/config.jar"));
+      if (FileUtil.fileExists(rootDir + "/code/config-new.jar")) {
+        FileUtils.moveFile(new File(rootDir + "/code/config.jar"), new File(rootDir + "/code/config-old.jar"));
+        FileUtils.moveFile(new File(rootDir + "/code/config-new.jar"), new File(rootDir + "/code/config.jar"));
+      }
 
       // And finally, remove the old one. We don't need to store it as we'll fetch the original from getdown
       // when a rebuild is triggered.
