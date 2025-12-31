@@ -7,8 +7,8 @@ public final class SmoothScrollPane extends JScrollPane
   private static final int FPS = 60;
   private static final int TIMER_DELAY = 1000 / FPS;
 
-  private static final double SMOOTHING = 0.15;
-  private static final int SCROLL_SPEED = 50;
+  private static final double SMOOTHING = 0.33;
+  private static final int SCROLL_SPEED = 120;
 
   private static final int UNIT_INCREMENT = 16;
 
@@ -24,11 +24,21 @@ public final class SmoothScrollPane extends JScrollPane
   {
     super(view);
 
+    setWheelScrollingEnabled(false); // disable default jswing scrolling.
+
     JScrollBar vBar = getVerticalScrollBar();
     targetY = vBar.getValue();
 
     animator = new Timer(TIMER_DELAY, e -> animate());
     animator.setRepeats(true);
+
+    // prevents authoritative scrolling from getting borked.
+    vBar.addAdjustmentListener(e -> {
+      if (e.getValueIsAdjusting()) {
+        targetY = e.getValue();
+        animator.stop();
+      }
+    });
 
     getVerticalScrollBar().setUnitIncrement(UNIT_INCREMENT);
 
@@ -38,16 +48,18 @@ public final class SmoothScrollPane extends JScrollPane
   private void enableSmoothScrolling ()
   {
     addMouseWheelListener(e -> {
-      if (!e.isControlDown()) {
-        e.consume();
+      if (e.isControlDown()) return;
 
-        double delta = e.getPreciseWheelRotation();
-        targetY += delta * SCROLL_SPEED;
+      e.consume();
 
-        clampTarget();
-        if (!animator.isRunning()) {
-          animator.start();
-        }
+      JScrollBar vBar = getVerticalScrollBar();
+
+      targetY = vBar.getValue();
+      targetY += e.getPreciseWheelRotation() * SCROLL_SPEED;
+      clampTarget();
+
+      if (!animator.isRunning()) {
+        animator.start();
       }
     });
   }
