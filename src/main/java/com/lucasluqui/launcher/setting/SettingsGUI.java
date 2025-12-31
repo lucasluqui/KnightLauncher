@@ -751,7 +751,7 @@ public class SettingsGUI extends BaseGUI
       }
     });
 
-    JScrollPane scrollBar = new JScrollPane(argumentsPane);
+    SmoothScrollPane scrollBar = new SmoothScrollPane(argumentsPane);
     scrollBar.setBounds(25, 117, 590, 100);
     scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -898,7 +898,7 @@ public class SettingsGUI extends BaseGUI
 
     JLabel creditsLabel = new JLabel(_localeManager.getValue("m.credits"));
     creditsLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    creditsLabel.setBounds(25, 90, 200, 30);
+    creditsLabel.setBounds(25, 90, 200, 20);
     creditsLabel.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
     aboutPanel.add(creditsLabel);
 
@@ -913,7 +913,7 @@ public class SettingsGUI extends BaseGUI
     JPanel creditsPane = new JPanel();
     creditsPane.setBackground(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
 
-    JScrollPane creditsPaneScrollBar = new JScrollPane(creditsPane);
+    SmoothScrollPane creditsPaneScrollBar = new SmoothScrollPane(creditsPane);
     creditsPaneScrollBar.setBounds(25, 130, 550, 175);
     creditsPaneScrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     creditsPaneScrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
