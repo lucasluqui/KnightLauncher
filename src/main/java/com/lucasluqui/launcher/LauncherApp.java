@@ -583,12 +583,30 @@ public class LauncherApp
     List<Display> displays = hardwareAbstractLayer.getDisplays();
     for (int i = 0; i < displays.size(); i++) {
       Display display = displays.get(i);
+      String displayString = display.toString();
+
+      int maxRefreshRate = 0;
+      try {
+        maxRefreshRate = Integer.parseInt(
+          displayString.split("Field Rate ")[1]
+          .split(" Hz")[0]
+          .split("-")[1]
+        );
+        if (maxRefreshRate > SystemUtil.getRefreshRate()) SystemUtil.setRefreshRate(maxRefreshRate);
+      } catch (Exception e) {
+        log.error("Failed to get display refresh rate", e);
+      }
+
       log.info("Display " + i + ": " + display.toString()
         .trim()
         .replace("\n", ", ")
         .replace("\r", "")
         .replaceAll(" +", " ")
       );
+
+      if (maxRefreshRate > 0) {
+        log.info("Display " + i + " detected max refresh rate: " + maxRefreshRate);
+      }
     }
 
     log.info("---------------------------------");

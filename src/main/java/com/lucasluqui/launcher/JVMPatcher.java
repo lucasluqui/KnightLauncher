@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
@@ -7,6 +8,7 @@ import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.ImageUtil;
 import com.lucasluqui.util.ProcessUtil;
@@ -110,16 +112,20 @@ public class JVMPatcher extends BaseGUI
     jvmPatcherState.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     guiFrame.getContentPane().add(jvmPatcherState);
 
-    jvmPatcherProgressBar = new JProgressBar();
+    jvmPatcherProgressBar = new SmoothProgressBar();
     jvmPatcherProgressBar.setBounds(25, 204, 450, 25);
     jvmPatcherProgressBar.setVisible(false);
     guiFrame.getContentPane().add(jvmPatcherProgressBar);
 
     buttonAccept = new JButton("Start patching");
+    buttonAccept.setBounds(150, 200, 200, 25);
     buttonAccept.setFocusPainted(false);
     buttonAccept.setFocusable(false);
     buttonAccept.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-    buttonAccept.setBounds(150, 200, 200, 25);
+    buttonAccept.setForeground(Color.WHITE);
+    buttonAccept.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
+    buttonAccept.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
     guiFrame.getContentPane().add(buttonAccept);
     buttonAccept.addActionListener(l -> {
       buttonAccept.setEnabled(false);
@@ -231,7 +237,7 @@ public class JVMPatcher extends BaseGUI
   private JLabel headerLabel;
   private JLabel subHeaderLabel;
   private JButton buttonAccept;
-  private JProgressBar jvmPatcherProgressBar;
+  private SmoothProgressBar jvmPatcherProgressBar;
   private JLabel jvmPatcherState;
   private JComboBox<String> jvmComboBox;
 

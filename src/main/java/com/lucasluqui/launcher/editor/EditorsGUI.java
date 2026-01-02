@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.editor;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.jhlabs.image.GaussianFilter;
 import com.jhlabs.image.GrayscaleFilter;
@@ -9,6 +10,7 @@ import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.editor.data.Editor;
 import com.lucasluqui.launcher.setting.Settings;
+import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.ImageUtil;
 
@@ -60,9 +62,10 @@ public class EditorsGUI extends BaseGUI
     editorLaunchState.setVisible(false);
     guiFrame.getContentPane().add(editorLaunchState);
 
-    editorLaunchFakeProgressBar = new JProgressBar(0, 150);
+    editorLaunchFakeProgressBar = new SmoothProgressBar();
     editorLaunchFakeProgressBar.setBounds(192, 220, 385, 25);
     editorLaunchFakeProgressBar.setVisible(false);
+    editorLaunchFakeProgressBar.putClientProperty(FlatClientProperties.STYLE, "arc: 35;");
     guiFrame.getContentPane().add(editorLaunchFakeProgressBar);
 
     editorListPane = new JPanel();
@@ -290,6 +293,6 @@ public class EditorsGUI extends BaseGUI
   protected JPanel editorListPane = new JPanel();
   protected SmoothScrollPane editorListPaneScroll = new SmoothScrollPane();
   protected JLabel editorLaunchState;
-  protected JProgressBar editorLaunchFakeProgressBar;
+  protected SmoothProgressBar editorLaunchFakeProgressBar;
   protected JLabel footerLabel;
 }

@@ -13,6 +13,7 @@ import com.lucasluqui.launcher.mod.data.JarMod;
 import com.lucasluqui.launcher.mod.data.Mod;
 import com.lucasluqui.launcher.mod.data.Modpack;
 import com.lucasluqui.launcher.mod.data.ZipMod;
+import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.ColorUtil;
 import com.lucasluqui.util.ImageUtil;
@@ -231,7 +232,7 @@ public class ModListGUI extends BaseGUI
     guiFrame.getContentPane().add(refreshButton);
     refreshButton.addActionListener(this.eventHandler::refreshEvent);
 
-    refreshProgressBar = new JProgressBar();
+    refreshProgressBar = new SmoothProgressBar();
     refreshProgressBar.setBounds(25, 445, 740, 2);
     refreshProgressBar.setStringPainted(false);
     refreshProgressBar.setVisible(false);
@@ -516,7 +517,7 @@ public class ModListGUI extends BaseGUI
   public JButton refreshButton;
   public JButton enableAllModsButton;
   public JButton disableAllModsButton;
-  public JProgressBar refreshProgressBar = new JProgressBar();
+  public SmoothProgressBar refreshProgressBar = new SmoothProgressBar();
   public JTextField searchBox;
   public JLabel displayedModsLabel = new JLabel();
   public JLabel viewingModsLabel = new JLabel();

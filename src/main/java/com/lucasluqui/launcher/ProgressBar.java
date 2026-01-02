@@ -10,9 +10,11 @@ import static com.lucasluqui.launcher.Log.log;
 public class ProgressBar
 {
   @Inject protected LauncherContext _launcherCtx;
+
+  private final long HIDE_BAR_TIME = 8000;
+
   private int activeTasks = 0;
   private long lastTaskStartedAt = 0;
-  private final long HIDE_BAR_TIME = 8000;
 
   public ProgressBar ()
   {
