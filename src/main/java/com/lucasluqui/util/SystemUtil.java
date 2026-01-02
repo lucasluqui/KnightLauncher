@@ -14,9 +14,10 @@ import static com.lucasluqui.util.Log.log;
 
 public class SystemUtil
 {
-
   private static final String OS = System.getProperty("os.name").toLowerCase();
   private static final String ARCH = System.getProperty("os.arch").toLowerCase();
+
+  private static int refreshRate = 75;
 
   public static boolean isWindows ()
   {
@@ -202,4 +203,13 @@ public class SystemUtil
     log.info("TEMP path changed to: " + newDir);
   }
 
+  public static int getRefreshRate ()
+  {
+    return refreshRate;
+  }
+
+  public static void setRefreshRate (int newRate)
+  {
+    refreshRate = newRate;
+  }
 }

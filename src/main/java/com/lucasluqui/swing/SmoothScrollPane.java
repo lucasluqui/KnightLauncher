@@ -1,10 +1,12 @@
 package com.lucasluqui.swing;
 
+import com.lucasluqui.util.SystemUtil;
+
 import javax.swing.*;
 
 public final class SmoothScrollPane extends JScrollPane
 {
-  private final int FPS = 60;
+  private final int FPS = SystemUtil.getRefreshRate();
 
   private double friction = 0.80;
   private double maxVelocity = 60;
