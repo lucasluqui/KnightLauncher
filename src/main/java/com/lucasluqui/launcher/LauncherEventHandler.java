@@ -87,6 +87,10 @@ public class LauncherEventHandler
       if (_modManager.gameVersionChanged()) {
         _modManager.checkInstalled();
         _modManager.mount();
+
+        // re-lock server switching and launch button after mounting.
+        this.updateServerSwitcher(true);
+        this.gui.launchButton.setEnabled(false);
       }
 
       if (selectedServer.isOfficial()) {
