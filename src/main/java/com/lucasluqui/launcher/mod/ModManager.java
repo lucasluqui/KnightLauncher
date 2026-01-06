@@ -154,7 +154,6 @@ public class ModManager
 
       // If the game version has changed since the last time mods were mounted, then we schedule a new mount.
       if (gameVersionChanged()) {
-        log.info("Game version has changed", "new", selectedServer.getLocalVersion());
         _settingsManager.setValue("modloader.forcedMountsForCurrentVersion", "0", selectedServer);
         rebuildRequired = true;
         mountRequired = true;
@@ -593,12 +592,16 @@ public class ModManager
     }
   }
 
-  private boolean gameVersionChanged ()
+  public boolean gameVersionChanged ()
   {
     Server selectedServer = _flamingoManager.getSelectedServer();
 
     String lastKnownVersion = _settingsManager.getValue("modloader.lastKnownVersion", selectedServer);
     String currentVersion = selectedServer.getLocalVersion();
+
+    if (!lastKnownVersion.equalsIgnoreCase(currentVersion)) {
+      log.info("Game version changed", "old", lastKnownVersion, "new", currentVersion);
+    }
 
     return !lastKnownVersion.equalsIgnoreCase(currentVersion);
   }
