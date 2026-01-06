@@ -111,12 +111,10 @@ public abstract class Mod
       JSONObject jsonObject = new JSONObject(jsonString).getJSONObject("mod");
       this.setMetadata(jsonObject);
     } catch (IOException e) {
-      log.error("Could not parse mod metadata from mod.json file. File probably does not exist");
-      log.error(e);
+      log.error("Could not parse mod metadata from mod.json file. File probably does not exist", "file", this.fileName, "error", e.getMessage());
       this.setMetadata(null);
     } catch (JSONException e) {
-      log.error("Failed parsing mod metadata from mod.json file");
-      log.error(e);
+      log.error("Failed parsing mod metadata from mod.json file", "file", this.fileName, "error", e.getMessage());
       this.setMetadata(null);
     }
 
