@@ -4,6 +4,8 @@ import com.lucasluqui.util.SystemUtil;
 
 import javax.swing.*;
 
+import static com.lucasluqui.launcher.Log.log;
+
 public final class SmoothScrollPane extends JScrollPane
 {
   private final int FPS = SystemUtil.getRefreshRate();

@@ -2,6 +2,8 @@ package com.lucasluqui.swing;
 
 import javax.swing.*;
 
+import static com.lucasluqui.swing.Log.log;
+
 public final class SmoothProgressBar extends JProgressBar
 {
   private static final int VISUAL_MIN = 0;
@@ -47,7 +49,11 @@ public final class SmoothProgressBar extends JProgressBar
   public void setValue (int value)
   {
     if (value < logicalMin || value > logicalMax) {
-      throw new IllegalArgumentException("Value out of logical range");
+      log.error("Progress bar value out of logical range!",
+        "value", value,
+        "logicalMin", logicalMin,
+        "logicalMax", logicalMax
+      );
     }
 
     logicalValue = value;
@@ -87,6 +93,13 @@ public final class SmoothProgressBar extends JProgressBar
 
   private void animateTo (int targetVisual)
   {
+    if (targetVisual < currentVisualValue) {
+      currentVisualValue = targetVisual;
+      stopAnimation();
+      super.setValue(currentVisualValue);
+      return;
+    }
+
     stopAnimation();
 
     animationTimer = new Timer(DELAY_MS, e -> {
