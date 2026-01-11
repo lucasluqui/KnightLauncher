@@ -303,26 +303,6 @@ public class ZipUtil
     }
   }
 
-  /**
-   * Unpacks a pack200 packed jar file from {@code packedJar} into {@code target}.
-   * If {@code packedJar} has a {@code .gz} extension, it will be gunzipped first.
-   */
-  @SuppressWarnings({"removal", "deprecation"})
-  public static void unpackPacked200Jar (File packedJar, File target)
-    throws IOException
-  {
-    try (InputStream packJarIn = new FileInputStream(packedJar);
-         JarOutputStream jarOut = new JarOutputStream(new FileOutputStream(target))) {
-      boolean gz = (packedJar.getName().endsWith(".gz") ||
-        packedJar.getName().endsWith(".gz_new"));
-      try (InputStream packJarIn2 = (gz ? new GZIPInputStream(packJarIn) : packJarIn)) {
-        Pack200.Unpacker unpacker = Pack200.newUnpacker();
-        unpacker.unpack(packJarIn2, jarOut);
-      }
-    }
-  }
-
-
   public static String readFileInsideZip (String zip, String pathInZip)
     throws IOException
   {
