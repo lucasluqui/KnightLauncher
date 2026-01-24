@@ -20,10 +20,21 @@ public class SteamUtil
     }
 
     String steamProtocolString = dialog ? "steam://launch/" + id + "/dialog" : "steam://run/" + id;
+
+    // Special procedure for Mac systems.
+    // There might be a way for Mac to use the same method as Windows, but I don't feel like
+    // going down that rabbit hole at the moment...
+    if (SystemUtil.isMac()) {
+      Desktop desktop = Desktop.getDesktop();
+      try {
+        URI steamProtocol = new URI(steamProtocolString);
+        desktop.browse(steamProtocol);
+      } catch (Exception e) {
+        log.error(e);
+      }
+    }
+
     ProcessUtil.run(new String[] { "start", steamProtocolString }, true);
-    //Desktop desktop = Desktop.getDesktop();
-    //URI steamProtocol = new URI(steamProtocolString);
-    //desktop.browse(steamProtocol);
   }
 
   public static String getSteamPath ()
