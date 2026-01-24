@@ -111,11 +111,7 @@ public class LauncherEventHandler
           ProcessUtil.run(getCodeModsStartCommand(altMode), true);
         } else {
           if (Settings.gamePlatform.startsWith("Steam")) {
-            try {
-              SteamUtil.startGameById(99900, SystemUtil.isMac());
-            } catch (Exception e) {
-              log.error(e);
-            }
+            SteamUtil.runApp(99900, SystemUtil.isMac());
           } else {
             if (SystemUtil.isWindows()) {
               ProcessUtil.run(LauncherGlobals.GETDOWN_ARGS_WIN, true);
