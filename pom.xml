@@ -6,7 +6,7 @@
   <groupId>com.lucasluqui</groupId>
   <artifactId>KnightLauncher</artifactId>
   <packaging>jar</packaging>
-  <version>2.4.23</version>
+  <version>2.4.24-SNAPSHOT</version>
 
   <name>Knight Launcher</name>
   <description>Open source game launcher for Spiral Knights.</description>
