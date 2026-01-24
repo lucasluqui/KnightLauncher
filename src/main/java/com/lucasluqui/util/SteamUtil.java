@@ -34,7 +34,7 @@ public class SteamUtil
       }
     }
 
-    ProcessUtil.run(new String[] { "start", steamProtocolString }, true);
+    ProcessUtil.run(new String[] { "cmd.exe", "/C", "start", steamProtocolString }, true);
   }
 
   public static String getSteamPath ()
