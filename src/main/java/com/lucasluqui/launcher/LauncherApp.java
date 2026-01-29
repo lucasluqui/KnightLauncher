@@ -529,23 +529,27 @@ public class LauncherApp
 
   private void logVMInfo ()
   {
+    String systemUsername = System.getProperty("user.name");
+
     log.info("------------ VM Info ------------");
     log.info("OS Name: " + System.getProperty("os.name"));
     log.info("OS Arch: " + System.getProperty("os.arch"));
     log.info("OS Vers: " + System.getProperty("os.version"));
     log.info("Java Home: " + System.getProperty("java.home"));
     log.info("Java Vers: " + System.getProperty("java.version"));
-    log.info("User Name: " + System.getProperty("user.name"));
-    log.info("User Home: " + System.getProperty("user.home"));
-    log.info("Current Directory: " + System.getProperty("user.dir"));
+    log.info("User Name Valid: " + TextUtil.isAlphanumeric(systemUsername));
+    log.info("User Home: " + System.getProperty("user.home").replace(systemUsername, "USERNAME"));
+    log.info("Current Directory: " + System.getProperty("user.dir").replace(systemUsername, "USERNAME"));
     log.info("---------------------------------");
   }
 
   private void logGameVMInfo ()
   {
+    String systemUsername = System.getProperty("user.name");
+
     log.info("--------- Game VM Info ----------");
-    log.info("Directory: " + JavaUtil.getGameJVMDirPath());
-    log.info("Executable: " + JavaUtil.getGameJVMExePath());
+    log.info("Directory: " + JavaUtil.getGameJVMDirPath().replace(systemUsername, "USERNAME"));
+    log.info("Executable: " + JavaUtil.getGameJVMExePath().replace(systemUsername, "USERNAME"));
     log.info("Data: " + JavaUtil.getGameJVMData());
     log.info("Version: " + JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath()));
     log.info("Arch: " + JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()));

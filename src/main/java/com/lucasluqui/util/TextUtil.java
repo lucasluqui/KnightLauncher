@@ -4,7 +4,6 @@ import java.util.Random;
 
 public class TextUtil
 {
-
   public static String extractNumericFromString (String input)
   {
     input = input.replaceAll("[^0-9 ]", "").replaceAll(" +", " ").trim();
@@ -24,4 +23,8 @@ public class TextUtil
       .toString();
   }
 
+  public static boolean isAlphanumeric (String input)
+  {
+    return input.matches("^[a-zA-Z0-9]+$");
+  }
 }
