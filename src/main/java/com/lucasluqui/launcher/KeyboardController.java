@@ -86,4 +86,11 @@ public class KeyboardController
     return this.altPressed;
   }
 
+  public void clear ()
+  {
+    this.altPressed = false;
+    this.shiftPressed = false;
+    specialKeyReleased();
+  }
+
 }

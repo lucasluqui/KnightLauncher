@@ -32,7 +32,7 @@ public class LauncherGUI extends BaseGUI
   @Inject protected LocaleManager _localeManager;
   @Inject protected FlamingoManager _flamingoManager;
   @Inject protected DiscordPresenceClient _discordPresenceClient;
-  @Inject protected KeyboardController _keyboardController;
+  @Inject protected KeyboardController _kbController;
 
   @Inject
   public LauncherGUI ()
@@ -82,6 +82,13 @@ public class LauncherGUI extends BaseGUI
     guiFrame.setShape(new RoundRectangle2D.Double(0, 0, this.width, this.height, 15, 15));
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.getContentPane().setLayout(null);
+
+    guiFrame.addWindowFocusListener(new WindowAdapter() {
+      @Override
+      public void windowLostFocus(WindowEvent e) {
+        _kbController.clear();
+      }
+    });
 
     returnButton.setBounds(305, 40, 25, 25);
     returnButton.setToolTipText(_localeManager.getValue("b.back"));
@@ -417,7 +424,7 @@ public class LauncherGUI extends BaseGUI
     launchButton.setToolTipText(_localeManager.getValue("b.play"));
     mainPane.add(launchButton);
     launchButton.addActionListener(action -> {
-      if (_keyboardController.isShiftPressed() || _keyboardController.isAltPressed()) {
+      if (_kbController.isShiftPressed() || _kbController.isAltPressed()) {
         // TODO: Consolidate alt launching inside LauncherEventHandler::launchGameEvent for both.
         if (_flamingoManager.getSelectedServer().isOfficial()) {
           this.eventHandler.launchGameAltEvent();
