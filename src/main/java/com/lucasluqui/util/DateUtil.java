@@ -40,7 +40,7 @@ public class DateUtil
       + getDayNumberWithSuffix(calendar.get(Calendar.DATE)) + " "
       + calendar.get(Calendar.HOUR_OF_DAY) + ":" + getMinuteWithTrailingZero(calendar.get(Calendar.MINUTE)) + " "
       + (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM") + " "
-      + TIMEZONE;
+      + timezone;
   }
 
   private static String getDayNumberWithSuffix (int date)

@@ -61,6 +61,10 @@ public class Server
 
   public long maintenanceEndsAt;
 
+  public String noticeTitle;
+
+  public String notice;
+
   public int enabled;
 
   public Server ()
@@ -175,7 +179,7 @@ public class Server
 
   public boolean isOutdated ()
   {
-    return !this.version.equalsIgnoreCase(getLocalVersion());
+    return !isOfficial() && !this.version.equalsIgnoreCase(getLocalVersion());
   }
 
   public int getMaintenanceStatus ()

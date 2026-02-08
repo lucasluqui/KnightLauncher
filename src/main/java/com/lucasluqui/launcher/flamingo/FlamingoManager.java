@@ -85,6 +85,10 @@ public class FlamingoManager
         server.announceBannerEndsAt = serverJson.getLong("announceBannerEndsAt");
         server.fromCode = serverJson.getString("fromCode");
         server.serverIcon = serverJson.getString("serverIcon");
+        server.maintenanceStartsAt = serverJson.getLong("maintenanceStartsAt");
+        server.maintenanceEndsAt = serverJson.getLong("maintenanceEndsAt");
+        server.noticeTitle = serverJson.getString("noticeTitle");
+        server.notice = serverJson.getString("notice");
         server.enabled = serverJson.getInt("enabled");
 
         servers.add(server);

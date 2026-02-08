@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
+import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.util.*;
@@ -20,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 import static com.lucasluqui.launcher.Log.log;
 
@@ -411,6 +413,20 @@ public class LauncherGUI extends BaseGUI
     bannerLinkButton.setVisible(false);
     mainPane.add(bannerLinkButton);
 
+    serverNoticeButton = new JButton(_localeManager.getValue("b.server_notice"));
+    serverNoticeButton.setIcon(IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 13, Color.BLACK));
+    serverNoticeButton.setBounds(510, 388, 252, 25);
+    serverNoticeButton.setFocusPainted(false);
+    serverNoticeButton.setFocusable(false);
+    serverNoticeButton.setBackground(CustomColors.WARNING);
+    serverNoticeButton.setBorderPainted(false);
+    serverNoticeButton.setForeground(Color.BLACK);
+    //serverNoticeButton.setVisible(false);
+    serverNoticeButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
+    serverNoticeButton.setToolTipText(_localeManager.getValue("b.server_notice"));
+    mainPane.add(serverNoticeButton);
+
     launchButton = new JButton(_localeManager.getValue("b.play"));
     launchButton.setBounds(500, 423, 210, 52);
     launchButton.setFont(Fonts.getFont("defaultMedium", 15.0f, Font.PLAIN));
@@ -432,6 +448,16 @@ public class LauncherGUI extends BaseGUI
           this.eventHandler.launchGameEvent(true);
         }
       } else {
+        // Display a warning first if the server is currently during a maintenance window.
+        Server selectedServer = _flamingoManager.getSelectedServer();
+        if (selectedServer.getMaintenanceStatus() == 1) {
+          Dialog.push(
+            _localeManager.getValue("m.scheduled_maintenance_warning", new String[] { DateUtil.getFormattedTime(selectedServer.maintenanceEndsAt, TimeZone.getDefault().getID()) }),
+            _localeManager.getValue("t.scheduled_maintenance"),
+            JOptionPane.WARNING_MESSAGE
+          );
+        }
+
         this.eventHandler.launchGameEvent(false);
       }
     });
@@ -743,16 +769,67 @@ public class LauncherGUI extends BaseGUI
     mainPane.setVisible(true);
   }
 
+  public void resetLaunchButton ()
+  {
+    Server selectedServer = _flamingoManager.getSelectedServer();
+    if (selectedServer != null) {
+      switch (selectedServer.getMaintenanceStatus()) {
+        case 0:
+          // no maintenance.
+          launchButton.setBackground(CustomColors.LAUNCH);
+          launchButton.setForeground(Color.WHITE);
+          launchButton.setIcon(null);
+          break;
+        case 1:
+          // maintenance ongoing.
+          launchButton.setBackground(CustomColors.WARNING);
+          launchButton.setForeground(Color.BLACK);
+          launchButton.setIcon(IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 13, Color.BLACK));
+          break;
+        case 2:
+          // maintenance scheduled.
+          launchButton.setBackground(CustomColors.LAUNCH);
+          launchButton.setForeground(Color.WHITE);
+          launchButton.setIcon(null);
+          break;
+        default:
+          launchButton.setBackground(CustomColors.LAUNCH);
+          launchButton.setForeground(Color.WHITE);
+          launchButton.setIcon(null);
+          break;
+      }
+
+      if (!selectedServer.isInstalled()) {
+        launchButton.setText(_localeManager.getValue("b.install"));
+        launchButton.setToolTipText(_localeManager.getValue("b.install"));
+      } else if (selectedServer.isOutdated()) {
+        launchButton.setText(_localeManager.getValue("b.update"));
+        launchButton.setToolTipText(_localeManager.getValue("b.update"));
+      } else {
+        launchButton.setText(_localeManager.getValue("b.play"));
+        launchButton.setToolTipText(_localeManager.getValue("b.play"));
+      }
+    } else {
+      launchButton.setBackground(CustomColors.LAUNCH);
+      launchButton.setForeground(Color.WHITE);
+      launchButton.setIcon(null);
+      launchButton.setText(_localeManager.getValue("b.play"));
+      launchButton.setToolTipText(_localeManager.getValue("b.play"));
+    }
+  }
+
   protected void specialKeyPressed ()
   {
     launchButton.setBackground(CustomColors.LAUNCH_ALT);
+    launchButton.setIcon(null);
     launchButton.updateUI();
     altModeEnabledLabel.setVisible(true);
   }
 
   protected void specialKeyReleased ()
   {
-    launchButton.setBackground(CustomColors.LAUNCH);
+    resetLaunchButton();
+
     launchButton.updateUI();
     altModeEnabledLabel.setVisible(false);
   }
@@ -785,6 +862,7 @@ public class LauncherGUI extends BaseGUI
   public JLabel bannerSubtitle1;
   public JLabel bannerSubtitle2;
   public JButton bannerLinkButton;
+  public JButton serverNoticeButton;
   public JButton launchButton;
   public JButton launchPopupMenuButton;
   public JButton updateButton;
