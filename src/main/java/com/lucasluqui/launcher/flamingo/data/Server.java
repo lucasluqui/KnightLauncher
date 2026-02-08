@@ -57,6 +57,10 @@ public class Server
 
   public String serverIcon;
 
+  public long maintenanceStartsAt;
+
+  public long maintenanceEndsAt;
+
   public int enabled;
 
   public Server ()
@@ -174,6 +178,33 @@ public class Server
     return !this.version.equalsIgnoreCase(getLocalVersion());
   }
 
+  public int getMaintenanceStatus ()
+  {
+    if (maintenanceStartsAt == 0) {
+      // No scheduled maintenance.
+      return 0;
+    }
+
+    if (maintenanceEndsAt < System.currentTimeMillis()) {
+      // Scheduled maintenance already ended.
+      return 0;
+    }
+
+    if (System.currentTimeMillis() < maintenanceStartsAt) {
+      // Scheduled maintenance is ahead.
+      return 2;
+    }
+
+    if (System.currentTimeMillis() >= maintenanceStartsAt
+      && System.currentTimeMillis() <= maintenanceEndsAt) {
+      // Scheduled maintenance is ongoing.
+      return 1;
+    }
+
+    // It should never ever land here, but just in case...
+    return 0;
+  }
+
   @Override
   public String toString ()
   {
@@ -197,6 +228,8 @@ public class Server
       ", announceBannerEndsAt=" + announceBannerEndsAt +
       ", fromCode='" + fromCode + '\'' +
       ", serverIcon='" + serverIcon + '\'' +
+      ", maintenanceStartsAt='" + maintenanceStartsAt + '\'' +
+      ", maintenanceEndsAt='" + maintenanceEndsAt + '\'' +
       ", enabled=" + enabled +
       ']';
   }
