@@ -433,6 +433,7 @@ public class LauncherEventHandler
               _localeManager.getValue("b.server_notice") : selectedServer.noticeTitle;
 
         gui.serverNoticeButton.setText(noticeTitle);
+        gui.serverNoticeButton.setToolTipText(noticeTitle);
 
         gui.serverNoticeButton.addActionListener(
           action -> Dialog.push(selectedServer.notice, noticeTitle, JOptionPane.WARNING_MESSAGE)
