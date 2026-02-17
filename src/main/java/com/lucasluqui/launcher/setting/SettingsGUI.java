@@ -351,6 +351,7 @@ public class SettingsGUI extends BaseGUI
     choiceGC.setFocusable(false);
     choiceGC.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     gamePanel.add(choiceGC);
+    choiceGC.addItem("ZGC");
     choiceGC.addItem("ParallelOld");
     choiceGC.addItem("Serial");
     choiceGC.addItem("G1");

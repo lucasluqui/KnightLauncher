@@ -110,14 +110,18 @@ public class SettingsEventHandler
 
     switch (this.gui.choiceGC.getSelectedIndex()) {
       case 0:
+        Settings.gameGarbageCollector = "ZGC";
+        _settingsManager.setValue("game.garbageCollector", "ZGC", selectedServer);
+        break;
+      case 1:
         Settings.gameGarbageCollector = "ParallelOld";
         _settingsManager.setValue("game.garbageCollector", "ParallelOld", selectedServer);
         break;
-      case 1:
+      case 2:
         Settings.gameGarbageCollector = "Serial";
         _settingsManager.setValue("game.garbageCollector", "Serial", selectedServer);
         break;
-      case 2:
+      case 3:
         Settings.gameGarbageCollector = "G1";
         _settingsManager.setValue("game.garbageCollector", "G1", selectedServer);
         break;
