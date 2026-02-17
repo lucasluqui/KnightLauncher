@@ -2,6 +2,7 @@ package com.lucasluqui.launcher.setting;
 
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
+import com.lucasluqui.launcher.DeployConfig;
 import com.lucasluqui.launcher.LauncherContext;
 import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
@@ -245,7 +246,7 @@ public class SettingsEventHandler
 
     this.gui.memorySlider.setValue(recommendedMemory);
     this.gui.switchUseCustomGC.setSelected(RECOMMENDED_USE_CUSTOM_GC);
-    this.gui.choiceGC.setSelectedItem(RECOMMENDED_GC);
+    this.gui.choiceGC.setSelectedItem(DeployConfig.isDev() ? "ZGC" : RECOMMENDED_GC);
     this.gui.switchExplicitGC.setSelected(RECOMMENDED_DISABLE_EXPLICIT_GC);
 
     customGCChangeEvent(null);
