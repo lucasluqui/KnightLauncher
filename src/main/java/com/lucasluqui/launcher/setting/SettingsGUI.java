@@ -436,7 +436,7 @@ public class SettingsGUI extends BaseGUI
     jvmPatchButton.addActionListener(eventHandler::jvmPatchEvent);
 
     if (((SystemUtil.isWindows() && SystemUtil.is64Bit()) || (SystemUtil.isUnix() && Settings.gamePlatform.equalsIgnoreCase("Steam")))) {
-      jvmPatchButton.setEnabled(true);
+      jvmPatchButton.setEnabled(DeployConfig.isDev());
       jvmPatchButton.setToolTipText(null);
     }
 
