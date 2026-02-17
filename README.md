@@ -12,7 +12,7 @@
     <a href="https://discord.gg/RAf499a"><img alt="Discord" src="https://img.shields.io/discord/653349356459786240" target="_blank"></a>
 </p>
 
-Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM installation, Discord integration, easier modding & much more.
+Open source game launcher for Spiral Knights. Supports user-friendly Java configuration, Discord integration, easier modding & much more.
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W4W11S2JU)
 
@@ -21,9 +21,8 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 ## Features
 - Install and uninstall game mods in an easy and noob-friendly way without worrying about game updates.
 - Jump into several editors to create custom user-generated content or simply preview game models.
-- Automatically patch your game to use a 64-bit Java VM to improve the game's performance.
+- Intuitive and user-friendly UI for configuring advanced Java settings.
 - Re-install and verify your game files with ease.
-- Intuitive and user-friendly UI for configuring advanced Java VM settings.
 - Discord integration that shows your current game activity on your Discord status. This feature is only available on Windows.
 - Launch alt accounts with lesser resources assigned to them avoiding losing performance on your main instance.
 - Future-proofed to support third party servers. Third party server support <ins>**will not**</ins> be enabled while Grey Havens' Official servers are still online, unless explicitly permitted by their respective right owners and/or law.
