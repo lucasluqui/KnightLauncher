@@ -259,6 +259,9 @@ public class SettingsManager
       if (Settings.gameGarbageCollector.equals("G1")) {
         writer.println("-Xms" + Settings.gameMemory + "M");
         writer.println("-Xmx" + Settings.gameMemory + "M");
+      } else if (Settings.gameGarbageCollector.equals("ZGC") && DeployConfig.isDev()) {
+        writer.println("-Xms" + Settings.gameMemory + "M");
+        writer.println("-Xmx" + Settings.gameMemory + "M");
       } else {
         writer.println("-Xms512M");
         writer.println("-Xmx" + Settings.gameMemory + "M");
