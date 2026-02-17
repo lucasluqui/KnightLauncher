@@ -245,6 +245,10 @@ public class SettingsManager
         if (Settings.gameGarbageCollector.equals("ParallelOld")) {
           writer.println("-XX:+UseParallelGC");
           writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+        if (Settings.gameGarbageCollector.equals("ZGC")) {
+          writer.println("-XX:+Use" + Settings.gameGarbageCollector);
+          writer.println("-XX:+ZGenerational");
+        }
         } else {
           writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
         }
