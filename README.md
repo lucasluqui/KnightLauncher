@@ -39,12 +39,12 @@ Open source game launcher for Spiral Knights. Supports user-friendly Java config
 3. Extract the downloaded `KnightLauncher-x.x.x.zip` ZIP file to your Spiral Knights directory (`x.x.x` will vary depending on the current version).
    - <ins>**Windows**</ins>:
      - **Steam**: Steam installations can be found by right-clicking the game on your Steam library and selecting "Manage" → "Browse Local Files," you can also look for it at `<Your Steam Folder>\steamapps\common\Spiral Knights`.
-     - **Standalone**: Standalone installations can be found by right-clicking the Spiral Knights shortcut on your desktop and then clicking "Open File Location," you can also look for it at `<Your User Folder>\AppData\LocalLow\spiral`.
+     - **Standalone**: Standalone installations can be found by first right-clicking the Spiral Knights shortcut on your desktop, clicking "Open File Location," and once you're there you must enter the `app` folder. You can also look for it at `<Your User Folder>\AppData\Local\Spiral Knights\app`
    - <ins>**macOS**</ins>:
      - **Steam**: Steam installations can be found by right-clicking the game on your Steam library, selecting "Manage" → "Browse Local Files," then right click the "Spiral Knights" application file and select "Show Package Contents". Once this is done, browse to `Contents/Resources/Java`. This is where you must extract the zip file you downloaded earlier.
      - **Standalone**: Standalone installations can be found by searching "Spiral Knights" in Applications, then right click on the result and select "Show in Finder", finally right click the "Spiral Knights" Application file and select "Show Package Contents", and browse to `Contents/Resources/Java`. This is where you must extract the zip file you downloaded earlier.
    - <ins>**Linux**</ins>:
-     - **Steam**: Steam installations are not natively supported, but the launcher will still call Steam and launch through Proton if you place Knight Launcher's JAR file in the game's directory.
+     - **Steam**: Steam installations can be found by right-clicking the game on your Steam library and selecting "Manage" → "Browse Local Files".
      - **Standalone**: Standalone installations are found at your user's home folder then `.getdown/spiral`.
 
 > [!NOTE]
