@@ -3,6 +3,7 @@ package com.lucasluqui.util;
 import com.google.inject.Inject;
 import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
+import sun.misc.Launcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -151,7 +152,12 @@ public class JavaUtil
       }
     }
 
-    // Official.
+    // Official (steam)
+    if (SteamUtil.isRunningInSteamapps()) {
+      return LauncherGlobals.USER_DIR + File.separator + "java_vm";
+    }
+
+    // Official (standalone)
     return LauncherGlobals.USER_DIR.split("Spiral Knights")[0] + "Spiral Knights" + File.separator + "runtime";
 
     /*
