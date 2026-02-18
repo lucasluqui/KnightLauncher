@@ -763,8 +763,6 @@ public class LauncherEventHandler
         LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar;");
       argsList.add("-Dcom.threerings.getdown=false");
       if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
-      if (Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld"))
-        argsList.add("-XX:+UseParallelGC");
       if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
       argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
@@ -930,7 +928,7 @@ public class LauncherEventHandler
   private boolean isGameRunning ()
   {
     // TODO: Add Linux and Mac compatibility to launch checking.
-    return !SystemUtil.isWindows() || ProcessUtil.isProcessRunning("java.exe", _flamingoManager.getSelectedServer().isOfficial() ? "Spiral Knights" : _flamingoManager.getSelectedServer().name);
+    return !SystemUtil.isWindows() || ProcessUtil.isProcessRunning("javaw.exe", _flamingoManager.getSelectedServer().isOfficial() ? "Spiral Knights" : _flamingoManager.getSelectedServer().name);
   }
 
   private final String[] RPC_COMMAND_LINE = new String[]{".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe", BuildConfig.getVersion()};

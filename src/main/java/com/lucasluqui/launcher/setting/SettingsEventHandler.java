@@ -111,20 +111,20 @@ public class SettingsEventHandler
 
     switch (this.gui.choiceGC.getSelectedIndex()) {
       case 0:
-        Settings.gameGarbageCollector = "ZGC";
-        _settingsManager.setValue("game.garbageCollector", "ZGC", selectedServer);
+        Settings.gameGarbageCollector = "Parallel";
+        _settingsManager.setValue("game.garbageCollector.v2", "Parallel", selectedServer);
         break;
       case 1:
-        Settings.gameGarbageCollector = "ParallelOld";
-        _settingsManager.setValue("game.garbageCollector", "ParallelOld", selectedServer);
+        Settings.gameGarbageCollector = "ZGC";
+        _settingsManager.setValue("game.garbageCollector.v2", "ZGC", selectedServer);
         break;
       case 2:
         Settings.gameGarbageCollector = "Serial";
-        _settingsManager.setValue("game.garbageCollector", "Serial", selectedServer);
+        _settingsManager.setValue("game.garbageCollector.v2", "Serial", selectedServer);
         break;
       case 3:
         Settings.gameGarbageCollector = "G1";
-        _settingsManager.setValue("game.garbageCollector", "G1", selectedServer);
+        _settingsManager.setValue("game.garbageCollector.v2", "G1", selectedServer);
         break;
     }
   }
@@ -140,7 +140,7 @@ public class SettingsEventHandler
   {
     Settings.gameAdditionalArgs = this.gui.argumentsPane.getText();
     Server selectedServer = _flamingoManager.getSelectedServer();
-    _settingsManager.setValue("game.additionalArgs", this.gui.argumentsPane.getText(), selectedServer);
+    _settingsManager.setValue("game.additionalArgs.v2", this.gui.argumentsPane.getText(), selectedServer);
   }
 
   public void memoryChangeEvent (int memory)
@@ -246,7 +246,7 @@ public class SettingsEventHandler
 
     this.gui.memorySlider.setValue(recommendedMemory);
     this.gui.switchUseCustomGC.setSelected(RECOMMENDED_USE_CUSTOM_GC);
-    this.gui.choiceGC.setSelectedItem(DeployConfig.isDev() ? "ZGC" : RECOMMENDED_GC);
+    this.gui.choiceGC.setSelectedItem(RECOMMENDED_GC);
     this.gui.switchExplicitGC.setSelected(RECOMMENDED_DISABLE_EXPLICIT_GC);
 
     customGCChangeEvent(null);
@@ -518,11 +518,17 @@ public class SettingsEventHandler
   {
     // Port all the contents of their existing extra.txt into
     // the launcher's gameAdditionalArgs setting so that it's also preserved by it.
-    if (!FileUtil.fileExists("old-extra.txt")) {
+    if (FileUtil.fileExists("extra.txt") && !FileUtil.fileExists("old-extra.txt")) {
       try {
-        this.gui.argumentsPane.setText(FileUtil.readFile("extra.txt").trim());
+        String extraTxtContents = FileUtil.readFile("extra.txt").trim();
+
+        // Avoid porting ParallelOld, causes issues post Java update.
+        if (!extraTxtContents.contains("ParallelOld")) {
+          this.gui.argumentsPane.setText(extraTxtContents);
+        }
+
         this.gui.eventHandler.saveAdditionalArgs();
-      } catch (IOException e) {
+      } catch (Exception e) {
         log.error(e);
       }
     }
@@ -569,13 +575,13 @@ public class SettingsEventHandler
   // Default game settings
   private final int DEFAULT_MEMORY = 1024;
   private final boolean DEFAULT_USE_CUSTOM_GC = false;
-  private final String DEFAULT_GC = "ParallelOld";
+  private final String DEFAULT_GC = "Parallel";
   private final boolean DEFAULT_DISABLE_EXPLICIT_GC = false;
   private final String DEFAULT_ADDITIONAL_ARGS = "";
 
   // Recommended game settings
   private final boolean RECOMMENDED_USE_CUSTOM_GC = true;
-  private final String RECOMMENDED_GC = "ParallelOld";
+  private final String RECOMMENDED_GC = "Parallel";
   private final boolean RECOMMENDED_DISABLE_EXPLICIT_GC = true;
 
   // Default connection settings

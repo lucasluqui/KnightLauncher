@@ -88,7 +88,11 @@ public class JavaUtil
       }
     }
 
-    if (version.isEmpty() || osArch.isEmpty()) {
+    if (osArch == null) {
+      osArch = SystemUtil.is64Bit() ? "64-bit" : "32-bit";
+    }
+
+    if (version.isEmpty()) {
       return "Unknown Java VM";
     }
 
@@ -112,8 +116,8 @@ public class JavaUtil
     try {
       if (postJava8Versioning) {
         // versioning for Java 10 onwards. e.g. "15.0.2"
-        javaMajorVersion = rawJavaVMData;
-        javaMinorVersion = rawJavaVMData;
+        javaMinorVersion = rawJavaVMData.split(",")[0];
+        javaMajorVersion = javaMinorVersion.split("\\.")[0];
       } else {
         // versioning for Java 8 and prior. e.g. "1.8.0_251"
         javaMajorVersion = rawJavaVMData.split("\\.")[1];
@@ -131,7 +135,7 @@ public class JavaUtil
     }
 
     if (postJava8Versioning) {
-      return "Java " + javaMajorVersion + ", " + javaArch;
+      return "Java " + javaMajorVersion + " (" + javaMinorVersion + "), " + javaArch;
     }
 
     return "Java " + javaMajorVersion + " (" + javaMinorVersion + "), " + javaArch;
@@ -139,20 +143,24 @@ public class JavaUtil
 
   public static String getGameJVMDirPath ()
   {
-    String startingDirPath = LauncherGlobals.USER_DIR;
-
+    // Third party servers.
     if (_flamingoManager != null && _flamingoManager.getSelectedServer() != null) {
       if (!_flamingoManager.getSelectedServer().isOfficial()) {
-        startingDirPath += File.separator + "thirdparty" + File.separator + _flamingoManager.getSelectedServer().getSanitizedName();
+        String path = LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + _flamingoManager.getSelectedServer().getSanitizedName();
+        return new File(path, "java_vm").getAbsolutePath();
       }
     }
+
+    // Official.
+    return LauncherGlobals.USER_DIR.split("Spiral Knights")[0] + "Spiral Knights" + File.separator + "runtime";
 
     /*
       Exclude linux users from possibly matching a java_vm directory.
       They might have installed from Steam which downloads Windows files
       which also have a java_vm folder, but meant to be run with Proton...
      */
-    File javaVMDir = new File(startingDirPath, "java_vm");
+
+    /*File javaVMDir = new File(startingDirPath, "java_vm");
     if (javaVMDir.exists() && javaVMDir.isDirectory() && !SystemUtil.isUnix()) {
       return javaVMDir.getAbsolutePath();
     }
@@ -160,22 +168,22 @@ public class JavaUtil
     File javaDir = new File(startingDirPath, "java");
     if (javaDir.exists() && javaDir.isDirectory()) {
       return javaDir.getAbsolutePath();
-    }
+    }*/
 
-    return "";
+    //return "";
   }
 
   public static String getGameJVMExePath ()
   {
     String javaDir = getGameJVMDirPath();
-    if (FileUtil.fileExists(javaDir + "/bin/java.exe")) {
-      return javaDir + "/bin/java.exe";
+    if (FileUtil.fileExists(javaDir + File.separator + "bin" + File.separator + "javaw.exe")) {
+      return javaDir + File.separator + "bin" + File.separator + "javaw.exe";
     }
-    if (FileUtil.fileExists(javaDir + "/bin/java")) {
-      return javaDir + "/bin/java";
+    if (FileUtil.fileExists(javaDir + File.separator + "bin" + File.separator + "javaw")) {
+      return javaDir + File.separator + "bin" + File.separator + "javaw";
     }
     log.error("Cannot locate local java executable");
-    return "java";
+    return "javaw";
   }
 
   public static boolean isLegacy ()

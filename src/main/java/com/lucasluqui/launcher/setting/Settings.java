@@ -31,7 +31,7 @@ public class Settings
   public static Boolean gameDisableExplicitGC = false;
   public static Boolean gameUndecoratedWindow = false;
   public static Boolean gameUseCustomGC = false;
-  public static String gameGarbageCollector = "ParallelOld";
+  public static String gameGarbageCollector = "Parallel";
   public static String gameAdditionalArgs = null;
   public static String gameEndpoint = "game.spiralknights.com";
   public static int gamePort = 47624;
