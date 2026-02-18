@@ -228,11 +228,12 @@ public class SettingsManager
       _launcherCtx._progressBar.setBarValue(0);
       _launcherCtx._progressBar.setState(_localeManager.getValue("m.apply"));
 
-      /**
-       * Back up the current extra.txt if there's no back up already.
-       * This is useful if a user installs the launcher and had already
-       * made its own extra.txt, this way it won't get deleted forever, just renamed.
-       */
+      // Run a platform check by triggering a change event just in case the value stored is incorrect.
+      _launcherCtx.settingsGUI.eventHandler.platformChangeEvent(null);
+
+      // Back up the current extra.txt if there's no back up already.
+      // This is useful if a user installs the launcher and had already
+      // made its own extra.txt, this way it won't get deleted forever, just renamed.
       if (!FileUtil.fileExists("old-extra.txt")) {
         FileUtil.rename(new File("extra.txt"), new File("old-extra.txt"));
       }
