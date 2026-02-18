@@ -763,6 +763,9 @@ public class SettingsGUI extends BaseGUI
 
     argumentsPane.setCaretPosition(0);
 
+    // TODO: Temporary, re-enable once it's fixed.
+    argumentsPane.setEnabled(false);
+
     eventHandler.checkExistingArguments();
 
     JSeparator sep = new JSeparator();
