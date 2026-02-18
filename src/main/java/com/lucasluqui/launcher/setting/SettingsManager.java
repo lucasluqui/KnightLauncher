@@ -263,7 +263,8 @@ public class SettingsManager
         writer.println("-Xmx" + Settings.gameMemory + "M");
       }
 
-      writer.println(Settings.gameAdditionalArgs);
+      // TODO: Add guard rails to avoid non java args from being parsed here.
+      //writer.println(Settings.gameAdditionalArgs);
       writer.close();
 
       if (_flamingoManager.getSelectedServer().isOfficial()) applyConnectionSettings();
