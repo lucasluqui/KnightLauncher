@@ -658,6 +658,9 @@ public class SettingsGUI extends BaseGUI
     }
 
     if (!entitledServers.isEmpty()) {
+      activeCodesPane.removeAll();
+      activeCodesPane.updateUI();
+
       int count = 0;
       for (Server server : entitledServers) {
         JPanel activeCodePane = new JPanel();
