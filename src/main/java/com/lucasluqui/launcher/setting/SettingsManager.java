@@ -245,9 +245,9 @@ public class SettingsManager
       if (Settings.gameUseCustomGC) {
         if (Settings.gameGarbageCollector.equals("Parallel")) {
           writer.println("-XX:+UseParallelGC");
-        } else if (Settings.gameGarbageCollector.equals("ZGC") && DeployConfig.isDev()) {
+        } else if (Settings.gameGarbageCollector.equals("ZGC")) {
           writer.println("-XX:+Use" + Settings.gameGarbageCollector);
-          writer.println("-XX:+ZGenerational");
+          // TODO: Maybe add some extra settings for ZGC to use?
         } else {
           writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
         }
