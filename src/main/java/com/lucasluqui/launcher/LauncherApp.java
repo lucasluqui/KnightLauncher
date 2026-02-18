@@ -545,15 +545,19 @@ public class LauncherApp
 
   private void logGameVMInfo ()
   {
-    String systemUsername = System.getProperty("user.name");
+    try {
+      String systemUsername = System.getProperty("user.name");
 
-    log.info("--------- Game VM Info ----------");
-    log.info("Directory: " + JavaUtil.getGameJVMDirPath().replace(systemUsername, "USERNAME"));
-    log.info("Executable: " + JavaUtil.getGameJVMExePath().replace(systemUsername, "USERNAME"));
-    log.info("Data: " + JavaUtil.getGameJVMData());
-    log.info("Version: " + JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath()));
-    log.info("Arch: " + JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()));
-    log.info("---------------------------------");
+      log.info("--------- Game VM Info ----------");
+      log.info("Directory: " + JavaUtil.getGameJVMDirPath().replace(systemUsername, "USERNAME"));
+      log.info("Executable: " + JavaUtil.getGameJVMExePath().replace(systemUsername, "USERNAME"));
+      log.info("Data: " + JavaUtil.getGameJVMData());
+      log.info("Version: " + JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath()));
+      log.info("Arch: " + JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()));
+      log.info("---------------------------------");
+    } catch (Exception e) {
+      log.error(e);
+    }
   }
 
   private void logHostInfo ()
