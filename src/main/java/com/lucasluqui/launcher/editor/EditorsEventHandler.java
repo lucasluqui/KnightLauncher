@@ -91,19 +91,7 @@ public class EditorsEventHandler
       isBooting = true;
       new Thread(this::startedBooting).start();
 
-      String javaVMPath = JavaUtil.getGameJVMExePath();
-      String javaVMVersion = JavaUtil.getGameJVMData();
       String libSeparator = JavaUtil.getJavaVMCommandLineSeparator();
-
-      if (javaVMVersion.contains("1.7") || javaVMVersion.contains("1.8")) {
-        log.info("Compatible game Java VM version found: " + javaVMVersion);
-      } else if (System.getProperty("java.version").contains("1.7") || System.getProperty("java.version").contains("1.8")) {
-        log.warning("Incompatible game Java VM version: " + javaVMVersion + ". Luckily we can rely on system's (" + System.getProperty("java.version") + ")");
-        javaVMPath = "java";
-      } else {
-        Dialog.push(_localeManager.getValue("error.no_compatible_jvm"), _localeManager.getValue("b.editors"), JOptionPane.ERROR_MESSAGE);
-      }
-
       String classpath = "";
       String rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
       if (!thirdparty)
@@ -115,17 +103,19 @@ public class EditorsEventHandler
       classpath += rootDir + File.separator + "./code/lwjgl.jar";
 
       List<String> editorCmdLine = new ArrayList<>();
-      editorCmdLine.add(javaVMPath);
+      editorCmdLine.add(JavaUtil.getGameJVMExePath());
       editorCmdLine.add("-classpath");
       editorCmdLine.add(classpath);
       editorCmdLine.add("-Xms2G");
       editorCmdLine.add("-Xmx2G");
+      editorCmdLine.add("-Dcom.threerings.getdown=false");
+      editorCmdLine.add("-Dorg.lwjgl.util.NoChecks=true");
+      editorCmdLine.add("-Dsun.java2d.d3d=false");
+      editorCmdLine.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
+      editorCmdLine.add("--add-opens=java.base/java.util=ALL-UNNAMED");
+      editorCmdLine.add("--enable-native-access=ALL-UNNAMED");
       if (thirdparty) {
-        editorCmdLine.add("-Dcom.threerings.getdown=false");
         editorCmdLine.add("-XX:SoftRefLRUPolicyMSPerMB=10");
-        editorCmdLine.add("-Dorg.lwjgl.util.NoChecks=true");
-        editorCmdLine.add("-Dsun.java2d.d3d=false");
-        editorCmdLine.add("-XX:+AggressiveOpts");
       }
       editorCmdLine.add("-Dappdir=" + rootDir + File.separator + "./");
       editorCmdLine.add("-Dresource_dir=" + rootDir + File.separator + "./rsrc");
@@ -145,8 +135,6 @@ public class EditorsEventHandler
       new Thread(this::startedBooting).start();
 
       String libSeparator = JavaUtil.getJavaVMCommandLineSeparator();
-      String javaVMPath = JavaUtil.getGameJVMExePath();
-
       String classpath = "";
       String rootDir = LauncherGlobals.USER_DIR;
       classpath += rootDir + File.separator + "./code/config.jar" + libSeparator;
@@ -162,16 +150,17 @@ public class EditorsEventHandler
       classpath += rootDir + File.separator + "./code/commons-logging.jar" + libSeparator;
 
       List<String> editorCmdLine = new ArrayList<>();
-      editorCmdLine.add(javaVMPath);
+      editorCmdLine.add(JavaUtil.getGameJVMExePath());
       editorCmdLine.add("-classpath");
       editorCmdLine.add(classpath);
       editorCmdLine.add("-Xms2G");
       editorCmdLine.add("-Xmx2G");
       editorCmdLine.add("-Dcom.threerings.getdown=false");
-      editorCmdLine.add("-XX:SoftRefLRUPolicyMSPerMB=10");
       editorCmdLine.add("-Dorg.lwjgl.util.NoChecks=true");
       editorCmdLine.add("-Dsun.java2d.d3d=false");
-      editorCmdLine.add("-XX:+AggressiveOpts");
+      editorCmdLine.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
+      editorCmdLine.add("--add-opens=java.base/java.util=ALL-UNNAMED");
+      editorCmdLine.add("--enable-native-access=ALL-UNNAMED");
       editorCmdLine.add("-Dappdir=" + rootDir + File.separator + ".");
       editorCmdLine.add("-Dresource_dir=" + rootDir + File.separator + "./rsrc");
       editorCmdLine.add("-Dcrucible.dir=../crucible");
