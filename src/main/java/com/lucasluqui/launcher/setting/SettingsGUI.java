@@ -526,6 +526,7 @@ public class SettingsGUI extends BaseGUI
           break;
         case 1:
           betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_success"));
+          updateActiveBetaCodes();
           break;
         case 2:
           betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_duplicate"));

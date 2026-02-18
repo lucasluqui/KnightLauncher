@@ -401,7 +401,6 @@ public class SettingsEventHandler
     if (response.equalsIgnoreCase("success")) {
       addBetaCode(code);
       _launcherCtx.launcherGUI.eventHandler.updateServerList(_flamingoManager.fetchServerList());
-      this.gui.updateActiveBetaCodes();
       return 1;
     }
 
@@ -423,6 +422,7 @@ public class SettingsEventHandler
     for (String betaCode : betaCodes) {
       activateBetaCode(betaCode, true);
     }
+    this.gui.updateActiveBetaCodes();
   }
 
   public void clearLocalBetaCodes ()
