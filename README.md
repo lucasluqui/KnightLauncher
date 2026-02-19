@@ -45,7 +45,7 @@ Open source game launcher for Spiral Knights. Supports user-friendly Java config
      - **Standalone**: Standalone installations can be found by searching "Spiral Knights" in Applications, then right click on the result and select "Show in Finder", finally right click the "Spiral Knights" Application file and select "Show Package Contents", and browse to `Contents/Resources/Java`. This is where you must extract the zip file you downloaded earlier.
    - <ins>**Linux**</ins>:
      - **Steam**: Steam installations can be found by right-clicking the game on your Steam library and selecting "Manage" → "Browse Local Files".
-     - **Standalone**: Standalone installations are found at your user's home folder then `.getdown/spiral`.
+     - **Standalone**: There's no standalone download for Linux, you must download the game through Steam. Once that's done, follow the instructions above to install the launcher via Steam on Linux, and you'll be able to set your platform as standalone in the launcher's settings.
 
 > [!NOTE]
 > Bear in mind that those are the *usual* installation locations, your mileage may vary.
