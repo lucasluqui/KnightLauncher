@@ -146,8 +146,13 @@ public class ModManager
       }
 
       // Check if there's a new or removed mod since the last execution, rebuild will be needed in that case.
-      if (Integer.parseInt(_settingsManager.getValue("modloader.appliedModsHash", selectedServer)) != getEnabledModsHash()) {
-        log.info("Hashcode doesn't match, preparing for rebuild and remount...");
+      int previousModHash = Integer.parseInt(_settingsManager.getValue("modloader.appliedModsHash", selectedServer));
+      String currentModHash = Integer.toString(getEnabledModsHash());
+      if (Integer.toString(previousModHash).equalsIgnoreCase(currentModHash)) {
+        log.info("Hashcode doesn't match, preparing for rebuild and remount...",
+          "previous", previousModHash,
+          "current", currentModHash
+        );
         rebuildRequired = true;
         mountRequired = true;
       }
@@ -191,7 +196,6 @@ public class ModManager
     _launcherCtx._progressBar.setState(_localeManager.getValue("m.mount"));
     _discordPresenceClient.setDetails(_localeManager.getValue("m.mount"));
     LinkedList<Mod> localList = getModList();
-    Set<Long> hashSet = new HashSet<>();
 
     for (int i = 0; i < getModCount(); i++) {
       Mod mod = localList.get(i);
@@ -207,13 +211,11 @@ public class ModManager
         } else {
           mod.mount();
         }
-        long lastModified = new File(rootDir + "/mods/" + mod.getFileName()).lastModified();
-        hashSet.add(lastModified);
         _launcherCtx._progressBar.setBarValue(i + 1);
       }
     }
 
-    _settingsManager.setValue("modloader.appliedModsHash", Integer.toString(hashSet.hashCode()), selectedServer);
+    _settingsManager.setValue("modloader.appliedModsHash", Integer.toString(getEnabledModsHash()), selectedServer);
 
     // Mount all the locale changes.
     if (!globalLocaleChanges.isEmpty()) {
@@ -452,8 +454,9 @@ public class ModManager
   private int getEnabledModsHash ()
   {
     Set<Long> hashSet = new HashSet<>();
+    String rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
     for (Mod mod : modList) {
-      long lastModified = new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + mod.getFileName()).lastModified();
+      long lastModified = new File(rootDir + "/mods/" + mod.getFileName()).lastModified();
       if (mod.isEnabled()) hashSet.add(lastModified);
     }
     return hashSet.hashCode();
