@@ -21,17 +21,9 @@ public class SteamUtil
 
     String steamProtocolString = dialog ? "steam://launch/" + id + "/dialog" : "steam://run/" + id;
 
-    // Special procedure for Mac systems.
-    // There might be a way for Mac to use the same method as Windows, but I don't feel like
-    // going down that rabbit hole at the moment...
+    // Special procedure for macOS.
     if (SystemUtil.isMac()) {
-      Desktop desktop = Desktop.getDesktop();
-      try {
-        URI steamProtocol = new URI(steamProtocolString);
-        desktop.browse(steamProtocol);
-      } catch (Exception e) {
-        log.error(e);
-      }
+      ProcessUtil.run(new String[] { "open", steamProtocolString }, true);
     }
 
     ProcessUtil.run(new String[] { "cmd.exe", "/C", "start", steamProtocolString }, true);
