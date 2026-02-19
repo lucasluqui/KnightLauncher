@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.zip.ZipFile;
 
@@ -260,10 +262,10 @@ public class ModManager
 
         // Turn all the locale changes back into a jar file.
         try {
-          ZipUtil.zipFolderContents(
-            new File(rootDir + "/code/locale-changes/"),
-            new File(rootDir + "/code/projectx-config-new.jar"),
-            "projectx-config-new.jar"
+          JavaUtil.createJar(
+            Paths.get(rootDir + "/code/locale-changes/"),
+            Paths.get(rootDir + "/code/projectx-config-new.jar"),
+            null
           );
         } catch (Exception e) {
           log.error(e);
@@ -305,12 +307,12 @@ public class ModManager
       FileUtils.delete(new File(rootDir + "/code/config-new.jar"));
     } catch (Exception ignored) {}
 
-    // And now after merging their contents, we turn it back into config.jar.
+    // And now after merging their contents, we turn it back into a jar.
     try {
-      ZipUtil.zipFolderContents(
-        new File(rootDir + "/code/class-changes/"),
-        new File(rootDir + "/code/config-new.jar"),
-        "config-new.jar"
+      JavaUtil.createJar(
+        Paths.get(rootDir + "/code/class-changes/"),
+        Paths.get(rootDir + "/code/config-new.jar"),
+        null
       );
     } catch (Exception e) {
       log.error(e);

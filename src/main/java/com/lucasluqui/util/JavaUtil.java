@@ -5,8 +5,7 @@ import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import sun.misc.Launcher;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,7 +13,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 
 import static com.lucasluqui.util.Log.log;
 
@@ -248,6 +252,55 @@ public class JavaUtil
       fieldSysPath.set(null, null);
     } catch (Exception e) {
       log.error(e);
+    }
+  }
+
+  public static void createJar (Path source, Path output, String mainClass)
+    throws IOException
+  {
+    final int BUFFER_SIZE = 8192;
+
+    if (!Files.exists(source) || !Files.isDirectory(source)) {
+      throw new IllegalArgumentException("Source must be an existing directory");
+    }
+
+    Manifest manifest = new Manifest();
+    Attributes attributes = manifest.getMainAttributes();
+    attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
+
+    if (mainClass != null && !mainClass.isEmpty()) {
+      attributes.put(Attributes.Name.MAIN_CLASS, mainClass);
+    }
+
+    // Warning: Manifest is not passed through.
+    try (JarOutputStream jarOutputStream =
+           new JarOutputStream(Files.newOutputStream(output))) {
+
+      Files.walk(source)
+        .filter(path -> !Files.isDirectory(path))
+        .forEach(path -> {
+          String entryName = source.relativize(path)
+            .toString()
+            .replace("\\", "/");
+
+          try (InputStream inputStream =
+                 new BufferedInputStream(new FileInputStream(path.toFile()))) {
+
+            JarEntry jarEntry = new JarEntry(entryName);
+            jarOutputStream.putNextEntry(jarEntry);
+
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+              jarOutputStream.write(buffer, 0, bytesRead);
+            }
+
+            jarOutputStream.closeEntry();
+
+          } catch (IOException e) {
+            throw new RuntimeException("Error adding file to jar: " + path, e);
+          }
+        });
     }
   }
 }
