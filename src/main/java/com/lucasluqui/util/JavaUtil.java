@@ -186,12 +186,19 @@ public class JavaUtil
   public static String getGameJVMExePath ()
   {
     String javaDir = getGameJVMDirPath();
+
     if (FileUtil.fileExists(javaDir + File.separator + "bin" + File.separator + "javaw.exe")) {
       return javaDir + File.separator + "bin" + File.separator + "javaw.exe";
     }
+
     if (FileUtil.fileExists(javaDir + File.separator + "bin" + File.separator + "javaw")) {
       return javaDir + File.separator + "bin" + File.separator + "javaw";
     }
+
+    if (FileUtil.fileExists(javaDir + File.separator + "bin" + File.separator + "java")) {
+      return javaDir + File.separator + "bin" + File.separator + "java";
+    }
+
     log.error("Cannot locate local java executable");
     return "javaw";
   }
