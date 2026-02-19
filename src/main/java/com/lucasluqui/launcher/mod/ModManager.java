@@ -133,6 +133,9 @@ public class ModManager
       // Finally, let's see which have been set as disabled.
       parseDisabledMods();
 
+      // Check if there's any incompatible mods.
+      checkModCompatibility();
+
       // Mounting after a game update sometimes causes getdown to re-validate files again, making that
       // first mount essentially useless, so with this setting we make sure mods are force mounted at least 2 times
       // with the current known version.
@@ -147,8 +150,8 @@ public class ModManager
 
       // Check if there's a new or removed mod since the last execution, rebuild will be needed in that case.
       int previousModHash = Integer.parseInt(_settingsManager.getValue("modloader.appliedModsHash", selectedServer));
-      String currentModHash = Integer.toString(getEnabledModsHash());
-      if (Integer.toString(previousModHash).equalsIgnoreCase(currentModHash)) {
+      int currentModHash = getEnabledModsHash();
+      if (previousModHash != currentModHash) {
         log.info("Hashcode doesn't match, preparing for rebuild and remount...",
           "previous", previousModHash,
           "current", currentModHash
@@ -163,8 +166,6 @@ public class ModManager
         rebuildRequired = true;
         mountRequired = true;
       }
-
-      checkModCompatibility();
 
       // Check if there's directories in the mod folder and push a warning to the user.
       for (File file : FileUtil.filesAndDirectoriesInDirectory(modFolderPath)) {
@@ -215,7 +216,7 @@ public class ModManager
       }
     }
 
-    _settingsManager.setValue("modloader.appliedModsHash", Integer.toString(getEnabledModsHash()), selectedServer);
+    _settingsManager.setValue("modloader.appliedModsHash", String.valueOf(getEnabledModsHash()), selectedServer);
 
     // Mount all the locale changes.
     if (!globalLocaleChanges.isEmpty()) {
@@ -459,6 +460,7 @@ public class ModManager
       long lastModified = new File(rootDir + "/mods/" + mod.getFileName()).lastModified();
       if (mod.isEnabled()) hashSet.add(lastModified);
     }
+
     return hashSet.hashCode();
   }
 
