@@ -256,13 +256,8 @@ public class SettingsManager
 
       if (Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
 
-      if (Settings.gameGarbageCollector.equals("G1") || Settings.gameGarbageCollector.equals("ZGC")) {
-        writer.println("-Xms" + Settings.gameMemory + "M");
-        writer.println("-Xmx" + Settings.gameMemory + "M");
-      } else {
-        writer.println("-Xms" + Settings.gameMemory / 2 + "M");
-        writer.println("-Xmx" + Settings.gameMemory + "M");
-      }
+      writer.println("-Xms" + Settings.gameMemory + "M");
+      writer.println("-Xmx" + Settings.gameMemory + "M");
 
       // TODO: Add guard rails to avoid non java args from being parsed here.
       //writer.println(Settings.gameAdditionalArgs);
