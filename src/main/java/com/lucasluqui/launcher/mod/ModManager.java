@@ -256,15 +256,15 @@ public class ModManager
         } catch (Exception ignored) {}
 
         // Turn all the locale changes back into a jar file.
-        String[] outputCapture;
-        if (SystemUtil.isWindows()) {
-          outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
-        } else if (SystemUtil.isMac()) {
-          outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "jar cvf code/projectx-config-new.jar -C code/locale-changes/ ." });
-        } else {
-          outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "\"" + JavaUtil.getGameJVMDirPath() + "/bin/jar" + "\"", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
+        try {
+          ZipUtil.zipFolderContents(
+            new File(rootDir + "/code/locale-changes/"),
+            new File(rootDir + "/code/projectx-config-new.jar"),
+            "projectx-config-new.jar"
+          );
+        } catch (Exception e) {
+          log.error(e);
         }
-        log.info("Locale changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
 
         // Delete the temporary directory used to store locale changes.
         FileUtils.deleteDirectory(new File(rootDir + "/code/locale-changes"));
@@ -303,15 +303,15 @@ public class ModManager
     } catch (Exception ignored) {}
 
     // And now after merging their contents, we turn it back into config.jar.
-    String[] outputCapture;
-    if (SystemUtil.isWindows()) {
-      outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "." });
-    } else if (SystemUtil.isMac()) {
-      outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "jar cvf code/config-new.jar -C code/class-changes/ ." });
-    } else {
-      outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "\"" + JavaUtil.getGameJVMDirPath() + "/bin/jar" + "\"", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "." });
+    try {
+      ZipUtil.zipFolderContents(
+        new File(rootDir + "/code/class-changes/"),
+        new File(rootDir + "/code/config-new.jar"),
+        "config-new.jar"
+      );
+    } catch (Exception e) {
+      log.error(e);
     }
-    log.info("Class changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
 
     try {
       // Delete the temporary directory used to store class changes.

@@ -33,8 +33,6 @@ public class ModuleManager
   {
     Thread moduleThread = new Thread(() -> {
       loadIngameRPC();
-      loadJarCommandLine();
-      if (SystemUtil.isUnix()) loadFroth();
     });
     moduleThread.start();
   }
@@ -53,36 +51,6 @@ public class ModuleManager
     } else {
       _settingsManager.setValue("launcher.ingameRPCSetup", "true");
       _settingsManager.setValue("launcher.useIngameRPC", "false");
-    }
-  }
-
-  protected void loadJarCommandLine ()
-  {
-    try {
-      int vmArch = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath());
-      if (SystemUtil.isWindows() && !FileUtil.fileExists(JavaUtil.getGameJVMDirPath() + "/bin/jar.exe")) {
-        ZipUtil.extractFileWithinJar("/rsrc/modules/jarcmd/jar-" + vmArch + ".exe", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe");
-      } else if (!FileUtil.fileExists(JavaUtil.getGameJVMDirPath() + "/bin/jar")) {
-        ZipUtil.extractFileWithinJar(vmArch == 64 ? "/rsrc/modules/jarcmd/jar-amd64" : "/rsrc/modules/jarcmd/jar-i386", JavaUtil.getGameJVMDirPath() + "/bin/jar");
-      }
-    } catch (IOException e) {
-      log.error(e);
-    }
-  }
-
-  protected void loadFroth ()
-  {
-    // Experimental feature: Extract a 64-bit version of libfroth for Linux steam users.
-    // Also make sure we're only doing so once.
-    if (Settings.gamePlatform.equalsIgnoreCase("Steam")) {
-      if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth64.so")) {
-        try {
-          ZipUtil.extractFileWithinJar("/rsrc/modules/linuxfroth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth.so");
-          ZipUtil.extractFileWithinJar("/rsrc/modules/linuxfroth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth64.so");
-        } catch (IOException e) {
-          log.error(e);
-        }
-      }
     }
   }
 
