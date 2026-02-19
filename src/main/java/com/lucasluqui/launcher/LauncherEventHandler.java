@@ -764,9 +764,8 @@ public class LauncherEventHandler
       argsList.add("-Dcom.threerings.getdown=false");
       if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
       if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
-      argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
+      argsList.add(altMode ? "-Xms512M" : "-Xms" + Settings.gameMemory + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
-      argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
 
       if (!Settings.gameAdditionalArgs.isEmpty()) {
@@ -795,12 +794,9 @@ public class LauncherEventHandler
         LauncherGlobals.USER_DIR + File.separator + "code/commons-logging.jar:");
       argsList.add("-Dcom.threerings.getdown=false");
       if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
-      if (Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld"))
-        argsList.add("-XX:+UseParallelGC");
       if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
-      argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
+      argsList.add(altMode ? "-Xms512M" : "-Xms" + Settings.gameMemory + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
-      argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
 
       if (!Settings.gameAdditionalArgs.isEmpty()) {
@@ -838,10 +834,17 @@ public class LauncherEventHandler
         LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-logging.jar;");
       argsList.add("-Dcom.threerings.getdown=false");
       if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
-      if (Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld"))
-        argsList.add("-XX:+UseParallelGC");
-      if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
-      argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
+      if (Settings.gameUseCustomGC) {
+        if (Settings.gameGarbageCollector.equalsIgnoreCase("ZGC")) {
+          // do nothing.
+        } else {
+          if (Settings.gameGarbageCollector.equalsIgnoreCase("Parallel")) {
+            argsList.add("-XX:+UseParallelOldGC");
+          }
+          argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+        }
+      }
+      argsList.add(altMode ? "-Xms512M" : "-Xms" + Settings.gameMemory + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
       argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
@@ -871,10 +874,17 @@ public class LauncherEventHandler
         LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-logging.jar:");
       argsList.add("-Dcom.threerings.getdown=false");
       if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
-      if (Settings.gameUseCustomGC && Settings.gameGarbageCollector.equalsIgnoreCase("ParallelOld"))
-        argsList.add("-XX:+UseParallelGC");
-      if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
-      argsList.add(altMode ? "-Xms256M" : Settings.gameGarbageCollector.equalsIgnoreCase("G1") ? "-Xms" + Settings.gameMemory + "M" : "-Xms" + Settings.gameMemory / 2 + "M");
+      if (Settings.gameUseCustomGC) {
+        if (Settings.gameGarbageCollector.equalsIgnoreCase("ZGC")) {
+          // do nothing.
+        } else {
+          if (Settings.gameGarbageCollector.equalsIgnoreCase("Parallel")) {
+            argsList.add("-XX:+UseParallelOldGC");
+          }
+          argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+        }
+      }
+      argsList.add(altMode ? "-Xms512M" : "-Xms" + Settings.gameMemory + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
       argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");

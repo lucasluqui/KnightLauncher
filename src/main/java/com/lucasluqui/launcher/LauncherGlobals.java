@@ -77,18 +77,23 @@ public class LauncherGlobals
       USER_DIR + File.separator + "./code/jshortcut.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/commons-beanutils.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/commons-digester.jar" + javaSeparator +
-      USER_DIR + File.separator + "./code/commons-logging.jar" + javaSeparator,
+      USER_DIR + File.separator + "./code/commons-logging.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/discord-game-sdk4j.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/gson.jar" + javaSeparator,
       "-Dcom.threerings.getdown=false",
-      "-Xms256M",
+      "-Xms512M",
       "-Xmx512M",
-      "-XX:+AggressiveOpts",
+      "-XX:+UseSerialGC",
       "-XX:SoftRefLRUPolicyMSPerMB=10",
       "-Djava.library.path=" + USER_DIR + File.separator + "./native",
       "-Dorg.lwjgl.util.NoChecks=true",
       "-Dsun.java2d.d3d=false",
+      "--add-opens=java.base/java.lang=ALL-UNNAMED",
+      "--add-opens=java.base/java.util=ALL-UNNAMED",
+      "--enable-native-access=ALL-UNNAMED",
       "-Dappdir=" + USER_DIR + File.separator + ".",
       "-Dresource_dir=" + USER_DIR + File.separator + "./rsrc",
-      "-XX:+UseStringDeduplication",
+      "-Dcrucible.dir=" + USER_DIR + File.separator + "./crucible",
       "com.threerings.projectx.client.ProjectXApp",
     };
   }
