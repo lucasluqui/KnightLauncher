@@ -595,14 +595,19 @@ public class LauncherApp
 
       int maxRefreshRate = 0;
       try {
-        maxRefreshRate = Integer.parseInt(
-          displayString.split("Field Rate ")[1]
-          .split(" Hz")[0]
-          .split("-")[1]
-        );
+        String refreshRateString = displayString.split("Field Rate ")[1].split(" Hz")[0];
+        if (refreshRateString.contains("--")) {
+          maxRefreshRate = Integer.parseInt(
+            refreshRateString.split("--")[1]
+          );
+        } else {
+          maxRefreshRate = Integer.parseInt(
+            refreshRateString.split("-")[1]
+          );
+        }
         if (maxRefreshRate > SystemUtil.getRefreshRate()) SystemUtil.setRefreshRate(maxRefreshRate);
       } catch (Exception e) {
-        log.error("Failed to get display refresh rate", e);
+        log.error("Failed to get display max refresh rate", e);
       }
 
       log.info("Display " + i + ": " + display.toString()
