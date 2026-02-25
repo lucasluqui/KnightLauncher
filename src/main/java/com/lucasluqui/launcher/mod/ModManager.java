@@ -58,7 +58,7 @@ public class ModManager
   /**
    * Number of times a forced mod mount will be required for a known version.
    */
-  private final int FORCED_MOUNTS_PER_VERSION = 2;
+  private final int FORCED_MOUNTS_PER_VERSION = 0;
 
   /**
    * Flags whether a mod mounting is required.
