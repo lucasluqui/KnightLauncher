@@ -43,7 +43,13 @@ public class ProcessUtil
   {
     Process process = null;
     try {
-      process = new ProcessBuilder(command).start();
+      ProcessBuilder processBuilder = new ProcessBuilder(command);
+
+      // Get rid of _JAVA_OPTIONS, usually just contains garbage.
+      processBuilder.environment().remove("_JAVA_OPTIONS");
+
+      // Start the process.
+      process = processBuilder.start();
 
       // Capture both streams and send them back. Ideally we'd only pass stdout but Java likes
       // sending important stuff through stderr like -version.
