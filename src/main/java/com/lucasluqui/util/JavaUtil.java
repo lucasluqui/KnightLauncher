@@ -310,4 +310,12 @@ public class JavaUtil
         });
     }
   }
+
+  public static void clearJavaOptions ()
+  {
+    if (SystemUtil.isWindows()) {
+      ProcessUtil.run(new String[] { "cmd.exe", "/C", "setx _JAVA_OPTIONS \"\"" }, true);
+    }
+    // TODO: Linux and macOS support for clearing _JAVA_OPTIONS?
+  }
 }
