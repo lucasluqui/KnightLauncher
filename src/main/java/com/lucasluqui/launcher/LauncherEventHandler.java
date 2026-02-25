@@ -763,6 +763,8 @@ public class LauncherEventHandler
         LauncherGlobals.USER_DIR + File.separator + "./code/commons-beanutils.jar;" +
         LauncherGlobals.USER_DIR + File.separator + "./code/commons-digester.jar;" +
         LauncherGlobals.USER_DIR + File.separator + "./code/commons-logging.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/discord-game-sdk4j.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/gson.jar;" +
         LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar;");
       argsList.add("-Dcom.threerings.getdown=false");
       if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
@@ -794,7 +796,9 @@ public class LauncherEventHandler
         LauncherGlobals.USER_DIR + File.separator + "code/jshortcut.jar:" +
         LauncherGlobals.USER_DIR + File.separator + "code/commons-beanutils.jar:" +
         LauncherGlobals.USER_DIR + File.separator + "code/commons-digester.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "code/commons-logging.jar:");
+        LauncherGlobals.USER_DIR + File.separator + "code/commons-logging.jar:" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/discord-game-sdk4j.jar;" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/gson.jar;");
       argsList.add("-Dcom.threerings.getdown=false");
       if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
       if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
