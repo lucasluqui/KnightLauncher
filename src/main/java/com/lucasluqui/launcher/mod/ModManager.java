@@ -33,48 +33,6 @@ import static com.lucasluqui.launcher.mod.Log.log;
 @Singleton
 public class ModManager
 {
-  @Inject protected LauncherContext _launcherCtx;
-  @Inject protected LocaleManager _localeManager;
-  @Inject protected SettingsManager _settingsManager;
-  @Inject protected FlamingoManager _flamingoManager;
-  @Inject protected DownloadManager _downloadManager;
-  @Inject protected DiscordPresenceClient _discordPresenceClient;
-
-  /**
-   * Holds a list of all mods.
-   */
-  private final LinkedList<Mod> modList = new LinkedList<>();
-
-  /**
-   * Holds a list of all LocaleChange objects across all mods.
-   */
-  private final List<LocaleChange> globalLocaleChanges = new ArrayList<>();
-
-  /**
-   * Properties file with game files mapped to their last time they were modified by a game update.
-   */
-  private final Properties lastChanged = new Properties();
-
-  /**
-   * Number of times a forced mod mount will be required for a known version.
-   */
-  private final int FORCED_MOUNTS_PER_VERSION = 0;
-
-  /**
-   * Flags whether a mod mounting is required.
-   */
-  private Boolean mountRequired = false;
-
-  /**
-   * Flags whether a file rebuild is required.
-   */
-  private Boolean rebuildRequired = false;
-
-  /**
-   * Flags whether we're currently parsing files in the mods directory.
-   */
-  private Boolean checking = false;
-
   public ModManager ()
   {
     // empty.
@@ -258,7 +216,8 @@ public class ModManager
         try {
           FileUtils.delete(new File(rootDir + "/code/projectx-config-old.jar"));
           FileUtils.delete(new File(rootDir + "/code/projectx-config-new.jar"));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         // Turn all the locale changes back into a jar file.
         try {
@@ -305,7 +264,8 @@ public class ModManager
     try {
       FileUtils.delete(new File(rootDir + "/code/config-old.jar"));
       FileUtils.delete(new File(rootDir + "/code/config-new.jar"));
-    } catch (Exception ignored) {}
+    } catch (Exception ignored) {
+    }
 
     // And now after merging their contents, we turn it back into a jar.
     try {
@@ -706,16 +666,58 @@ public class ModManager
     }
   }
 
+  /** The launcher's context class. */
+  @Inject protected LauncherContext _launcherCtx;
+
+  /** Locale manager, for handling i18n bits. */
+  @Inject protected LocaleManager _localeManager;
+
+  /** Manages the launcher user settings. */
+  @Inject protected SettingsManager _settingsManager;
+
+  /** Communicates with the launcher's backend server. */
+  @Inject protected FlamingoManager _flamingoManager;
+
+  /** Handles file downloading launcher-wide */
+  @Inject protected DownloadManager _downloadManager;
+
+  /** Discord RPC client. */
+  @Inject protected DiscordPresenceClient _discordPresenceClient;
+
+  /** Holds a list of all mods. */
+  private final LinkedList<Mod> modList = new LinkedList<>();
+
+  /** Holds a list of all LocaleChange objects across all mods. */
+  private final List<LocaleChange> globalLocaleChanges = new ArrayList<>();
+
+  /** Properties file with game files mapped to their last time they were modified by a game update. */
+  private final Properties lastChanged = new Properties();
+
+  /** Number of times a forced mod mount will be required for a known version. */
+  private final int FORCED_MOUNTS_PER_VERSION = 0;
+
+  /** Flags whether a mod mounting is required. */
+  private Boolean mountRequired = false;
+
+  /** Flags whether a file rebuild is required. */
+  private Boolean rebuildRequired = false;
+
+  /** Flags whether we're currently parsing files in the mods directory. */
+  private Boolean checking = false;
+
+  /** Resource bundles. */
   private final String[] RSRC_BUNDLES = {
     "full-music-bundle.jar",
     "full-rest-bundle.jar",
     "intro-bundle.jar"
   };
 
+  /** Resource bundles, but for third party servers. */
   private final String[] THIRDPARTY_RSRC_BUNDLES = {
     "base.zip"
   };
 
+  /** Nasty files that very often collide with updates. */
   private final String[] FILTER_LIST = new String[]{
     "config/accessory.dat",
     "config/accessory.xml",
