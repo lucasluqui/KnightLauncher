@@ -694,7 +694,7 @@ public class ModManager
   private final Properties lastChanged = new Properties();
 
   /** Number of times a forced mod mount will be required for a known version. */
-  private final int FORCED_MOUNTS_PER_VERSION = 0;
+  private final int FORCED_MOUNTS_PER_VERSION = 2;
 
   /** Flags whether a mod mounting is required. */
   private Boolean mountRequired = false;
