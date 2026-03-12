@@ -1,4 +1,4 @@
-a<p align="center">
+<p align="center">
     <img src="https://github.com/lucasluqui/KnightLauncher/blob/main/src/main/resources/rsrc/img/icon-128.png?raw=true" height="128">
 </p>
 <h1 align="center">Knight Launcher</h1>
