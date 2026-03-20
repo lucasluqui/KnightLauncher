@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.zip.ZipFile;
@@ -41,7 +40,7 @@ public class ModManager
   public void init ()
   {
     try (InputStream is = ModManager.class.getResourceAsStream("/rsrc/config/last-changed.properties")) {
-      lastChanged.load(is);
+      _lastChanged.load(is);
     } catch (IOException e) {
       log.error(e);
     }
@@ -49,8 +48,8 @@ public class ModManager
 
   public void checkInstalled ()
   {
-    if (!checking) {
-      checking = true;
+    if (!_checking) {
+      _checking = true;
       _launcherCtx.block();
 
       Server selectedServer = _flamingoManager.getSelectedServer();
@@ -77,7 +76,7 @@ public class ModManager
         Mod mod = null;
         if (fileName.endsWith("zip")) {
           mod = new ZipMod(
-            modFolderPath, fileName, Settings.fileProtection ? this.FILTER_LIST : null, lastChanged);
+            modFolderPath, fileName, Settings.fileProtection ? this.FILTER_LIST : null, _lastChanged);
         } else if (fileName.endsWith("jar")) {
           mod = new JarMod(modFolderPath, fileName);
         } else if (fileName.endsWith("modpack")) {
@@ -85,8 +84,7 @@ public class ModManager
         }
 
         if (mod != null) {
-          modList.add(mod);
-          mod.wasAdded();
+          _modList.addMod(mod);
         }
       }
 
@@ -104,8 +102,8 @@ public class ModManager
       if (forcedMountsForCurrentVersion < FORCED_MOUNTS_PER_VERSION) {
         log.info("Forced mounts quota for current version not met",
           "forcedMounts", forcedMountsForCurrentVersion);
-        rebuildRequired = true;
-        mountRequired = true;
+        _rebuildRequired = true;
+        _mountRequired = true;
       }
 
       // Check if there's a new or removed mod since the last execution, rebuild will be needed in that case.
@@ -116,15 +114,15 @@ public class ModManager
           "previous", previousModHash,
           "current", currentModHash
         );
-        rebuildRequired = true;
-        mountRequired = true;
+        _rebuildRequired = true;
+        _mountRequired = true;
       }
 
       // If the game version has changed since the last time mods were mounted, then we schedule a new mount.
       if (gameVersionChanged()) {
         _settingsManager.setValue("modloader.forcedMountsForCurrentVersion", "0", selectedServer);
-        rebuildRequired = true;
-        mountRequired = true;
+        _rebuildRequired = true;
+        _mountRequired = true;
       }
 
       // Check if there's directories in the mod folder and push a warning to the user.
@@ -139,7 +137,7 @@ public class ModManager
       _launcherCtx.modListGUI.labelModCount.setText(String.valueOf(getModList().size()));
       _launcherCtx.modListGUI.updateModList(null);
       _launcherCtx.unblock();
-      checking = false;
+      _checking = false;
     }
   }
 
@@ -148,7 +146,7 @@ public class ModManager
     Server selectedServer = _flamingoManager.getSelectedServer();
     String rootDir = selectedServer.getRootDirectory();
 
-    if (Settings.doRebuilds && rebuildRequired) startFileRebuild();
+    if (Settings.doRebuilds && _rebuildRequired) startFileRebuild();
 
     _launcherCtx.block();
 
@@ -162,12 +160,12 @@ public class ModManager
       Mod mod = localList.get(i);
       if (mod.isEnabled()) {
         if (mod instanceof Modpack) {
-          ((Modpack) mod).mount(rootDir, FILTER_LIST, lastChanged);
+          ((Modpack) mod).mount(rootDir, FILTER_LIST, _lastChanged);
         } else if (mod instanceof ZipMod) {
           ZipMod zipMod = ((ZipMod) mod);
-          zipMod.mount(rootDir, FILTER_LIST, lastChanged);
+          zipMod.mount(rootDir, FILTER_LIST, _lastChanged);
           if (zipMod.hasLocaleChanges()) {
-            this.globalLocaleChanges.addAll(zipMod.getLocaleChanges());
+            this._localeChanges.addAll(zipMod.getLocaleChanges());
           }
         } else {
           mod.mount();
@@ -179,7 +177,7 @@ public class ModManager
     _settingsManager.setValue("modloader.appliedModsHash", String.valueOf(getEnabledModsHash()), selectedServer);
 
     // Mount all the locale changes.
-    if (!globalLocaleChanges.isEmpty()) {
+    if (!_localeChanges.isEmpty()) {
       log.info("Mounting locale changes...");
       try {
         // Unpack the current projectx-config jar file.
@@ -189,7 +187,7 @@ public class ModManager
 
         // Create per-bundle batch of locale changes.
         HashMap<String, List<LocaleChange>> sortedLocaleChanges = new HashMap<>();
-        for (LocaleChange localeChange : this.globalLocaleChanges) {
+        for (LocaleChange localeChange : this._localeChanges) {
           if (!sortedLocaleChanges.containsKey(localeChange.getBundle())) {
             sortedLocaleChanges.put(localeChange.getBundle(), new ArrayList<>());
           }
@@ -314,7 +312,7 @@ public class ModManager
         Integer.toString(forcedMountsForCurrentVersion));
     }
 
-    mountRequired = false;
+    _mountRequired = false;
     _launcherCtx._progressBar.finishTask();
 
     _launcherCtx.unblock();
@@ -386,7 +384,7 @@ public class ModManager
 
     _launcherCtx._progressBar.setBarValue(bundles.length + 1);
     _launcherCtx._progressBar.finishTask();
-    rebuildRequired = false;
+    _rebuildRequired = false;
 
     _launcherCtx.unblock();
     _discordPresenceClient.setDetails(_localeManager.getValue("presence.ready"));
@@ -405,20 +403,11 @@ public class ModManager
     }
   }
 
-  public int getEnabledModCount ()
-  {
-    int count = 0;
-    for (Mod mod : modList) {
-      if (mod.isEnabled()) count++;
-    }
-    return count;
-  }
-
   private int getEnabledModsHash ()
   {
     Set<Long> hashSet = new HashSet<>();
     String rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
-    for (Mod mod : modList) {
+    for (Mod mod : _modList.getAll()) {
       long lastModified = new File(rootDir + "/mods/" + mod.getFileName()).lastModified();
       if (mod.isEnabled()) hashSet.add(lastModified);
     }
@@ -428,12 +417,12 @@ public class ModManager
 
   private void clearModList ()
   {
-    modList.clear();
+    _modList.clear();
   }
 
   private void clearLocaleChanges ()
   {
-    globalLocaleChanges.clear();
+    _localeChanges.clear();
   }
 
   private void parseDisabledMods ()
@@ -445,7 +434,7 @@ public class ModManager
     if (rawString.equals("")) return;
 
     String[] fileNames = rawString.split(",");
-    for (Mod mod : modList) {
+    for (Mod mod : _modList.getAll()) {
       for (int i = 0; i < fileNames.length; i++) {
         if (mod.getFileName().equals(fileNames[i])) {
           mod.setEnabled(false);
@@ -470,7 +459,7 @@ public class ModManager
     int gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
     String pxVersion = _flamingoManager.getSelectedServer().getLocalVersion();
 
-    for (Mod mod : modList) {
+    for (Mod mod : _modList.getAll()) {
       // Parse whether the mod is compatible with the current game version.
       // Not a strict requirement for most mods, only for ZipMods with 'class' type and JarMods.
       boolean pxCompatible = pxVersion.equalsIgnoreCase(mod.getPXVersion());
@@ -611,59 +600,123 @@ public class ModManager
 
   public int getModCount ()
   {
-    return modList.size();
+    return _modList.getModCount();
+  }
+
+  public int getEnabledModCount ()
+  {
+    return _modList.getEnabledModCount();
   }
 
   public LinkedList<Mod> getModList ()
   {
-    // We don't want to return the actual object, so let's clone it.
-    return new LinkedList<>(modList);
+    return _modList.getAll();
   }
 
   public Boolean getMountRequired ()
   {
-    return this.mountRequired;
+    return this._mountRequired;
   }
 
   public void setMountRequired (Boolean mountRequired)
   {
-    this.mountRequired = mountRequired;
+    this._mountRequired = mountRequired;
   }
 
   public Boolean getRebuildRequired ()
   {
-    return this.rebuildRequired;
+    return this._rebuildRequired;
   }
 
   public void setRebuildRequired (Boolean rebuildRequired)
   {
-    this.rebuildRequired = rebuildRequired;
+    this._rebuildRequired = rebuildRequired;
   }
 
   public Properties getLastChanged ()
   {
-    return this.lastChanged;
+    return this._lastChanged;
   }
 
+  /**
+   * A class to centralize all queries to the mod list in one place.
+   * <code>Mod</code> objects within can be modified outside of it...
+   * TODO Prevent modification outside of this class.
+   */
   @SuppressWarnings("all")
-  private class ModList
+  protected class ModList
   {
-    private final LinkedList<Mod> installedMods;
-
+    /** The shiny toy. */
     private ModList ()
     {
-      this.installedMods = new LinkedList<>();
+      this.mods = new LinkedList<>();
     }
 
+    /**
+     * Adds a <code>Mod</code> to the list.
+     * @param mod The <code>Mod</code> to be added.
+     */
     private void addMod (Mod mod)
     {
-      if (mod.isEnabled()) this.installedMods.add(mod);
+      this.mods.add(mod);
+      mod.wasAdded();
     }
 
+    /**
+     * Clears the <code>LinkedList</code> within this class.
+     */
+    private void clear ()
+    {
+      this.mods.clear();
+    }
+
+    /**
+     * Get the number of <code>Mod</code> objects in the list.
+     * @return Number of <code>Mod</code> objects within the <code>LinkedList</code>.
+     */
     private int getModCount ()
     {
-      return installedMods.size();
+      return this.mods.size();
     }
+
+    /**
+     * Get the number of ENABLED <code>Mod</code> objects in the list.
+     * @return Number of <code>Mod</code> objects within the <code>LinkedList</code> that are set as enabled.
+     */
+    private int getEnabledModCount ()
+    {
+      int count = 0;
+      for (Mod mod : this.mods) {
+        if (mod.isEnabled())
+          count++;
+      }
+      return count;
+    }
+
+    /**
+     * Get the <code>LinkedList</code> within this class.
+     * This does not sound like a good idea. Everything should be handled in here.
+     * But I don't have the time to refactor that whole thing. So for now it stays this way.
+     * @return The <code>LinkedList</code> with all <code>Mod</code> objects.
+     */
+    private LinkedList<Mod> getAll ()
+    {
+      return this.mods;
+    }
+
+    /**
+     * Get a CLONE of the <code>LinkedList</code> within this class.
+     * This is how it should work!
+     * @return A clone of the <code>LinkedList</code> with all <code>Mod</code> objects.
+     */
+    private LinkedList<Mod> getClone ()
+    {
+      // We don't want to return the actual object, so let's clone it first.
+      return new LinkedList<Mod>(this.mods);
+    }
+
+    /** A <code>LinkedList</code> holding all <code>Mod</code> objects. */
+    private final LinkedList<Mod> mods;
   }
 
   /** The launcher's context class. */
@@ -685,25 +738,27 @@ public class ModManager
   @Inject protected DiscordPresenceClient _discordPresenceClient;
 
   /** Holds a list of all mods. */
-  private final LinkedList<Mod> modList = new LinkedList<>();
+  protected final ModList _modList = new ModList();
 
   /** Holds a list of all LocaleChange objects across all mods. */
-  private final List<LocaleChange> globalLocaleChanges = new ArrayList<>();
+  protected final List<LocaleChange> _localeChanges = new ArrayList<>();
 
-  /** Properties file with game files mapped to their last time they were modified by a game update. */
-  private final Properties lastChanged = new Properties();
-
-  /** Number of times a forced mod mount will be required for a known version. */
-  private final int FORCED_MOUNTS_PER_VERSION = 2;
+  /** Game files mapped to their last modified stamp
+   * to prioritize newer vanilla files over modded ones. */
+  protected final Properties _lastChanged = new Properties();
 
   /** Flags whether a mod mounting is required. */
-  private Boolean mountRequired = false;
+  protected Boolean _mountRequired = false;
 
   /** Flags whether a file rebuild is required. */
-  private Boolean rebuildRequired = false;
+  protected Boolean _rebuildRequired = false;
 
   /** Flags whether we're currently parsing files in the mods directory. */
-  private Boolean checking = false;
+  protected Boolean _checking = false;
+
+  /** Number of times a forced mod mount will be required for a newly detected
+   * client version. */
+  private final int FORCED_MOUNTS_PER_VERSION = 2;
 
   /** Resource bundles. */
   private final String[] RSRC_BUNDLES = {
@@ -718,7 +773,7 @@ public class ModManager
   };
 
   /** Nasty files that very often collide with updates. */
-  private final String[] FILTER_LIST = new String[]{
+  private final String[] FILTER_LIST = new String[] {
     "config/accessory.dat",
     "config/accessory.xml",
     "config/actor.dat",
