@@ -31,6 +31,7 @@ public class ProgressBar
   {
     activeTasks++;
     lastTaskStartedAt = System.currentTimeMillis();
+    setBarValue(0);
     showBar(true);
   }
 
