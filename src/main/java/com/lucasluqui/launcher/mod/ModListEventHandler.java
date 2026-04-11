@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.mod;
 
+import com.formdev.flatlaf.util.SystemFileChooser;
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.launcher.LauncherGlobals;
@@ -204,13 +205,7 @@ public class ModListEventHandler
   @SuppressWarnings("unused")
   public void addModEvent (ActionEvent event)
   {
-    JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Add a mod");
-    fileChooser.setApproveButtonText("Add");
-
-    FileNameExtensionFilter restrict = new FileNameExtensionFilter(".zip, .jar, .modpack", "zip", "jar", "modpack");
-    fileChooser.setAcceptAllFileFilterUsed(false);
-    fileChooser.addChoosableFileFilter(restrict);
+    SystemFileChooser fileChooser = getModFileChooser();
 
     int response = fileChooser.showOpenDialog(null);
 
@@ -246,5 +241,17 @@ public class ModListEventHandler
   {
     Dialog.push(
       _localeManager.getValue("m.mod_warnings", new String[]{mod.getDisplayName(), mod.getWarningMessage()}), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
+  }
+
+  private SystemFileChooser getModFileChooser ()
+  {
+    SystemFileChooser fileChooser = new SystemFileChooser();
+    fileChooser.setDialogTitle("Add a mod");
+    fileChooser.setApproveButtonText("Add");
+    fileChooser.setFileFilter(new SystemFileChooser.FileNameExtensionFilter(
+      ".zip, .jar, .modpack", "zip", "jar", "modpack"
+    ));
+    fileChooser.setAcceptAllFileFilterUsed(false);
+    return fileChooser;
   }
 }
