@@ -37,12 +37,14 @@ public class LauncherContext
     try {
       launcherGUI.eventHandler.updateServerSwitcher(true);
       launcherGUI.closeButton.setEnabled(false);
+      launcherGUI.updateButton.setEnabled(false);
       launcherGUI.launchButton.setEnabled(false);
       launcherGUI.launchPopupMenuButton.setEnabled(false);
       launcherGUI.settingsButton.setEnabled(false);
       launcherGUI.modButton.setEnabled(false);
       launcherGUI.editorsButton.setEnabled(false);
       settingsGUI.forceRebuildButton.setEnabled(false);
+      modListGUI.searchBox.setEnabled(false);
     } catch (Exception ignored) {}
   }
 
@@ -51,12 +53,14 @@ public class LauncherContext
     try {
       launcherGUI.eventHandler.updateServerSwitcher(false);
       launcherGUI.closeButton.setEnabled(true);
+      launcherGUI.updateButton.setEnabled(true);
       launcherGUI.launchButton.setEnabled(true);
       launcherGUI.launchPopupMenuButton.setEnabled(true);
       launcherGUI.settingsButton.setEnabled(true);
       launcherGUI.modButton.setEnabled(true);
       launcherGUI.editorsButton.setEnabled(true);
       settingsGUI.forceRebuildButton.setEnabled(true);
+      modListGUI.searchBox.setEnabled(true);
     } catch (Exception ignored) {}
   }
 
