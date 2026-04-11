@@ -574,6 +574,7 @@ public class LauncherGUI extends BaseGUI
     launchProgressBar = new SmoothProgressBar();
     launchProgressBar.setBounds(43, 449, 416, 25);
     launchProgressBar.setVisible(false);
+    launchProgressBar.setShouldPaintString(true);
     launchProgressBar.putClientProperty(FlatClientProperties.STYLE, "arc: 35;");
     mainPane.add(launchProgressBar);
     mainPane.setComponentZOrder(launchProgressBar, 0);

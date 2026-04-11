@@ -28,6 +28,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.lucasluqui.launcher.mod.Log.log;
 
@@ -234,7 +236,7 @@ public class ModListGUI extends BaseGUI
 
     refreshProgressBar = new SmoothProgressBar();
     refreshProgressBar.setBounds(25, 445, 740, 2);
-    refreshProgressBar.setStringPainted(false);
+    refreshProgressBar.setShouldPaintString(false);
     refreshProgressBar.setVisible(false);
     guiFrame.getContentPane().add(refreshProgressBar);
 

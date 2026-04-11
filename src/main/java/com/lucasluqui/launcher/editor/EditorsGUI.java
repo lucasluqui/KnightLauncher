@@ -65,6 +65,7 @@ public class EditorsGUI extends BaseGUI
     editorLaunchFakeProgressBar = new SmoothProgressBar();
     editorLaunchFakeProgressBar.setBounds(192, 220, 385, 25);
     editorLaunchFakeProgressBar.setVisible(false);
+    editorLaunchFakeProgressBar.setShouldPaintString(true);
     editorLaunchFakeProgressBar.putClientProperty(FlatClientProperties.STYLE, "arc: 35;");
     guiFrame.getContentPane().add(editorLaunchFakeProgressBar);
 

@@ -116,6 +116,7 @@ public class JVMPatcher extends BaseGUI
     jvmPatcherProgressBar = new SmoothProgressBar();
     jvmPatcherProgressBar.setBounds(25, 204, 450, 25);
     jvmPatcherProgressBar.setVisible(false);
+    jvmPatcherProgressBar.setShouldPaintString(true);
     guiFrame.getContentPane().add(jvmPatcherProgressBar);
 
     buttonAccept = new JButton("Start patching");

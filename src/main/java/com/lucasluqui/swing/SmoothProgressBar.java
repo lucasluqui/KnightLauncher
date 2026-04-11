@@ -6,19 +6,6 @@ import static com.lucasluqui.swing.Log.log;
 
 public final class SmoothProgressBar extends JProgressBar
 {
-  private static final int VISUAL_MIN = 0;
-  private static final int VISUAL_MAX = 500;
-
-  private static final int DELAY_MS = 3;
-  private static final int STEP = 4;
-
-  private int logicalMin = 0;
-  private int logicalMax = 100;
-  private int logicalValue = 0;
-
-  private int currentVisualValue = 0;
-  private Timer animationTimer;
-
   public SmoothProgressBar ()
   {
     super(VISUAL_MIN, VISUAL_MAX);
@@ -67,7 +54,7 @@ public final class SmoothProgressBar extends JProgressBar
       return;
     }
 
-    setStringPainted(true);
+    setStringPainted(this.shouldPaintString);
     animateTo(logicalToVisual(value));
   }
 
@@ -128,4 +115,24 @@ public final class SmoothProgressBar extends JProgressBar
       animationTimer.stop();
     }
   }
+
+  public void setShouldPaintString (boolean painted)
+  {
+    this.shouldPaintString = painted;
+  }
+
+  private static final int VISUAL_MIN = 0;
+  private static final int VISUAL_MAX = 500;
+
+  private static final int DELAY_MS = 3;
+  private static final int STEP = 4;
+
+  private int logicalMin = 0;
+  private int logicalMax = 100;
+  private int logicalValue = 0;
+
+  private int currentVisualValue = 0;
+  private Timer animationTimer;
+
+  private boolean shouldPaintString = true;
 }
