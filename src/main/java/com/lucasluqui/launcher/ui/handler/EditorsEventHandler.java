@@ -8,6 +8,7 @@ import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.ModuleManager;
 import com.lucasluqui.launcher.editor.data.Editor;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
+import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.ui.EditorsUI;
 import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.ProcessUtil;
@@ -183,10 +184,13 @@ public class EditorsEventHandler
 
   public void selectedServerChanged ()
   {
-    if (_flamingoManager.getSelectedServer().isOfficial()) {
-      this.ui.footerLabel.setText(_localeManager.getValue("m.powered_by_spiralview", BuildConfig.getSpiralviewVersion()));
-    } else {
-      this.ui.footerLabel.setText(_localeManager.getValue("m.viewing_editors", _flamingoManager.getSelectedServer().name));
+    Server server = _flamingoManager.getSelectedServer();
+    if (server != null) {
+      if (server.isOfficial()) {
+        this.ui.footerLabel.setText(_localeManager.getValue("m.powered_by_spiralview", BuildConfig.getSpiralviewVersion()));
+      } else {
+        this.ui.footerLabel.setText(_localeManager.getValue("m.viewing_editors", server.name));
+      }
     }
   }
 

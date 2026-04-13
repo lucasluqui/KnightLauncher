@@ -308,23 +308,6 @@ public class LauncherUI extends BaseUI
     });
     sidePane.add(editorsButton);
 
-    Icon auctionIcon = IconFontSwing.buildIcon(FontAwesome.SHOPPING_CART, 16, ColorUtil.getForegroundColor());
-    auctionButton = new JButton(_localeManager.getValue("b.auction"));
-    auctionButton.setIcon(auctionIcon);
-    auctionButton.setBounds(28, 375, 125, 35);
-    auctionButton.setHorizontalAlignment(SwingConstants.LEFT);
-    auctionButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-    auctionButton.setFocusPainted(false);
-    auctionButton.setFocusable(false);
-    auctionButton.setBorderPainted(false);
-    auctionButton.setEnabled(true);
-    auctionButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
-    auctionButton.setForeground(Color.WHITE);
-    auctionButton.setToolTipText(_localeManager.getValue("b.auction"));
-    auctionButton.addActionListener(this.eventHandler::openAuctionsWebpage);
-    sidePane.add(auctionButton);
-    auctionButton.setVisible(false);
-
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherUI.class.getResourceAsStream("/rsrc/img/icon-discord.png")));
     discordButton.setBounds(65, 440, 36, 36);
     discordButton.setToolTipText(_localeManager.getValue("b.discord"));
@@ -829,7 +812,6 @@ public class LauncherUI extends BaseUI
   public JButton settingsButton;
   public JButton modButton;
   public JButton editorsButton;
-  public JButton auctionButton;
   public JButton playerCountTooltipButton;
   public JLabel playerCountLabel;
   public JLabel selectedServerLabel;

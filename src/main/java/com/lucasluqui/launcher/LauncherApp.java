@@ -141,7 +141,7 @@ public class LauncherApp
       _modManager.extractSafeguard();
     }
 
-    ((LauncherUI) this.getUI("launcher")).eventHandler.updateServerList(null);
+    _flamingoManager.updateServerList();
 
     loadOnlineAssets();
 
@@ -653,13 +653,13 @@ public class LauncherApp
   private void loadOnlineAssets ()
   {
     new Thread(() -> {
-
       Status flamingoStatus = _flamingoManager.getStatus();
-      if (flamingoStatus.version != null) _flamingoManager.setOnline(true);
-      ((LauncherUI) this.getUI("launcher")).eventHandler.updateServerList(_flamingoManager.fetchServerList());
-      ((SettingsUI) this.getUI("settings")).eventHandler.updateAboutTab(flamingoStatus);
+      if (flamingoStatus != null) {
+        _flamingoManager.setOnline(true);
+        ((SettingsUI) this.getUI("settings")).eventHandler.updateAboutTab(flamingoStatus);
+      }
+      _flamingoManager.updateServerList();
       ((SettingsUI) this.getUI("settings")).eventHandler.updateActiveBetaCodes();
-
     }).start();
 
     ThreadingUtil.executeWithDelay(this::checkVersion, 3000);
@@ -668,12 +668,12 @@ public class LauncherApp
 
   private void checkFlamingoStatus ()
   {
-    if (!_flamingoManager.getOnline()) {
+    if (!_flamingoManager.isOnline()) {
       ((LauncherUI) this.getUI("launcher")).showWarning(_localeManager.getValue("error.flamingo_offline"));
     }
   }
 
-  public static int getOfficialApproxPlayerCount ()
+  public int getOfficialApproxPlayerCount ()
   {
     int steamPlayers = SteamUtil.getCurrentPlayers("99900");
     if (steamPlayers == 0) {
@@ -801,9 +801,6 @@ public class LauncherApp
   public void selectedServerChanged ()
   {
     for (String id : _uiSet.keySet()) {
-      // DO NOT call LauncherUI::selectedServerChanged, or it will loop infinitely.
-      if (id.equalsIgnoreCase("launcher")) return;
-
       _uiSet.get(id).selectedServerChanged();
     }
   }

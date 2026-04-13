@@ -13,7 +13,6 @@ import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.ui.LauncherUI;
-import com.lucasluqui.launcher.ui.ModListUI;
 import com.lucasluqui.launcher.ui.SettingsUI;
 import com.lucasluqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -21,7 +20,6 @@ import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -235,94 +233,6 @@ public class LauncherEventHandler
 
   }
 
-  public void updateServerList (List<Server> servers)
-  {
-    List<Server> newServerList = _flamingoManager.getServerList();
-    newServerList.clear();
-    Server official = new Server("Official");
-    newServerList.add(official);
-
-    if (servers != null) {
-      for (Server server : servers) {
-
-        if (server.name.equalsIgnoreCase("Official")) {
-          official.playerCountUrl = "~" + LauncherApp.getOfficialApproxPlayerCount() + " ";
-          official.announceBanner = server.announceBanner;
-          official.announceContent = server.announceContent;
-          official.announceBannerLink = server.announceBannerLink;
-          official.announceBannerStartsAt = server.announceBannerStartsAt;
-          official.announceBannerEndsAt = server.announceBannerEndsAt;
-          official.maintenanceStartsAt = server.maintenanceStartsAt;
-          official.maintenanceEndsAt = server.maintenanceEndsAt;
-          official.noticeTitle = server.noticeTitle;
-          official.notice =  server.notice;
-          continue;
-        }
-
-        // Prevent from adding duplicate servers
-        if (_flamingoManager.findServerByName(server.name) != null) {
-          log.info("Tried to add duplicate server", "server", server.name);
-          continue;
-        }
-
-        if (server.beta == 1) server.name += " (Beta)";
-
-        newServerList.add(server);
-
-        // make sure we have a proper folder structure for this server.
-        String serverName = server.getSanitizedName();
-        FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + serverName);
-        FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + serverName + "/mods");
-
-        // make sure there's a base zip file we can use to clean files with.
-        String rootDir = server.getRootDirectory();
-        if (FileUtil.fileExists(rootDir + "/rsrc")
-          && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
-          try {
-            ZipUtil.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
-          } catch (Exception e) {
-            log.error(e);
-          }
-        }
-
-        // check server specific settings keys.
-        ((SettingsUI) _ctx.getApp().getUI("settings")).eventHandler.checkServerSettingsKeys(serverName);
-        ((ModListUI) _ctx.getApp().getUI("modlist")).eventHandler.checkServerSettingsKeys(serverName);
-      }
-
-      _flamingoManager.setServerList(newServerList);
-
-      try {
-        _flamingoManager.setSelectedServer(_flamingoManager.findServerBySanitizedName(Settings.selectedServerName));
-      } catch (Exception e) {
-        log.error(e);
-        _flamingoManager.setSelectedServer(official);
-      }
-    } else {
-      _flamingoManager.setSelectedServer(official);
-    }
-
-    selectedServerChanged();
-  }
-
-  public void saveSelectedServer ()
-  {
-    String serverName = _flamingoManager.getSelectedServer().getSanitizedName();
-    if (serverName.isEmpty()) serverName = "official";
-    _settingsManager.setValue("launcher.selectedServerName", serverName);
-  }
-
-  public void saveSelectedServer (String serverName)
-  {
-    if (serverName.isEmpty()) serverName = "official";
-    _settingsManager.setValue("launcher.selectedServerName", serverName);
-  }
-
-  public void openAuctionsWebpage (ActionEvent action)
-  {
-    DesktopUtil.openWebpage("https://www.sk-ah.com");
-  }
-
   public void repairGameFilesEvent ()
   {
     Thread repairThread = new Thread(() -> {
@@ -393,7 +303,6 @@ public class LauncherEventHandler
         }
         ui.serverInfoButton.setEnabled(false);
         ui.serverInfoButton.setVisible(false);
-        //gui.auctionButton.setVisible(true);
       } else {
         ui.launchButton.setEnabled(selectedServer.enabled == 1);
 
@@ -407,8 +316,6 @@ public class LauncherEventHandler
         ui.playerCountLabel.setText("??? ");
         ui.playerCountLabel.setIcon(null);
         ui.playerCountTooltipButton.setVisible(false);
-
-        //gui.auctionButton.setVisible(false);
       }
 
       if (selectedServer.announceBanner != null) updateBanner();
@@ -436,14 +343,10 @@ public class LauncherEventHandler
 
       ui.resetLaunchButton();
 
-      _ctx.getApp().selectedServerChanged();
-
-      saveSelectedServer();
       updateServerSwitcher(false);
     } else {
       // fallback to official in rare error scenario
       _flamingoManager.setSelectedServer(_flamingoManager.findServerByName("Official"));
-      selectedServerChanged();
     }
   }
 
@@ -499,8 +402,6 @@ public class LauncherEventHandler
             {
               if (!locked) {
                 _flamingoManager.setSelectedServer(server);
-                selectedServerChanged();
-                saveSelectedServer(server.getSanitizedName());
               }
             }
 
@@ -606,7 +507,7 @@ public class LauncherEventHandler
     Thread refreshThread = new Thread(() -> {
       this.displayingAnimBanner = false;
 
-      if (!_flamingoManager.getOnline()) {
+      if (!_flamingoManager.isOnline()) {
         return;
       }
 

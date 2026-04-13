@@ -394,7 +394,7 @@ public class SettingsEventHandler
     // the code was successfully activated, we update the server list and return a success code to the GUI.
     if (response.equalsIgnoreCase("success")) {
       addBetaCode(code);
-      ((LauncherUI) _ctx.getApp().getUI("launcher")).eventHandler.updateServerList(_flamingoManager.fetchServerList());
+      _flamingoManager.updateServerList();
       return 1;
     }
 
