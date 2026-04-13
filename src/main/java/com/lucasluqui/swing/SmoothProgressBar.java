@@ -45,12 +45,20 @@ public final class SmoothProgressBar extends JProgressBar
 
     logicalValue = value;
 
-    // when being set to the logical minimum, don't animate, just go straight to it.
+    // when being set to the logical minimum or maximum, don't animate, just go straight to it.
     if (value == logicalMin) {
       stopAnimation();
       currentVisualValue = VISUAL_MIN;
       super.setValue(VISUAL_MIN);
       setStringPainted(false);
+      return;
+    }
+
+    if (value == logicalMax) {
+      stopAnimation();
+      currentVisualValue = VISUAL_MAX;
+      super.setValue(VISUAL_MAX);
+      setStringPainted(this.shouldPaintString);
       return;
     }
 
