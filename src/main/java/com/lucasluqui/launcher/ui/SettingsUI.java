@@ -53,27 +53,30 @@ public class SettingsUI extends BaseUI
     guiFrame.setBounds(100, 100, this.width, this.height);
     guiFrame.setResizable(false);
     guiFrame.setUndecorated(true);
+    guiFrame.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     guiFrame.getContentPane().setLayout(null);
+
     panel = (JPanel) guiFrame.getContentPane();
+    panel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
-    tabbedPanel = new JTabbedPane();
-    tabbedPanel.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-    tabbedPanel.setBounds(-2, 20, 852, 455);
-    tabbedPanel.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
-    tabbedPanel.setTabPlacement(JTabbedPane.LEFT);
-    tabbedPanel.setFocusable(false);
-    tabbedPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    tabbedPane = new JTabbedPane();
+    tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+    tabbedPane.setBounds(-2, 0, 852, 475);
+    tabbedPane.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
+    tabbedPane.setTabPlacement(JTabbedPane.LEFT);
+    tabbedPane.setFocusable(false);
+    tabbedPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
-    tabbedPanel.addTab(_localeManager.getValue("tab.launcher"), createLauncherPanel());
-    tabbedPanel.addTab(_localeManager.getValue("tab.game"), createGamePanel());
+    tabbedPane.addTab(_localeManager.getValue("tab.launcher"), createLauncherPanel());
+    tabbedPane.addTab(_localeManager.getValue("tab.game"), createGamePanel());
     if (Settings.betasEnabled) {
-      tabbedPanel.addTab(_localeManager.getValue("tab.betas"), createBetasPanel());
+      tabbedPane.addTab(_localeManager.getValue("tab.betas"), createBetasPanel());
     }
-    tabbedPanel.addTab(_localeManager.getValue("tab.advanced"), createAdvancedPanel());
-    tabbedPanel.addTab(_localeManager.getValue("tab.about"), createAboutPanel());
+    tabbedPane.addTab(_localeManager.getValue("tab.advanced"), createAdvancedPanel());
+    tabbedPane.addTab(_localeManager.getValue("tab.about"), createAboutPanel());
 
-    panel.add(tabbedPanel);
+    panel.add(tabbedPane);
 
     guiFrame.setLocationRelativeTo(null);
   }
@@ -1026,7 +1029,7 @@ public class SettingsUI extends BaseUI
   @Inject protected SettingsManager _settingsManager;
   @Inject protected FlamingoManager _flamingoManager;
 
-  public JTabbedPane tabbedPanel;
+  public JTabbedPane tabbedPane;
   public JComboBox<String> choicePlatform = new JComboBox<String>();
   public JComboBox<String> choiceLanguage;
   public JComboBox<String> choiceGC;

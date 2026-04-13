@@ -335,7 +335,7 @@ public class LauncherEventHandler
 
   public void gameSettingsEvent ()
   {
-    ((SettingsUI) _ctx.getApp().getUI("settings")).tabbedPanel.setSelectedIndex(1);
+    ((SettingsUI) _ctx.getApp().getUI("settings")).tabbedPane.setSelectedIndex(1);
     _ctx.getApp().showUI("settings");
   }
 
