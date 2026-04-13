@@ -27,6 +27,7 @@ public class Stylesheet
 
     UIManager.put("TabbedPane.underlineColor", CustomColors.LAUNCHER);
     UIManager.put("TabbedPane.inactiveUnderlineColor", CustomColors.LAUNCHER);
+    UIManager.put("TabbedPane.contentAreaColor", new Color(89, 92, 94));
 
     UIManager.put("Slider.thumbColor", CustomColors.INTERFACE_DEFAULT);
 
