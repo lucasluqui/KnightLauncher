@@ -3,25 +3,19 @@ package com.lucasluqui.launcher;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.lucasluqui.discord.DiscordPresenceClient;
-import com.lucasluqui.launcher.editor.EditorsGUI;
-import com.lucasluqui.launcher.mod.ModListGUI;
+import com.lucasluqui.launcher.ui.*;
 import com.lucasluqui.launcher.setting.Settings;
-import com.lucasluqui.launcher.setting.SettingsGUI;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import static com.lucasluqui.launcher.Log.log;
 
 @Singleton
 public class LauncherContext
 {
-  public LauncherGUI launcherGUI;
-  public SettingsGUI settingsGUI;
-  public ModListGUI modListGUI;
-  public EditorsGUI editorsGUI;
-  public JVMPatcher jvmPatcher;
-  public Updater updater;
-  @Inject private DiscordPresenceClient _discordPresenceClient;
-  @Inject public ProgressBar _progressBar = new ProgressBar();
-
   public LauncherContext ()
   {
     // empty.
@@ -32,36 +26,42 @@ public class LauncherContext
     // empty.
   }
 
-  public void block ()
+  public void registerUI (String id, BaseUI ui)
   {
-    try {
-      launcherGUI.eventHandler.updateServerSwitcher(true);
-      launcherGUI.closeButton.setEnabled(false);
-      launcherGUI.updateButton.setEnabled(false);
-      launcherGUI.launchButton.setEnabled(false);
-      launcherGUI.launchPopupMenuButton.setEnabled(false);
-      launcherGUI.settingsButton.setEnabled(false);
-      launcherGUI.modButton.setEnabled(false);
-      launcherGUI.editorsButton.setEnabled(false);
-      settingsGUI.forceRebuildButton.setEnabled(false);
-      modListGUI.searchBox.setEnabled(false);
-    } catch (Exception ignored) {}
+    _uiSet.put(id, ui);
+    log.info("Registered UI", "id", id);
   }
 
-  public void unblock ()
+  public <T extends BaseUI> T getUI (String id)
   {
-    try {
-      launcherGUI.eventHandler.updateServerSwitcher(false);
-      launcherGUI.closeButton.setEnabled(true);
-      launcherGUI.updateButton.setEnabled(true);
-      launcherGUI.launchButton.setEnabled(true);
-      launcherGUI.launchPopupMenuButton.setEnabled(true);
-      launcherGUI.settingsButton.setEnabled(true);
-      launcherGUI.modButton.setEnabled(true);
-      launcherGUI.editorsButton.setEnabled(true);
-      settingsGUI.forceRebuildButton.setEnabled(true);
-      modListGUI.searchBox.setEnabled(true);
-    } catch (Exception ignored) {}
+    return (T) _uiSet.get(id);
+  }
+
+  public Map<String, BaseUI> getUISet ()
+  {
+    return _uiSet;
+  }
+
+  public void disposeUI (String id)
+  {
+    _uiSet.remove(id);
+  }
+
+  public void toggleElementsBlock (boolean block)
+  {
+    for (String id : _uiSet.keySet()) {
+      _uiSet.get(id).toggleElementsBlock(block);
+    }
+  }
+
+  public void selectedServerChanged ()
+  {
+    for (String id : _uiSet.keySet()) {
+      // DO NOT call LauncherUI::selectedServerChanged, or it will loop infinitely.
+      if (id.equalsIgnoreCase("launcher")) return;
+
+      _uiSet.get(id).selectedServerChanged();
+    }
   }
 
   public void exit (boolean force)
@@ -69,11 +69,15 @@ public class LauncherContext
     _discordPresenceClient.stop();
     if (force || !Settings.keepOpen) {
       try {
-        launcherGUI.guiFrame.dispose();
+        getUI("launcher").guiFrame.dispose();
       } catch (NullPointerException e) {
-        log.error("Failed to dispose main GUI Frame on exit");
+        log.error("Failed to dispose frame on exit");
       }
       System.exit(0);
     }
   }
+
+  private final Map<String, BaseUI> _uiSet = new HashMap<>();
+  @Inject private DiscordPresenceClient _discordPresenceClient;
+  @Inject public ProgressBar _progressBar = new ProgressBar();
 }

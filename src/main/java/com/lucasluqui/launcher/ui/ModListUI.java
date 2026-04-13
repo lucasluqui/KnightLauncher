@@ -1,11 +1,12 @@
-package com.lucasluqui.launcher.mod;
+package com.lucasluqui.launcher.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.jhlabs.image.GaussianFilter;
 import com.jhlabs.image.GrayscaleFilter;
 import com.lucasluqui.dialog.Dialog;
-import com.lucasluqui.launcher.BaseGUI;
+import com.lucasluqui.launcher.ui.handler.ModListEventHandler;
+import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.launcher.LocaleManager;
@@ -28,28 +29,28 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
-import static com.lucasluqui.launcher.mod.Log.log;
+import static com.lucasluqui.launcher.ui.Log.log;
 
-public class ModListGUI extends BaseGUI
+public class ModListUI extends BaseUI
 {
-  @Inject public ModListEventHandler eventHandler;
-  @Inject protected ModManager _modManager;
-  @Inject protected LocaleManager _localeManager;
-  protected String globalWarningMessage = "";
-
   @Inject
-  public ModListGUI ()
+  public ModListUI ()
   {
     super(385, 460, false);
   }
 
   public void init ()
   {
+    super.init();
     setupImages();
     compose();
+    initFinished();
+  }
+
+  public void initFinished ()
+  {
+    super.initFinished();
   }
 
   private void compose ()
@@ -62,7 +63,7 @@ public class ModListGUI extends BaseGUI
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     guiFrame.getContentPane().setLayout(null);
-    modListPanel = (JPanel) guiFrame.getContentPane();
+    panel = (JPanel) guiFrame.getContentPane();
 
     labelModCount = new JLabel();
     labelModCount.setHorizontalAlignment(SwingConstants.LEFT);
@@ -284,6 +285,11 @@ public class ModListGUI extends BaseGUI
     guiFrame.getContentPane().add(viewingModsLabel);
 
     updateModList(null);
+  }
+
+  public void selectedServerChanged ()
+  {
+    this.eventHandler.selectedServerChanged();
   }
 
   public void updateModList (String searchString)
@@ -511,7 +517,18 @@ public class ModListGUI extends BaseGUI
     modStoreButtonImage = modStoreButtonImageUnfocused;
   }
 
-  public JPanel modListPanel;
+  public void toggleElementsBlock (boolean block)
+  {
+    super.toggleElementsBlock(block);
+    this.searchBox.setEnabled(!block);
+  }
+
+  @Inject public ModListEventHandler eventHandler;
+  @Inject protected ModManager _modManager;
+  @Inject protected LocaleManager _localeManager;
+
+  public String globalWarningMessage = "";
+
   public JPanel modListPane = new JPanel();
   public SmoothScrollPane modListPaneScrollBar = new SmoothScrollPane();
   public JLabel labelModCount;

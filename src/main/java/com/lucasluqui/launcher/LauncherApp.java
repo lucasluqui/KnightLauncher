@@ -5,13 +5,11 @@ import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
-import com.lucasluqui.launcher.editor.EditorsGUI;
+import com.lucasluqui.launcher.ui.*;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Status;
-import com.lucasluqui.launcher.mod.ModListGUI;
 import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
-import com.lucasluqui.launcher.setting.SettingsGUI;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.util.*;
 import net.sf.image4j.codec.ico.ICOEncoder;
@@ -43,20 +41,6 @@ import static com.lucasluqui.launcher.Log.log;
 @Singleton
 public class LauncherApp
 {
-  @Inject protected LauncherContext _launcherCtx;
-  @Inject protected SettingsManager _settingsManager;
-  @Inject protected LocaleManager _localeManager;
-  @Inject protected ModManager _modManager;
-  @Inject protected FlamingoManager _flamingoManager;
-  @Inject protected DiscordPresenceClient _discordPresenceClient;
-  @Inject protected ModuleManager _moduleManager;
-  @Inject protected CacheManager _cacheManager;
-  @Inject protected DownloadManager _downloadManager;
-  @Inject protected KeyboardController _keyboardController;
-
-  private final String[] args;
-  private final Injector injector;
-
   public LauncherApp ()
   {
     this.args = null;
@@ -99,17 +83,17 @@ public class LauncherApp
     checkStartLocation();
     checkShortcut();
 
-    initInterfaces();
+    initUI();
 
     if (!this.requiresJVMPatch() && !this.requiresUpdate()) {
       initFinished();
-      ThreadingUtil.executeWithDelay(_launcherCtx.launcherGUI::switchVisibility, 200);
+      ThreadingUtil.executeWithDelay(_ctx.getUI("launcher")::switchVisibility, 200);
     }
   }
 
   private void initManagers ()
   {
-    _launcherCtx.init();
+    _ctx.init();
     _settingsManager.init();
     _localeManager.init();
     _modManager.init();
@@ -126,17 +110,17 @@ public class LauncherApp
     }
   }
 
-  private void initInterfaces ()
+  private void initUI ()
   {
     if (this.requiresJVMPatch()) {
       this.initJVMPatcher();
     } else if (this.requiresUpdate()) {
       this.initUpdater();
     } else {
-      this.initLauncherGUI();
-      this.initSettingsGUI();
-      this.initModListGUI();
-      this.initEditorsGUI();
+      this.initLauncherUI();
+      this.initSettingsUI();
+      this.initModListUI();
+      this.initEditorsUI();
     }
   }
 
@@ -150,7 +134,7 @@ public class LauncherApp
       _modManager.extractSafeguard();
     }
 
-    _launcherCtx.launcherGUI.eventHandler.updateServerList(null);
+    ((LauncherUI) _ctx.getUI("launcher")).eventHandler.updateServerList(null);
 
     loadOnlineAssets();
 
@@ -161,13 +145,14 @@ public class LauncherApp
     _discordPresenceClient.setDetails(_localeManager.getValue("presence.ready"));
   }
 
-  private void initLauncherGUI ()
+  private void initLauncherUI ()
   {
     try {
       EventQueue.invokeAndWait(() -> {
         try {
-          _launcherCtx.launcherGUI = injector.getInstance(LauncherGUI.class);
-          _launcherCtx.launcherGUI.init();
+          LauncherUI launcherUI = injector.getInstance(LauncherUI.class);
+          launcherUI.init();
+          _ctx.registerUI("launcher", launcherUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -177,13 +162,14 @@ public class LauncherApp
     }
   }
 
-  private void initSettingsGUI ()
+  private void initSettingsUI ()
   {
     try {
       EventQueue.invokeAndWait(() -> {
         try {
-          _launcherCtx.settingsGUI = injector.getInstance(SettingsGUI.class);
-          _launcherCtx.settingsGUI.init();
+          SettingsUI settingsUI = injector.getInstance(SettingsUI.class);
+          settingsUI.init();
+          _ctx.registerUI("settings", settingsUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -193,13 +179,14 @@ public class LauncherApp
     }
   }
 
-  private void initModListGUI ()
+  private void initModListUI ()
   {
     try {
       EventQueue.invokeAndWait(() -> {
         try {
-          _launcherCtx.modListGUI = injector.getInstance(ModListGUI.class);
-          _launcherCtx.modListGUI.init();
+          ModListUI modListUI = injector.getInstance(ModListUI.class);
+          modListUI.init();
+          _ctx.registerUI("modlist", modListUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -209,13 +196,14 @@ public class LauncherApp
     }
   }
 
-  private void initEditorsGUI ()
+  private void initEditorsUI ()
   {
     try {
       EventQueue.invokeAndWait(() -> {
         try {
-          _launcherCtx.editorsGUI = injector.getInstance(EditorsGUI.class);
-          _launcherCtx.editorsGUI.init();
+          EditorsUI editorsUI = injector.getInstance(EditorsUI.class);
+          editorsUI.init();
+          _ctx.registerUI("editors", editorsUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -230,7 +218,7 @@ public class LauncherApp
     try {
       EventQueue.invokeAndWait(() -> {
         try {
-          _launcherCtx.jvmPatcher = injector.getInstance(JVMPatcher.class);
+          JVMPatcher jvmPatcher = injector.getInstance(JVMPatcher.class);
 
           final String path;
           final boolean legacy;
@@ -249,7 +237,7 @@ public class LauncherApp
             // legacy Java VMs are offered to patch.
             legacy = JavaUtil.isLegacy();
           }
-          _launcherCtx.jvmPatcher.init(path, legacy);
+          jvmPatcher.init(path, legacy);
         } catch (Exception e) {
           log.error(e);
         }
@@ -264,8 +252,8 @@ public class LauncherApp
     try {
       EventQueue.invokeAndWait(() -> {
         try {
-          _launcherCtx.updater = injector.getInstance(Updater.class);
-          _launcherCtx.updater.init(this.args[1]);
+          Updater updater = injector.getInstance(Updater.class);
+          updater.init(this.args[1]);
         } catch (Exception e) {
           log.error(e);
         }
@@ -661,9 +649,9 @@ public class LauncherApp
 
       Status flamingoStatus = _flamingoManager.getStatus();
       if (flamingoStatus.version != null) _flamingoManager.setOnline(true);
-      _launcherCtx.launcherGUI.eventHandler.updateServerList(_flamingoManager.fetchServerList());
-      _launcherCtx.settingsGUI.eventHandler.updateAboutTab(flamingoStatus);
-      _launcherCtx.settingsGUI.eventHandler.updateActiveBetaCodes();
+      ((LauncherUI) _ctx.getUI("launcher")).eventHandler.updateServerList(_flamingoManager.fetchServerList());
+      ((SettingsUI) _ctx.getUI("settings")).eventHandler.updateAboutTab(flamingoStatus);
+      ((SettingsUI) _ctx.getUI("settings")).eventHandler.updateActiveBetaCodes();
 
     }).start();
 
@@ -674,11 +662,11 @@ public class LauncherApp
   private void checkFlamingoStatus ()
   {
     if (!_flamingoManager.getOnline()) {
-      _launcherCtx.launcherGUI.showWarning(_localeManager.getValue("error.flamingo_offline"));
+      ((LauncherUI) _ctx.getUI("launcher")).showWarning(_localeManager.getValue("error.flamingo_offline"));
     }
   }
 
-  protected static int getOfficialApproxPlayerCount ()
+  public static int getOfficialApproxPlayerCount ()
   {
     int steamPlayers = SteamUtil.getCurrentPlayers("99900");
     if (steamPlayers == 0) {
@@ -700,13 +688,15 @@ public class LauncherApp
         + "latest"
     );
 
+    LauncherUI launcherUI = (LauncherUI) _ctx.getUI("launcher");
+
     if (rawResponseReleases != null) {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
       String latestRelease = jsonReleases.getString("tag_name");
       String latestChangelog = jsonReleases.getString("body");
 
-      _launcherCtx.launcherGUI.eventHandler.latestRelease = latestRelease;
-      _launcherCtx.launcherGUI.eventHandler.latestChangelog = latestChangelog;
+      launcherUI.eventHandler.latestRelease = latestRelease;
+      launcherUI.eventHandler.latestChangelog = latestChangelog;
 
       String currentVersion = BuildConfig.getVersion();
 
@@ -714,11 +704,11 @@ public class LauncherApp
         if (Settings.autoUpdate && !currentVersion.contains("SNAPSHOT")) {
           // Check if we're coming from a failed update, in that case do not autoupdate even if all other conditions matched.
           if (!(this.args.length > 0 && this.args[0].equals("updateFailed"))) {
-            _launcherCtx.launcherGUI.eventHandler.updateLauncher(latestRelease);
+            launcherUI.eventHandler.updateLauncher(latestRelease);
           }
         }
         Settings.isOutdated = true;
-        _launcherCtx.launcherGUI.updateButton.setVisible(true);
+        launcherUI.updateButton.setVisible(true);
       }
     } else {
       log.error("Received no response from GitHub. Possible downtime?");
@@ -780,4 +770,18 @@ public class LauncherApp
       super.configure();
     }
   }
+
+  @Inject protected LauncherContext _ctx;
+  @Inject protected SettingsManager _settingsManager;
+  @Inject protected LocaleManager _localeManager;
+  @Inject protected ModManager _modManager;
+  @Inject protected FlamingoManager _flamingoManager;
+  @Inject protected DiscordPresenceClient _discordPresenceClient;
+  @Inject protected ModuleManager _moduleManager;
+  @Inject protected CacheManager _cacheManager;
+  @Inject protected DownloadManager _downloadManager;
+  @Inject protected KeyboardController _keyboardController;
+
+  private final String[] args;
+  private final Injector injector;
 }

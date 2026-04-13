@@ -2,12 +2,12 @@ package com.lucasluqui.launcher.setting;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.lucasluqui.launcher.DeployConfig;
 import com.lucasluqui.launcher.LauncherContext;
 import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
+import com.lucasluqui.launcher.ui.SettingsUI;
 import com.lucasluqui.util.*;
 
 import java.io.*;
@@ -22,7 +22,7 @@ import static com.lucasluqui.launcher.setting.Log.log;
 @Singleton
 public class SettingsManager
 {
-  @Inject protected LauncherContext _launcherCtx;
+  @Inject protected LauncherContext _ctx;
   @Inject protected LocaleManager _localeManager;
   @Inject protected FlamingoManager _flamingoManager;
 
@@ -70,10 +70,10 @@ public class SettingsManager
 
   private void loadProp ()
   {
-    log.info("Loading properties file...");
+    log.info("Loading properties...");
     try (InputStream is = Files.newInputStream(Paths.get(PROP_PATH))) {
       prop.load(is);
-      log.info("Loaded properties file.");
+      log.info("Loaded properties");
     } catch (IOException e) {
       log.error(e);
     }
@@ -223,13 +223,13 @@ public class SettingsManager
   public void applyGameSettings ()
   {
     try {
-      _launcherCtx._progressBar.startTask();
-      _launcherCtx._progressBar.setBarMax(1);
-      _launcherCtx._progressBar.setBarValue(0);
-      _launcherCtx._progressBar.setState(_localeManager.getValue("m.apply"));
+      _ctx._progressBar.startTask();
+      _ctx._progressBar.setBarMax(1);
+      _ctx._progressBar.setBarValue(0);
+      _ctx._progressBar.setState(_localeManager.getValue("m.apply"));
 
       // Run a platform check by triggering a change event just in case the value stored is incorrect.
-      _launcherCtx.settingsGUI.eventHandler.platformChangeEvent(null);
+      ((SettingsUI) _ctx.getUI("settings")).eventHandler.platformChangeEvent(null);
 
       // Back up the current extra.txt if there's no back up already.
       // This is useful if a user installs the launcher and had already
@@ -265,8 +265,8 @@ public class SettingsManager
 
       if (_flamingoManager.getSelectedServer().isOfficial()) applyConnectionSettings();
 
-      _launcherCtx._progressBar.setBarValue(1);
-      _launcherCtx._progressBar.finishTask();
+      _ctx._progressBar.setBarValue(1);
+      _ctx._progressBar.finishTask();
     } catch (FileNotFoundException | UnsupportedEncodingException e) {
       log.error(e);
     }

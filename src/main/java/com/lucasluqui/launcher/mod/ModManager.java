@@ -13,6 +13,7 @@ import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.mod.data.*;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.launcher.ui.ModListUI;
 import com.lucasluqui.util.*;
 import net.lingala.zip4j.model.FileHeader;
 import org.apache.commons.io.FileUtils;
@@ -50,7 +51,8 @@ public class ModManager
   {
     if (!_checking) {
       _checking = true;
-      _launcherCtx.block();
+      _ctx.toggleElementsBlock(true);
+      ModListUI modListUI = _ctx.getUI("modlist");
 
       Server selectedServer = _flamingoManager.getSelectedServer();
       String modFolderPath = LauncherGlobals.USER_DIR + "/mods/";
@@ -128,15 +130,15 @@ public class ModManager
       // Check if there's directories in the mod folder and push a warning to the user.
       for (File file : FileUtil.filesAndDirectoriesInDirectory(modFolderPath)) {
         if (file.isDirectory()) {
-          _launcherCtx.modListGUI.eventHandler.showDirectoriesWarning(true);
+          modListUI.eventHandler.showDirectoriesWarning(true);
           break;
         }
-        _launcherCtx.modListGUI.eventHandler.showDirectoriesWarning(false);
+        modListUI.eventHandler.showDirectoriesWarning(false);
       }
 
-      _launcherCtx.modListGUI.labelModCount.setText(String.valueOf(getModList().size()));
-      _launcherCtx.modListGUI.updateModList(null);
-      _launcherCtx.unblock();
+      modListUI.labelModCount.setText(String.valueOf(getModList().size()));
+      modListUI.updateModList(null);
+      _ctx.toggleElementsBlock(false);
       _checking = false;
     }
   }
@@ -148,11 +150,11 @@ public class ModManager
 
     if (Settings.doRebuilds && _rebuildRequired) startFileRebuild();
 
-    _launcherCtx.block();
+    _ctx.toggleElementsBlock(true);
 
-    _launcherCtx._progressBar.startTask();
-    _launcherCtx._progressBar.setBarMax(getEnabledModCount());
-    _launcherCtx._progressBar.setState(_localeManager.getValue("m.mount"));
+    _ctx._progressBar.startTask();
+    _ctx._progressBar.setBarMax(getEnabledModCount());
+    _ctx._progressBar.setState(_localeManager.getValue("m.mount"));
     _discordPresenceClient.setDetails(_localeManager.getValue("m.mount"));
     LinkedList<Mod> localList = getModList();
 
@@ -170,7 +172,7 @@ public class ModManager
         } else {
           mod.mount();
         }
-        _launcherCtx._progressBar.setBarValue(i + 1);
+        _ctx._progressBar.setBarValue(i + 1);
       }
     }
 
@@ -313,9 +315,9 @@ public class ModManager
     }
 
     _mountRequired = false;
-    _launcherCtx._progressBar.finishTask();
+    _ctx._progressBar.finishTask();
 
-    _launcherCtx.unblock();
+    _ctx.toggleElementsBlock(false);
   }
 
   public void startFileRebuild ()
@@ -330,7 +332,7 @@ public class ModManager
 
   private void rebuildFiles (boolean strict)
   {
-    _launcherCtx.block();
+    _ctx.toggleElementsBlock(true);
 
     String rootDir = LauncherGlobals.USER_DIR;
     String[] bundles = RSRC_BUNDLES;
@@ -340,22 +342,22 @@ public class ModManager
       bundles = selectedServer.isOfficial() ? RSRC_BUNDLES : THIRDPARTY_RSRC_BUNDLES;
     }
 
-    _launcherCtx._progressBar.startTask();
-    _launcherCtx._progressBar.setBarMax(bundles.length + 1);
+    _ctx._progressBar.startTask();
+    _ctx._progressBar.setBarMax(bundles.length + 1);
 
     // Clear the entirety of the rsrc folder leaving only the jar and zip bundles.
     if (Settings.filePurging) {
       _discordPresenceClient.setDetails(_localeManager.getValue("m.purge"));
-      _launcherCtx._progressBar.setState(_localeManager.getValue("m.purge"));
+      _ctx._progressBar.setState(_localeManager.getValue("m.purge"));
       FileUtil.purgeDirectory(new File(rootDir + "/rsrc/"), new String[]{".jar", ".jarv", ".zip"});
     }
 
     // Iterate through all bundles to rebuild the game files.
     _discordPresenceClient.setDetails(_localeManager.getValue("m.rebuild"));
-    _launcherCtx._progressBar.setState(_localeManager.getValue("m.rebuild"));
+    _ctx._progressBar.setState(_localeManager.getValue("m.rebuild"));
 
     for (int i = 0; i < bundles.length; i++) {
-      _launcherCtx._progressBar.setBarValue(i + 1);
+      _ctx._progressBar.setBarValue(i + 1);
       _discordPresenceClient.setDetails(_localeManager.getValue("presence.rebuilding", new String[]{String.valueOf(i + 1), String.valueOf(bundles.length)}));
       try {
         ZipUtil.unpackJar(new ZipFile(rootDir + "/rsrc/" + bundles[i]), new File(rootDir + "/rsrc/"), false);
@@ -373,7 +375,7 @@ public class ModManager
     // Reset projectx-config to clear any locale changes.
     if (selectedServer.isOfficial()) {
       _discordPresenceClient.setDetails(_localeManager.getValue("m.reset_code"));
-      _launcherCtx._progressBar.setState(_localeManager.getValue("m.reset_code"));
+      _ctx._progressBar.setState(_localeManager.getValue("m.reset_code"));
       resetConfig();
 
       // And if we're on strict mode, we do the same for projectx-code too.
@@ -382,11 +384,11 @@ public class ModManager
       }
     }
 
-    _launcherCtx._progressBar.setBarValue(bundles.length + 1);
-    _launcherCtx._progressBar.finishTask();
+    _ctx._progressBar.setBarValue(bundles.length + 1);
+    _ctx._progressBar.finishTask();
     _rebuildRequired = false;
 
-    _launcherCtx.unblock();
+    _ctx.toggleElementsBlock(false);
     _discordPresenceClient.setDetails(_localeManager.getValue("presence.ready"));
   }
 
@@ -720,7 +722,7 @@ public class ModManager
   }
 
   /** The launcher's context class. */
-  @Inject protected LauncherContext _launcherCtx;
+  @Inject protected LauncherContext _ctx;
 
   /** Locale manager, for handling i18n bits. */
   @Inject protected LocaleManager _localeManager;

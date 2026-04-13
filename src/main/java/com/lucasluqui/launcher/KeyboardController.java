@@ -9,15 +9,8 @@ import java.awt.event.KeyEvent;
 @Singleton
 public class KeyboardController
 {
-  @Inject protected LauncherContext _launcherCtx;
-
-  private Boolean shiftPressed = false;
-  private Boolean altPressed = false;
-
   public KeyboardController ()
-  {
-
-  }
+  {}
 
   public void init ()
   {
@@ -48,12 +41,16 @@ public class KeyboardController
 
   private void specialKeyPressed ()
   {
-    _launcherCtx.launcherGUI.specialKeyPressed();
+    for (String id : _ctx.getUISet().keySet()) {
+      _ctx.getUI(id).specialKeyPressed();
+    }
   }
 
   private void specialKeyReleased ()
   {
-    _launcherCtx.launcherGUI.specialKeyReleased();
+    for (String id : _ctx.getUISet().keySet()) {
+      _ctx.getUI(id).specialKeyReleased();
+    }
   }
 
   private void shiftPressed ()
@@ -93,4 +90,8 @@ public class KeyboardController
     specialKeyReleased();
   }
 
+  @Inject protected LauncherContext _ctx;
+
+  private Boolean shiftPressed = false;
+  private Boolean altPressed = false;
 }

@@ -1,10 +1,10 @@
-package com.lucasluqui.launcher.editor;
+package com.lucasluqui.launcher.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.jhlabs.image.GaussianFilter;
 import com.jhlabs.image.GrayscaleFilter;
-import com.lucasluqui.launcher.BaseGUI;
+import com.lucasluqui.launcher.ui.handler.EditorsEventHandler;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.launcher.LocaleManager;
@@ -22,23 +22,26 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lucasluqui.launcher.mod.Log.log;
+import static com.lucasluqui.launcher.ui.Log.log;
 
-public class EditorsGUI extends BaseGUI
+public class EditorsUI extends BaseUI
 {
-  @Inject public EditorsEventHandler eventHandler;
-
-  @Inject protected LocaleManager _localeManager;
-
   @Inject
-  public EditorsGUI ()
+  public EditorsUI ()
   {
     super(385, 460, false);
   }
 
   public void init ()
   {
+    super.init();
     compose();
+    initFinished();
+  }
+
+  public void initFinished ()
+  {
+    super.initFinished();
     setupEditors();
   }
 
@@ -52,7 +55,7 @@ public class EditorsGUI extends BaseGUI
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     guiFrame.getContentPane().setLayout(null);
-    editorsPanel = (JPanel) guiFrame.getContentPane();
+    panel = (JPanel) guiFrame.getContentPane();
 
     editorLaunchState = new JLabel(_localeManager.getValue("m.editor_loading"));
     editorLaunchState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
@@ -92,11 +95,15 @@ public class EditorsGUI extends BaseGUI
     footerLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
     footerLabel.setVisible(false);
     guiFrame.getContentPane().add(footerLabel);
+  }
 
+  public void selectedServerChanged ()
+  {
+    this.eventHandler.selectedServerChanged();
   }
 
   @SuppressWarnings("all")
-  protected void startFakeProgress ()
+  public void startFakeProgress ()
   {
     this.editorLaunchState.setText(_localeManager.getValue("m.editor_loading"));
     for (int i = editorLaunchFakeProgressBar.getMinimum(); i <= editorLaunchFakeProgressBar.getMaximum(); i++) {
@@ -290,10 +297,12 @@ public class EditorsGUI extends BaseGUI
     editorListPane.updateUI();
   }
 
-  public JPanel editorsPanel;
+  @Inject public EditorsEventHandler eventHandler;
+  @Inject protected LocaleManager _localeManager;
+
   protected JPanel editorListPane = new JPanel();
-  protected SmoothScrollPane editorListPaneScroll = new SmoothScrollPane();
-  protected JLabel editorLaunchState;
-  protected SmoothProgressBar editorLaunchFakeProgressBar;
-  protected JLabel footerLabel;
+  public SmoothScrollPane editorListPaneScroll = new SmoothScrollPane();
+  public JLabel editorLaunchState;
+  public SmoothProgressBar editorLaunchFakeProgressBar;
+  public JLabel footerLabel;
 }

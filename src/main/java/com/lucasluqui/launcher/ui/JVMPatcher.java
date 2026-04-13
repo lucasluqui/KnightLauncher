@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher;
+package com.lucasluqui.launcher.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
@@ -6,6 +6,7 @@ import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
+import com.lucasluqui.launcher.*;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.swing.SmoothProgressBar;
@@ -25,9 +26,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.lucasluqui.launcher.Log.log;
+import static com.lucasluqui.launcher.ui.Log.log;
 
-public class JVMPatcher extends BaseGUI
+public class JVMPatcher extends BaseUI
 {
   @Inject protected LauncherContext _launcherCtx;
   @Inject protected LocaleManager _localeManager;
@@ -47,10 +48,16 @@ public class JVMPatcher extends BaseGUI
 
   public void init (String path, boolean legacy)
   {
+    super.init();
     this.path = path;
     this.legacy = legacy;
     setAvailableJVMs();
     compose();
+  }
+
+  public void initFinished ()
+  {
+    super.initFinished();
   }
 
   private void setAvailableJVMs ()
@@ -241,6 +248,5 @@ public class JVMPatcher extends BaseGUI
   private SmoothProgressBar jvmPatcherProgressBar;
   private JLabel jvmPatcherState;
   private JComboBox<String> jvmComboBox;
-
 }
 

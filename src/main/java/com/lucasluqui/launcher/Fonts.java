@@ -1,6 +1,7 @@
 package com.lucasluqui.launcher;
 
 import com.lucasluqui.launcher.setting.Settings;
+import com.lucasluqui.launcher.ui.LauncherUI;
 
 import java.awt.*;
 import java.io.IOException;
@@ -33,19 +34,19 @@ public class Fonts
 
     if (Settings.lang.equalsIgnoreCase("jp")
       || Settings.lang.equalsIgnoreCase("ru")) {
-      fontRegIs = LauncherGUI.class.getResourceAsStream(PATH_JP_REGULAR);
-      fontMedIs = LauncherGUI.class.getResourceAsStream(PATH_JP_MEDIUM);
+      fontRegIs = LauncherUI.class.getResourceAsStream(PATH_JP_REGULAR);
+      fontMedIs = LauncherUI.class.getResourceAsStream(PATH_JP_MEDIUM);
       sizeMultiplier = 1.1f;
     } else if (Settings.lang.equalsIgnoreCase("ar")) {
-      fontRegIs = LauncherGUI.class.getResourceAsStream(PATH_AR_REGULAR);
-      fontMedIs = LauncherGUI.class.getResourceAsStream(PATH_AR_MEDIUM);
+      fontRegIs = LauncherUI.class.getResourceAsStream(PATH_AR_REGULAR);
+      fontMedIs = LauncherUI.class.getResourceAsStream(PATH_AR_MEDIUM);
     } else {
-      fontRegIs = LauncherGUI.class.getResourceAsStream(PATH_REGULAR);
-      fontMedIs = LauncherGUI.class.getResourceAsStream(PATH_MEDIUM);
+      fontRegIs = LauncherUI.class.getResourceAsStream(PATH_REGULAR);
+      fontMedIs = LauncherUI.class.getResourceAsStream(PATH_MEDIUM);
       sizeMultiplier = 1.2f;
     }
 
-    fontCodeRegIs = LauncherGUI.class.getResourceAsStream(PATH_CODE_REGULAR);
+    fontCodeRegIs = LauncherUI.class.getResourceAsStream(PATH_CODE_REGULAR);
 
     try {
       fonts.put("defaultRegular", Font.createFont(Font.TRUETYPE_FONT, fontRegIs));

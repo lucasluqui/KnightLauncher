@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher;
+package com.lucasluqui.launcher.ui.handler;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
@@ -6,11 +6,15 @@ import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
+import com.lucasluqui.launcher.*;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.launcher.ui.LauncherUI;
+import com.lucasluqui.launcher.ui.ModListUI;
+import com.lucasluqui.launcher.ui.SettingsUI;
 import com.lucasluqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -32,27 +36,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.lucasluqui.launcher.Log.log;
+import static com.lucasluqui.launcher.ui.handler.Log.log;
 
 public class LauncherEventHandler
 {
-  @Inject private LauncherGUI gui;
-
-  protected LauncherContext _launcherCtx;
-  protected ModManager _modManager;
-  protected SettingsManager _settingsManager;
-  protected LocaleManager _localeManager;
-  protected FlamingoManager _flamingoManager;
-  protected CacheManager _cacheManager;
-  protected DownloadManager _downloadManager;
-  protected DiscordPresenceClient _discordPresenceClient;
-
-  public String currentWarning = "";
-  public String latestRelease = "";
-  public String latestChangelog = "";
-
-  public boolean displayingAnimBanner = false;
-
   @Inject
   public LauncherEventHandler (LauncherContext launcherCtx,
                                ModManager modManager,
@@ -63,7 +50,7 @@ public class LauncherEventHandler
                                DownloadManager downloadManager,
                                DiscordPresenceClient discordPresenceClient)
   {
-    this._launcherCtx = launcherCtx;
+    this._ctx = launcherCtx;
     this._modManager = modManager;
     this._settingsManager = settingsManager;
     this._localeManager = localeManager;
@@ -78,7 +65,7 @@ public class LauncherEventHandler
     Thread launchThread = new Thread(() -> {
 
       // block interactions with the launcher
-      _launcherCtx.block();
+      _ctx.toggleElementsBlock(true);
 
       Server selectedServer = _flamingoManager.getSelectedServer();
       String sanitizedServerName = selectedServer.getSanitizedName();
@@ -90,7 +77,7 @@ public class LauncherEventHandler
 
         // re-lock server switching and launch button after mounting.
         this.updateServerSwitcher(true);
-        this.gui.launchButton.setEnabled(false);
+        this.ui.launchButton.setEnabled(false);
       }
 
       if (selectedServer.isOfficial()) {
@@ -100,11 +87,11 @@ public class LauncherEventHandler
 
           // re-lock server switching and launch button after mounting.
           this.updateServerSwitcher(true);
-          this.gui.launchButton.setEnabled(false);
+          this.ui.launchButton.setEnabled(false);
         }
 
-        _launcherCtx.settingsGUI.eventHandler.saveAdditionalArgs();
-        _launcherCtx.settingsGUI.eventHandler.saveConnectionSettings();
+        ((SettingsUI) _ctx.getUI("settings")).eventHandler.saveAdditionalArgs();
+        ((SettingsUI) _ctx.getUI("settings")).eventHandler.saveConnectionSettings();
         _settingsManager.applyGameSettings();
 
         // Remove any arguments in _JAVA_OPTIONS.
@@ -128,17 +115,17 @@ public class LauncherEventHandler
         // end: official servers launch procedure
       } else {
         // start: third party server launch procedure
-        _launcherCtx._progressBar.startTask();
-        _launcherCtx._progressBar.setBarMax(2);
-        _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_data", selectedServer.name));
-        _launcherCtx._progressBar.setBarValue(0);
+        _ctx._progressBar.startTask();
+        _ctx._progressBar.setBarMax(2);
+        _ctx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_data", selectedServer.name));
+        _ctx._progressBar.setBarValue(0);
 
         // we did not download this third party client yet, time to get it from the deployment url.
         if (!selectedServer.isInstalled()) {
           log.info("Downloading a third party client", "client", sanitizedServerName);
 
-          _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_download", selectedServer.name));
-          _launcherCtx._progressBar.setBarValue(1);
+          _ctx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_download", selectedServer.name));
+          _ctx._progressBar.setBarValue(1);
 
           File localFile = new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
 
@@ -163,8 +150,8 @@ public class LauncherEventHandler
         if (selectedServer.isOutdated()) {
           log.info("Updating third party client", "client", selectedServer.name);
 
-          _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_update", selectedServer.name));
-          _launcherCtx._progressBar.setBarValue(1);
+          _ctx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_update", selectedServer.name));
+          _ctx._progressBar.setBarValue(1);
 
           File localFile = new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
 
@@ -188,7 +175,7 @@ public class LauncherEventHandler
           if (FileUtil.fileExists(selectedServer.getRootDirectory() + "/rsrc/base.zip")) {
             FileUtil.deleteFile(selectedServer.getRootDirectory() + "/rsrc/base.zip");
             try {
-              _launcherCtx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_bundle_regen", selectedServer.name));
+              _ctx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_bundle_regen", selectedServer.name));
               ZipUtil.zipFolderContents(new File(selectedServer.getRootDirectory() + "/rsrc"),
                 new File(selectedServer.getRootDirectory() + "/rsrc/base.zip"), "base.zip");
             } catch (Exception e) {
@@ -212,19 +199,19 @@ public class LauncherEventHandler
         // we already have the client files,
         // the client is up to date, or the download has finished.
         // and so we start it up!
-        _launcherCtx._progressBar.setBarValue(2);
+        _ctx._progressBar.setBarValue(2);
 
         ProcessUtil.runFromDirectory(getThirdPartyClientStartCommand(selectedServer, altMode),
           LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName,
           true);
 
-        _launcherCtx._progressBar.finishTask();
+        _ctx._progressBar.finishTask();
       }
 
       log.info("Starting game", "server", selectedServer.name, "platform", Settings.gamePlatform, "codeMods", Settings.loadCodeMods);
-      _launcherCtx._progressBar.setState(_localeManager.getValue("m.game_launching"));
-      _launcherCtx.launcherGUI.launchButton.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
-      _launcherCtx.launcherGUI.launchButton.setText(_localeManager.getValue("m.launching"));
+      _ctx._progressBar.setState(_localeManager.getValue("m.game_launching"));
+      ui.launchButton.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+      ui.launchButton.setText(_localeManager.getValue("m.launching"));
       ThreadingUtil.executeWithDelay(this::checkGameLaunch, 8000);
     });
     launchThread.start();
@@ -299,8 +286,8 @@ public class LauncherEventHandler
         }
 
         // check server specific settings keys.
-        _launcherCtx.settingsGUI.eventHandler.checkServerSettingsKeys(serverName);
-        _launcherCtx.modListGUI.eventHandler.checkServerSettingsKeys(serverName);
+        ((SettingsUI) _ctx.getUI("settings")).eventHandler.checkServerSettingsKeys(serverName);
+        ((ModListUI) _ctx.getUI("modlist")).eventHandler.checkServerSettingsKeys(serverName);
       }
 
       _flamingoManager.setServerList(newServerList);
@@ -348,13 +335,13 @@ public class LauncherEventHandler
 
   public void gameSettingsEvent ()
   {
-    this.gui.showSettingsMenu();
-    _launcherCtx.settingsGUI.tabbedPane.setSelectedIndex(1);
+    this.ui.showUI("settings");
+    ((SettingsUI) _ctx.getUI("settings")).tabbedPanel.setSelectedIndex(1);
   }
 
   public void openGameFolderEvent ()
   {
-    _launcherCtx.settingsGUI.eventHandler.openRootFolderEvent(null);
+    ((SettingsUI) _ctx.getUI("settings")).eventHandler.openRootFolderEvent(null);
   }
 
   public void displaySelectedServerInfo ()
@@ -395,39 +382,39 @@ public class LauncherEventHandler
 
     if (selectedServer != null) {
       if (selectedServer.isOfficial()) {
-        gui.launchButton.setEnabled(selectedServer.enabled == 1);
-        gui.selectedServerLabel.setText("Official");
-        gui.playerCountLabel.setVisible(true);
+        ui.launchButton.setEnabled(selectedServer.enabled == 1);
+        ui.selectedServerLabel.setText("Official");
+        ui.playerCountLabel.setVisible(true);
         if (selectedServer.playerCountUrl != null) {
-          gui.playerCountLabel.setText(selectedServer.playerCountUrl);
-          gui.playerCountLabel.setVisible(true);
-          gui.playerCountLabel.setIcon(null);
-          gui.playerCountTooltipButton.setVisible(true);
+          ui.playerCountLabel.setText(selectedServer.playerCountUrl);
+          ui.playerCountLabel.setVisible(true);
+          ui.playerCountLabel.setIcon(null);
+          ui.playerCountTooltipButton.setVisible(true);
         }
-        gui.serverInfoButton.setEnabled(false);
-        gui.serverInfoButton.setVisible(false);
+        ui.serverInfoButton.setEnabled(false);
+        ui.serverInfoButton.setVisible(false);
         //gui.auctionButton.setVisible(true);
       } else {
-        gui.launchButton.setEnabled(selectedServer.enabled == 1);
+        ui.launchButton.setEnabled(selectedServer.enabled == 1);
 
-        gui.selectedServerLabel.setText("");
+        ui.selectedServerLabel.setText("");
 
-        gui.serverInfoButton.setEnabled(true);
-        gui.serverInfoButton.setVisible(true);
-        gui.serverInfoButton.setText(selectedServer.name);
+        ui.serverInfoButton.setEnabled(true);
+        ui.serverInfoButton.setVisible(true);
+        ui.serverInfoButton.setText(selectedServer.name);
 
         // TODO: Fetch player count.
-        gui.playerCountLabel.setText("??? ");
-        gui.playerCountLabel.setIcon(null);
-        gui.playerCountTooltipButton.setVisible(false);
+        ui.playerCountLabel.setText("??? ");
+        ui.playerCountLabel.setIcon(null);
+        ui.playerCountTooltipButton.setVisible(false);
 
         //gui.auctionButton.setVisible(false);
       }
 
       if (selectedServer.announceBanner != null) updateBanner();
 
-      for (ActionListener al : gui.serverNoticeButton.getActionListeners()) {
-        gui.serverNoticeButton.removeActionListener(al);
+      for (ActionListener al : ui.serverNoticeButton.getActionListeners()) {
+        ui.serverNoticeButton.removeActionListener(al);
       }
 
       if (selectedServer.notice != null && !selectedServer.notice.equalsIgnoreCase("null")) {
@@ -435,23 +422,21 @@ public class LauncherEventHandler
             selectedServer.noticeTitle.equalsIgnoreCase("null") ?
               _localeManager.getValue("b.server_notice") : selectedServer.noticeTitle;
 
-        gui.serverNoticeButton.setText(noticeTitle);
-        gui.serverNoticeButton.setToolTipText(noticeTitle);
+        ui.serverNoticeButton.setText(noticeTitle);
+        ui.serverNoticeButton.setToolTipText(noticeTitle);
 
-        gui.serverNoticeButton.addActionListener(
+        ui.serverNoticeButton.addActionListener(
           action -> Dialog.push(selectedServer.notice, noticeTitle, JOptionPane.WARNING_MESSAGE)
         );
 
-        gui.serverNoticeButton.setVisible(true);
+        ui.serverNoticeButton.setVisible(true);
       } else {
-        gui.serverNoticeButton.setVisible(false);
+        ui.serverNoticeButton.setVisible(false);
       }
 
-      gui.resetLaunchButton();
+      ui.resetLaunchButton();
 
-      _launcherCtx.settingsGUI.eventHandler.selectedServerChanged();
-      _launcherCtx.modListGUI.eventHandler.selectedServerChanged();
-      _launcherCtx.editorsGUI.eventHandler.selectedServerChanged();
+      _ctx.selectedServerChanged();
 
       saveSelectedServer();
       updateServerSwitcher(false);
@@ -464,7 +449,7 @@ public class LauncherEventHandler
 
   public void updateServerSwitcher (boolean locked)
   {
-    this.gui.serverSwitcherPane.removeAll();
+    this.ui.serverSwitcherPane.removeAll();
 
     List<Server> serverList = _flamingoManager.getServerList();
     if (!serverList.isEmpty()) {
@@ -549,7 +534,7 @@ public class LauncherEventHandler
           });
         }
 
-        this.gui.serverSwitcherPane.add(serverIconPane);
+        this.ui.serverSwitcherPane.add(serverIconPane);
         count++;
       }
 
@@ -598,21 +583,21 @@ public class LauncherEventHandler
         }
       });
 
-      this.gui.serverSwitcherPane.add(addServerPane);
+      this.ui.serverSwitcherPane.add(addServerPane);
 
-      this.gui.serverSwitcherPane.setPreferredSize(new Dimension(50, count * 50));
+      this.ui.serverSwitcherPane.setPreferredSize(new Dimension(50, count * 50));
 
-      this.gui.serverSwitcherPaneScrollBar.setBounds(
-        this.gui.serverSwitcherPaneScrollBar.getX(),
-        this.gui.serverSwitcherPaneScrollBar.getY(),
-        this.gui.serverSwitcherPaneScrollBar.getWidth(),
+      this.ui.serverSwitcherPaneScrollBar.setBounds(
+        this.ui.serverSwitcherPaneScrollBar.getX(),
+        this.ui.serverSwitcherPaneScrollBar.getY(),
+        this.ui.serverSwitcherPaneScrollBar.getWidth(),
         550
       );
 
-      this.gui.serverSwitcherPane.setLayout(null);
+      this.ui.serverSwitcherPane.setLayout(null);
 
-      this.gui.serverSwitcherPane.updateUI();
-      this.gui.serverSwitcherPaneScrollBar.updateUI();
+      this.ui.serverSwitcherPane.updateUI();
+      this.ui.serverSwitcherPaneScrollBar.updateUI();
     }
   }
 
@@ -629,66 +614,66 @@ public class LauncherEventHandler
       String bannerUrl = selectedServer.announceBanner.split("\\|")[0];
       double bannerIntensity = Double.parseDouble(selectedServer.announceBanner.split("\\|")[1]);
       if (!bannerUrl.contains(".gif")) {
-        this.gui.banner = this.gui.processImageForBanner(_cacheManager.fetchImage(bannerUrl, 800, 550), bannerIntensity);
-        this.gui.playAnimatedBannersButton.setVisible(false);
+        this.ui.banner = this.ui.processImageForBanner(_cacheManager.fetchImage(bannerUrl, 800, 550), bannerIntensity);
+        this.ui.playAnimatedBannersButton.setVisible(false);
       } else {
-        this.gui.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerUrl), bannerIntensity);
-        this.gui.playAnimatedBannersButton.setVisible(true);
+        this.ui.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerUrl), bannerIntensity);
+        this.ui.playAnimatedBannersButton.setVisible(true);
       }
 
-      this.gui.bannerLoading.setVisible(false);
-      this.gui.mainPane.repaint();
+      this.ui.bannerLoading.setVisible(false);
+      this.ui.panel.repaint();
 
-      this.gui.bannerTitle.setText(selectedServer.announceContent.split("\\|")[0]);
-      this.gui.bannerTitle.setVisible(true);
+      this.ui.bannerTitle.setText(selectedServer.announceContent.split("\\|")[0]);
+      this.ui.bannerTitle.setVisible(true);
 
       String bannerSubtitle = selectedServer.announceContent.split("\\|")[1];
 
       if (bannerSubtitle.contains("\n")) {
-        this.gui.bannerSubtitle1.setText(bannerSubtitle.split("\n")[0]);
-        this.gui.bannerSubtitle2.setText(bannerSubtitle.split("\n")[1]);
-        this.gui.bannerSubtitle2.setVisible(true);
+        this.ui.bannerSubtitle1.setText(bannerSubtitle.split("\n")[0]);
+        this.ui.bannerSubtitle2.setText(bannerSubtitle.split("\n")[1]);
+        this.ui.bannerSubtitle2.setVisible(true);
       } else {
-        this.gui.bannerSubtitle1.setText(bannerSubtitle);
-        this.gui.bannerSubtitle2.setVisible(false);
+        this.ui.bannerSubtitle1.setText(bannerSubtitle);
+        this.ui.bannerSubtitle2.setVisible(false);
       }
-      this.gui.bannerSubtitle1.setVisible(true);
+      this.ui.bannerSubtitle1.setVisible(true);
 
       if (!selectedServer.announceBannerLink.equalsIgnoreCase("null")) {
 
-        ActionListener[] listeners = this.gui.bannerLinkButton.getActionListeners();
+        ActionListener[] listeners = this.ui.bannerLinkButton.getActionListeners();
         for (ActionListener listener : listeners) {
-          this.gui.bannerLinkButton.removeActionListener(listener);
+          this.ui.bannerLinkButton.removeActionListener(listener);
         }
 
-        this.gui.bannerLinkButton.addActionListener(l -> {
+        this.ui.bannerLinkButton.addActionListener(l -> {
           DesktopUtil.openWebpage(selectedServer.announceBannerLink);
         });
-        this.gui.bannerLinkButton.setVisible(true);
+        this.ui.bannerLinkButton.setVisible(true);
       } else {
-        this.gui.bannerLinkButton.setVisible(false);
+        this.ui.bannerLinkButton.setVisible(false);
       }
 
       if (selectedServer.announceBannerEndsAt != 0L || selectedServer.announceBannerStartsAt != 0L) {
 
         if (selectedServer.announceBannerStartsAt > System.currentTimeMillis()) {
           // The event has not yet started
-          this.gui.bannerTimer.setText(_localeManager.getValue("m.banner_starts_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(selectedServer.announceBannerStartsAt))));
-          this.gui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(selectedServer.announceBannerStartsAt, "PST")));
+          this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_starts_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(selectedServer.announceBannerStartsAt))));
+          this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(selectedServer.announceBannerStartsAt, "PST")));
         } else if (System.currentTimeMillis() > selectedServer.announceBannerEndsAt) {
           // The event already ended
-          this.gui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_ended"));
+          this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_ended"));
         } else {
           // The event is currently running
-          this.gui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(selectedServer.announceBannerEndsAt))));
-          this.gui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_ends_at_time", DateUtil.getFormattedTime(selectedServer.announceBannerEndsAt, "PST")));
+          this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(selectedServer.announceBannerEndsAt))));
+          this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_ends_at_time", DateUtil.getFormattedTime(selectedServer.announceBannerEndsAt, "PST")));
         }
 
         // In any case, the timer needs to be visible
-        this.gui.bannerTimer.setVisible(true);
+        this.ui.bannerTimer.setVisible(true);
       } else {
         // Nothing to show here.
-        this.gui.bannerTimer.setVisible(false);
+        this.ui.bannerTimer.setVisible(false);
       }
     });
     refreshThread.start();
@@ -703,7 +688,7 @@ public class LauncherEventHandler
       Thread.sleep(1000);
 
       ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update", newVersion}, true);
-      _launcherCtx.exit(true);
+      _ctx.exit(true);
     } catch (Exception e) {
       String downloadErrMsg = "An error occurred while trying to start the launcher updater." +
         "\nPlease try again later.";
@@ -740,9 +725,9 @@ public class LauncherEventHandler
 
     Icon playAnimatedBannersIconEnabled = IconFontSwing.buildIcon(FontAwesome.EYE, 18, Color.WHITE);
     Icon playAnimatedBannersIconDisabled = IconFontSwing.buildIcon(FontAwesome.EYE_SLASH, 18, Color.WHITE);
-    this.gui.playAnimatedBannersButton.setIcon(Settings.playAnimatedBanners ? playAnimatedBannersIconEnabled : playAnimatedBannersIconDisabled);
-    this.gui.playAnimatedBannersButton.setToolTipText(_localeManager.getValue(Settings.playAnimatedBanners ? "m.animated_banners_disable" : "m.animated_banners_enable"));
-    this.gui.playAnimatedBannersButton.setBackground(Settings.playAnimatedBanners ? CustomColors.INTERFACE_BUTTON_BACKGROUND : CustomColors.LIGHT_RED);
+    this.ui.playAnimatedBannersButton.setIcon(Settings.playAnimatedBanners ? playAnimatedBannersIconEnabled : playAnimatedBannersIconDisabled);
+    this.ui.playAnimatedBannersButton.setToolTipText(_localeManager.getValue(Settings.playAnimatedBanners ? "m.animated_banners_disable" : "m.animated_banners_enable"));
+    this.ui.playAnimatedBannersButton.setBackground(Settings.playAnimatedBanners ? CustomColors.INTERFACE_BUTTON_BACKGROUND : CustomColors.LIGHT_RED);
   }
 
   private String[] getCodeModsStartCommand (boolean altMode)
@@ -926,12 +911,12 @@ public class LauncherEventHandler
       }
     }
 
-    if (gameRunning) _launcherCtx.exit(false);
+    if (gameRunning) _ctx.exit(false);
 
     // unblock launcher interactions
-    _launcherCtx.unblock();
+    _ctx.toggleElementsBlock(false);
 
-    _launcherCtx.launcherGUI.resetLaunchButton();
+    ui.resetLaunchButton();
   }
 
   private String localizeTimeRemaining (String remainingString)
@@ -948,6 +933,22 @@ public class LauncherEventHandler
     return !SystemUtil.isWindows() || ProcessUtil.isProcessRunning("javaw.exe", _flamingoManager.getSelectedServer().isOfficial() ? "Spiral Knights" : _flamingoManager.getSelectedServer().name);
   }
 
-  private final String[] RPC_COMMAND_LINE = new String[]{".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe", BuildConfig.getVersion()};
+  @Inject private LauncherUI ui;
 
+  protected LauncherContext _ctx;
+  protected ModManager _modManager;
+  protected SettingsManager _settingsManager;
+  protected LocaleManager _localeManager;
+  protected FlamingoManager _flamingoManager;
+  protected CacheManager _cacheManager;
+  protected DownloadManager _downloadManager;
+  protected DiscordPresenceClient _discordPresenceClient;
+
+  public String currentWarning = "";
+  public String latestRelease = "";
+  public String latestChangelog = "";
+
+  public boolean displayingAnimBanner = false;
+
+  private final String[] RPC_COMMAND_LINE = new String[]{".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe", BuildConfig.getVersion()};
 }

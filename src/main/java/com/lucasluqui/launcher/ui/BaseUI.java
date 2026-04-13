@@ -1,6 +1,7 @@
-package com.lucasluqui.launcher;
+package com.lucasluqui.launcher.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.util.ColorUtil;
 import com.lucasluqui.util.SystemUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -14,22 +15,22 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.RoundRectangle2D;
 
-public abstract class BaseGUI
+public abstract class BaseUI
 {
-  protected int pY = 0, pX = 0;
-
-  protected int width;
-  protected int height;
-
-  protected boolean displayTitleBar;
-
-  public BaseGUI (int width, int height, boolean displayTitleBar)
+  public BaseUI (int width, int height, boolean displayTitleBar)
   {
     this.width = width;
     this.height = height;
     this.displayTitleBar = displayTitleBar;
+  }
+
+  public void init ()
+  {
     compose();
   }
+
+  public void initFinished ()
+  {}
 
   public void switchVisibility ()
   {
@@ -203,7 +204,32 @@ public abstract class BaseGUI
     }
   }
 
+  public void selectedServerChanged ()
+  {}
+
+  public void specialKeyPressed ()
+  {}
+
+  public void specialKeyReleased ()
+  {}
+
+  public void toggleElementsBlock (boolean block)
+  {
+    if (this.displayTitleBar) this.closeButton.setEnabled(!block);
+  }
+
+  public JPanel getPanel ()
+  {
+    return this.panel;
+  }
+
+  protected int pY = 0, pX = 0;
+  protected int width;
+  protected int height;
+  protected boolean displayTitleBar;
+
   public JFrame guiFrame = new JFrame();
+  public JPanel panel;
   protected JPanel titleBar;
   protected JButton returnButton;
   protected JButton closeButton;

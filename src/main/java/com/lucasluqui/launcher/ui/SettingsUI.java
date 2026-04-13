@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher.setting;
+package com.lucasluqui.launcher.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
@@ -6,6 +6,9 @@ import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.launcher.*;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
+import com.lucasluqui.launcher.setting.Settings;
+import com.lucasluqui.launcher.ui.handler.SettingsEventHandler;
+import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -22,23 +25,24 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsGUI extends BaseGUI
+public class SettingsUI extends BaseUI
 {
-  @Inject public SettingsEventHandler eventHandler;
-
-  @Inject protected LocaleManager _localeManager;
-  @Inject protected SettingsManager _settingsManager;
-  @Inject protected FlamingoManager _flamingoManager;
-
   @Inject
-  public SettingsGUI ()
+  public SettingsUI ()
   {
     super(850, 475, false);
   }
 
   public void init ()
   {
+    super.init();
     compose();
+    initFinished();
+  }
+
+  public void initFinished ()
+  {
+    super.initFinished();
     if (Settings.betasEnabled) eventHandler.checkBetaCodes();
   }
 
@@ -51,24 +55,25 @@ public class SettingsGUI extends BaseGUI
     guiFrame.setUndecorated(true);
     guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     guiFrame.getContentPane().setLayout(null);
+    panel = (JPanel) guiFrame.getContentPane();
 
-    tabbedPane = new JTabbedPane();
-    tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-    tabbedPane.setBounds(-2, 20, 852, 455);
-    tabbedPane.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
-    tabbedPane.setTabPlacement(JTabbedPane.LEFT);
-    tabbedPane.setFocusable(false);
-    tabbedPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    tabbedPanel = new JTabbedPane();
+    tabbedPanel.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+    tabbedPanel.setBounds(-2, 20, 852, 455);
+    tabbedPanel.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
+    tabbedPanel.setTabPlacement(JTabbedPane.LEFT);
+    tabbedPanel.setFocusable(false);
+    tabbedPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
 
-    tabbedPane.addTab(_localeManager.getValue("tab.launcher"), createLauncherPanel());
-    tabbedPane.addTab(_localeManager.getValue("tab.game"), createGamePanel());
+    tabbedPanel.addTab(_localeManager.getValue("tab.launcher"), createLauncherPanel());
+    tabbedPanel.addTab(_localeManager.getValue("tab.game"), createGamePanel());
     if (Settings.betasEnabled) {
-      tabbedPane.addTab(_localeManager.getValue("tab.betas"), createBetasPanel());
+      tabbedPanel.addTab(_localeManager.getValue("tab.betas"), createBetasPanel());
     }
-    tabbedPane.addTab(_localeManager.getValue("tab.advanced"), createAdvancedPanel());
-    tabbedPane.addTab(_localeManager.getValue("tab.about"), createAboutPanel());
+    tabbedPanel.addTab(_localeManager.getValue("tab.advanced"), createAdvancedPanel());
+    tabbedPanel.addTab(_localeManager.getValue("tab.about"), createAboutPanel());
 
-    guiFrame.getContentPane().add(tabbedPane);
+    panel.add(tabbedPanel);
 
     guiFrame.setLocationRelativeTo(null);
   }
@@ -1004,7 +1009,24 @@ public class SettingsGUI extends BaseGUI
     return aboutPanel;
   }
 
-  public JTabbedPane tabbedPane;
+  public void selectedServerChanged ()
+  {
+    this.eventHandler.selectedServerChanged();
+  }
+
+  public void toggleElementsBlock (boolean block)
+  {
+    super.toggleElementsBlock(block);
+    this.forceRebuildButton.setEnabled(!block);
+  }
+
+  @Inject public SettingsEventHandler eventHandler;
+
+  @Inject protected LocaleManager _localeManager;
+  @Inject protected SettingsManager _settingsManager;
+  @Inject protected FlamingoManager _flamingoManager;
+
+  public JTabbedPane tabbedPanel;
   public JComboBox<String> choicePlatform = new JComboBox<String>();
   public JComboBox<String> choiceLanguage;
   public JComboBox<String> choiceGC;

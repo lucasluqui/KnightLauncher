@@ -55,7 +55,7 @@ public class DiscordPresenceClient
     this.clientId = clientId;
     DiscordRPC.discordInitialize(this.clientId, this.getEventHandlers(), true);
     setDetails(_localeManager.getValue("presence.starting"));
-    log.info("Discord presence client is now running.");
+    log.info("Discord presence client is now running");
   }
 
   public void setDetails (String details)

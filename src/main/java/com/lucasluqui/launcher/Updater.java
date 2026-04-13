@@ -5,6 +5,7 @@ import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
+import com.lucasluqui.launcher.ui.BaseUI;
 import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.ImageUtil;
 import com.lucasluqui.util.ProcessUtil;
@@ -24,15 +25,8 @@ import static com.lucasluqui.launcher.Log.log;
 import static com.lucasluqui.launcher.Updater.ErrorCode.ERR_DOWNLOAD;
 import static com.lucasluqui.launcher.Updater.ErrorCode.ERR_FETCH;
 
-public class Updater extends BaseGUI
+public class Updater extends BaseUI
 {
-  @Inject protected LocaleManager _localeManager;
-  @Inject protected DownloadManager _downloadManager;
-  @Inject protected DiscordPresenceClient _discordPresenceClient;
-
-  private String newVersion = "";
-  private final int fetchAttempts = 0;
-
   public Updater ()
   {
     super(500, 125, true);
@@ -40,8 +34,15 @@ public class Updater extends BaseGUI
 
   public void init (String newVersion)
   {
+    super.init();
     this.newVersion = newVersion;
     compose();
+    initFinished();
+  }
+
+  public void initFinished ()
+  {
+    super.initFinished();
     startUpdate();
   }
 
@@ -192,6 +193,13 @@ public class Updater extends BaseGUI
     System.exit(0);
   }
 
+  @Inject protected LocaleManager _localeManager;
+  @Inject protected DownloadManager _downloadManager;
+  @Inject protected DiscordPresenceClient _discordPresenceClient;
+
+  private String newVersion = "";
+  private final int fetchAttempts = 0;
+
   private JProgressBar updaterProgressBar;
   private JLabel updaterState;
 
@@ -200,6 +208,5 @@ public class Updater extends BaseGUI
     ERR_FETCH,
     ERR_DOWNLOAD
   }
-
 }
 

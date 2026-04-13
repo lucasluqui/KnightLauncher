@@ -1,8 +1,7 @@
-package com.lucasluqui.launcher.setting;
+package com.lucasluqui.launcher.ui.handler;
 
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
-import com.lucasluqui.launcher.DeployConfig;
 import com.lucasluqui.launcher.LauncherContext;
 import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
@@ -10,6 +9,10 @@ import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.flamingo.data.Status;
 import com.lucasluqui.launcher.mod.ModManager;
+import com.lucasluqui.launcher.setting.Settings;
+import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.launcher.ui.LauncherUI;
+import com.lucasluqui.launcher.ui.SettingsUI;
 import com.lucasluqui.util.*;
 import com.sun.management.OperatingSystemMXBean;
 
@@ -17,32 +20,23 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lucasluqui.launcher.setting.Log.log;
+import static com.lucasluqui.launcher.ui.handler.Log.log;
 
 public class SettingsEventHandler
 {
-  @Inject private SettingsGUI gui;
-
-  protected LauncherContext _launcherCtx;
-  protected ModManager _modManager;
-  protected LocaleManager _localeManager;
-  protected SettingsManager _settingsManager;
-  protected FlamingoManager _flamingoManager;
-
   @Inject
-  public SettingsEventHandler (LauncherContext _launcherCtx,
+  public SettingsEventHandler (LauncherContext _ctx,
                                ModManager _modManager,
                                LocaleManager _localeManager,
                                SettingsManager _settingsManager,
                                FlamingoManager _flamingoManager)
   {
-    this._launcherCtx = _launcherCtx;
+    this._ctx = _ctx;
     this._modManager = _modManager;
     this._localeManager = _localeManager;
     this._settingsManager = _settingsManager;
@@ -51,65 +45,65 @@ public class SettingsEventHandler
 
   public void platformChangeEvent (ItemEvent event)
   {
-    Settings.gamePlatform = (String) this.gui.choicePlatform.getSelectedItem();
-    _settingsManager.setValue("game.platform", (String) this.gui.choicePlatform.getSelectedItem());
+    Settings.gamePlatform = (String) this.ui.choicePlatform.getSelectedItem();
+    _settingsManager.setValue("game.platform", (String) this.ui.choicePlatform.getSelectedItem());
   }
 
   public void rebuildsChangeEvent (ActionEvent event)
   {
     // Only display a warning if the user is disabling this setting.
     boolean confirm = true;
-    if (!this.gui.switchCleaning.isSelected()) {
+    if (!this.ui.switchCleaning.isSelected()) {
       confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.settings_warning"), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
     }
 
     if (confirm) {
-      Settings.doRebuilds = this.gui.switchCleaning.isSelected();
-      _settingsManager.setValue("launcher.rebuilds", String.valueOf(this.gui.switchCleaning.isSelected()));
+      Settings.doRebuilds = this.ui.switchCleaning.isSelected();
+      _settingsManager.setValue("launcher.rebuilds", String.valueOf(this.ui.switchCleaning.isSelected()));
     }
 
-    this.gui.switchCleaning.setSelected(Settings.doRebuilds);
+    this.ui.switchCleaning.setSelected(Settings.doRebuilds);
   }
 
   public void keepOpenChangeEvent (ActionEvent event)
   {
-    Settings.keepOpen = this.gui.switchKeepOpen.isSelected();
-    _settingsManager.setValue("launcher.keepOpen", String.valueOf(this.gui.switchKeepOpen.isSelected()));
+    Settings.keepOpen = this.ui.switchKeepOpen.isSelected();
+    _settingsManager.setValue("launcher.keepOpen", String.valueOf(this.ui.switchKeepOpen.isSelected()));
   }
 
   public void forceRebuildEvent ()
   {
     _modManager.setMountRequired(true);
     new Thread(_modManager::startStrictFileRebuild).start();
-    _launcherCtx.launcherGUI.returnToHome();
+    ((LauncherUI) _ctx.getUI("launcher")).returnToHome();
   }
 
   public void createShortcutChangeEvent (ActionEvent event)
   {
-    Settings.createShortcut = this.gui.switchShortcut.isSelected();
-    _settingsManager.setValue("launcher.createShortcut", String.valueOf(this.gui.switchShortcut.isSelected()));
+    Settings.createShortcut = this.ui.switchShortcut.isSelected();
+    _settingsManager.setValue("launcher.createShortcut", String.valueOf(this.ui.switchShortcut.isSelected()));
   }
 
   public void languageChangeEvent (ItemEvent event)
   {
     if (event.getStateChange() == ItemEvent.SELECTED) return; // Prevent triggering 2 times
-    Settings.lang = _localeManager.getLangCode((String) this.gui.choiceLanguage.getSelectedItem());
-    _settingsManager.setValue("launcher.lang", _localeManager.getLangCode((String) this.gui.choiceLanguage.getSelectedItem()));
+    Settings.lang = _localeManager.getLangCode((String) this.ui.choiceLanguage.getSelectedItem());
+    _settingsManager.setValue("launcher.lang", _localeManager.getLangCode((String) this.ui.choiceLanguage.getSelectedItem()));
     Dialog.push(_localeManager.getValue("m.prompt_restart_required"), JOptionPane.INFORMATION_MESSAGE);
   }
 
   public void customGCChangeEvent (ActionEvent action)
   {
-    Settings.gameUseCustomGC = this.gui.switchUseCustomGC.isSelected();
+    Settings.gameUseCustomGC = this.ui.switchUseCustomGC.isSelected();
     Server selectedServer = _flamingoManager.getSelectedServer();
-    _settingsManager.setValue("game.useCustomGC", String.valueOf(this.gui.switchUseCustomGC.isSelected()), selectedServer);
+    _settingsManager.setValue("game.useCustomGC", String.valueOf(this.ui.switchUseCustomGC.isSelected()), selectedServer);
   }
 
   public void choiceGCChangeEvent (ItemEvent event)
   {
     Server selectedServer = _flamingoManager.getSelectedServer();
 
-    switch (this.gui.choiceGC.getSelectedIndex()) {
+    switch (this.ui.choiceGC.getSelectedIndex()) {
       case 0:
         Settings.gameGarbageCollector = "Parallel";
         _settingsManager.setValue("game.garbageCollector.v2", "Parallel", selectedServer);
@@ -131,16 +125,16 @@ public class SettingsEventHandler
 
   public void disableExplicitGCChangeEvent (ActionEvent action)
   {
-    Settings.gameDisableExplicitGC = this.gui.switchExplicitGC.isSelected();
+    Settings.gameDisableExplicitGC = this.ui.switchExplicitGC.isSelected();
     Server selectedServer = _flamingoManager.getSelectedServer();
-    _settingsManager.setValue("game.disableExplicitGC", String.valueOf(this.gui.switchExplicitGC.isSelected()), selectedServer);
+    _settingsManager.setValue("game.disableExplicitGC", String.valueOf(this.ui.switchExplicitGC.isSelected()), selectedServer);
   }
 
   public void saveAdditionalArgs ()
   {
-    Settings.gameAdditionalArgs = this.gui.argumentsPane.getText();
+    Settings.gameAdditionalArgs = this.ui.argumentsPane.getText();
     Server selectedServer = _flamingoManager.getSelectedServer();
-    _settingsManager.setValue("game.additionalArgs.v2", this.gui.argumentsPane.getText(), selectedServer);
+    _settingsManager.setValue("game.additionalArgs.v2", this.ui.argumentsPane.getText(), selectedServer);
   }
 
   public void memoryChangeEvent (int memory)
@@ -152,30 +146,30 @@ public class SettingsEventHandler
 
   public void ingameRPCChangeEvent (ActionEvent action)
   {
-    Settings.useIngameRPC = this.gui.switchDiscordIntegration.isSelected();
-    _settingsManager.setValue("launcher.useIngameRPC", String.valueOf(this.gui.switchDiscordIntegration.isSelected()));
+    Settings.useIngameRPC = this.ui.switchDiscordIntegration.isSelected();
+    _settingsManager.setValue("launcher.useIngameRPC", String.valueOf(this.ui.switchDiscordIntegration.isSelected()));
   }
 
   public void autoUpdateChangeEvent (ActionEvent action)
   {
-    Settings.autoUpdate = this.gui.switchAutoUpdate.isSelected();
-    _settingsManager.setValue("launcher.autoUpdate", String.valueOf(this.gui.switchAutoUpdate.isSelected()));
+    Settings.autoUpdate = this.ui.switchAutoUpdate.isSelected();
+    _settingsManager.setValue("launcher.autoUpdate", String.valueOf(this.ui.switchAutoUpdate.isSelected()));
   }
 
   public void filePurgingChangeEvent (ActionEvent action)
   {
     // Only display a warning if the user is disabling this setting.
     boolean confirm = true;
-    if (!this.gui.switchFilePurging.isSelected()) {
+    if (!this.ui.switchFilePurging.isSelected()) {
       confirm = Dialog.pushWithConfirm(_localeManager.getValue("m.settings_warning"), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
     }
 
     if (confirm) {
-      Settings.filePurging = this.gui.switchFilePurging.isSelected();
-      _settingsManager.setValue("launcher.filePurging", String.valueOf(this.gui.switchFilePurging.isSelected()));
+      Settings.filePurging = this.ui.switchFilePurging.isSelected();
+      _settingsManager.setValue("launcher.filePurging", String.valueOf(this.ui.switchFilePurging.isSelected()));
     }
 
-    this.gui.switchFilePurging.setSelected(Settings.filePurging);
+    this.ui.switchFilePurging.setSelected(Settings.filePurging);
   }
 
   public void jvmPatchEvent (ActionEvent action)
@@ -191,17 +185,17 @@ public class SettingsEventHandler
     }
 
     ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar", "forceJVMPatch", javaVMPatchDir, String.valueOf(legacy)}, true);
-    this.gui.guiFrame.dispose();
+    this.ui.guiFrame.dispose();
     System.exit(1);
   }
 
   public void saveConnectionSettings ()
   {
-    Settings.gameEndpoint = this.gui.serverAddressTextField.getText();
-    Settings.gamePort = Integer.parseInt(this.gui.portTextField.getText());
-    Settings.gamePublicKey = this.gui.publicKeyTextField.getText();
-    Settings.gameGetdownFullURL = this.gui.getdownURLTextField.getText();
-    Settings.gameGetdownURL = "http://" + this.gui.getdownURLTextField.getText().split("://")[1].split("/")[0];
+    Settings.gameEndpoint = this.ui.serverAddressTextField.getText();
+    Settings.gamePort = Integer.parseInt(this.ui.portTextField.getText());
+    Settings.gamePublicKey = this.ui.publicKeyTextField.getText();
+    Settings.gameGetdownFullURL = this.ui.getdownURLTextField.getText();
+    Settings.gameGetdownURL = "http://" + this.ui.getdownURLTextField.getText().split("://")[1].split("/")[0];
 
     _settingsManager.setValue("game.endpoint", Settings.gameEndpoint);
     _settingsManager.setValue("game.port", String.valueOf(Settings.gamePort));
@@ -212,21 +206,21 @@ public class SettingsEventHandler
 
   public void resetConnectionSettingsButtonEvent (ActionEvent action)
   {
-    this.gui.serverAddressTextField.setText(DEFAULT_SERVER_ADDRESS);
-    this.gui.portTextField.setText(DEFAULT_PORT);
-    this.gui.publicKeyTextField.setText(DEFAULT_PUBLIC_KEY);
-    this.gui.getdownURLTextField.setText(DEFAULT_GETDOWN_URL);
+    this.ui.serverAddressTextField.setText(DEFAULT_SERVER_ADDRESS);
+    this.ui.portTextField.setText(DEFAULT_PORT);
+    this.ui.publicKeyTextField.setText(DEFAULT_PUBLIC_KEY);
+    this.ui.getdownURLTextField.setText(DEFAULT_GETDOWN_URL);
 
     saveConnectionSettings();
   }
 
   public void resetGameSettingsButtonEvent (ActionEvent action)
   {
-    this.gui.memorySlider.setValue(DEFAULT_MEMORY);
-    this.gui.switchUseCustomGC.setSelected(DEFAULT_USE_CUSTOM_GC);
-    this.gui.choiceGC.setSelectedItem(DEFAULT_GC);
-    this.gui.switchExplicitGC.setSelected(DEFAULT_DISABLE_EXPLICIT_GC);
-    this.gui.argumentsPane.setText(DEFAULT_ADDITIONAL_ARGS);
+    this.ui.memorySlider.setValue(DEFAULT_MEMORY);
+    this.ui.switchUseCustomGC.setSelected(DEFAULT_USE_CUSTOM_GC);
+    this.ui.choiceGC.setSelectedItem(DEFAULT_GC);
+    this.ui.switchExplicitGC.setSelected(DEFAULT_DISABLE_EXPLICIT_GC);
+    this.ui.argumentsPane.setText(DEFAULT_ADDITIONAL_ARGS);
 
     customGCChangeEvent(null);
     choiceGCChangeEvent(null);
@@ -244,10 +238,10 @@ public class SettingsEventHandler
     log.info("Recommended settings: Maximum physical memory is " + maximumMemory
       + ", setting allocated memory to " + recommendedMemory);
 
-    this.gui.memorySlider.setValue(recommendedMemory);
-    this.gui.switchUseCustomGC.setSelected(RECOMMENDED_USE_CUSTOM_GC);
-    this.gui.choiceGC.setSelectedItem(RECOMMENDED_GC);
-    this.gui.switchExplicitGC.setSelected(RECOMMENDED_DISABLE_EXPLICIT_GC);
+    this.ui.memorySlider.setValue(recommendedMemory);
+    this.ui.switchUseCustomGC.setSelected(RECOMMENDED_USE_CUSTOM_GC);
+    this.ui.choiceGC.setSelectedItem(RECOMMENDED_GC);
+    this.ui.switchExplicitGC.setSelected(RECOMMENDED_DISABLE_EXPLICIT_GC);
 
     customGCChangeEvent(null);
     choiceGCChangeEvent(null);
@@ -342,13 +336,13 @@ public class SettingsEventHandler
         .replace("M", " " + _localeManager.getValue("m.minutes").toLowerCase() + " ");
       uptimeString = uptimeString.substring(0, uptimeString.length() - 7);
 
-      this.gui.labelFlamingoStatus.setText(_localeManager.getValue("m.flamingo_status", _localeManager.getValue("m.online")));
-      this.gui.labelFlamingoVersion.setText(_localeManager.getValue("m.flamingo_version", status.version));
+      this.ui.labelFlamingoStatus.setText(_localeManager.getValue("m.flamingo_status", _localeManager.getValue("m.online")));
+      this.ui.labelFlamingoVersion.setText(_localeManager.getValue("m.flamingo_version", status.version));
 
       if (uptimeString.isEmpty()) {
-        this.gui.labelFlamingoUptime.setText(_localeManager.getValue("m.flamingo_uptime", _localeManager.getValue("m.recently_restarted")));
+        this.ui.labelFlamingoUptime.setText(_localeManager.getValue("m.flamingo_uptime", _localeManager.getValue("m.recently_restarted")));
       } else {
-        this.gui.labelFlamingoUptime.setText(_localeManager.getValue("m.flamingo_uptime", uptimeString));
+        this.ui.labelFlamingoUptime.setText(_localeManager.getValue("m.flamingo_uptime", uptimeString));
       }
     }
   }
@@ -400,7 +394,7 @@ public class SettingsEventHandler
     // the code was successfully activated, we update the server list and return a success code to the GUI.
     if (response.equalsIgnoreCase("success")) {
       addBetaCode(code);
-      _launcherCtx.launcherGUI.eventHandler.updateServerList(_flamingoManager.fetchServerList());
+      ((LauncherUI) _ctx.getUI("launcher")).eventHandler.updateServerList(_flamingoManager.fetchServerList());
       return 1;
     }
 
@@ -422,7 +416,7 @@ public class SettingsEventHandler
     for (String betaCode : betaCodes) {
       activateBetaCode(betaCode, true);
     }
-    this.gui.updateActiveBetaCodes();
+    this.ui.updateActiveBetaCodes();
   }
 
   public void clearLocalBetaCodes ()
@@ -455,33 +449,33 @@ public class SettingsEventHandler
 
     if (selectedServer != null) {
       if (selectedServer.name.equalsIgnoreCase("Official")) {
-        this.gui.switchDiscordIntegration.setEnabled(SystemUtil.isWindows() && SystemUtil.is64Bit());
-        this.gui.labelPlatform.setVisible(true);
-        this.gui.choicePlatform.setEnabled(true);
-        this.gui.choicePlatform.setVisible(true);
-        this.gui.labelMemory.setBounds(275, 90, 275, 18);
-        this.gui.memorySlider.setBounds(265, 105, 350, 40);
-        this.gui.memoryValue.setBounds(270, 139, 350, 25);
-        this.gui.labelDisclaimer.setVisible(false);
-        this.gui.serverAddressTextField.setEnabled(true);
-        this.gui.portTextField.setEnabled(true);
-        this.gui.publicKeyTextField.setEnabled(true);
-        this.gui.getdownURLTextField.setEnabled(true);
-        this.gui.resetConnectionSettingsButton.setEnabled(true);
+        this.ui.switchDiscordIntegration.setEnabled(SystemUtil.isWindows() && SystemUtil.is64Bit());
+        this.ui.labelPlatform.setVisible(true);
+        this.ui.choicePlatform.setEnabled(true);
+        this.ui.choicePlatform.setVisible(true);
+        this.ui.labelMemory.setBounds(275, 90, 275, 18);
+        this.ui.memorySlider.setBounds(265, 105, 350, 40);
+        this.ui.memoryValue.setBounds(270, 139, 350, 25);
+        this.ui.labelDisclaimer.setVisible(false);
+        this.ui.serverAddressTextField.setEnabled(true);
+        this.ui.portTextField.setEnabled(true);
+        this.ui.publicKeyTextField.setEnabled(true);
+        this.ui.getdownURLTextField.setEnabled(true);
+        this.ui.resetConnectionSettingsButton.setEnabled(true);
       } else {
-        this.gui.switchDiscordIntegration.setEnabled(false);
-        this.gui.labelPlatform.setVisible(false);
-        this.gui.choicePlatform.setEnabled(false);
-        this.gui.choicePlatform.setVisible(false);
-        this.gui.labelMemory.setBounds(30, 90, 275, 18);
-        this.gui.memorySlider.setBounds(20, 105, 350, 40);
-        this.gui.memoryValue.setBounds(25, 139, 350, 25);
-        this.gui.labelDisclaimer.setVisible(true);
-        this.gui.serverAddressTextField.setEnabled(false);
-        this.gui.portTextField.setEnabled(false);
-        this.gui.publicKeyTextField.setEnabled(false);
-        this.gui.getdownURLTextField.setEnabled(false);
-        this.gui.resetConnectionSettingsButton.setEnabled(false);
+        this.ui.switchDiscordIntegration.setEnabled(false);
+        this.ui.labelPlatform.setVisible(false);
+        this.ui.choicePlatform.setEnabled(false);
+        this.ui.choicePlatform.setVisible(false);
+        this.ui.labelMemory.setBounds(30, 90, 275, 18);
+        this.ui.memorySlider.setBounds(20, 105, 350, 40);
+        this.ui.memoryValue.setBounds(25, 139, 350, 25);
+        this.ui.labelDisclaimer.setVisible(true);
+        this.ui.serverAddressTextField.setEnabled(false);
+        this.ui.portTextField.setEnabled(false);
+        this.ui.publicKeyTextField.setEnabled(false);
+        this.ui.getdownURLTextField.setEnabled(false);
+        this.ui.resetConnectionSettingsButton.setEnabled(false);
       }
 
       updateGameJavaVMData();
@@ -493,13 +487,13 @@ public class SettingsEventHandler
   public void updateGameJavaVMData ()
   {
     Thread thread = new Thread(() -> {
-      this.gui.javaVMBadge.setText(_localeManager.getValue("m.game_java_vm_data", JavaUtil.getReadableGameJVMData()));
+      this.ui.javaVMBadge.setText(_localeManager.getValue("m.game_java_vm_data", JavaUtil.getReadableGameJVMData()));
 
       boolean is64Bit = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64;
       try {
-        this.gui.memorySlider.setMaximum(is64Bit ? 4096 : 1024);
-        if (this.gui.memorySlider.getValue() >= 256) {
-          memoryChangeEvent(this.gui.memorySlider.getValue());
+        this.ui.memorySlider.setMaximum(is64Bit ? 4096 : 1024);
+        if (this.ui.memorySlider.getValue() >= 256) {
+          memoryChangeEvent(this.ui.memorySlider.getValue());
         }
       } catch (Exception ignored) {}
     });
@@ -509,8 +503,8 @@ public class SettingsEventHandler
   public void checkBetaCodes ()
   {
     if (!_settingsManager.getValue("launcher.betaCodes").trim().isEmpty()) {
-      this.gui.betaCodeRevalidateButton.setVisible(true);
-      this.gui.betaCodeClearLocalButton.setVisible(true);
+      this.ui.betaCodeRevalidateButton.setVisible(true);
+      this.ui.betaCodeClearLocalButton.setVisible(true);
     }
   }
 
@@ -524,10 +518,10 @@ public class SettingsEventHandler
 
         // Avoid porting ParallelOld, causes issues post Java update.
         if (!extraTxtContents.contains("ParallelOld")) {
-          this.gui.argumentsPane.setText(extraTxtContents);
+          this.ui.argumentsPane.setText(extraTxtContents);
         }
 
-        this.gui.eventHandler.saveAdditionalArgs();
+        this.ui.eventHandler.saveAdditionalArgs();
       } catch (Exception e) {
         log.error(e);
       }
@@ -536,16 +530,16 @@ public class SettingsEventHandler
 
   public void updateActiveBetaCodes ()
   {
-    this.gui.updateActiveBetaCodes();
+    this.ui.updateActiveBetaCodes();
   }
 
   public void updateServerSettings (Server server)
   {
-    this.gui.memorySlider.setValue(Integer.parseInt(_settingsManager.getValue("game.memory", server)));
-    this.gui.switchUseCustomGC.setSelected(Boolean.parseBoolean(_settingsManager.getValue("game.useCustomGC", server)));
-    this.gui.choiceGC.setSelectedItem(_settingsManager.getValue("game.garbageCollector", server));
-    this.gui.switchExplicitGC.setSelected(Boolean.parseBoolean(_settingsManager.getValue("game.disableExplicitGC", server)));
-    this.gui.argumentsPane.setText(_settingsManager.getValue("game.additionalArgs", server));
+    this.ui.memorySlider.setValue(Integer.parseInt(_settingsManager.getValue("game.memory", server)));
+    this.ui.switchUseCustomGC.setSelected(Boolean.parseBoolean(_settingsManager.getValue("game.useCustomGC", server)));
+    this.ui.choiceGC.setSelectedItem(_settingsManager.getValue("game.garbageCollector", server));
+    this.ui.switchExplicitGC.setSelected(Boolean.parseBoolean(_settingsManager.getValue("game.disableExplicitGC", server)));
+    this.ui.argumentsPane.setText(_settingsManager.getValue("game.additionalArgs", server));
 
     customGCChangeEvent(null);
     choiceGCChangeEvent(null);
@@ -553,13 +547,13 @@ public class SettingsEventHandler
     saveAdditionalArgs();
 
     if (server.isOfficial()) {
-      this.gui.gameTabViewingSettingsLabel.setVisible(false);
-      this.gui.advancedTabViewingSettingsLabel.setVisible(false);
+      this.ui.gameTabViewingSettingsLabel.setVisible(false);
+      this.ui.advancedTabViewingSettingsLabel.setVisible(false);
     } else {
-      this.gui.gameTabViewingSettingsLabel.setVisible(true);
-      this.gui.advancedTabViewingSettingsLabel.setVisible(true);
-      this.gui.gameTabViewingSettingsLabel.setText(_localeManager.getValue("m.viewing_settings", server.name));
-      this.gui.advancedTabViewingSettingsLabel.setText(_localeManager.getValue("m.viewing_settings", server.name));
+      this.ui.gameTabViewingSettingsLabel.setVisible(true);
+      this.ui.advancedTabViewingSettingsLabel.setVisible(true);
+      this.ui.gameTabViewingSettingsLabel.setText(_localeManager.getValue("m.viewing_settings", server.name));
+      this.ui.advancedTabViewingSettingsLabel.setText(_localeManager.getValue("m.viewing_settings", server.name));
     }
   }
 
@@ -571,6 +565,14 @@ public class SettingsEventHandler
     _settingsManager.createKeyIfNotExists("game.disableExplicitGC_" + serverName, "false");
     _settingsManager.createKeyIfNotExists("game.additionalArgs_" + serverName, "");
   }
+
+  @Inject private SettingsUI ui;
+
+  protected LauncherContext _ctx;
+  protected ModManager _modManager;
+  protected LocaleManager _localeManager;
+  protected SettingsManager _settingsManager;
+  protected FlamingoManager _flamingoManager;
 
   // Default game settings
   private final int DEFAULT_MEMORY = 1024;

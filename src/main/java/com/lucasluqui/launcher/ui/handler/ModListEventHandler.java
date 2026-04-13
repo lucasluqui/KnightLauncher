@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher.mod;
+package com.lucasluqui.launcher.ui.handler;
 
 import com.formdev.flatlaf.util.SystemFileChooser;
 import com.google.inject.Inject;
@@ -7,9 +7,11 @@ import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
+import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.mod.data.Mod;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.launcher.ui.ModListUI;
 import com.lucasluqui.util.DesktopUtil;
 import com.lucasluqui.util.ThreadingUtil;
 import org.apache.commons.io.FileUtils;
@@ -21,16 +23,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.lucasluqui.launcher.mod.Log.log;
+import static com.lucasluqui.launcher.ui.handler.Log.log;
 
 public class ModListEventHandler
 {
-  @Inject private ModListGUI gui;
-  protected ModManager _modManager;
-  protected LocaleManager _localeManager;
-  protected SettingsManager _settingsManager;
-  protected FlamingoManager _flamingoManager;
-
   @Inject
   public ModListEventHandler (ModManager _modManager,
                               LocaleManager _localeManager,
@@ -52,10 +48,10 @@ public class ModListEventHandler
   public void refreshMods (boolean mount)
   {
     Thread refreshThread = new Thread(() -> {
-      this.gui.refreshButton.setEnabled(false);
-      this.gui.enableAllModsButton.setEnabled(false);
-      this.gui.disableAllModsButton.setEnabled(false);
-      this.gui.addModButton.setEnabled(false);
+      this.ui.refreshButton.setEnabled(false);
+      this.ui.enableAllModsButton.setEnabled(false);
+      this.ui.disableAllModsButton.setEnabled(false);
+      this.ui.addModButton.setEnabled(false);
 
       _modManager.checkInstalled();
 
@@ -66,12 +62,12 @@ public class ModListEventHandler
         _modManager.mount();
       }
 
-      this.gui.updateModList(null);
+      this.ui.updateModList(null);
 
-      this.gui.refreshButton.setEnabled(true);
-      this.gui.enableAllModsButton.setEnabled(true);
-      this.gui.disableAllModsButton.setEnabled(true);
-      this.gui.addModButton.setEnabled(true);
+      this.ui.refreshButton.setEnabled(true);
+      this.ui.enableAllModsButton.setEnabled(true);
+      this.ui.disableAllModsButton.setEnabled(true);
+      this.ui.addModButton.setEnabled(true);
     });
     refreshThread.start();
   }
@@ -143,21 +139,21 @@ public class ModListEventHandler
   public void showDirectoriesWarning (boolean show)
   {
     if (!show) {
-      this.gui.globalWarningButton.setVisible(false);
+      this.ui.globalWarningButton.setVisible(false);
       return;
     }
 
     // Show the warning with a slight delay to make sure the GUI can load beforehand.
     Thread showDirectoriesWarningThread = new Thread(() -> {
-      this.gui.globalWarningButton.setVisible(true);
-      this.gui.globalWarningMessage = _localeManager.getValue("error.folders_within_mods_folder");
+      this.ui.globalWarningButton.setVisible(true);
+      this.ui.globalWarningMessage = _localeManager.getValue("error.folders_within_mods_folder");
     });
     ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
   }
 
   public void searchMod ()
   {
-    this.gui.updateModList(this.gui.searchBox.getText());
+    this.ui.updateModList(this.ui.searchBox.getText());
   }
 
   public void selectedServerChanged ()
@@ -168,9 +164,9 @@ public class ModListEventHandler
       new Thread(_modManager::checkInstalled).start();
 
       if (selectedServer.isOfficial()) {
-        this.gui.viewingModsLabel.setVisible(false);
+        this.ui.viewingModsLabel.setVisible(false);
       } else {
-        this.gui.viewingModsLabel.setText(_localeManager.getValue("m.viewing_mods", selectedServer.name));
+        this.ui.viewingModsLabel.setText(_localeManager.getValue("m.viewing_mods", selectedServer.name));
       }
     }
   }
@@ -253,4 +249,10 @@ public class ModListEventHandler
     fileChooser.setAcceptAllFileFilterUsed(false);
     return fileChooser;
   }
+
+  @Inject private ModListUI ui;
+  protected ModManager _modManager;
+  protected LocaleManager _localeManager;
+  protected SettingsManager _settingsManager;
+  protected FlamingoManager _flamingoManager;
 }

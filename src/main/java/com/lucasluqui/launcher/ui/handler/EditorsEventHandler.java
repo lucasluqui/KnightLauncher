@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher.editor;
+package com.lucasluqui.launcher.ui.handler;
 
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
@@ -8,30 +8,17 @@ import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.ModuleManager;
 import com.lucasluqui.launcher.editor.data.Editor;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
+import com.lucasluqui.launcher.ui.EditorsUI;
 import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.ProcessUtil;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lucasluqui.launcher.editor.Log.log;
-
 public class EditorsEventHandler
 {
-  @Inject private EditorsGUI gui;
-
-  protected LocaleManager _localeManager;
-  protected FlamingoManager _flamingoManager;
-  protected ModuleManager _moduleManager;
-
-  public List<Editor> editors = new ArrayList<>();
-
-  public boolean isBooting = false;
-  public boolean spiralviewExtracted = false;
-
   @Inject
   public EditorsEventHandler (LocaleManager _localeManager,
                               FlamingoManager _flamingoManager,
@@ -44,7 +31,7 @@ public class EditorsEventHandler
 
   public void startEditor (Editor editor)
   {
-    this.gui.editorLaunchFakeProgressBar.setMaximum(editor.stallTime);
+    this.ui.editorLaunchFakeProgressBar.setMaximum(editor.stallTime);
 
     if (_flamingoManager.getSelectedServer().isOfficial()) {
       // Any attempts to start the legacy Scene Editor must first show a warning.
@@ -175,18 +162,18 @@ public class EditorsEventHandler
   protected void startedBooting ()
   {
     isBooting = true;
-    this.gui.editorListPaneScroll.setVisible(false);
-    this.gui.editorLaunchState.setVisible(true);
-    this.gui.editorLaunchFakeProgressBar.setVisible(true);
-    this.gui.startFakeProgress();
+    this.ui.editorListPaneScroll.setVisible(false);
+    this.ui.editorLaunchState.setVisible(true);
+    this.ui.editorLaunchFakeProgressBar.setVisible(true);
+    this.ui.startFakeProgress();
   }
 
-  protected void finishedBooting ()
+  public void finishedBooting ()
   {
     isBooting = false;
-    this.gui.editorListPaneScroll.setVisible(true);
-    this.gui.editorLaunchState.setVisible(false);
-    this.gui.editorLaunchFakeProgressBar.setVisible(false);
+    this.ui.editorListPaneScroll.setVisible(true);
+    this.ui.editorLaunchState.setVisible(false);
+    this.ui.editorLaunchFakeProgressBar.setVisible(false);
   }
 
   private void initEditorTask ()
@@ -197,10 +184,20 @@ public class EditorsEventHandler
   public void selectedServerChanged ()
   {
     if (_flamingoManager.getSelectedServer().isOfficial()) {
-      this.gui.footerLabel.setText(_localeManager.getValue("m.powered_by_spiralview", BuildConfig.getSpiralviewVersion()));
+      this.ui.footerLabel.setText(_localeManager.getValue("m.powered_by_spiralview", BuildConfig.getSpiralviewVersion()));
     } else {
-      this.gui.footerLabel.setText(_localeManager.getValue("m.viewing_editors", _flamingoManager.getSelectedServer().name));
+      this.ui.footerLabel.setText(_localeManager.getValue("m.viewing_editors", _flamingoManager.getSelectedServer().name));
     }
   }
 
+  @Inject private EditorsUI ui;
+
+  protected LocaleManager _localeManager;
+  protected FlamingoManager _flamingoManager;
+  protected ModuleManager _moduleManager;
+
+  public List<Editor> editors = new ArrayList<>();
+
+  public boolean isBooting = false;
+  public boolean spiralviewExtracted = false;
 }
