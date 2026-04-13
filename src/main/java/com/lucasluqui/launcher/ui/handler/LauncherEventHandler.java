@@ -65,7 +65,7 @@ public class LauncherEventHandler
     Thread launchThread = new Thread(() -> {
 
       // block interactions with the launcher
-      _ctx.toggleElementsBlock(true);
+      _ctx.getApp().toggleElementsBlock(true);
 
       Server selectedServer = _flamingoManager.getSelectedServer();
       String sanitizedServerName = selectedServer.getSanitizedName();
@@ -90,8 +90,8 @@ public class LauncherEventHandler
           this.ui.launchButton.setEnabled(false);
         }
 
-        ((SettingsUI) _ctx.getUI("settings")).eventHandler.saveAdditionalArgs();
-        ((SettingsUI) _ctx.getUI("settings")).eventHandler.saveConnectionSettings();
+        ((SettingsUI) _ctx.getApp().getUI("settings")).eventHandler.saveAdditionalArgs();
+        ((SettingsUI) _ctx.getApp().getUI("settings")).eventHandler.saveConnectionSettings();
         _settingsManager.applyGameSettings();
 
         // Remove any arguments in _JAVA_OPTIONS.
@@ -286,8 +286,8 @@ public class LauncherEventHandler
         }
 
         // check server specific settings keys.
-        ((SettingsUI) _ctx.getUI("settings")).eventHandler.checkServerSettingsKeys(serverName);
-        ((ModListUI) _ctx.getUI("modlist")).eventHandler.checkServerSettingsKeys(serverName);
+        ((SettingsUI) _ctx.getApp().getUI("settings")).eventHandler.checkServerSettingsKeys(serverName);
+        ((ModListUI) _ctx.getApp().getUI("modlist")).eventHandler.checkServerSettingsKeys(serverName);
       }
 
       _flamingoManager.setServerList(newServerList);
@@ -335,13 +335,13 @@ public class LauncherEventHandler
 
   public void gameSettingsEvent ()
   {
-    this.ui.showUI("settings");
-    ((SettingsUI) _ctx.getUI("settings")).tabbedPanel.setSelectedIndex(1);
+    ((SettingsUI) _ctx.getApp().getUI("settings")).tabbedPanel.setSelectedIndex(1);
+    _ctx.getApp().showUI("settings");
   }
 
   public void openGameFolderEvent ()
   {
-    ((SettingsUI) _ctx.getUI("settings")).eventHandler.openRootFolderEvent(null);
+    ((SettingsUI) _ctx.getApp().getUI("settings")).eventHandler.openRootFolderEvent(null);
   }
 
   public void displaySelectedServerInfo ()
@@ -436,7 +436,7 @@ public class LauncherEventHandler
 
       ui.resetLaunchButton();
 
-      _ctx.selectedServerChanged();
+      _ctx.getApp().selectedServerChanged();
 
       saveSelectedServer();
       updateServerSwitcher(false);
@@ -688,7 +688,7 @@ public class LauncherEventHandler
       Thread.sleep(1000);
 
       ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update", newVersion}, true);
-      _ctx.exit(true);
+      _ctx.getApp().exit(true);
     } catch (Exception e) {
       String downloadErrMsg = "An error occurred while trying to start the launcher updater." +
         "\nPlease try again later.";
@@ -911,10 +911,10 @@ public class LauncherEventHandler
       }
     }
 
-    if (gameRunning) _ctx.exit(false);
+    if (gameRunning) _ctx.getApp().exit(false);
 
     // unblock launcher interactions
-    _ctx.toggleElementsBlock(false);
+    _ctx.getApp().toggleElementsBlock(false);
 
     ui.resetLaunchButton();
   }

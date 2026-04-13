@@ -30,17 +30,6 @@ import static com.lucasluqui.launcher.ui.Log.log;
 
 public class JVMPatcher extends BaseUI
 {
-  @Inject protected LauncherContext _launcherCtx;
-  @Inject protected LocaleManager _localeManager;
-  @Inject protected SettingsManager _settingsManager;
-  @Inject protected ModuleManager _moduleManager;
-  @Inject protected DownloadManager _downloadManager;
-  @Inject protected DiscordPresenceClient _discordPresenceClient;
-
-  private String path;
-  private boolean legacy;
-  private final Map<String, String> availableJVMs = new HashMap<String, String>();
-
   public JVMPatcher ()
   {
     super(500, 250, true);
@@ -149,7 +138,7 @@ public class JVMPatcher extends BaseUI
 
     closeButton.addActionListener(e -> {
       if (Settings.jvmPatched) {
-        _launcherCtx.exit(true);
+        _ctx.getApp().exit(true);
       } else {
         Dialog.push(
           "On your first time launching you are required to patch a 64-bit Java VM\nand thus you cannot close this window.",
@@ -241,6 +230,17 @@ public class JVMPatcher extends BaseUI
     guiFrame.dispose();
     System.exit(0);
   }
+
+  @Inject protected LauncherContext _ctx;
+  @Inject protected LocaleManager _localeManager;
+  @Inject protected SettingsManager _settingsManager;
+  @Inject protected ModuleManager _moduleManager;
+  @Inject protected DownloadManager _downloadManager;
+  @Inject protected DiscordPresenceClient _discordPresenceClient;
+
+  private String path;
+  private boolean legacy;
+  private final Map<String, String> availableJVMs = new HashMap<String, String>();
 
   private JLabel headerLabel;
   private JLabel subHeaderLabel;

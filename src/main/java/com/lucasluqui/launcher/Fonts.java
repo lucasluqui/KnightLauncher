@@ -34,19 +34,19 @@ public class Fonts
 
     if (Settings.lang.equalsIgnoreCase("jp")
       || Settings.lang.equalsIgnoreCase("ru")) {
-      fontRegIs = LauncherUI.class.getResourceAsStream(PATH_JP_REGULAR);
-      fontMedIs = LauncherUI.class.getResourceAsStream(PATH_JP_MEDIUM);
+      fontRegIs = Fonts.class.getResourceAsStream(PATH_JP_REGULAR);
+      fontMedIs = Fonts.class.getResourceAsStream(PATH_JP_MEDIUM);
       sizeMultiplier = 1.1f;
     } else if (Settings.lang.equalsIgnoreCase("ar")) {
-      fontRegIs = LauncherUI.class.getResourceAsStream(PATH_AR_REGULAR);
-      fontMedIs = LauncherUI.class.getResourceAsStream(PATH_AR_MEDIUM);
+      fontRegIs = Fonts.class.getResourceAsStream(PATH_AR_REGULAR);
+      fontMedIs = Fonts.class.getResourceAsStream(PATH_AR_MEDIUM);
     } else {
-      fontRegIs = LauncherUI.class.getResourceAsStream(PATH_REGULAR);
-      fontMedIs = LauncherUI.class.getResourceAsStream(PATH_MEDIUM);
+      fontRegIs = Fonts.class.getResourceAsStream(PATH_REGULAR);
+      fontMedIs = Fonts.class.getResourceAsStream(PATH_MEDIUM);
       sizeMultiplier = 1.2f;
     }
 
-    fontCodeRegIs = LauncherUI.class.getResourceAsStream(PATH_CODE_REGULAR);
+    fontCodeRegIs = Fonts.class.getResourceAsStream(PATH_CODE_REGULAR);
 
     try {
       fonts.put("defaultRegular", Font.createFont(Font.TRUETYPE_FONT, fontRegIs));

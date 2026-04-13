@@ -16,8 +16,8 @@ public class ProgressBar
 
   public void setState (String newState)
   {
-    ((LauncherUI) _ctx.getUI("launcher")).launchState.setText(newState);
-    ((ModListUI) _ctx.getUI("modlist")).refreshProgressBar.setString(newState);
+    ((LauncherUI) _ctx.getApp().getUI("launcher")).launchState.setText(newState);
+    ((ModListUI) _ctx.getApp().getUI("modlist")).refreshProgressBar.setString(newState);
   }
 
   public void startTask ()
@@ -33,7 +33,7 @@ public class ProgressBar
     activeTasks--;
     if (activeTasks == 0) {
       setState("Finished");
-      ((LauncherUI) _ctx.getUI("launcher")).launchState.setIcon(null);
+      ((LauncherUI) _ctx.getApp().getUI("launcher")).launchState.setIcon(null);
       Thread finishDelayThread = new Thread(() -> {
         long now = System.currentTimeMillis();
         if (now - lastTaskStartedAt > HIDE_BAR_TIME) {
@@ -46,20 +46,20 @@ public class ProgressBar
 
   public void setBarValue (int n)
   {
-    ((LauncherUI) _ctx.getUI("launcher")).launchProgressBar.setValue(n);
-    ((ModListUI) _ctx.getUI("modlist")).refreshProgressBar.setValue(n);
+    ((LauncherUI) _ctx.getApp().getUI("launcher")).launchProgressBar.setValue(n);
+    ((ModListUI) _ctx.getApp().getUI("modlist")).refreshProgressBar.setValue(n);
   }
 
   public void setBarMax (int n)
   {
-    ((LauncherUI) _ctx.getUI("launcher")).launchProgressBar.setMaximum(n);
-    ((ModListUI) _ctx.getUI("modlist")).refreshProgressBar.setMaximum(n);
+    ((LauncherUI) _ctx.getApp().getUI("launcher")).launchProgressBar.setMaximum(n);
+    ((ModListUI) _ctx.getApp().getUI("modlist")).refreshProgressBar.setMaximum(n);
   }
 
   private void showBar (boolean show)
   {
-    LauncherUI launcherUI = _ctx.getUI("launcher");
-    ModListUI modListUI = _ctx.getUI("modlist");
+    LauncherUI launcherUI = _ctx.getApp().getUI("launcher");
+    ModListUI modListUI = _ctx.getApp().getUI("modlist");
 
     launcherUI.launchBackground.setVisible(show);
     launcherUI.launchState.setVisible(show);

@@ -229,7 +229,7 @@ public class SettingsManager
       _ctx._progressBar.setState(_localeManager.getValue("m.apply"));
 
       // Run a platform check by triggering a change event just in case the value stored is incorrect.
-      ((SettingsUI) _ctx.getUI("settings")).eventHandler.platformChangeEvent(null);
+      ((SettingsUI) _ctx.getApp().getUI("settings")).eventHandler.platformChangeEvent(null);
 
       // Back up the current extra.txt if there's no back up already.
       // This is useful if a user installs the launcher and had already

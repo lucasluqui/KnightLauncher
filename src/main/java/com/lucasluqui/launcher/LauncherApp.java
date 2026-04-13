@@ -30,7 +30,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -87,13 +89,13 @@ public class LauncherApp
 
     if (!this.requiresJVMPatch() && !this.requiresUpdate()) {
       initFinished();
-      ThreadingUtil.executeWithDelay(_ctx.getUI("launcher")::switchVisibility, 200);
+      ThreadingUtil.executeWithDelay(this.getUI("launcher")::switchVisibility, 200);
     }
   }
 
   private void initManagers ()
   {
-    _ctx.init();
+    _ctx.init(this);
     _settingsManager.init();
     _localeManager.init();
     _modManager.init();
@@ -134,7 +136,7 @@ public class LauncherApp
       _modManager.extractSafeguard();
     }
 
-    ((LauncherUI) _ctx.getUI("launcher")).eventHandler.updateServerList(null);
+    ((LauncherUI) this.getUI("launcher")).eventHandler.updateServerList(null);
 
     loadOnlineAssets();
 
@@ -152,7 +154,7 @@ public class LauncherApp
         try {
           LauncherUI launcherUI = injector.getInstance(LauncherUI.class);
           launcherUI.init();
-          _ctx.registerUI("launcher", launcherUI);
+          this.registerUI("launcher", launcherUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -169,7 +171,7 @@ public class LauncherApp
         try {
           SettingsUI settingsUI = injector.getInstance(SettingsUI.class);
           settingsUI.init();
-          _ctx.registerUI("settings", settingsUI);
+          this.registerUI("settings", settingsUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -186,7 +188,7 @@ public class LauncherApp
         try {
           ModListUI modListUI = injector.getInstance(ModListUI.class);
           modListUI.init();
-          _ctx.registerUI("modlist", modListUI);
+          this.registerUI("modlist", modListUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -203,7 +205,7 @@ public class LauncherApp
         try {
           EditorsUI editorsUI = injector.getInstance(EditorsUI.class);
           editorsUI.init();
-          _ctx.registerUI("editors", editorsUI);
+          this.registerUI("editors", editorsUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -649,9 +651,9 @@ public class LauncherApp
 
       Status flamingoStatus = _flamingoManager.getStatus();
       if (flamingoStatus.version != null) _flamingoManager.setOnline(true);
-      ((LauncherUI) _ctx.getUI("launcher")).eventHandler.updateServerList(_flamingoManager.fetchServerList());
-      ((SettingsUI) _ctx.getUI("settings")).eventHandler.updateAboutTab(flamingoStatus);
-      ((SettingsUI) _ctx.getUI("settings")).eventHandler.updateActiveBetaCodes();
+      ((LauncherUI) this.getUI("launcher")).eventHandler.updateServerList(_flamingoManager.fetchServerList());
+      ((SettingsUI) this.getUI("settings")).eventHandler.updateAboutTab(flamingoStatus);
+      ((SettingsUI) this.getUI("settings")).eventHandler.updateActiveBetaCodes();
 
     }).start();
 
@@ -662,7 +664,7 @@ public class LauncherApp
   private void checkFlamingoStatus ()
   {
     if (!_flamingoManager.getOnline()) {
-      ((LauncherUI) _ctx.getUI("launcher")).showWarning(_localeManager.getValue("error.flamingo_offline"));
+      ((LauncherUI) this.getUI("launcher")).showWarning(_localeManager.getValue("error.flamingo_offline"));
     }
   }
 
@@ -688,7 +690,7 @@ public class LauncherApp
         + "latest"
     );
 
-    LauncherUI launcherUI = (LauncherUI) _ctx.getUI("launcher");
+    LauncherUI launcherUI = (LauncherUI) this.getUI("launcher");
 
     if (rawResponseReleases != null) {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
@@ -763,6 +765,96 @@ public class LauncherApp
     if (containsCyrillic) SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
   }
 
+  public void registerUI (String id, BaseUI ui)
+  {
+    _uiSet.put(id, ui);
+    log.info("Registered UI", "id", id);
+  }
+
+  public <T extends BaseUI> T getUI (String id)
+  {
+    return (T) _uiSet.get(id);
+  }
+
+  public Map<String, BaseUI> getUISet ()
+  {
+    return _uiSet;
+  }
+
+  public void disposeUI (String id)
+  {
+    _uiSet.remove(id);
+  }
+
+  public void toggleElementsBlock (boolean block)
+  {
+    for (String id : _uiSet.keySet()) {
+      _uiSet.get(id).toggleElementsBlock(block);
+    }
+  }
+
+  public void selectedServerChanged ()
+  {
+    for (String id : _uiSet.keySet()) {
+      // DO NOT call LauncherUI::selectedServerChanged, or it will loop infinitely.
+      if (id.equalsIgnoreCase("launcher")) return;
+
+      _uiSet.get(id).selectedServerChanged();
+    }
+  }
+
+  public void showUI (String targetId)
+  {
+    LauncherUI launcherUI = getUI("launcher");
+    BaseUI targetUI = null;
+
+    for (String id : getUISet().keySet()) {
+      if (id.equals(targetId)) {
+        targetUI = getUI(id);
+      } else {
+        JComponent otherPanel = getUI(id).getPanel();
+        otherPanel.setVisible(false);
+      }
+    }
+
+    if (targetUI == null) {
+      log.error("UI is null", "id", targetId);
+      return;
+    }
+
+    targetUI.getPanel().setBounds(300, 75, 800, 550);
+    launcherUI.guiFrame.add(targetUI.getPanel());
+    targetUI.getPanel().setVisible(true);
+    launcherUI.returnButton.setVisible(true);
+  }
+
+  public void returnToHome ()
+  {
+    for (String id : getUISet().keySet()) {
+      BaseUI ui = getUI(id);
+      if (id.equalsIgnoreCase("launcher")) {
+        ui.getPanel().setVisible(true);
+        ui.returnButton.setVisible(false);
+      } else {
+        ui.getPanel().setVisible(false);
+        ui.returnButton.setVisible(false);
+      }
+    }
+  }
+
+  public void exit (boolean force)
+  {
+    _discordPresenceClient.stop();
+    if (force || !Settings.keepOpen) {
+      try {
+        getUI("launcher").guiFrame.dispose();
+      } catch (NullPointerException e) {
+        log.error("Failed to dispose frame on exit");
+      }
+      System.exit(0);
+    }
+  }
+
   public static class LauncherModule extends AbstractModule
   {
     @Override protected void configure ()
@@ -781,6 +873,8 @@ public class LauncherApp
   @Inject protected CacheManager _cacheManager;
   @Inject protected DownloadManager _downloadManager;
   @Inject protected KeyboardController _keyboardController;
+
+  private final Map<String, BaseUI> _uiSet = new HashMap<>();
 
   private final String[] args;
   private final Injector injector;

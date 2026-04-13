@@ -51,8 +51,8 @@ public class ModManager
   {
     if (!_checking) {
       _checking = true;
-      _ctx.toggleElementsBlock(true);
-      ModListUI modListUI = _ctx.getUI("modlist");
+      _ctx.getApp().toggleElementsBlock(true);
+      ModListUI modListUI = _ctx.getApp().getUI("modlist");
 
       Server selectedServer = _flamingoManager.getSelectedServer();
       String modFolderPath = LauncherGlobals.USER_DIR + "/mods/";
@@ -138,7 +138,7 @@ public class ModManager
 
       modListUI.labelModCount.setText(String.valueOf(getModList().size()));
       modListUI.updateModList(null);
-      _ctx.toggleElementsBlock(false);
+      _ctx.getApp().toggleElementsBlock(false);
       _checking = false;
     }
   }
@@ -150,7 +150,7 @@ public class ModManager
 
     if (Settings.doRebuilds && _rebuildRequired) startFileRebuild();
 
-    _ctx.toggleElementsBlock(true);
+    _ctx.getApp().toggleElementsBlock(true);
 
     _ctx._progressBar.startTask();
     _ctx._progressBar.setBarMax(getEnabledModCount());
@@ -317,7 +317,7 @@ public class ModManager
     _mountRequired = false;
     _ctx._progressBar.finishTask();
 
-    _ctx.toggleElementsBlock(false);
+    _ctx.getApp().toggleElementsBlock(false);
   }
 
   public void startFileRebuild ()
@@ -332,7 +332,7 @@ public class ModManager
 
   private void rebuildFiles (boolean strict)
   {
-    _ctx.toggleElementsBlock(true);
+    _ctx.getApp().toggleElementsBlock(true);
 
     String rootDir = LauncherGlobals.USER_DIR;
     String[] bundles = RSRC_BUNDLES;
@@ -388,7 +388,7 @@ public class ModManager
     _ctx._progressBar.finishTask();
     _rebuildRequired = false;
 
-    _ctx.toggleElementsBlock(false);
+    _ctx.getApp().toggleElementsBlock(false);
     _discordPresenceClient.setDetails(_localeManager.getValue("presence.ready"));
   }
 

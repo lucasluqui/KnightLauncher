@@ -268,7 +268,7 @@ public class LauncherUI extends BaseUI
     settingsButton.setForeground(Color.WHITE);
     settingsButton.setToolTipText(_localeManager.getValue("b.settings"));
     settingsButton.addActionListener(action -> {
-      showUI("settings");
+      _ctx.getApp().showUI("settings");
     });
     sidePane.add(settingsButton);
 
@@ -286,7 +286,7 @@ public class LauncherUI extends BaseUI
     modButton.setForeground(Color.WHITE);
     modButton.setToolTipText(_localeManager.getValue("b.mods"));
     modButton.addActionListener(action -> {
-      showUI("modlist");
+      _ctx.getApp().showUI("modlist");
     });
     sidePane.add(modButton);
 
@@ -304,7 +304,7 @@ public class LauncherUI extends BaseUI
     editorsButton.setForeground(Color.WHITE);
     editorsButton.setToolTipText(_localeManager.getValue("b.editors"));
     editorsButton.addActionListener(action -> {
-      showUI("editors");
+      _ctx.getApp().showUI("editors");
     });
     sidePane.add(editorsButton);
 
@@ -621,7 +621,7 @@ public class LauncherUI extends BaseUI
     updateButton.setVisible(false);
     panel.add(updateButton);
     updateButton.addActionListener(
-      l -> this.eventHandler.updateLauncher(((LauncherUI) _ctx.getUI("launcher")).eventHandler.latestRelease)
+      l -> this.eventHandler.updateLauncher(eventHandler.latestRelease)
     );
 
     Icon playAnimatedBannersIconEnabled = IconFontSwing.buildIcon(FontAwesome.EYE, 18, Color.WHITE);
@@ -640,7 +640,7 @@ public class LauncherUI extends BaseUI
     playAnimatedBannersButton.addActionListener(l -> this.eventHandler.switchBannerAnimations());
 
     closeButton.addActionListener(e -> {
-      _ctx.exit(true);
+      _ctx.getApp().exit(true);
     });
     closeButton.setToolTipText(_localeManager.getValue("b.close"));
     minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));
@@ -726,39 +726,9 @@ public class LauncherUI extends BaseUI
     }
   }
 
-  public void showUI (String targetId)
-  {
-    BaseUI ui = null;
-    for (String id : _ctx.getUISet().keySet()) {
-      if (id.equals(targetId)) {
-        ui = _ctx.getUI(id);
-      } else {
-        JComponent otherPanel = _ctx.getUI(id).getPanel();
-        otherPanel.setVisible(false);
-      }
-    }
-
-    if (ui == null) {
-      log.error("Could not show UI", "id", targetId);
-      return;
-    }
-
-    ui.getPanel().setBounds(300, 75, 800, 550);
-    guiFrame.add(ui.getPanel());
-    ui.getPanel().setVisible(true);
-    returnButton.setVisible(true);
-  }
-
   public void returnToHome ()
   {
-    for (String id : _ctx.getUISet().keySet()) {
-      if (id.equalsIgnoreCase("launcher")) return;
-      BaseUI ui = _ctx.getUI(id);
-      ui.getPanel().setVisible(false);
-      ui.returnButton.setVisible(false);
-    }
-    returnButton.setVisible(false);
-    panel.setVisible(true);
+    _ctx.getApp().returnToHome();
   }
 
   public void resetLaunchButton ()

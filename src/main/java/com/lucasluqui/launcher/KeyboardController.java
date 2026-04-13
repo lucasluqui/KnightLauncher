@@ -41,15 +41,15 @@ public class KeyboardController
 
   private void specialKeyPressed ()
   {
-    for (String id : _ctx.getUISet().keySet()) {
-      _ctx.getUI(id).specialKeyPressed();
+    for (String id : _ctx.getApp().getUISet().keySet()) {
+      _ctx.getApp().getUI(id).specialKeyPressed();
     }
   }
 
   private void specialKeyReleased ()
   {
-    for (String id : _ctx.getUISet().keySet()) {
-      _ctx.getUI(id).specialKeyReleased();
+    for (String id : _ctx.getApp().getUISet().keySet()) {
+      _ctx.getApp().getUI(id).specialKeyReleased();
     }
   }
 

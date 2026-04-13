@@ -231,7 +231,7 @@ public abstract class BaseUI
   public JFrame guiFrame = new JFrame();
   public JPanel panel;
   protected JPanel titleBar;
-  protected JButton returnButton;
+  public JButton returnButton;
   protected JButton closeButton;
   protected JButton minimizeButton;
 }

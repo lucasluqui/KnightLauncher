@@ -75,7 +75,7 @@ public class SettingsEventHandler
   {
     _modManager.setMountRequired(true);
     new Thread(_modManager::startStrictFileRebuild).start();
-    ((LauncherUI) _ctx.getUI("launcher")).returnToHome();
+    _ctx.getApp().returnToHome();
   }
 
   public void createShortcutChangeEvent (ActionEvent event)
@@ -394,7 +394,7 @@ public class SettingsEventHandler
     // the code was successfully activated, we update the server list and return a success code to the GUI.
     if (response.equalsIgnoreCase("success")) {
       addBetaCode(code);
-      ((LauncherUI) _ctx.getUI("launcher")).eventHandler.updateServerList(_flamingoManager.fetchServerList());
+      ((LauncherUI) _ctx.getApp().getUI("launcher")).eventHandler.updateServerList(_flamingoManager.fetchServerList());
       return 1;
     }
 

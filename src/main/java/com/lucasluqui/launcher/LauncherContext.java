@@ -21,63 +21,17 @@ public class LauncherContext
     // empty.
   }
 
-  public void init ()
+  public void init (LauncherApp app)
   {
-    // empty.
+    this._app = app;
   }
 
-  public void registerUI (String id, BaseUI ui)
+  public LauncherApp getApp ()
   {
-    _uiSet.put(id, ui);
-    log.info("Registered UI", "id", id);
+    return this._app;
   }
 
-  public <T extends BaseUI> T getUI (String id)
-  {
-    return (T) _uiSet.get(id);
-  }
-
-  public Map<String, BaseUI> getUISet ()
-  {
-    return _uiSet;
-  }
-
-  public void disposeUI (String id)
-  {
-    _uiSet.remove(id);
-  }
-
-  public void toggleElementsBlock (boolean block)
-  {
-    for (String id : _uiSet.keySet()) {
-      _uiSet.get(id).toggleElementsBlock(block);
-    }
-  }
-
-  public void selectedServerChanged ()
-  {
-    for (String id : _uiSet.keySet()) {
-      // DO NOT call LauncherUI::selectedServerChanged, or it will loop infinitely.
-      if (id.equalsIgnoreCase("launcher")) return;
-
-      _uiSet.get(id).selectedServerChanged();
-    }
-  }
-
-  public void exit (boolean force)
-  {
-    _discordPresenceClient.stop();
-    if (force || !Settings.keepOpen) {
-      try {
-        getUI("launcher").guiFrame.dispose();
-      } catch (NullPointerException e) {
-        log.error("Failed to dispose frame on exit");
-      }
-      System.exit(0);
-    }
-  }
-
-  private final Map<String, BaseUI> _uiSet = new HashMap<>();
+  private LauncherApp _app;
   @Inject private DiscordPresenceClient _discordPresenceClient;
   @Inject public ProgressBar _progressBar = new ProgressBar();
 }
