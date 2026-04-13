@@ -85,7 +85,7 @@ public class LauncherApp
     checkStartLocation();
     checkShortcut();
 
-    initUI();
+    maybeInitUI();
 
     if (!this.requiresJVMPatch() && !this.requiresUpdate()) {
       initFinished();
@@ -112,18 +112,23 @@ public class LauncherApp
     }
   }
 
-  private void initUI ()
+  private void maybeInitUI ()
   {
     if (this.requiresJVMPatch()) {
       this.initJVMPatcher();
     } else if (this.requiresUpdate()) {
       this.initUpdater();
     } else {
-      this.initLauncherUI();
-      this.initSettingsUI();
-      this.initModListUI();
-      this.initEditorsUI();
+      this.initUI();
     }
+  }
+
+  private void initUI ()
+  {
+    this.initLauncherUI();
+    this.initSettingsUI();
+    this.initModListUI();
+    this.initEditorsUI();
   }
 
   private void initFinished ()
