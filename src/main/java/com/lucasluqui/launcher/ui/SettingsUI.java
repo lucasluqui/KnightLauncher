@@ -679,7 +679,7 @@ public class SettingsUI extends BaseUI
         JLabel activeCodeBadge = new JLabel(server.fromCode);
         activeCodeBadge.setBounds(5, 5, 150, 18);
         activeCodeBadge.setHorizontalAlignment(SwingConstants.CENTER);
-        activeCodeBadge.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
+        activeCodeBadge.setFont(Fonts.getFont("codeRegular", 9.0f, Font.ITALIC));
         activeCodeBadge.putClientProperty(FlatClientProperties.STYLE,
           "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_BACKGROUND)
             + "1A; foreground:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_SETTINGS_BADGE_CODE_FOREGROUND)
@@ -774,9 +774,6 @@ public class SettingsUI extends BaseUI
     advancedPanel.add(scrollBar);
 
     argumentsPane.setCaretPosition(0);
-
-    // TODO: Temporary, re-enable once it's fixed.
-    argumentsPane.setEnabled(false);
 
     eventHandler.checkExistingArguments();
 

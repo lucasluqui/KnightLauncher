@@ -319,4 +319,10 @@ public class JavaUtil
     }
     // TODO: Linux and macOS support for clearing _JAVA_OPTIONS?
   }
+
+  public static boolean validJVMArg (String arg)
+  {
+    // TODO: extend this.
+    return arg.startsWith("-");
+  }
 }

@@ -2,43 +2,29 @@ package com.lucasluqui.launcher.setting;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.launcher.LauncherContext;
 import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
-import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.launcher.ui.SettingsUI;
 import com.lucasluqui.util.*;
 
+import javax.swing.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 import static com.lucasluqui.launcher.setting.Log.log;
 
 @Singleton
 public class SettingsManager
 {
-  @Inject protected LauncherContext _ctx;
-  @Inject protected LocaleManager _localeManager;
-  @Inject protected FlamingoManager _flamingoManager;
-
-  private final String PROP_VER = "30";
-  private final String PROP_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
-
-  private final Properties prop = new Properties();
-
-  private HashMap<String, Object> migrationMap = new HashMap<>();
-  private boolean migrating = false;
-
   public SettingsManager ()
-  {
-
-  }
+  {}
 
   public void init ()
   {
@@ -51,14 +37,14 @@ public class SettingsManager
       String currentPropVer = getValue("PROP_VER");
       if (!currentPropVer.equals(PROP_VER)) {
         log.warning("PROP_VER mismatch", "expected", PROP_VER, "found", currentPropVer);
-        migrationMap = getAllKeyValues();
-        prop.clear();
+        _migrationMap = getAllKeyValues();
+        _prop.clear();
         FileUtil.deleteFile(PROP_PATH);
         ZipUtil.extractFileWithinJar("/rsrc/config/launcher.properties", PROP_PATH);
         log.info("Extracting latest properties file...");
         loadProp();
         migrateSettings();
-        prop.clear();
+        _prop.clear();
         loadProp();
       }
     } catch (IOException e) {
@@ -73,7 +59,7 @@ public class SettingsManager
   {
     log.info("Loading properties...");
     try (InputStream is = Files.newInputStream(Paths.get(PROP_PATH))) {
-      prop.load(is);
+      _prop.load(is);
       log.info("Loaded properties");
     } catch (IOException e) {
       log.error(e);
@@ -134,7 +120,7 @@ public class SettingsManager
   public String getValue (String key, String defVal)
   {
     String value;
-    value = prop.getProperty(key);
+    value = _prop.getProperty(key);
     log.info("Request for key", "key", key, "value", value);
     return value != null ? value : defVal;
   }
@@ -148,9 +134,9 @@ public class SettingsManager
   {
     String value;
     if (server != null) {
-      value = prop.getProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName());
+      value = _prop.getProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName());
     } else {
-      value = prop.getProperty(key);
+      value = _prop.getProperty(key);
     }
     log.info("Request for key", "key", key, "value", value);
     return value != null ? value : defVal;
@@ -158,9 +144,9 @@ public class SettingsManager
 
   public void setValue (String key, String value)
   {
-    prop.setProperty(key, value);
+    _prop.setProperty(key, value);
     try {
-      prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
+      _prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
     } catch (IOException e) {
       log.error(e);
     }
@@ -170,12 +156,12 @@ public class SettingsManager
   public void setValue (String key, String value, Server server)
   {
     if (server != null) {
-      prop.setProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName(), value);
+      _prop.setProperty(server.isOfficial() ? key : key + "_" + server.getSanitizedName(), value);
     } else {
-      prop.setProperty(key, value);
+      _prop.setProperty(key, value);
     }
     try {
-      prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
+      _prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
     } catch (IOException e) {
       log.error(e);
     }
@@ -185,7 +171,7 @@ public class SettingsManager
   private HashMap<String, Object> getAllKeyValues ()
   {
     HashMap<String, Object> keyValues = new HashMap<>();
-    for (String key : prop.stringPropertyNames()) {
+    for (String key : _prop.stringPropertyNames()) {
       keyValues.put(key, getValue(key));
     }
     return keyValues;
@@ -193,10 +179,10 @@ public class SettingsManager
 
   public void createKeyIfNotExists (String key, String value)
   {
-    if (prop.getProperty(key) == null) {
-      prop.setProperty(key, value);
+    if (_prop.getProperty(key) == null) {
+      _prop.setProperty(key, value);
       try {
-        prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
+        _prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
       } catch (IOException e) {
         log.error(e);
       }
@@ -208,17 +194,17 @@ public class SettingsManager
 
   private void migrateSettings ()
   {
-    migrating = true;
+    _migrating = true;
     log.info("Migrating settings to new properties file...");
-    for (String key : migrationMap.keySet()) {
+    for (String key : _migrationMap.keySet()) {
       if (key.equals("PROP_VER")) continue;
-      setValue(key, (String) migrationMap.get(key));
+      setValue(key, (String) _migrationMap.get(key));
     }
 
     // Successfully migrated to newer PROP_VER.
     setValue("PROP_VER", PROP_VER);
     log.info("Successfully migrated properties file");
-    migrating = false;
+    _migrating = false;
   }
 
   public void applyGameSettings ()
@@ -260,8 +246,15 @@ public class SettingsManager
       writer.println("-Xms" + Settings.gameMemory + "M");
       writer.println("-Xmx" + Settings.gameMemory + "M");
 
-      // TODO: Add guard rails to avoid non java args from being parsed here.
-      //writer.println(Settings.gameAdditionalArgs);
+      if (validAdditionalArgs(Settings.gameAdditionalArgs)) {
+        writer.println(Settings.gameAdditionalArgs);
+      } else {
+        Dialog.push(
+          _localeManager.getValue("m.invalid_additional_args_warning"),
+          _localeManager.getValue("t.invalid_additional_args"),
+          JOptionPane.WARNING_MESSAGE
+        );
+      }
       writer.close();
 
       if (_flamingoManager.getSelectedServer().isOfficial()) applyConnectionSettings();
@@ -271,6 +264,29 @@ public class SettingsManager
     } catch (FileNotFoundException | UnsupportedEncodingException e) {
       log.error(e);
     }
+  }
+
+  private boolean validAdditionalArgs (String argString)
+  {
+    // ParallelOld isn't compatible with the game's JVM anymore.
+    if (argString.contains("ParallelOld")) {
+      return false;
+    }
+
+    // iterate through all args.
+    List<String> args = Arrays.asList(argString.split("\\r?\\n"));
+    for (String arg : args) {
+      log.info("validAdditionalArgs", "arg", arg);
+
+      // invalid arg? mark the whole thing as invalid.
+      if (!JavaUtil.validJVMArg(arg)) {
+        log.info("Ignoring all additional args due to invalid JVM arg", "arg", arg);
+        return false;
+      }
+    }
+
+    // there doesn't seem to be any unsafe args... gets a green light.
+    return true;
   }
 
   private void applyConnectionSettings ()
@@ -335,4 +351,15 @@ public class SettingsManager
       return MAX_ALLOWED_MEMORY_32_BIT;
     }
   }
+
+  @Inject protected LauncherContext _ctx;
+  @Inject protected LocaleManager _localeManager;
+  @Inject protected FlamingoManager _flamingoManager;
+
+  private final Properties _prop = new Properties();
+  private HashMap<String, Object> _migrationMap = new HashMap<>();
+  private boolean _migrating = false;
+
+  private final String PROP_VER = "30";
+  private final String PROP_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
 }
