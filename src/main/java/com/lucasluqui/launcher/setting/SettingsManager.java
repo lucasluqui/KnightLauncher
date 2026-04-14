@@ -7,8 +7,8 @@ import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
+import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.launcher.ui.SettingsUI;
-import com.lucasluqui.launcher.ui.UINames;
 import com.lucasluqui.util.*;
 
 import java.io.*;
@@ -230,7 +230,7 @@ public class SettingsManager
       _ctx._progressBar.setState(_localeManager.getValue("m.apply"));
 
       // Run a platform check by triggering a change event just in case the value stored is incorrect.
-      ((SettingsUI) _ctx.getApp().getUI(UINames.UI_ID_SETTINGS)).eventHandler.platformChangeEvent(null);
+      _ctx.getApp().getUI(SettingsUI.class).eventHandler.platformChangeEvent(null);
 
       // Back up the current extra.txt if there's no back up already.
       // This is useful if a user installs the launcher and had already

@@ -2,6 +2,7 @@ package com.lucasluqui.launcher;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.lucasluqui.launcher.ui.BaseUI;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -41,15 +42,15 @@ public class KeyboardController
 
   private void specialKeyPressed ()
   {
-    for (String id : _ctx.getApp().getUISet().keySet()) {
-      _ctx.getApp().getUI(id).specialKeyPressed();
+    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+      ui.specialKeyReleased();
     }
   }
 
   private void specialKeyReleased ()
   {
-    for (String id : _ctx.getApp().getUISet().keySet()) {
-      _ctx.getApp().getUI(id).specialKeyReleased();
+    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+      ui.specialKeyReleased();
     }
   }
 

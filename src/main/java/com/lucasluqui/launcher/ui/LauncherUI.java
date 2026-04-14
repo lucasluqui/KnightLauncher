@@ -264,7 +264,7 @@ public class LauncherUI extends BaseUI
     settingsButton.setForeground(Color.WHITE);
     settingsButton.setToolTipText(_localeManager.getValue("b.settings"));
     settingsButton.addActionListener(action -> {
-      _ctx.getApp().showUI(UINames.UI_ID_SETTINGS);
+      _ctx.getApp().showUI(SettingsUI.class);
     });
     sidePane.add(settingsButton);
 
@@ -282,7 +282,7 @@ public class LauncherUI extends BaseUI
     modButton.setForeground(Color.WHITE);
     modButton.setToolTipText(_localeManager.getValue("b.mods"));
     modButton.addActionListener(action -> {
-      _ctx.getApp().showUI(UINames.UI_ID_MODLIST);
+      _ctx.getApp().showUI(ModListUI.class);
     });
     sidePane.add(modButton);
 
@@ -300,7 +300,7 @@ public class LauncherUI extends BaseUI
     editorsButton.setForeground(Color.WHITE);
     editorsButton.setToolTipText(_localeManager.getValue("b.editors"));
     editorsButton.addActionListener(action -> {
-      _ctx.getApp().showUI(UINames.UI_ID_EDITORS);
+      _ctx.getApp().showUI(EditorsUI.class);
     });
     sidePane.add(editorsButton);
 

@@ -90,7 +90,7 @@ public class LauncherApp
 
     if (!this.requiresJVMPatch() && !this.requiresUpdate()) {
       initFinished();
-      ThreadingUtil.executeWithDelay(this.getUI(UINames.UI_ID_LAUNCHER)::switchVisibility, 200);
+      ThreadingUtil.executeWithDelay(this.getUI(LauncherUI.class)::switchVisibility, 200);
     }
   }
 
@@ -160,7 +160,7 @@ public class LauncherApp
         try {
           LauncherUI launcherUI = injector.getInstance(LauncherUI.class);
           launcherUI.init();
-          this.registerUI(UINames.UI_ID_LAUNCHER, launcherUI);
+          this.registerUI(launcherUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -177,7 +177,7 @@ public class LauncherApp
         try {
           SettingsUI settingsUI = injector.getInstance(SettingsUI.class);
           settingsUI.init();
-          this.registerUI(UINames.UI_ID_SETTINGS, settingsUI);
+          this.registerUI(settingsUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -194,7 +194,7 @@ public class LauncherApp
         try {
           ModListUI modListUI = injector.getInstance(ModListUI.class);
           modListUI.init();
-          this.registerUI(UINames.UI_ID_MODLIST, modListUI);
+          this.registerUI(modListUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -211,7 +211,7 @@ public class LauncherApp
         try {
           EditorsUI editorsUI = injector.getInstance(EditorsUI.class);
           editorsUI.init();
-          this.registerUI(UINames.UI_ID_EDITORS, editorsUI);
+          this.registerUI(editorsUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -657,10 +657,10 @@ public class LauncherApp
       Status flamingoStatus = _flamingoManager.getStatus();
       if (flamingoStatus != null) {
         _flamingoManager.setOnline(true);
-        ((SettingsUI) this.getUI(UINames.UI_ID_SETTINGS)).eventHandler.updateAboutTab(flamingoStatus);
+        this.getUI(SettingsUI.class).eventHandler.updateAboutTab(flamingoStatus);
       }
       _flamingoManager.updateServerList();
-      ((SettingsUI) this.getUI(UINames.UI_ID_SETTINGS)).eventHandler.updateActiveBetaCodes();
+      this.getUI(SettingsUI.class).eventHandler.updateActiveBetaCodes();
     }).start();
 
     ThreadingUtil.executeWithDelay(this::checkVersion, 3000);
@@ -670,7 +670,7 @@ public class LauncherApp
   private void checkFlamingoStatus ()
   {
     if (!_flamingoManager.isOnline()) {
-      ((LauncherUI) this.getUI(UINames.UI_ID_LAUNCHER)).showWarning(_localeManager.getValue("error.flamingo_offline"));
+      this.getUI(LauncherUI.class).showWarning(_localeManager.getValue("error.flamingo_offline"));
     }
   }
 
@@ -696,7 +696,7 @@ public class LauncherApp
         + "latest"
     );
 
-    LauncherUI launcherUI = (LauncherUI) this.getUI(UINames.UI_ID_LAUNCHER);
+    LauncherUI launcherUI = (LauncherUI) this.getUI(LauncherUI.class);
 
     if (rawResponseReleases != null) {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
@@ -771,61 +771,63 @@ public class LauncherApp
     if (containsCyrillic) SystemUtil.fixTempDir(LauncherGlobals.USER_DIR + "/KnightLauncher/temp/");
   }
 
-  public void registerUI (String id, BaseUI ui)
+  public <T extends BaseUI> void registerUI (BaseUI ui)
   {
-    _uiSet.put(id, ui);
-    log.info("Registered UI", "id", id);
+    _uiSet.put(ui.getClass(), ui);
+    log.info("Registered UI", "class", ui.getClass().getSimpleName());
   }
 
-  public <T extends BaseUI> T getUI (String id)
+  public <T extends BaseUI> T getUI (Class<T> clazz)
   {
-    return (T) _uiSet.get(id);
+    BaseUI ui = _uiSet.get(clazz);
+
+    if (ui == null) {
+      log.error("Tried to get non-existent UI", "class", clazz.getSimpleName());
+    }
+
+    return clazz.cast(ui);
   }
 
-  public Map<String, BaseUI> getUISet ()
+  public Map<Class<? extends BaseUI>, BaseUI> getUISet ()
   {
     return _uiSet;
   }
 
-  public void disposeUI (String id)
+  public void disposeUI (Class<? extends BaseUI> clazz)
   {
-    _uiSet.remove(id);
+    _uiSet.remove(clazz);
   }
 
   public void toggleElementsBlock (boolean block)
   {
-    for (String id : _uiSet.keySet()) {
-      _uiSet.get(id).toggleElementsBlock(block);
+    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+      ui.toggleElementsBlock(block);
     }
   }
 
   public void selectedServerChanged ()
   {
-    for (String id : _uiSet.keySet()) {
-      _uiSet.get(id).selectedServerChanged();
+    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+      ui.selectedServerChanged();
     }
   }
 
-  public void showUI (String targetId)
+  public void showUI (Class<? extends BaseUI> clazz)
   {
-    LauncherUI launcherUI = getUI(UINames.UI_ID_LAUNCHER);
-    BaseUI targetUI = null;
+    LauncherUI launcherUI = getUI(LauncherUI.class);
+    BaseUI targetUI = getUI(clazz);
 
-    for (String id : getUISet().keySet()) {
-      if (id.equals(targetId)) {
-        targetUI = getUI(id);
-      } else {
-        JComponent otherPanel = getUI(id).getPanel();
-        otherPanel.setVisible(false);
-      }
+    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+      ui.getPanel().setVisible(false);
     }
 
     if (targetUI == null) {
-      log.error("UI is null", "id", targetId);
+      log.error("UI is null", "class", clazz.getSimpleName());
       return;
     }
 
     targetUI.getPanel().setBounds(300, 75, 800, 550);
+
     launcherUI.guiFrame.add(targetUI.getPanel());
     targetUI.getPanel().setVisible(true);
     launcherUI.returnButton.setVisible(true);
@@ -833,9 +835,8 @@ public class LauncherApp
 
   public void returnToHome ()
   {
-    for (String id : getUISet().keySet()) {
-      BaseUI ui = getUI(id);
-      if (id.equalsIgnoreCase(UINames.UI_ID_LAUNCHER)) {
+    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+      if (ui instanceof LauncherUI) {
         ui.getPanel().setVisible(true);
         ui.returnButton.setVisible(false);
       } else {
@@ -850,7 +851,7 @@ public class LauncherApp
     _discordPresenceClient.stop();
     if (force || !Settings.keepOpen) {
       try {
-        getUI(UINames.UI_ID_LAUNCHER).guiFrame.dispose();
+        getUI(LauncherUI.class).guiFrame.dispose();
       } catch (NullPointerException e) {
         log.error("Failed to dispose frame on exit");
       }
@@ -877,8 +878,8 @@ public class LauncherApp
   @Inject protected DownloadManager _downloadManager;
   @Inject protected KeyboardController _keyboardController;
 
-  private final Map<String, BaseUI> _uiSet = new HashMap<>();
-  private final List<String> _uiHistory = new ArrayList<>();
+  private final Map<Class<? extends BaseUI>, BaseUI> _uiSet = new HashMap<>();
+  private final List<Class<? extends BaseUI>> _uiHistory = new ArrayList<>();
 
   private final String[] args;
   private final Injector injector;
