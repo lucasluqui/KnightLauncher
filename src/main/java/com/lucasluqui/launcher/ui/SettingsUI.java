@@ -738,7 +738,7 @@ public class SettingsUI extends BaseUI
     advancedPanel.add(advancedTabViewingSettingsLabel);
     advancedTabViewingSettingsLabel.setVisible(false);
 
-    JLabel labelArguments = new JLabel(_localeManager.getValue("m.extratxt_write_arguments") + " (Extra.txt)");
+    JLabel labelArguments = new JLabel(_localeManager.getValue("m.extratxt_write_arguments") + " (extra.txt)");
     labelArguments.setBounds(25, 90, 600, 20);
     labelArguments.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
     advancedPanel.add(labelArguments);
