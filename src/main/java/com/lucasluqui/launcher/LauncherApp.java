@@ -696,7 +696,7 @@ public class LauncherApp
         + "latest"
     );
 
-    LauncherUI launcherUI = (LauncherUI) this.getUI(LauncherUI.class);
+    LauncherUI launcherUI = this.getUI(LauncherUI.class);
 
     if (rawResponseReleases != null) {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
