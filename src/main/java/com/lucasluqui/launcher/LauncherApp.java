@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +90,7 @@ public class LauncherApp
 
     if (!this.requiresJVMPatch() && !this.requiresUpdate()) {
       initFinished();
-      ThreadingUtil.executeWithDelay(this.getUI("launcher")::switchVisibility, 200);
+      ThreadingUtil.executeWithDelay(this.getUI(UINames.UI_ID_LAUNCHER)::switchVisibility, 200);
     }
   }
 
@@ -159,7 +160,7 @@ public class LauncherApp
         try {
           LauncherUI launcherUI = injector.getInstance(LauncherUI.class);
           launcherUI.init();
-          this.registerUI("launcher", launcherUI);
+          this.registerUI(UINames.UI_ID_LAUNCHER, launcherUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -176,7 +177,7 @@ public class LauncherApp
         try {
           SettingsUI settingsUI = injector.getInstance(SettingsUI.class);
           settingsUI.init();
-          this.registerUI("settings", settingsUI);
+          this.registerUI(UINames.UI_ID_SETTINGS, settingsUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -193,7 +194,7 @@ public class LauncherApp
         try {
           ModListUI modListUI = injector.getInstance(ModListUI.class);
           modListUI.init();
-          this.registerUI("modlist", modListUI);
+          this.registerUI(UINames.UI_ID_MODLIST, modListUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -210,7 +211,7 @@ public class LauncherApp
         try {
           EditorsUI editorsUI = injector.getInstance(EditorsUI.class);
           editorsUI.init();
-          this.registerUI("editors", editorsUI);
+          this.registerUI(UINames.UI_ID_EDITORS, editorsUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -656,10 +657,10 @@ public class LauncherApp
       Status flamingoStatus = _flamingoManager.getStatus();
       if (flamingoStatus != null) {
         _flamingoManager.setOnline(true);
-        ((SettingsUI) this.getUI("settings")).eventHandler.updateAboutTab(flamingoStatus);
+        ((SettingsUI) this.getUI(UINames.UI_ID_SETTINGS)).eventHandler.updateAboutTab(flamingoStatus);
       }
       _flamingoManager.updateServerList();
-      ((SettingsUI) this.getUI("settings")).eventHandler.updateActiveBetaCodes();
+      ((SettingsUI) this.getUI(UINames.UI_ID_SETTINGS)).eventHandler.updateActiveBetaCodes();
     }).start();
 
     ThreadingUtil.executeWithDelay(this::checkVersion, 3000);
@@ -669,7 +670,7 @@ public class LauncherApp
   private void checkFlamingoStatus ()
   {
     if (!_flamingoManager.isOnline()) {
-      ((LauncherUI) this.getUI("launcher")).showWarning(_localeManager.getValue("error.flamingo_offline"));
+      ((LauncherUI) this.getUI(UINames.UI_ID_LAUNCHER)).showWarning(_localeManager.getValue("error.flamingo_offline"));
     }
   }
 
@@ -695,7 +696,7 @@ public class LauncherApp
         + "latest"
     );
 
-    LauncherUI launcherUI = (LauncherUI) this.getUI("launcher");
+    LauncherUI launcherUI = (LauncherUI) this.getUI(UINames.UI_ID_LAUNCHER);
 
     if (rawResponseReleases != null) {
       JSONObject jsonReleases = new JSONObject(rawResponseReleases);
@@ -807,7 +808,7 @@ public class LauncherApp
 
   public void showUI (String targetId)
   {
-    LauncherUI launcherUI = getUI("launcher");
+    LauncherUI launcherUI = getUI(UINames.UI_ID_LAUNCHER);
     BaseUI targetUI = null;
 
     for (String id : getUISet().keySet()) {
@@ -834,7 +835,7 @@ public class LauncherApp
   {
     for (String id : getUISet().keySet()) {
       BaseUI ui = getUI(id);
-      if (id.equalsIgnoreCase("launcher")) {
+      if (id.equalsIgnoreCase(UINames.UI_ID_LAUNCHER)) {
         ui.getPanel().setVisible(true);
         ui.returnButton.setVisible(false);
       } else {
@@ -849,7 +850,7 @@ public class LauncherApp
     _discordPresenceClient.stop();
     if (force || !Settings.keepOpen) {
       try {
-        getUI("launcher").guiFrame.dispose();
+        getUI(UINames.UI_ID_LAUNCHER).guiFrame.dispose();
       } catch (NullPointerException e) {
         log.error("Failed to dispose frame on exit");
       }
@@ -877,6 +878,7 @@ public class LauncherApp
   @Inject protected KeyboardController _keyboardController;
 
   private final Map<String, BaseUI> _uiSet = new HashMap<>();
+  private final List<String> _uiHistory = new ArrayList<>();
 
   private final String[] args;
   private final Injector injector;

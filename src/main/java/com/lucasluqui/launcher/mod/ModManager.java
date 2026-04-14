@@ -14,6 +14,7 @@ import com.lucasluqui.launcher.mod.data.*;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.ui.ModListUI;
+import com.lucasluqui.launcher.ui.UINames;
 import com.lucasluqui.util.*;
 import net.lingala.zip4j.model.FileHeader;
 import org.apache.commons.io.FileUtils;
@@ -52,7 +53,7 @@ public class ModManager
     if (!_checking) {
       _checking = true;
       _ctx.getApp().toggleElementsBlock(true);
-      ModListUI modListUI = _ctx.getApp().getUI("modlist");
+      ModListUI modListUI = _ctx.getApp().getUI(UINames.UI_ID_MODLIST);
 
       Server selectedServer = _flamingoManager.getSelectedServer();
       String modFolderPath = LauncherGlobals.USER_DIR + "/mods/";

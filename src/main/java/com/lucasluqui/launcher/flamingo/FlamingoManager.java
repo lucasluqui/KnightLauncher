@@ -9,6 +9,7 @@ import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.ui.ModListUI;
 import com.lucasluqui.launcher.ui.SettingsUI;
+import com.lucasluqui.launcher.ui.UINames;
 import com.lucasluqui.util.*;
 import org.json.JSONObject;
 
@@ -225,8 +226,8 @@ public class FlamingoManager
         }
 
         // check server specific settings keys.
-        ((SettingsUI) _ctx.getApp().getUI("settings")).eventHandler.checkServerSettingsKeys(serverName);
-        ((ModListUI) _ctx.getApp().getUI("modlist")).eventHandler.checkServerSettingsKeys(serverName);
+        ((SettingsUI) _ctx.getApp().getUI(UINames.UI_ID_SETTINGS)).eventHandler.checkServerSettingsKeys(serverName);
+        ((ModListUI) _ctx.getApp().getUI(UINames.UI_ID_MODLIST)).eventHandler.checkServerSettingsKeys(serverName);
       }
       setServerList(serverList);
 

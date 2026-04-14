@@ -14,6 +14,7 @@ import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.launcher.ui.SettingsUI;
+import com.lucasluqui.launcher.ui.UINames;
 import com.lucasluqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -88,8 +89,8 @@ public class LauncherEventHandler
           this.ui.launchButton.setEnabled(false);
         }
 
-        ((SettingsUI) _ctx.getApp().getUI("settings")).eventHandler.saveAdditionalArgs();
-        ((SettingsUI) _ctx.getApp().getUI("settings")).eventHandler.saveConnectionSettings();
+        ((SettingsUI) _ctx.getApp().getUI(UINames.UI_ID_SETTINGS)).eventHandler.saveAdditionalArgs();
+        ((SettingsUI) _ctx.getApp().getUI(UINames.UI_ID_SETTINGS)).eventHandler.saveConnectionSettings();
         _settingsManager.applyGameSettings();
 
         // Remove any arguments in _JAVA_OPTIONS.
@@ -245,13 +246,13 @@ public class LauncherEventHandler
 
   public void gameSettingsEvent ()
   {
-    ((SettingsUI) _ctx.getApp().getUI("settings")).tabbedPane.setSelectedIndex(1);
-    _ctx.getApp().showUI("settings");
+    ((SettingsUI) _ctx.getApp().getUI(UINames.UI_ID_SETTINGS)).tabbedPane.setSelectedIndex(1);
+    _ctx.getApp().showUI(UINames.UI_ID_SETTINGS);
   }
 
   public void openGameFolderEvent ()
   {
-    ((SettingsUI) _ctx.getApp().getUI("settings")).eventHandler.openRootFolderEvent(null);
+    ((SettingsUI) _ctx.getApp().getUI(UINames.UI_ID_SETTINGS)).eventHandler.openRootFolderEvent(null);
   }
 
   public void displaySelectedServerInfo ()

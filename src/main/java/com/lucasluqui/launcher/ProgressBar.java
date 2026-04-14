@@ -3,6 +3,7 @@ package com.lucasluqui.launcher;
 import com.google.inject.Inject;
 import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.launcher.ui.ModListUI;
+import com.lucasluqui.launcher.ui.UINames;
 import com.lucasluqui.util.ThreadingUtil;
 
 import javax.swing.*;
@@ -16,8 +17,8 @@ public class ProgressBar
 
   public void setState (String newState)
   {
-    ((LauncherUI) _ctx.getApp().getUI("launcher")).launchState.setText(newState);
-    ((ModListUI) _ctx.getApp().getUI("modlist")).refreshProgressBar.setString(newState);
+    ((LauncherUI) _ctx.getApp().getUI(UINames.UI_ID_LAUNCHER)).launchState.setText(newState);
+    ((ModListUI) _ctx.getApp().getUI(UINames.UI_ID_MODLIST)).refreshProgressBar.setString(newState);
   }
 
   public void startTask ()
@@ -33,7 +34,7 @@ public class ProgressBar
     activeTasks--;
     if (activeTasks == 0) {
       setState("Finished");
-      ((LauncherUI) _ctx.getApp().getUI("launcher")).launchState.setIcon(null);
+      ((LauncherUI) _ctx.getApp().getUI(UINames.UI_ID_LAUNCHER)).launchState.setIcon(null);
       Thread finishDelayThread = new Thread(() -> {
         long now = System.currentTimeMillis();
         if (now - lastTaskStartedAt > HIDE_BAR_TIME) {
@@ -46,20 +47,20 @@ public class ProgressBar
 
   public void setBarValue (int n)
   {
-    ((LauncherUI) _ctx.getApp().getUI("launcher")).launchProgressBar.setValue(n);
-    ((ModListUI) _ctx.getApp().getUI("modlist")).refreshProgressBar.setValue(n);
+    ((LauncherUI) _ctx.getApp().getUI(UINames.UI_ID_LAUNCHER)).launchProgressBar.setValue(n);
+    ((ModListUI) _ctx.getApp().getUI(UINames.UI_ID_MODLIST)).refreshProgressBar.setValue(n);
   }
 
   public void setBarMax (int n)
   {
-    ((LauncherUI) _ctx.getApp().getUI("launcher")).launchProgressBar.setMaximum(n);
-    ((ModListUI) _ctx.getApp().getUI("modlist")).refreshProgressBar.setMaximum(n);
+    ((LauncherUI) _ctx.getApp().getUI(UINames.UI_ID_LAUNCHER)).launchProgressBar.setMaximum(n);
+    ((ModListUI) _ctx.getApp().getUI(UINames.UI_ID_MODLIST)).refreshProgressBar.setMaximum(n);
   }
 
   private void showBar (boolean show)
   {
-    LauncherUI launcherUI = _ctx.getApp().getUI("launcher");
-    ModListUI modListUI = _ctx.getApp().getUI("modlist");
+    LauncherUI launcherUI = _ctx.getApp().getUI(UINames.UI_ID_LAUNCHER);
+    ModListUI modListUI = _ctx.getApp().getUI(UINames.UI_ID_MODLIST);
 
     launcherUI.launchBackground.setVisible(show);
     launcherUI.launchState.setVisible(show);
