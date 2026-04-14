@@ -210,8 +210,8 @@ public class FlamingoManager
 
         // make sure we have a proper folder structure for this server.
         String serverName = server.getSanitizedName();
-        FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + serverName);
-        FileUtil.createDir(LauncherGlobals.USER_DIR + "/thirdparty/" + serverName + "/mods");
+        FileUtil.createDir(getThirdPartyBaseDir() + serverName);
+        FileUtil.createDir(getThirdPartyBaseDir() + serverName + "/mods");
 
         // make sure there's a base zip file we can use to clean files with.
         String rootDir = server.getRootDirectory();
@@ -308,11 +308,18 @@ public class FlamingoManager
     this.online = online;
   }
 
+  public String getThirdPartyBaseDir ()
+  {
+    return THIRD_PARTY_BASE_DIR;
+  }
+
   @Inject protected LauncherContext _ctx;
   @Inject protected SettingsManager _settingsManager;
 
   private final String ADDRESS = DeployConfig.getFlamingoAddress();
   private final int PORT = DeployConfig.getFlamingoPort();
+
+  private final String THIRD_PARTY_BASE_DIR = LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator;
 
   private List<Server> serverList = new ArrayList<>();
   private Server selectedServer = null;

@@ -125,7 +125,7 @@ public class LauncherEventHandler
           _ctx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_download", selectedServer.name));
           _ctx._progressBar.setBarValue(1);
 
-          File localFile = new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
+          File localFile = new File(_flamingoManager.getThirdPartyBaseDir() + sanitizedServerName + File.separator + "bundle.zip");
 
           try {
             _downloadManager.add(new URLDownloadQueue(
@@ -139,7 +139,7 @@ public class LauncherEventHandler
           _downloadManager.processQueues();
 
           ZipUtil.unzip(localFile.getAbsolutePath(),
-            LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName);
+            _flamingoManager.getThirdPartyBaseDir() + sanitizedServerName);
 
           FileUtil.deleteFile(localFile.getAbsolutePath());
         }
@@ -151,7 +151,7 @@ public class LauncherEventHandler
           _ctx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_update", selectedServer.name));
           _ctx._progressBar.setBarValue(1);
 
-          File localFile = new File(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "bundle.zip");
+          File localFile = new File(_flamingoManager.getThirdPartyBaseDir() + sanitizedServerName + File.separator + "bundle.zip");
 
           try {
             _downloadManager.add(new URLDownloadQueue(
@@ -165,7 +165,7 @@ public class LauncherEventHandler
           _downloadManager.processQueues();
 
           ZipUtil.unzip(localFile.getAbsolutePath(),
-            LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName);
+            _flamingoManager.getThirdPartyBaseDir() + sanitizedServerName);
 
           FileUtil.deleteFile(localFile.getAbsolutePath());
 
@@ -200,7 +200,7 @@ public class LauncherEventHandler
         _ctx._progressBar.setBarValue(2);
 
         ProcessUtil.runFromDirectory(getThirdPartyClientStartCommand(selectedServer, altMode),
-          LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName,
+          _flamingoManager.getThirdPartyBaseDir() + sanitizedServerName,
           true);
 
         _ctx._progressBar.finishTask();
@@ -711,20 +711,23 @@ public class LauncherEventHandler
   {
     List<String> argsList = new ArrayList<>();
     String sanitizedServerName = server.getSanitizedName();
+    String thirdPartyBaseDir = _flamingoManager.getThirdPartyBaseDir();
 
     if (SystemUtil.isWindows()) {
-      argsList.add(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "java_vm" + File.separator + "bin" + File.separator + "java");
+      argsList.add(thirdPartyBaseDir + sanitizedServerName + File.separator + "java_vm" + File.separator + "bin" + File.separator + "java");
       argsList.add("-classpath");
-      argsList.add(LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/config.jar;" +
-        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/projectx-config.jar;" +
-        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/projectx-pcode.jar;" +
-        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/lwjgl.jar;" +
-        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/lwjgl_util.jar;" +
-        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/jinput.jar;" +
-        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/jshortcut.jar;" +
-        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-beanutils.jar;" +
-        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-digester.jar;" +
-        LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./code/commons-logging.jar;");
+      argsList.add(
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "./code/config.jar;" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "./code/projectx-config.jar;" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "./code/projectx-pcode.jar;" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "./code/lwjgl.jar;" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "./code/lwjgl_util.jar;" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "./code/jinput.jar;" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "./code/jshortcut.jar;" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "./code/commons-beanutils.jar;" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "./code/commons-digester.jar;" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "./code/commons-logging.jar;"
+      );
       argsList.add("-Dcom.threerings.getdown=false");
       if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
       if (Settings.gameUseCustomGC) {
@@ -746,25 +749,27 @@ public class LauncherEventHandler
         argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
       }
 
-      argsList.add("-Djava.library.path=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./native");
+      argsList.add("-Djava.library.path=" + thirdPartyBaseDir + sanitizedServerName + File.separator + "./native");
       argsList.add("-Dorg.lwjgl.util.NoChecks=true");
       argsList.add("-Dsun.java2d.d3d=false");
-      argsList.add("-Dappdir=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + ".");
-      argsList.add("-Dresource_dir=" + LauncherGlobals.USER_DIR + "\\thirdparty\\" + sanitizedServerName + File.separator + "./rsrc");
+      argsList.add("-Dappdir=" + thirdPartyBaseDir + sanitizedServerName + File.separator + ".");
+      argsList.add("-Dresource_dir=" + thirdPartyBaseDir + sanitizedServerName + File.separator + "./rsrc");
       argsList.add("com.threerings.projectx.client.ProjectXApp");
     } else {
-      argsList.add(LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + sanitizedServerName + File.separator + "java" + File.separator + "bin" + File.separator + "java");
+      argsList.add(thirdPartyBaseDir + sanitizedServerName + File.separator + "java" + File.separator + "bin" + File.separator + "java");
       argsList.add("-classpath");
-      argsList.add(LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/config.jar:" +
-        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/projectx-config.jar:" +
-        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/projectx-pcode.jar:" +
-        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/lwjgl.jar:" +
-        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/lwjgl_util.jar:" +
-        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/jinput.jar:" +
-        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/jshortcut.jar:" +
-        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-beanutils.jar:" +
-        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-digester.jar:" +
-        LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "code/commons-logging.jar:");
+      argsList.add(
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "code/config.jar:" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "code/projectx-config.jar:" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "code/projectx-pcode.jar:" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "code/lwjgl.jar:" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "code/lwjgl_util.jar:" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "code/jinput.jar:" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "code/jshortcut.jar:" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "code/commons-beanutils.jar:" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "code/commons-digester.jar:" +
+        thirdPartyBaseDir + sanitizedServerName + File.separator + "code/commons-logging.jar:"
+      );
       argsList.add("-Dcom.threerings.getdown=false");
       if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
       if (Settings.gameUseCustomGC) {
@@ -786,11 +791,11 @@ public class LauncherEventHandler
         argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
       }
 
-      argsList.add("-Djava.library.path=" + LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "native");
+      argsList.add("-Djava.library.path=" + thirdPartyBaseDir + sanitizedServerName + File.separator + "native");
       argsList.add("-Dorg.lwjgl.util.NoChecks=true");
       argsList.add("-Dsun.java2d.d3d=false");
-      argsList.add("-Dappdir=" + LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator);
-      argsList.add("-Dresource_dir=" + LauncherGlobals.USER_DIR + "/thirdparty/" + sanitizedServerName + File.separator + "rsrc");
+      argsList.add("-Dappdir=" + thirdPartyBaseDir + sanitizedServerName + File.separator);
+      argsList.add("-Dresource_dir=" + thirdPartyBaseDir + sanitizedServerName + File.separator + "rsrc");
       argsList.add("com.threerings.projectx.client.ProjectXApp");
     }
 
