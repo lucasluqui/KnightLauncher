@@ -539,7 +539,7 @@ public class SettingsEventHandler
     this.ui.switchUseCustomGC.setSelected(Boolean.parseBoolean(_settingsManager.getValue("game.useCustomGC", server)));
     this.ui.choiceGC.setSelectedItem(_settingsManager.getValue("game.garbageCollector", server));
     this.ui.switchExplicitGC.setSelected(Boolean.parseBoolean(_settingsManager.getValue("game.disableExplicitGC", server)));
-    this.ui.argumentsPane.setText(_settingsManager.getValue("game.additionalArgs", server));
+    this.ui.argumentsPane.setText(_settingsManager.getValue("game.additionalArgs.v2", server));
 
     customGCChangeEvent(null);
     choiceGCChangeEvent(null);
@@ -563,7 +563,7 @@ public class SettingsEventHandler
     _settingsManager.createKeyIfNotExists("game.useCustomGC_" + serverName, "false");
     _settingsManager.createKeyIfNotExists("game.garbageCollector_" + serverName, "ParallelOld");
     _settingsManager.createKeyIfNotExists("game.disableExplicitGC_" + serverName, "false");
-    _settingsManager.createKeyIfNotExists("game.additionalArgs_" + serverName, "");
+    _settingsManager.createKeyIfNotExists("game.additionalArgs.v2_" + serverName, "");
   }
 
   @Inject private SettingsUI ui;
