@@ -773,13 +773,13 @@ public class LauncherApp
 
   public <T extends BaseUI> void registerUI (BaseUI ui)
   {
-    _uiSet.put(ui.getClass(), ui);
+    _uiMap.put(ui.getClass(), ui);
     log.info("Registered UI", "class", ui.getClass().getSimpleName());
   }
 
   public <T extends BaseUI> T getUI (Class<T> clazz)
   {
-    BaseUI ui = _uiSet.get(clazz);
+    BaseUI ui = _uiMap.get(clazz);
 
     if (ui == null) {
       log.error("Tried to get non-existent UI", "class", clazz.getSimpleName());
@@ -788,26 +788,26 @@ public class LauncherApp
     return clazz.cast(ui);
   }
 
-  public Map<Class<? extends BaseUI>, BaseUI> getUISet ()
+  public Map<Class<? extends BaseUI>, BaseUI> getUIMap ()
   {
-    return _uiSet;
+    return _uiMap;
   }
 
   public void disposeUI (Class<? extends BaseUI> clazz)
   {
-    _uiSet.remove(clazz);
+    _uiMap.remove(clazz);
   }
 
   public void toggleElementsBlock (boolean block)
   {
-    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+    for (BaseUI ui : _ctx.getApp().getUIMap().values()) {
       ui.toggleElementsBlock(block);
     }
   }
 
   public void selectedServerChanged ()
   {
-    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+    for (BaseUI ui : _ctx.getApp().getUIMap().values()) {
       ui.selectedServerChanged();
     }
   }
@@ -817,7 +817,7 @@ public class LauncherApp
     LauncherUI launcherUI = getUI(LauncherUI.class);
     BaseUI targetUI = getUI(clazz);
 
-    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+    for (BaseUI ui : _ctx.getApp().getUIMap().values()) {
       ui.getPanel().setVisible(false);
     }
 
@@ -835,7 +835,7 @@ public class LauncherApp
 
   public void returnToHome ()
   {
-    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+    for (BaseUI ui : _ctx.getApp().getUIMap().values()) {
       if (ui instanceof LauncherUI) {
         ui.getPanel().setVisible(true);
         ui.returnButton.setVisible(false);
@@ -878,7 +878,7 @@ public class LauncherApp
   @Inject protected DownloadManager _downloadManager;
   @Inject protected KeyboardController _keyboardController;
 
-  private final Map<Class<? extends BaseUI>, BaseUI> _uiSet = new HashMap<>();
+  private final Map<Class<? extends BaseUI>, BaseUI> _uiMap = new HashMap<>();
   private final List<Class<? extends BaseUI>> _uiHistory = new ArrayList<>();
 
   private final String[] args;

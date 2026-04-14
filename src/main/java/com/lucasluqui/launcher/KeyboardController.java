@@ -42,14 +42,14 @@ public class KeyboardController
 
   private void specialKeyPressed ()
   {
-    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+    for (BaseUI ui : _ctx.getApp().getUIMap().values()) {
       ui.specialKeyReleased();
     }
   }
 
   private void specialKeyReleased ()
   {
-    for (BaseUI ui : _ctx.getApp().getUISet().values()) {
+    for (BaseUI ui : _ctx.getApp().getUIMap().values()) {
       ui.specialKeyReleased();
     }
   }
