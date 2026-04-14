@@ -323,6 +323,8 @@ public class JavaUtil
   public static boolean validJVMArg (String arg)
   {
     // TODO: extend this.
-    return arg.startsWith("-");
+    return arg.startsWith("-")
+      && !arg.contains(" ")
+      && arg.length() > 3;
   }
 }
