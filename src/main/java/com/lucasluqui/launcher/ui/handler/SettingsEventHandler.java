@@ -147,6 +147,7 @@ public class SettingsEventHandler
         Settings.gameAdditionalArgs = this.ui.argumentsPane.getText();
       } else {
         Settings.gameAdditionalArgs = "";
+        this.ui.argumentsPane.setText(Settings.gameAdditionalArgs);
         Dialog.push(
           _localeManager.getValue("m.invalid_additional_args_save_warning"),
           _localeManager.getValue("t.invalid_additional_args"),
