@@ -249,7 +249,7 @@ public class SettingsManager
       // Get rid of this "0" bug. Maybe delete this one day
       if (Settings.gameAdditionalArgs.equalsIgnoreCase("0")) {
         Settings.gameAdditionalArgs = "";
-        _ctx.getApp().getUI(SettingsUI.class).eventHandler.saveAdditionalArgs();
+        _ctx.getApp().getUI(SettingsUI.class).eventHandler.saveAdditionalArgs(true);
       }
 
       // And now we validate all (possibly) REAL args.
