@@ -43,7 +43,7 @@ public class SettingsUI extends BaseUI
   public void initFinished ()
   {
     super.initFinished();
-    if (Settings.betasEnabled) eventHandler.checkBetaCodes();
+    if (showBetas()) eventHandler.checkBetaCodes();
   }
 
   private void compose ()
@@ -70,7 +70,7 @@ public class SettingsUI extends BaseUI
 
     tabbedPane.addTab(_localeManager.getValue("tab.launcher"), createLauncherPanel());
     tabbedPane.addTab(_localeManager.getValue("tab.game"), createGamePanel());
-    if (Settings.betasEnabled) {
+    if (showBetas()) {
       tabbedPane.addTab(_localeManager.getValue("tab.betas"), createBetasPanel());
     }
     tabbedPane.addTab(_localeManager.getValue("tab.advanced"), createAdvancedPanel());
@@ -1010,6 +1010,12 @@ public class SettingsUI extends BaseUI
     openRootFolderButton.addActionListener(eventHandler::openRootFolderEvent);
 
     return aboutPanel;
+  }
+
+  private boolean showBetas ()
+  {
+    return Settings.betasEnabled
+      || !_settingsManager.getValue("launcher.betaCodes").trim().isEmpty();
   }
 
   public void selectedServerChanged ()

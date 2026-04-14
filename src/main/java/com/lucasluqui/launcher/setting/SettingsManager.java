@@ -128,7 +128,7 @@ public class SettingsManager
 
   public String getValue (String key)
   {
-    return getValue(key, "0");
+    return getValue(key, "");
   }
 
   public String getValue (String key, String defVal)
@@ -141,7 +141,7 @@ public class SettingsManager
 
   public String getValue (String key, Server server)
   {
-    return getValue(key, "0", server);
+    return getValue(key, "", server);
   }
 
   public String getValue (String key, String defVal, Server server)
