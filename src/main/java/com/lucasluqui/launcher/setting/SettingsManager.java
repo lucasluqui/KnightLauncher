@@ -246,6 +246,13 @@ public class SettingsManager
       writer.println("-Xms" + Settings.gameMemory + "M");
       writer.println("-Xmx" + Settings.gameMemory + "M");
 
+      // Get rid of this "0" bug. Maybe delete this one day
+      if (Settings.gameAdditionalArgs.equalsIgnoreCase("0")) {
+        Settings.gameAdditionalArgs = "";
+        _ctx.getApp().getUI(SettingsUI.class).eventHandler.saveAdditionalArgs();
+      }
+
+      // And now we validate all (possibly) REAL args.
       if (validAdditionalArgs(Settings.gameAdditionalArgs)) {
         writer.println(Settings.gameAdditionalArgs);
       } else {
