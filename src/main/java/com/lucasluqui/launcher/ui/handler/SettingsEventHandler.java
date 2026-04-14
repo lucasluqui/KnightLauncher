@@ -132,9 +132,14 @@ public class SettingsEventHandler
 
   public void saveAdditionalArgs ()
   {
-    Settings.gameAdditionalArgs = this.ui.argumentsPane.getText();
+    if (_settingsManager.validAdditionalArgs(this.ui.argumentsPane.getText())) {
+      Settings.gameAdditionalArgs = this.ui.argumentsPane.getText();
+    } else {
+      Settings.gameAdditionalArgs = "";
+    }
+
     Server selectedServer = _flamingoManager.getSelectedServer();
-    _settingsManager.setValue("game.additionalArgs.v2", this.ui.argumentsPane.getText(), selectedServer);
+    _settingsManager.setValue("game.additionalArgs.v2", Settings.gameAdditionalArgs, selectedServer);
   }
 
   public void memoryChangeEvent (int memory)
@@ -233,7 +238,8 @@ public class SettingsEventHandler
     long maximumMemory = ((OperatingSystemMXBean) ManagementFactory
       .getOperatingSystemMXBean()).getTotalPhysicalMemorySize() / 1048576;
 
-    int recommendedMemory = (int) Math.min(JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64 ? 3072 : 1024, maximumMemory * 0.25);
+    int recommendedMemory = (int) Math.min(JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64
+      ? RECOMMENDED_MAX_MEMORY : 1024, maximumMemory * 0.25);
 
     log.info("Recommended settings: Maximum physical memory is " + maximumMemory
       + ", setting allocated memory to " + recommendedMemory);
@@ -582,6 +588,7 @@ public class SettingsEventHandler
   private final String DEFAULT_ADDITIONAL_ARGS = "";
 
   // Recommended game settings
+  private final int RECOMMENDED_MAX_MEMORY = 3072;
   private final boolean RECOMMENDED_USE_CUSTOM_GC = true;
   private final String RECOMMENDED_GC = "Parallel";
   private final boolean RECOMMENDED_DISABLE_EXPLICIT_GC = true;

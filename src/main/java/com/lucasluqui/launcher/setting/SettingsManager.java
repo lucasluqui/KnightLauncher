@@ -266,7 +266,7 @@ public class SettingsManager
     }
   }
 
-  private boolean validAdditionalArgs (String argString)
+  public boolean validAdditionalArgs (String argString)
   {
     // ParallelOld isn't compatible with the game's JVM anymore.
     if (argString.contains("ParallelOld")) {
