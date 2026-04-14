@@ -41,11 +41,13 @@ public class CustomColors
   public static final Color INTERFACE_SIDEPANE_SUBBACKGROUND    = new Color(38, 41, 48);
   public static final Color INTERFACE_SIDEPANE_FOOTNOTE         = new Color(79, 84, 100);
 
-  public static final Color INTERFACE_MAINPANE_BACKGROUND           = new Color(56, 60, 71);
-  public static final Color INTERFACE_MAINPANE_BACKGROUND_FOCUS     = new Color(67, 72, 86);
-  public static final Color INTERFACE_MAINPANE_SUBBACKGROUND        = new Color(45, 48, 57);
-  public static final Color INTERFACE_MAINPANE_TRANSPARENT_BUTTON   = new Color(INTERFACE_MAINPANE_BACKGROUND.getRed(), INTERFACE_MAINPANE_BACKGROUND.getGreen(), INTERFACE_MAINPANE_BACKGROUND.getBlue(), 150);
-  public static final Color INTERFACE_MAINPANE_FOOTNOTE             = new Color(90, 96, 114);
+  public static final Color INTERFACE_MAINPANE_BACKGROUND                 = new Color(56, 60, 71);
+  public static final Color INTERFACE_MAINPANE_BACKGROUND_FOCUS           = new Color(67, 72, 86);
+  public static final Color INTERFACE_MAINPANE_SUBBACKGROUND              = new Color(45, 48, 57);
+  public static final Color INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_DARK   = new Color(34, 36, 43);
+  public static final Color INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_BRIGHT = new Color(169, 173, 188);
+  public static final Color INTERFACE_MAINPANE_TRANSPARENT_BUTTON         = new Color(INTERFACE_MAINPANE_BACKGROUND.getRed(), INTERFACE_MAINPANE_BACKGROUND.getGreen(), INTERFACE_MAINPANE_BACKGROUND.getBlue(), 150);
+  public static final Color INTERFACE_MAINPANE_FOOTNOTE                   = new Color(90, 96, 114);
 
   public static final Color INTERFACE_SETTINGS_BADGE_JVM_BACKGROUND       = new Color(217, 119, 7);
   public static final Color INTERFACE_SETTINGS_BADGE_JVM_FOREGROUND       = new Color(248, 159, 58);

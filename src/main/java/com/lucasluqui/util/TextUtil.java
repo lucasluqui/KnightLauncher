@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class TextUtil
 {
-  public static String extractNumericFromString (String input)
+  public static String extractNumeric (String input)
   {
     input = input.replaceAll("[^0-9 ]", "").replaceAll(" +", " ").trim();
     return input;

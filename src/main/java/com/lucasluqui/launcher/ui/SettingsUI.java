@@ -357,7 +357,7 @@ public class SettingsUI extends BaseUI
     choiceGC = new JComboBox<String>();
     choiceGC.setBounds(465, 180, 110, 20);
     choiceGC.setFocusable(false);
-    choiceGC.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    choiceGC.setFont(Fonts.getFont("codeRegular", 11.0f, Font.BOLD));
     gamePanel.add(choiceGC);
     choiceGC.addItem("Parallel");
     choiceGC.addItem("ZGC");
@@ -746,8 +746,6 @@ public class SettingsUI extends BaseUI
     argumentsPane = new JEditorPane();
     argumentsPane.setBounds(25, 117, 615, 100);
     argumentsPane.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
-    argumentsPane.setBackground(CustomColors.INTERFACE_COMPONENT_BACKGROUND);
-    argumentsPane.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
     advancedPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
     argumentsPane.addFocusListener(new FocusListener()
@@ -768,9 +766,9 @@ public class SettingsUI extends BaseUI
     scrollBar.setBounds(25, 117, 590, 100);
     scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollBar.getVerticalScrollBar().setBackground(CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+    scrollBar.getVerticalScrollBar().setBackground(argumentsPane.getBackground());
     scrollBar.putClientProperty(FlatClientProperties.STYLE,
-      "arc: 10; borderWidth: 0");
+      "arc: 10; borderWidth: 0;");
     advancedPanel.add(scrollBar);
 
     argumentsPane.setCaretPosition(0);
@@ -802,7 +800,6 @@ public class SettingsUI extends BaseUI
     serverAddressTextField = new JTextField();
     serverAddressTextField.setBounds(25, 304, 250, 25);
     serverAddressTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
-    serverAddressTextField.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
     serverAddressTextField.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
     serverAddressTextField.addActionListener(e -> {
@@ -820,7 +817,6 @@ public class SettingsUI extends BaseUI
     portTextField = new JTextField();
     portTextField.setBounds(280, 304, 65, 25);
     portTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
-    portTextField.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
     portTextField.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
     advancedPanel.add(portTextField);
@@ -834,7 +830,6 @@ public class SettingsUI extends BaseUI
 
     publicKeyTextField = new JTextField();
     publicKeyTextField.setBounds(25, 363, 355, 30);
-    publicKeyTextField.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
     publicKeyTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
     publicKeyTextField.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
@@ -842,6 +837,7 @@ public class SettingsUI extends BaseUI
     JScrollBar publicKeyScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
     JPanel publicKeyPanel = new JPanel();
     publicKeyPanel.setBounds(25, 363, 355, 38);
+    publicKeyPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     publicKeyPanel.setLayout(new BoxLayout(publicKeyPanel, BoxLayout.Y_AXIS));
     BoundedRangeModel publicKeyBRM = publicKeyTextField.getHorizontalVisibility();
     publicKeyScrollBar.setModel(publicKeyBRM);
@@ -859,7 +855,6 @@ public class SettingsUI extends BaseUI
 
     getdownURLTextField = new JTextField();
     getdownURLTextField.setBounds(25, 422, 355, 30);
-    getdownURLTextField.setSelectionColor(CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
     getdownURLTextField.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
     getdownURLTextField.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
@@ -867,6 +862,7 @@ public class SettingsUI extends BaseUI
     JScrollBar getdownURLScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
     JPanel getdownURLPanel = new JPanel();
     getdownURLPanel.setLayout(new BoxLayout(getdownURLPanel, BoxLayout.Y_AXIS));
+    getdownURLPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     BoundedRangeModel getdownURLBRM = getdownURLTextField.getHorizontalVisibility();
     getdownURLScrollBar.setModel(getdownURLBRM);
     getdownURLPanel.add(getdownURLTextField);

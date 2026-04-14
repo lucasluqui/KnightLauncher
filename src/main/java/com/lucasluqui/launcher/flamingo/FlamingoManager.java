@@ -262,7 +262,7 @@ public class FlamingoManager
   {
     try {
       request = Arrays.copyOf(request, request.length + 1);
-      request[request.length - 1] = "version=" + TextUtil.extractNumericFromString(BuildConfig.getVersion());
+      request[request.length - 1] = "version=" + TextUtil.extractNumeric(BuildConfig.getVersion());
       return RequestUtil.makeRequest(method, "http://" + ADDRESS + ":" + PORT + endpoint, request);
     } catch (Exception e) {
       log.error("Request failed");

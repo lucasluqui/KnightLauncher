@@ -709,12 +709,32 @@ public class LauncherApp
       String currentVersion = BuildConfig.getVersion();
 
       if (!latestRelease.equalsIgnoreCase(currentVersion)) {
-        if (Settings.autoUpdate && !currentVersion.contains("SNAPSHOT")) {
-          // Check if we're coming from a failed update, in that case do not autoupdate even if all other conditions matched.
-          if (!(this.args.length > 0 && this.args[0].equals("updateFailed"))) {
+
+        // Special procedure for SNAPSHOT versions.
+        // Also, avoid users in SNAPSHOT versions from staying behind.
+        if (currentVersion.contains("SNAPSHOT")) {
+          int currentVersionInt = Integer.parseInt(TextUtil.extractNumeric(currentVersion));
+          int latestReleaseInt =  Integer.parseInt(TextUtil.extractNumeric(latestRelease));
+
+          if (currentVersionInt < 1000) currentVersionInt *= 10;
+          if (latestReleaseInt < 1000) latestReleaseInt *= 10;
+
+          if (currentVersionInt <= latestReleaseInt) {
+            launcherUI.eventHandler.updateLauncher(latestRelease);
+          }
+
+          return;
+        }
+
+        if (Settings.autoUpdate) {
+          // Check if we're coming from a failed update
+          // In that case do not autoupdate even if all other conditions matched.
+          boolean updateFailed = this.args.length > 0 && this.args[0].equals("updateFailed");
+          if (!updateFailed) {
             launcherUI.eventHandler.updateLauncher(latestRelease);
           }
         }
+
         Settings.isOutdated = true;
         launcherUI.updateButton.setVisible(true);
       }
