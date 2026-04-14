@@ -268,6 +268,11 @@ public class SettingsManager
 
   public boolean validAdditionalArgs (String argString)
   {
+    // Is it empty? goddamn that's the finest it can be.
+    if (argString.isEmpty()) {
+      return true;
+    }
+
     // ParallelOld isn't compatible with the game's JVM anymore.
     if (argString.contains("ParallelOld")) {
       return false;

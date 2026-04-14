@@ -132,10 +132,20 @@ public class SettingsEventHandler
 
   public void saveAdditionalArgs ()
   {
+    if (this.ui.argumentsPane.getText().equalsIgnoreCase("0")) {
+      // no clue why this happens, just ignore it I guess.
+      return;
+    }
+
     if (_settingsManager.validAdditionalArgs(this.ui.argumentsPane.getText())) {
       Settings.gameAdditionalArgs = this.ui.argumentsPane.getText();
     } else {
       Settings.gameAdditionalArgs = "";
+      Dialog.push(
+        _localeManager.getValue("m.invalid_additional_args_save_warning"),
+        _localeManager.getValue("t.invalid_additional_args"),
+        JOptionPane.WARNING_MESSAGE
+      );
     }
 
     Server selectedServer = _flamingoManager.getSelectedServer();
