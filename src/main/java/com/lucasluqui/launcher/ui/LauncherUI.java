@@ -94,11 +94,7 @@ public class LauncherUI extends BaseUI
     returnButton.setBounds(305, 40, 25, 25);
     returnButton.setToolTipText(_localeManager.getValue("b.back"));
     returnButton.addActionListener(l -> {
-      layeredSettingsPane.setVisible(false);
-      layeredModsPane.setVisible(false);
-      layeredEditorsPane.setVisible(false);
-      panel.setVisible(true);
-      returnButton.setVisible(false);
+      returnToHome();
     });
 
     serverSwitcherPane = new JPanel();
@@ -799,11 +795,6 @@ public class LauncherUI extends BaseUI
   @Inject protected DiscordPresenceClient _discordPresenceClient;
   @Inject protected KeyboardController _kbController;
 
-  // Layered panels
-  public JTabbedPane layeredSettingsPane = new JTabbedPane();
-  public JPanel layeredModsPane = new JPanel();
-  public JPanel layeredEditorsPane = new JPanel();
-
   // Server switcher pane
   public JPanel serverSwitcherPane;
   public JScrollPane serverSwitcherPaneScrollBar;
@@ -833,7 +824,7 @@ public class LauncherUI extends BaseUI
   public JButton playAnimatedBannersButton;
   public JLabel launchBackground;
   public JLabel launchState;
-  public SmoothProgressBar launchProgressBar = new SmoothProgressBar();
+  public SmoothProgressBar launchProgressBar = new SmoothProgressBar(); // does this need to init here? why?
   public JButton warningNotice;
   public JLabel altModeEnabledLabel;
 
