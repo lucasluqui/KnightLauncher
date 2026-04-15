@@ -12,7 +12,7 @@ public class TemplateUI extends BaseUI
   @Inject
   public TemplateUI ()
   {
-    super(385, 460, false);
+    super(800, 455, false);
   }
 
   public void init ()
@@ -51,11 +51,26 @@ public class TemplateUI extends BaseUI
     this.eventHandler.selectedServerChanged();
   }
 
-  // methods here.
+  public void specialKeyPressed ()
+  {
+
+  }
+
+  public void specialKeyReleased ()
+  {
+
+  }
+
+  public void toggleElementsBlock (boolean block)
+  {
+
+  }
+
+  // custom methods here.
 
   @Inject public EventHandler eventHandler;
   @Inject protected LocaleManager _localeManager;
 
-  // attributes and swing components here.
+  // custom attributes, fields, and swing components here.
 }
 */

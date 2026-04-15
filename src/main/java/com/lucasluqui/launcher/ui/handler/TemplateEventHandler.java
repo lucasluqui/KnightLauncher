@@ -17,12 +17,12 @@ public class TemplateEventHandler
 
   }
 
-  // methods here.
+  // custom methods here.
 
   @Inject private UI ui;
 
   protected LocaleManager _localeManager;
 
-  // attributes here.
+  // custom attributes, fields here.
 }
 */
