@@ -422,16 +422,19 @@ public class SettingsUI extends BaseUI
 
     JSeparator sep4 = new JSeparator();
     sep4.setBounds(25, 355, 600, 16);
+    sep4.setVisible(false);
     gamePanel.add(sep4);
 
     JLabel labelJVMPatch = new JLabel(_localeManager.getValue("m.force_jvm_patch"));
     labelJVMPatch.setBounds(25, 370, 350, 18);
     labelJVMPatch.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
+    labelJVMPatch.setVisible(false);
     gamePanel.add(labelJVMPatch);
 
     JLabel labelJVMPatchExplained = new JLabel(_localeManager.getValue("m.force_jvm_patch_explained"));
     labelJVMPatchExplained.setBounds(25, 390, 600, 16);
     labelJVMPatchExplained.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    labelJVMPatchExplained.setVisible(false);
     gamePanel.add(labelJVMPatchExplained);
 
     jvmPatchButton = new JButton(startIcon);
@@ -439,6 +442,7 @@ public class SettingsUI extends BaseUI
     jvmPatchButton.setFocusPainted(false);
     jvmPatchButton.setFocusable(false);
     jvmPatchButton.setEnabled(false);
+    jvmPatchButton.setVisible(false);
     jvmPatchButton.setForeground(Color.WHITE);
     jvmPatchButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     jvmPatchButton.putClientProperty(FlatClientProperties.STYLE,
