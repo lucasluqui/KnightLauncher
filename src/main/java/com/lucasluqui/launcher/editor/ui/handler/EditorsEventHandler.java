@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher.ui.handler;
+package com.lucasluqui.launcher.editor.ui.handler;
 
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
@@ -9,7 +9,7 @@ import com.lucasluqui.launcher.ModuleManager;
 import com.lucasluqui.launcher.editor.data.Editor;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
-import com.lucasluqui.launcher.ui.EditorsUI;
+import com.lucasluqui.launcher.editor.ui.EditorsUI;
 import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.ProcessUtil;
 
@@ -17,6 +17,8 @@ import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.lucasluqui.launcher.editor.ui.Log.log;
 
 public class EditorsEventHandler
 {

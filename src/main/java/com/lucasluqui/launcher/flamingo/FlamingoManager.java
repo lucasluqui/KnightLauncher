@@ -7,8 +7,8 @@ import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.flamingo.data.Status;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
-import com.lucasluqui.launcher.ui.ModListUI;
-import com.lucasluqui.launcher.ui.SettingsUI;
+import com.lucasluqui.launcher.mod.ui.ModListUI;
+import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.util.*;
 import org.json.JSONObject;
 

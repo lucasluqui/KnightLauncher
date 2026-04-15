@@ -1,10 +1,11 @@
-package com.lucasluqui.launcher.ui;
+package com.lucasluqui.launcher.editor.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.jhlabs.image.GaussianFilter;
 import com.jhlabs.image.GrayscaleFilter;
-import com.lucasluqui.launcher.ui.handler.EditorsEventHandler;
+import com.lucasluqui.launcher.ui.BaseUI;
+import com.lucasluqui.launcher.editor.ui.handler.EditorsEventHandler;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.launcher.LocaleManager;
@@ -22,7 +23,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lucasluqui.launcher.ui.Log.log;
+import static com.lucasluqui.launcher.editor.ui.Log.log;
 
 public class EditorsUI extends BaseUI
 {

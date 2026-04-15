@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher.ui;
+package com.lucasluqui.launcher.mod.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
@@ -6,7 +6,8 @@ import com.google.inject.Inject;
 import com.jhlabs.image.GaussianFilter;
 import com.jhlabs.image.GrayscaleFilter;
 import com.lucasluqui.dialog.Dialog;
-import com.lucasluqui.launcher.ui.handler.ModListEventHandler;
+import com.lucasluqui.launcher.ui.BaseUI;
+import com.lucasluqui.launcher.mod.ui.handler.ModListEventHandler;
 import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
@@ -31,7 +32,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
-import static com.lucasluqui.launcher.ui.Log.log;
+import static com.lucasluqui.launcher.mod.ui.Log.log;
 
 public class ModListUI extends BaseUI
 {

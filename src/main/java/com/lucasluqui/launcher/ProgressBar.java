@@ -2,7 +2,7 @@ package com.lucasluqui.launcher;
 
 import com.google.inject.Inject;
 import com.lucasluqui.launcher.ui.LauncherUI;
-import com.lucasluqui.launcher.ui.ModListUI;
+import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.util.ThreadingUtil;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher.ui;
+package com.lucasluqui.launcher;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
@@ -6,9 +6,9 @@ import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
-import com.lucasluqui.launcher.*;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.launcher.ui.BaseUI;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.ImageUtil;

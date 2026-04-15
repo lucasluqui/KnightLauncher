@@ -8,7 +8,7 @@ import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
-import com.lucasluqui.launcher.ui.SettingsUI;
+import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.util.*;
 
 import javax.swing.*;

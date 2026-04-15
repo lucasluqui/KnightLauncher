@@ -13,7 +13,7 @@ import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.ui.LauncherUI;
-import com.lucasluqui.launcher.ui.SettingsUI;
+import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;

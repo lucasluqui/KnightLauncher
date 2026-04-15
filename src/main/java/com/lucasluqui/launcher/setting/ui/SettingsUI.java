@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher.ui;
+package com.lucasluqui.launcher.setting.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
@@ -7,7 +7,8 @@ import com.lucasluqui.launcher.*;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.setting.Settings;
-import com.lucasluqui.launcher.ui.handler.SettingsEventHandler;
+import com.lucasluqui.launcher.ui.BaseUI;
+import com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.*;
@@ -24,6 +25,8 @@ import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.lucasluqui.launcher.setting.ui.Log.log;
 
 public class SettingsUI extends BaseUI
 {

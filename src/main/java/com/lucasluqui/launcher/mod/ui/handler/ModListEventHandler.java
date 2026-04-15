@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher.ui.handler;
+package com.lucasluqui.launcher.mod.ui.handler;
 
 import com.formdev.flatlaf.util.SystemFileChooser;
 import com.google.inject.Inject;
@@ -11,7 +11,7 @@ import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.mod.data.Mod;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
-import com.lucasluqui.launcher.ui.ModListUI;
+import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.util.DesktopUtil;
 import com.lucasluqui.util.ThreadingUtil;
 import org.apache.commons.io.FileUtils;
@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.lucasluqui.launcher.ui.handler.Log.log;
+import static com.lucasluqui.launcher.mod.ui.Log.log;
 
 public class ModListEventHandler
 {

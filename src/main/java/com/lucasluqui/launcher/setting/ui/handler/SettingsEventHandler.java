@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher.ui.handler;
+package com.lucasluqui.launcher.setting.ui.handler;
 
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
@@ -11,8 +11,7 @@ import com.lucasluqui.launcher.flamingo.data.Status;
 import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
-import com.lucasluqui.launcher.ui.LauncherUI;
-import com.lucasluqui.launcher.ui.SettingsUI;
+import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.util.*;
 import com.sun.management.OperatingSystemMXBean;
 
@@ -25,7 +24,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lucasluqui.launcher.ui.handler.Log.log;
+import static com.lucasluqui.launcher.setting.ui.Log.log;
 
 public class SettingsEventHandler
 {
