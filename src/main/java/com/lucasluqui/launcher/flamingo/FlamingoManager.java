@@ -36,25 +36,30 @@ public class FlamingoManager
   public void init ()
   {
     String localId = getLocalId();
-    this._machineId = SystemUtil.getHashedMachineId(localId);
+    _machineId = SystemUtil.getHashedMachineId(localId);
 
     // Make sure we at least have the official server on init.
     Server official = new Server("Official");
     _serverList.add(official);
-    this._selectedServer = official;
+    _selectedServer = official;
   }
 
   public void load ()
   {
-    this.getStatus();
+    getStatus();
 
-    if (this._status == null) {
+    if (_status == null) {
       log.info("Flamingo status is null, we are offline!");
-      checkStatus();
+      setAsOffline();
+
+      // Still at least TRY to get GitHub data, perhaps the issue is on flamingo's side?
+      // Helpful too in case we need to update the launcher with flamingo off.
+      _ctx.getApp().fetchGithubData();
+
       return;
     }
 
-    this.updateServerList();
+    updateServerList();
     _ctx.getApp().fetchGithubData();
   }
 
@@ -143,12 +148,10 @@ public class FlamingoManager
     }
   }
 
-  private void checkStatus ()
+  private void setAsOffline ()
   {
-    if (!this.isOnline()) {
-      _ctx.getApp().getUI(LauncherUI.class)
-        .showWarning(_localeManager.getValue("error.flamingo_offline"));
-    }
+    _ctx.getApp().getUI(LauncherUI.class)
+      .showWarning(_localeManager.getValue("error.flamingo_offline"));
   }
 
   public Server findServerByName (String serverName)
