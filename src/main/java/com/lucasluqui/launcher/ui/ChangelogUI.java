@@ -43,10 +43,16 @@ public class ChangelogUI extends BaseUI
 
     changelogText = changelogText.replaceAll("\\*\\*", "");
     changelogText = changelogText.replaceAll("__", "");
-    changelogText = changelogText.replaceAll("-", "•");
+    changelogText = changelogText.replaceAll("- ", "• ");
 
-    this.changelogArea.setText(WordUtils.wrap(changelogText, 160));
     this.releaseLabel.setText("Knight Launcher " + latestReleaseText);
+
+    for (String line : changelogText.split("\n")) {
+      if (line.length() > 110) {
+        line = WordUtils.wrap(line, 110);
+      }
+      this.changelogArea.setText(changelogArea.getText() + line + "\n");
+    }
 
     this.loadingLabel.setVisible(false);
   }
@@ -74,12 +80,12 @@ public class ChangelogUI extends BaseUI
 
     releaseLabel = new JLabel("");
     releaseLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    releaseLabel.setBounds(25, 0, this.width - 180, 60);
+    releaseLabel.setBounds(25, 0, this.width - 100, 60);
     releaseLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
     panel.add(releaseLabel);
 
     changelogArea = new JTextArea();
-    changelogArea.setBounds(25, 65, this.width - 180, this.height);
+    changelogArea.setBounds(25, 65, this.width - 100, this.height);
     changelogArea.setText("");
     changelogArea.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     changelogArea.setEditable(false);
