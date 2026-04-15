@@ -55,8 +55,7 @@ public class FlamingoManager
     }
 
     this.updateServerList();
-
-    ThreadingUtil.executeWithDelay(this._ctx.getApp()::checkVersion, 3000);
+    _ctx.getApp().fetchGithubData();
   }
 
   public List<Server> fetchServerList ()

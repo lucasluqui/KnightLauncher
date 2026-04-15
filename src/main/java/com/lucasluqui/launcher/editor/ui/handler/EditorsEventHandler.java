@@ -23,13 +23,13 @@ import static com.lucasluqui.launcher.editor.ui.Log.log;
 public class EditorsEventHandler
 {
   @Inject
-  public EditorsEventHandler (LocaleManager _localeManager,
-                              FlamingoManager _flamingoManager,
-                              ModuleManager _moduleManager)
+  public EditorsEventHandler (LocaleManager localeManager,
+                              FlamingoManager flamingoManager,
+                              ModuleManager moduleManager)
   {
-    this._localeManager = _localeManager;
-    this._flamingoManager = _flamingoManager;
-    this._moduleManager = _moduleManager;
+    this._localeManager = localeManager;
+    this._flamingoManager = flamingoManager;
+    this._moduleManager = moduleManager;
   }
 
   public void startEditor (Editor editor)

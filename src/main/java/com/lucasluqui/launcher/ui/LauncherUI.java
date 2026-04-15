@@ -578,7 +578,7 @@ public class LauncherUI extends BaseUI
     changelogButton.setForeground(Color.WHITE);
     changelogButton.setVisible(true);
     panel.add(changelogButton);
-    changelogButton.addActionListener(l -> this.eventHandler.showLatestChangelog());
+    changelogButton.addActionListener(l -> _ctx.getApp().showUI(ChangelogUI.class));
 
     Icon warningNoticeIcon = IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 16, Color.WHITE);
     warningNotice = new JButton(warningNoticeIcon);
@@ -609,7 +609,7 @@ public class LauncherUI extends BaseUI
     updateButton.setVisible(false);
     panel.add(updateButton);
     updateButton.addActionListener(
-      l -> this.eventHandler.updateLauncher(eventHandler.latestRelease)
+      l -> _ctx.getApp().updateLauncher()
     );
 
     Icon playAnimatedBannersIconEnabled = IconFontSwing.buildIcon(FontAwesome.EYE, 18, Color.WHITE);

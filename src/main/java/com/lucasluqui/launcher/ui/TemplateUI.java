@@ -69,6 +69,7 @@ public class TemplateUI extends BaseUI
   // custom methods here.
 
   @Inject public EventHandler eventHandler;
+  @Inject protected LauncherContext _ctx;
   @Inject protected LocaleManager _localeManager;
 
   // custom attributes, fields, and swing components here.

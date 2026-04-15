@@ -10,7 +10,6 @@ import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.launcher.ui.*;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
-import com.lucasluqui.launcher.flamingo.data.Status;
 import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
@@ -133,6 +132,7 @@ public class LauncherApp
     this.initSettingsUI();
     this.initModListUI();
     this.initEditorsUI();
+    this.initChangelogUI();
   }
 
   private void initFinished ()
@@ -215,6 +215,23 @@ public class LauncherApp
           EditorsUI editorsUI = injector.getInstance(EditorsUI.class);
           editorsUI.init();
           this.registerUI(editorsUI);
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
+  }
+
+  private void initChangelogUI ()
+  {
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          ChangelogUI changelogUI = injector.getInstance(ChangelogUI.class);
+          changelogUI.init();
+          this.registerUI(changelogUI);
         } catch (Exception e) {
           log.error(e);
         }
@@ -681,61 +698,91 @@ public class LauncherApp
   }
 
   @SuppressWarnings("all")
-  public void checkVersion ()
+  public void fetchGithubData ()
   {
-    String rawResponseReleases = INetUtil.getWebpageContent(
-      LauncherGlobals.GITHUB_API
-        + "repos/"
-        + LauncherGlobals.GITHUB_AUTHOR + "/"
-        + LauncherGlobals.GITHUB_REPO + "/"
-        + "releases/"
-        + "latest"
-    );
+    String rawResponseLatestRelease = INetUtil.getWebpageContent(LauncherGlobals.GITHUB_API_LATEST_RELEASE);
 
+    if (rawResponseLatestRelease == null) {
+      log.error("Received no response from Github. Possible downtime?");
+      return;
+    }
+
+    JSONObject jsonLatestRelease = new JSONObject(rawResponseLatestRelease);
+
+    this._latestRelease = jsonLatestRelease.getString("tag_name");
+    this._latestReleaseChangelog = jsonLatestRelease.getString("body");
+
+    ThreadingUtil.executeWithDelay(this::checkLauncherUpdates, 3000);
+  }
+
+  public void checkLauncherUpdates ()
+  {
     LauncherUI launcherUI = this.getUI(LauncherUI.class);
+    String currentVersion = BuildConfig.getVersion();
 
-    if (rawResponseReleases != null) {
-      JSONObject jsonReleases = new JSONObject(rawResponseReleases);
-      String latestRelease = jsonReleases.getString("tag_name");
-      String latestChangelog = jsonReleases.getString("body");
+    if (!this._latestRelease.equalsIgnoreCase(currentVersion)) {
 
-      launcherUI.eventHandler.latestRelease = latestRelease;
-      launcherUI.eventHandler.latestChangelog = latestChangelog;
+      // Special procedure for SNAPSHOT versions.
+      // Also, avoid users in SNAPSHOT versions from staying behind.
+      if (currentVersion.contains("SNAPSHOT")) {
+        int currentVersionInt = Integer.parseInt(TextUtil.extractNumeric(currentVersion));
+        int latestReleaseInt =  Integer.parseInt(TextUtil.extractNumeric(this._latestRelease));
 
-      String currentVersion = BuildConfig.getVersion();
+        if (currentVersionInt < 1000) currentVersionInt *= 10;
+        if (latestReleaseInt < 1000) latestReleaseInt *= 10;
 
-      if (!latestRelease.equalsIgnoreCase(currentVersion)) {
-
-        // Special procedure for SNAPSHOT versions.
-        // Also, avoid users in SNAPSHOT versions from staying behind.
-        if (currentVersion.contains("SNAPSHOT")) {
-          int currentVersionInt = Integer.parseInt(TextUtil.extractNumeric(currentVersion));
-          int latestReleaseInt =  Integer.parseInt(TextUtil.extractNumeric(latestRelease));
-
-          if (currentVersionInt < 1000) currentVersionInt *= 10;
-          if (latestReleaseInt < 1000) latestReleaseInt *= 10;
-
-          if (currentVersionInt <= latestReleaseInt) {
-            launcherUI.eventHandler.updateLauncher(latestRelease);
-          }
-
-          return;
+        if (currentVersionInt <= latestReleaseInt) {
+          updateLauncher(this._latestRelease);
         }
 
-        if (Settings.autoUpdate) {
-          // Check if we're coming from a failed update
-          // In that case do not autoupdate even if all other conditions matched.
-          boolean updateFailed = this.args.length > 0 && this.args[0].equals("updateFailed");
-          if (!updateFailed) {
-            launcherUI.eventHandler.updateLauncher(latestRelease);
-          }
-        }
-
-        Settings.isOutdated = true;
-        launcherUI.updateButton.setVisible(true);
+        return;
       }
-    } else {
-      log.error("Received no response from GitHub. Possible downtime?");
+
+      if (Settings.autoUpdate) {
+        // Check if we're coming from a failed update
+        // In that case do not autoupdate even if all other conditions matched.
+        boolean updateFailed = this.args.length > 0 && this.args[0].equals("updateFailed");
+        if (!updateFailed) {
+          updateLauncher(this._latestRelease);
+        }
+      }
+
+      Settings.isOutdated = true;
+      launcherUI.updateButton.setVisible(true);
+    }
+  }
+
+  public void updateLauncher ()
+  {
+    updateLauncher(this._latestRelease);
+  }
+
+  public void updateLauncher (String newVersion)
+  {
+    try {
+      Files.copy(Paths.get(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"), Paths.get(LauncherGlobals.USER_DIR + "/updater.jar"), StandardCopyOption.REPLACE_EXISTING);
+
+      // Sleep the thread for a bit to be fully sure updater.jar isn't locked.
+      Thread.sleep(1000);
+
+      ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update", newVersion}, true);
+      exit(true);
+    } catch (Exception e) {
+      String downloadErrMsg = "An error occurred while trying to start the launcher updater." +
+        "\nPlease try again later.";
+      downloadErrMsg += "\n\nError: " + e;
+      for (StackTraceElement stElement : e.getStackTrace()) {
+        downloadErrMsg += "\n" + stElement.toString();
+      }
+
+      List<File> files = new ArrayList<>();
+      files.add(new File(LauncherGlobals.USER_DIR + File.separator + "knightlauncher.log"));
+      files.add(new File(LauncherGlobals.USER_DIR + File.separator + "old-knightlauncher.log"));
+      FileUtil.copyFilesToClipboard(files);
+      downloadErrMsg += "\n\nRelevant log files were automatically copied to your clipboard.";
+
+      Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
+      log.error(e);
     }
   }
 
@@ -862,6 +909,16 @@ public class LauncherApp
     }
   }
 
+  public String getLatestRelease ()
+  {
+    return this._latestRelease;
+  }
+
+  public String getLatestReleaseChangelog ()
+  {
+    return this._latestReleaseChangelog;
+  }
+
   public void exit (boolean force)
   {
     _discordPresenceClient.stop();
@@ -893,6 +950,9 @@ public class LauncherApp
   @Inject protected CacheManager _cacheManager;
   @Inject protected DownloadManager _downloadManager;
   @Inject protected KeyboardController _keyboardController;
+
+  protected String _latestRelease = null;
+  protected String _latestReleaseChangelog = null;
 
   private final Map<Class<? extends BaseUI>, BaseUI> _uiMap = new HashMap<>();
   private final List<Class<? extends BaseUI>> _uiHistory = new ArrayList<>();

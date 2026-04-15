@@ -29,17 +29,17 @@ import static com.lucasluqui.launcher.setting.ui.Log.log;
 public class SettingsEventHandler
 {
   @Inject
-  public SettingsEventHandler (LauncherContext _ctx,
-                               ModManager _modManager,
-                               LocaleManager _localeManager,
-                               SettingsManager _settingsManager,
-                               FlamingoManager _flamingoManager)
+  public SettingsEventHandler (LauncherContext ctx,
+                               ModManager modManager,
+                               LocaleManager localeManager,
+                               SettingsManager settingsManager,
+                               FlamingoManager flamingoManager)
   {
-    this._ctx = _ctx;
-    this._modManager = _modManager;
-    this._localeManager = _localeManager;
-    this._settingsManager = _settingsManager;
-    this._flamingoManager = _flamingoManager;
+    this._ctx = ctx;
+    this._modManager = modManager;
+    this._localeManager = localeManager;
+    this._settingsManager = settingsManager;
+    this._flamingoManager = flamingoManager;
   }
 
   public void platformChangeEvent (ItemEvent event)

@@ -39,7 +39,7 @@ import static com.lucasluqui.launcher.ui.Log.log;
 public class LauncherEventHandler
 {
   @Inject
-  public LauncherEventHandler (LauncherContext launcherCtx,
+  public LauncherEventHandler (LauncherContext ctx,
                                ModManager modManager,
                                SettingsManager settingsManager,
                                LocaleManager localeManager,
@@ -48,7 +48,7 @@ public class LauncherEventHandler
                                DownloadManager downloadManager,
                                DiscordPresenceClient discordPresenceClient)
   {
-    this._ctx = launcherCtx;
+    this._ctx = ctx;
     this._modManager = modManager;
     this._settingsManager = settingsManager;
     this._localeManager = localeManager;
@@ -580,45 +580,6 @@ public class LauncherEventHandler
     refreshThread.start();
   }
 
-  public void updateLauncher (String newVersion)
-  {
-    try {
-      Files.copy(Paths.get(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"), Paths.get(LauncherGlobals.USER_DIR + "/updater.jar"), StandardCopyOption.REPLACE_EXISTING);
-
-      // Sleep the thread for a bit to be fully sure updater.jar isn't locked.
-      Thread.sleep(1000);
-
-      ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update", newVersion}, true);
-      _ctx.getApp().exit(true);
-    } catch (Exception e) {
-      String downloadErrMsg = "An error occurred while trying to start the launcher updater." +
-        "\nPlease try again later.";
-      downloadErrMsg += "\n\nError: " + e;
-      for (StackTraceElement stElement : e.getStackTrace()) {
-        downloadErrMsg += "\n" + stElement.toString();
-      }
-
-      List<File> files = new ArrayList<>();
-      files.add(new File(LauncherGlobals.USER_DIR + File.separator + "knightlauncher.log"));
-      files.add(new File(LauncherGlobals.USER_DIR + File.separator + "old-knightlauncher.log"));
-      FileUtil.copyFilesToClipboard(files);
-      downloadErrMsg += "\n\nRelevant log files were automatically copied to your clipboard.";
-
-      Dialog.push(downloadErrMsg, JOptionPane.ERROR_MESSAGE);
-      log.error(e);
-    }
-  }
-
-  public void showLatestChangelog ()
-  {
-    Dialog.push(_localeManager.getValue(
-      "m.changelog_text",
-      new String[]{
-        BuildConfig.getVersion(),
-        this.latestRelease, this.latestChangelog
-      }), JOptionPane.INFORMATION_MESSAGE);
-  }
-
   public void switchBannerAnimations ()
   {
     Settings.playAnimatedBanners = !Settings.playAnimatedBanners;
@@ -852,7 +813,6 @@ public class LauncherEventHandler
 
   public String currentWarning = "";
   public String latestRelease = "";
-  public String latestChangelog = "";
 
   public boolean displayingAnimBanner = false;
 

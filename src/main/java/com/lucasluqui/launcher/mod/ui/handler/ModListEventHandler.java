@@ -28,15 +28,15 @@ import static com.lucasluqui.launcher.mod.ui.Log.log;
 public class ModListEventHandler
 {
   @Inject
-  public ModListEventHandler (ModManager _modManager,
-                              LocaleManager _localeManager,
-                              SettingsManager _settingsManager,
-                              FlamingoManager _flamingoManager)
+  public ModListEventHandler (ModManager modManager,
+                              LocaleManager localeManager,
+                              SettingsManager settingsManager,
+                              FlamingoManager flamingoManager)
   {
-    this._modManager = _modManager;
-    this._localeManager = _localeManager;
-    this._settingsManager = _settingsManager;
-    this._flamingoManager = _flamingoManager;
+    this._modManager = modManager;
+    this._localeManager = localeManager;
+    this._settingsManager = settingsManager;
+    this._flamingoManager = flamingoManager;
   }
 
   @SuppressWarnings("unused")
