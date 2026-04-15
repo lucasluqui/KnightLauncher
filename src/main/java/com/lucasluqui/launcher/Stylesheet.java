@@ -59,6 +59,10 @@ public class Stylesheet
     UIManager.put("Button.default.hoverBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("Button.hoverBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
 
+    UIManager.put("HelpButton.borderColor", CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+    UIManager.put("HelpButton.hoverBorderColor", CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+    UIManager.put("HelpButton.background", CustomColors.INTERFACE_COMPONENT_BACKGROUND);
+
     // think fbc and fc do nothing.
     UIManager.put("CheckBox.icon.focusedBorderColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_BRIGHT);
     UIManager.put("CheckBox.icon.focusColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_BRIGHT);

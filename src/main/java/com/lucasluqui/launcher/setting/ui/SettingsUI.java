@@ -746,6 +746,20 @@ public class SettingsUI extends BaseUI
     labelArguments.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
     advancedPanel.add(labelArguments);
 
+    JButton jvmArgDocsButton = new JButton(_localeManager.getValue("b.jvm_arg_docs"));
+    jvmArgDocsButton.setBounds(590, 87, 25, 25);
+    jvmArgDocsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    jvmArgDocsButton.setFocusPainted(false);
+    jvmArgDocsButton.setFocusable(false);
+    jvmArgDocsButton.setForeground(Color.WHITE);
+    jvmArgDocsButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
+    jvmArgDocsButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
+    jvmArgDocsButton.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
+    jvmArgDocsButton.setToolTipText(_localeManager.getValue("b.jvm_arg_docs"));
+    advancedPanel.add(jvmArgDocsButton);
+    jvmArgDocsButton.addActionListener(l -> DesktopUtil.openWebpage(URL_JVM_ARG_DOCS));
+
     argumentsPane = new JEditorPane();
     argumentsPane.setBounds(25, 117, 615, 100);
     argumentsPane.setFont(Fonts.getFont("codeRegular", 12.0f, Font.PLAIN));
@@ -1031,6 +1045,8 @@ public class SettingsUI extends BaseUI
   @Inject protected SettingsManager _settingsManager;
   @Inject protected FlamingoManager _flamingoManager;
 
+  private final String URL_JVM_ARG_DOCS = "https://docs.oracle.com/en/java/javase/21/docs/specs/man/java.html#advanced-options-for-java";
+
   public JTabbedPane tabbedPane;
   public JComboBox<String> choicePlatform = new JComboBox<String>();
   public JComboBox<String> choiceLanguage;
@@ -1076,5 +1092,4 @@ public class SettingsUI extends BaseUI
   public JLabel labelFilePurging;
   public JLabel labelFilePurgingExplained;
   public JCheckBox switchFilePurging;
-
 }
