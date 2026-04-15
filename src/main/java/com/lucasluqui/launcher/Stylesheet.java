@@ -38,6 +38,7 @@ public class Stylesheet
     UIManager.put("TextField.background", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
     UIManager.put("TextField.selectionBackground", CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
     UIManager.put("TextField.caretForeground", Color.WHITE);
+    UIManager.put("TextField.placeholderForeground", CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
 
     UIManager.put("TextArea.background", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
     UIManager.put("TextArea.selectionBackground", CustomColors.INTERFACE_COMPONENT_SELECTED_BACKGROUND);
