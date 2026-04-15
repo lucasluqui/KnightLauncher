@@ -147,7 +147,7 @@ public class LauncherApp
 
     _flamingoManager.updateServerList();
 
-    loadOnlineAssets();
+    loadOnline();
 
     // Only re-check installed mods if we got a different selected server.
     if (!_flamingoManager.getSelectedServer().isOfficial())
@@ -654,26 +654,19 @@ public class LauncherApp
     return this.args.length > 0 && this.args[0].equals("update");
   }
 
-  private void loadOnlineAssets ()
+  private void loadOnline ()
   {
     new Thread(() -> {
-      Status flamingoStatus = _flamingoManager.getStatus();
-      if (flamingoStatus != null) {
-        _flamingoManager.setOnline(true);
-        this.getUI(SettingsUI.class).eventHandler.updateAboutTab(flamingoStatus);
+      _flamingoManager.load();
+      if (_flamingoManager.isOnline()) {
+        loadOnlineUI();
       }
-      _flamingoManager.updateServerList();
-      this.getUI(SettingsUI.class).eventHandler.updateActiveBetaCodes();
     }).start();
-
-    ThreadingUtil.executeWithDelay(this::checkVersion, 3000);
-    ThreadingUtil.executeWithDelay(this::checkFlamingoStatus, 10000);
   }
 
-  private void checkFlamingoStatus ()
-  {
-    if (!_flamingoManager.isOnline()) {
-      this.getUI(LauncherUI.class).showWarning(_localeManager.getValue("error.flamingo_offline"));
+  private void loadOnlineUI() {
+    for (BaseUI ui : getUIMap().values()) {
+      ui.loadOnline();
     }
   }
 
@@ -688,7 +681,7 @@ public class LauncherApp
   }
 
   @SuppressWarnings("all")
-  private void checkVersion ()
+  public void checkVersion ()
   {
     String rawResponseReleases = INetUtil.getWebpageContent(
       LauncherGlobals.GITHUB_API

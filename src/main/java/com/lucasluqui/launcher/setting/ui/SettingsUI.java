@@ -49,6 +49,13 @@ public class SettingsUI extends BaseUI
     if (showBetas()) eventHandler.checkBetaCodes();
   }
 
+  @Override
+  public void loadOnline ()
+  {
+    eventHandler.updateAboutTab(_flamingoManager.getStatus());
+    eventHandler.updateActiveBetaCodes();
+  }
+
   private void compose ()
   {
     guiFrame.setVisible(false);

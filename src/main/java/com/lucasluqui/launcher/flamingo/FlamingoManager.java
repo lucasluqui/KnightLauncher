@@ -9,6 +9,7 @@ import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
+import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.util.*;
 import org.json.JSONObject;
 
@@ -35,12 +36,27 @@ public class FlamingoManager
   public void init ()
   {
     String localId = getLocalId();
-    this.machineId = SystemUtil.getHashedMachineId(localId);
+    this._machineId = SystemUtil.getHashedMachineId(localId);
 
     // Make sure we at least have the official server on init.
     Server official = new Server("Official");
-    serverList.add(official);
-    this.selectedServer = official;
+    _serverList.add(official);
+    this._selectedServer = official;
+  }
+
+  public void load ()
+  {
+    this.getStatus();
+
+    if (this._status == null) {
+      log.info("Flamingo status is null, we are offline!");
+      checkStatus();
+      return;
+    }
+
+    this.updateServerList();
+
+    ThreadingUtil.executeWithDelay(this._ctx.getApp()::checkVersion, 3000);
   }
 
   public List<Server> fetchServerList ()
@@ -48,7 +64,7 @@ public class FlamingoManager
     List<Server> servers = new ArrayList<>();
 
     try {
-      JSONObject response = sendRequest("GET", "/server-list/", new String[]{"machineId=" + this.machineId});
+      JSONObject response = sendRequest("GET", "/server-list/", new String[]{"machineId=" + this._machineId});
       log.info("Got server list from flamingo");
 
       // we got an empty server list, so empty we return it.
@@ -95,7 +111,7 @@ public class FlamingoManager
   public String activateBetaCode (String code)
   {
     try {
-      JSONObject response = sendRequest("POST", "/beta-code/activate/" + code, new String[]{"machineId=" + this.machineId});
+      JSONObject response = sendRequest("POST", "/beta-code/activate/" + code, new String[]{"machineId=" + this._machineId});
       log.info("Got response for beta code activation: " + response);
 
       return response.getString("result");
@@ -107,6 +123,10 @@ public class FlamingoManager
 
   public Status getStatus ()
   {
+    if (this._status != null) {
+      return this._status;
+    }
+
     try {
       JSONObject response = sendRequest("GET", "/status/", new String[]{});
       log.info("Got status from flamingo: " + response);
@@ -115,10 +135,20 @@ public class FlamingoManager
       status.version = response.getString("version");
       status.uptime = response.getLong("uptime");
 
+      this._status = status;
+
       return status;
     } catch (Exception e) {
       log.error(e);
-      return new Status();
+      return null;
+    }
+  }
+
+  private void checkStatus ()
+  {
+    if (!this.isOnline()) {
+      _ctx.getApp().getUI(LauncherUI.class)
+        .showWarning(_localeManager.getValue("error.flamingo_offline"));
     }
   }
 
@@ -139,7 +169,7 @@ public class FlamingoManager
   public String getLocalGameVersion ()
   {
     try {
-      String buildString = ZipUtil.readFileInsideZip(this.selectedServer.getRootDirectory() + File.separator + "code/config.jar", "build.properties");
+      String buildString = ZipUtil.readFileInsideZip(this._selectedServer.getRootDirectory() + File.separator + "code/config.jar", "build.properties");
       Properties properties = new Properties();
       properties.load(new ByteArrayInputStream(buildString.getBytes(StandardCharsets.UTF_8)));
       String version = properties.getProperty("version");
@@ -147,7 +177,7 @@ public class FlamingoManager
       return version;
     } catch (IOException e) {
       try {
-        String version = FileUtil.readFile(this.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
+        String version = FileUtil.readFile(this._selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
         return version;
       } catch (IOException ex) {
         log.error(ex);
@@ -273,17 +303,17 @@ public class FlamingoManager
 
   public List<Server> getServerList ()
   {
-    return this.serverList;
+    return this._serverList;
   }
 
   public void setServerList (List<Server> serverList)
   {
-    this.serverList = serverList;
+    this._serverList = serverList;
   }
 
   public Server getSelectedServer ()
   {
-    return this.selectedServer;
+    return this._selectedServer;
   }
 
   public void setSelectedServer (Server server)
@@ -293,19 +323,18 @@ public class FlamingoManager
       return;
     }
 
-    this.selectedServer = server;
+    this._selectedServer = server;
     _ctx.getApp().selectedServerChanged();
     saveSelectedServer(server.getSanitizedName().toLowerCase());
   }
 
   public boolean isOnline ()
   {
-    return this.online;
+    return this._status != null;
   }
 
-  public void setOnline (boolean online)
-  {
-    this.online = online;
+  public void setStatus (Status status) {
+    this._status = status;
   }
 
   public String getThirdPartyBaseDir ()
@@ -315,14 +344,14 @@ public class FlamingoManager
 
   @Inject protected LauncherContext _ctx;
   @Inject protected SettingsManager _settingsManager;
+  @Inject protected LocaleManager _localeManager;
+
+  protected List<Server> _serverList = new ArrayList<>();
+  protected Server _selectedServer = null;
+  protected String _machineId = null;
+  protected Status _status = null;
 
   private final String ADDRESS = DeployConfig.getFlamingoAddress();
   private final int PORT = DeployConfig.getFlamingoPort();
-
   private final String THIRD_PARTY_BASE_DIR = LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator;
-
-  private List<Server> serverList = new ArrayList<>();
-  private Server selectedServer = null;
-  private String machineId = null;
-  private boolean online = false;
 }

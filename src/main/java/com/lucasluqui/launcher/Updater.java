@@ -46,6 +46,12 @@ public class Updater extends BaseUI
     startUpdate();
   }
 
+  @Override
+  public void loadOnline ()
+  {
+
+  }
+
   private void compose ()
   {
     guiFrame.setVisible(false);

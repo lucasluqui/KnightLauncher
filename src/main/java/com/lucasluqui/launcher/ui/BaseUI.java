@@ -30,7 +30,11 @@ public abstract class BaseUI
   }
 
   public void initFinished ()
-  {}
+  {
+
+  }
+
+  public abstract void loadOnline ();
 
   public void switchVisibility ()
   {

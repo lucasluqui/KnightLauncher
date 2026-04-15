@@ -46,6 +46,12 @@ public class EditorsUI extends BaseUI
     setupEditors();
   }
 
+  @Override
+  public void loadOnline ()
+  {
+
+  }
+
   private void compose ()
   {
     guiFrame.setVisible(false);

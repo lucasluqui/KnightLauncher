@@ -49,6 +49,12 @@ public class JVMPatcher extends BaseUI
     super.initFinished();
   }
 
+  @Override
+  public void loadOnline ()
+  {
+
+  }
+
   private void setAvailableJVMs ()
   {
     if (legacy) {

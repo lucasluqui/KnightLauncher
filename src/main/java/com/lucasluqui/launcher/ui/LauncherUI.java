@@ -74,6 +74,12 @@ public class LauncherUI extends BaseUI
     super.initFinished();
   }
 
+  @Override
+  public void loadOnline ()
+  {
+
+  }
+
   private void compose ()
   {
     guiFrame.setVisible(false);
