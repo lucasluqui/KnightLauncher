@@ -27,11 +27,9 @@ public class Stylesheet
 
     UIManager.put("TabbedPane.underlineColor", CustomColors.LAUNCHER);
     UIManager.put("TabbedPane.inactiveUnderlineColor", CustomColors.LAUNCHER);
-    UIManager.put("TabbedPane.contentAreaColor", new Color(89, 92, 94));
 
     UIManager.put("Slider.thumbColor", CustomColors.INTERFACE_DEFAULT);
 
-    UIManager.put("ComboBox.border", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
     UIManager.put("ComboBox.background", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
     UIManager.put("ComboBox.popupBackground", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
     UIManager.put("ComboBox.buttonBackground", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
@@ -61,6 +59,7 @@ public class Stylesheet
     UIManager.put("Button.default.hoverBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
     UIManager.put("Button.hoverBorderColor", CustomColors.INTERFACE_COMPONENT_FOCUS);
 
+    // think fbc and fc do nothing.
     UIManager.put("CheckBox.icon.focusedBorderColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_BRIGHT);
     UIManager.put("CheckBox.icon.focusColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_BRIGHT);
     UIManager.put("CheckBox.icon.hoverBorderColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_BRIGHT);
@@ -68,9 +67,15 @@ public class Stylesheet
     UIManager.put("CheckBox.icon.selectedBackground", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
     UIManager.put("CheckBox.icon.selectedBorderColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_BRIGHT);
 
+    // changes borders in comboboxes popups.
+    UIManager.put("PopupMenu.borderColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
+
     UIManager.put("Component.borderColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
     UIManager.put("Component.focusedBorderColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_BRIGHT);
+
+    // mainly text fields.
     UIManager.put("Component.focusColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_BRIGHT);
+
     UIManager.put("Component.hoverBorderColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_BRIGHT);
 
     UIManager.put("ToolTip.font", Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));

@@ -1,6 +1,7 @@
 package com.lucasluqui.launcher.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
 import com.google.inject.Inject;
 import com.jhlabs.image.GaussianFilter;
 import com.jhlabs.image.GrayscaleFilter;
@@ -244,11 +245,11 @@ public class ModListUI extends BaseUI
     searchBox = new JTextField();
     searchBox.setBounds(250, 85, 300, 27);
     searchBox.setFont(Fonts.getFont("codeRegular", 11.0f, Font.ITALIC));
-    searchBox.setBackground(CustomColors.INTERFACE_COMPONENT_BACKGROUND);
-    searchBox.setForeground(Color.WHITE);
     searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, _localeManager.getValue("m.modlist_searchbox_placeholder"));
     searchBox.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
+    searchBox.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+      new FlatSearchIcon());
     guiFrame.getContentPane().add(searchBox);
     searchBox.addActionListener(l -> eventHandler.searchMod());
     searchBox.addKeyListener(new KeyAdapter()
