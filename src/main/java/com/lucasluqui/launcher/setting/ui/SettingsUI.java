@@ -121,9 +121,9 @@ public class SettingsUI extends BaseUI
     launcherSubPanel.add(labelLanguage);
 
     choiceLanguage = new JComboBox<>();
-    choiceLanguage.setBounds(95, 0, 150, 20);
+    choiceLanguage.setBounds(95, 0, 155, 25);
     choiceLanguage.setFocusable(false);
-    choiceLanguage.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    choiceLanguage.setFont(Fonts.getFont("defaultRegular", 12.0f, Font.BOLD));
     for (String lang : _localeManager.AVAILABLE_LANGUAGES) {
       choiceLanguage.addItem(lang);
     }
@@ -291,8 +291,8 @@ public class SettingsUI extends BaseUI
     gamePanel.add(labelPlatform);
 
     choicePlatform = new JComboBox<String>();
-    choicePlatform.setBounds(25, 115, 150, 20);
-    choicePlatform.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    choicePlatform.setBounds(25, 115, 155, 25);
+    choicePlatform.setFont(Fonts.getFont("defaultRegular", 12.0f, Font.BOLD));
     choicePlatform.setFocusable(false);
     gamePanel.add(choicePlatform);
     choicePlatform.addItem(_localeManager.getValue("o.steam"));
@@ -358,9 +358,9 @@ public class SettingsUI extends BaseUI
     switchUseCustomGC.setEnabled(SystemUtil.is64Bit());
 
     choiceGC = new JComboBox<String>();
-    choiceGC.setBounds(465, 180, 110, 20);
+    choiceGC.setBounds(465, 180, 115, 25);
     choiceGC.setFocusable(false);
-    choiceGC.setFont(Fonts.getFont("codeRegular", 11.0f, Font.BOLD));
+    choiceGC.setFont(Fonts.getFont("codeRegular", 12.0f, Font.BOLD));
     gamePanel.add(choiceGC);
     choiceGC.addItem("Parallel");
     choiceGC.addItem("ZGC");
@@ -771,7 +771,7 @@ public class SettingsUI extends BaseUI
     scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     scrollBar.getVerticalScrollBar().setBackground(argumentsPane.getBackground());
     scrollBar.putClientProperty(FlatClientProperties.STYLE,
-      "arc: 10; borderWidth: 0;");
+      "arc: 10; borderWidth: 1;");
     advancedPanel.add(scrollBar);
 
     argumentsPane.setCaretPosition(0);

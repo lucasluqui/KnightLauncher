@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.lucasluqui.launcher.ui.handler.Log.log;
+import static com.lucasluqui.launcher.ui.Log.log;
 
 public class LauncherEventHandler
 {

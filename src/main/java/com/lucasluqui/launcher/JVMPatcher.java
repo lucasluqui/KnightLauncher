@@ -92,9 +92,9 @@ public class JVMPatcher extends BaseUI
     guiFrame.getContentPane().add(jvmSelectLabel);
 
     jvmComboBox = new JComboBox<>();
-    jvmComboBox.setBounds(125, 145, 255, 20);
+    jvmComboBox.setBounds(125, 145, 260, 25);
     jvmComboBox.setFocusable(false);
-    jvmComboBox.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    jvmComboBox.setFont(Fonts.getFont("defaultRegular", 12.0f, Font.BOLD));
     guiFrame.add(jvmComboBox);
 
     for (String key : this.availableJVMs.keySet()) {
