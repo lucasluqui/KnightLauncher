@@ -128,11 +128,28 @@ public class LauncherApp
 
   private void initUI ()
   {
-    this.initLauncherUI();
-    this.initSettingsUI();
-    this.initModListUI();
-    this.initEditorsUI();
-    this.initChangelogUI();
+    this.initUI(LauncherUI.class);
+    this.initUI(SettingsUI.class);
+    this.initUI(ModListUI.class);
+    this.initUI(EditorsUI.class);
+    this.initUI(ChangelogUI.class);
+  }
+
+  private <T extends BaseUI> void initUI(Class<T> clazz)
+  {
+    try {
+      EventQueue.invokeAndWait(() -> {
+        try {
+          T ui = injector.getInstance(clazz);
+          ui.init();
+          this.registerUI(ui);
+        } catch (Exception e) {
+          log.error(e);
+        }
+      });
+    } catch (Exception e) {
+      log.error(e);
+    }
   }
 
   private void initFinished ()
@@ -154,91 +171,6 @@ public class LauncherApp
       new Thread(_modManager::checkInstalled).start();
 
     _discordPresenceClient.setDetails(_localeManager.getValue("presence.ready"));
-  }
-
-  private void initLauncherUI ()
-  {
-    try {
-      EventQueue.invokeAndWait(() -> {
-        try {
-          LauncherUI launcherUI = injector.getInstance(LauncherUI.class);
-          launcherUI.init();
-          this.registerUI(launcherUI);
-        } catch (Exception e) {
-          log.error(e);
-        }
-      });
-    } catch (Exception e) {
-      log.error(e);
-    }
-  }
-
-  private void initSettingsUI ()
-  {
-    try {
-      EventQueue.invokeAndWait(() -> {
-        try {
-          SettingsUI settingsUI = injector.getInstance(SettingsUI.class);
-          settingsUI.init();
-          this.registerUI(settingsUI);
-        } catch (Exception e) {
-          log.error(e);
-        }
-      });
-    } catch (Exception e) {
-      log.error(e);
-    }
-  }
-
-  private void initModListUI ()
-  {
-    try {
-      EventQueue.invokeAndWait(() -> {
-        try {
-          ModListUI modListUI = injector.getInstance(ModListUI.class);
-          modListUI.init();
-          this.registerUI(modListUI);
-        } catch (Exception e) {
-          log.error(e);
-        }
-      });
-    } catch (Exception e) {
-      log.error(e);
-    }
-  }
-
-  private void initEditorsUI ()
-  {
-    try {
-      EventQueue.invokeAndWait(() -> {
-        try {
-          EditorsUI editorsUI = injector.getInstance(EditorsUI.class);
-          editorsUI.init();
-          this.registerUI(editorsUI);
-        } catch (Exception e) {
-          log.error(e);
-        }
-      });
-    } catch (Exception e) {
-      log.error(e);
-    }
-  }
-
-  private void initChangelogUI ()
-  {
-    try {
-      EventQueue.invokeAndWait(() -> {
-        try {
-          ChangelogUI changelogUI = injector.getInstance(ChangelogUI.class);
-          changelogUI.init();
-          this.registerUI(changelogUI);
-        } catch (Exception e) {
-          log.error(e);
-        }
-      });
-    } catch (Exception e) {
-      log.error(e);
-    }
   }
 
   private void initJVMPatcher ()
