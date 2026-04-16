@@ -8,16 +8,18 @@ public final class SmoothProgressBar extends JProgressBar
 {
   public SmoothProgressBar ()
   {
-    super(VISUAL_MIN, VISUAL_MAX);
+    super();
+    this.setMinimum(VISUAL_MIN);
+    this.setMaximum(VISUAL_MAX);
     setStringPainted(false);
   }
 
   @Override
   public void setMinimum (int min)
   {
-    logicalMin = min;
-    if (logicalValue < logicalMin) {
-      logicalValue = logicalMin;
+    _logicalMin = min;
+    if (_logicalValue < _logicalMin) {
+      _logicalValue = _logicalMin;
     }
     reanimate();
   }
@@ -25,9 +27,9 @@ public final class SmoothProgressBar extends JProgressBar
   @Override
   public void setMaximum (int max)
   {
-    logicalMax = max;
-    if (logicalValue > logicalMax) {
-      logicalValue = logicalMax;
+    _logicalMax = max;
+    if (_logicalValue > _logicalMax) {
+      _logicalValue = _logicalMax;
     }
     reanimate();
   }
@@ -35,112 +37,109 @@ public final class SmoothProgressBar extends JProgressBar
   @Override
   public void setValue (int value)
   {
-    if (value < logicalMin || value > logicalMax) {
+    if (value < _logicalMin || value > _logicalMax) {
       log.error("Progress bar value out of logical range!",
         "value", value,
-        "logicalMin", logicalMin,
-        "logicalMax", logicalMax
+        "logicalMin", _logicalMin,
+        "logicalMax", _logicalMax
       );
     }
 
-    logicalValue = value;
+    _logicalValue = value;
 
     // when being set to the logical minimum or maximum, don't animate, just go straight to it.
-    if (value == logicalMin) {
+    if (value == _logicalMin) {
       stopAnimation();
-      currentVisualValue = VISUAL_MIN;
+      _currentVisualValue = VISUAL_MIN;
       super.setValue(VISUAL_MIN);
       setStringPainted(false);
       return;
     }
 
-    if (value == logicalMax) {
+    if (value == _logicalMax) {
       stopAnimation();
-      currentVisualValue = VISUAL_MAX;
+      _currentVisualValue = VISUAL_MAX;
       super.setValue(VISUAL_MAX);
-      setStringPainted(this.shouldPaintString);
+      setStringPainted(this._shouldPaintString);
       return;
     }
 
-    setStringPainted(this.shouldPaintString);
+    setStringPainted(this._shouldPaintString);
     animateTo(logicalToVisual(value));
   }
 
   private int logicalToVisual (int value)
   {
-    if (logicalMax == logicalMin) {
+    if (_logicalMax == _logicalMin) {
       return VISUAL_MIN;
     }
 
-    double ratio = (value - logicalMin) / (double) (logicalMax - logicalMin);
+    double ratio = (value - _logicalMin) / (double) (_logicalMax - _logicalMin);
 
     return (int) Math.round(ratio * VISUAL_MAX);
   }
 
   private void reanimate ()
   {
-    if (logicalValue == logicalMin) {
-      setValue(logicalMin);
+    if (_logicalValue == _logicalMin) {
+      setValue(_logicalMin);
       return;
     }
-    animateTo(logicalToVisual(logicalValue));
+    animateTo(logicalToVisual(_logicalValue));
   }
 
   private void animateTo (int targetVisual)
   {
-    if (targetVisual < currentVisualValue) {
-      currentVisualValue = targetVisual;
+    if (targetVisual < _currentVisualValue) {
+      _currentVisualValue = targetVisual;
       stopAnimation();
-      super.setValue(currentVisualValue);
+      super.setValue(_currentVisualValue);
       return;
     }
 
     stopAnimation();
 
-    animationTimer = new Timer(DELAY_MS, e -> {
-      if (currentVisualValue == targetVisual) {
+    _animationTimer = new Timer(DELAY_MS, e -> {
+      if (_currentVisualValue == targetVisual) {
         stopAnimation();
         return;
       }
 
-      int direction = Integer.compare(targetVisual, currentVisualValue);
-      currentVisualValue += direction * STEP;
+      int direction = Integer.compare(targetVisual, _currentVisualValue);
+      _currentVisualValue += direction * STEP;
 
-      if ((direction > 0 && currentVisualValue > targetVisual) ||
-        (direction < 0 && currentVisualValue < targetVisual)) {
-        currentVisualValue = targetVisual;
+      if ((direction > 0 && _currentVisualValue > targetVisual) ||
+        (direction < 0 && _currentVisualValue < targetVisual)) {
+        _currentVisualValue = targetVisual;
       }
 
-      super.setValue(currentVisualValue);
+      super.setValue(_currentVisualValue);
     });
 
-    animationTimer.start();
+    _animationTimer.start();
   }
 
   private void stopAnimation ()
   {
-    if (animationTimer != null && animationTimer.isRunning()) {
-      animationTimer.stop();
+    if (_animationTimer != null && _animationTimer.isRunning()) {
+      _animationTimer.stop();
     }
   }
 
   public void setShouldPaintString (boolean painted)
   {
-    this.shouldPaintString = painted;
+    this._shouldPaintString = painted;
   }
 
-  private static final int VISUAL_MIN = 0;
-  private static final int VISUAL_MAX = 500;
+  private int _logicalMin = 0;
+  private int _logicalMax = 100;
+  private int _logicalValue = 0;
+  private int _currentVisualValue = 0;
+  private Timer _animationTimer;
+  private boolean _shouldPaintString = true;
 
-  private static final int DELAY_MS = 3;
-  private static final int STEP = 4;
-
-  private int logicalMin = 0;
-  private int logicalMax = 100;
-  private int logicalValue = 0;
-
-  private int currentVisualValue = 0;
-  private Timer animationTimer;
-
-  private boolean shouldPaintString = true;
+  private final int VISUAL_MIN = 0;
+  private final int VISUAL_MAX = 500;
+  private final int DELAY_MS = 3;
+  private final int STEP = 4;
 }

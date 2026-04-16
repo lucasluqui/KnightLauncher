@@ -4,20 +4,8 @@ import com.lucasluqui.util.SystemUtil;
 
 import javax.swing.*;
 
-import static com.lucasluqui.launcher.Log.log;
-
 public final class SmoothScrollPane extends JScrollPane
 {
-  private final int FPS = SystemUtil.getRefreshRate();
-
-  private double friction = 0.80;
-  private double maxVelocity = 60;
-  private int scrollSpeed = 36;
-
-  private double velocityY = 0.0;
-  private double targetY;
-  private final Timer animator;
-
   public SmoothScrollPane ()
   {
     this(null);
@@ -30,17 +18,17 @@ public final class SmoothScrollPane extends JScrollPane
     setWheelScrollingEnabled(false); // disable default jswing scrolling.
 
     JScrollBar vBar = getVerticalScrollBar();
-    targetY = vBar.getValue();
+    _targetY = vBar.getValue();
 
-    animator = new Timer(1000 / FPS, e -> animate());
-    animator.setRepeats(true);
+    _animator = new Timer(1000 / FPS, e -> animate());
+    _animator.setRepeats(true);
 
     // prevents authoritative scrolling from getting borked.
     vBar.addAdjustmentListener(e -> {
       if (e.getValueIsAdjusting()) {
-        velocityY = 0;
-        targetY = e.getValue();
-        animator.stop();
+        _velY = 0;
+        _targetY = e.getValue();
+        _animator.stop();
       }
     });
 
@@ -55,13 +43,13 @@ public final class SmoothScrollPane extends JScrollPane
       e.consume();
 
       JScrollBar vBar = getVerticalScrollBar();
-      targetY = vBar.getValue();
+      _targetY = vBar.getValue();
 
-      velocityY += e.getPreciseWheelRotation() * scrollSpeed;
-      velocityY = Math.max(-maxVelocity, Math.min(velocityY, maxVelocity));
+      _velY += e.getPreciseWheelRotation() * _scrollSpeed;
+      _velY = Math.max(-_maxVel, Math.min(_velY, _maxVel));
 
-      if (!animator.isRunning()) {
-        animator.start();
+      if (!_animator.isRunning()) {
+        _animator.start();
       }
     });
   }
@@ -70,18 +58,18 @@ public final class SmoothScrollPane extends JScrollPane
   {
     JScrollBar vBar = getVerticalScrollBar();
 
-    if (Math.abs(velocityY) < 0.5) {
-      velocityY = 0;
-      animator.stop();
+    if (Math.abs(_velY) < 0.5) {
+      _velY = 0;
+      _animator.stop();
       return;
     }
 
-    targetY += velocityY;
+    _targetY += _velY;
     clampTarget();
 
-    vBar.setValue((int) targetY);
+    vBar.setValue((int) _targetY);
 
-    velocityY *= friction;
+    _velY *= _friction;
   }
 
   private void clampTarget ()
@@ -89,36 +77,45 @@ public final class SmoothScrollPane extends JScrollPane
     JScrollBar vBar = getVerticalScrollBar();
     int min = vBar.getMinimum();
     int max = vBar.getMaximum() - vBar.getVisibleAmount();
-    targetY = Math.max(min, Math.min(targetY, max));
+    _targetY = Math.max(min, Math.min(_targetY, max));
   }
 
   public double getFriction ()
   {
-    return this.friction;
+    return this._friction;
   }
 
   public void setFriction (double friction)
   {
-    this.friction = friction;
+    this._friction = friction;
   }
 
   public double getMaxVelocity ()
   {
-    return this.maxVelocity;
+    return this._maxVel;
   }
 
   public void setMaxVelocity (double maxVelocity)
   {
-    this.maxVelocity = maxVelocity;
+    this._maxVel = maxVelocity;
   }
 
   public int getScrollSpeed ()
   {
-    return this.scrollSpeed;
+    return this._scrollSpeed;
   }
 
   public void setScrollSpeed (int scrollSpeed)
   {
-    this.scrollSpeed = scrollSpeed;
+    this._scrollSpeed = scrollSpeed;
   }
+
+  private final Timer _animator;
+  private double _friction = 0.80;
+  private double _maxVel = 60;
+  private int _scrollSpeed = 36;
+  private double _velY = 0.0;
+  private double _targetY;
+
+  private final int FPS = SystemUtil.getRefreshRate();
 }
