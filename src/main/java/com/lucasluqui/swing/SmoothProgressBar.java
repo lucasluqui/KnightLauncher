@@ -12,11 +12,17 @@ public final class SmoothProgressBar extends JProgressBar
     this.setMinimum(VISUAL_MIN);
     this.setMaximum(VISUAL_MAX);
     setStringPainted(false);
+    _initialized = true;
   }
 
   @Override
   public void setMinimum (int min)
   {
+    if (!_initialized) {
+      super.setMinimum(min);
+      return;
+    }
+
     _logicalMin = min;
     if (_logicalValue < _logicalMin) {
       _logicalValue = _logicalMin;
@@ -27,6 +33,11 @@ public final class SmoothProgressBar extends JProgressBar
   @Override
   public void setMaximum (int max)
   {
+    if (!_initialized) {
+      super.setMaximum(max);
+      return;
+    }
+
     _logicalMax = max;
     if (_logicalValue > _logicalMax) {
       _logicalValue = _logicalMax;
@@ -137,6 +148,9 @@ public final class SmoothProgressBar extends JProgressBar
   private int _currentVisualValue = 0;
   private Timer _animationTimer;
   private boolean _shouldPaintString = true;
+
+  /** Tracks whether this element has finished intializing or not. */
+  private boolean _initialized = false;
 
   private final int VISUAL_MIN = 0;
   private final int VISUAL_MAX = 500;
