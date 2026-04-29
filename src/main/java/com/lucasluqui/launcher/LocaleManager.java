@@ -15,9 +15,6 @@ import static com.lucasluqui.launcher.Log.log;
 @Singleton
 public class LocaleManager
 {
-  private final Properties _lang = new Properties();
-  private final Properties _langFallback = new Properties();
-
   public LocaleManager ()
   {
     // empty.
@@ -183,4 +180,6 @@ public class LocaleManager
     "Chinese (Traditional)",
   };
 
+  private final Properties _lang = new Properties();
+  private final Properties _langFallback = new Properties();
 }

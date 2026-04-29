@@ -1,6 +1,6 @@
 package com.lucasluqui.dialog;
 
-import com.lucasluqui.launcher.BuildConfig;
+import com.lucasluqui.util.BuildConfig;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
 

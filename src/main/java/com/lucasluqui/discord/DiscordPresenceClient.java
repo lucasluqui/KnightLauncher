@@ -2,7 +2,7 @@ package com.lucasluqui.discord;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.lucasluqui.launcher.BuildConfig;
+import com.lucasluqui.util.BuildConfig;
 import com.lucasluqui.launcher.LocaleManager;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;

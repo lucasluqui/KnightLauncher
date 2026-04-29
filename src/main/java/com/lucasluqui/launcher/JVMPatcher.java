@@ -10,10 +10,7 @@ import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.ui.BaseUI;
 import com.lucasluqui.swing.SmoothProgressBar;
-import com.lucasluqui.util.FileUtil;
-import com.lucasluqui.util.ImageUtil;
-import com.lucasluqui.util.ProcessUtil;
-import com.lucasluqui.util.ZipUtil;
+import com.lucasluqui.util.*;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;

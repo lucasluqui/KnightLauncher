@@ -1,4 +1,4 @@
-package com.lucasluqui.launcher;
+package com.lucasluqui.util;
 
 import com.samskivert.util.Config;
 

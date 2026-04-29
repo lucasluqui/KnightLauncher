@@ -26,8 +26,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lucasluqui.launcher.setting.ui.Log.log;
-
 public class SettingsUI extends BaseUI
 {
   @Inject

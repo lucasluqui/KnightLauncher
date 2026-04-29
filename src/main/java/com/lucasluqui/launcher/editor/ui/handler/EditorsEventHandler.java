@@ -2,7 +2,7 @@ package com.lucasluqui.launcher.editor.ui.handler;
 
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
-import com.lucasluqui.launcher.BuildConfig;
+import com.lucasluqui.util.BuildConfig;
 import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.ModuleManager;
@@ -17,8 +17,6 @@ import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.lucasluqui.launcher.editor.ui.Log.log;
 
 public class EditorsEventHandler
 {
