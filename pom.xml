@@ -11,11 +11,10 @@
   <name>Knight Launcher</name>
   <description>Open source game launcher for Spiral Knights.</description>
 
-  <licenses>
-    <license>
-      <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
-    </license>
-  </licenses>
+  <url>https://github.com/lucasluqui/KnightLauncher</url>
+  <issueManagement>
+    <url>https://github.com/lucasluqui/KnightLauncher/issues</url>
+  </issueManagement>
 
   <developers>
     <developer>
@@ -24,6 +23,12 @@
       <email>contact@lucasluqui.com</email>
     </developer>
   </developers>
+
+  <licenses>
+    <license>
+      <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+    </license>
+  </licenses>
 
   <properties>
     <env>dev</env>

@@ -68,7 +68,7 @@ The launcher is capable of auto-updating itself given the option is enabled in t
 After following those steps, the launcher will be up to date.
 
 ## Building From Source
-To build Knight Launcher manually, follow these steps:
+To build Knight Launcher follow these steps:
 
 1. Prerequisites 
    - [Java 8 JDK](https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html) installed.
