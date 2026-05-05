@@ -157,12 +157,17 @@ public class JavaUtil
     }
 
     // Official (steam)
-    if (SteamUtil.isRunningInSteamapps()) {
-      return LauncherGlobals.USER_DIR + File.separator + "java_vm";
-    }
+    //if (SteamUtil.isRunningInSteamapps()) {
+    //  return LauncherGlobals.USER_DIR + File.separator + "java_vm";
+    //}
 
     // Official (standalone)
-    return LauncherGlobals.USER_DIR.split("Spiral Knights")[0] + "Spiral Knights" + File.separator + "runtime";
+    //return LauncherGlobals.USER_DIR.split("Spiral Knights")[0] + "Spiral Knights" + File.separator + "runtime";
+
+    // It looks like everyone is now on java_vm AGAIN. MAYBE????
+    // give me a rest man...
+    // I need to remove all this commented bs. TODO: TODO!
+    return LauncherGlobals.USER_DIR + File.separator + "java_vm";
 
     /*
       Exclude linux users from possibly matching a java_vm directory.
