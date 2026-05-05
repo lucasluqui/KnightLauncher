@@ -600,7 +600,7 @@ public class SettingsEventHandler
   // Default game settings
   private final int DEFAULT_MEMORY = 1024;
   private final boolean DEFAULT_USE_CUSTOM_GC = false;
-  private final String DEFAULT_GC = "Parallel";
+  private final String DEFAULT_GC = "ZGC";
   private final boolean DEFAULT_DISABLE_EXPLICIT_GC = false;
   private final String DEFAULT_ADDITIONAL_ARGS = "";
 
