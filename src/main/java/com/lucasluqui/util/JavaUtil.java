@@ -165,7 +165,8 @@ public class JavaUtil
     //return LauncherGlobals.USER_DIR.split("Spiral Knights")[0] + "Spiral Knights" + File.separator + "runtime";
 
     boolean isSteam = SteamUtil.isRunningInSteamapps();
-    if (!isSteam
+    if (SystemUtil.isWindows()
+      && !isSteam
       && !FileUtil.fileExists(LauncherGlobals.USER_DIR + File.separator + "java_vm" + File.separator + "release")) {
       // Temporarily direct them to the ""old"" 'runtime' directory so that they can update.
       return LauncherGlobals.USER_DIR.split("Spiral Knights")[0] + "Spiral Knights" + File.separator + "runtime";
