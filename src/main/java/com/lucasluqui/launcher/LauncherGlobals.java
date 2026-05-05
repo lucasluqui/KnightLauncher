@@ -82,18 +82,18 @@ public class LauncherGlobals
       USER_DIR + File.separator + "./code/lwjgl-opengl-natives-windows.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/lwjgl-openal-natives-windows.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/lwjgl-glfw-natives-windows.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-natives-macos.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-opengl-natives-macos.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-openal-natives-macos.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-glfw-natives-macos.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-natives-macos-arm64.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-opengl-natives-macos-arm64.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-openal-natives-macos-arm64.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-glfw-natives-macos-arm64.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-natives-linux.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-opengl-natives-linux.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-openal-natives-linux.jar" + javaSeparator +
-        USER_DIR + File.separator + "./code/lwjgl-glfw-natives-linux.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-natives-macos.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-opengl-natives-macos.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-openal-natives-macos.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-glfw-natives-macos.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-natives-macos-arm64.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-opengl-natives-macos-arm64.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-openal-natives-macos-arm64.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-glfw-natives-macos-arm64.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-natives-linux.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-opengl-natives-linux.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-openal-natives-linux.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-glfw-natives-linux.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/jshortcut.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/commons-beanutils.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/commons-digester.jar" + javaSeparator +
