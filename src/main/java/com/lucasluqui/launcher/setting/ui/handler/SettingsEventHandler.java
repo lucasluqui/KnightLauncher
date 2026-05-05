@@ -607,7 +607,7 @@ public class SettingsEventHandler
   // Recommended game settings
   private final int RECOMMENDED_MAX_MEMORY = 3072;
   private final boolean RECOMMENDED_USE_CUSTOM_GC = true;
-  private final String RECOMMENDED_GC = "Parallel";
+  private final String RECOMMENDED_GC = "ZGC";
   private final boolean RECOMMENDED_DISABLE_EXPLICIT_GC = true;
 
   // Default connection settings
