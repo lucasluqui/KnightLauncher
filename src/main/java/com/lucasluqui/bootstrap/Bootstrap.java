@@ -51,7 +51,7 @@ public class Bootstrap
   {
     loadJarMods();
     checkSteamAppIdFile();
-    com.threerings.projectx.client.ProjectXApp.main(args);
+    //com.threerings.projectx.client.ProjectXApp.main(args);
   }
 
   static void loadJarMods ()
