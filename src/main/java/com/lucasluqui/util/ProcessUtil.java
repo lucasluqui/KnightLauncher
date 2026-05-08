@@ -11,13 +11,19 @@ import static com.lucasluqui.util.Log.log;
 
 public class ProcessUtil
 {
-
   public static void run (String[] command, boolean keepAlive)
   {
-    log.info("Running process command",
-      "keepAlive", keepAlive,
-      "command", String.join(" ", command)
-    );
+    run(command, keepAlive, false);
+  }
+
+  public static void run (String[] command, boolean keepAlive, boolean silent)
+  {
+    if (!silent) {
+      log.info("Running process command",
+        "keepAlive", keepAlive,
+        "command", String.join(" ", command)
+      );
+    }
 
     Process process = null;
     try {
@@ -39,16 +45,23 @@ public class ProcessUtil
 
   public static void runFromDirectory (String[] command, String workDir, boolean keepAlive)
   {
+    runFromDirectory(command, workDir, keepAlive, false);
+  }
+
+  public static void runFromDirectory (String[] command, String workDir, boolean keepAlive, boolean silent)
+  {
     ProcessBuilder pb = new ProcessBuilder(command);
     pb.directory(new File(workDir));
 
     // Get rid of _JAVA_OPTIONS, usually just contains garbage.
     pb.environment().remove("_JAVA_OPTIONS");
 
-    log.info("Running process command from directory",
-      "directory", workDir,
-      "command", String.join(" ", command)
-    );
+    if (!silent) {
+      log.info("Running process command from directory",
+        "directory", workDir,
+        "command", String.join(" ", command)
+      );
+    }
 
     Process process = null;
     try {
@@ -63,9 +76,16 @@ public class ProcessUtil
 
   public static String[] runAndCapture (String[] command)
   {
-    log.info("Running process command and capturing",
-      "command", String.join(" ", command)
-    );
+    return runAndCapture(command, false);
+  }
+
+  public static String[] runAndCapture (String[] command, boolean silent)
+  {
+    if (!silent) {
+      log.info("Running process command and capturing",
+        "command", String.join(" ", command)
+      );
+    }
 
     Process process = null;
     try {

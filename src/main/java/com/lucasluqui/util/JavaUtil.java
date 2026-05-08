@@ -30,9 +30,9 @@ public class JavaUtil
   {
     String output = "";
     if (SystemUtil.isWindows()) {
-      output = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", path, "-version" })[1];
+      output = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", path, "-version" }, true)[1];
     } else {
-      output = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "\"" + path + "\" -version" })[1];
+      output = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "\"" + path + "\" -version" }, true)[1];
     }
     return output;
   }
