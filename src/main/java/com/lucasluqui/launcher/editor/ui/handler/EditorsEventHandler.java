@@ -96,27 +96,31 @@ public class EditorsEventHandler
       classpath += rootDir + File.separator + "./code/lwjgl3-awt.jar" + libSeparator;
 
       if (SystemUtil.isWindows()) {
-        classpath += rootDir + File.separator + "./code/lwjgl3-opengl-natives-windows.jar" + libSeparator;
-        classpath += rootDir + File.separator + "./code/lwjgl3-openal-natives-windows.jar" + libSeparator;
-        classpath += rootDir + File.separator + "./code/lwjgl3-glfw-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-windows.jar" + libSeparator;
       }
 
       if (SystemUtil.isMac()) {
         if (SystemUtil.isARM()) {
-          classpath += rootDir + File.separator + "./code/lwjgl3-opengl-natives-macos-arm64.jar" + libSeparator;
-          classpath += rootDir + File.separator + "./code/lwjgl3-openal-natives-macos-arm64.jar" + libSeparator;
-          classpath += rootDir + File.separator + "./code/lwjgl3-glfw-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-macos-arm64.jar" + libSeparator;
         } else {
-          classpath += rootDir + File.separator + "./code/lwjgl3-opengl-natives-macos.jar" + libSeparator;
-          classpath += rootDir + File.separator + "./code/lwjgl3-openal-natives-macos.jar" + libSeparator;
-          classpath += rootDir + File.separator + "./code/lwjgl3-glfw-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-macos.jar" + libSeparator;
         }
       }
 
       if (SystemUtil.isUnix()) {
-        classpath += rootDir + File.separator + "./code/lwjgl3-opengl-natives-linux.jar" + libSeparator;
-        classpath += rootDir + File.separator + "./code/lwjgl3-openal-natives-linux.jar" + libSeparator;
-        classpath += rootDir + File.separator + "./code/lwjgl3-glfw-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-linux.jar" + libSeparator;
       }
 
       // Just in case?
@@ -174,27 +178,31 @@ public class EditorsEventHandler
       classpath += rootDir + File.separator + "./code/lwjgl3-awt.jar" + libSeparator;
 
       if (SystemUtil.isWindows()) {
-        classpath += rootDir + File.separator + "./code/lwjgl3-opengl-natives-windows.jar" + libSeparator;
-        classpath += rootDir + File.separator + "./code/lwjgl3-openal-natives-windows.jar" + libSeparator;
-        classpath += rootDir + File.separator + "./code/lwjgl3-glfw-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-windows.jar" + libSeparator;
       }
 
       if (SystemUtil.isMac()) {
         if (SystemUtil.isARM()) {
-          classpath += rootDir + File.separator + "./code/lwjgl3-opengl-natives-macos-arm64.jar" + libSeparator;
-          classpath += rootDir + File.separator + "./code/lwjgl3-openal-natives-macos-arm64.jar" + libSeparator;
-          classpath += rootDir + File.separator + "./code/lwjgl3-glfw-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-macos-arm64.jar" + libSeparator;
         } else {
-          classpath += rootDir + File.separator + "./code/lwjgl3-opengl-natives-macos.jar" + libSeparator;
-          classpath += rootDir + File.separator + "./code/lwjgl3-openal-natives-macos.jar" + libSeparator;
-          classpath += rootDir + File.separator + "./code/lwjgl3-glfw-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-macos.jar" + libSeparator;
         }
       }
 
       if (SystemUtil.isUnix()) {
-        classpath += rootDir + File.separator + "./code/lwjgl3-opengl-natives-linux.jar" + libSeparator;
-        classpath += rootDir + File.separator + "./code/lwjgl3-openal-natives-linux.jar" + libSeparator;
-        classpath += rootDir + File.separator + "./code/lwjgl3-glfw-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-linux.jar" + libSeparator;
       }
 
       // Just in case?
