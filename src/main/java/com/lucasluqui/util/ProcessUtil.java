@@ -14,6 +14,11 @@ public class ProcessUtil
 
   public static void run (String[] command, boolean keepAlive)
   {
+    log.info("Running process command",
+      "keepAlive", keepAlive,
+      "command", String.join(" ", command)
+    );
+
     Process process = null;
     try {
       Map<String, String> env = System.getenv();
@@ -40,6 +45,11 @@ public class ProcessUtil
     // Get rid of _JAVA_OPTIONS, usually just contains garbage.
     pb.environment().remove("_JAVA_OPTIONS");
 
+    log.info("Running process command from directory",
+      "directory", workDir,
+      "command", String.join(" ", command)
+    );
+
     Process process = null;
     try {
       process = pb.start();
@@ -53,6 +63,10 @@ public class ProcessUtil
 
   public static String[] runAndCapture (String[] command)
   {
+    log.info("Running process command and capturing",
+      "command", String.join(" ", command)
+    );
+
     Process process = null;
     try {
       ProcessBuilder processBuilder = new ProcessBuilder(command);
