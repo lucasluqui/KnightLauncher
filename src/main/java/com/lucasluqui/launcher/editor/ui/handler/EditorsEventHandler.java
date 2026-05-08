@@ -93,6 +93,7 @@ public class EditorsEventHandler
       classpath += rootDir + File.separator + "./code/lwjgl-openal.jar" + libSeparator;
       classpath += rootDir + File.separator + "./code/lwjgl-glfw.jar" + libSeparator;
       classpath += rootDir + File.separator + "./code/lwjgl-jawt.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl3-awt.jar";
 
       if (SystemUtil.isWindows()) {
         classpath += rootDir + File.separator + "./code/lwjgl3-opengl-natives-windows.jar" + libSeparator;
@@ -118,7 +119,11 @@ public class EditorsEventHandler
         classpath += rootDir + File.separator + "./code/lwjgl3-glfw-natives-linux.jar" + libSeparator;
       }
 
-      classpath += rootDir + File.separator + "./code/lwjgl3-awt.jar";
+      // Just in case?
+      classpath += rootDir + File.separator + "./code/jshortcut.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-beanutils.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-digester.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-logging.jar" + libSeparator;
 
 
       List<String> editorCmdLine = new ArrayList<>();
@@ -166,6 +171,7 @@ public class EditorsEventHandler
       classpath += rootDir + File.separator + "./code/lwjgl-openal.jar" + libSeparator;
       classpath += rootDir + File.separator + "./code/lwjgl-glfw.jar" + libSeparator;
       classpath += rootDir + File.separator + "./code/lwjgl-jawt.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl3-awt.jar";
 
       if (SystemUtil.isWindows()) {
         classpath += rootDir + File.separator + "./code/lwjgl3-opengl-natives-windows.jar" + libSeparator;
@@ -191,7 +197,11 @@ public class EditorsEventHandler
         classpath += rootDir + File.separator + "./code/lwjgl3-glfw-natives-linux.jar" + libSeparator;
       }
 
-      classpath += rootDir + File.separator + "./code/lwjgl3-awt.jar";
+      // Just in case?
+      classpath += rootDir + File.separator + "./code/jshortcut.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-beanutils.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-digester.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-logging.jar" + libSeparator;
 
       List<String> editorCmdLine = new ArrayList<>();
       editorCmdLine.add(JavaUtil.getGameJVMExePath());
