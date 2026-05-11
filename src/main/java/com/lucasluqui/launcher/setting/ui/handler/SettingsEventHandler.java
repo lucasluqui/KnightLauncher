@@ -584,7 +584,7 @@ public class SettingsEventHandler
   {
     _settingsManager.createKeyIfNotExists("game.memory_" + serverName, "1024");
     _settingsManager.createKeyIfNotExists("game.useCustomGC_" + serverName, "false");
-    _settingsManager.createKeyIfNotExists("game.garbageCollector_" + serverName, "ParallelOld");
+    _settingsManager.createKeyIfNotExists("game.garbageCollector_" + serverName, "G1");
     _settingsManager.createKeyIfNotExists("game.disableExplicitGC_" + serverName, "false");
     _settingsManager.createKeyIfNotExists("game.additionalArgs.v2_" + serverName, "");
   }
@@ -600,14 +600,14 @@ public class SettingsEventHandler
   // Default game settings
   private final int DEFAULT_MEMORY = 1024;
   private final boolean DEFAULT_USE_CUSTOM_GC = false;
-  private final String DEFAULT_GC = "ZGC";
+  private final String DEFAULT_GC = "G1";
   private final boolean DEFAULT_DISABLE_EXPLICIT_GC = false;
   private final String DEFAULT_ADDITIONAL_ARGS = "";
 
   // Recommended game settings
   private final int RECOMMENDED_MAX_MEMORY = 3072;
   private final boolean RECOMMENDED_USE_CUSTOM_GC = true;
-  private final String RECOMMENDED_GC = "ZGC";
+  private final String RECOMMENDED_GC = "G1";
   private final boolean RECOMMENDED_DISABLE_EXPLICIT_GC = true;
 
   // Default connection settings
