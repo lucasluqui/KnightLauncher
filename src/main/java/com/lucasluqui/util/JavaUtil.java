@@ -156,44 +156,17 @@ public class JavaUtil
       }
     }
 
-    // Official (steam)
-    //if (SteamUtil.isRunningInSteamapps()) {
-    //  return LauncherGlobals.USER_DIR + File.separator + "java_vm";
-    //}
-
-    // Official (standalone)
-    //return LauncherGlobals.USER_DIR.split("Spiral Knights")[0] + "Spiral Knights" + File.separator + "runtime";
-
+    // Standalone? If so, check if they even have a java_vm folder...
     boolean isSteam = SteamUtil.isRunningInSteamapps();
     if (SystemUtil.isWindows()
       && !isSteam
       && !FileUtil.fileExists(LauncherGlobals.USER_DIR + File.separator + "java_vm" + File.separator + "release")) {
-      // Temporarily direct them to the ""old"" 'runtime' directory so that they can update.
-      return LauncherGlobals.USER_DIR.split("Spiral Knights")[0] + "Spiral Knights" + File.separator + "runtime";
+      // They don't, let's use runtime.
+      return LauncherGlobals.USER_DIR + File.separator + ".." + File.separator + "runtime";
     }
 
-    // It looks like everyone is now on java_vm AGAIN. MAYBE????
-    // give me a rest man...
-    // I need to remove all this commented bs. TODO: TODO!
+    // Most of the time the JVM will be in 'java_vm'. MOST!! of the time.
     return LauncherGlobals.USER_DIR + File.separator + "java_vm";
-
-    /*
-      Exclude linux users from possibly matching a java_vm directory.
-      They might have installed from Steam which downloads Windows files
-      which also have a java_vm folder, but meant to be run with Proton...
-     */
-
-    /*File javaVMDir = new File(startingDirPath, "java_vm");
-    if (javaVMDir.exists() && javaVMDir.isDirectory() && !SystemUtil.isUnix()) {
-      return javaVMDir.getAbsolutePath();
-    }
-
-    File javaDir = new File(startingDirPath, "java");
-    if (javaDir.exists() && javaDir.isDirectory()) {
-      return javaDir.getAbsolutePath();
-    }*/
-
-    //return "";
   }
 
   public static String getGameJVMExePath ()
