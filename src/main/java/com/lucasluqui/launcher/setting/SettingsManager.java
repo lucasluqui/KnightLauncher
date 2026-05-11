@@ -301,6 +301,7 @@ public class SettingsManager
     return true;
   }
 
+  // TODO: Fix this. jar tool isn't bundled anymore.
   private void applyConnectionSettings ()
   {
     String deployPropStr = null;
