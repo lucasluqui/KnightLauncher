@@ -243,8 +243,13 @@ public class SettingsManager
 
       if (Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
 
-      writer.println("-Xms" + Settings.gameMemory + "M");
-      writer.println("-Xmx" + Settings.gameMemory + "M");
+      if (Settings.gameGarbageCollector.equals("G1")) {
+        writer.println("-Xms" + Settings.gameMemory / 2 + "M");
+        writer.println("-Xmx" + Settings.gameMemory + "M");
+      } else {
+        writer.println("-Xms" + Settings.gameMemory + "M");
+        writer.println("-Xmx" + Settings.gameMemory + "M");
+      }
 
       // Get rid of this "0" bug. Maybe delete this one day
       if (Settings.gameAdditionalArgs.equalsIgnoreCase("0")) {
