@@ -91,10 +91,11 @@ public class SettingsManager
 
     // Game settings
     Settings.gamePlatform = getValue("game.platform");
+    Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
     Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));
     Settings.gameUseCustomGC = Boolean.parseBoolean(getValue("game.useCustomGC"));
     Settings.gameGarbageCollector = getValue("game.garbageCollector.v2");
-    Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
+    Settings.gameExtraPerfMode = Boolean.parseBoolean(getValue("game.extraPerfMode"));
     Settings.gameEndpoint = getValue("game.endpoint");
     Settings.gamePort = Integer.parseInt(getValue("game.port"));
     Settings.gamePublicKey = getValue("game.publicKey");
@@ -378,6 +379,6 @@ public class SettingsManager
   private HashMap<String, Object> _migrationMap = new HashMap<>();
   private boolean _migrating = false;
 
-  private final String PROP_VER = "30";
+  private final String PROP_VER = "31";
   private final String PROP_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
 }
