@@ -33,6 +33,7 @@ public class ModuleManager
   {
     Thread moduleThread = new Thread(() -> {
       loadIngameRPC();
+      loadExtraPerf();
     });
     moduleThread.start();
   }
@@ -51,6 +52,18 @@ public class ModuleManager
     } else {
       _settingsManager.setValue("launcher.ingameRPCSetup", "true");
       _settingsManager.setValue("launcher.useIngameRPC", "false");
+    }
+  }
+
+  protected void loadExtraPerf ()
+  {
+    try {
+      ZipUtil.extractFileWithinJar(
+        "/rsrc/modules/extra-perf/extra-perf",
+        LauncherGlobals.USER_DIR + "\\KnightLauncher\\modules\\extra-perf\\extra-perf"
+      );
+    } catch (IOException e) {
+      log.error(e);
     }
   }
 

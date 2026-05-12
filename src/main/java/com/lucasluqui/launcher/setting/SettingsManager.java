@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.setting;
 
+import com.google.common.base.Charsets;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.lucasluqui.dialog.Dialog;
@@ -228,28 +229,41 @@ public class SettingsManager
 
       PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");
 
-      if (Settings.gameUseStringDeduplication) writer.println("-XX:+UseStringDeduplication");
-      if (Settings.gameDisableExplicitGC) writer.println("-XX:+DisableExplicitGC");
-
-      if (Settings.gameUseCustomGC) {
-        if (Settings.gameGarbageCollector.equals("Parallel")) {
-          writer.println("-XX:+UseParallelGC");
-        } else if (Settings.gameGarbageCollector.equals("ZGC")) {
-          writer.println("-XX:+Use" + Settings.gameGarbageCollector);
-          // TODO: Maybe add some extra settings for ZGC to use?
-        } else {
-          writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+      if (Settings.gameExtraPerfMode) {
+        String extraPerfArgs = null;
+        try {
+          extraPerfArgs = com.google.common.io.Files.toString(new File("file.txt"), Charsets.UTF_8);
+        } catch (Exception e) {
+          log.error(e);
         }
-      }
 
-      if (Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
-
-      if (Settings.gameGarbageCollector.equals("G1")) {
-        writer.println("-Xms" + Settings.gameMemory / 2 + "M");
-        writer.println("-Xmx" + Settings.gameMemory + "M");
+        if (extraPerfArgs != null) {
+          writer.println(extraPerfArgs);
+        }
       } else {
-        writer.println("-Xms" + Settings.gameMemory + "M");
-        writer.println("-Xmx" + Settings.gameMemory + "M");
+        if (Settings.gameUseStringDeduplication) writer.println("-XX:+UseStringDeduplication");
+        if (Settings.gameDisableExplicitGC) writer.println("-XX:+DisableExplicitGC");
+
+        if (Settings.gameUseCustomGC) {
+          if (Settings.gameGarbageCollector.equals("Parallel")) {
+            writer.println("-XX:+UseParallelGC");
+          } else if (Settings.gameGarbageCollector.equals("ZGC")) {
+            writer.println("-XX:+Use" + Settings.gameGarbageCollector);
+            // TODO: Maybe add some extra settings for ZGC to use?
+          } else {
+            writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+          }
+        }
+
+        if (Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
+
+        if (Settings.gameGarbageCollector.equals("G1")) {
+          writer.println("-Xms" + Settings.gameMemory / 2 + "M");
+          writer.println("-Xmx" + Settings.gameMemory + "M");
+        } else {
+          writer.println("-Xms" + Settings.gameMemory + "M");
+          writer.println("-Xmx" + Settings.gameMemory + "M");
+        }
       }
 
       // Get rid of this "0" bug. Maybe delete this one day
