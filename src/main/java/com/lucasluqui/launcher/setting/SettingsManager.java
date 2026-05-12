@@ -233,7 +233,7 @@ public class SettingsManager
         String extraPerfArgs = null;
         try {
           extraPerfArgs = com.google.common.io.Files.toString(
-            new File(LauncherGlobals.USER_DIR + File.separator + "modules" + File.separator + "extra-perf" + File.separator + "extra-perf"),
+            new File(LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "modules" + File.separator + "extra-perf" + File.separator + "extra-perf"),
             Charsets.UTF_8
           );
         } catch (Exception e) {
