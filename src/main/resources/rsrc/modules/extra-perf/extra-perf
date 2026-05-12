@@ -11,8 +11,6 @@
 -XX:InitiatingHeapOccupancyPercent=30
 -XX:+PerfDisableSharedMem
 -XX:+UseFastUnorderedTimeStamps
--Dsun.java2d.opengl=true
--Dsun.java2d.d3d=false
 -Djava.net.preferIPv4Stack=true
 -XX:+UseCompressedOops
 -Xms2G
