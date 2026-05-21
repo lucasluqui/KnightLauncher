@@ -605,7 +605,7 @@ public class SettingsEventHandler
   private final String DEFAULT_ADDITIONAL_ARGS = "";
 
   // Recommended game settings
-  private final int RECOMMENDED_MAX_MEMORY = 3072;
+  private final int RECOMMENDED_MAX_MEMORY = 2048;
   private final boolean RECOMMENDED_USE_CUSTOM_GC = true;
   private final String RECOMMENDED_GC = "G1";
   private final boolean RECOMMENDED_DISABLE_EXPLICIT_GC = true;
