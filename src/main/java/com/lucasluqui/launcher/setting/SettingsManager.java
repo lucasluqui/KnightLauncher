@@ -277,7 +277,7 @@ public class SettingsManager
 
       // And now we validate all (possibly) REAL args.
       if (validAdditionalArgs(Settings.gameAdditionalArgs)) {
-        writer.println(Settings.gameAdditionalArgs);
+        writer.println(filterAdditionalArgs(Settings.gameAdditionalArgs));
       } else {
         Dialog.push(
           _localeManager.getValue("m.invalid_additional_args_warning"),
@@ -311,8 +311,6 @@ public class SettingsManager
     // iterate through all args.
     List<String> args = Arrays.asList(argString.split("\\r?\\n"));
     for (String arg : args) {
-      log.info("validAdditionalArgs", "arg", arg);
-
       // invalid arg? mark the whole thing as invalid.
       if (!JavaUtil.validJVMArg(arg)) {
         log.info("Ignoring all additional args due to invalid JVM arg", "arg", arg);
@@ -322,6 +320,27 @@ public class SettingsManager
 
     // there doesn't seem to be any unsafe args... gets a green light.
     return true;
+  }
+
+  public String filterAdditionalArgs (String argString)
+  {
+    if (argString.isEmpty()) return argString;
+
+    // iterate through all args.
+    List<String> args = Arrays.asList(argString.split("\\r?\\n"));
+    for (String arg : args) {
+      // filter out stuff we don't want while in extra perf mode.
+      if (Settings.gameExtraPerfMode) {
+        if (arg.startsWith("-Xms") && arg.startsWith("-Xmx")) {
+          args.remove(arg);
+        }
+      }
+
+      // any other filters, if any, should go here below.
+    }
+
+    // return the filtered args as a single string.
+    return String.join(System.lineSeparator(), args);
   }
 
   // TODO: Fix this. jar tool isn't bundled anymore.
