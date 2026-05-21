@@ -367,10 +367,10 @@ public class SettingsUI extends BaseUI
     choiceGC.setFocusable(false);
     choiceGC.setFont(Fonts.getFont("codeRegular", 12.0f, Font.BOLD));
     gamePanel.add(choiceGC);
-    choiceGC.addItem("ZGC");
+    choiceGC.addItem("G1");
     choiceGC.addItem("Parallel");
     choiceGC.addItem("Serial");
-    choiceGC.addItem("G1");
+    choiceGC.addItem("ZGC");
     choiceGC.setSelectedItem(Settings.gameGarbageCollector);
     choiceGC.addItemListener(eventHandler::choiceGCChangeEvent);
     choiceGC.setEnabled(SystemUtil.is64Bit());
