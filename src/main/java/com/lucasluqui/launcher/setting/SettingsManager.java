@@ -331,7 +331,7 @@ public class SettingsManager
     for (String arg : args) {
       // filter out stuff we don't want while in extra perf mode.
       if (Settings.gameExtraPerfMode) {
-        if (arg.startsWith("-Xms") && arg.startsWith("-Xmx")) {
+        if (arg.startsWith("-Xms") || arg.startsWith("-Xmx")) {
           args.remove(arg);
         }
       }
