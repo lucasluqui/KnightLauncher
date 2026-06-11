@@ -664,6 +664,10 @@ public class LauncherApp
         if (latestReleaseInt < 1000) latestReleaseInt *= 10;
 
         if (currentVersionInt <= latestReleaseInt) {
+          log.info("Updating even though we're on a SNAPSHOT build",
+            "currentVersionInt", currentVersionInt,
+            "latestReleaseInt", latestReleaseInt
+          );
           updateLauncher(this._latestRelease);
         }
 
