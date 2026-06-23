@@ -656,7 +656,7 @@ public class LauncherApp
 
       // Special procedure for SNAPSHOT versions.
       // Also, avoid users in SNAPSHOT versions from staying behind.
-      if (currentVersion.contains("SNAPSHOT")) {
+      if (BuildConfig.isSnapshot()) {
         int currentVersionInt = Integer.parseInt(TextUtil.extractNumeric(currentVersion));
         int latestReleaseInt =  Integer.parseInt(TextUtil.extractNumeric(this._latestRelease));
 
