@@ -644,10 +644,10 @@ public class LauncherApp
     this._latestRelease = jsonLatestRelease.getString("tag_name");
     this._latestReleaseChangelog = jsonLatestRelease.getString("body");
 
-    ThreadingUtil.executeWithDelay(this::checkLauncherUpdates, 3000);
+    ThreadingUtil.executeWithDelay(this::maybeUpdate, 3000);
   }
 
-  public void checkLauncherUpdates ()
+  public void maybeUpdate ()
   {
     LauncherUI launcherUI = this.getUI(LauncherUI.class);
     String currentVersion = BuildConfig.getVersion();
@@ -668,7 +668,7 @@ public class LauncherApp
             "currentVersionInt", currentVersionInt,
             "latestReleaseInt", latestReleaseInt
           );
-          updateLauncher(this._latestRelease);
+          doUpdate(this._latestRelease);
         }
 
         return;
@@ -679,7 +679,7 @@ public class LauncherApp
         // In that case do not autoupdate even if all other conditions matched.
         boolean updateFailed = this.args.length > 0 && this.args[0].equals("updateFailed");
         if (!updateFailed) {
-          updateLauncher(this._latestRelease);
+          doUpdate(this._latestRelease);
         }
       }
 
@@ -688,12 +688,12 @@ public class LauncherApp
     }
   }
 
-  public void updateLauncher ()
+  public void doUpdate ()
   {
-    updateLauncher(this._latestRelease);
+    doUpdate(this._latestRelease);
   }
 
-  public void updateLauncher (String newVersion)
+  public void doUpdate (String newVersion)
   {
     try {
       Files.copy(Paths.get(LauncherGlobals.USER_DIR + "/KnightLauncher.jar"), Paths.get(LauncherGlobals.USER_DIR + "/updater.jar"), StandardCopyOption.REPLACE_EXISTING);

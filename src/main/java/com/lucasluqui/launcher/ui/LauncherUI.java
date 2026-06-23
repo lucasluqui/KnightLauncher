@@ -609,7 +609,7 @@ public class LauncherUI extends BaseUI
     updateButton.setVisible(false);
     panel.add(updateButton);
     updateButton.addActionListener(
-      l -> _ctx.getApp().updateLauncher()
+      l -> _ctx.getApp().doUpdate()
     );
 
     Icon playAnimatedBannersIconEnabled = IconFontSwing.buildIcon(FontAwesome.EYE, 18, Color.WHITE);
