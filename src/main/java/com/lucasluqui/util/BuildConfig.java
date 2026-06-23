@@ -25,4 +25,9 @@ public class BuildConfig
   {
     return _build.getValue("spiralview_version", "0");
   }
+
+  public static boolean isSnapshot ()
+  {
+    return BuildConfig.getVersion().contains("SNAPSHOT");
+  }
 }

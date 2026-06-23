@@ -13,6 +13,7 @@ import com.lucasluqui.launcher.editor.data.Editor;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.swing.SmoothScrollPane;
+import com.lucasluqui.util.BuildConfig;
 import com.lucasluqui.util.ImageUtil;
 
 import javax.swing.*;
@@ -226,6 +227,20 @@ public class EditorsUI extends BaseUI
         125
       )
     );
+
+    // wip stuff.
+    if (BuildConfig.isSnapshot()) {
+      editors.add(new Editor(
+          "editor_silverweave",
+          modelViewerImageFocused,
+          modelViewerImageUnfocused,
+          "com.lucasluqui.silverweave.SilverweaveTool",
+          "",
+          "",
+          150
+        )
+      );
+    }
 
     eventHandler.editors = editors;
 
