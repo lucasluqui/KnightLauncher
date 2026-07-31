@@ -217,7 +217,16 @@ public class FlamingoManager
     if (newServerList != null) {
       for (Server server : newServerList) {
         if (server.name.equalsIgnoreCase("Official")) {
-          official.playerCountUrl = "~" + _ctx.getApp().getOfficialApproxPlayerCount() + " ";
+          PlayerCount playerCount = _ctx.getApp().getPlayerCount();
+          if (playerCount == null) {
+            official.playerCountUrl = "???";
+          } else {
+            official.playerCountUrl = "~" + playerCount.getEstimated() + " ";
+
+            // TODO: Too hacky, why not just have the values lie in the server object itself?
+            _ctx.getApp().getUI(LauncherUI.class).updatePlayerCountTooltip(playerCount);
+          }
+
           official.announceBanner = server.announceBanner;
           official.announceContent = server.announceContent;
           official.announceBannerLink = server.announceBannerLink;

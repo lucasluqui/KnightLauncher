@@ -619,13 +619,19 @@ public class LauncherApp
     }
   }
 
-  public int getOfficialApproxPlayerCount ()
+  public PlayerCount getPlayerCount ()
   {
-    int steamPlayers = SteamUtil.getCurrentPlayers("99900");
-    if (steamPlayers == 0) {
-      return 0;
+    int prodSteamPlayers = SteamUtil.getCurrentPlayers("99900"); // Spiral Knights app
+    int previewSteamPlayers = SteamUtil.getCurrentPlayers("99920"); // Spiral Knights Preview app
+
+    PlayerCount playerCount = new PlayerCount(prodSteamPlayers, previewSteamPlayers);
+
+    if (prodSteamPlayers == 0) {
+      // While Steam is down it will return 0 for any game's player count. When that's the case
+      // simply return null and let the launcher handle the rest.
+      return null;
     } else {
-      return Math.round(steamPlayers * 1.4f);
+      return playerCount;
     }
   }
 

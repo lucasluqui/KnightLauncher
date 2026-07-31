@@ -241,8 +241,6 @@ public class LauncherUI extends BaseUI
     playerCountLabel.setVisible(false);
     sidePane.add(playerCountLabel);
 
-    String playerCountTooltipTitle = _localeManager.getValue("m.players_online");
-    String playerCountTooltipText = _localeManager.getValue("m.players_online_text");
     playerCountTooltipButton = new JButton(_localeManager.getValue("b.learn_more"));
     playerCountTooltipButton.setBounds(35, 213, 178, 25);
     playerCountTooltipButton.setEnabled(true);
@@ -253,10 +251,7 @@ public class LauncherUI extends BaseUI
     playerCountTooltipButton.setForeground(Color.WHITE);
     playerCountTooltipButton.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
-    playerCountTooltipButton.setToolTipText(playerCountTooltipTitle);
-    playerCountTooltipButton.addActionListener(l -> {
-      Dialog.push(playerCountTooltipText, playerCountTooltipTitle, JOptionPane.INFORMATION_MESSAGE);
-    });
+    updatePlayerCountTooltip(null);
     sidePane.add(playerCountTooltipButton);
     playerCountTooltipButton.setVisible(false);
 
@@ -794,6 +789,30 @@ public class LauncherUI extends BaseUI
     this.settingsButton.setEnabled(!block);
     this.modButton.setEnabled(!block);
     this.editorsButton.setEnabled(!block);
+  }
+
+  public void updatePlayerCountTooltip (PlayerCount playerCount)
+  {
+    // when we got no player count, do nothing.
+    if (playerCount == null) {
+      return;
+    }
+
+    String playerCountTooltipTitle = _localeManager.getValue("m.players_online");
+    String playerCountTooltipText = _localeManager.getValue(
+      "m.players_online_text",
+      new String[] {
+        String.valueOf(playerCount.getProdCount()),
+        String.valueOf(playerCount.getProdEstimated()),
+        String.valueOf(playerCount.getPreviewCount()),
+        String.valueOf(playerCount.getPreviewEstimated())
+      }
+    );
+
+    playerCountTooltipButton.setToolTipText(playerCountTooltipTitle);
+    playerCountTooltipButton.addActionListener(l -> {
+      Dialog.push(playerCountTooltipText, playerCountTooltipTitle, JOptionPane.INFORMATION_MESSAGE);
+    });
   }
 
   @Inject public LauncherEventHandler eventHandler;
