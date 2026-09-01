@@ -608,15 +608,11 @@ public class LauncherApp
     new Thread(() -> {
       _flamingoManager.load();
       if (_flamingoManager.isOnline()) {
-        loadOnlineUI();
+        for (BaseUI ui : getUIMap().values()) {
+          ui.loadOnline();
+        }
       }
     }).start();
-  }
-
-  private void loadOnlineUI() {
-    for (BaseUI ui : getUIMap().values()) {
-      ui.loadOnline();
-    }
   }
 
   public PlayerCount getPlayerCount ()
