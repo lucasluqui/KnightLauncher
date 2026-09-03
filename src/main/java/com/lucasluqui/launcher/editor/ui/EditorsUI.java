@@ -69,7 +69,7 @@ public class EditorsUI extends BaseUI
     editorLaunchState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     editorLaunchState.setHorizontalAlignment(SwingConstants.CENTER);
     editorLaunchState.setBounds(192, 190, 385, 25);
-    editorLaunchState.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
+    editorLaunchState.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
     editorLaunchState.setVisible(false);
     guiFrame.getContentPane().add(editorLaunchState);
 
@@ -98,7 +98,7 @@ public class EditorsUI extends BaseUI
 
     footerLabel = new JLabel();
     footerLabel.setBounds(30, 449, 740, 15);
-    footerLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    footerLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     footerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     footerLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
     footerLabel.setVisible(false);
@@ -260,7 +260,7 @@ public class EditorsUI extends BaseUI
 
       JLabel editorLabel = new JLabel();
       editorLabel.setText(_localeManager.getValue("m." + editor.name));
-      editorLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
+      editorLabel.setFont(Fonts.getFont("default", 40.0f, Font.BOLD));
       editorLabel.setHorizontalAlignment(SwingConstants.CENTER);
       editorLabel.setVerticalAlignment(SwingConstants.CENTER);
       editorLabel.setBounds(0, 0, 740, 100);

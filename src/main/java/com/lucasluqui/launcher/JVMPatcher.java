@@ -78,26 +78,26 @@ public class JVMPatcher extends BaseUI
 
     headerLabel = new JLabel("Patch your game to use a compatible 64-bit Java VM");
     headerLabel.setBounds(0, 50, 500, 37);
-    headerLabel.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    headerLabel.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
     guiFrame.getContentPane().add(headerLabel);
 
     subHeaderLabel = new JLabel("You can always restart this patcher from the Settings menu");
     subHeaderLabel.setBounds(0, 75, 500, 37);
-    subHeaderLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    subHeaderLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     subHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
     guiFrame.getContentPane().add(subHeaderLabel);
 
     JLabel jvmSelectLabel = new JLabel("Select a Java version to install");
     jvmSelectLabel.setBounds(0, 115, 500, 37);
-    jvmSelectLabel.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    jvmSelectLabel.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     jvmSelectLabel.setHorizontalAlignment(SwingConstants.CENTER);
     guiFrame.getContentPane().add(jvmSelectLabel);
 
     jvmComboBox = new JComboBox<>();
     jvmComboBox.setBounds(125, 145, 260, 25);
     jvmComboBox.setFocusable(false);
-    jvmComboBox.setFont(Fonts.getFont("defaultRegular", 12.0f, Font.BOLD));
+    jvmComboBox.setFont(Fonts.getFont("default", 12.0f, Font.BOLD));
     guiFrame.add(jvmComboBox);
 
     for (String key : this.availableJVMs.keySet()) {
@@ -109,7 +109,7 @@ public class JVMPatcher extends BaseUI
     jvmPatcherState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     jvmPatcherState.setVisible(false);
     jvmPatcherState.setBounds(26, 180, 450, 15);
-    jvmPatcherState.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    jvmPatcherState.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     guiFrame.getContentPane().add(jvmPatcherState);
 
     jvmPatcherProgressBar = new SmoothProgressBar();
@@ -122,7 +122,7 @@ public class JVMPatcher extends BaseUI
     buttonAccept.setBounds(150, 200, 200, 25);
     buttonAccept.setFocusPainted(false);
     buttonAccept.setFocusable(false);
-    buttonAccept.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    buttonAccept.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     buttonAccept.setForeground(Color.WHITE);
     buttonAccept.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
     buttonAccept.putClientProperty(FlatClientProperties.STYLE,

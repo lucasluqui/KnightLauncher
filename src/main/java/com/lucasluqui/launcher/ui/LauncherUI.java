@@ -149,7 +149,7 @@ public class LauncherUI extends BaseUI
     bannerLoading = new JLabel(_localeManager.getValue("m.loading"));
     bannerLoading.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     bannerLoading.setBounds(325, 235, 150, 45);
-    bannerLoading.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
+    bannerLoading.setFont(Fonts.getFont("default", 14.0f, Font.BOLD));
     bannerLoading.setHorizontalAlignment(SwingConstants.CENTER);
     bannerLoading.setVerticalAlignment(SwingConstants.CENTER);
     bannerLoading.putClientProperty(FlatClientProperties.STYLE,
@@ -200,14 +200,14 @@ public class LauncherUI extends BaseUI
     });
 
     JLabel launcherName = new JLabel(BuildConfig.getName());
-    launcherName.setFont(Fonts.getFont("defaultMedium", 15.0f, Font.PLAIN));
+    launcherName.setFont(Fonts.getFont("default", 15.0f, Font.BOLD));
     launcherName.setHorizontalAlignment(SwingConstants.CENTER);
     launcherName.setVerticalAlignment(SwingConstants.CENTER);
     launcherName.setBounds(0, 100, 250, 80);
     sidePane.add(launcherName);
 
     selectedServerLabel = new JLabel("Official");
-    selectedServerLabel.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    selectedServerLabel.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     selectedServerLabel.setVisible(false);
     selectedServerLabel.setBounds(28, 185, 120, 20);
     sidePane.add(selectedServerLabel);
@@ -230,13 +230,13 @@ public class LauncherUI extends BaseUI
     JLabel playerCountTitleLabel = new JLabel(_localeManager.getValue("m.players_online"));
     playerCountTitleLabel.setIcon(playerCountTitleIcon);
     playerCountTitleLabel.setBounds(35, 188, 200, 20);
-    playerCountTitleLabel.setFont(Fonts.getFont("defaultMedium", 13.0f, Font.ITALIC));
+    playerCountTitleLabel.setFont(Fonts.getFont("default", 13.0f, Font.BOLD | Font.ITALIC));
     sidePane.add(playerCountTitleLabel);
 
     playerCountLabel = new JLabel("");
     playerCountLabel.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     playerCountLabel.setBounds(25, 188, 190, 20);
-    playerCountLabel.setFont(Fonts.getFont("defaultMedium", 13.0f, Font.ITALIC));
+    playerCountLabel.setFont(Fonts.getFont("default", 13.0f, Font.BOLD | Font.ITALIC));
     playerCountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     playerCountLabel.setVisible(false);
     sidePane.add(playerCountLabel);
@@ -260,7 +260,7 @@ public class LauncherUI extends BaseUI
     settingsButton.setIcon(settingsIcon);
     settingsButton.setBounds(28, 275, 125, 35);
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
-    settingsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    settingsButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     settingsButton.setFocusPainted(false);
     settingsButton.setFocusable(false);
     settingsButton.setBorderPainted(false);
@@ -277,7 +277,7 @@ public class LauncherUI extends BaseUI
     modButton.setIcon(modsIcon);
     modButton.setBounds(28, 315, 125, 35);
     modButton.setHorizontalAlignment(SwingConstants.LEFT);
-    modButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    modButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     modButton.setFocusPainted(false);
     modButton.setFocusable(false);
     modButton.setBorderPainted(false);
@@ -295,7 +295,7 @@ public class LauncherUI extends BaseUI
     editorsButton.setIcon(editorsIcon);
     editorsButton.setBounds(28, 355, 125, 35);
     editorsButton.setHorizontalAlignment(SwingConstants.LEFT);
-    editorsButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    editorsButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     editorsButton.setFocusPainted(false);
     editorsButton.setFocusable(false);
     editorsButton.setBorderPainted(false);
@@ -341,7 +341,7 @@ public class LauncherUI extends BaseUI
     donateButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_DONATE));
 
     JLabel launcherVersion = new JLabel("v" + BuildConfig.getVersion() + " ");
-    launcherVersion.setFont(Fonts.getFont("defaultRegular", 9.0f, Font.ITALIC));
+    launcherVersion.setFont(Fonts.getFont("default", 9.0f, Font.ITALIC));
     launcherVersion.setForeground(CustomColors.INTERFACE_SIDEPANE_FOOTNOTE);
     launcherVersion.setHorizontalAlignment(SwingConstants.RIGHT);
     launcherVersion.setBounds(10, 493, 230, 15);
@@ -351,7 +351,7 @@ public class LauncherUI extends BaseUI
     bannerTimer = new JLabel("");
     bannerTimer.setIcon(timerIcon);
     bannerTimer.setBounds(40, 50, 225, 25);
-    bannerTimer.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    bannerTimer.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     bannerTimer.setForeground(Color.WHITE);
     bannerTimer.setHorizontalAlignment(SwingConstants.CENTER);
     bannerTimer.setVerticalAlignment(SwingConstants.CENTER);
@@ -364,28 +364,28 @@ public class LauncherUI extends BaseUI
 
     bannerTitle = new JLabel(_localeManager.getValue("m.banner_title_default"));
     bannerTitle.setBounds(35, -60, 700, 340);
-    bannerTitle.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
+    bannerTitle.setFont(Fonts.getFont("default", 40.0f, Font.BOLD));
     bannerTitle.setForeground(Color.WHITE);
     bannerTitle.setVisible(false);
     panel.add(bannerTitle);
 
     bannerSubtitle1 = new JLabel(_localeManager.getValue("m.banner_subtitle_default"));
     bannerSubtitle1.setBounds(40, -15, 700, 340);
-    bannerSubtitle1.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
+    bannerSubtitle1.setFont(Fonts.getFont("default", 14.0f, Font.BOLD));
     bannerSubtitle1.setForeground(Color.WHITE);
     bannerSubtitle1.setVisible(false);
     panel.add(bannerSubtitle1);
 
     bannerSubtitle2 = new JLabel("");
     bannerSubtitle2.setBounds(40, 5, 700, 340);
-    bannerSubtitle2.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
+    bannerSubtitle2.setFont(Fonts.getFont("default", 14.0f, Font.BOLD));
     bannerSubtitle2.setForeground(Color.WHITE);
     bannerSubtitle2.setVisible(false);
     panel.add(bannerSubtitle2);
 
     bannerLinkButton = new JButton(_localeManager.getValue("b.learn_more"));
     bannerLinkButton.setBounds(40, 195, 110, 25);
-    bannerLinkButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    bannerLinkButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     bannerLinkButton.setForeground(Color.WHITE);
     bannerLinkButton.setFocusPainted(false);
     bannerLinkButton.setFocusable(false);
@@ -411,7 +411,7 @@ public class LauncherUI extends BaseUI
 
     launchButton = new JButton(_localeManager.getValue("b.play"));
     launchButton.setBounds(500, 423, 210, 52);
-    launchButton.setFont(Fonts.getFont("defaultMedium", 15.0f, Font.PLAIN));
+    launchButton.setFont(Fonts.getFont("default", 15.0f, Font.BOLD));
     launchButton.setFocusPainted(false);
     launchButton.setFocusable(false);
     launchButton.setBackground(CustomColors.LAUNCH);
@@ -456,7 +456,7 @@ public class LauncherUI extends BaseUI
     panel.add(launchPopupMenuButton);
 
     JPopupMenu launchPopupMenu = new JPopupMenu();
-    launchPopupMenu.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    launchPopupMenu.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     launchPopupMenu.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     launchPopupMenu.putClientProperty(FlatClientProperties.POPUP_BORDER_CORNER_RADIUS, 5);
     launchPopupMenu.putClientProperty(FlatClientProperties.STYLE,
@@ -469,7 +469,7 @@ public class LauncherUI extends BaseUI
         eventHandler.gameSettingsEvent();
       }
     });
-    gameSettingsMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    gameSettingsMenuItem.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     gameSettingsMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
 
     JMenuItem repairGameFilesMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.repair_game_files"))
@@ -479,7 +479,7 @@ public class LauncherUI extends BaseUI
         eventHandler.repairGameFilesEvent();
       }
     });
-    repairGameFilesMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    repairGameFilesMenuItem.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     repairGameFilesMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
 
     JMenuItem openGameFolderMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("b.open_game_dir"))
@@ -489,7 +489,7 @@ public class LauncherUI extends BaseUI
         eventHandler.openGameFolderEvent();
       }
     });
-    openGameFolderMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    openGameFolderMenuItem.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     openGameFolderMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
 
     JMenuItem altModeMenuItem = new JMenuItem(new AbstractAction(_localeManager.getValue("m.alt_mode_title"))
@@ -502,7 +502,7 @@ public class LauncherUI extends BaseUI
           JOptionPane.INFORMATION_MESSAGE);
       }
     });
-    altModeMenuItem.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    altModeMenuItem.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     altModeMenuItem.putClientProperty(FlatClientProperties.STYLE, "margin: 10,10,10,10; selectionArc: 15; selectionBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS) + ";");
 
     launchPopupMenu.add(gameSettingsMenuItem);
@@ -524,7 +524,7 @@ public class LauncherUI extends BaseUI
     altModeEnabledLabel = new JLabel(_localeManager.getValue("m.alt_mode"));
     altModeEnabledLabel.setIcon(altModeEnabledIcon);
     altModeEnabledLabel.setBounds(540, 480, 130, 20);
-    altModeEnabledLabel.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    altModeEnabledLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     altModeEnabledLabel.setForeground(Color.WHITE);
     altModeEnabledLabel.setHorizontalAlignment(SwingConstants.CENTER);
     altModeEnabledLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -548,7 +548,7 @@ public class LauncherUI extends BaseUI
     launchState = new JLabel("");
     launchState.setHorizontalAlignment(SwingConstants.LEFT);
     launchState.setBounds(43, 419, 416, 25);
-    launchState.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
+    launchState.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
     launchState.setVisible(false);
     panel.add(launchState);
     panel.setComponentZOrder(launchState, 0);
@@ -565,7 +565,7 @@ public class LauncherUI extends BaseUI
     changelogButton = new JButton(changelogIcon);
     changelogButton.setBounds(736, 26, 36, 36);
     changelogButton.setToolTipText(_localeManager.getValue("m.changelog"));
-    changelogButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    changelogButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     changelogButton.setFocusPainted(false);
     changelogButton.setFocusable(false);
     changelogButton.setBorderPainted(false);
@@ -584,7 +584,7 @@ public class LauncherUI extends BaseUI
     warningNotice.setBorderPainted(false);
     warningNotice.setForeground(Color.WHITE);
     warningNotice.setBackground(CustomColors.LIGHT_RED);
-    warningNotice.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    warningNotice.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
       Dialog.push(this.eventHandler.currentWarning, _localeManager.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
@@ -595,7 +595,7 @@ public class LauncherUI extends BaseUI
     updateButton = new JButton(updateIcon);
     updateButton.setBounds(691, 26, 36, 36);
     updateButton.setToolTipText(_localeManager.getValue("b.update"));
-    updateButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    updateButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     updateButton.setFocusPainted(false);
     updateButton.setFocusable(false);
     updateButton.setBorderPainted(false);
@@ -612,7 +612,7 @@ public class LauncherUI extends BaseUI
     playAnimatedBannersButton = new JButton(Settings.playAnimatedBanners ? playAnimatedBannersIconEnabled : playAnimatedBannersIconDisabled);
     playAnimatedBannersButton.setBounds(736, 71, 36, 36);
     playAnimatedBannersButton.setToolTipText(_localeManager.getValue(Settings.playAnimatedBanners ? "m.animated_banners_disable" : "m.animated_banners_enable"));
-    playAnimatedBannersButton.setFont(Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    playAnimatedBannersButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     playAnimatedBannersButton.setFocusPainted(false);
     playAnimatedBannersButton.setFocusable(false);
     playAnimatedBannersButton.setBorderPainted(false);

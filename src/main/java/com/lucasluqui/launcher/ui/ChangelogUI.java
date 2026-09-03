@@ -72,7 +72,7 @@ public class ChangelogUI extends BaseUI
     loadingLabel = new JLabel(_localeManager.getValue("m.loading"));
     loadingLabel.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     loadingLabel.setBounds(0, 0, this.width, this.height);
-    loadingLabel.setFont(Fonts.getFont("defaultMedium", 14.0f, Font.PLAIN));
+    loadingLabel.setFont(Fonts.getFont("default", 14.0f, Font.BOLD));
     loadingLabel.setHorizontalAlignment(SwingConstants.CENTER);
     loadingLabel.setVerticalAlignment(SwingConstants.CENTER);
     panel.add(loadingLabel);
@@ -81,13 +81,13 @@ public class ChangelogUI extends BaseUI
     releaseLabel = new JLabel("");
     releaseLabel.setHorizontalAlignment(SwingConstants.LEFT);
     releaseLabel.setBounds(25, 0, this.width - 100, 60);
-    releaseLabel.setFont(Fonts.getFont("defaultMedium", 40.0f, Font.PLAIN));
+    releaseLabel.setFont(Fonts.getFont("default", 40.0f, Font.BOLD));
     panel.add(releaseLabel);
 
     changelogArea = new JTextArea();
     changelogArea.setBounds(25, 65, this.width - 100, this.height);
     changelogArea.setText("");
-    changelogArea.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    changelogArea.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     changelogArea.setEditable(false);
     changelogArea.setEnabled(false);
     changelogArea.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);

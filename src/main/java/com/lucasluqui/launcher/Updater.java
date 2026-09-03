@@ -75,7 +75,7 @@ public class Updater extends BaseUI
     updaterState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
     updaterState.setHorizontalAlignment(SwingConstants.LEFT);
     updaterState.setBounds(100, 49, 375, 25);
-    updaterState.setFont(Fonts.getFont("defaultRegular", 14.0f, Font.ITALIC));
+    updaterState.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
     updaterState.setVisible(true);
     guiFrame.add(updaterState);
 

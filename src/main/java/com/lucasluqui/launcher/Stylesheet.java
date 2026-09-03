@@ -14,7 +14,7 @@ public class Stylesheet
 
   public static void setup ()
   {
-    System.setProperty("awt.useSystemAAFontSettings", "on");
+    System.setProperty("awt.useSystemAAFontSettings", "gasp");
     System.setProperty("swing.aatext", "true");
 
     IconFontSwing.register(FontAwesome.getIconFont());
@@ -83,10 +83,10 @@ public class Stylesheet
 
     UIManager.put("Component.hoverBorderColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_BRIGHT);
 
-    UIManager.put("ToolTip.font", Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
-    UIManager.put("Button.font", Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-    UIManager.put("TitlePane.font", Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
-    UIManager.put("ProgressBar.font", Fonts.getFont("defaultMedium", 11.0f, Font.PLAIN));
+    UIManager.put("ToolTip.font", Fonts.getFont("default", 11.0f, Font.ITALIC));
+    UIManager.put("Button.font", Fonts.getFont("default", 11.0f, Font.BOLD));
+    UIManager.put("TitlePane.font", Fonts.getFont("default", 11.0f, Font.BOLD));
+    UIManager.put("ProgressBar.font", Fonts.getFont("default", 11.0f, Font.BOLD));
   }
 
 }

@@ -295,7 +295,7 @@ public class LauncherEventHandler
         if (selectedServer.playerCountUrl != null) {
           // Decrease the font size if the player count string is "too" long.
           if (selectedServer.playerCountUrl.length() > 5) {
-            ui.playerCountLabel.setFont(Fonts.getFont("defaultMedium", 12.0f, Font.ITALIC));
+            ui.playerCountLabel.setFont(Fonts.getFont("default", 12.0f, Font.BOLD | Font.ITALIC));
           }
 
           ui.playerCountLabel.setText(selectedServer.playerCountUrl);

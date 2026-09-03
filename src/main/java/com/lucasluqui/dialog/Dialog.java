@@ -41,7 +41,7 @@ public class Dialog
   private static JTextArea formatMessage (String msg)
   {
     JTextArea message = new JTextArea(msg);
-    message.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    message.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     message.setForeground(CustomColors.INTERFACE_DEFAULT);
     message.setBackground(CustomColors.INTERFACE_DEFAULT_BACKGROUND);
     message.setEditable(false);
