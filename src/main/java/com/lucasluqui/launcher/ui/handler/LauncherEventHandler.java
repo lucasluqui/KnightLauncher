@@ -30,6 +30,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static com.lucasluqui.launcher.ui.Log.log;
 
@@ -320,7 +321,9 @@ public class LauncherEventHandler
         ui.playerCountTooltipButton.setVisible(false);
       }
 
-      if (selectedServer.announceBanner != null) updateBanner();
+      if (selectedServer.events != null || selectedServer.defaultEvent != null) {
+        updateBanner();
+      }
 
       for (ActionListener al : ui.serverNoticeButton.getActionListeners()) {
         ui.serverNoticeButton.removeActionListener(al);
@@ -514,23 +517,31 @@ public class LauncherEventHandler
       }
 
       Server selectedServer = _flamingoManager.getSelectedServer();
-      String bannerUrl = selectedServer.announceBanner.split("\\|")[0];
-      double bannerIntensity = Double.parseDouble(selectedServer.announceBanner.split("\\|")[1]);
-      if (!bannerUrl.contains(".gif")) {
-        this.ui.banner = this.ui.processImageForBanner(_cacheManager.fetchImage(bannerUrl, 800, 550), bannerIntensity);
+      com.lucasluqui.launcher.flamingo.data.Event event;
+      if (selectedServer.events == null || selectedServer.events.isEmpty()) {
+        event = selectedServer.defaultEvent;
+      } else {
+        int idx = new Random().nextInt(selectedServer.events.size());
+        event = selectedServer.events.get(idx);
+      }
+
+      String bannerImage = event.banner.split("\\|")[0];
+      double bannerIntensity = Double.parseDouble(event.banner.split("\\|")[1]);
+      if (!event.banner.contains(".gif")) {
+        this.ui.banner = this.ui.processImageForBanner(_cacheManager.fetchImage(bannerImage, 800, 550), bannerIntensity);
         this.ui.playAnimatedBannersButton.setVisible(false);
       } else {
-        this.ui.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerUrl), bannerIntensity);
+        this.ui.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerImage), bannerIntensity);
         this.ui.playAnimatedBannersButton.setVisible(true);
       }
 
       this.ui.bannerLoading.setVisible(false);
       this.ui.panel.repaint();
 
-      this.ui.bannerTitle.setText(selectedServer.announceContent.split("\\|")[0]);
+      this.ui.bannerTitle.setText(event.content.split("\\|")[0]);
       this.ui.bannerTitle.setVisible(true);
 
-      String bannerSubtitle = selectedServer.announceContent.split("\\|")[1];
+      String bannerSubtitle = event.content.split("\\|")[1];
 
       if (bannerSubtitle.contains("\n")) {
         this.ui.bannerSubtitle1.setText(bannerSubtitle.split("\n")[0]);
@@ -542,34 +553,33 @@ public class LauncherEventHandler
       }
       this.ui.bannerSubtitle1.setVisible(true);
 
-      if (!selectedServer.announceBannerLink.equalsIgnoreCase("null")) {
-
+      if (event.link != null) {
         ActionListener[] listeners = this.ui.bannerLinkButton.getActionListeners();
         for (ActionListener listener : listeners) {
           this.ui.bannerLinkButton.removeActionListener(listener);
         }
 
         this.ui.bannerLinkButton.addActionListener(l -> {
-          DesktopUtil.openWebpage(selectedServer.announceBannerLink);
+          DesktopUtil.openWebpage(event.link);
         });
         this.ui.bannerLinkButton.setVisible(true);
       } else {
         this.ui.bannerLinkButton.setVisible(false);
       }
 
-      if (selectedServer.announceBannerEndsAt != 0L || selectedServer.announceBannerStartsAt != 0L) {
+      if (event.endsAt != 0L || event.startsAt != 0L) {
 
-        if (selectedServer.announceBannerStartsAt > System.currentTimeMillis()) {
+        if (event.startsAt > System.currentTimeMillis()) {
           // The event has not yet started
-          this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_starts_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(selectedServer.announceBannerStartsAt))));
-          this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(selectedServer.announceBannerStartsAt, "PST")));
-        } else if (System.currentTimeMillis() > selectedServer.announceBannerEndsAt) {
+          this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_starts_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(event.startsAt))));
+          this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(event.startsAt, "PST")));
+        } else if (System.currentTimeMillis() > event.endsAt) {
           // The event already ended
           this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_ended"));
         } else {
           // The event is currently running
-          this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(selectedServer.announceBannerEndsAt))));
-          this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_ends_at_time", DateUtil.getFormattedTime(selectedServer.announceBannerEndsAt, "PST")));
+          this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(event.endsAt))));
+          this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_ends_at_time", DateUtil.getFormattedTime(event.endsAt, "PST")));
         }
 
         // In any case, the timer needs to be visible

@@ -3,6 +3,7 @@ package com.lucasluqui.launcher.flamingo;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.lucasluqui.launcher.*;
+import com.lucasluqui.launcher.flamingo.data.Event;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.flamingo.data.Status;
 import com.lucasluqui.launcher.setting.Settings;
@@ -89,12 +90,32 @@ public class FlamingoManager
         server.siteUrl = serverJson.getString("siteUrl");
         server.communityUrl = serverJson.getString("communityUrl");
         server.sourceCodeUrl = serverJson.getString("sourceCodeUrl");
-        server.announceType = serverJson.getString("announceType");
-        server.announceBanner = serverJson.getString("announceBanner");
-        server.announceContent = serverJson.getString("announceContent");
-        server.announceBannerLink = serverJson.getString("announceBannerLink");
-        server.announceBannerStartsAt = serverJson.getLong("announceBannerStartsAt");
-        server.announceBannerEndsAt = serverJson.getLong("announceBannerEndsAt");
+        server.defaultEvent = new Event(
+          serverJson.getString("defaultEventType"),
+          serverJson.getString("defaultEventBanner"),
+          serverJson.getString("defaultEventContent"),
+          serverJson.getString("defaultEventLink"),
+          serverJson.getLong("defaultEventStartsAt"),
+          serverJson.getLong("defaultEventEndsAt")
+        );
+
+        List<Event> events = new ArrayList<>();
+        if (!serverJson.getJSONArray("events").isEmpty()) {
+          for (int i = 0; i < serverJson.getJSONArray("events").length(); i++) {
+            JSONObject eventJson = serverJson.getJSONArray("events").getJSONObject(i);
+            Event event = new Event(
+              eventJson.getString("type"),
+              eventJson.getString("banner"),
+              eventJson.getString("content"),
+              eventJson.getString("link"),
+              eventJson.getLong("startsAt"),
+              eventJson.getLong("endsAt")
+            );
+            events.add(event);
+          }
+        }
+        server.events = events;
+
         server.fromCode = serverJson.getString("fromCode");
         server.serverIcon = serverJson.getString("serverIcon");
         server.maintenanceStartsAt = serverJson.getLong("maintenanceStartsAt");
@@ -227,13 +248,10 @@ public class FlamingoManager
             _ctx.getApp().getUI(LauncherUI.class).updatePlayerCountTooltip(playerCount);
           }
 
-          official.announceBanner = server.announceBanner;
-          official.announceContent = server.announceContent;
-          official.announceBannerLink = server.announceBannerLink;
-          official.announceBannerStartsAt = server.announceBannerStartsAt;
-          official.announceBannerEndsAt = server.announceBannerEndsAt;
           official.maintenanceStartsAt = server.maintenanceStartsAt;
           official.maintenanceEndsAt = server.maintenanceEndsAt;
+          official.defaultEvent = server.defaultEvent;
+          official.events = server.events;
           official.noticeTitle = server.noticeTitle;
           official.notice = server.notice;
           continue;

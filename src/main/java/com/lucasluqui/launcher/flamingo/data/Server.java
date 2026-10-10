@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Properties;
 import java.util.zip.ZipFile;
 
@@ -41,17 +42,21 @@ public class Server
 
   public String sourceCodeUrl;
 
-  public String announceType;
+  public Event defaultEvent;
 
-  public String announceBanner;
+  public List<Event> events;
 
-  public String announceContent;
+  //public String announceType;
 
-  public String announceBannerLink;
+  //public String announceBanner;
 
-  public long announceBannerStartsAt;
+  //public String announceContent;
 
-  public long announceBannerEndsAt;
+  //public String announceBannerLink;
+
+  //public long announceBannerStartsAt;
+
+  //public long announceBannerEndsAt;
 
   public String fromCode;
 
@@ -224,12 +229,6 @@ public class Server
       ", siteUrl='" + siteUrl + '\'' +
       ", communityUrl='" + communityUrl + '\'' +
       ", sourceCodeUrl='" + sourceCodeUrl + '\'' +
-      ", announceType='" + announceType + '\'' +
-      ", announceBanner='" + announceBanner + '\'' +
-      ", announceContent='" + announceContent + '\'' +
-      ", announceBannerLink='" + announceBannerLink + '\'' +
-      ", announceBannerStartsAt=" + announceBannerStartsAt +
-      ", announceBannerEndsAt=" + announceBannerEndsAt +
       ", fromCode='" + fromCode + '\'' +
       ", serverIcon='" + serverIcon + '\'' +
       ", maintenanceStartsAt='" + maintenanceStartsAt + '\'' +
