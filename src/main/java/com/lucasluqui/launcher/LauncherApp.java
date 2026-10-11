@@ -285,8 +285,9 @@ public class LauncherApp
 
   private void checkDirectories ()
   {
-    // Stores all mods.
+    // Stores all mods, and a config folder for each of them.
     FileUtil.createDir("mods");
+    FileUtil.createDir("mods/config");
 
     // Stores clients for third-party servers.
     FileUtil.createDir("thirdparty");

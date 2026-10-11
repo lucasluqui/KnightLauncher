@@ -87,6 +87,7 @@ public class ModManager
 
         if (mod != null) {
           _modList.addMod(mod);
+          createModConfigDirectory(modFolderPath, mod);
         }
       }
 
@@ -129,7 +130,8 @@ public class ModManager
 
       // Check if there's directories in the mod folder and push a warning to the user.
       for (File file : FileUtil.filesAndDirectoriesInDirectory(modFolderPath)) {
-        if (file.isDirectory()) {
+        // The config folder is ours, it's expected to be there.
+        if (file.isDirectory() && !file.getName().equals("config")) {
           modListUI.eventHandler.showDirectoriesWarning(true);
           break;
         }
@@ -141,6 +143,27 @@ public class ModManager
       _ctx.getApp().toggleElementsBlock(false);
       _checking = false;
     }
+  }
+
+  /**
+   * Makes sure the mod has its own folder under "config" in the mods folder, named after the mod
+   * with only lowercase a-z characters, digits, and dashes in place of spaces.
+   */
+  private void createModConfigDirectory (String modFolderPath, Mod mod)
+  {
+    String name = sanitizeModConfigName(mod.getDisplayName());
+
+    // Nothing usable in the display name, go with the file name instead.
+    if (name.isEmpty()) name = sanitizeModConfigName(mod.getFileName().replaceFirst("\\.[^.]+$", ""));
+    if (name.isEmpty()) return;
+
+    FileUtil.createDir(modFolderPath + "config/" + name);
+  }
+
+  private static String sanitizeModConfigName (String name)
+  {
+    if (name == null) return "";
+    return name.toLowerCase(Locale.ROOT).replace(' ', '-').replaceAll("[^a-z0-9-]", "");
   }
 
   public void mount ()
