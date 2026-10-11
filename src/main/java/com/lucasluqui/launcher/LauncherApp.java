@@ -28,14 +28,18 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -70,8 +74,31 @@ public class LauncherApp
   @SuppressWarnings("ConstantConditions")
   private void init ()
   {
-    setupLogging();
+    // This goes first, another instance might be running and we don't want to mess with its files (e.g. logs).
+    boolean instanceLocked = acquireInstanceLock();
+
+    if (instanceLocked) setupLogging();
     log.info(BuildConfig.getName() + " started. Running version: " + BuildConfig.getVersion());
+
+    // Just what's needed to be able to show localized and styled dialogs.
+    _ctx.init(this);
+    _settingsManager.init();
+    _localeManager.init();
+    Fonts.setup();
+    Stylesheet.setup();
+
+    if (!instanceLocked) {
+      log.warning("Another launcher instance is already running");
+      blockStartup("error.launcher_already_running");
+      return;
+    }
+
+    Set<Integer> gamePids = ProcessUtil.findJavaProcesses(LauncherGlobals.GAME_MAIN_CLASS);
+    if (gamePids != null && !gamePids.isEmpty()) {
+      log.warning("The game is already running", "pids", gamePids);
+      blockStartup("error.game_already_running");
+      return;
+    }
 
     logVMInfo();
     logGameVMInfo();
@@ -81,9 +108,6 @@ public class LauncherApp
     checkDirectories();
 
     initManagers();
-
-    Fonts.setup();
-    Stylesheet.setup();
 
     checkStartLocation();
     checkShortcut();
@@ -96,11 +120,47 @@ public class LauncherApp
     }
   }
 
+  /**
+   * Makes sure this is the only launcher instance running for this game directory. The lock is let go
+   * by the system as soon as this process ends.
+   *
+   * @return Whether we got the lock. Also true if locking isn't possible at all, so we don't get in the way.
+   */
+  private boolean acquireInstanceLock ()
+  {
+    try {
+      Path lockPath = Paths.get(LauncherGlobals.USER_DIR, "KnightLauncher.lock");
+      FileChannel channel = FileChannel.open(lockPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+
+      // When restarting (updates, Java VM patching) the previous instance starts this one right before exiting,
+      // so give it a moment to let go of the lock.
+      long deadline = System.currentTimeMillis() + INSTANCE_LOCK_TIMEOUT;
+      while (true) {
+        _instanceLock = channel.tryLock();
+        if (_instanceLock != null) return true;
+        if (System.currentTimeMillis() >= deadline) {
+          channel.close();
+          return false;
+        }
+        Thread.sleep(250);
+      }
+    } catch (Exception e) {
+      log.error("Failed to acquire instance lock", e);
+      return true;
+    }
+  }
+
+  /**
+   * Lets the user know why the launcher can't start, then exits.
+   */
+  private void blockStartup (String messageKey)
+  {
+    Dialog.push(_localeManager.getValue(messageKey), JOptionPane.WARNING_MESSAGE);
+    System.exit(0);
+  }
+
   private void initManagers ()
   {
-    _ctx.init(this);
-    _settingsManager.init();
-    _localeManager.init();
     _modManager.init();
     _flamingoManager.init();
     _moduleManager.init();
@@ -584,7 +644,7 @@ public class LauncherApp
     if (!SystemUtil.is64Bit()) return false;
 
     // Currently, Java VM patching is only supported on Windows systems and Linux installs through Steam.
-    if (!SystemUtil.isWindows() && !(SystemUtil.isUnix() && Settings.gamePlatform.startsWith("Steam"))) return false;
+    if (!SystemUtil.isWindows() && !(SystemUtil.isUnix() && Settings.PLATFORM_STEAM.equals(Settings.gamePlatform))) return false;
 
     // Check if there's already a 64-bit Java VM in the game's directory or if it already has been installed by the launcher.
     String javaVMVersion = JavaUtil.getGameJVMData();
@@ -704,7 +764,7 @@ public class LauncherApp
       Thread.sleep(1000);
 
       ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update", newVersion}, true);
-      exit(true);
+      exit();
     } catch (Exception e) {
       String downloadErrMsg = "An error occurred while trying to start the launcher updater." +
         "\nPlease try again later.";
@@ -857,17 +917,15 @@ public class LauncherApp
     return this._latestReleaseChangelog;
   }
 
-  public void exit (boolean force)
+  public void exit ()
   {
     _discordPresenceClient.stop();
-    if (force || !Settings.keepOpen) {
-      try {
-        getUI(LauncherUI.class).guiFrame.dispose();
-      } catch (NullPointerException e) {
-        log.error("Failed to dispose frame on exit");
-      }
-      System.exit(0);
+    try {
+      getUI(LauncherUI.class).guiFrame.dispose();
+    } catch (NullPointerException e) {
+      log.error("Failed to dispose frame on exit");
     }
+    System.exit(0);
   }
 
   public static class LauncherModule extends AbstractModule
@@ -894,6 +952,12 @@ public class LauncherApp
 
   private final Map<Class<? extends BaseUI>, BaseUI> _uiMap = new HashMap<>();
   private final List<Class<? extends BaseUI>> _uiHistory = new ArrayList<>();
+
+  // Held for as long as the launcher runs so no other instance can start.
+  private FileLock _instanceLock;
+
+  // How long to wait for a previous instance to exit when restarting.
+  private static final int INSTANCE_LOCK_TIMEOUT = 5000;
 
   private final String[] args;
   private final Injector injector;

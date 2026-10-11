@@ -25,7 +25,9 @@ public class Settings
   public static int compressorExtractBuffer = 8196;
 
   // Game settings
-  public static String gamePlatform = "Steam";
+  public static final String PLATFORM_STEAM = "Steam";
+  public static final String PLATFORM_STANDALONE = "Standalone";
+  public static String gamePlatform = PLATFORM_STEAM;
   public static int gameMemory = 1024;
   public static Boolean gameUseStringDeduplication = false;
   public static Boolean gameDisableExplicitGC = false;

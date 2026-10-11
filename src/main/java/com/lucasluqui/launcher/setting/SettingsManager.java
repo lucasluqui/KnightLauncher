@@ -91,7 +91,14 @@ public class SettingsManager
     Settings.compressorExtractBuffer = Integer.parseInt(getValue("compressor.extractBuffer"));
 
     // Game settings
-    Settings.gamePlatform = getValue("game.platform");
+    // Older versions stored the platform's translated name, which is "Steam" in every language.
+    // Anything else was a translation of "Standalone", so turn it into the language-independent value.
+    String platform = getValue("game.platform");
+    Settings.gamePlatform = platform.startsWith(Settings.PLATFORM_STEAM) ? Settings.PLATFORM_STEAM : Settings.PLATFORM_STANDALONE;
+    if (!Settings.gamePlatform.equals(platform)) {
+      log.info("Migrating stored game platform", "from", platform, "to", Settings.gamePlatform);
+      setValue("game.platform", Settings.gamePlatform);
+    }
     Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
     Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));
     Settings.gameUseCustomGC = Boolean.parseBoolean(getValue("game.useCustomGC"));
@@ -110,7 +117,8 @@ public class SettingsManager
   private void initFinished ()
   {
     if (SystemUtil.isWindows() && !SteamUtil.isRunningInSteamapps()) {
-      setValue("game.platform", "Standalone");
+      Settings.gamePlatform = Settings.PLATFORM_STANDALONE;
+      setValue("game.platform", Settings.PLATFORM_STANDALONE);
     }
   }
 

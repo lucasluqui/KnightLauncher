@@ -44,8 +44,8 @@ public class SettingsEventHandler
 
   public void platformChangeEvent (ItemEvent event)
   {
-    Settings.gamePlatform = (String) this.ui.choicePlatform.getSelectedItem();
-    _settingsManager.setValue("game.platform", (String) this.ui.choicePlatform.getSelectedItem());
+    Settings.gamePlatform = this.ui.getSelectedPlatform();
+    _settingsManager.setValue("game.platform", Settings.gamePlatform);
   }
 
   public void rebuildsChangeEvent (ActionEvent event)

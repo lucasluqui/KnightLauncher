@@ -24,6 +24,8 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.MalformedURLException;
@@ -38,6 +40,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.lucasluqui.launcher.ui.Log.log;
@@ -52,7 +57,8 @@ public class LauncherEventHandler
                                FlamingoManager flamingoManager,
                                CacheManager cacheManager,
                                DownloadManager downloadManager,
-                               DiscordPresenceClient discordPresenceClient)
+                               DiscordPresenceClient discordPresenceClient,
+                               TrayManager trayManager)
   {
     this._ctx = ctx;
     this._modManager = modManager;
@@ -62,6 +68,7 @@ public class LauncherEventHandler
     this._cacheManager = cacheManager;
     this._downloadManager = downloadManager;
     this._discordPresenceClient = discordPresenceClient;
+    this._trayManager = trayManager;
   }
 
   public void launchGameEvent (boolean altMode)
@@ -70,6 +77,20 @@ public class LauncherEventHandler
 
       // block interactions with the launcher
       _ctx.getApp().toggleElementsBlock(true);
+
+      // Take note of what's already running, so we only look for the processes we're about to start.
+      final Map<Integer, String> existingProcesses = ProcessUtil.listJavaProcesses();
+      final Set<Integer> existingGamePids = existingProcesses == null ? null
+        : ProcessUtil.findProcesses(existingProcesses, LauncherGlobals.GAME_MAIN_CLASS);
+
+      // Only one regular game client at a time, any extra ones have to go through Alt Mode.
+      if (!altMode && existingGamePids != null && !existingGamePids.isEmpty()) {
+        log.info("Game is already running, not launching another client", "pids", existingGamePids);
+        Dialog.push(_localeManager.getValue("error.game_already_running_launch"), JOptionPane.WARNING_MESSAGE);
+        _ctx.getApp().toggleElementsBlock(false);
+        ui.resetLaunchButton();
+        return;
+      }
 
       Server selectedServer = _flamingoManager.getSelectedServer();
       String sanitizedServerName = selectedServer.getSanitizedName();
@@ -104,7 +125,7 @@ public class LauncherEventHandler
         if (Settings.loadCodeMods) {
           ProcessUtil.run(getCodeModsStartCommand(altMode), true);
         } else {
-          if (Settings.gamePlatform.startsWith("Steam")) {
+          if (Settings.PLATFORM_STEAM.equals(Settings.gamePlatform)) {
             SteamUtil.runApp(99900, SystemUtil.isMac());
           } else {
             if (SystemUtil.isWindows()) {
@@ -216,7 +237,7 @@ public class LauncherEventHandler
       _ctx._progressBar.setState(_localeManager.getValue("m.game_launching"));
       ui.launchButton.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
       ui.launchButton.setText(_localeManager.getValue("m.launching"));
-      ThreadingUtil.executeWithDelay(this::checkGameLaunch, 8000);
+      checkGameLaunch(existingProcesses);
     });
     launchThread.start();
 
@@ -875,27 +896,172 @@ public class LauncherEventHandler
     return argsList.toArray(new String[argsList.size()]);
   }
 
-  private void checkGameLaunch ()
+  /**
+   * Waits for the game client to show up, then starts a game session, which also hides the launcher
+   * to the tray if the user wants so.
+   *
+   * @param existingProcesses Java processes that were already running before launching, or null if unknown.
+   */
+  private void checkGameLaunch (Map<Integer, String> existingProcesses)
   {
-    boolean gameRunning = isGameRunning();
-    if (!gameRunning) {
-      try {
-        Thread.sleep(8000);
-        gameRunning = isGameRunning();
-        if (!gameRunning) {
-          Dialog.push(_localeManager.getValue("error.game_launch"), _localeManager.getValue("t.game_launch_error"), JOptionPane.ERROR_MESSAGE);
+    Set<Integer> gamePids = new HashSet<>();
+    boolean detectionFailed = existingProcesses == null;
+    boolean getdownSeen = false;
+
+    long deadline = System.currentTimeMillis() + GAME_LAUNCH_TIMEOUT;
+    while (!detectionFailed && System.currentTimeMillis() < deadline) {
+      Map<Integer, String> processes = ProcessUtil.listJavaProcesses();
+      if (processes == null) {
+        detectionFailed = true;
+        break;
+      }
+
+      // Leave out anything that was already running before launching.
+      processes.keySet().removeAll(existingProcesses.keySet());
+
+      Set<Integer> found = ProcessUtil.findProcesses(processes, LauncherGlobals.GAME_MAIN_CLASS);
+      if (!found.isEmpty()) {
+        gamePids = found;
+        break;
+      }
+
+      // Getdown comes up before the game does (also when launching through Steam), and it might take a while
+      // updating or waiting on the user. The game can't show up until it's done, so keep waiting while it's open.
+      if (!ProcessUtil.findProcesses(processes, GETDOWN_COMMAND_LINE).isEmpty()) {
+        if (!getdownSeen) {
+          log.info("Getdown is running, waiting for it to start the game");
+
+          // Getdown has its own window, so we can get out of the way already.
+          if (Settings.keepOpen) SwingUtilities.invokeLater(this::hideLauncher);
         }
+        getdownSeen = true;
+        deadline = System.currentTimeMillis() + GAME_LAUNCH_TIMEOUT;
+      }
+
+      try {
+        Thread.sleep(GAME_LAUNCH_POLL_INTERVAL);
       } catch (InterruptedException e) {
+        log.error(e);
+        break;
+      }
+    }
+
+    // We might have hidden away when getdown showed up, come back if the game isn't there to start a session.
+    if (getdownSeen && gamePids.isEmpty()) {
+      try {
+        SwingUtilities.invokeAndWait(this::restoreLauncher);
+      } catch (Exception e) {
         log.error(e);
       }
     }
 
-    if (gameRunning) _ctx.getApp().exit(false);
+    if (detectionFailed) {
+      // We can't tell whether the game launched, so we stay as we are, as we wouldn't know when it closes either.
+      log.warning("Could not check whether the game launched");
+    } else if (gamePids.isEmpty()) {
+      Dialog.push(_localeManager.getValue("error.game_launch"), _localeManager.getValue("t.game_launch_error"), JOptionPane.ERROR_MESSAGE);
+    } else {
+      log.info("Game launched", "pids", gamePids);
+      SwingUtilities.invokeLater(this::enterGameSession);
+    }
 
     // unblock launcher interactions
     _ctx.getApp().toggleElementsBlock(false);
 
     ui.resetLaunchButton();
+  }
+
+  /**
+   * Stops Discord presence while the game is running and, if the user wants so, hides the launcher to the tray.
+   * Everything goes back to normal once every game client has closed.
+   */
+  private void enterGameSession ()
+  {
+    _discordPresenceClient.stop();
+    if (Settings.keepOpen) hideLauncher();
+
+    // A session might already be going on if another client was launched in the meantime.
+    if (_gameWatcher == null) {
+      _gameWatcher = _gameWatcherExecutor.scheduleWithFixedDelay(this::checkGameClosed,
+        GAME_WATCH_INTERVAL, GAME_WATCH_INTERVAL, TimeUnit.MILLISECONDS);
+    }
+  }
+
+  private void checkGameClosed ()
+  {
+    // Look for any game client rather than just the one we launched, so Alt Mode clients keep the session going too.
+    Set<Integer> gamePids = ProcessUtil.findJavaProcesses(LauncherGlobals.GAME_MAIN_CLASS);
+
+    // Can't tell right now, try again next time.
+    if (gamePids == null || !gamePids.isEmpty()) return;
+
+    log.info("Game closed");
+    _gameWatcher.cancel(false);
+    _gameWatcher = null;
+    SwingUtilities.invokeLater(this::exitGameSession);
+  }
+
+  private void exitGameSession ()
+  {
+    restoreLauncher();
+    _discordPresenceClient.resume();
+    _discordPresenceClient.setDetails(_localeManager.getValue("presence.ready"));
+  }
+
+  private void hideLauncher ()
+  {
+    if (_launcherHidden) return;
+    _launcherHidden = true;
+
+    if (_trayManager.show(this::restoreLauncher, () -> _ctx.getApp().exit())) {
+      ui.guiFrame.setVisible(false);
+    } else {
+      // No system tray to go to, just minimize instead.
+      if (!_deiconifyListenerAdded) {
+        ui.guiFrame.addWindowListener(new WindowAdapter()
+        {
+          @Override
+          public void windowDeiconified (WindowEvent e)
+          {
+            restoreLauncher();
+          }
+        });
+        _deiconifyListenerAdded = true;
+      }
+      ui.guiFrame.setState(Frame.ICONIFIED);
+    }
+
+    pauseBanner();
+  }
+
+  private void restoreLauncher ()
+  {
+    if (!_launcherHidden) return;
+    _launcherHidden = false;
+
+    _trayManager.hide();
+    ui.guiFrame.setVisible(true);
+    ui.guiFrame.setState(Frame.NORMAL);
+    ui.guiFrame.toFront();
+    ui.guiFrame.requestFocus();
+
+    updateBanner();
+  }
+
+  /**
+   * Stops the banner rotation and animations and drops the cached banner images.
+   * Showing the banner again is a matter of calling {@link #updateBanner()}.
+   */
+  private void pauseBanner ()
+  {
+    _bannerCycleTimer.stop();
+
+    // Stops any animated banner and makes pending loads bail out.
+    _bannerGeneration.incrementAndGet();
+    _bannerImageCache.clear();
+
+    // We just let go of the banner images which can take quite a bit of memory, give it back while the game runs.
+    System.gc();
   }
 
   private String localizeTimeRemaining (String remainingString)
@@ -904,12 +1070,6 @@ public class LauncherEventHandler
     return remainingString.replace("{d}", _localeManager.getValue("m.days"))
       .replace("{h}", _localeManager.getValue("m.hours"))
       .replace("{m}", _localeManager.getValue("m.minutes"));
-  }
-
-  private boolean isGameRunning ()
-  {
-    // TODO: Add Linux and Mac compatibility to launch checking.
-    return !SystemUtil.isWindows() || ProcessUtil.isProcessRunning("javaw.exe", _flamingoManager.getSelectedServer().isOfficial() ? "Spiral Knights" : _flamingoManager.getSelectedServer().name);
   }
 
   @Inject private LauncherUI ui;
@@ -922,6 +1082,7 @@ public class LauncherEventHandler
   protected CacheManager _cacheManager;
   protected DownloadManager _downloadManager;
   protected DiscordPresenceClient _discordPresenceClient;
+  protected TrayManager _trayManager;
 
   public String currentWarning = "";
   public String latestRelease = "";
@@ -945,6 +1106,28 @@ public class LauncherEventHandler
 
   // How long each event stays on screen before rotating to the next one.
   private static final int BANNER_CYCLE_INTERVAL = 8000;
+
+  private final ScheduledExecutorService _gameWatcherExecutor = Executors.newSingleThreadScheduledExecutor(r -> {
+    Thread thread = new Thread(r, "GameWatcher");
+    thread.setDaemon(true);
+    return thread;
+  });
+
+  private volatile ScheduledFuture<?> _gameWatcher;
+
+  private boolean _launcherHidden = false;
+  private boolean _deiconifyListenerAdded = false;
+
+  // How often to look for the game client after launching, and how long to wait for it before giving up.
+  // The wait starts over for as long as getdown is open.
+  private static final int GAME_LAUNCH_POLL_INTERVAL = 1000;
+  private static final int GAME_LAUNCH_TIMEOUT = 20000;
+
+  // How getdown shows up in its command line, both when we start it and when Steam does.
+  private static final String GETDOWN_COMMAND_LINE = "getdown";
+
+  // How often to check whether the game client is still running while the launcher is hidden.
+  private static final int GAME_WATCH_INTERVAL = 3000;
 
   private final String[] RPC_COMMAND_LINE = new String[]{".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe", BuildConfig.getVersion()};
 }

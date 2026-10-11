@@ -32,6 +32,11 @@ public class DiscordPresenceClient
   private boolean stub;
 
   /**
+   * Whether the Discord RPC connection is currently initialized.
+   */
+  private volatile boolean running;
+
+  /**
    * The event handlers which bother with all the Discord RPC callback bits.
    * Abstracted to Object to avoid injecting the actual class on ARM or Mac.
    */
@@ -54,6 +59,7 @@ public class DiscordPresenceClient
 
     this.clientId = clientId;
     DiscordRPC.discordInitialize(this.clientId, this.getEventHandlers(), true);
+    this.running = true;
     setDetails(_localeManager.getValue("presence.starting"));
     log.info("Discord presence client is now running");
   }
@@ -63,7 +69,9 @@ public class DiscordPresenceClient
     if (stub) return;
 
     this.details = details;
-    updatePresenceDetails(details);
+
+    // Keep the details around, they'll be sent once the client is resumed.
+    if (running) updatePresenceDetails(details);
   }
 
   @SuppressWarnings("unused")
@@ -83,8 +91,22 @@ public class DiscordPresenceClient
 
   public void stop ()
   {
-    if (stub) return;
+    if (stub || !running) return;
     DiscordRPC.discordShutdown();
+    this.running = false;
+    log.info("Discord presence client stopped");
+  }
+
+  /**
+   * Starts the client back up after being stopped, restoring the last known details.
+   */
+  public void resume ()
+  {
+    if (stub || running || clientId == null) return;
+    DiscordRPC.discordInitialize(this.clientId, this.getEventHandlers(), true);
+    this.running = true;
+    if (details != null) updatePresenceDetails(details);
+    log.info("Discord presence client resumed");
   }
 
   /**

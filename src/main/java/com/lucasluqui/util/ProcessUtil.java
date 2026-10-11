@@ -1,11 +1,18 @@
 package com.lucasluqui.util;
 
 import org.apache.commons.io.IOUtils;
+import oshi.SystemInfo;
+import oshi.software.os.OSProcess;
+import oshi.software.os.OperatingSystem;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 
 import static com.lucasluqui.util.Log.log;
 
@@ -111,14 +118,62 @@ public class ProcessUtil
     return new String[1];
   }
 
-  public static boolean isProcessRunning (String processExecutable, String processTitle)
+  /**
+   * Finds the running Java processes whose command line contains {@code commandLineFragment}.
+   *
+   * @return The IDs of the matching processes, or null if processes couldn't be listed.
+   */
+  public static Set<Integer> findJavaProcesses (String commandLineFragment)
   {
-    String[] output = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", "tasklist /v /fo csv /fi \"imagename eq " + processExecutable + "\""});
-    log.info("isProcessRunning", "output (stdout)", output[0].replace("\r", "").replace("\n", "|"), "output (stderr)", output[1]);
-
-    // We return true if we find either the process title requested or an "ERROR" string due to some
-    // systems not having a properly functioning "tasklist" command or some antivirus blocking it.
-    return output[0].contains(processTitle) || output[1].contains("ERROR");
+    Map<Integer, String> processes = listJavaProcesses();
+    if (processes == null) return null;
+    return findProcesses(processes, commandLineFragment);
   }
+
+  /**
+   * Picks the processes whose command line contains {@code commandLineFragment} out of a
+   * {@link #listJavaProcesses()} listing. Useful to look for several things with a single listing.
+   */
+  public static Set<Integer> findProcesses (Map<Integer, String> processes, String commandLineFragment)
+  {
+    Set<Integer> pids = new HashSet<>();
+    for (Map.Entry<Integer, String> process : processes.entrySet()) {
+      if (process.getValue().contains(commandLineFragment)) pids.add(process.getKey());
+    }
+    return pids;
+  }
+
+  /**
+   * Lists the running Java processes.
+   *
+   * @return The command line of each process keyed by its ID, or null if processes couldn't be listed.
+   */
+  public static Map<Integer, String> listJavaProcesses ()
+  {
+    try {
+      // Only look into the command line of Java processes, querying it for every process is costly.
+      // macOS is the exception, as the game might be started through an app bundle with a different name.
+      Predicate<OSProcess> filter = SystemUtil.isMac()
+        ? p -> true
+        : p -> p.getName().toLowerCase().contains("java");
+
+      Map<Integer, String> processes = new HashMap<>();
+      for (OSProcess process : getOperatingSystem().getProcesses(filter, OperatingSystem.ProcessSorting.NO_SORTING, 0)) {
+        processes.put(process.getProcessID(), process.getCommandLine());
+      }
+      return processes;
+    } catch (Throwable e) {
+      log.error("Failed to list processes", e);
+      return null;
+    }
+  }
+
+  private static synchronized OperatingSystem getOperatingSystem ()
+  {
+    if (_operatingSystem == null) _operatingSystem = new SystemInfo().getOperatingSystem();
+    return _operatingSystem;
+  }
+
+  private static OperatingSystem _operatingSystem;
 
 }

@@ -24,6 +24,9 @@ public class LauncherGlobals
 
   public static final String RPC_CLIENT_ID = "626524043209867274";
 
+  // Every game client, official or third party, runs this class.
+  public static final String GAME_MAIN_CLASS = "com.threerings.projectx.client.ProjectXApp";
+
   public static final String[] GETDOWN_ARGS;
   public static final String[] GETDOWN_ARGS_MAC;
   public static final String[] GETDOWN_ARGS_WIN;
@@ -37,7 +40,6 @@ public class LauncherGlobals
       javaPath,
       "-Dsun.java2d.d3d=false",
       "-Dcheck_unpacked=true",
-      "-Dsilent=launch",
       "-jar",
       "./getdown-pro.jar",
       ".",
@@ -48,7 +50,6 @@ public class LauncherGlobals
       "java",
       "-Dsun.java2d.d3d=false",
       "-Dcheck_unpacked=true",
-      "-Dsilent=launch",
       "-jar",
       "./getdown-pro.jar",
       ".",
@@ -59,7 +60,6 @@ public class LauncherGlobals
       javaPath,
       "-Dsun.java2d.d3d=false",
       "-Dcheck_unpacked=true",
-      "-Dsilent=launch",
       "-jar",
       USER_DIR + File.separator + "getdown-pro.jar",
       ".",

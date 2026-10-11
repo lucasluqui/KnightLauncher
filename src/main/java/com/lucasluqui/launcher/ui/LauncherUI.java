@@ -672,7 +672,7 @@ public class LauncherUI extends BaseUI
     playAnimatedBannersButton.addActionListener(l -> this.eventHandler.switchBannerAnimations());
 
     closeButton.addActionListener(e -> {
-      _ctx.getApp().exit(true);
+      _ctx.getApp().exit();
     });
     closeButton.setToolTipText(_localeManager.getValue("b.close"));
     minimizeButton.setToolTipText(_localeManager.getValue("b.minimize"));

@@ -141,7 +141,7 @@ public class JVMPatcher extends BaseUI
 
     closeButton.addActionListener(e -> {
       if (Settings.jvmPatched) {
-        _ctx.getApp().exit(true);
+        _ctx.getApp().exit();
       } else {
         Dialog.push(
           "On your first time launching you are required to patch a 64-bit Java VM\nand thus you cannot close this window.",

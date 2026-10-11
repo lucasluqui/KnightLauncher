@@ -199,12 +199,12 @@ public class SettingsUI extends BaseUI
     sep3.setBounds(10, 230, 600, 16);
     launcherSubPanel.add(sep3);
 
-    JLabel labelKeepOpen = new JLabel(_localeManager.getValue("m.keep_open"));
+    JLabel labelKeepOpen = new JLabel(_localeManager.getValue("m.minimize_to_tray"));
     labelKeepOpen.setBounds(10, 245, 350, 20);
     labelKeepOpen.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
     launcherSubPanel.add(labelKeepOpen);
 
-    JLabel labelKeepOpenExplained = new JLabel(_localeManager.getValue("m.keep_open_explained"));
+    JLabel labelKeepOpenExplained = new JLabel(_localeManager.getValue("m.minimize_to_tray_explained"));
     labelKeepOpenExplained.setBounds(10, 265, 600, 16);
     labelKeepOpenExplained.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     launcherSubPanel.add(labelKeepOpenExplained);
@@ -305,7 +305,7 @@ public class SettingsUI extends BaseUI
     if (SystemUtil.isWindows() && !SteamUtil.isRunningInSteamapps()) {
       choicePlatform.removeItem(_localeManager.getValue("o.steam"));
     }
-    choicePlatform.setSelectedItem(Settings.gamePlatform);
+    choicePlatform.setSelectedItem(getPlatformLabel(Settings.gamePlatform));
     choicePlatform.addItemListener(new ItemListener()
     {
       @Override
@@ -456,7 +456,7 @@ public class SettingsUI extends BaseUI
     gamePanel.add(jvmPatchButton);
     jvmPatchButton.addActionListener(eventHandler::jvmPatchEvent);
 
-    if (((SystemUtil.isWindows() && SystemUtil.is64Bit()) || (SystemUtil.isUnix() && Settings.gamePlatform.equalsIgnoreCase("Steam")))) {
+    if (((SystemUtil.isWindows() && SystemUtil.is64Bit()) || (SystemUtil.isUnix() && Settings.PLATFORM_STEAM.equals(Settings.gamePlatform)))) {
       jvmPatchButton.setEnabled(DeployConfig.isDev());
       jvmPatchButton.setToolTipText(null);
     }
@@ -1046,6 +1046,24 @@ public class SettingsUI extends BaseUI
   {
     super.toggleElementsBlock(block);
     this.forceRebuildButton.setEnabled(!block);
+  }
+
+  /**
+   * The platform currently picked in the dropdown, as one of the language-independent values to store.
+   */
+  public String getSelectedPlatform ()
+  {
+    return _localeManager.getValue("o.steam").equals(choicePlatform.getSelectedItem())
+      ? Settings.PLATFORM_STEAM
+      : Settings.PLATFORM_STANDALONE;
+  }
+
+  /**
+   * The translated name to show in the dropdown for the given stored platform value.
+   */
+  private String getPlatformLabel (String platform)
+  {
+    return _localeManager.getValue(Settings.PLATFORM_STEAM.equals(platform) ? "o.steam" : "o.standalone");
   }
 
   @Inject public SettingsEventHandler eventHandler;
