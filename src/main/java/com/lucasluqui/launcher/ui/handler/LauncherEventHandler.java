@@ -313,6 +313,58 @@ public class LauncherEventHandler
     );
   }
 
+  /**
+   * Shows the official server's player count on the side pane, if there's one to show yet.
+   */
+  private void showOfficialPlayerCount (Server official)
+  {
+    if (official.playerCountUrl == null) return;
+
+    // Decrease the font size if the player count string is "too" long.
+    float fontSize = official.playerCountUrl.length() > 5 ? 12.0f : 13.0f;
+    ui.playerCountLabel.setFont(Fonts.getFont("default", fontSize, Font.BOLD | Font.ITALIC));
+
+    ui.playerCountLabel.setText(official.playerCountUrl);
+    ui.playerCountLabel.setVisible(true);
+    ui.playerCountLabel.setIcon(null);
+    ui.playerCountTooltipButton.setVisible(true);
+  }
+
+  /**
+   * Starts refreshing the official server's player count periodically, if it isn't already.
+   */
+  private void startOfficialPlayerCountRefresh ()
+  {
+    if (_playerCountRefresh != null) return;
+    _playerCountRefresh = _scheduler.scheduleWithFixedDelay(this::refreshOfficialPlayerCount,
+      PLAYER_COUNT_REFRESH_INTERVAL, PLAYER_COUNT_REFRESH_INTERVAL, TimeUnit.MILLISECONDS);
+  }
+
+  private void refreshOfficialPlayerCount ()
+  {
+    // Nobody's looking while we're hidden away in the tray, skip it until we're back.
+    if (_launcherHidden) return;
+
+    Server official = _flamingoManager.findServerByName("Official");
+    if (official == null) return;
+
+    // Back to the loading animation while we fetch the new count.
+    SwingUtilities.invokeLater(() -> {
+      if (_flamingoManager.getSelectedServer() == official) {
+        ui.playerCountLabel.setText("");
+        ui.playerCountLabel.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+      }
+    });
+
+    PlayerCount playerCount = _flamingoManager.fetchOfficialPlayerCount(official);
+    log.info("Refreshed player count", "count", official.playerCountUrl);
+
+    SwingUtilities.invokeLater(() -> {
+      if (playerCount != null) ui.updatePlayerCountTooltip(playerCount);
+      if (_flamingoManager.getSelectedServer() == official) showOfficialPlayerCount(official);
+    });
+  }
+
   public void selectedServerChanged ()
   {
     Server selectedServer = _flamingoManager.getSelectedServer();
@@ -322,17 +374,8 @@ public class LauncherEventHandler
         ui.launchButton.setEnabled(selectedServer.enabled == 1);
         ui.selectedServerLabel.setText("Official");
         ui.playerCountLabel.setVisible(true);
-        if (selectedServer.playerCountUrl != null) {
-          // Decrease the font size if the player count string is "too" long.
-          if (selectedServer.playerCountUrl.length() > 5) {
-            ui.playerCountLabel.setFont(Fonts.getFont("default", 12.0f, Font.BOLD | Font.ITALIC));
-          }
-
-          ui.playerCountLabel.setText(selectedServer.playerCountUrl);
-          ui.playerCountLabel.setVisible(true);
-          ui.playerCountLabel.setIcon(null);
-          ui.playerCountTooltipButton.setVisible(true);
-        }
+        showOfficialPlayerCount(selectedServer);
+        startOfficialPlayerCountRefresh();
         ui.serverInfoButton.setEnabled(false);
         ui.serverInfoButton.setVisible(false);
       } else {
@@ -982,7 +1025,7 @@ public class LauncherEventHandler
 
     // A session might already be going on if another client was launched in the meantime.
     if (_gameWatcher == null) {
-      _gameWatcher = _gameWatcherExecutor.scheduleWithFixedDelay(this::checkGameClosed,
+      _gameWatcher = _scheduler.scheduleWithFixedDelay(this::checkGameClosed,
         GAME_WATCH_INTERVAL, GAME_WATCH_INTERVAL, TimeUnit.MILLISECONDS);
     }
   }
@@ -1046,6 +1089,9 @@ public class LauncherEventHandler
     ui.guiFrame.requestFocus();
 
     updateBanner();
+
+    // Refreshes were skipped while hidden, so the count we have might be outdated.
+    if (_playerCountRefresh != null) _scheduler.execute(this::refreshOfficialPlayerCount);
   }
 
   /**
@@ -1107,15 +1153,20 @@ public class LauncherEventHandler
   // How long each event stays on screen before rotating to the next one.
   private static final int BANNER_CYCLE_INTERVAL = 8000;
 
-  private final ScheduledExecutorService _gameWatcherExecutor = Executors.newSingleThreadScheduledExecutor(r -> {
-    Thread thread = new Thread(r, "GameWatcher");
+  // Runs the periodic background checks: the game watcher and the player count refresh.
+  private final ScheduledExecutorService _scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+    Thread thread = new Thread(r, "LauncherScheduler");
     thread.setDaemon(true);
     return thread;
   });
 
   private volatile ScheduledFuture<?> _gameWatcher;
+  private ScheduledFuture<?> _playerCountRefresh;
 
-  private boolean _launcherHidden = false;
+  // How often to refresh the player count.
+  private static final int PLAYER_COUNT_REFRESH_INTERVAL = 15 * 60 * 1000;
+
+  private volatile boolean _launcherHidden = false;
   private boolean _deiconifyListenerAdded = false;
 
   // How often to look for the game client after launching, and how long to wait for it before giving up.

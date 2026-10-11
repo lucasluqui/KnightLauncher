@@ -175,6 +175,18 @@ public class FlamingoManager
       .showWarning(_localeManager.getValue("error.flamingo_offline"));
   }
 
+  /**
+   * Fetches the current player count from Steam and stores the estimated total in the given official server.
+   *
+   * @return The player count, or null when Steam didn't give us one.
+   */
+  public PlayerCount fetchOfficialPlayerCount (Server official)
+  {
+    PlayerCount playerCount = _ctx.getApp().getPlayerCount();
+    official.playerCountUrl = playerCount == null ? "???" : "~" + playerCount.getEstimated() + " ";
+    return playerCount;
+  }
+
   public Server findServerByName (String serverName)
   {
     List<Server> results = getServerList().stream()
@@ -238,15 +250,10 @@ public class FlamingoManager
     if (newServerList != null) {
       for (Server server : newServerList) {
         if (server.name.equalsIgnoreCase("Official")) {
-          PlayerCount playerCount = _ctx.getApp().getPlayerCount();
-          if (playerCount == null) {
-            official.playerCountUrl = "???";
-          } else {
-            official.playerCountUrl = "~" + playerCount.getEstimated() + " ";
+          PlayerCount playerCount = fetchOfficialPlayerCount(official);
 
-            // TODO: Too hacky, why not just have the values lie in the server object itself?
-            _ctx.getApp().getUI(LauncherUI.class).updatePlayerCountTooltip(playerCount);
-          }
+          // TODO: Too hacky, why not just have the values lie in the server object itself?
+          if (playerCount != null) _ctx.getApp().getUI(LauncherUI.class).updatePlayerCountTooltip(playerCount);
 
           official.maintenanceStartsAt = server.maintenanceStartsAt;
           official.maintenanceEndsAt = server.maintenanceEndsAt;

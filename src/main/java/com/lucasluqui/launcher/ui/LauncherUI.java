@@ -942,6 +942,11 @@ public class LauncherUI extends BaseUI
     );
 
     playerCountTooltipButton.setToolTipText(playerCountTooltipTitle);
+
+    // This gets called every time the player count is refreshed, so get rid of the previous count's listener.
+    for (ActionListener listener : playerCountTooltipButton.getActionListeners()) {
+      playerCountTooltipButton.removeActionListener(listener);
+    }
     playerCountTooltipButton.addActionListener(l -> {
       Dialog.push(playerCountTooltipText, playerCountTooltipTitle, JOptionPane.INFORMATION_MESSAGE);
     });
