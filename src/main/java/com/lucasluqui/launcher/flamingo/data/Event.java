@@ -7,7 +7,7 @@ public class Event
     this.type = type;
     this.banner = banner;
     this.content = content;
-    this.link = link;
+    this.link = link == null || link.equalsIgnoreCase("null") ? null : link;
     this.startsAt = startsAt;
     this.endsAt = endsAt;
   }

@@ -8,6 +8,7 @@ import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
 import com.lucasluqui.launcher.*;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
+import com.lucasluqui.launcher.flamingo.data.Event;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
@@ -29,8 +30,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.lucasluqui.launcher.ui.Log.log;
 
@@ -509,87 +517,179 @@ public class LauncherEventHandler
 
   public void updateBanner ()
   {
-    Thread refreshThread = new Thread(() -> {
-      this.displayingAnimBanner = false;
+    // All banner state is owned by the EDT, the rotation timer and the navigation controls live there too.
+    if (!SwingUtilities.isEventDispatchThread()) {
+      SwingUtilities.invokeLater(this::updateBanner);
+      return;
+    }
 
-      if (!_flamingoManager.isOnline()) {
-        return;
+    _bannerCycleTimer.stop();
+    _bannerGeneration.incrementAndGet();
+
+    List<Event> events = new ArrayList<>();
+    Server selectedServer = _flamingoManager.getSelectedServer();
+    if (_flamingoManager.isOnline() && selectedServer != null) {
+      long now = System.currentTimeMillis();
+      if (selectedServer.events != null) {
+        for (Event event : selectedServer.events) {
+          // Leave out events that have already ended, upcoming ones are fine.
+          if (event.endsAt == 0L || event.endsAt > now) events.add(event);
+        }
       }
 
-      Server selectedServer = _flamingoManager.getSelectedServer();
-      com.lucasluqui.launcher.flamingo.data.Event event;
-      if (selectedServer.events == null || selectedServer.events.isEmpty()) {
-        event = selectedServer.defaultEvent;
-      } else {
-        int idx = new Random().nextInt(selectedServer.events.size());
-        event = selectedServer.events.get(idx);
+      // The default event is only shown when there's nothing else to display.
+      if (events.isEmpty() && selectedServer.defaultEvent != null) {
+        events.add(selectedServer.defaultEvent);
       }
+    }
 
+    _bannerEvents = events;
+
+    // Drop cached images that no longer belong to any event in rotation.
+    Set<String> banners = new HashSet<>();
+    for (Event event : events) banners.add(event.banner);
+    _bannerImageCache.keySet().retainAll(banners);
+
+    if (events.isEmpty()) {
+      this.ui.updateBannerNavigation(0, 0);
+      return;
+    }
+
+    showBannerEvent(new Random().nextInt(events.size()));
+  }
+
+  public void nextBannerEvent ()
+  {
+    if (_bannerEvents.isEmpty()) return;
+    showBannerEvent((_bannerIndex + 1) % _bannerEvents.size());
+  }
+
+  public void selectBannerEvent (int index)
+  {
+    if (index < 0 || index >= _bannerEvents.size() || index == _bannerIndex) return;
+    showBannerEvent(index);
+  }
+
+  private void showBannerEvent (int index)
+  {
+    final List<Event> events = _bannerEvents;
+    final Event event = events.get(index);
+    final int generation = _bannerGeneration.incrementAndGet();
+
+    _bannerIndex = index;
+    this.ui.updateBannerNavigation(events.size(), index);
+
+    // Restarting here also resets the countdown when the user navigates manually.
+    if (events.size() > 1) {
+      _bannerCycleTimer.restart();
+    } else {
+      _bannerCycleTimer.stop();
+    }
+
+    _bannerExecutor.execute(() -> {
+      // The user might have already moved on to another banner.
+      if (_bannerGeneration.get() != generation) return;
+
+      LauncherUI.BannerImage image = loadBannerImage(event);
+      SwingUtilities.invokeLater(() -> {
+        if (_bannerGeneration.get() != generation) return;
+        applyBannerEvent(event, image, generation);
+      });
+
+      // Have the next banner ready by the time we rotate to it.
+      if (events.size() > 1) loadBannerImage(events.get((index + 1) % events.size()));
+    });
+  }
+
+  private LauncherUI.BannerImage loadBannerImage (Event event)
+  {
+    LauncherUI.BannerImage image = _bannerImageCache.get(event.banner);
+    if (image != null) return image;
+
+    try {
       String bannerImage = event.banner.split("\\|")[0];
       double bannerIntensity = Double.parseDouble(event.banner.split("\\|")[1]);
-      if (!event.banner.contains(".gif")) {
-        this.ui.banner = this.ui.processImageForBanner(_cacheManager.fetchImage(bannerImage, 800, 550), bannerIntensity);
-        this.ui.playAnimatedBannersButton.setVisible(false);
+      if (!bannerImage.contains(".gif")) {
+        image = new LauncherUI.BannerImage(this.ui.processImageForBanner(_cacheManager.fetchImage(bannerImage, 800, 550), bannerIntensity));
       } else {
-        this.ui.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerImage), bannerIntensity);
-        this.ui.playAnimatedBannersButton.setVisible(true);
+        image = this.ui.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerImage), bannerIntensity);
+      }
+    } catch (Exception e) {
+      log.error("Failed to load banner image", "banner", event.banner, e);
+      return null;
+    }
+
+    if (image != null) _bannerImageCache.put(event.banner, image);
+    return image;
+  }
+
+  private void applyBannerEvent (Event event, LauncherUI.BannerImage image, int generation)
+  {
+    this.ui.fadeToBanner(image != null ? image.frames.get(0) : null);
+
+    if (image != null) {
+      this.ui.playAnimatedBannersButton.setVisible(image.isAnimated());
+      if (image.isAnimated()) {
+        this.ui.playAnimatedBanner(image, () -> _bannerGeneration.get() == generation);
+      }
+    } else {
+      this.ui.playAnimatedBannersButton.setVisible(false);
+    }
+
+    this.ui.bannerLoading.setVisible(false);
+    this.ui.panel.repaint();
+
+    this.ui.bannerTitle.setText(event.content.split("\\|")[0]);
+    this.ui.bannerTitle.setVisible(true);
+
+    String bannerSubtitle = event.content.split("\\|")[1];
+
+    if (bannerSubtitle.contains("\n")) {
+      this.ui.bannerSubtitle1.setText(bannerSubtitle.split("\n")[0]);
+      this.ui.bannerSubtitle2.setText(bannerSubtitle.split("\n")[1]);
+      this.ui.bannerSubtitle2.setVisible(true);
+    } else {
+      this.ui.bannerSubtitle1.setText(bannerSubtitle);
+      this.ui.bannerSubtitle2.setVisible(false);
+    }
+    this.ui.bannerSubtitle1.setVisible(true);
+
+    if (event.link != null) {
+      ActionListener[] listeners = this.ui.bannerLinkButton.getActionListeners();
+      for (ActionListener listener : listeners) {
+        this.ui.bannerLinkButton.removeActionListener(listener);
       }
 
-      this.ui.bannerLoading.setVisible(false);
-      this.ui.panel.repaint();
+      this.ui.bannerLinkButton.addActionListener(l -> {
+        DesktopUtil.openWebpage(event.link);
+      });
+      this.ui.bannerLinkButton.setVisible(true);
+    } else {
+      this.ui.bannerLinkButton.setVisible(false);
+    }
 
-      this.ui.bannerTitle.setText(event.content.split("\\|")[0]);
-      this.ui.bannerTitle.setVisible(true);
+    if (event.endsAt != 0L || event.startsAt != 0L) {
 
-      String bannerSubtitle = event.content.split("\\|")[1];
-
-      if (bannerSubtitle.contains("\n")) {
-        this.ui.bannerSubtitle1.setText(bannerSubtitle.split("\n")[0]);
-        this.ui.bannerSubtitle2.setText(bannerSubtitle.split("\n")[1]);
-        this.ui.bannerSubtitle2.setVisible(true);
+      if (event.startsAt > System.currentTimeMillis()) {
+        // The event has not yet started
+        this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_starts_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(event.startsAt))));
+        this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(event.startsAt, "PST")));
+      } else if (System.currentTimeMillis() > event.endsAt) {
+        // The event already ended
+        this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_ended"));
+        this.ui.bannerTimer.setToolTipText(null);
       } else {
-        this.ui.bannerSubtitle1.setText(bannerSubtitle);
-        this.ui.bannerSubtitle2.setVisible(false);
-      }
-      this.ui.bannerSubtitle1.setVisible(true);
-
-      if (event.link != null) {
-        ActionListener[] listeners = this.ui.bannerLinkButton.getActionListeners();
-        for (ActionListener listener : listeners) {
-          this.ui.bannerLinkButton.removeActionListener(listener);
-        }
-
-        this.ui.bannerLinkButton.addActionListener(l -> {
-          DesktopUtil.openWebpage(event.link);
-        });
-        this.ui.bannerLinkButton.setVisible(true);
-      } else {
-        this.ui.bannerLinkButton.setVisible(false);
+        // The event is currently running
+        this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(event.endsAt))));
+        this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_ends_at_time", DateUtil.getFormattedTime(event.endsAt, "PST")));
       }
 
-      if (event.endsAt != 0L || event.startsAt != 0L) {
-
-        if (event.startsAt > System.currentTimeMillis()) {
-          // The event has not yet started
-          this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_starts_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(event.startsAt))));
-          this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(event.startsAt, "PST")));
-        } else if (System.currentTimeMillis() > event.endsAt) {
-          // The event already ended
-          this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_ended"));
-        } else {
-          // The event is currently running
-          this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(event.endsAt))));
-          this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_ends_at_time", DateUtil.getFormattedTime(event.endsAt, "PST")));
-        }
-
-        // In any case, the timer needs to be visible
-        this.ui.bannerTimer.setVisible(true);
-      } else {
-        // Nothing to show here.
-        this.ui.bannerTimer.setVisible(false);
-      }
-    });
-    refreshThread.start();
+      // In any case, the timer needs to be visible
+      this.ui.bannerTimer.setVisible(true);
+    } else {
+      // Nothing to show here.
+      this.ui.bannerTimer.setVisible(false);
+    }
   }
 
   public void switchBannerAnimations ()
@@ -826,7 +926,25 @@ public class LauncherEventHandler
   public String currentWarning = "";
   public String latestRelease = "";
 
-  public boolean displayingAnimBanner = false;
+  private final Timer _bannerCycleTimer = new Timer(BANNER_CYCLE_INTERVAL, e -> nextBannerEvent());
+
+  // Bumped every time a different banner is shown, so stale loads and animations know to bail out.
+  private final AtomicInteger _bannerGeneration = new AtomicInteger();
+
+  private final ExecutorService _bannerExecutor = Executors.newSingleThreadExecutor(r -> {
+    Thread thread = new Thread(r, "BannerLoader");
+    thread.setDaemon(true);
+    return thread;
+  });
+
+  // Processed banner images, keyed by the event's banner string.
+  private final Map<String, LauncherUI.BannerImage> _bannerImageCache = new ConcurrentHashMap<>();
+
+  private List<Event> _bannerEvents = new ArrayList<>();
+  private int _bannerIndex = 0;
+
+  // How long each event stays on screen before rotating to the next one.
+  private static final int BANNER_CYCLE_INTERVAL = 8000;
 
   private final String[] RPC_COMMAND_LINE = new String[]{".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe", BuildConfig.getVersion()};
 }

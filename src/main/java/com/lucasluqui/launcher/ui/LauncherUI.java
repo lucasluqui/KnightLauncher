@@ -26,8 +26,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.function.BooleanSupplier;
 
 import static com.lucasluqui.launcher.ui.Log.log;
 
@@ -138,7 +140,17 @@ public class LauncherUI extends BaseUI
       protected void paintComponent (Graphics g)
       {
         super.paintComponent(g);
-        g.drawImage(banner, 0, 0, null);
+        BufferedImage previous = previousBanner;
+        if (previous != null && bannerFade < 1f) {
+          // Mid cross-fade, draw the new banner on top of the old one with increasing opacity.
+          Graphics2D g2d = (Graphics2D) g.create();
+          g2d.drawImage(previous, 0, 0, null);
+          g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, bannerFade));
+          g2d.drawImage(banner, 0, 0, null);
+          g2d.dispose();
+        } else {
+          g.drawImage(banner, 0, 0, null);
+        }
       }
     };
     panel.setLayout(null);
@@ -394,6 +406,43 @@ public class LauncherUI extends BaseUI
     bannerLinkButton.setBorderPainted(false);
     bannerLinkButton.setVisible(false);
     panel.add(bannerLinkButton);
+
+    bannerDots = new JPanel()
+    {
+      @Override
+      protected void paintComponent (Graphics g)
+      {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Pill shaped background, same as the rest of the transparent buttons on the banner.
+        g2d.setColor(CustomColors.INTERFACE_MAINPANE_TRANSPARENT_BUTTON);
+        g2d.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
+
+        int y = (getHeight() - BANNER_DOT_SIZE) / 2;
+        for (int i = 0; i < bannerDotCount; i++) {
+          g2d.setColor(i == bannerDotIndex ? Color.WHITE : new Color(255, 255, 255, 90));
+          g2d.fillOval(BANNER_DOTS_PADDING + i * BANNER_DOT_SPACING + (BANNER_DOT_SPACING - BANNER_DOT_SIZE) / 2, y, BANNER_DOT_SIZE, BANNER_DOT_SIZE);
+        }
+        g2d.dispose();
+      }
+    };
+    bannerDots.setOpaque(false);
+    bannerDots.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    bannerDots.setVisible(false);
+    bannerDots.addMouseListener(new MouseAdapter()
+    {
+      @Override
+      public void mouseClicked (MouseEvent e)
+      {
+        int x = e.getX() - BANNER_DOTS_PADDING;
+        if (x < 0) return;
+        int index = x / BANNER_DOT_SPACING;
+        if (index < bannerDotCount) eventHandler.selectBannerEvent(index);
+      }
+    });
+    panel.add(bannerDots);
 
     serverNoticeButton = new JButton(_localeManager.getValue("b.server_notice"));
     serverNoticeButton.setIcon(IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 13, Color.BLACK));
@@ -664,12 +713,13 @@ public class LauncherUI extends BaseUI
     return image;
   }
 
-  public void processAnimatedImageForBanner (byte[] gifData, double intensity)
+  public BannerImage processAnimatedImageForBanner (byte[] gifData, double intensity)
   {
     try {
       final GifDecoder.GifImage gif = GifDecoder.read(gifData);
       final int frameCount = gif.getFrameCount();
       final List<BufferedImage> proccesedImages = new ArrayList<>();
+      final int[] delays = new int[frameCount];
 
       // process every single frame of the GIF.
       for (int i = 0; i < frameCount; i++) {
@@ -677,36 +727,118 @@ public class LauncherUI extends BaseUI
         frame = ImageUtil.resizeImage(frame, 800, 550);
         if (intensity > 0) ImageUtil.fadeEdges(frame, intensity);
         proccesedImages.add(frame);
+        delays[i] = gif.getDelay(i);
       }
 
-      this.eventHandler.displayingAnimBanner = true;
-      new Thread(() -> {
-        while (this.eventHandler.displayingAnimBanner) {
-          for (int i = 0; i < proccesedImages.size(); i++) {
-            // we might need to end prematurely to avoid concurrent modifications.
-            if (!this.eventHandler.displayingAnimBanner) break;
-
-            try {
-              Thread.sleep(gif.getDelay(i) * 10L);
-            } catch (InterruptedException e) {
-              log.error(e);
-            }
-
-            if (Settings.playAnimatedBanners) {
-              // set the new frame.
-              banner = proccesedImages.get(i);
-              panel.repaint();
-            } else {
-              banner = proccesedImages.get(0);
-              panel.repaint();
-            }
-          }
-        }
-      }).start();
-
+      return new BannerImage(proccesedImages, delays);
     } catch (IOException e) {
       log.error(e);
+      return null;
     }
+  }
+
+  /**
+   * Plays the given animated banner until {@code active} returns false, which happens
+   * as soon as a different banner is displayed.
+   */
+  public void playAnimatedBanner (BannerImage image, BooleanSupplier active)
+  {
+    Thread animThread = new Thread(() -> {
+      while (active.getAsBoolean()) {
+        for (int i = 0; i < image.frames.size(); i++) {
+          try {
+            Thread.sleep(image.delays[i] * 10L);
+          } catch (InterruptedException e) {
+            return;
+          }
+
+          // the banner might have changed while we were sleeping.
+          if (!active.getAsBoolean()) return;
+
+          banner = Settings.playAnimatedBanners ? image.frames.get(i) : image.frames.get(0);
+          panel.repaint();
+        }
+      }
+    });
+    animThread.setDaemon(true);
+    animThread.start();
+  }
+
+  public void updateBannerNavigation (int count, int index)
+  {
+    boolean visible = count > 1;
+    bannerDotCount = count;
+    bannerDotIndex = index;
+
+    // Centered horizontally at the top of the banner, in line with the buttons on the top right.
+    int width = count * BANNER_DOT_SPACING + BANNER_DOTS_PADDING * 2;
+    bannerDots.setBounds((panel.getWidth() - width) / 2, 33, width, 22);
+    bannerDots.setVisible(visible);
+    bannerDots.repaint();
+  }
+
+  /**
+   * Cross-fades from the banner currently on screen to {@code next} and fades the banner texts in.
+   * Passing null keeps the current image and only fades the texts.
+   */
+  public void fadeToBanner (BufferedImage next)
+  {
+    if (next != null) {
+      previousBanner = banner;
+      banner = next;
+    } else {
+      previousBanner = null;
+    }
+
+    if (bannerFadeTimer != null) bannerFadeTimer.stop();
+
+    final long start = System.currentTimeMillis();
+    bannerFade = 0f;
+    setBannerTextAlpha(0f);
+    bannerFadeTimer = new Timer(15, e -> {
+      float t = Math.min(1f, (System.currentTimeMillis() - start) / (float) BANNER_FADE_DURATION);
+      // ease-out cubic, the change is noticeable right away and settles smoothly.
+      bannerFade = 1f - (float) Math.pow(1f - t, 3);
+      setBannerTextAlpha(bannerFade);
+      if (t >= 1f) {
+        previousBanner = null;
+        ((Timer) e.getSource()).stop();
+      }
+      panel.repaint();
+    });
+    bannerFadeTimer.start();
+  }
+
+  private void setBannerTextAlpha (float alpha)
+  {
+    Color color = new Color(255, 255, 255, Math.round(alpha * 255));
+    bannerTitle.setForeground(color);
+    bannerSubtitle1.setForeground(color);
+    bannerSubtitle2.setForeground(color);
+  }
+
+  public static class BannerImage
+  {
+    public BannerImage (BufferedImage image)
+    {
+      this.frames = Collections.singletonList(image);
+      this.delays = null;
+    }
+
+    public BannerImage (List<BufferedImage> frames, int[] delays)
+    {
+      this.frames = frames;
+      this.delays = delays;
+    }
+
+    public boolean isAnimated ()
+    {
+      return delays != null;
+    }
+
+    public final List<BufferedImage> frames;
+
+    public final int[] delays;
   }
 
   public void returnToHome ()
@@ -837,13 +969,14 @@ public class LauncherUI extends BaseUI
   public JButton serverInfoButton;
 
   // Main pane
-  public BufferedImage banner = null;
+  public volatile BufferedImage banner = null;
   public JLabel bannerLoading;
   public JLabel bannerTimer;
   public JLabel bannerTitle;
   public JLabel bannerSubtitle1;
   public JLabel bannerSubtitle2;
   public JButton bannerLinkButton;
+  public JPanel bannerDots;
   public JButton serverNoticeButton;
   public JButton launchButton;
   public JButton launchPopupMenuButton;
@@ -856,4 +989,14 @@ public class LauncherUI extends BaseUI
   public JButton warningNotice;
   public JLabel altModeEnabledLabel;
 
+  private int bannerDotCount = 0;
+  private int bannerDotIndex = 0;
+  private volatile BufferedImage previousBanner = null;
+  private volatile float bannerFade = 1f;
+  private Timer bannerFadeTimer;
+
+  private static final int BANNER_DOT_SIZE = 8;
+  private static final int BANNER_DOT_SPACING = 14;
+  private static final int BANNER_DOTS_PADDING = 6;
+  private static final int BANNER_FADE_DURATION = 400;
 }
