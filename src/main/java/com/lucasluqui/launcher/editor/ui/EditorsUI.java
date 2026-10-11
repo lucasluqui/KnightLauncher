@@ -2,8 +2,6 @@ package com.lucasluqui.launcher.editor.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
-import com.jhlabs.image.GaussianFilter;
-import com.jhlabs.image.GrayscaleFilter;
 import com.lucasluqui.launcher.ui.BaseUI;
 import com.lucasluqui.launcher.editor.ui.handler.EditorsEventHandler;
 import com.lucasluqui.launcher.CustomColors;
@@ -18,8 +16,6 @@ import com.lucasluqui.util.ImageUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +82,8 @@ public class EditorsUI extends BaseUI
     layout.setVgap(10);
     editorListPane.setLayout(layout);
     editorListPane.setPreferredSize(new Dimension(740, 440));
+    // Keeps the cards clear of the scroll bar when there's one.
+    editorListPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
 
     editorListPaneScroll = new SmoothScrollPane(editorListPane);
     editorListPaneScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -144,37 +142,19 @@ public class EditorsUI extends BaseUI
 
   protected void setupEditors ()
   {
-    BufferedImage sceneEditorImageFocused = null;
-    BufferedImage sceneEditorImageUnfocused = null;
-
+    BufferedImage sceneEditorImage = null;
     if (Settings.showLegacySceneEditor) {
-      sceneEditorImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-scene.png"), 740, 100);
-      sceneEditorImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(sceneEditorImageFocused, null), 25);
-      sceneEditorImageUnfocused = new GrayscaleFilter().filter(sceneEditorImageFocused, null);
+      sceneEditorImage = loadSplashImage("/rsrc/img/editor-scene.png");
     }
-
-    BufferedImage crucibleEditorImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-crucible.png"), 740, 100);
-    crucibleEditorImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(crucibleEditorImageFocused, null), 25);
-    BufferedImage crucibleEditorImageUnfocused = new GrayscaleFilter().filter(crucibleEditorImageFocused, null);
-
-    BufferedImage modelViewerImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-model.png"), 740, 100);
-    modelViewerImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(modelViewerImageFocused, null), 25);
-    BufferedImage modelViewerImageUnfocused = new GrayscaleFilter().filter(modelViewerImageFocused, null);
-
-    BufferedImage interfaceTesterImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-default.png"), 740, 100);
-    interfaceTesterImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(interfaceTesterImageFocused, null), 25);
-    BufferedImage interfaceTesterImageUnfocused = new GrayscaleFilter().filter(interfaceTesterImageFocused, null);
-
-    BufferedImage particleEditorImageFocused = ImageUtil.resizeImage(ImageUtil.loadImageWithinJar("/rsrc/img/editor-default.png"), 740, 100);
-    particleEditorImageFocused = (BufferedImage) ImageUtil.addRoundedCorners(new GaussianFilter(25f).filter(particleEditorImageFocused, null), 25);
-    BufferedImage particleEditorImageUnfocused = new GrayscaleFilter().filter(particleEditorImageFocused, null);
+    BufferedImage crucibleEditorImage = loadSplashImage("/rsrc/img/editor-crucible.png");
+    BufferedImage modelViewerImage = loadSplashImage("/rsrc/img/editor-model.png");
+    BufferedImage defaultEditorImage = loadSplashImage("/rsrc/img/editor-default.png");
 
     List<Editor> editors = new ArrayList<>();
 
     editors.add(new Editor(
       "editor_crucible",
-      crucibleEditorImageFocused,
-      crucibleEditorImageUnfocused,
+      crucibleEditorImage,
       "",
       null,
       "",
@@ -185,8 +165,7 @@ public class EditorsUI extends BaseUI
     if (Settings.showLegacySceneEditor) {
       editors.add(new Editor(
           "editor_scene_legacy",
-          sceneEditorImageFocused,
-          sceneEditorImageUnfocused,
+          sceneEditorImage,
           "com.lucasluqui.spiralview.SceneEditorHook",
           "com.threerings.tudey.tools.SceneEditor",
           "",
@@ -197,8 +176,7 @@ public class EditorsUI extends BaseUI
 
     editors.add(new Editor(
         "editor_model",
-        modelViewerImageFocused,
-        modelViewerImageUnfocused,
+        modelViewerImage,
         "com.lucasluqui.spiralview.ModelViewerHook",
         "com.threerings.opengl.model.tools.ModelViewer",
         "rsrc/character/pc/model.dat",
@@ -208,8 +186,7 @@ public class EditorsUI extends BaseUI
 
     editors.add(new Editor(
         "editor_interface",
-        interfaceTesterImageFocused,
-        interfaceTesterImageUnfocused,
+        defaultEditorImage,
         "com.lucasluqui.spiralview.InterfaceTesterHook",
         null,
         "",
@@ -219,8 +196,7 @@ public class EditorsUI extends BaseUI
 
     editors.add(new Editor(
         "editor_particle",
-        particleEditorImageFocused,
-        particleEditorImageUnfocused,
+        defaultEditorImage,
         "com.lucasluqui.spiralview.ParticleEditorHook",
         "com.threerings.opengl.effect.tools.ParticleEditor",
         "",
@@ -232,8 +208,7 @@ public class EditorsUI extends BaseUI
     if (BuildConfig.isSnapshot()) {
       editors.add(new Editor(
           "editor_silverweave",
-          modelViewerImageFocused,
-          modelViewerImageUnfocused,
+          modelViewerImage,
           "com.lucasluqui.silverweave.SilverweaveTool",
           "",
           "",
@@ -244,79 +219,79 @@ public class EditorsUI extends BaseUI
 
     eventHandler.editors = editors;
 
-    for (Editor editor : eventHandler.editors) {
-      JPanel editorPane = new JPanel()
-      {
-        @Override
-        protected void paintComponent (Graphics g)
-        {
-          super.paintComponent(g);
-          g.drawImage(editor.currentSplashImage, 0, 0, null);
-        }
-      };
-      editorPane.setLayout(null);
-      editorPane.setBounds(0, 0, 740, 100);
-      editorPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    // Two columns, filling up rows from left to right. With an odd amount, the last one takes up
+    // the whole row instead of leaving a gap next to it.
+    int count = eventHandler.editors.size();
+    int rows = (count + EDITOR_COLUMNS - 1) / EDITOR_COLUMNS;
+    int height = rows * (EDITOR_CARD_HEIGHT + EDITOR_CARD_GAP) - EDITOR_CARD_GAP;
+    editorListPane.setPreferredSize(new Dimension(740, height));
+    editorListPane.setLayout(new GridBagLayout());
 
-      JLabel editorLabel = new JLabel();
-      editorLabel.setText(_localeManager.getValue("m." + editor.name));
-      editorLabel.setFont(Fonts.getFont("default", 40.0f, Font.BOLD));
-      editorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-      editorLabel.setVerticalAlignment(SwingConstants.CENTER);
-      editorLabel.setBounds(0, 0, 740, 100);
-      editorPane.add(editorLabel);
-      editorPane.addMouseListener(new MouseListener()
-      {
-        @Override
-        public void mouseClicked (MouseEvent e)
-        {
-          eventHandler.startEditor(editor);
-        }
+    editorCards.clear();
+    for (int i = 0; i < count; i++) {
+      Editor editor = eventHandler.editors.get(i);
 
-        @Override
-        public void mousePressed (MouseEvent e)
-        {
-          eventHandler.startEditor(editor);
-        }
+      // Not every editor has a description.
+      String descriptionKey = "m." + editor.name + "_description";
+      String description = _localeManager.getValue(descriptionKey);
+      if (description.equals(descriptionKey)) description = null;
 
-        @Override
-        public void mouseReleased (MouseEvent e)
-        {
-          eventHandler.startEditor(editor);
-        }
+      // The legacy Scene Editor goes by its plain name, with a badge to set it apart.
+      boolean legacy = editor.name.equals("editor_scene_legacy");
+      String title = _localeManager.getValue(legacy ? "m.editor_scene" : "m." + editor.name);
+      String badge = legacy ? _localeManager.getValue("m.editor_legacy") : null;
 
-        @Override
-        public void mouseEntered (MouseEvent e)
-        {
-          editorPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
-          editor.currentSplashImage = editor.splashImage;
-          editorPane.repaint();
-        }
+      EditorCard card = new EditorCard(title, badge, description,
+        editor.splashImage, () -> eventHandler.startEditor(editor));
+      editorCards.add(card);
 
-        @Override
-        public void mouseExited (MouseEvent e)
-        {
-          editorPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-          editor.currentSplashImage = editor.splashImageUnfocused;
-          editorPane.repaint();
-        }
-      });
-      editorListPane.add(editorPane);
+      // Cards have no size of their own, the equal weights split the space evenly between them.
+      GridBagConstraints constraints = new GridBagConstraints();
+      constraints.gridx = i % EDITOR_COLUMNS;
+      constraints.gridy = i / EDITOR_COLUMNS;
+      constraints.gridwidth = i == count - 1 ? EDITOR_COLUMNS - constraints.gridx : 1;
+      constraints.weightx = 1;
+      constraints.weighty = 1;
+      constraints.fill = GridBagConstraints.BOTH;
+      constraints.insets = new Insets(constraints.gridy > 0 ? EDITOR_CARD_GAP : 0,
+        constraints.gridx > 0 ? EDITOR_CARD_GAP : 0, 0, 0);
+      editorListPane.add(card, constraints);
     }
-
-    editorListPane.setPreferredSize(new Dimension(740, eventHandler.editors.size() * 110));
-    GridLayout layout = new GridLayout(eventHandler.editors.size(), 1);
-    layout.setVgap(10);
-    editorListPane.setLayout(layout);
+    updateEditorAvailability();
 
     editorListPaneScroll.setBounds(
       editorListPaneScroll.getX(),
       editorListPaneScroll.getY(),
       editorListPaneScroll.getWidth(),
-      Math.min(440, eventHandler.editors.size() * 110)
+      Math.min(440, height)
     );
 
     editorListPane.updateUI();
+  }
+
+  /**
+   * Flags the editors that can't be launched on the selected server.
+   *
+   * @param official Whether the selected server is the official one.
+   */
+  public void setOfficialServerSelected (boolean official)
+  {
+    this.officialServerSelected = official;
+    updateEditorAvailability();
+  }
+
+  private void updateEditorAvailability ()
+  {
+    for (int i = 0; i < editorCards.size(); i++) {
+      // Third party servers can only run the editors that have a version for them.
+      boolean available = officialServerSelected || eventHandler.editors.get(i).classNameThirdParty != null;
+      editorCards.get(i).setUnavailableReason(available ? null : _localeManager.getValue("m.editor_official_only"));
+    }
+  }
+
+  private static BufferedImage loadSplashImage (String path)
+  {
+    return ImageUtil.resizeImage(ImageUtil.loadImageWithinJar(path), 740, 100);
   }
 
   @Inject public EditorsEventHandler eventHandler;
@@ -327,4 +302,11 @@ public class EditorsUI extends BaseUI
   public JLabel editorLaunchState;
   public SmoothProgressBar editorLaunchFakeProgressBar;
   public JLabel footerLabel;
+
+  private final List<EditorCard> editorCards = new ArrayList<>();
+
+  private static final int EDITOR_COLUMNS = 2;
+  private static final int EDITOR_CARD_HEIGHT = 130;
+  private static final int EDITOR_CARD_GAP = 10;
+  private boolean officialServerSelected = true;
 }

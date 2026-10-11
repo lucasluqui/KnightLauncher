@@ -368,21 +368,21 @@ public class LauncherUI extends BaseUI
     bannerTimer.setVisible(false);
     panel.add(bannerTimer);
 
-    bannerTitle = new JLabel(_localeManager.getValue("m.banner_title_default"));
+    bannerTitle = new ShadowedLabel(_localeManager.getValue("m.banner_title_default"));
     bannerTitle.setBounds(35, -60, 700, 340);
     bannerTitle.setFont(Fonts.getFont("default", 40.0f, Font.BOLD));
     bannerTitle.setForeground(Color.WHITE);
     bannerTitle.setVisible(false);
     panel.add(bannerTitle);
 
-    bannerSubtitle1 = new JLabel(_localeManager.getValue("m.banner_subtitle_default"));
+    bannerSubtitle1 = new ShadowedLabel(_localeManager.getValue("m.banner_subtitle_default"));
     bannerSubtitle1.setBounds(40, -15, 700, 340);
     bannerSubtitle1.setFont(Fonts.getFont("default", 14.0f, Font.BOLD));
     bannerSubtitle1.setForeground(Color.WHITE);
     bannerSubtitle1.setVisible(false);
     panel.add(bannerSubtitle1);
 
-    bannerSubtitle2 = new JLabel("");
+    bannerSubtitle2 = new ShadowedLabel("");
     bannerSubtitle2.setBounds(40, 5, 700, 340);
     bannerSubtitle2.setFont(Fonts.getFont("default", 14.0f, Font.BOLD));
     bannerSubtitle2.setForeground(Color.WHITE);
@@ -847,6 +847,48 @@ public class LauncherUI extends BaseUI
     bannerTitle.setForeground(color);
     bannerSubtitle1.setForeground(color);
     bannerSubtitle2.setForeground(color);
+  }
+
+  /**
+   * A label with a soft drop shadow under its text.
+   * The shadow fades along with the text's own alpha.
+   */
+  private static class ShadowedLabel extends JLabel
+  {
+    public ShadowedLabel (String text)
+    {
+      super(text);
+    }
+
+    @Override
+    protected void paintComponent (Graphics g)
+    {
+      String text = getText();
+      if (text != null && !text.isEmpty()) {
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setFont(getFont());
+        FontMetrics metrics = g2d.getFontMetrics();
+
+        // Place the text exactly where the label itself will draw it.
+        Insets insets = getInsets();
+        Rectangle view = new Rectangle(insets.left, insets.top,
+          getWidth() - insets.left - insets.right, getHeight() - insets.top - insets.bottom);
+        Rectangle iconBounds = new Rectangle();
+        Rectangle textBounds = new Rectangle();
+        String clipped = SwingUtilities.layoutCompoundLabel(this, metrics, text, null,
+          getVerticalAlignment(), getHorizontalAlignment(), getVerticalTextPosition(), getHorizontalTextPosition(),
+          view, iconBounds, textBounds, 0);
+
+        int alpha = Math.round(SHADOW_ALPHA * (getForeground().getAlpha() / 255f));
+        g2d.setColor(new Color(0, 0, 0, alpha));
+        g2d.drawString(clipped, textBounds.x + 1, textBounds.y + metrics.getAscent() + 2);
+        g2d.dispose();
+      }
+      super.paintComponent(g);
+    }
+
+    private static final int SHADOW_ALPHA = 90;
   }
 
   public static class BannerImage

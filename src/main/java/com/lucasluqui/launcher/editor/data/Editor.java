@@ -6,8 +6,6 @@ public class Editor
 {
   public String name;
   public BufferedImage splashImage;
-  public BufferedImage splashImageUnfocused;
-  public BufferedImage currentSplashImage;
   public String className;
   public String classNameThirdParty;
   public String arg;
@@ -16,7 +14,6 @@ public class Editor
   public Editor (
     String name,
     BufferedImage splashImage,
-    BufferedImage splashImageUnfocused,
     String className,
     String classNameThirdParty,
     String arg,
@@ -25,8 +22,6 @@ public class Editor
   {
     this.name = name;
     this.splashImage = splashImage;
-    this.splashImageUnfocused = splashImageUnfocused;
-    this.currentSplashImage = splashImageUnfocused;
     this.className = className;
     this.classNameThirdParty = classNameThirdParty;
     this.arg = arg;

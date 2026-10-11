@@ -262,6 +262,7 @@ public class EditorsEventHandler
   {
     Server server = _flamingoManager.getSelectedServer();
     if (server != null) {
+      this.ui.setOfficialServerSelected(server.isOfficial());
       if (server.isOfficial()) {
         this.ui.footerLabel.setText(_localeManager.getValue("m.powered_by_spiralview", BuildConfig.getSpiralviewVersion()));
       } else {
