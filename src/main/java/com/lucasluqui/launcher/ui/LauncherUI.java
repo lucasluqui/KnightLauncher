@@ -241,7 +241,7 @@ public class LauncherUI extends BaseUI
     Icon playerCountTitleIcon = IconFontSwing.buildIcon(FontAwesome.USERS, 17, CustomColors.INTERFACE_DEFAULT);
     JLabel playerCountTitleLabel = new JLabel(_localeManager.getValue("m.players_online"));
     playerCountTitleLabel.setIcon(playerCountTitleIcon);
-    playerCountTitleLabel.setBounds(35, 188, 200, 20);
+    playerCountTitleLabel.setBounds(35, 188, 135, 20);
     playerCountTitleLabel.setFont(Fonts.getFont("default", 13.0f, Font.BOLD | Font.ITALIC));
     sidePane.add(playerCountTitleLabel);
 
@@ -359,18 +359,12 @@ public class LauncherUI extends BaseUI
     launcherVersion.setBounds(10, 493, 230, 15);
     sidePane.add(launcherVersion);
 
-    Icon timerIcon = IconFontSwing.buildIcon(FontAwesome.CLOCK_O, 16, Color.WHITE);
     bannerTimer = new JLabel("");
-    bannerTimer.setIcon(timerIcon);
     bannerTimer.setBounds(40, 50, 225, 25);
     bannerTimer.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
-    bannerTimer.setForeground(Color.WHITE);
     bannerTimer.setHorizontalAlignment(SwingConstants.CENTER);
     bannerTimer.setVerticalAlignment(SwingConstants.CENTER);
-    bannerTimer.putClientProperty(FlatClientProperties.STYLE,
-      "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND)
-        + "AA; foreground:" + ColorUtil.colorToHexString(Color.WHITE)
-        + "; arc:999;");
+    setBannerTimerEndingSoon(false);
     bannerTimer.setVisible(false);
     panel.add(bannerTimer);
 
@@ -728,18 +722,48 @@ public class LauncherUI extends BaseUI
   }
 
   /**
-   * Replaces the event cards with one per given title. No cards are shown for a single event,
-   * as there's nothing to switch between.
+   * Gives the banner timer a slight yellow tint when the event is about to end.
    */
-  public void setEventCards (List<String> titles)
+  public void setBannerTimerEndingSoon (boolean endingSoon)
+  {
+    Color background = CustomColors.INTERFACE_MAINPANE_BACKGROUND;
+    Color foreground = Color.WHITE;
+    if (endingSoon) {
+      background = blend(background, CustomColors.WARNING, 0.3f);
+      foreground = blend(foreground, CustomColors.WARNING, 0.35f);
+    }
+
+    bannerTimer.setIcon(IconFontSwing.buildIcon(FontAwesome.CLOCK_O, 16, foreground));
+    bannerTimer.setForeground(foreground);
+    bannerTimer.putClientProperty(FlatClientProperties.STYLE,
+      "background:" + ColorUtil.colorToHexString(background)
+        + "AA; foreground:" + ColorUtil.colorToHexString(foreground)
+        + "; arc:999;");
+  }
+
+  private static Color blend (Color from, Color to, float amount)
+  {
+    return new Color(
+      Math.round(from.getRed() + (to.getRed() - from.getRed()) * amount),
+      Math.round(from.getGreen() + (to.getGreen() - from.getGreen()) * amount),
+      Math.round(from.getBlue() + (to.getBlue() - from.getBlue()) * amount));
+  }
+
+  /**
+   * Replaces the event cards with one per given title, flagging the ones that are ending soon.
+   * No cards are shown for a single event, as there's nothing to switch between.
+   */
+  public void setEventCards (List<String> titles, List<Boolean> endingSoon)
   {
     for (EventCard card : eventCards) panel.remove(card);
     eventCards.clear();
 
     if (titles.size() > 1) {
+      String endingSoonBadge = _localeManager.getValue("m.event_ending_soon");
       for (int i = 0; i < titles.size(); i++) {
         final int index = i;
-        EventCard card = new EventCard(titles.get(i), () -> this.eventHandler.selectBannerEvent(index));
+        EventCard card = new EventCard(titles.get(i), endingSoon.get(i) ? endingSoonBadge : null,
+          () -> this.eventHandler.selectBannerEvent(index));
         eventCards.add(card);
         panel.add(card);
 

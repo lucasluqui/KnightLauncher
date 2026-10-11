@@ -12,6 +12,15 @@ public class Event
     this.endsAt = endsAt;
   }
 
+  /**
+   * Whether the event is already running and ends within the next two days.
+   */
+  public boolean isEndingSoon ()
+  {
+    long now = System.currentTimeMillis();
+    return endsAt != 0L && startsAt <= now && now < endsAt && endsAt - now < ENDING_SOON_THRESHOLD;
+  }
+
   public String type;
 
   public String banner;
@@ -23,4 +32,6 @@ public class Event
   public long startsAt;
 
   public long endsAt;
+
+  private static final long ENDING_SOON_THRESHOLD = 2 * 24 * 60 * 60 * 1000L;
 }

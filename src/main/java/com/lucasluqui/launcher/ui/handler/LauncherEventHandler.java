@@ -618,8 +618,12 @@ public class LauncherEventHandler
     _bannerImageCache.keySet().retainAll(banners);
 
     List<String> titles = new ArrayList<>();
-    for (Event event : events) titles.add(event.content.split("\\|")[0]);
-    this.ui.setEventCards(titles);
+    List<Boolean> endingSoon = new ArrayList<>();
+    for (Event event : events) {
+      titles.add(event.content.split("\\|")[0]);
+      endingSoon.add(event.isEndingSoon());
+    }
+    this.ui.setEventCards(titles, endingSoon);
 
     if (events.isEmpty()) return;
 
@@ -770,6 +774,7 @@ public class LauncherEventHandler
       }
 
       // In any case, the timer needs to be visible
+      this.ui.setBannerTimerEndingSoon(event.isEndingSoon());
       this.ui.bannerTimer.setVisible(true);
     } else {
       // Nothing to show here.
@@ -1129,7 +1134,7 @@ public class LauncherEventHandler
 
     // The cards hold on to their banner images too, they get rebuilt along with the banner.
     _bannerEvents = new ArrayList<>();
-    this.ui.setEventCards(new ArrayList<>());
+    this.ui.setEventCards(new ArrayList<>(), new ArrayList<>());
 
     // We just let go of the banner images which can take quite a bit of memory, give it back while the game runs.
     System.gc();

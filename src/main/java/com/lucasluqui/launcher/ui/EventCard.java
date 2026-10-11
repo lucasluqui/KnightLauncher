@@ -16,9 +16,13 @@ import java.awt.image.BufferedImage;
  */
 public class EventCard extends JComponent
 {
-  public EventCard (String title, Runnable onClick)
+  /**
+   * @param badge Text for a small badge on the card's right side, or null for none.
+   */
+  public EventCard (String title, String badge, Runnable onClick)
   {
     this.title = title;
+    this.badge = badge;
     setOpaque(false);
     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     setToolTipText(title);
@@ -101,12 +105,29 @@ public class EventCard extends JComponent
 
     g2d.drawImage(buffer, 0, 0, null);
 
+    // Badge, a pill against the right edge. Halfway down, each slanted edge sits half the slant in.
+    int badgeSpace = 0;
+    if (badge != null) {
+      g2d.setFont(Fonts.getFont("default", 9.0f, Font.BOLD));
+      FontMetrics badgeMetrics = g2d.getFontMetrics();
+      int badgeWidth = badgeMetrics.stringWidth(badge) + BADGE_PADDING * 2;
+      int badgeX = w - PADDING - SLANT / 2 - badgeWidth;
+      int badgeY = (h - BADGE_HEIGHT) / 2;
+      Color badgeColor = CustomColors.WARNING;
+      g2d.setColor(new Color(badgeColor.getRed(), badgeColor.getGreen(), badgeColor.getBlue(), active || hovered ? 230 : 150));
+      g2d.fillRoundRect(badgeX, badgeY, badgeWidth, BADGE_HEIGHT, BADGE_HEIGHT, BADGE_HEIGHT);
+      g2d.setColor(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_DARK);
+      g2d.drawString(badge, badgeX + BADGE_PADDING,
+        badgeY + (BADGE_HEIGHT - badgeMetrics.getHeight()) / 2 + badgeMetrics.getAscent());
+      badgeSpace = badgeWidth + BADGE_GAP;
+    }
+
     // Title, cut short with an ellipsis if it doesn't fit.
     g2d.setFont(Fonts.getFont("default", 12.0f, Font.BOLD));
     g2d.setColor(active ? Color.WHITE : (hovered ? new Color(220, 220, 220) : new Color(165, 165, 165)));
     FontMetrics metrics = g2d.getFontMetrics();
-    // Halfway down, each slanted edge sits half the slant in, keep the text clear of both.
-    String text = ellipsize(title, metrics, w - PADDING * 2 - SLANT);
+    // Keep the text clear of both slanted edges, and of the badge.
+    String text = ellipsize(title, metrics, w - PADDING * 2 - SLANT - badgeSpace);
     g2d.drawString(text, PADDING + SLANT / 2, (h - metrics.getHeight()) / 2 + metrics.getAscent());
 
     // Outline, brighter for the active event. Inset a bit so the stroke isn't cut by the bounds.
@@ -186,11 +207,16 @@ public class EventCard extends JComponent
   }
 
   private final String title;
+  private final String badge;
   private BufferedImage image;
   private boolean active = false;
   private boolean hovered = false;
 
   private static final int PADDING = 12;
+
+  private static final int BADGE_HEIGHT = 16;
+  private static final int BADGE_PADDING = 7;
+  private static final int BADGE_GAP = 8;
 
   // How far the top edge is shifted right compared to the bottom one.
   private static final int SLANT = 14;
