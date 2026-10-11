@@ -407,43 +407,6 @@ public class LauncherUI extends BaseUI
     bannerLinkButton.setVisible(false);
     panel.add(bannerLinkButton);
 
-    bannerDots = new JPanel()
-    {
-      @Override
-      protected void paintComponent (Graphics g)
-      {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        // Pill shaped background, same as the rest of the transparent buttons on the banner.
-        g2d.setColor(CustomColors.INTERFACE_MAINPANE_TRANSPARENT_BUTTON);
-        g2d.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
-
-        int y = (getHeight() - BANNER_DOT_SIZE) / 2;
-        for (int i = 0; i < bannerDotCount; i++) {
-          g2d.setColor(i == bannerDotIndex ? Color.WHITE : new Color(255, 255, 255, 90));
-          g2d.fillOval(BANNER_DOTS_PADDING + i * BANNER_DOT_SPACING + (BANNER_DOT_SPACING - BANNER_DOT_SIZE) / 2, y, BANNER_DOT_SIZE, BANNER_DOT_SIZE);
-        }
-        g2d.dispose();
-      }
-    };
-    bannerDots.setOpaque(false);
-    bannerDots.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    bannerDots.setVisible(false);
-    bannerDots.addMouseListener(new MouseAdapter()
-    {
-      @Override
-      public void mouseClicked (MouseEvent e)
-      {
-        int x = e.getX() - BANNER_DOTS_PADDING;
-        if (x < 0) return;
-        int index = x / BANNER_DOT_SPACING;
-        if (index < bannerDotCount) eventHandler.selectBannerEvent(index);
-      }
-    });
-    panel.add(bannerDots);
-
     serverNoticeButton = new JButton(_localeManager.getValue("b.server_notice"));
     serverNoticeButton.setIcon(IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 13, Color.BLACK));
     serverNoticeButton.setBounds(510, 388, 252, 25);
@@ -764,17 +727,62 @@ public class LauncherUI extends BaseUI
     animThread.start();
   }
 
-  public void updateBannerNavigation (int count, int index)
+  /**
+   * Replaces the event cards with one per given title. No cards are shown for a single event,
+   * as there's nothing to switch between.
+   */
+  public void setEventCards (List<String> titles)
   {
-    boolean visible = count > 1;
-    bannerDotCount = count;
-    bannerDotIndex = index;
+    for (EventCard card : eventCards) panel.remove(card);
+    eventCards.clear();
 
-    // Centered horizontally at the top of the banner, in line with the buttons on the top right.
-    int width = count * BANNER_DOT_SPACING + BANNER_DOTS_PADDING * 2;
-    bannerDots.setBounds((panel.getWidth() - width) / 2, 33, width, 22);
-    bannerDots.setVisible(visible);
-    bannerDots.repaint();
+    if (titles.size() > 1) {
+      for (int i = 0; i < titles.size(); i++) {
+        final int index = i;
+        EventCard card = new EventCard(titles.get(i), () -> this.eventHandler.selectBannerEvent(index));
+        eventCards.add(card);
+        panel.add(card);
+
+        // Keep them above the banner texts, which can be wide enough to overlap.
+        panel.setComponentZOrder(card, 0);
+      }
+    }
+
+    layoutEventCards();
+    panel.repaint();
+  }
+
+  public void setEventCardImage (int index, BufferedImage image)
+  {
+    if (index < eventCards.size()) eventCards.get(index).setImage(image);
+  }
+
+  public void setActiveEventCard (int index)
+  {
+    for (int i = 0; i < eventCards.size(); i++) eventCards.get(i).setActive(i == index);
+  }
+
+  /**
+   * Stacks the event cards right above the launch button, or above the server notice when it's showing.
+   * Cards get shorter if there are too many of them to fit.
+   */
+  public void layoutEventCards ()
+  {
+    if (eventCards.isEmpty()) return;
+
+    int bottom = serverNoticeButton.isVisible() ? serverNoticeButton.getY() : launchButton.getY();
+    bottom -= EVENT_CARDS_BOTTOM_MARGIN;
+
+    int count = eventCards.size();
+    int available = bottom - EVENT_CARDS_TOP;
+    int cardHeight = Math.max(EVENT_CARD_MIN_HEIGHT,
+      Math.min(EVENT_CARD_HEIGHT, (available - EVENT_CARD_GAP * (count - 1)) / count));
+
+    int y = bottom - count * cardHeight - (count - 1) * EVENT_CARD_GAP;
+    for (EventCard card : eventCards) {
+      card.setBounds(EVENT_CARDS_X, y, EVENT_CARDS_WIDTH, cardHeight);
+      y += cardHeight + EVENT_CARD_GAP;
+    }
   }
 
   /**
@@ -981,7 +989,6 @@ public class LauncherUI extends BaseUI
   public JLabel bannerSubtitle1;
   public JLabel bannerSubtitle2;
   public JButton bannerLinkButton;
-  public JPanel bannerDots;
   public JButton serverNoticeButton;
   public JButton launchButton;
   public JButton launchPopupMenuButton;
@@ -994,14 +1001,21 @@ public class LauncherUI extends BaseUI
   public JButton warningNotice;
   public JLabel altModeEnabledLabel;
 
-  private int bannerDotCount = 0;
-  private int bannerDotIndex = 0;
+  private final List<EventCard> eventCards = new ArrayList<>();
   private volatile BufferedImage previousBanner = null;
   private volatile float bannerFade = 1f;
   private Timer bannerFadeTimer;
 
-  private static final int BANNER_DOT_SIZE = 8;
-  private static final int BANNER_DOT_SPACING = 14;
-  private static final int BANNER_DOTS_PADDING = 6;
   private static final int BANNER_FADE_DURATION = 400;
+
+  // Event cards sit in the column above the launch button, below the buttons on the top right.
+  private static final int EVENT_CARDS_X = 500;
+  private static final int EVENT_CARDS_WIDTH = 272;
+  private static final int EVENT_CARDS_TOP = 120;
+  private static final int EVENT_CARD_HEIGHT = 46;
+  private static final int EVENT_CARD_MIN_HEIGHT = 28;
+  private static final int EVENT_CARD_GAP = 6;
+
+  // Space between the bottom card and the button right below the stack.
+  private static final int EVENT_CARDS_BOTTOM_MARGIN = 14;
 }

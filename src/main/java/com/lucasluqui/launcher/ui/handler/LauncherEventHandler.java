@@ -418,6 +418,9 @@ public class LauncherEventHandler
         ui.serverNoticeButton.setVisible(false);
       }
 
+      // The event cards stack on top of the server notice when there's one.
+      SwingUtilities.invokeLater(ui::layoutEventCards);
+
       ui.resetLaunchButton();
 
       updateServerSwitcher(false);
@@ -614,12 +617,30 @@ public class LauncherEventHandler
     for (Event event : events) banners.add(event.banner);
     _bannerImageCache.keySet().retainAll(banners);
 
-    if (events.isEmpty()) {
-      this.ui.updateBannerNavigation(0, 0);
-      return;
-    }
+    List<String> titles = new ArrayList<>();
+    for (Event event : events) titles.add(event.content.split("\\|")[0]);
+    this.ui.setEventCards(titles);
+
+    if (events.isEmpty()) return;
 
     showBannerEvent(new Random().nextInt(events.size()));
+
+    // Fill in the cards' backgrounds after the banner being shown, which takes priority.
+    if (events.size() > 1) {
+      for (int i = 0; i < events.size(); i++) {
+        final int index = i;
+        final Event event = events.get(i);
+        _bannerExecutor.execute(() -> {
+          // The events might have changed by the time we get to this one.
+          if (_bannerEvents != events) return;
+          LauncherUI.BannerImage image = loadBannerImage(event);
+          if (image == null) return;
+          SwingUtilities.invokeLater(() -> {
+            if (_bannerEvents == events) this.ui.setEventCardImage(index, image.frames.get(0));
+          });
+        });
+      }
+    }
   }
 
   public void nextBannerEvent ()
@@ -641,7 +662,7 @@ public class LauncherEventHandler
     final int generation = _bannerGeneration.incrementAndGet();
 
     _bannerIndex = index;
-    this.ui.updateBannerNavigation(events.size(), index);
+    this.ui.setActiveEventCard(index);
 
     // Restarting here also resets the countdown when the user navigates manually.
     if (events.size() > 1) {
@@ -1105,6 +1126,10 @@ public class LauncherEventHandler
     // Stops any animated banner and makes pending loads bail out.
     _bannerGeneration.incrementAndGet();
     _bannerImageCache.clear();
+
+    // The cards hold on to their banner images too, they get rebuilt along with the banner.
+    _bannerEvents = new ArrayList<>();
+    this.ui.setEventCards(new ArrayList<>());
 
     // We just let go of the banner images which can take quite a bit of memory, give it back while the game runs.
     System.gc();
