@@ -26,11 +26,17 @@ import org.apache.commons.text.WordUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.List;
 
 import static com.lucasluqui.launcher.mod.ui.Log.log;
 
@@ -292,7 +298,109 @@ public class ModListUI extends BaseUI
     viewingModsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
     guiFrame.getContentPane().add(viewingModsLabel);
 
+    setupModDropping();
+
     updateModList(null);
+  }
+
+  /**
+   * Lets files be dragged and dropped anywhere on this screen to add them as mods, same as the add button.
+   */
+  private void setupModDropping ()
+  {
+    dropOverlay = new JComponent()
+    {
+      @Override
+      protected void paintComponent (Graphics g)
+      {
+        // Only shown while files are being dragged over.
+        if (!draggingFiles) return;
+
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+        Color background = CustomColors.INTERFACE_MAINPANE_BACKGROUND;
+        g2d.setColor(new Color(background.getRed(), background.getGreen(), background.getBlue(), 220));
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+
+        // Dashed outline around the drop area.
+        g2d.setColor(new Color(255, 255, 255, 150));
+        g2d.setStroke(new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f, new float[]{ 10f, 8f }, 0f));
+        g2d.drawRoundRect(20, 20, getWidth() - 40, getHeight() - 40, 30, 30);
+
+        Icon icon = IconFontSwing.buildIcon(FontAwesome.PLUS_CIRCLE, 48, Color.WHITE);
+        String text = _localeManager.getValue("m.drop_mods");
+        g2d.setFont(Fonts.getFont("default", 16.0f, Font.BOLD));
+        FontMetrics metrics = g2d.getFontMetrics();
+        int top = (getHeight() - icon.getIconHeight() - 16 - metrics.getHeight()) / 2;
+        icon.paintIcon(this, g2d, (getWidth() - icon.getIconWidth()) / 2, top);
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(text, (getWidth() - metrics.stringWidth(text)) / 2, top + icon.getIconHeight() + 16 + metrics.getAscent());
+
+        g2d.dispose();
+      }
+    };
+    // The overlay always covers the whole screen and owns the drop target, otherwise components with their
+    // own drop target (like the search box) would take over the drag while hovering them. It has no mouse
+    // listeners, so clicks and scrolling still go through to whatever is below it.
+    panel.add(dropOverlay);
+    panel.setComponentZOrder(dropOverlay, 0);
+    dropOverlay.setBounds(0, 0, panel.getWidth(), panel.getHeight());
+    panel.addComponentListener(new ComponentAdapter()
+    {
+      @Override
+      public void componentResized (ComponentEvent e)
+      {
+        dropOverlay.setBounds(0, 0, panel.getWidth(), panel.getHeight());
+      }
+    });
+
+    new DropTarget(dropOverlay, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetAdapter()
+    {
+      @Override
+      public void dragEnter (DropTargetDragEvent event)
+      {
+        if (!event.isDataFlavorSupported(DataFlavor.javaFileListFlavor) || !eventHandler.canAddMods()) {
+          event.rejectDrag();
+          return;
+        }
+        draggingFiles = true;
+        dropOverlay.repaint();
+      }
+
+      @Override
+      public void dragExit (DropTargetEvent event)
+      {
+        draggingFiles = false;
+        dropOverlay.repaint();
+      }
+
+      @Override
+      @SuppressWarnings("unchecked")
+      public void drop (DropTargetDropEvent event)
+      {
+        draggingFiles = false;
+        dropOverlay.repaint();
+
+        if (!event.isDataFlavorSupported(DataFlavor.javaFileListFlavor) || !eventHandler.canAddMods()) {
+          event.rejectDrop();
+          return;
+        }
+
+        try {
+          event.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+          List<File> files = (List<File>) event.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+          event.dropComplete(true);
+
+          // Off the drop itself, so the app the files were dragged from isn't kept waiting on us or a dialog.
+          new Thread(() -> eventHandler.addModFiles(files)).start();
+        } catch (Exception e) {
+          log.error("Failed to receive dropped files", e);
+          event.dropComplete(false);
+        }
+      }
+    });
   }
 
   public void selectedServerChanged ()
@@ -553,5 +661,9 @@ public class ModListUI extends BaseUI
   public BufferedImage modStoreButtonImage = null;
   public BufferedImage modStoreButtonImageFocused = null;
   public BufferedImage modStoreButtonImageUnfocused = null;
+
+  // Covers the whole screen to receive dropped mod files, and shows a hint while they're dragged over it.
+  private JComponent dropOverlay;
+  private boolean draggingFiles = false;
 
 }

@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static com.lucasluqui.launcher.mod.ui.Log.log;
 
@@ -205,19 +207,48 @@ public class ModListEventHandler
     int response = fileChooser.showOpenDialog(null);
 
     if (response == JFileChooser.APPROVE_OPTION) {
-      String path = fileChooser.getSelectedFile().getAbsolutePath();
-      if (path.endsWith(".zip") || path.endsWith(".jar") || path.endsWith(".modpack")) {
-        File file = new File(path);
-        try {
-          FileUtils.moveFile(file, new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + file.getName()));
-          log.info("Added mod: " + file.getName());
-          refreshMods(false);
-        } catch (IOException e) {
-          log.error(e);
-        }
-      } else {
-        Dialog.push(_localeManager.getValue("error.mod_file_format"), _localeManager.getValue("t.error"), JOptionPane.ERROR_MESSAGE);
+      addModFiles(Collections.singletonList(fileChooser.getSelectedFile()));
+    }
+  }
+
+  /**
+   * Whether mods can be added right now, which isn't the case while the mod list is being refreshed.
+   */
+  public boolean canAddMods ()
+  {
+    return this.ui.addModButton.isEnabled();
+  }
+
+  /**
+   * Moves the given files into the selected server's mods folder and refreshes the mod list.
+   * Files that aren't a supported mod format are left alone and the user is told about them.
+   */
+  public void addModFiles (List<File> files)
+  {
+    boolean added = false;
+    boolean rejected = false;
+
+    for (File file : files) {
+      String name = file.getName();
+      if (!file.isFile() || !(name.endsWith(".zip") || name.endsWith(".jar") || name.endsWith(".modpack"))) {
+        log.info("Not adding unsupported file as a mod", "file", file.getAbsolutePath());
+        rejected = true;
+        continue;
       }
+
+      try {
+        FileUtils.moveFile(file, new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + name));
+        log.info("Added mod: " + name);
+        added = true;
+      } catch (IOException e) {
+        log.error(e);
+      }
+    }
+
+    if (added) refreshMods(false);
+
+    if (rejected) {
+      Dialog.push(_localeManager.getValue("error.mod_file_format"), _localeManager.getValue("t.error"), JOptionPane.ERROR_MESSAGE);
     }
   }
 
