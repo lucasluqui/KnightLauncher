@@ -8,6 +8,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -157,6 +158,18 @@ public class ImageUtil
     graphics2D.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
     graphics2D.dispose();
     return resizedImage;
+  }
+
+  /**
+   * A copy of the image with the given amount added to every pixel's red, green and blue, leaving transparency alone.
+   */
+  public static BufferedImage brighten (BufferedImage image, int amount)
+  {
+    BufferedImage argb = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g = argb.createGraphics();
+    g.drawImage(image, 0, 0, null);
+    g.dispose();
+    return new RescaleOp(new float[]{ 1f, 1f, 1f, 1f }, new float[]{ amount, amount, amount, 0f }, null).filter(argb, null);
   }
 
   public static BufferedImage resizeImagePreserveTransparency (BufferedImage originalImage, int targetWidth, int targetHeight)

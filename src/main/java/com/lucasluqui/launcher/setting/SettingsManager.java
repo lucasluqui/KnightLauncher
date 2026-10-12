@@ -85,6 +85,11 @@ public class SettingsManager
     Settings.fileProtection = Boolean.parseBoolean(getValue("launcher.fileProtection"));
     Settings.betasEnabled = Boolean.parseBoolean(getValue("launcher.betasEnabled"));
     Settings.showLegacySceneEditor = Boolean.parseBoolean(getValue("launcher.showLegacySceneEditor"));
+    try {
+      Settings.uiScale = Integer.parseInt(getValue("launcher.uiScale", "100"));
+    } catch (NumberFormatException e) {
+      Settings.uiScale = 100;
+    }
 
     // Compressor settings
     Settings.compressorUnzipMethod = getValue("compressor.unzipMethod");

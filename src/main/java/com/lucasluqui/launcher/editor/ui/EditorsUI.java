@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.editor.ui;
 
+import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.lucasluqui.launcher.ui.BaseUI;
@@ -55,7 +56,7 @@ public class EditorsUI extends BaseUI
   {
     guiFrame.setVisible(false);
     guiFrame.setTitle(_localeManager.getValue("t.editors"));
-    guiFrame.setBounds(100, 100, this.width, this.height);
+    guiFrame.setBounds(Scale.rect(100, 100, this.width, this.height));
     guiFrame.setResizable(false);
     guiFrame.setUndecorated(true);
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
@@ -66,7 +67,7 @@ public class EditorsUI extends BaseUI
     editorLaunchState = new JLabel(_localeManager.getValue("m.editor_loading"));
     editorLaunchState.setIcon(new LoadingIcon());
     editorLaunchState.setHorizontalAlignment(SwingConstants.CENTER);
-    editorLaunchState.setBounds(192, 190, 385, 25);
+    editorLaunchState.setBounds(Scale.rect(192, 190, 385, 25));
     editorLaunchState.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
     editorLaunchState.setVisible(false);
     guiFrame.getContentPane().add(editorLaunchState);
@@ -76,7 +77,7 @@ public class EditorsUI extends BaseUI
     editorLaunchFakeProgressBar.setUI(new SlimProgressBarUI(CustomColors.LAUNCH));
     editorLaunchFakeProgressBar.setOpaque(false);
     editorLaunchFakeProgressBar.setBorder(null);
-    editorLaunchFakeProgressBar.setBounds(192 - SlimProgressBarUI.GLOW_MARGIN, 224, 385 + SlimProgressBarUI.GLOW_MARGIN * 2, 16);
+    editorLaunchFakeProgressBar.setBounds(Scale.rect(192 - SlimProgressBarUI.GLOW_MARGIN, 224, 385 + SlimProgressBarUI.GLOW_MARGIN * 2, 16));
     editorLaunchFakeProgressBar.setVisible(false);
     editorLaunchFakeProgressBar.setShouldPaintString(false);
     guiFrame.getContentPane().add(editorLaunchFakeProgressBar);
@@ -84,23 +85,23 @@ public class EditorsUI extends BaseUI
     editorListPane = new JPanel();
     editorListPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     GridLayout layout = new GridLayout(4, 1);
-    layout.setVgap(10);
+    layout.setVgap(Scale.px(10));
     editorListPane.setLayout(layout);
-    editorListPane.setPreferredSize(new Dimension(740, 440));
+    editorListPane.setPreferredSize(Scale.dim(740, 440));
     // Keeps the cards clear of the scroll bar when there's one.
-    editorListPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+    editorListPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, Scale.px(20)));
 
     editorListPaneScroll = new SmoothScrollPane(editorListPane);
     editorListPaneScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     editorListPaneScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    editorListPaneScroll.setBounds(30, 0, 760, 444);
+    editorListPaneScroll.setBounds(Scale.rect(30, 0, 760, 444));
     editorListPaneScroll.setBorder(null);
     editorListPaneScroll.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     editorListPaneScroll.setForeground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.getContentPane().add(editorListPaneScroll);
 
     footerLabel = new JLabel();
-    footerLabel.setBounds(30, 449, 740, 15);
+    footerLabel.setBounds(Scale.rect(30, 449, 740, 15));
     footerLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     footerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     footerLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
@@ -229,7 +230,7 @@ public class EditorsUI extends BaseUI
     int count = eventHandler.editors.size();
     int rows = (count + EDITOR_COLUMNS - 1) / EDITOR_COLUMNS;
     int height = rows * (EDITOR_CARD_HEIGHT + EDITOR_CARD_GAP) - EDITOR_CARD_GAP;
-    editorListPane.setPreferredSize(new Dimension(740, height));
+    editorListPane.setPreferredSize(Scale.dim(740, height));
     editorListPane.setLayout(new GridBagLayout());
 
     editorCards.clear();
@@ -258,8 +259,8 @@ public class EditorsUI extends BaseUI
       constraints.weightx = 1;
       constraints.weighty = 1;
       constraints.fill = GridBagConstraints.BOTH;
-      constraints.insets = new Insets(constraints.gridy > 0 ? EDITOR_CARD_GAP : 0,
-        constraints.gridx > 0 ? EDITOR_CARD_GAP : 0, 0, 0);
+      constraints.insets = new Insets(constraints.gridy > 0 ? Scale.px(EDITOR_CARD_GAP) : 0,
+        constraints.gridx > 0 ? Scale.px(EDITOR_CARD_GAP) : 0, 0, 0);
       editorListPane.add(card, constraints);
     }
     updateEditorAvailability();
@@ -268,7 +269,7 @@ public class EditorsUI extends BaseUI
       editorListPaneScroll.getX(),
       editorListPaneScroll.getY(),
       editorListPaneScroll.getWidth(),
-      Math.min(440, height)
+      Scale.px(Math.min(440, height))
     );
 
     editorListPane.updateUI();
@@ -296,7 +297,7 @@ public class EditorsUI extends BaseUI
 
   private static BufferedImage loadSplashImage (String path)
   {
-    return ImageUtil.resizeImage(ImageUtil.loadImageWithinJar(path), 740, 100);
+    return ImageUtil.resizeImage(ImageUtil.loadImageWithinJar(path), Scale.px(740), Scale.px(100));
   }
 
   @Inject public EditorsEventHandler eventHandler;

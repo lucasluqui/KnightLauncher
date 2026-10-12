@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.jhlabs.image.GaussianFilter;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
+import com.lucasluqui.swing.Scale;
 import com.lucasluqui.util.ColorUtil;
 
 import javax.swing.*;
@@ -90,7 +91,7 @@ public class ModCard extends JPanel
 
     if (toggle != null) {
       Dimension size = toggle.getPreferredSize();
-      toggle.setBounds(w - PADDING - size.width + 4, PADDING - 3, size.width, size.height);
+      toggle.setBounds(w - PADDING - size.width + Scale.px(4), PADDING - Scale.px(3), size.width, size.height);
     }
 
     int x = w - PADDING;
@@ -158,10 +159,10 @@ public class ModCard extends JPanel
     g2d.drawImage(buffer, 0, 0, null);
 
     // Texts between the image and the controls on the right.
-    int textX = h + 4;
+    int textX = h + Scale.px(4);
     int controlsWidth = Math.max(toggle == null ? 0 : toggle.getPreferredSize().width,
       actions.size() * (ACTION_SIZE + ACTION_GAP));
-    int textWidth = w - textX - PADDING - controlsWidth - 16;
+    int textWidth = w - textX - PADDING - controlsWidth - Scale.px(16);
 
     Font titleFont = Fonts.getFont("default", 16.0f, Font.BOLD);
     Font descriptionFont = Fonts.getFont("default", 11.0f, Font.PLAIN);
@@ -171,25 +172,25 @@ public class ModCard extends JPanel
     FontMetrics footerMetrics = g2d.getFontMetrics(footerFont);
 
     int badgeWidth = badgeLabel == null ? 0 : badgeLabel.getPreferredSize().width;
-    String titleText = ellipsize(title, titleMetrics, textWidth - (badgeLabel == null ? 0 : badgeWidth + 8));
-    int titleY = PADDING + titleMetrics.getAscent() - 2;
+    String titleText = ellipsize(title, titleMetrics, textWidth - (badgeLabel == null ? 0 : badgeWidth + Scale.px(8)));
+    int titleY = PADDING + titleMetrics.getAscent() - Scale.px(2);
     g2d.setFont(titleFont);
     g2d.setColor(new Color(0, 0, 0, 90));
-    g2d.drawString(titleText, textX + 1, titleY + 2);
+    g2d.drawString(titleText, textX + Scale.px(1), titleY + Scale.px(2));
     g2d.setColor(dimmed ? new Color(170, 172, 180) : Color.WHITE);
     g2d.drawString(titleText, textX, titleY);
 
     // The badge sits right after the name, which is only known now. It paints itself after this.
     if (badgeLabel != null) {
-      int badgeX = textX + titleMetrics.stringWidth(titleText) + 8;
-      int badgeY = titleY - titleMetrics.getAscent() / 2 - BADGE_HEIGHT / 2 + 2;
+      int badgeX = textX + titleMetrics.stringWidth(titleText) + Scale.px(8);
+      int badgeY = titleY - titleMetrics.getAscent() / 2 - BADGE_HEIGHT / 2 + Scale.px(2);
       Rectangle bounds = new Rectangle(badgeX, badgeY, badgeWidth, BADGE_HEIGHT);
       if (!bounds.equals(badgeLabel.getBounds())) badgeLabel.setBounds(bounds);
     }
 
     List<String> descriptionLines = description == null || description.isEmpty()
       ? new ArrayList<>() : wrap(description, descriptionMetrics, textWidth, MAX_DESCRIPTION_LINES);
-    int descriptionY = titleY + titleMetrics.getDescent() + 6 + descriptionMetrics.getAscent();
+    int descriptionY = titleY + titleMetrics.getDescent() + Scale.px(6) + descriptionMetrics.getAscent();
     g2d.setFont(descriptionFont);
     g2d.setColor(dimmed ? new Color(120, 124, 135) : new Color(185, 189, 200));
     for (int i = 0; i < descriptionLines.size(); i++) {
@@ -317,15 +318,16 @@ public class ModCard extends JPanel
   private Timer hoverTimer;
   private boolean dimmed = false;
 
+  // At 100% scale, the list scales it when placing the card. Everything below is in actual pixels.
   public static final int HEIGHT = 116;
 
-  private static final int PADDING = 14;
-  private static final float CORNER_RADIUS = 14f;
+  private static final int PADDING = Scale.px(14);
+  private static final float CORNER_RADIUS = Scale.px(14f);
 
-  private static final int ACTION_SIZE = 28;
-  private static final int ACTION_GAP = 6;
+  private static final int ACTION_SIZE = Scale.px(28);
+  private static final int ACTION_GAP = Scale.px(6);
 
-  private static final int BADGE_HEIGHT = 18;
+  private static final int BADGE_HEIGHT = Scale.px(18);
 
   private static final int MAX_DESCRIPTION_LINES = 2;
 

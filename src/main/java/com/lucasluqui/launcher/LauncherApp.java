@@ -13,6 +13,7 @@ import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.swing.Scale;
 import com.lucasluqui.util.*;
 import net.sf.image4j.codec.ico.ICOEncoder;
 import org.apache.commons.io.FileUtils;
@@ -84,6 +85,7 @@ public class LauncherApp
     _ctx.init(this);
     _settingsManager.init();
     _localeManager.init();
+    setupUIScale();
     Fonts.setup();
     Stylesheet.setup();
 
@@ -173,6 +175,34 @@ public class LauncherApp
     } else {
       _discordPresenceClient.init(LauncherGlobals.RPC_CLIENT_ID, false);
     }
+  }
+
+  /**
+   * Applies the UI scale picked in settings. It has to happen before any font or UI is created,
+   * which is why changing it needs a restart.
+   */
+  private void setupUIScale ()
+  {
+    // Never bigger than what fits on screen, which might have changed since it was picked.
+    int percent = Math.max(LauncherGlobals.UI_SCALE_MIN, Math.min(Settings.uiScale, getMaxUIScale()));
+    if (percent != Settings.uiScale) log.info("UI scale doesn't fit the screen, lowering it", "from", Settings.uiScale, "to", percent);
+
+    Scale.init(percent / 100f);
+
+    // FlatLaf scales its own parts (borders, arcs, checkboxes, scrollbars...) to match. Left alone at 100%,
+    // so it keeps working as it always did.
+    if (percent != 100) System.setProperty("flatlaf.uiScale", String.valueOf(percent / 100f));
+    log.info("UI scale", "percent", percent);
+  }
+
+  /**
+   * The biggest UI scale, in percent and in UI_SCALE_STEP steps, at which the main window still fits on screen.
+   */
+  public static int getMaxUIScale ()
+  {
+    int fits = (int) Math.floor(Scale.maxFactorFor(LauncherUI.WIDTH, LauncherUI.HEIGHT) * 100);
+    fits -= fits % LauncherGlobals.UI_SCALE_STEP;
+    return Math.max(LauncherGlobals.UI_SCALE_MIN, Math.min(LauncherGlobals.UI_SCALE_MAX, fits));
   }
 
   private void maybeInitUI ()
@@ -888,7 +918,7 @@ public class LauncherApp
       return;
     }
 
-    targetUI.getPanel().setBounds(300, 75, 800, 550);
+    targetUI.getPanel().setBounds(Scale.rect(300, 75, 800, 550));
 
     launcherUI.guiFrame.add(targetUI.getPanel());
     targetUI.getPanel().setVisible(true);
@@ -916,6 +946,16 @@ public class LauncherApp
   public String getLatestReleaseChangelog ()
   {
     return this._latestReleaseChangelog;
+  }
+
+  /**
+   * Starts a fresh launcher and exits this one. The new one waits for this one to let go of the instance lock.
+   */
+  public void restart ()
+  {
+    log.info("Restarting launcher");
+    ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar"}, true);
+    exit();
   }
 
   public void exit ()

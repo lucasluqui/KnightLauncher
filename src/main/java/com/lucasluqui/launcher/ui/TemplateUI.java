@@ -1,6 +1,7 @@
 /*
 package com.lucasluqui.launcher.ui;
 
+import com.lucasluqui.swing.Scale;
 import com.google.inject.Inject;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.LocaleManager;
@@ -37,7 +38,7 @@ public class TemplateUI extends BaseUI
   {
     guiFrame.setVisible(false);
     guiFrame.setTitle(_localeManager.getValue("t.main"));
-    guiFrame.setBounds(100, 100, this.width, this.height);
+    guiFrame.setBounds(Scale.rect(100, 100, this.width, this.height));
     guiFrame.setResizable(false);
     guiFrame.setUndecorated(true);
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);

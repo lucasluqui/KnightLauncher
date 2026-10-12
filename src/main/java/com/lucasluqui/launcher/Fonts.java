@@ -1,6 +1,7 @@
 package com.lucasluqui.launcher;
 
 import com.lucasluqui.launcher.setting.Settings;
+import com.lucasluqui.swing.Scale;
 
 import java.awt.*;
 import java.io.IOException;
@@ -69,9 +70,10 @@ public class Fonts
       return FONT_NULL;
     }
 
+    // Sizes are given for 100%, so they follow the UI scale too.
     float effectiveSize = resolvedFontName.startsWith(FONT_FAMILY_CODE)
-      ? Math.round(size)
-      : size * _sizeMultiplier;
+      ? Math.round(Scale.px(size))
+      : Scale.px(size) * _sizeMultiplier;
 
     String cacheKey = resolvedFontName + ":" + effectiveSize + ":" + resolvedStyle;
     Font cachedFont = _derivedFonts.get(cacheKey);

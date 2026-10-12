@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.ui;
 
+import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.lucasluqui.launcher.CustomColors;
@@ -62,7 +63,7 @@ public class ChangelogUI extends BaseUI
   {
     guiFrame.setVisible(false);
     guiFrame.setTitle(_localeManager.getValue("t.main"));
-    guiFrame.setBounds(100, 100, this.width, this.height);
+    guiFrame.setBounds(Scale.rect(100, 100, this.width, this.height));
     guiFrame.setResizable(false);
     guiFrame.setUndecorated(true);
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
@@ -72,7 +73,7 @@ public class ChangelogUI extends BaseUI
 
     loadingLabel = new JLabel(_localeManager.getValue("m.loading"));
     loadingLabel.setIcon(new LoadingIcon());
-    loadingLabel.setBounds(0, 0, this.width, this.height);
+    loadingLabel.setBounds(Scale.rect(0, 0, this.width, this.height));
     loadingLabel.setFont(Fonts.getFont("default", 14.0f, Font.BOLD));
     loadingLabel.setHorizontalAlignment(SwingConstants.CENTER);
     loadingLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -81,12 +82,12 @@ public class ChangelogUI extends BaseUI
 
     releaseLabel = new JLabel("");
     releaseLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    releaseLabel.setBounds(25, 0, this.width - 100, 60);
+    releaseLabel.setBounds(Scale.rect(25, 0, this.width - 100, 60));
     releaseLabel.setFont(Fonts.getFont("default", 40.0f, Font.BOLD));
     panel.add(releaseLabel);
 
     changelogArea = new JTextArea();
-    changelogArea.setBounds(25, 65, this.width - 100, this.height);
+    changelogArea.setBounds(Scale.rect(25, 65, this.width - 100, this.height));
     changelogArea.setText("");
     changelogArea.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     changelogArea.setEditable(false);

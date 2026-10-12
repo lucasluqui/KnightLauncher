@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.ui;
 
+import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.util.ColorUtil;
@@ -43,13 +44,13 @@ public abstract class BaseUI
 
   private void compose ()
   {
-    guiFrame.setBounds(0, 0, width, height);
+    guiFrame.setBounds(Scale.rect(0, 0, width, height));
     guiFrame.setGlassPane(new BorderPane());
     guiFrame.getGlassPane().setVisible(true);
 
     if (displayTitleBar) {
       titleBar = new JPanel();
-      titleBar.setBounds(0, 0, guiFrame.getWidth(), 35);
+      titleBar.setBounds(Scale.rect(0, 0, width, 35));
       titleBar.setBackground(ColorUtil.getTitleBarColor());
       guiFrame.getContentPane().add(titleBar);
 
@@ -102,13 +103,13 @@ public abstract class BaseUI
       final int BUTTON_WIDTH = 35;
       final int BUTTON_HEIGHT = 35;
 
-      Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, 17, ColorUtil.getForegroundColor());
+      Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, Scale.px(17), ColorUtil.getForegroundColor());
       closeButton = new JButton(closeIcon);
 
       if (SystemUtil.isMac()) {
-        closeButton.setBounds(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+        closeButton.setBounds(Scale.rect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
       } else {
-        closeButton.setBounds(guiFrame.getWidth() - BUTTON_WIDTH, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+        closeButton.setBounds(Scale.rect(width - BUTTON_WIDTH, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
       }
 
       closeButton.setToolTipText("{SET}");
@@ -142,13 +143,13 @@ public abstract class BaseUI
         }
       });
 
-      Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, 12, ColorUtil.getForegroundColor());
+      Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, Scale.px(12), ColorUtil.getForegroundColor());
       minimizeButton = new JButton(minimizeIcon);
 
       if (SystemUtil.isMac()) {
-        minimizeButton.setBounds(BUTTON_WIDTH, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7);
+        minimizeButton.setBounds(Scale.rect(BUTTON_WIDTH, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7));
       } else {
-        minimizeButton.setBounds(guiFrame.getWidth() - BUTTON_WIDTH * 2, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7);
+        minimizeButton.setBounds(Scale.rect(width - BUTTON_WIDTH * 2, -7, BUTTON_WIDTH, BUTTON_HEIGHT + 7));
       }
 
       minimizeButton.setToolTipText("{SET}");
@@ -160,7 +161,7 @@ public abstract class BaseUI
       minimizeButton.addActionListener(e -> guiFrame.setState(Frame.ICONIFIED));
     }
 
-    returnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, 12, Color.WHITE));
+    returnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, Scale.px(12), Color.WHITE));
     returnButton.setVisible(false);
     returnButton.setFocusable(false);
     returnButton.setFocusPainted(false);
@@ -196,9 +197,9 @@ public abstract class BaseUI
       Shape border = new RoundRectangle2D.Double(
         0.5,
         0.5,
-        width - 1,
-        height - 1,
-        15, 15);
+        Scale.px(width) - 1,
+        Scale.px(height) - 1,
+        Scale.px(15), Scale.px(15));
 
       g2.setColor(CustomColors.INTERFACE_DEFAULT_WINDOW_BORDER);
       g2.setStroke(new BasicStroke(1));

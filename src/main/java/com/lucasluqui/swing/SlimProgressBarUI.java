@@ -18,13 +18,13 @@ public class SlimProgressBarUI extends BasicProgressBarUI
   }
 
   /**
-   * @param barHeight How thick the bar is, for places with less room than the default needs.
+   * @param barHeight How thick the bar is at 100% scale, for places with less room than the default needs.
    */
   public SlimProgressBarUI (Color fill, float barHeight)
   {
     this.fill = fill;
     this.fillEnd = blend(fill, Color.WHITE, 0.35f);
-    this.barHeight = barHeight;
+    this.barHeight = Scale.px(barHeight);
   }
 
   @Override
@@ -40,9 +40,9 @@ public class SlimProgressBarUI extends BasicProgressBarUI
 
     // The bar is inset from the bounds and vertically centered, leaving room around it for the glow.
     float barHeight = Math.min(this.barHeight, h);
-    float x = GLOW_MARGIN;
+    float x = Scale.px((float) GLOW_MARGIN);
     float y = (h - barHeight) / 2f;
-    float barWidth = w - GLOW_MARGIN * 2;
+    float barWidth = w - x * 2;
 
     g2d.setColor(new Color(255, 255, 255, 30));
     g2d.fill(new RoundRectangle2D.Float(x, y, barWidth, barHeight, barHeight, barHeight));
@@ -54,7 +54,7 @@ public class SlimProgressBarUI extends BasicProgressBarUI
 
       // Soft glow, a few wider and fainter copies of the fill behind it.
       for (int i = GLOW_LAYERS; i > 0; i--) {
-        float spread = i * 1.5f;
+        float spread = Scale.px(i * 1.5f);
         g2d.setColor(new Color(fill.getRed(), fill.getGreen(), fill.getBlue(), 18));
         g2d.fill(new RoundRectangle2D.Float(x - spread, y - spread, fillWidth + spread * 2, barHeight + spread * 2,
           barHeight + spread * 2, barHeight + spread * 2));
@@ -83,7 +83,8 @@ public class SlimProgressBarUI extends BasicProgressBarUI
   private static final int GLOW_LAYERS = 3;
 
   /**
-   * Room the glow takes on each side of the bar. Size the component this much larger than the bar on every side.
+   * Room the glow takes on each side of the bar, at 100% scale. Size the component this much larger than the bar
+   * on every side.
    */
   public static final int GLOW_MARGIN = 5;
 }

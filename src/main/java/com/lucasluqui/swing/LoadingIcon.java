@@ -23,19 +23,22 @@ public final class LoadingIcon implements Icon, FlatLaf.DisabledIconProvider
   }
 
   /**
-   * @param size Width and height in pixels, for places with less room than the default size needs.
+   * @param size Width and height at 100% scale, for places with less room than the default size needs.
    */
   public LoadingIcon (int size)
   {
-    this(size, 1f);
+    this(Scale.px(size), 1f);
   }
 
+  /**
+   * @param size Width and height in actual pixels, already scaled.
+   */
   private LoadingIcon (int size, float opacity)
   {
     this.size = size;
     this.opacity = opacity;
     // Thickness scales along with the size, so smaller spinners keep the same proportions.
-    this.stroke = DEFAULT_STROKE * size / DEFAULT_SIZE;
+    this.stroke = Scale.px(DEFAULT_STROKE) * size / Scale.px(DEFAULT_SIZE);
   }
 
   @Override
@@ -49,7 +52,7 @@ public final class LoadingIcon implements Icon, FlatLaf.DisabledIconProvider
     g2d.setStroke(new BasicStroke(stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
     // Keep the stroke inside the icon's bounds.
-    float inset = stroke / 2f + 1f;
+    float inset = stroke / 2f + Scale.px(1f);
     float diameter = size - inset * 2f;
 
     g2d.setColor(new Color(1f, 1f, 1f, 0.15f * opacity));

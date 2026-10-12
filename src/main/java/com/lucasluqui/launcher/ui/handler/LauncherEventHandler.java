@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.ui.handler;
 
+import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
@@ -442,21 +443,21 @@ public class LauncherEventHandler
       String borderColor = ColorUtil.colorToHexString(locked ? CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER_LOCKED : CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER);
 
       BufferedImage officialServerBufferedImage = ImageUtil.loadImageWithinJar("/rsrc/img/server-official.png");
-      officialServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(officialServerBufferedImage, 32, 32);
-      ImageIcon officialServerImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(officialServerBufferedImage, 15));
+      officialServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(officialServerBufferedImage, Scale.px(32), Scale.px(32));
+      ImageIcon officialServerImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(officialServerBufferedImage, Scale.px(15)));
 
       BufferedImage defaultServerBufferedImage = ImageUtil.loadImageWithinJar("/rsrc/img/icon-default.png");
-      defaultServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(defaultServerBufferedImage, 32, 32);
-      ImageIcon defaultServerImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(defaultServerBufferedImage, 15));
+      defaultServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(defaultServerBufferedImage, Scale.px(32), Scale.px(32));
+      ImageIcon defaultServerImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(defaultServerBufferedImage, Scale.px(15)));
 
       for (Server server : serverList) {
         JPanel serverIconPane = new JPanel();
         serverIconPane.setLayout(null);
         serverIconPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-        serverIconPane.setBounds(0, count * 50, 50, 50);
+        serverIconPane.setBounds(Scale.rect(0, count * 50, 50, 50));
 
         JLabel serverIcon = new JLabel();
-        serverIcon.setBounds(4, 4, 42, 42);
+        serverIcon.setBounds(Scale.rect(4, 4, 42, 42));
         serverIcon.setHorizontalAlignment(SwingConstants.CENTER);
         if (server.isOfficial()) {
           serverIcon.setIcon(officialServerImageIcon);
@@ -465,8 +466,8 @@ public class LauncherEventHandler
           if (server.serverIcon.equalsIgnoreCase("null")) {
             serverIconImageIcon = defaultServerImageIcon;
           } else {
-            BufferedImage serverIconBufferedImage = _cacheManager.fetchImage(server.serverIcon, 32, 32);
-            serverIconImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(serverIconBufferedImage, 15));
+            BufferedImage serverIconBufferedImage = _cacheManager.fetchImage(server.serverIcon, Scale.px(32), Scale.px(32));
+            serverIconImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(serverIconBufferedImage, Scale.px(15)));
           }
           serverIcon.setIcon(server.serverIcon.equalsIgnoreCase("null") ? defaultServerImageIcon : serverIconImageIcon);
         }
@@ -524,13 +525,13 @@ public class LauncherEventHandler
       JPanel addServerPane = new JPanel();
       addServerPane.setLayout(null);
       addServerPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-      addServerPane.setBounds(0, count * 50, 50, 50);
+      addServerPane.setBounds(Scale.rect(0, count * 50, 50, 50));
 
       JLabel addServerIcon = new JLabel();
-      addServerIcon.setBounds(4, 4, 42, 42);
+      addServerIcon.setBounds(Scale.rect(4, 4, 42, 42));
       addServerIcon.setHorizontalAlignment(SwingConstants.CENTER);
       addServerIcon.setToolTipText(_localeManager.getValue("m.add_server"));
-      addServerIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, 18, Color.WHITE));
+      addServerIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, Scale.px(18), Color.WHITE));
       addServerIcon.setVisible(false);
       addServerPane.add(addServerIcon);
       addServerIcon.addMouseListener(new MouseListener()
@@ -568,13 +569,13 @@ public class LauncherEventHandler
 
       this.ui.serverSwitcherPane.add(addServerPane);
 
-      this.ui.serverSwitcherPane.setPreferredSize(new Dimension(50, count * 50));
+      this.ui.serverSwitcherPane.setPreferredSize(Scale.dim(50, count * 50));
 
       this.ui.serverSwitcherPaneScrollBar.setBounds(
         this.ui.serverSwitcherPaneScrollBar.getX(),
         this.ui.serverSwitcherPaneScrollBar.getY(),
         this.ui.serverSwitcherPaneScrollBar.getWidth(),
-        550
+        Scale.px(550)
       );
 
       this.ui.serverSwitcherPane.setLayout(null);
@@ -701,7 +702,7 @@ public class LauncherEventHandler
       String bannerImage = event.banner.split("\\|")[0];
       double bannerIntensity = Double.parseDouble(event.banner.split("\\|")[1]);
       if (!bannerImage.contains(".gif")) {
-        image = new LauncherUI.BannerImage(this.ui.processImageForBanner(_cacheManager.fetchImage(bannerImage, 800, 550), bannerIntensity));
+        image = new LauncherUI.BannerImage(this.ui.processImageForBanner(_cacheManager.fetchImage(bannerImage, Scale.px(800), Scale.px(550)), bannerIntensity));
       } else {
         image = this.ui.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerImage), bannerIntensity);
       }
@@ -789,8 +790,8 @@ public class LauncherEventHandler
     Settings.playAnimatedBanners = !Settings.playAnimatedBanners;
     _settingsManager.setValue("launcher.playAnimatedBanners", Boolean.toString(Settings.playAnimatedBanners));
 
-    Icon playAnimatedBannersIconEnabled = IconFontSwing.buildIcon(FontAwesome.EYE, 18, Color.WHITE);
-    Icon playAnimatedBannersIconDisabled = IconFontSwing.buildIcon(FontAwesome.EYE_SLASH, 18, Color.WHITE);
+    Icon playAnimatedBannersIconEnabled = IconFontSwing.buildIcon(FontAwesome.EYE, Scale.px(18), Color.WHITE);
+    Icon playAnimatedBannersIconDisabled = IconFontSwing.buildIcon(FontAwesome.EYE_SLASH, Scale.px(18), Color.WHITE);
     this.ui.playAnimatedBannersButton.setIcon(Settings.playAnimatedBanners ? playAnimatedBannersIconEnabled : playAnimatedBannersIconDisabled);
     this.ui.playAnimatedBannersButton.setToolTipText(_localeManager.getValue(Settings.playAnimatedBanners ? "m.animated_banners_disable" : "m.animated_banners_enable"));
     this.ui.playAnimatedBannersButton.setBackground(Settings.playAnimatedBanners ? CustomColors.INTERFACE_BUTTON_BACKGROUND : CustomColors.LIGHT_RED);

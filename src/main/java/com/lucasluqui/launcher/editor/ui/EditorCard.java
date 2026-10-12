@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.editor.ui;
 
+import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
@@ -31,8 +32,8 @@ public class EditorCard extends JComponent
     this.title = title;
     this.description = description;
     this.image = image;
-    this.arrowIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_RIGHT, 14, Color.WHITE);
-    this.lockIcon = IconFontSwing.buildIcon(FontAwesome.LOCK, 11, new Color(200, 200, 200));
+    this.arrowIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_RIGHT, Scale.px(14), Color.WHITE);
+    this.lockIcon = IconFontSwing.buildIcon(FontAwesome.LOCK, Scale.px(11), new Color(200, 200, 200));
     setOpaque(false);
     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -170,7 +171,7 @@ public class EditorCard extends JComponent
 
     // Name and description at the bottom left, leaving room for the launch arrow on the right.
     int textX = PADDING;
-    int textWidth = w - PADDING * 2 - ARROW_SIZE - 10;
+    int textWidth = w - PADDING * 2 - ARROW_SIZE - Scale.px(10);
     Font titleFont = Fonts.getFont("default", 20.0f, Font.BOLD);
     Font descriptionFont = Fonts.getFont("default", 11.0f, Font.ITALIC);
     FontMetrics titleMetrics = g2d.getFontMetrics(titleFont);
@@ -182,20 +183,20 @@ public class EditorCard extends JComponent
       - (descriptionLines.size() - 1) * descriptionMetrics.getHeight();
     int titleY = descriptionLines.isEmpty()
       ? h - PADDING - titleMetrics.getDescent()
-      : descriptionY - descriptionMetrics.getAscent() - titleMetrics.getDescent() - 2;
+      : descriptionY - descriptionMetrics.getAscent() - titleMetrics.getDescent() - Scale.px(2);
 
     int badgeWidth = badgeLabel == null ? 0 : badgeLabel.getPreferredSize().width;
-    String titleText = ellipsize(title, titleMetrics, textWidth - (badgeLabel == null ? 0 : badgeWidth + 8));
+    String titleText = ellipsize(title, titleMetrics, textWidth - (badgeLabel == null ? 0 : badgeWidth + Scale.px(8)));
     g2d.setFont(titleFont);
     g2d.setColor(new Color(0, 0, 0, 90));
-    g2d.drawString(titleText, textX + 1, titleY + 2);
+    g2d.drawString(titleText, textX + Scale.px(1), titleY + Scale.px(2));
     g2d.setColor(available ? lerp(new Color(225, 225, 225), Color.WHITE, t) : new Color(130, 130, 135));
     g2d.drawString(titleText, textX, titleY);
 
     // The badge sits right after the name, which is only known now. It paints itself after this.
     if (badgeLabel != null) {
-      int badgeX = textX + titleMetrics.stringWidth(titleText) + 8;
-      int badgeY = titleY - titleMetrics.getAscent() / 2 - BADGE_HEIGHT / 2 + 2;
+      int badgeX = textX + titleMetrics.stringWidth(titleText) + Scale.px(8);
+      int badgeY = titleY - titleMetrics.getAscent() / 2 - BADGE_HEIGHT / 2 + Scale.px(2);
       Rectangle bounds = new Rectangle(badgeX, badgeY, badgeWidth, BADGE_HEIGHT);
       if (!bounds.equals(badgeLabel.getBounds())) badgeLabel.setBounds(bounds);
     }
@@ -214,21 +215,21 @@ public class EditorCard extends JComponent
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, t));
         g2d.setColor(CustomColors.LAUNCH);
         g2d.fillOval(cx - ARROW_SIZE / 2, cy - ARROW_SIZE / 2, ARROW_SIZE, ARROW_SIZE);
-        arrowIcon.paintIcon(this, g2d, cx - arrowIcon.getIconWidth() / 2 + 1, cy - arrowIcon.getIconHeight() / 2);
+        arrowIcon.paintIcon(this, g2d, cx - arrowIcon.getIconWidth() / 2 + Scale.px(1), cy - arrowIcon.getIconHeight() / 2);
         g2d.setComposite(composite);
       }
     } else {
       // A chip at the top right explaining why it can't be launched.
       g2d.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
       FontMetrics chipMetrics = g2d.getFontMetrics();
-      int chipWidth = chipMetrics.stringWidth(unavailableReason) + lockIcon.getIconWidth() + CHIP_PADDING * 2 + 6;
+      int chipWidth = chipMetrics.stringWidth(unavailableReason) + lockIcon.getIconWidth() + CHIP_PADDING * 2 + Scale.px(6);
       int chipX = w - CHIP_MARGIN - chipWidth;
       int chipY = CHIP_MARGIN;
       g2d.setColor(new Color(255, 255, 255, 25));
       g2d.fill(new RoundRectangle2D.Float(chipX, chipY, chipWidth, CHIP_HEIGHT, CHIP_HEIGHT, CHIP_HEIGHT));
       lockIcon.paintIcon(this, g2d, chipX + CHIP_PADDING, chipY + (CHIP_HEIGHT - lockIcon.getIconHeight()) / 2);
       g2d.setColor(new Color(200, 200, 200));
-      g2d.drawString(unavailableReason, chipX + CHIP_PADDING + lockIcon.getIconWidth() + 6,
+      g2d.drawString(unavailableReason, chipX + CHIP_PADDING + lockIcon.getIconWidth() + Scale.px(6),
         chipY + (CHIP_HEIGHT - chipMetrics.getHeight()) / 2 + chipMetrics.getAscent());
     }
 
@@ -307,19 +308,20 @@ public class EditorCard extends JComponent
   private float hoverTarget = 0f;
   private Timer hoverTimer;
 
-  private static final int PADDING = 20;
-  private static final float CORNER_RADIUS = 14f;
+  // In actual pixels, for the current UI scale.
+  private static final int PADDING = Scale.px(20);
+  private static final float CORNER_RADIUS = Scale.px(14f);
 
-  private static final int ARROW_SIZE = 36;
-  private static final int CHIP_HEIGHT = 24;
-  private static final int CHIP_PADDING = 10;
-  private static final int CHIP_MARGIN = 14;
+  private static final int ARROW_SIZE = Scale.px(36);
+  private static final int CHIP_HEIGHT = Scale.px(24);
+  private static final int CHIP_PADDING = Scale.px(10);
+  private static final int CHIP_MARGIN = Scale.px(14);
 
-  private static final int BADGE_HEIGHT = 18;
+  private static final int BADGE_HEIGHT = Scale.px(18);
 
   private static final int MAX_DESCRIPTION_LINES = 2;
 
   private static final int HOVER_DURATION = 180;
   private static final float HOVER_ZOOM = 0.05f;
-  private static final float HOVER_SLIDE = 8f;
+  private static final float HOVER_SLIDE = Scale.px(8f);
 }

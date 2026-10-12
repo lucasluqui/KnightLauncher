@@ -22,6 +22,11 @@ public class LauncherGlobals
 
   public static final String USER_DIR = System.getProperty("user.dir");
 
+  // UI scale limits, in percent.
+  public static final int UI_SCALE_MIN = 90;
+  public static final int UI_SCALE_MAX = 140;
+  public static final int UI_SCALE_STEP = 5;
+
   public static final String RPC_CLIENT_ID = "626524043209867274";
 
   // Every game client, official or third party, runs this class.

@@ -2,6 +2,7 @@ package com.lucasluqui.launcher.ui;
 
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
+import com.lucasluqui.swing.Scale;
 
 import javax.swing.*;
 import java.awt.*;
@@ -164,9 +165,9 @@ public class EventCard extends JComponent
     g2d.drawString(text, PADDING + SLANT / 2, (h - metrics.getHeight()) / 2 + metrics.getAscent());
 
     // Outline, brighter for the active event. Inset a bit so the stroke isn't cut by the bounds.
-    g2d.setStroke(new BasicStroke(active ? 1.5f : 1f));
+    g2d.setStroke(new BasicStroke(Scale.px(active ? 1.5f : 1f)));
     g2d.setColor(active ? new Color(255, 255, 255, 200) : new Color(255, 255, 255, 40));
-    g2d.draw(getShape(1f, w, h));
+    g2d.draw(getShape(Scale.px(1f), w, h));
 
     g2d.dispose();
   }
@@ -249,15 +250,16 @@ public class EventCard extends JComponent
   private float hoverTarget = 0f;
   private Timer hoverTimer;
 
-  private static final int PADDING = 12;
+  // In actual pixels, for the current UI scale.
+  private static final int PADDING = Scale.px(12);
 
-  private static final int BADGE_HEIGHT = 16;
-  private static final int BADGE_PADDING = 7;
-  private static final int BADGE_GAP = 8;
+  private static final int BADGE_HEIGHT = Scale.px(16);
+  private static final int BADGE_PADDING = Scale.px(7);
+  private static final int BADGE_GAP = Scale.px(8);
 
   // How far the top edge is shifted right compared to the bottom one.
-  private static final int SLANT = 14;
-  private static final float CORNER_RADIUS = 7f;
+  private static final int SLANT = Scale.px(14);
+  private static final float CORNER_RADIUS = Scale.px(7f);
 
   private static final int HOVER_DURATION = 180;
   private static final float HOVER_ZOOM = 0.05f;

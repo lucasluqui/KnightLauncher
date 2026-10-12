@@ -4,7 +4,6 @@ import com.google.inject.Singleton;
 import com.lucasluqui.download.data.URLDownloadQueue;
 import org.apache.commons.io.FileUtils;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -68,22 +67,25 @@ public class DownloadManager
    *
    * @param downloadQueue The URL download queue object we'll have to store for further processing.
    */
-  public void add (URLDownloadQueue downloadQueue)
+  public synchronized void add (URLDownloadQueue downloadQueue)
   {
     this.storedQueues.add(downloadQueue);
     log.info("Added download queue", "queue", downloadQueue.getName());
   }
 
   /**
-   * Starts processing all download queues stored.
+   * Starts processing all download queues stored, on the calling thread. Callers are expected to be off the
+   * event dispatch thread, so the UI keeps responding while things download.
+   *
+   * Synchronized, so queues from different threads still download one at a time, as they always have.
    */
-  public void processQueues ()
+  public synchronized void processQueues ()
   {
     this.queuesInProcess += storedQueues.size();
 
     for (URLDownloadQueue downloadQueue : storedQueues) {
       try {
-        EventQueue.invokeAndWait(() -> processQueue(downloadQueue));
+        processQueue(downloadQueue);
       } catch (Exception e) {
         log.error(e);
       }
@@ -148,7 +150,7 @@ public class DownloadManager
    * @param downloadQueue The download queue object to search for.
    * @return Returns true if this queue was downloaded correctly or false if failed or not found.
    */
-  public boolean getQueueStatus (URLDownloadQueue downloadQueue)
+  public synchronized boolean getQueueStatus (URLDownloadQueue downloadQueue)
   {
     return this.queueStatusMap.getOrDefault(downloadQueue, false);
   }

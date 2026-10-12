@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.setting.ui.handler;
 
+import com.lucasluqui.swing.Scale;
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.launcher.LauncherContext;
@@ -17,12 +18,14 @@ import com.sun.management.OperatingSystemMXBean;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import javax.swing.event.ChangeEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static com.lucasluqui.launcher.setting.ui.Log.log;
 
@@ -62,6 +65,33 @@ public class SettingsEventHandler
     }
 
     this.ui.switchCleaning.setSelected(Settings.doRebuilds);
+  }
+
+  /**
+   * Saved once the slider is let go. The UI is built at its scale on startup, so it applies on the next one,
+   * which the user gets offered right away.
+   */
+  public void uiScaleChangeEvent (ChangeEvent event)
+  {
+    int value = this.ui.sliderUIScale.getValue();
+    this.ui.labelUIScaleValue.setText(value + "%");
+    if (this.ui.sliderUIScale.getValueIsAdjusting()) return;
+
+    _settingsManager.setValue("launcher.uiScale", String.valueOf(value));
+
+    // Back to the scale already in use, nothing to restart for.
+    if (value == Math.round(Scale.factor() * 100)) return;
+
+    // A new launcher refuses to start while the game is running, so that has to wait for later.
+    Set<Integer> gamePids = ProcessUtil.findJavaProcesses(LauncherGlobals.GAME_MAIN_CLASS);
+    if (gamePids != null && !gamePids.isEmpty()) {
+      Dialog.push(_localeManager.getValue("m.prompt_restart_required"), JOptionPane.INFORMATION_MESSAGE);
+      return;
+    }
+
+    if (Dialog.pushWithConfirm(_localeManager.getValue("m.ui_scale_restart_prompt"), JOptionPane.WARNING_MESSAGE)) {
+      _ctx.getApp().restart();
+    }
   }
 
   public void hideWhileGameRunningChangeEvent (ActionEvent event)
@@ -476,9 +506,9 @@ public class SettingsEventHandler
         this.ui.labelPlatform.setVisible(true);
         this.ui.choicePlatform.setEnabled(true);
         this.ui.choicePlatform.setVisible(true);
-        this.ui.labelMemory.setBounds(275, 90, 275, 18);
-        this.ui.memorySlider.setBounds(265, 105, 350, 40);
-        this.ui.memoryValue.setBounds(270, 139, 350, 25);
+        this.ui.labelMemory.setBounds(Scale.rect(275, 90, 275, 18));
+        this.ui.memorySlider.setBounds(Scale.rect(265, 105, 350, 40));
+        this.ui.memoryValue.setBounds(Scale.rect(270, 139, 350, 25));
         this.ui.labelDisclaimer.setVisible(false);
         this.ui.serverAddressTextField.setEnabled(true);
         this.ui.portTextField.setEnabled(true);
@@ -490,9 +520,9 @@ public class SettingsEventHandler
         this.ui.labelPlatform.setVisible(false);
         this.ui.choicePlatform.setEnabled(false);
         this.ui.choicePlatform.setVisible(false);
-        this.ui.labelMemory.setBounds(30, 90, 275, 18);
-        this.ui.memorySlider.setBounds(20, 105, 350, 40);
-        this.ui.memoryValue.setBounds(25, 139, 350, 25);
+        this.ui.labelMemory.setBounds(Scale.rect(30, 90, 275, 18));
+        this.ui.memorySlider.setBounds(Scale.rect(20, 105, 350, 40));
+        this.ui.memoryValue.setBounds(Scale.rect(25, 139, 350, 25));
         this.ui.labelDisclaimer.setVisible(true);
         this.ui.serverAddressTextField.setEnabled(false);
         this.ui.portTextField.setEnabled(false);

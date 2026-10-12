@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher;
 
+import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
@@ -69,35 +70,35 @@ public class JVMPatcher extends BaseUI
   {
     guiFrame.setVisible(false);
     guiFrame.setTitle(_localeManager.getValue("t.jvm_patcher"));
-    guiFrame.setBounds(100, 100, this.width, this.height);
+    guiFrame.setBounds(Scale.rect(100, 100, this.width, this.height));
     guiFrame.setResizable(false);
     guiFrame.setUndecorated(true);
     guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/rsrc/img/icon-128.png"));
     guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-    guiFrame.setShape(new RoundRectangle2D.Double(0, 0, this.width, this.height, 15, 15));
+    guiFrame.setShape(new RoundRectangle2D.Double(0, 0, Scale.px(this.width), Scale.px(this.height), Scale.px(15), Scale.px(15)));
     guiFrame.getContentPane().setLayout(null);
 
     headerLabel = new JLabel("Patch your game to use a compatible 64-bit Java VM");
-    headerLabel.setBounds(0, 50, 500, 37);
+    headerLabel.setBounds(Scale.rect(0, 50, 500, 37));
     headerLabel.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
     guiFrame.getContentPane().add(headerLabel);
 
     subHeaderLabel = new JLabel("You can always restart this patcher from the Settings menu");
-    subHeaderLabel.setBounds(0, 75, 500, 37);
+    subHeaderLabel.setBounds(Scale.rect(0, 75, 500, 37));
     subHeaderLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     subHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
     guiFrame.getContentPane().add(subHeaderLabel);
 
     JLabel jvmSelectLabel = new JLabel("Select a Java version to install");
-    jvmSelectLabel.setBounds(0, 115, 500, 37);
+    jvmSelectLabel.setBounds(Scale.rect(0, 115, 500, 37));
     jvmSelectLabel.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     jvmSelectLabel.setHorizontalAlignment(SwingConstants.CENTER);
     guiFrame.getContentPane().add(jvmSelectLabel);
 
     jvmComboBox = new JComboBox<>();
-    jvmComboBox.setBounds(125, 145, 260, 25);
+    jvmComboBox.setBounds(Scale.rect(125, 145, 260, 25));
     jvmComboBox.setFocusable(false);
     jvmComboBox.setFont(Fonts.getFont("default", 12.0f, Font.BOLD));
     guiFrame.add(jvmComboBox);
@@ -109,9 +110,9 @@ public class JVMPatcher extends BaseUI
 
     jvmPatcherState = new JLabel("");
     jvmPatcherState.setIcon(new LoadingIcon(16));
-    jvmPatcherState.setIconTextGap(8);
+    jvmPatcherState.setIconTextGap(Scale.px(8));
     jvmPatcherState.setVisible(false);
-    jvmPatcherState.setBounds(25, 178, 450, 20);
+    jvmPatcherState.setBounds(Scale.rect(25, 178, 450, 20));
     jvmPatcherState.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     guiFrame.getContentPane().add(jvmPatcherState);
 
@@ -120,13 +121,13 @@ public class JVMPatcher extends BaseUI
     jvmPatcherProgressBar.setUI(new SlimProgressBarUI(CustomColors.LAUNCH));
     jvmPatcherProgressBar.setOpaque(false);
     jvmPatcherProgressBar.setBorder(null);
-    jvmPatcherProgressBar.setBounds(25 - SlimProgressBarUI.GLOW_MARGIN, 205, 450 + SlimProgressBarUI.GLOW_MARGIN * 2, 16);
+    jvmPatcherProgressBar.setBounds(Scale.rect(25 - SlimProgressBarUI.GLOW_MARGIN, 205, 450 + SlimProgressBarUI.GLOW_MARGIN * 2, 16));
     jvmPatcherProgressBar.setVisible(false);
     jvmPatcherProgressBar.setShouldPaintString(false);
     guiFrame.getContentPane().add(jvmPatcherProgressBar);
 
     buttonAccept = new JButton("Start patching");
-    buttonAccept.setBounds(150, 200, 200, 25);
+    buttonAccept.setBounds(Scale.rect(150, 200, 200, 25));
     buttonAccept.setFocusPainted(false);
     buttonAccept.setFocusable(false);
     buttonAccept.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
