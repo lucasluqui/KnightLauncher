@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 
@@ -38,14 +39,14 @@ public class EventCard extends JComponent
       public void mouseEntered (MouseEvent e)
       {
         hovered = true;
-        repaint();
+        updateHover();
       }
 
       @Override
       public void mouseExited (MouseEvent e)
       {
         hovered = false;
-        repaint();
+        updateHover();
       }
     });
   }
@@ -61,6 +62,22 @@ public class EventCard extends JComponent
     if (this.active == active) return;
     this.active = active;
     repaint();
+  }
+
+  private void updateHover ()
+  {
+    hoverTarget = hovered ? 1f : 0f;
+    if (hoverTimer == null) {
+      hoverTimer = new Timer(15, e -> {
+        float step = 15f / HOVER_DURATION;
+        hoverProgress = hoverTarget > hoverProgress
+          ? Math.min(hoverTarget, hoverProgress + step)
+          : Math.max(hoverTarget, hoverProgress - step);
+        if (hoverProgress == hoverTarget) ((Timer) e.getSource()).stop();
+        repaint();
+      });
+    }
+    hoverTimer.start();
   }
 
   @Override
@@ -85,11 +102,17 @@ public class EventCard extends JComponent
     bg.fill(getShape(0, w, h));
     bg.setComposite(AlphaComposite.SrcIn);
 
-    // Background: the event's banner scaled to the card's width, cropped around its vertical center.
+    // Background: the event's banner covering the card, cropped around its center, and zooming in a little
+    // while hovered. Eased out, so the movement settles in gently. Scaled with a transform rather than
+    // rounded pixel sizes, so the zoom moves smoothly instead of jumping a pixel at a time.
     if (image != null) {
-      int srcHeight = Math.min(image.getHeight(), Math.round(image.getWidth() * (h / (float) w)));
-      int srcY = (image.getHeight() - srcHeight) / 2;
-      bg.drawImage(image, 0, 0, w, h, 0, srcY, image.getWidth(), srcY + srcHeight, null);
+      float zoom = Math.max(w / (float) image.getWidth(), h / (float) image.getHeight())
+        * (1f + HOVER_ZOOM * (1f - (1f - hoverProgress) * (1f - hoverProgress)));
+      bg.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+      AffineTransform transform = AffineTransform.getTranslateInstance(w / 2.0, h / 2.0);
+      transform.scale(zoom, zoom);
+      transform.translate(-image.getWidth() / 2.0, -image.getHeight() / 2.0);
+      bg.drawImage(image, transform, null);
     } else {
       bg.setColor(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
       bg.fillRect(0, 0, w, h);
@@ -211,6 +234,9 @@ public class EventCard extends JComponent
   private BufferedImage image;
   private boolean active = false;
   private boolean hovered = false;
+  private float hoverProgress = 0f;
+  private float hoverTarget = 0f;
+  private Timer hoverTimer;
 
   private static final int PADDING = 12;
 
@@ -221,4 +247,7 @@ public class EventCard extends JComponent
   // How far the top edge is shifted right compared to the bottom one.
   private static final int SLANT = 14;
   private static final float CORNER_RADIUS = 7f;
+
+  private static final int HOVER_DURATION = 180;
+  private static final float HOVER_ZOOM = 0.05f;
 }

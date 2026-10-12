@@ -182,7 +182,7 @@ public class ZipMod extends Mod
 
   public boolean isClassType ()
   {
-    return this.getType() != null && this.getType().equals("class");
+    return this.getType() != null && this.getType().equalsIgnoreCase("class");
   }
 
   private final List<LocaleChange> localeChanges = new ArrayList<>();

@@ -13,6 +13,7 @@ import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.util.DesktopUtil;
+import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.ThreadingUtil;
 import org.apache.commons.io.FileUtils;
 
@@ -88,6 +89,16 @@ public class ModListEventHandler
       rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
     }
     DesktopUtil.openDir(rootDir + "/mods");
+  }
+
+  public void openModConfigFolderEvent (Mod mod)
+  {
+    String path = _modManager.getModConfigDirectory(mod);
+    if (path == null) return;
+
+    // It could've been deleted since the mod list was loaded.
+    FileUtil.createDir(path);
+    DesktopUtil.openDir(path);
   }
 
   @SuppressWarnings("all")

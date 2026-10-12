@@ -149,18 +149,38 @@ public class ModManager
   }
 
   /**
-   * Makes sure the mod has its own folder under "config" in the mods folder, named after the mod
-   * with only lowercase a-z characters, digits, and dashes in place of spaces.
+   * Makes sure the mod has its own folder under "config" in the mods folder.
    */
   private void createModConfigDirectory (String modFolderPath, Mod mod)
+  {
+    String path = getModConfigDirectory(modFolderPath, mod);
+    if (path != null) FileUtil.createDir(path);
+  }
+
+  /**
+   * Path to the mod's config folder for the currently selected server, or null if the mod has no usable name.
+   */
+  public String getModConfigDirectory (Mod mod)
+  {
+    Server selectedServer = _flamingoManager.getSelectedServer();
+    String modFolderPath = selectedServer != null
+      ? selectedServer.getModsDirectory() : LauncherGlobals.USER_DIR + "/mods/";
+    return getModConfigDirectory(modFolderPath, mod);
+  }
+
+  /**
+   * The mod's config folder is named after the mod with only lowercase a-z characters, digits,
+   * and dashes in place of spaces.
+   */
+  private static String getModConfigDirectory (String modFolderPath, Mod mod)
   {
     String name = sanitizeModConfigName(mod.getDisplayName());
 
     // Nothing usable in the display name, go with the file name instead.
     if (name.isEmpty()) name = sanitizeModConfigName(mod.getFileName().replaceFirst("\\.[^.]+$", ""));
-    if (name.isEmpty()) return;
+    if (name.isEmpty()) return null;
 
-    FileUtil.createDir(modFolderPath + "config/" + name);
+    return modFolderPath + "config/" + name;
   }
 
   private static String sanitizeModConfigName (String name)
