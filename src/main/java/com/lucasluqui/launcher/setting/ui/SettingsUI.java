@@ -199,22 +199,22 @@ public class SettingsUI extends BaseUI
     sep3.setBounds(10, 230, 600, 16);
     launcherSubPanel.add(sep3);
 
-    JLabel labelKeepOpen = new JLabel(_localeManager.getValue("m.minimize_to_tray"));
-    labelKeepOpen.setBounds(10, 245, 350, 20);
-    labelKeepOpen.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
-    launcherSubPanel.add(labelKeepOpen);
+    JLabel labelHideWhileGameRunning = new JLabel(_localeManager.getValue("m.hide_while_game_running"));
+    labelHideWhileGameRunning.setBounds(10, 245, 350, 20);
+    labelHideWhileGameRunning.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    launcherSubPanel.add(labelHideWhileGameRunning);
 
-    JLabel labelKeepOpenExplained = new JLabel(_localeManager.getValue("m.minimize_to_tray_explained"));
-    labelKeepOpenExplained.setBounds(10, 265, 600, 16);
-    labelKeepOpenExplained.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
-    launcherSubPanel.add(labelKeepOpenExplained);
+    JLabel labelHideWhileGameRunningExplained = new JLabel(_localeManager.getValue("m.hide_while_game_running_explained"));
+    labelHideWhileGameRunningExplained.setBounds(10, 265, 600, 16);
+    labelHideWhileGameRunningExplained.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
+    launcherSubPanel.add(labelHideWhileGameRunningExplained);
 
-    switchKeepOpen = new JCheckBox("");
-    switchKeepOpen.setBounds(575, 250, 30, 23);
-    switchKeepOpen.setFocusPainted(false);
-    launcherSubPanel.add(switchKeepOpen);
-    switchKeepOpen.setSelected(Settings.keepOpen);
-    switchKeepOpen.addActionListener(eventHandler::keepOpenChangeEvent);
+    switchHideWhileGameRunning = new JCheckBox("");
+    switchHideWhileGameRunning.setBounds(575, 250, 30, 23);
+    switchHideWhileGameRunning.setFocusPainted(false);
+    launcherSubPanel.add(switchHideWhileGameRunning);
+    switchHideWhileGameRunning.setSelected(Settings.hideWhileGameRunning);
+    switchHideWhileGameRunning.addActionListener(eventHandler::hideWhileGameRunningChangeEvent);
 
     JSeparator sep4 = new JSeparator();
     sep4.setBounds(10, 295, 600, 16);
@@ -1077,7 +1077,7 @@ public class SettingsUI extends BaseUI
   public JComboBox<String> choiceLanguage;
   public JComboBox<String> choiceGC;
   public JCheckBox switchCleaning;
-  public JCheckBox switchKeepOpen;
+  public JCheckBox switchHideWhileGameRunning;
   public JCheckBox switchShortcut;
   public JButton jvmPatchButton = new JButton();
   public JButton forceRebuildButton = new JButton();

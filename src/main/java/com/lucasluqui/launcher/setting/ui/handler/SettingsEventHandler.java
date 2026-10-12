@@ -64,10 +64,10 @@ public class SettingsEventHandler
     this.ui.switchCleaning.setSelected(Settings.doRebuilds);
   }
 
-  public void keepOpenChangeEvent (ActionEvent event)
+  public void hideWhileGameRunningChangeEvent (ActionEvent event)
   {
-    Settings.keepOpen = this.ui.switchKeepOpen.isSelected();
-    _settingsManager.setValue("launcher.keepOpen", String.valueOf(this.ui.switchKeepOpen.isSelected()));
+    Settings.hideWhileGameRunning = this.ui.switchHideWhileGameRunning.isSelected();
+    _settingsManager.setValue("launcher.hideWhileGameRunning", String.valueOf(this.ui.switchHideWhileGameRunning.isSelected()));
   }
 
   public void forceRebuildEvent ()

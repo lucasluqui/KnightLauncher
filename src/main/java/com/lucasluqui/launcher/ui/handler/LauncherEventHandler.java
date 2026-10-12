@@ -1002,7 +1002,7 @@ public class LauncherEventHandler
           log.info("Getdown is running, waiting for it to start the game");
 
           // Getdown has its own window, so we can get out of the way already.
-          if (Settings.keepOpen) SwingUtilities.invokeLater(this::hideLauncher);
+          if (Settings.hideWhileGameRunning) SwingUtilities.invokeLater(this::hideLauncher);
         }
         getdownSeen = true;
         deadline = System.currentTimeMillis() + GAME_LAUNCH_TIMEOUT;
@@ -1048,7 +1048,7 @@ public class LauncherEventHandler
   private void enterGameSession ()
   {
     _discordPresenceClient.stop();
-    if (Settings.keepOpen) hideLauncher();
+    if (Settings.hideWhileGameRunning) hideLauncher();
 
     // A session might already be going on if another client was launched in the meantime.
     if (_gameWatcher == null) {

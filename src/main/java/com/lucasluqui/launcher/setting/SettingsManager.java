@@ -74,7 +74,7 @@ public class SettingsManager
     Settings.lang = getValue("launcher.lang");
     Settings.doRebuilds = Boolean.parseBoolean(getValue("launcher.rebuilds"));
     Settings.filePurging = Boolean.parseBoolean(getValue("launcher.filePurging"));
-    Settings.keepOpen = Boolean.parseBoolean(getValue("launcher.keepOpen"));
+    Settings.hideWhileGameRunning = Boolean.parseBoolean(getValue("launcher.hideWhileGameRunning"));
     Settings.createShortcut = Boolean.parseBoolean(getValue("launcher.createShortcut"));
     Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
     Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));
@@ -423,6 +423,6 @@ public class SettingsManager
   private HashMap<String, Object> _migrationMap = new HashMap<>();
   private boolean _migrating = false;
 
-  private final String PROP_VER = "31";
+  private final String PROP_VER = "32";
   private final String PROP_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
 }
