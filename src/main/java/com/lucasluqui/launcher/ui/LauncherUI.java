@@ -14,6 +14,7 @@ import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.launcher.ui.handler.LauncherEventHandler;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.util.*;
+import com.lucasluqui.swing.LoadingIcon;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import org.madlonkay.desktopsupport.DesktopSupport;
@@ -159,7 +160,7 @@ public class LauncherUI extends BaseUI
     guiFrame.getContentPane().add(panel);
 
     bannerLoading = new JLabel(_localeManager.getValue("m.loading"));
-    bannerLoading.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+    bannerLoading.setIcon(new LoadingIcon());
     bannerLoading.setBounds(325, 235, 150, 45);
     bannerLoading.setFont(Fonts.getFont("default", 14.0f, Font.BOLD));
     bannerLoading.setHorizontalAlignment(SwingConstants.CENTER);
@@ -246,7 +247,7 @@ public class LauncherUI extends BaseUI
     sidePane.add(playerCountTitleLabel);
 
     playerCountLabel = new JLabel("");
-    playerCountLabel.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+    playerCountLabel.setIcon(new LoadingIcon(16));
     playerCountLabel.setBounds(25, 188, 190, 20);
     playerCountLabel.setFont(Fonts.getFont("default", 13.0f, Font.BOLD | Font.ITALIC));
     playerCountLabel.setHorizontalAlignment(SwingConstants.RIGHT);

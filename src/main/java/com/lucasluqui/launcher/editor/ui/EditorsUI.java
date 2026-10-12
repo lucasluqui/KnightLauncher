@@ -13,6 +13,7 @@ import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.BuildConfig;
 import com.lucasluqui.util.ImageUtil;
+import com.lucasluqui.swing.LoadingIcon;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,7 +63,7 @@ public class EditorsUI extends BaseUI
     panel = (JPanel) guiFrame.getContentPane();
 
     editorLaunchState = new JLabel(_localeManager.getValue("m.editor_loading"));
-    editorLaunchState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+    editorLaunchState.setIcon(new LoadingIcon());
     editorLaunchState.setHorizontalAlignment(SwingConstants.CENTER);
     editorLaunchState.setBounds(192, 190, 385, 25);
     editorLaunchState.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));

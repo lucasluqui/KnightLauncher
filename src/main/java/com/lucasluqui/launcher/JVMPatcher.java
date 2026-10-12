@@ -11,6 +11,7 @@ import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.ui.BaseUI;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.util.*;
+import com.lucasluqui.swing.LoadingIcon;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -106,7 +107,7 @@ public class JVMPatcher extends BaseUI
     jvmComboBox.setSelectedIndex(0);
 
     jvmPatcherState = new JLabel("");
-    jvmPatcherState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+    jvmPatcherState.setIcon(new LoadingIcon());
     jvmPatcherState.setVisible(false);
     jvmPatcherState.setBounds(26, 180, 450, 15);
     jvmPatcherState.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));

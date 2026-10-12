@@ -16,6 +16,7 @@ import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.util.*;
+import com.lucasluqui.swing.LoadingIcon;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
@@ -236,7 +237,7 @@ public class LauncherEventHandler
 
       log.info("Starting game", "server", selectedServer.name, "platform", Settings.gamePlatform, "codeMods", Settings.loadCodeMods);
       _ctx._progressBar.setState(_localeManager.getValue("m.game_launching"));
-      ui.launchButton.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+      ui.launchButton.setIcon(new LoadingIcon());
       ui.launchButton.setText(_localeManager.getValue("m.launching"));
       checkGameLaunch(existingProcesses);
     });
@@ -353,7 +354,7 @@ public class LauncherEventHandler
     SwingUtilities.invokeLater(() -> {
       if (_flamingoManager.getSelectedServer() == official) {
         ui.playerCountLabel.setText("");
-        ui.playerCountLabel.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+        ui.playerCountLabel.setIcon(new LoadingIcon(16));
       }
     });
 

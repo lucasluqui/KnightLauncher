@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.util.ThreadingUtil;
+import com.lucasluqui.swing.LoadingIcon;
 
 import javax.swing.*;
 
@@ -67,7 +68,7 @@ public class ProgressBar
     modListUI.refreshProgressBar.setVisible(show);
 
     if (show) {
-      launcherUI.launchState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+      launcherUI.launchState.setIcon(new LoadingIcon());
     }
   }
 

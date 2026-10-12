@@ -10,6 +10,7 @@ import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.ImageUtil;
 import com.lucasluqui.util.ProcessUtil;
 import com.lucasluqui.util.ZipUtil;
+import com.lucasluqui.swing.LoadingIcon;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,7 +73,7 @@ public class Updater extends BaseUI
     guiFrame.add(launcherLogo);
 
     updaterState = new JLabel("");
-    updaterState.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+    updaterState.setIcon(new LoadingIcon());
     updaterState.setHorizontalAlignment(SwingConstants.LEFT);
     updaterState.setBounds(100, 49, 375, 25);
     updaterState.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));

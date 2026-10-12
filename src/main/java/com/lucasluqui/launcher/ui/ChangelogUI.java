@@ -8,6 +8,7 @@ import com.lucasluqui.launcher.LauncherContext;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.ui.handler.ChangelogEventHandler;
 import com.lucasluqui.util.ColorUtil;
+import com.lucasluqui.swing.LoadingIcon;
 import org.apache.commons.text.WordUtils;
 
 import javax.swing.*;
@@ -70,7 +71,7 @@ public class ChangelogUI extends BaseUI
     panel = (JPanel) guiFrame.getContentPane();
 
     loadingLabel = new JLabel(_localeManager.getValue("m.loading"));
-    loadingLabel.setIcon(new ImageIcon(this.getClass().getResource("/rsrc/img/loading.gif")));
+    loadingLabel.setIcon(new LoadingIcon());
     loadingLabel.setBounds(0, 0, this.width, this.height);
     loadingLabel.setFont(Fonts.getFont("default", 14.0f, Font.BOLD));
     loadingLabel.setHorizontalAlignment(SwingConstants.CENTER);
