@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -762,7 +763,7 @@ public class LauncherEventHandler
       if (event.startsAt > System.currentTimeMillis()) {
         // The event has not yet started
         this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_starts_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(event.startsAt))));
-        this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(event.startsAt, "PST")));
+        this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(event.startsAt, TimeZone.getDefault().getID())));
       } else if (System.currentTimeMillis() > event.endsAt) {
         // The event already ended
         this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_ended"));
@@ -770,7 +771,7 @@ public class LauncherEventHandler
       } else {
         // The event is currently running
         this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(event.endsAt))));
-        this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_ends_at_time", DateUtil.getFormattedTime(event.endsAt, "PST")));
+        this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_ends_at_time", DateUtil.getFormattedTime(event.endsAt, TimeZone.getDefault().getID())));
       }
 
       // In any case, the timer needs to be visible

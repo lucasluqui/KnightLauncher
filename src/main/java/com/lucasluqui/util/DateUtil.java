@@ -32,15 +32,15 @@ public class DateUtil
     calendar.setTimeInMillis(timestamp);
     calendar.setTimeZone(TimeZone.getTimeZone(timezone));
 
-    // Only the month, we'll concatenate the rest later.
+    // Only the weekday and month, we'll concatenate the rest later.
     // Also, force it to be in English locale.
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM", java.util.Locale.ENGLISH);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM", java.util.Locale.ENGLISH);
+    dateFormat.setTimeZone(calendar.getTimeZone());
 
     return dateFormat.format(calendar.getTime()) + " "
       + getDayNumberWithSuffix(calendar.get(Calendar.DATE)) + " "
-      + calendar.get(Calendar.HOUR_OF_DAY) + ":" + getMinuteWithTrailingZero(calendar.get(Calendar.MINUTE)) + " "
-      + (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM") + " "
-      + timezone;
+      + String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY)) + ":"
+      + getMinuteWithTrailingZero(calendar.get(Calendar.MINUTE));
   }
 
   private static String getDayNumberWithSuffix (int date)
