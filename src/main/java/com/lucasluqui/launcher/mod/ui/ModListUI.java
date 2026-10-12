@@ -319,23 +319,26 @@ public class ModListUI extends BaseUI
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
+        // The screen can be taller than the window showing it, so stick to the part that's actually visible.
+        Rectangle area = getVisibleRect();
+
         Color background = CustomColors.INTERFACE_MAINPANE_BACKGROUND;
         g2d.setColor(new Color(background.getRed(), background.getGreen(), background.getBlue(), 220));
-        g2d.fillRect(0, 0, getWidth(), getHeight());
+        g2d.fillRect(area.x, area.y, area.width, area.height);
 
         // Dashed outline around the drop area.
         g2d.setColor(new Color(255, 255, 255, 150));
         g2d.setStroke(new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f, new float[]{ 10f, 8f }, 0f));
-        g2d.drawRoundRect(20, 20, getWidth() - 40, getHeight() - 40, 30, 30);
+        g2d.drawRoundRect(area.x + 20, area.y + 20, area.width - 40, area.height - 40, 30, 30);
 
         Icon icon = IconFontSwing.buildIcon(FontAwesome.PLUS_CIRCLE, 48, Color.WHITE);
         String text = _localeManager.getValue("m.drop_mods");
         g2d.setFont(Fonts.getFont("default", 16.0f, Font.BOLD));
         FontMetrics metrics = g2d.getFontMetrics();
-        int top = (getHeight() - icon.getIconHeight() - 16 - metrics.getHeight()) / 2;
-        icon.paintIcon(this, g2d, (getWidth() - icon.getIconWidth()) / 2, top);
+        int top = area.y + (area.height - icon.getIconHeight() - 16 - metrics.getHeight()) / 2;
+        icon.paintIcon(this, g2d, area.x + (area.width - icon.getIconWidth()) / 2, top);
         g2d.setColor(Color.WHITE);
-        g2d.drawString(text, (getWidth() - metrics.stringWidth(text)) / 2, top + icon.getIconHeight() + 16 + metrics.getAscent());
+        g2d.drawString(text, area.x + (area.width - metrics.stringWidth(text)) / 2, top + icon.getIconHeight() + 16 + metrics.getAscent());
 
         g2d.dispose();
       }

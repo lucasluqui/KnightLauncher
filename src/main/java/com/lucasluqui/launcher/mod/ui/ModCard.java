@@ -37,7 +37,6 @@ public class ModCard extends JPanel
     this.ambient = image == null ? null : blur(image);
     setLayout(null);
     setOpaque(false);
-    setToolTipText(title);
 
     if (badge != null) {
       badgeLabel = new JLabel(badge);
