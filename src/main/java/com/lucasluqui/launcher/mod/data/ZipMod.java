@@ -14,11 +14,6 @@ import static com.lucasluqui.launcher.mod.Log.log;
 
 public class ZipMod extends Mod
 {
-  private final List<LocaleChange> localeChanges = new ArrayList<>();
-  private final FileHeaderData fileHeaderData = new FileHeaderData();
-  protected String type;
-  protected Boolean hasInvalidFileHeaders;
-
   @SuppressWarnings("unused")
   public ZipMod ()
   {
@@ -57,7 +52,7 @@ public class ZipMod extends Mod
       log.info("Zip mod mounted successfully", "mod", this.displayName);
     } else {
       log.info("Mounting Zip mod with " + this.type + " type", "mod", this.displayName);
-      if (this.type.equalsIgnoreCase("class")) {
+      if (isClassType()) {
         for (Map.Entry<FileHeader, Integer> entry : fileHeaderData.getFileHeaders().entrySet()) {
           if (entry.getValue() < 1) ZipUtil.unzipFileHeader(
             zipFile, entry.getKey(), rootDir + "/code/class-changes/", false);
@@ -184,4 +179,14 @@ public class ZipMod extends Mod
   {
     this.type = type;
   }
+
+  public boolean isClassType ()
+  {
+    return this.getType() != null && this.getType().equals("class");
+  }
+
+  private final List<LocaleChange> localeChanges = new ArrayList<>();
+  private final FileHeaderData fileHeaderData = new FileHeaderData();
+  protected String type;
+  protected Boolean hasInvalidFileHeaders;
 }

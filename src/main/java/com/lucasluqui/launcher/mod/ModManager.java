@@ -79,6 +79,10 @@ public class ModManager
         if (fileName.endsWith("zip")) {
           mod = new ZipMod(
             modFolderPath, fileName, Settings.fileProtection ? this.FILTER_LIST : null, _lastChanged);
+          ZipMod zipMod = (ZipMod) mod;
+          if (zipMod.isClassType()) {
+            createModConfigDirectory(modFolderPath, mod);
+          }
         } else if (fileName.endsWith("jar")) {
           mod = new JarMod(modFolderPath, fileName);
         } else if (fileName.endsWith("modpack")) {
@@ -87,7 +91,6 @@ public class ModManager
 
         if (mod != null) {
           _modList.addMod(mod);
-          createModConfigDirectory(modFolderPath, mod);
         }
       }
 
