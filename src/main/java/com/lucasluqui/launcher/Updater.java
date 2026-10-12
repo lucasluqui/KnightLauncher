@@ -1,20 +1,27 @@
 package com.lucasluqui.launcher;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
 import com.lucasluqui.launcher.ui.BaseUI;
+import com.lucasluqui.util.BuildConfig;
+import com.lucasluqui.util.ColorUtil;
 import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.ImageUtil;
 import com.lucasluqui.util.ProcessUtil;
 import com.lucasluqui.util.ZipUtil;
 import com.lucasluqui.swing.LoadingIcon;
 import com.lucasluqui.swing.SlimProgressBarUI;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -31,7 +38,7 @@ public class Updater extends BaseUI
 {
   public Updater ()
   {
-    super(500, 125, true);
+    super(460, 176, false);
   }
 
   public void init (String newVersion)
@@ -63,38 +70,122 @@ public class Updater extends BaseUI
     guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     guiFrame.setUndecorated(true);
     guiFrame.setIconImage(ImageUtil.loadImageWithinJar("/rsrc/img/icon-128.png"));
-    guiFrame.getContentPane().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     guiFrame.setShape(new RoundRectangle2D.Double(0, 0, this.width, this.height, 15, 15));
-    guiFrame.getContentPane().setLayout(null);
 
-    JLabel launcherLogo = new JLabel();
-    BufferedImage launcherLogoImage = ImageUtil.loadImageWithinJar("/rsrc/img/icon-64.png");
-    launcherLogo.setBounds(15, 48, 64, 64);
-    launcherLogo.setIcon(new ImageIcon(launcherLogoImage));
-    guiFrame.add(launcherLogo);
+    BufferedImage logoImage = ImageUtil.loadImageWithinJar("/rsrc/img/icon-128.png");
+
+    // A soft glow in the launcher's color behind the logo, fading out before it reaches the texts.
+    JPanel content = new JPanel(null)
+    {
+      @Override
+      protected void paintComponent (Graphics g)
+      {
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setColor(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+
+        Color glow = CustomColors.LAUNCHER;
+        g2d.setPaint(new RadialGradientPaint(60, 64, 150, new float[]{ 0f, 1f }, new Color[]{
+          new Color(glow.getRed(), glow.getGreen(), glow.getBlue(), 70),
+          new Color(glow.getRed(), glow.getGreen(), glow.getBlue(), 0) }));
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+        g2d.dispose();
+      }
+    };
+    guiFrame.setContentPane(content);
+
+    // There's no title bar, so the whole window can be dragged around instead.
+    MouseAdapter dragListener = new MouseAdapter()
+    {
+      @Override
+      public void mousePressed (MouseEvent e)
+      {
+        pX = e.getX();
+        pY = e.getY();
+      }
+
+      @Override
+      public void mouseDragged (MouseEvent e)
+      {
+        guiFrame.setLocation(guiFrame.getX() + e.getX() - pX, guiFrame.getY() + e.getY() - pY);
+      }
+    };
+    content.addMouseListener(dragListener);
+    content.addMouseMotionListener(dragListener);
+
+    JLabel launcherLogo = new JLabel(new ImageIcon(logoImage.getScaledInstance(72, 72, Image.SCALE_SMOOTH)));
+    launcherLogo.setBounds(24, 28, 72, 72);
+    content.add(launcherLogo);
+
+    JLabel title = new JLabel("Updating Knight Launcher");
+    title.setBounds(116, 26, 320, 26);
+    title.setFont(Fonts.getFont("default", 18.0f, Font.BOLD));
+    title.setForeground(Color.WHITE);
+    content.add(title);
+
+    // Where we're coming from and where we're going, as a pair of badges.
+    JLabel currentVersionBadge = createBadge(BuildConfig.getVersion(),
+      CustomColors.INTERFACE_MAINPANE_FOOTNOTE, new Color(170, 174, 186));
+    int badgeX = 116;
+    currentVersionBadge.setBounds(badgeX, 58, currentVersionBadge.getPreferredSize().width, 18);
+    content.add(currentVersionBadge);
+    badgeX += currentVersionBadge.getWidth() + 8;
+
+    JLabel arrow = new JLabel(IconFontSwing.buildIcon(FontAwesome.LONG_ARROW_RIGHT, 12, new Color(170, 174, 186)));
+    arrow.setBounds(badgeX, 58, 14, 18);
+    content.add(arrow);
+    badgeX += arrow.getWidth() + 8;
+
+    JLabel newVersionBadge = createBadge(this.newVersion == null ? "?" : this.newVersion,
+      CustomColors.LAUNCH, new Color(102, 182, 255));
+    newVersionBadge.setBounds(badgeX, 58, newVersionBadge.getPreferredSize().width, 18);
+    content.add(newVersionBadge);
 
     updaterState = new JLabel("");
-    updaterState.setIcon(new LoadingIcon());
+    updaterState.setIcon(new LoadingIcon(16));
+    updaterState.setIconTextGap(8);
     updaterState.setHorizontalAlignment(SwingConstants.LEFT);
-    updaterState.setBounds(100, 49, 375, 25);
-    updaterState.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
-    updaterState.setVisible(true);
-    guiFrame.add(updaterState);
+    updaterState.setBounds(116, 94, 260, 20);
+    updaterState.setFont(Fonts.getFont("default", 12.0f, Font.ITALIC));
+    content.add(updaterState);
+
+    updaterStep = new JLabel("");
+    updaterStep.setHorizontalAlignment(SwingConstants.RIGHT);
+    updaterStep.setBounds(376, 94, 60, 20);
+    updaterStep.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
+    updaterStep.setForeground(new Color(170, 174, 186));
+    content.add(updaterStep);
 
     // Bounds include the room the bar's glow needs around it.
     updaterProgressBar = new JProgressBar();
     updaterProgressBar.setUI(new SlimProgressBarUI(CustomColors.LAUNCH));
     updaterProgressBar.setOpaque(false);
     updaterProgressBar.setBorder(null);
-    updaterProgressBar.setBounds(100 - SlimProgressBarUI.GLOW_MARGIN, 80, 375 + SlimProgressBarUI.GLOW_MARGIN * 2, 16);
-    updaterProgressBar.setVisible(true);
-    guiFrame.add(updaterProgressBar);
+    updaterProgressBar.setBounds(116 - SlimProgressBarUI.GLOW_MARGIN, 124 - 8, 320 + SlimProgressBarUI.GLOW_MARGIN * 2, 16);
+    updaterProgressBar.addChangeListener(e ->
+      updaterStep.setText(updaterProgressBar.getValue() + " / " + updaterProgressBar.getMaximum()));
+    content.add(updaterProgressBar);
 
-    closeButton.setVisible(false);
-    minimizeButton.setVisible(false);
+    JLabel footnote = new JLabel("The launcher will restart by itself once it's done.");
+    footnote.setBounds(116, 142, 320, 16);
+    footnote.setFont(Fonts.getFont("default", 10.0f, Font.ITALIC));
+    footnote.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
+    content.add(footnote);
 
     guiFrame.setLocationRelativeTo(null);
     guiFrame.setVisible(true);
+  }
+
+  private static JLabel createBadge (String text, Color background, Color foreground)
+  {
+    JLabel badge = new JLabel(text);
+    badge.setHorizontalAlignment(SwingConstants.CENTER);
+    badge.setFont(Fonts.getFont("default", 10.0f, Font.ITALIC));
+    badge.putClientProperty(FlatClientProperties.STYLE,
+      "background:" + ColorUtil.colorToHexString(background)
+        + "1A; foreground:" + ColorUtil.colorToHexString(foreground)
+        + "; arc:999; border:2,8,2,8," + ColorUtil.colorToHexString(background));
+    return badge;
   }
 
   private void startUpdate ()
@@ -128,6 +219,7 @@ public class Updater extends BaseUI
     new File(LauncherGlobals.USER_DIR + "/KnightLauncher.zip").delete();
 
     updaterProgressBar.setValue(4);
+    updaterState.setIcon(IconFontSwing.buildIcon(FontAwesome.CHECK, 14, CustomColors.GREEN));
     updaterState.setText("Update finished");
     this.finish(true);
   }
@@ -214,6 +306,7 @@ public class Updater extends BaseUI
 
   private JProgressBar updaterProgressBar;
   private JLabel updaterState;
+  private JLabel updaterStep;
 
   enum ErrorCode
   {
