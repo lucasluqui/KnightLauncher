@@ -12,6 +12,7 @@ import com.lucasluqui.launcher.ui.BaseUI;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.util.*;
 import com.lucasluqui.swing.LoadingIcon;
+import com.lucasluqui.swing.SlimProgressBarUI;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -107,16 +108,21 @@ public class JVMPatcher extends BaseUI
     jvmComboBox.setSelectedIndex(0);
 
     jvmPatcherState = new JLabel("");
-    jvmPatcherState.setIcon(new LoadingIcon());
+    jvmPatcherState.setIcon(new LoadingIcon(16));
+    jvmPatcherState.setIconTextGap(8);
     jvmPatcherState.setVisible(false);
-    jvmPatcherState.setBounds(26, 180, 450, 15);
+    jvmPatcherState.setBounds(25, 178, 450, 20);
     jvmPatcherState.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     guiFrame.getContentPane().add(jvmPatcherState);
 
+    // Bounds include the room the bar's glow needs around it.
     jvmPatcherProgressBar = new SmoothProgressBar();
-    jvmPatcherProgressBar.setBounds(25, 204, 450, 25);
+    jvmPatcherProgressBar.setUI(new SlimProgressBarUI(CustomColors.LAUNCH));
+    jvmPatcherProgressBar.setOpaque(false);
+    jvmPatcherProgressBar.setBorder(null);
+    jvmPatcherProgressBar.setBounds(25 - SlimProgressBarUI.GLOW_MARGIN, 205, 450 + SlimProgressBarUI.GLOW_MARGIN * 2, 16);
     jvmPatcherProgressBar.setVisible(false);
-    jvmPatcherProgressBar.setShouldPaintString(true);
+    jvmPatcherProgressBar.setShouldPaintString(false);
     guiFrame.getContentPane().add(jvmPatcherProgressBar);
 
     buttonAccept = new JButton("Start patching");

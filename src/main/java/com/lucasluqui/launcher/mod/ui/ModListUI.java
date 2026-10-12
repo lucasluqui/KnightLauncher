@@ -16,6 +16,7 @@ import com.lucasluqui.launcher.mod.data.JarMod;
 import com.lucasluqui.launcher.mod.data.Mod;
 import com.lucasluqui.launcher.mod.data.Modpack;
 import com.lucasluqui.launcher.mod.data.ZipMod;
+import com.lucasluqui.swing.SlimProgressBarUI;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.ColorUtil;
@@ -248,8 +249,12 @@ public class ModListUI extends BaseUI
     guiFrame.getContentPane().add(refreshButton);
     refreshButton.addActionListener(this.eventHandler::refreshEvent);
 
+    // A thin line along the bottom of the list. Bounds include the room the bar's glow needs around it.
     refreshProgressBar = new SmoothProgressBar();
-    refreshProgressBar.setBounds(25, 445, 740, 2);
+    refreshProgressBar.setUI(new SlimProgressBarUI(CustomColors.LAUNCH, 3f));
+    refreshProgressBar.setOpaque(false);
+    refreshProgressBar.setBorder(null);
+    refreshProgressBar.setBounds(25 - SlimProgressBarUI.GLOW_MARGIN, 446 - 5, 740 + SlimProgressBarUI.GLOW_MARGIN * 2, 10);
     refreshProgressBar.setShouldPaintString(false);
     refreshProgressBar.setVisible(false);
     guiFrame.getContentPane().add(refreshProgressBar);

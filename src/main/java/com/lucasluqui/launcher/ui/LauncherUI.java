@@ -13,6 +13,7 @@ import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.launcher.ui.handler.LauncherEventHandler;
 import com.lucasluqui.swing.SmoothProgressBar;
+import com.lucasluqui.swing.SlimProgressBarUI;
 import com.lucasluqui.util.*;
 import com.lucasluqui.swing.LoadingIcon;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -542,11 +543,13 @@ public class LauncherUI extends BaseUI
     altModeEnabledLabel.setVisible(false);
     panel.add(altModeEnabledLabel);
 
-    BufferedImage launchBackgroundImage = ImageUtil.generatePlainColorImage(446, 80, Color.BLACK);
-    launchBackgroundImage = (BufferedImage) ImageUtil.addRoundedCorners(launchBackgroundImage, 35);
-    ImageUtil.setAlpha(launchBackgroundImage, (byte) 191);
+    // Progress box: the current task with a spinner and its percentage on top, a slim bar below.
+    // Vertically centered on the play button next to it.
+    BufferedImage launchBackgroundImage = ImageUtil.generatePlainColorImage(446, 64, CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_DARK);
+    launchBackgroundImage = (BufferedImage) ImageUtil.addRoundedCorners(launchBackgroundImage, 28);
+    ImageUtil.setAlpha(launchBackgroundImage, (byte) 245);
     launchBackground = new JLabel("");
-    launchBackground.setBounds(28, 409, 446, 80);
+    launchBackground.setBounds(28, 417, 446, 64);
     launchBackground.setIcon(new ImageIcon(launchBackgroundImage));
     launchBackground.setVisible(false);
     panel.add(launchBackground);
@@ -554,17 +557,33 @@ public class LauncherUI extends BaseUI
 
     launchState = new JLabel("");
     launchState.setHorizontalAlignment(SwingConstants.LEFT);
-    launchState.setBounds(43, 419, 416, 25);
-    launchState.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    launchState.setIconTextGap(8);
+    launchState.setBounds(44, 426, 330, 22);
+    launchState.setFont(Fonts.getFont("default", 13.0f, Font.ITALIC));
     launchState.setVisible(false);
     panel.add(launchState);
     panel.setComponentZOrder(launchState, 0);
 
+    launchProgressPercent = new JLabel("0%");
+    launchProgressPercent.setHorizontalAlignment(SwingConstants.RIGHT);
+    launchProgressPercent.setBounds(384, 426, 74, 22);
+    launchProgressPercent.setFont(Fonts.getFont("default", 13.0f, Font.BOLD));
+    launchProgressPercent.setForeground(Color.WHITE);
+    launchProgressPercent.setVisible(false);
+    panel.add(launchProgressPercent);
+    panel.setComponentZOrder(launchProgressPercent, 0);
+
+    // Bounds include the room the bar's glow needs around it.
     launchProgressBar = new SmoothProgressBar();
-    launchProgressBar.setBounds(43, 449, 416, 25);
+    launchProgressBar.setUI(new SlimProgressBarUI(CustomColors.LAUNCH));
+    launchProgressBar.setOpaque(false);
+    launchProgressBar.setBorder(null);
+    launchProgressBar.setBounds(44 - SlimProgressBarUI.GLOW_MARGIN, 464 - 8, 414 + SlimProgressBarUI.GLOW_MARGIN * 2, 16);
     launchProgressBar.setVisible(false);
-    launchProgressBar.setShouldPaintString(true);
-    launchProgressBar.putClientProperty(FlatClientProperties.STYLE, "arc: 35;");
+    launchProgressBar.setShouldPaintString(false);
+    // The percentage follows the bar's animation rather than jumping straight to the new value.
+    launchProgressBar.addChangeListener(e ->
+      launchProgressPercent.setText(Math.round(launchProgressBar.getPercentComplete() * 100) + "%"));
     panel.add(launchProgressBar);
     panel.setComponentZOrder(launchProgressBar, 0);
 
@@ -1064,6 +1083,7 @@ public class LauncherUI extends BaseUI
   public JButton playAnimatedBannersButton;
   public JLabel launchBackground;
   public JLabel launchState;
+  public JLabel launchProgressPercent;
   public SmoothProgressBar launchProgressBar = new SmoothProgressBar(); // does this need to init here? why?
   public JButton warningNotice;
   public JLabel altModeEnabledLabel;

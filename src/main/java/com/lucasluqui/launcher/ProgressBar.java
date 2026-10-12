@@ -65,10 +65,11 @@ public class ProgressBar
     launcherUI.launchBackground.setVisible(show);
     launcherUI.launchState.setVisible(show);
     launcherUI.launchProgressBar.setVisible(show);
+    launcherUI.launchProgressPercent.setVisible(show);
     modListUI.refreshProgressBar.setVisible(show);
 
     if (show) {
-      launcherUI.launchState.setIcon(new LoadingIcon());
+      launcherUI.launchState.setIcon(new LoadingIcon(16));
     }
   }
 

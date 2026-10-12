@@ -11,6 +11,7 @@ import com.lucasluqui.util.ImageUtil;
 import com.lucasluqui.util.ProcessUtil;
 import com.lucasluqui.util.ZipUtil;
 import com.lucasluqui.swing.LoadingIcon;
+import com.lucasluqui.swing.SlimProgressBarUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,8 +81,12 @@ public class Updater extends BaseUI
     updaterState.setVisible(true);
     guiFrame.add(updaterState);
 
+    // Bounds include the room the bar's glow needs around it.
     updaterProgressBar = new JProgressBar();
-    updaterProgressBar.setBounds(100, 79, 375, 25);
+    updaterProgressBar.setUI(new SlimProgressBarUI(CustomColors.LAUNCH));
+    updaterProgressBar.setOpaque(false);
+    updaterProgressBar.setBorder(null);
+    updaterProgressBar.setBounds(100 - SlimProgressBarUI.GLOW_MARGIN, 80, 375 + SlimProgressBarUI.GLOW_MARGIN * 2, 16);
     updaterProgressBar.setVisible(true);
     guiFrame.add(updaterProgressBar);
 

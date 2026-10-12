@@ -14,6 +14,7 @@ import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.BuildConfig;
 import com.lucasluqui.util.ImageUtil;
 import com.lucasluqui.swing.LoadingIcon;
+import com.lucasluqui.swing.SlimProgressBarUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,11 +71,14 @@ public class EditorsUI extends BaseUI
     editorLaunchState.setVisible(false);
     guiFrame.getContentPane().add(editorLaunchState);
 
+    // Bounds include the room the bar's glow needs around it.
     editorLaunchFakeProgressBar = new SmoothProgressBar();
-    editorLaunchFakeProgressBar.setBounds(192, 220, 385, 25);
+    editorLaunchFakeProgressBar.setUI(new SlimProgressBarUI(CustomColors.LAUNCH));
+    editorLaunchFakeProgressBar.setOpaque(false);
+    editorLaunchFakeProgressBar.setBorder(null);
+    editorLaunchFakeProgressBar.setBounds(192 - SlimProgressBarUI.GLOW_MARGIN, 224, 385 + SlimProgressBarUI.GLOW_MARGIN * 2, 16);
     editorLaunchFakeProgressBar.setVisible(false);
-    editorLaunchFakeProgressBar.setShouldPaintString(true);
-    editorLaunchFakeProgressBar.putClientProperty(FlatClientProperties.STYLE, "arc: 35;");
+    editorLaunchFakeProgressBar.setShouldPaintString(false);
     guiFrame.getContentPane().add(editorLaunchFakeProgressBar);
 
     editorListPane = new JPanel();
