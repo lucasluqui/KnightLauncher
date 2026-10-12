@@ -29,10 +29,20 @@ public class EventCard extends JComponent
     setToolTipText(title);
     addMouseListener(new MouseAdapter()
     {
+      // Not mouseClicked, which gets dropped if the mouse moves even a pixel between press and release.
       @Override
-      public void mouseClicked (MouseEvent e)
+      public void mousePressed (MouseEvent e)
       {
-        onClick.run();
+        if (SwingUtilities.isLeftMouseButton(e)) pressed = true;
+      }
+
+      @Override
+      public void mouseReleased (MouseEvent e)
+      {
+        if (!pressed) return;
+        pressed = false;
+        // Only counts as a click if the mouse is still over the card.
+        if (contains(e.getPoint())) onClick.run();
       }
 
       @Override
@@ -234,6 +244,7 @@ public class EventCard extends JComponent
   private BufferedImage image;
   private boolean active = false;
   private boolean hovered = false;
+  private boolean pressed = false;
   private float hoverProgress = 0f;
   private float hoverTarget = 0f;
   private Timer hoverTimer;
