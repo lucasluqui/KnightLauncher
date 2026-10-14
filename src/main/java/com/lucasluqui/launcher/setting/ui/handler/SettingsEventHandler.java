@@ -100,6 +100,12 @@ public class SettingsEventHandler
     _settingsManager.setValue("launcher.hideWhileGameRunning", String.valueOf(this.ui.switchHideWhileGameRunning.isSelected()));
   }
 
+  public void hideWhileEditorRunningChangeEvent (ActionEvent event)
+  {
+    Settings.hideWhileEditorRunning = this.ui.switchHideWhileEditorRunning.isSelected();
+    _settingsManager.setValue("launcher.hideWhileEditorRunning", String.valueOf(this.ui.switchHideWhileEditorRunning.isSelected()));
+  }
+
   public void forceRebuildEvent ()
   {
     _modManager.setMountRequired(true);

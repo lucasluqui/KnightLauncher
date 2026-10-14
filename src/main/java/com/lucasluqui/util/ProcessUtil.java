@@ -1,12 +1,18 @@
 package com.lucasluqui.util;
 
+import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.Kernel32;
+import com.sun.jna.platform.win32.WinNT;
 import org.apache.commons.io.IOUtils;
 import oshi.SystemInfo;
+import oshi.software.os.OSDesktopWindow;
 import oshi.software.os.OSProcess;
 import oshi.software.os.OperatingSystem;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,12 +56,15 @@ public class ProcessUtil
     }
   }
 
-  public static void runFromDirectory (String[] command, String workDir, boolean keepAlive)
+  public static Process runFromDirectory (String[] command, String workDir, boolean keepAlive)
   {
-    runFromDirectory(command, workDir, keepAlive, false);
+    return runFromDirectory(command, workDir, keepAlive, false);
   }
 
-  public static void runFromDirectory (String[] command, String workDir, boolean keepAlive, boolean silent)
+  /**
+   * @return The started process, or null if it failed to start or wasn't kept alive.
+   */
+  public static Process runFromDirectory (String[] command, String workDir, boolean keepAlive, boolean silent)
   {
     ProcessBuilder pb = new ProcessBuilder(command);
     pb.directory(new File(workDir));
@@ -79,6 +88,7 @@ public class ProcessUtil
       // No need to keep the process alive.
       if (process != null && !keepAlive) process.destroy();
     }
+    return keepAlive ? process : null;
   }
 
   public static String[] runAndCapture (String[] command)
@@ -116,6 +126,83 @@ public class ProcessUtil
       if (process != null) process.destroy();
     }
     return new String[1];
+  }
+
+  /**
+   * Reads and throws away everything a process writes to its output streams in the background.
+   * Needed when holding on to a process for a while, as it'd block once the pipe buffers fill up.
+   */
+  public static void discardOutput (Process process)
+  {
+    for (InputStream stream : new InputStream[] { process.getInputStream(), process.getErrorStream() }) {
+      Thread drainer = new Thread(() -> {
+        byte[] buffer = new byte[8192];
+        try (InputStream in = stream) {
+          while (in.read(buffer) != -1) ;
+        } catch (IOException ignored) {
+          // The process went away, nothing left to read.
+        }
+      }, "ProcessOutputDrainer");
+      drainer.setDaemon(true);
+      drainer.start();
+    }
+  }
+
+  /**
+   * Gets the ID of a process we started. Java 8 has no way of asking for it, so this digs it out of the
+   * platform's process implementation.
+   *
+   * @return The process ID, or -1 if it couldn't be found out.
+   */
+  public static long getProcessId (Process process)
+  {
+    try {
+      // Java 9 onwards. Looked up on Process itself, as the platform's implementation class isn't
+      // public and calling the method through it is refused.
+      return (long) Process.class.getMethod("pid").invoke(process);
+    } catch (NoSuchMethodException ignored) {
+      // Java 8, move on.
+    } catch (Throwable e) {
+      log.error("Failed to get process id", e);
+      return -1;
+    }
+
+    try {
+      Class<?> clazz = process.getClass();
+      if (SystemUtil.isWindows()) {
+        // Windows only keeps a handle to the process around.
+        Field handleField = clazz.getDeclaredField("handle");
+        handleField.setAccessible(true);
+        long handle = handleField.getLong(process);
+        int pid = Kernel32.INSTANCE.GetProcessId(new WinNT.HANDLE(Pointer.createConstant(handle)));
+        return pid != 0 ? pid : -1;
+      } else {
+        Field pidField = clazz.getDeclaredField("pid");
+        pidField.setAccessible(true);
+        return pidField.getInt(process);
+      }
+    } catch (Throwable e) {
+      log.error("Failed to get process id", e);
+      return -1;
+    }
+  }
+
+  /**
+   * Checks whether a process has any window showing on the desktop.
+   *
+   * @return Whether there's a visible window, or null if windows couldn't be listed.
+   */
+  public static Boolean hasVisibleWindow (long pid)
+  {
+    try {
+      for (OSDesktopWindow window : getOperatingSystem().getDesktopWindows(true)) {
+        if (window.getOwningProcessId() == pid) return true;
+      }
+      return false;
+    } catch (Throwable e) {
+      log.error("Failed to list windows", e);
+      return null;
+    }
   }
 
   /**

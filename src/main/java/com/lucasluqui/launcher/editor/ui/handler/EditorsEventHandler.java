@@ -3,6 +3,7 @@ package com.lucasluqui.launcher.editor.ui.handler;
 import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.util.BuildConfig;
+import com.lucasluqui.launcher.LauncherContext;
 import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.ModuleManager;
@@ -10,6 +11,7 @@ import com.lucasluqui.launcher.editor.data.Editor;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.editor.ui.EditorsUI;
+import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.ProcessUtil;
 import com.lucasluqui.util.SystemUtil;
@@ -18,6 +20,8 @@ import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.lucasluqui.launcher.editor.ui.Log.log;
 
 public class EditorsEventHandler
 {
@@ -66,6 +70,20 @@ public class EditorsEventHandler
       // All clear, move on.
       startEditor(editor.classNameThirdParty, editor.arg, true);
     }
+  }
+
+  /**
+   * Starts one of the listed editors by its name.
+   */
+  public void startEditor (String name)
+  {
+    for (Editor editor : editors) {
+      if (editor.name.equals(name)) {
+        startEditor(editor);
+        return;
+      }
+    }
+    log.warning("Editor not found", "name", name);
   }
 
   @SuppressWarnings("all")
@@ -153,8 +171,8 @@ public class EditorsEventHandler
       editorCmdLine.add(editorClassName);
       editorCmdLine.add(arg);
 
-      ProcessUtil.runFromDirectory(editorCmdLine.toArray(new String[editorCmdLine.size()]), rootDir, true);
-      initEditorTask();
+      Process process = ProcessUtil.runFromDirectory(editorCmdLine.toArray(new String[editorCmdLine.size()]), rootDir, true);
+      initEditorTask(process);
     }
   }
 
@@ -231,8 +249,8 @@ public class EditorsEventHandler
       editorCmdLine.add("-Djava.library.path=" + rootDir + File.separator + "./native");
       editorCmdLine.add("com.threerings.projectx.tools.CrucibleSceneEditor");
 
-      ProcessUtil.runFromDirectory(editorCmdLine.toArray(new String[0]), rootDir, true);
-      initEditorTask();
+      Process process = ProcessUtil.runFromDirectory(editorCmdLine.toArray(new String[0]), rootDir, true);
+      initEditorTask(process);
     }
   }
 
@@ -253,8 +271,11 @@ public class EditorsEventHandler
     this.ui.editorLaunchFakeProgressBar.setVisible(false);
   }
 
-  private void initEditorTask ()
+  private void initEditorTask (Process process)
   {
+    // Gets out of the way once the editor shows up, if the user wants so.
+    _ctx.getApp().getUI(LauncherUI.class).eventHandler.enterEditorSession(process);
+
     // wip for discord integration.
   }
 
@@ -272,6 +293,7 @@ public class EditorsEventHandler
   }
 
   @Inject private EditorsUI ui;
+  @Inject protected LauncherContext _ctx;
 
   protected LocaleManager _localeManager;
   protected FlamingoManager _flamingoManager;

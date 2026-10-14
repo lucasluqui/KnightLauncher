@@ -7,6 +7,7 @@ public class Settings
   public static Boolean doRebuilds = true;
   public static Boolean filePurging = true;
   public static Boolean hideWhileGameRunning = true;
+  public static Boolean hideWhileEditorRunning = true;
   public static Boolean createShortcut = true;
   public static Boolean autoUpdate = true;
   public static String selectedServerName = "official";

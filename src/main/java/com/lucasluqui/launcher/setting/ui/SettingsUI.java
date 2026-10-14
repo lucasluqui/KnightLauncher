@@ -104,7 +104,7 @@ public class SettingsUI extends BaseUI
 
     launcherSubPanel = new JPanel();
     launcherSubPanel.setBounds(Scale.rect(15, 90, 0, 0));
-    launcherSubPanel.setPreferredSize(Scale.dim(630, 490));
+    launcherSubPanel.setPreferredSize(Scale.dim(630, 555));
     launcherSubPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     launcherSubPanel.setLayout(null);
     launcherSubPanel.setBorder(null);
@@ -251,22 +251,43 @@ public class SettingsUI extends BaseUI
     switchHideWhileGameRunning.setSelected(Settings.hideWhileGameRunning);
     switchHideWhileGameRunning.addActionListener(eventHandler::hideWhileGameRunningChangeEvent);
 
+    JSeparator sepHideWhileEditorRunning = new JSeparator();
+    sepHideWhileEditorRunning.setBounds(Scale.rect(10, 360, 600, 16));
+    launcherSubPanel.add(sepHideWhileEditorRunning);
+
+    JLabel labelHideWhileEditorRunning = new JLabel(_localeManager.getValue("m.hide_while_editor_running"));
+    labelHideWhileEditorRunning.setBounds(Scale.rect(10, 375, 350, 20));
+    labelHideWhileEditorRunning.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    launcherSubPanel.add(labelHideWhileEditorRunning);
+
+    JLabel labelHideWhileEditorRunningExplained = new JLabel(_localeManager.getValue("m.hide_while_editor_running_explained"));
+    labelHideWhileEditorRunningExplained.setBounds(Scale.rect(10, 395, 600, 16));
+    labelHideWhileEditorRunningExplained.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
+    launcherSubPanel.add(labelHideWhileEditorRunningExplained);
+
+    switchHideWhileEditorRunning = new JCheckBox("");
+    switchHideWhileEditorRunning.setBounds(Scale.rect(575, 380, 30, 23));
+    switchHideWhileEditorRunning.setFocusPainted(false);
+    launcherSubPanel.add(switchHideWhileEditorRunning);
+    switchHideWhileEditorRunning.setSelected(Settings.hideWhileEditorRunning);
+    switchHideWhileEditorRunning.addActionListener(eventHandler::hideWhileEditorRunningChangeEvent);
+
     JSeparator sep4 = new JSeparator();
-    sep4.setBounds(Scale.rect(10, 360, 600, 16));
+    sep4.setBounds(Scale.rect(10, 425, 600, 16));
     launcherSubPanel.add(sep4);
 
     labelDiscordIntegration = new JLabel(_localeManager.getValue("m.use_ingame_rpc"));
-    labelDiscordIntegration.setBounds(Scale.rect(10, 375, 350, 20));
+    labelDiscordIntegration.setBounds(Scale.rect(10, 440, 350, 20));
     labelDiscordIntegration.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
     launcherSubPanel.add(labelDiscordIntegration);
 
     labelDiscordIntegrationExplained = new JLabel(_localeManager.getValue("m.use_ingame_rpc_explained"));
-    labelDiscordIntegrationExplained.setBounds(Scale.rect(10, 395, 600, 16));
+    labelDiscordIntegrationExplained.setBounds(Scale.rect(10, 460, 600, 16));
     labelDiscordIntegrationExplained.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     launcherSubPanel.add(labelDiscordIntegrationExplained);
 
     switchDiscordIntegration = new JCheckBox("");
-    switchDiscordIntegration.setBounds(Scale.rect(575, 380, 30, 23));
+    switchDiscordIntegration.setBounds(Scale.rect(575, 445, 30, 23));
     switchDiscordIntegration.setFocusPainted(false);
     switchDiscordIntegration.setEnabled(SystemUtil.isWindows() && SystemUtil.is64Bit());
     launcherSubPanel.add(switchDiscordIntegration);
@@ -274,21 +295,21 @@ public class SettingsUI extends BaseUI
     switchDiscordIntegration.addActionListener(eventHandler::ingameRPCChangeEvent);
 
     JSeparator sep5 = new JSeparator();
-    sep5.setBounds(Scale.rect(10, 425, 600, 16));
+    sep5.setBounds(Scale.rect(10, 490, 600, 16));
     launcherSubPanel.add(sep5);
 
     JLabel labelAutoUpdate = new JLabel(_localeManager.getValue("m.autoupdate"));
-    labelAutoUpdate.setBounds(Scale.rect(10, 440, 350, 20));
+    labelAutoUpdate.setBounds(Scale.rect(10, 505, 350, 20));
     labelAutoUpdate.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
     launcherSubPanel.add(labelAutoUpdate);
 
     JLabel labelAutoUpdateExplained = new JLabel(_localeManager.getValue("m.autoupdate_explained"));
-    labelAutoUpdateExplained.setBounds(Scale.rect(10, 460, 600, 16));
+    labelAutoUpdateExplained.setBounds(Scale.rect(10, 525, 600, 16));
     labelAutoUpdateExplained.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     launcherSubPanel.add(labelAutoUpdateExplained);
 
     switchAutoUpdate = new JCheckBox("");
-    switchAutoUpdate.setBounds(Scale.rect(575, 445, 30, 23));
+    switchAutoUpdate.setBounds(Scale.rect(575, 510, 30, 23));
     switchAutoUpdate.setFocusPainted(false);
     launcherSubPanel.add(switchAutoUpdate);
     switchAutoUpdate.setSelected(Settings.autoUpdate);
@@ -1113,6 +1134,7 @@ public class SettingsUI extends BaseUI
   public JComboBox<String> choiceGC;
   public JCheckBox switchCleaning;
   public JCheckBox switchHideWhileGameRunning;
+  public JCheckBox switchHideWhileEditorRunning;
   public JSlider sliderUIScale;
   public JLabel labelUIScaleValue;
   public JCheckBox switchShortcut;

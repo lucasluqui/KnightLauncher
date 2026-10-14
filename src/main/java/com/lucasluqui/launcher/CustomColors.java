@@ -12,6 +12,7 @@ public class CustomColors
   public static final Color DISCORD         = new Color(114, 137, 218);
   public static final Color KOFI            = new Color(255, 94, 91);
   public static final Color CHANGELOG       = new Color(0, 174, 255);
+  public static final Color SILVERWEAVE     = new Color(124, 92, 214);
 
   public static final Color LIGHT_RED     = new Color(247, 59, 59);
   public static final Color LIGHT_GREEN   = new Color(52, 219, 103);

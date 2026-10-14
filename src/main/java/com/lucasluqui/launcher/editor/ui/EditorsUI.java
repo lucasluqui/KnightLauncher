@@ -154,9 +154,23 @@ public class EditorsUI extends BaseUI
     }
     BufferedImage crucibleEditorImage = loadSplashImage("/rsrc/img/editor-crucible.png");
     BufferedImage modelViewerImage = loadSplashImage("/rsrc/img/editor-model.png");
+    BufferedImage silverweaveImage = loadSplashImage("/rsrc/img/editor-silverweave.png");
     BufferedImage defaultEditorImage = loadSplashImage("/rsrc/img/editor-default.png");
 
     List<Editor> editors = new ArrayList<>();
+
+    // wip stuff.
+    if (BuildConfig.isSnapshot()) {
+      editors.add(new Editor(
+          "editor_silverweave",
+          silverweaveImage,
+          "com.lucasluqui.silverweave.SilverweaveTool",
+          "",
+          "",
+          120
+        )
+      );
+    }
 
     editors.add(new Editor(
       "editor_crucible",
@@ -164,7 +178,7 @@ public class EditorsUI extends BaseUI
       "",
       null,
       "",
-      140
+      120
       )
     );
 
@@ -175,7 +189,7 @@ public class EditorsUI extends BaseUI
           "com.lucasluqui.spiralview.SceneEditorHook",
           "com.threerings.tudey.tools.SceneEditor",
           "",
-          155
+          120
         )
       );
     }
@@ -186,7 +200,7 @@ public class EditorsUI extends BaseUI
         "com.lucasluqui.spiralview.ModelViewerHook",
         "com.threerings.opengl.model.tools.ModelViewer",
         "rsrc/character/pc/model.dat",
-        150
+        120
       )
     );
 
@@ -209,19 +223,6 @@ public class EditorsUI extends BaseUI
         125
       )
     );
-
-    // wip stuff.
-    if (BuildConfig.isSnapshot()) {
-      editors.add(new Editor(
-          "editor_silverweave",
-          modelViewerImage,
-          "com.lucasluqui.silverweave.SilverweaveTool",
-          "",
-          "",
-          150
-        )
-      );
-    }
 
     eventHandler.editors = editors;
 

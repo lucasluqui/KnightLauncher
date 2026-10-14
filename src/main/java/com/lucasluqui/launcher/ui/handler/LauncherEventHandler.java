@@ -1075,9 +1075,65 @@ public class LauncherEventHandler
 
   private void exitGameSession ()
   {
-    restoreLauncher();
+    // An editor might still be running, it'll bring us back once it closes.
+    if (_editorSessions == 0) restoreLauncher();
     _discordPresenceClient.resume();
     _discordPresenceClient.setDetails(_localeManager.getValue("presence.ready"));
+  }
+
+  /**
+   * Hides the launcher to the tray as soon as a freshly launched editor shows up, if the user wants so.
+   * Everything goes back to normal once every editor and game client has closed.
+   *
+   * @param process The editor's process.
+   */
+  public void enterEditorSession (Process process)
+  {
+    if (!Settings.hideWhileEditorRunning || process == null || !process.isAlive()) return;
+
+    _editorSessions++;
+
+    // We'll be holding on to the process until it closes, so keep its output from piling up.
+    ProcessUtil.discardOutput(process);
+
+    Thread watcher = new Thread(() -> {
+      try {
+        waitForEditorWindow(process);
+        if (process.isAlive()) SwingUtilities.invokeLater(this::hideLauncher);
+        process.waitFor();
+      } catch (InterruptedException e) {
+        log.error(e);
+      }
+      SwingUtilities.invokeLater(this::exitEditorSession);
+    }, "EditorWatcher");
+    watcher.setDaemon(true);
+    watcher.start();
+  }
+
+  /**
+   * Waits until the editor has a window up, it closes, or we give up on it. Returns right away if there's
+   * no telling when its window shows up.
+   */
+  private void waitForEditorWindow (Process process) throws InterruptedException
+  {
+    long pid = ProcessUtil.getProcessId(process);
+    if (pid == -1) return;
+
+    long deadline = System.currentTimeMillis() + EDITOR_WINDOW_TIMEOUT;
+    while (process.isAlive() && System.currentTimeMillis() < deadline) {
+      Boolean hasWindow = ProcessUtil.hasVisibleWindow(pid);
+      if (hasWindow == null || hasWindow) return;
+      Thread.sleep(EDITOR_WINDOW_POLL_INTERVAL);
+    }
+  }
+
+  private void exitEditorSession ()
+  {
+    log.info("Editor closed");
+    _editorSessions--;
+
+    // A game client might still be running, it'll bring us back once it closes.
+    if (_editorSessions == 0 && _gameWatcher == null) restoreLauncher();
   }
 
   private void hideLauncher ()
@@ -1200,6 +1256,13 @@ public class LauncherEventHandler
   private static final int PLAYER_COUNT_REFRESH_INTERVAL = 15 * 60 * 1000;
 
   private volatile boolean _launcherHidden = false;
+
+  // Editors we're hidden away for, only touched from the event dispatch thread.
+  private int _editorSessions = 0;
+
+  // How often to look for a launched editor's window, and how long to wait for it before hiding anyway.
+  private static final int EDITOR_WINDOW_POLL_INTERVAL = 250;
+  private static final int EDITOR_WINDOW_TIMEOUT = 30000;
   private boolean _deiconifyListenerAdded = false;
 
   // How often to look for the game client after launching, and how long to wait for it before giving up.

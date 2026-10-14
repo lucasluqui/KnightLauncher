@@ -75,6 +75,7 @@ public class SettingsManager
     Settings.doRebuilds = Boolean.parseBoolean(getValue("launcher.rebuilds"));
     Settings.filePurging = Boolean.parseBoolean(getValue("launcher.filePurging"));
     Settings.hideWhileGameRunning = Boolean.parseBoolean(getValue("launcher.hideWhileGameRunning"));
+    Settings.hideWhileEditorRunning = Boolean.parseBoolean(getValue("launcher.hideWhileEditorRunning", "true"));
     Settings.createShortcut = Boolean.parseBoolean(getValue("launcher.createShortcut"));
     Settings.ingameRPCSetup = Boolean.parseBoolean(getValue("launcher.ingameRPCSetup"));
     Settings.useIngameRPC = Boolean.parseBoolean(getValue("launcher.useIngameRPC"));

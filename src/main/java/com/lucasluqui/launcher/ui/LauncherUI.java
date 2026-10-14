@@ -274,10 +274,13 @@ public class LauncherUI extends BaseUI
     sidePane.add(playerCountTooltipButton);
     playerCountTooltipButton.setVisible(false);
 
+    // silverweave button needs the group to sit higher to stay centered between its neighbors.
+    int sideButtonsY = 260;
+
     Icon settingsIcon = IconFontSwing.buildIcon(FontAwesome.COGS, Scale.px(16), ColorUtil.getForegroundColor());
     settingsButton = new JButton(_localeManager.getValue("b.settings"));
     settingsButton.setIcon(settingsIcon);
-    settingsButton.setBounds(Scale.rect(28, 275, 125, 35));
+    settingsButton.setBounds(Scale.rect(28, sideButtonsY, 125, 35));
     settingsButton.setHorizontalAlignment(SwingConstants.LEFT);
     settingsButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     settingsButton.setFocusPainted(false);
@@ -294,7 +297,7 @@ public class LauncherUI extends BaseUI
     Icon modsIcon = IconFontSwing.buildIcon(FontAwesome.PUZZLE_PIECE, Scale.px(16), ColorUtil.getForegroundColor());
     modButton = new JButton(_localeManager.getValue("b.mods"));
     modButton.setIcon(modsIcon);
-    modButton.setBounds(Scale.rect(28, 315, 125, 35));
+    modButton.setBounds(Scale.rect(28, sideButtonsY + 40, 125, 35));
     modButton.setHorizontalAlignment(SwingConstants.LEFT);
     modButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     modButton.setFocusPainted(false);
@@ -312,7 +315,7 @@ public class LauncherUI extends BaseUI
     Icon editorsIcon = IconFontSwing.buildIcon(FontAwesome.PENCIL, Scale.px(16), ColorUtil.getForegroundColor());
     editorsButton = new JButton(_localeManager.getValue("b.editors"));
     editorsButton.setIcon(editorsIcon);
-    editorsButton.setBounds(Scale.rect(28, 355, 125, 35));
+    editorsButton.setBounds(Scale.rect(28, sideButtonsY + 80, 125, 35));
     editorsButton.setHorizontalAlignment(SwingConstants.LEFT);
     editorsButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     editorsButton.setFocusPainted(false);
@@ -326,6 +329,26 @@ public class LauncherUI extends BaseUI
       _ctx.getApp().showUI(EditorsUI.class);
     });
     sidePane.add(editorsButton);
+
+    Icon silverweaveIcon = IconFontSwing.buildIcon(FontAwesome.MAGIC, Scale.px(16), Color.WHITE);
+    silverweaveButton = new JButton(_localeManager.getValue("b.silverweave"));
+    silverweaveButton.setIcon(silverweaveIcon);
+    silverweaveButton.setBounds(Scale.rect(28, sideButtonsY + 120, 125, 35));
+    silverweaveButton.setHorizontalAlignment(SwingConstants.LEFT);
+    silverweaveButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
+    silverweaveButton.setFocusPainted(false);
+    silverweaveButton.setFocusable(false);
+    silverweaveButton.setBorderPainted(false);
+    silverweaveButton.setEnabled(true);
+    silverweaveButton.setBackground(CustomColors.SILVERWEAVE);
+    silverweaveButton.setForeground(Color.WHITE);
+    silverweaveButton.setToolTipText(_localeManager.getValue("b.silverweave"));
+    silverweaveButton.addActionListener(action -> {
+      // Straight to the editors' loading screen, so there's something to look at while it boots.
+      _ctx.getApp().showUI(EditorsUI.class);
+      _ctx.getApp().getUI(EditorsUI.class).eventHandler.startEditor("editor_silverweave");
+    });
+    sidePane.add(silverweaveButton);
 
     JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherUI.class.getResourceAsStream("/rsrc/img/icon-discord.png")));
     discordButton.setBounds(Scale.rect(65, 440, 36, 36));
@@ -1020,6 +1043,7 @@ public class LauncherUI extends BaseUI
     this.settingsButton.setEnabled(!block);
     this.modButton.setEnabled(!block);
     this.editorsButton.setEnabled(!block);
+    if (this.silverweaveButton != null) this.silverweaveButton.setEnabled(!block);
   }
 
   public void updatePlayerCountTooltip (PlayerCount playerCount)
@@ -1067,6 +1091,7 @@ public class LauncherUI extends BaseUI
   public JButton settingsButton;
   public JButton modButton;
   public JButton editorsButton;
+  public JButton silverweaveButton;
   public JButton playerCountTooltipButton;
   public JLabel playerCountLabel;
   public JLabel selectedServerLabel;
