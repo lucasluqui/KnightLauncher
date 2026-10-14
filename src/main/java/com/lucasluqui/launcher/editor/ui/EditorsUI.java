@@ -12,7 +12,6 @@ import com.lucasluqui.launcher.editor.data.Editor;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.swing.SmoothScrollPane;
-import com.lucasluqui.util.BuildConfig;
 import com.lucasluqui.util.ImageUtil;
 import com.lucasluqui.swing.LoadingIcon;
 import com.lucasluqui.swing.SlimProgressBarUI;
@@ -159,18 +158,15 @@ public class EditorsUI extends BaseUI
 
     List<Editor> editors = new ArrayList<>();
 
-    // wip stuff.
-    if (BuildConfig.isSnapshot()) {
-      editors.add(new Editor(
-          "editor_silverweave",
-          silverweaveImage,
-          "com.lucasluqui.silverweave.SilverweaveTool",
-          "",
-          "",
-          120
-        )
-      );
-    }
+    editors.add(new Editor(
+      "editor_silverweave",
+      silverweaveImage,
+      "com.lucasluqui.silverweave.SilverweaveTool",
+      "",
+      "",
+      120
+      )
+    );
 
     editors.add(new Editor(
       "editor_crucible",
