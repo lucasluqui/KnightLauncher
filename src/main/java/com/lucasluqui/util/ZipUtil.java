@@ -5,12 +5,15 @@ import com.samskivert.util.Logger;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
+import net.lingala.zip4j.model.ZipParameters;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -309,6 +312,47 @@ public class ZipUtil
     String content = FileUtil.convertInputStreamToString(inputStream);
     zipFile.close();
     return content;
+  }
+
+  /**
+   * Updates an existing properties entry, retaining other properties and ZIP entries.
+   * Only replaces the original after the temporary archive is closed successfully.
+   * If atomic replacement is unsupported, fails without modifying the original.
+   */
+  public static void updatePropertiesInsideZip (Path zip, String pathInZip, Properties updates)
+    throws IOException
+  {
+    Path original = zip.toAbsolutePath();
+    Path temporary = Files.createTempFile(original.getParent(), original.getFileName() + ".", ".tmp");
+    try {
+      Files.copy(original, temporary, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+      try (ZipFile zipFile = new ZipFile(temporary.toFile())) {
+        FileHeader entry = zipFile.getFileHeader(pathInZip);
+        if (entry == null || entry.isDirectory()) {
+          throw new IOException("Missing properties entry: " + pathInZip);
+        }
+
+        Properties properties = new Properties();
+        try (InputStream input = zipFile.getInputStream(entry)) {
+          properties.load(input);
+        }
+        properties.putAll(updates);
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        properties.store(output, null);
+        ZipParameters parameters = new ZipParameters();
+        parameters.setFileNameInZip(pathInZip);
+        parameters.setOverrideExistingFilesInZip(true);
+        try (InputStream input = new ByteArrayInputStream(output.toByteArray())) {
+          zipFile.addStream(input, parameters);
+        }
+      }
+
+      // Keep the temporary file on the same filesystem and never write to the original in place.
+      Files.move(temporary, original, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+    } finally {
+      Files.deleteIfExists(temporary);
+    }
   }
 
   public static InputStream getISFromFileInsideZip (String zip, String pathInZip)

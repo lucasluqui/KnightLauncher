@@ -14,7 +14,6 @@ import com.lucasluqui.util.*;
 
 import javax.swing.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -357,56 +356,56 @@ public class SettingsManager
     return String.join(System.lineSeparator(), args);
   }
 
-  // TODO: Fix this. jar tool isn't bundled anymore.
-  private void applyConnectionSettings ()
+  public void applyConnectionSettings ()
   {
-    String deployPropStr = null;
-    try {
-      deployPropStr = ZipUtil.readFileInsideZip(
-        LauncherGlobals.USER_DIR + File.separator + "code" + File.separator + "config.jar",
-        "deployment.properties");
+    Server server = _flamingoManager.getSelectedServer();
 
-    } catch (IOException e) {
-      log.error(e);
-    }
-
-    if (deployPropStr == null) {
-      log.error("Failed to read deployment.properties, cannot apply connection settings");
+    // Every server shares the stock client, so an empty configuration must never be
+    // written over it: that would wipe the connection settings of the other servers.
+    if (isBlank(Settings.gameEndpoint) && isBlank(Settings.gamePublicKey) && isBlank(Settings.gameGetdownURL)) {
+      log.info("No connection settings to apply", "server", server == null ? "null" : server.name);
       return;
     }
 
     Properties properties = new Properties();
+    if (!isBlank(Settings.gameEndpoint)) {
+      properties.setProperty("server_host", Settings.gameEndpoint);
+    }
+    if (Settings.gamePort > 0) {
+      properties.setProperty("server_ports", String.valueOf(Settings.gamePort));
+      properties.setProperty("datagram_ports", String.valueOf(Settings.gamePort));
+    }
+    if (!isBlank(Settings.gamePublicKey)) {
+      properties.setProperty("key.public", Settings.gamePublicKey);
+    }
+    if (!isBlank(Settings.gameGetdownURL)) {
+      properties.setProperty("client_root_url", Settings.gameGetdownURL);
+    }
+
     try {
-      InputStream stream = new ByteArrayInputStream(deployPropStr.getBytes(StandardCharsets.UTF_8));
-      properties.load(stream);
-    } catch (IOException e) {
+      ZipUtil.updatePropertiesInsideZip(
+        Paths.get(LauncherGlobals.USER_DIR, "code", "config.jar"),
+        "deployment.properties", properties);
+    } catch (IOException | IllegalArgumentException e) {
+      log.error("Failed to apply connection settings to code/config.jar",
+        "server", server == null ? "null" : server.name);
       log.error(e);
     }
+  }
 
-    properties.setProperty("server_host", Settings.gameEndpoint);
-    properties.setProperty("server_ports", String.valueOf(Settings.gamePort));
-    properties.setProperty("datagram_ports", String.valueOf(Settings.gamePort));
-    properties.setProperty("key.public", Settings.gamePublicKey);
-    properties.setProperty("client_root_url", Settings.gameGetdownURL);
+  private static boolean isBlank (String value)
+  {
+    return value == null || value.trim().isEmpty();
+  }
 
-    try {
-      properties.store(
-        Files.newOutputStream(
-          new File(LauncherGlobals.USER_DIR + "/deployment.properties").toPath()), null);
-    } catch (IOException e) {
-      log.error(e);
-    }
-
-    String[] outputCapture = null;
-    if (SystemUtil.isWindows()) {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "uf", "code/config.jar", "deployment.properties"});
-    } else {
-      outputCapture = ProcessUtil.runAndCapture(new String[]{"/bin/bash", "-c", JavaUtil.getGameJVMDirPath() + "/bin/jar", "uf", "code/config.jar", "deployment.properties"});
-    }
-    log.debug("Connection settings capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
-
-    FileUtil.deleteFile(LauncherGlobals.USER_DIR + "/deployment.properties");
-    properties.clear();
+  /**
+   * Whether the given server has connection settings worth applying. An empty endpoint
+   * means the server was left on "do not touch the client", which is the default for
+   * custom servers.
+   */
+  public boolean hasConnectionSettings (Server server)
+  {
+    return !isBlank(getValue("game.endpoint", "", server));
   }
 
   public int getMaxAllowedMemoryAlloc ()

@@ -241,25 +241,55 @@ public class SettingsEventHandler
 
   public void saveConnectionSettings ()
   {
-    Settings.gameEndpoint = this.ui.serverAddressTextField.getText();
-    Settings.gamePort = Integer.parseInt(this.ui.portTextField.getText());
-    Settings.gamePublicKey = this.ui.publicKeyTextField.getText();
-    Settings.gameGetdownFullURL = this.ui.getdownURLTextField.getText();
-    Settings.gameGetdownURL = "http://" + this.ui.getdownURLTextField.getText().split("://")[1].split("/")[0];
+    Server selectedServer = _flamingoManager.getSelectedServer();
 
-    _settingsManager.setValue("game.endpoint", Settings.gameEndpoint);
-    _settingsManager.setValue("game.port", String.valueOf(Settings.gamePort));
-    _settingsManager.setValue("game.publicKey", Settings.gamePublicKey);
-    _settingsManager.setValue("game.getdownURL", Settings.gameGetdownURL);
-    _settingsManager.setValue("game.getdownFullURL", Settings.gameGetdownFullURL);
+    Settings.gameEndpoint = this.ui.serverAddressTextField.getText().trim();
+    Settings.gamePort = parsePort(this.ui.portTextField.getText());
+    Settings.gamePublicKey = this.ui.publicKeyTextField.getText().trim();
+    Settings.gameGetdownFullURL = this.ui.getdownURLTextField.getText().trim();
+    Settings.gameGetdownURL = toClientRootUrl(Settings.gameGetdownFullURL);
+
+    _settingsManager.setValue("game.endpoint", Settings.gameEndpoint, selectedServer);
+    _settingsManager.setValue("game.port", String.valueOf(Settings.gamePort), selectedServer);
+    _settingsManager.setValue("game.publicKey", Settings.gamePublicKey, selectedServer);
+    _settingsManager.setValue("game.getdownURL", Settings.gameGetdownURL, selectedServer);
+    _settingsManager.setValue("game.getdownFullURL", Settings.gameGetdownFullURL, selectedServer);
+  }
+
+  private int parsePort (String port)
+  {
+    try {
+      return Integer.parseInt(port.trim());
+    } catch (NumberFormatException e) {
+      return 0;
+    }
+  }
+
+  // The game expects the root URL only ("http://host"), while the settings field
+  // holds the full getdown URL the user pastes in.
+  private String toClientRootUrl (String getdownFullURL)
+  {
+    if (getdownFullURL.isEmpty()) return "";
+    String withoutScheme = getdownFullURL.contains("://") ? getdownFullURL.split("://")[1] : getdownFullURL;
+    return "http://" + withoutScheme.split("/")[0];
   }
 
   public void resetConnectionSettingsButtonEvent (ActionEvent action)
   {
-    this.ui.serverAddressTextField.setText(DEFAULT_SERVER_ADDRESS);
-    this.ui.portTextField.setText(DEFAULT_PORT);
-    this.ui.publicKeyTextField.setText(DEFAULT_PUBLIC_KEY);
-    this.ui.getdownURLTextField.setText(DEFAULT_GETDOWN_URL);
+    Server selectedServer = _flamingoManager.getSelectedServer();
+
+    if (selectedServer != null && !selectedServer.isOfficial()) {
+      // Custom servers share the stock client, an empty value means "leave it alone".
+      this.ui.serverAddressTextField.setText("");
+      this.ui.portTextField.setText("");
+      this.ui.publicKeyTextField.setText("");
+      this.ui.getdownURLTextField.setText("");
+    } else {
+      this.ui.serverAddressTextField.setText(DEFAULT_SERVER_ADDRESS);
+      this.ui.portTextField.setText(DEFAULT_PORT);
+      this.ui.publicKeyTextField.setText(DEFAULT_PUBLIC_KEY);
+      this.ui.getdownURLTextField.setText(DEFAULT_GETDOWN_URL);
+    }
 
     saveConnectionSettings();
   }
@@ -522,11 +552,11 @@ public class SettingsEventHandler
         this.ui.memorySlider.setBounds(Scale.rect(20, 105, 350, 40));
         this.ui.memoryValue.setBounds(Scale.rect(25, 139, 350, 25));
         this.ui.labelDisclaimer.setVisible(true);
-        this.ui.serverAddressTextField.setEnabled(false);
-        this.ui.portTextField.setEnabled(false);
-        this.ui.publicKeyTextField.setEnabled(false);
-        this.ui.getdownURLTextField.setEnabled(false);
-        this.ui.resetConnectionSettingsButton.setEnabled(false);
+        this.ui.serverAddressTextField.setEnabled(true);
+        this.ui.portTextField.setEnabled(true);
+        this.ui.publicKeyTextField.setEnabled(true);
+        this.ui.getdownURLTextField.setEnabled(true);
+        this.ui.resetConnectionSettingsButton.setEnabled(true);
       }
 
       updateGameJavaVMData();
@@ -592,6 +622,22 @@ public class SettingsEventHandler
     this.ui.switchExplicitGC.setSelected(Boolean.parseBoolean(_settingsManager.getValue("game.disableExplicitGC", server)));
     this.ui.argumentsPane.setText(_settingsManager.getValue("game.additionalArgs.v2", server));
 
+    boolean official = server.isOfficial();
+    this.ui.serverAddressTextField.setText(
+      _settingsManager.getValue("game.endpoint", official ? DEFAULT_SERVER_ADDRESS : "", server));
+    this.ui.portTextField.setText(
+      _settingsManager.getValue("game.port", official ? DEFAULT_PORT : "", server));
+    this.ui.publicKeyTextField.setText(
+      _settingsManager.getValue("game.publicKey", official ? DEFAULT_PUBLIC_KEY : "", server));
+    this.ui.getdownURLTextField.setText(
+      _settingsManager.getValue("game.getdownFullURL", official ? DEFAULT_GETDOWN_URL : "", server));
+
+    Settings.gameEndpoint = this.ui.serverAddressTextField.getText().trim();
+    Settings.gamePort = parsePort(this.ui.portTextField.getText());
+    Settings.gamePublicKey = this.ui.publicKeyTextField.getText().trim();
+    Settings.gameGetdownFullURL = this.ui.getdownURLTextField.getText().trim();
+    Settings.gameGetdownURL = toClientRootUrl(Settings.gameGetdownFullURL);
+
     customGCChangeEvent(null);
     choiceGCChangeEvent(null);
     disableExplicitGCChangeEvent(null);
@@ -615,6 +661,14 @@ public class SettingsEventHandler
     _settingsManager.createKeyIfNotExists("game.garbageCollector_" + serverName, "G1");
     _settingsManager.createKeyIfNotExists("game.disableExplicitGC_" + serverName, "false");
     _settingsManager.createKeyIfNotExists("game.additionalArgs.v2_" + serverName, "");
+
+    // Connection settings are per server so every server keeps its own endpoint.
+    // They are left empty by default: an empty value means "do not touch the client".
+    _settingsManager.createKeyIfNotExists("game.endpoint_" + serverName, "");
+    _settingsManager.createKeyIfNotExists("game.port_" + serverName, "");
+    _settingsManager.createKeyIfNotExists("game.publicKey_" + serverName, "");
+    _settingsManager.createKeyIfNotExists("game.getdownURL_" + serverName, "");
+    _settingsManager.createKeyIfNotExists("game.getdownFullURL_" + serverName, "");
   }
 
   @Inject private SettingsUI ui;

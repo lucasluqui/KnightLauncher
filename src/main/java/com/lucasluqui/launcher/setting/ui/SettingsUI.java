@@ -866,7 +866,7 @@ public class SettingsUI extends BaseUI
     labelConnectionSettings.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
     advancedPanel.add(labelConnectionSettings);
 
-    labelDisclaimer = new JLabel(_localeManager.getValue("m.connection_settings_thirdparty_disclaimer"));
+    labelDisclaimer = new JLabel(_localeManager.getValue("m.connection_settings_thirdparty_note"));
     labelDisclaimer.setBounds(Scale.rect(195, 255, 300, 18));
     labelDisclaimer.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     labelDisclaimer.setHorizontalAlignment(SwingConstants.LEFT);

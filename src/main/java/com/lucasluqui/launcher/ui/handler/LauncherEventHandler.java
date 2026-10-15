@@ -143,6 +143,22 @@ public class LauncherEventHandler
 
         if (Settings.useIngameRPC) ProcessUtil.run(RPC_COMMAND_LINE, true);
         // end: official servers launch procedure
+      } else if (_settingsManager.hasConnectionSettings(selectedServer)) {
+        // start: stock-client private server launch procedure
+        // This server reuses the installed client, so we only bake its connection
+        // settings in and launch that client directly (no getdown, no downloads).
+        _ctx._progressBar.startTask();
+        _ctx._progressBar.setBarMax(1);
+        _ctx._progressBar.setState(_localeManager.getValue("m.launch_thirdparty_data", selectedServer.name));
+        _ctx._progressBar.setBarValue(0);
+
+        _ctx.getApp().getUI(SettingsUI.class).eventHandler.saveConnectionSettings();
+        _settingsManager.applyConnectionSettings();
+
+        _ctx._progressBar.setBarValue(1);
+        ProcessUtil.run(getStockClientStartCommand(altMode), true);
+        _ctx._progressBar.finishTask();
+        // end: stock-client private server launch procedure
       } else {
         // start: third party server launch procedure
         _ctx._progressBar.startTask();
@@ -801,6 +817,18 @@ public class LauncherEventHandler
 
   private String[] getCodeModsStartCommand (boolean altMode)
   {
+    return getClientStartCommand(altMode, "com.lucasluqui.bootstrap.Bootstrap");
+  }
+
+  // Launches the installed stock client directly, without getdown and without a
+  // server-specific copy of the client.
+  private String[] getStockClientStartCommand (boolean altMode)
+  {
+    return getClientStartCommand(altMode, "com.threerings.projectx.client.ProjectXApp");
+  }
+
+  private String[] getClientStartCommand (boolean altMode, String mainClass)
+  {
     List<String> argsList = new ArrayList<>();
 
     if (SystemUtil.isWindows()) {
@@ -837,7 +865,7 @@ public class LauncherEventHandler
       argsList.add("-Dsun.java2d.d3d=false");
       argsList.add("-Dappdir=" + LauncherGlobals.USER_DIR + File.separator + ".");
       argsList.add("-Dresource_dir=" + LauncherGlobals.USER_DIR + File.separator + "./rsrc");
-      argsList.add("com.lucasluqui.bootstrap.Bootstrap");
+      argsList.add(mainClass);
     } else {
       argsList.add(LauncherGlobals.USER_DIR + File.separator + "java" + File.separator + "bin" + File.separator + "java");
       argsList.add("-classpath");
@@ -871,7 +899,7 @@ public class LauncherEventHandler
       argsList.add("-Dsun.java2d.d3d=false");
       argsList.add("-Dappdir=" + LauncherGlobals.USER_DIR + File.separator);
       argsList.add("-Dresource_dir=" + LauncherGlobals.USER_DIR + File.separator + "rsrc");
-      argsList.add("com.lucasluqui.bootstrap.Bootstrap");
+      argsList.add(mainClass);
     }
 
     return argsList.toArray(new String[argsList.size()]);
