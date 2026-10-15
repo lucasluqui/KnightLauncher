@@ -267,7 +267,7 @@ public class SettingsEventHandler
 
   // The game expects the root URL only ("http://host"), while the settings field
   // holds the full getdown URL the user pastes in.
-  private String toClientRootUrl (String getdownFullURL)
+  public String toClientRootUrl (String getdownFullURL)
   {
     if (getdownFullURL.isEmpty()) return "";
     String withoutScheme = getdownFullURL.contains("://") ? getdownFullURL.split("://")[1] : getdownFullURL;

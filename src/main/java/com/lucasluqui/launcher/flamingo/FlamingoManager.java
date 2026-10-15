@@ -12,6 +12,7 @@ import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.util.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
@@ -273,42 +274,154 @@ public class FlamingoManager
         if (server.beta == 1) server.name += " (Beta)";
 
         serverList.add(server);
-
-        // make sure we have a proper folder structure for this server.
-        String serverName = server.getSanitizedName();
-        FileUtil.createDir(getThirdPartyBaseDir() + serverName);
-        FileUtil.createDir(getThirdPartyBaseDir() + serverName + "/mods");
-
-        // make sure there's a base zip file we can use to clean files with.
-        String rootDir = server.getRootDirectory();
-        if (FileUtil.fileExists(rootDir + "/rsrc")
-          && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
-          try {
-            ZipUtil.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
-          } catch (Exception e) {
-            log.error(e);
-          }
-        }
-
-        // check server specific settings keys.
-        _ctx.getApp().getUI(SettingsUI.class).eventHandler.checkServerSettingsKeys(serverName);
-        _ctx.getApp().getUI(ModListUI.class).eventHandler.checkServerSettingsKeys(serverName);
-      }
-      setServerList(serverList);
-
-      try {
-        // Shouldn't sanitized name from Official just return 'official' instead of null? or empty??
-        Server previousSelectedServer = findServerBySanitizedName(Settings.selectedServerName);
-        setSelectedServer(previousSelectedServer == null ? official : previousSelectedServer);
-      } catch (Exception e) {
-        log.error(e);
-        setSelectedServer(official);
+        registerServer(server);
       }
     } else {
+      // Offline: only Official and manually added servers are available.
+      log.info("Could not reach the server list, keeping manually added servers only");
+    }
+
+    // Manually added servers are always available, whether we're online or not.
+    for (Server custom : loadCustomServers()) {
+      if (findServerByName(custom.name) != null) {
+        log.info("Tried to add duplicate server", "server", custom.name);
+        continue;
+      }
+
+      serverList.add(custom);
+      registerServer(custom);
+    }
+
+    setServerList(serverList);
+
+    try {
+      // Shouldn't sanitized name from Official just return 'official' instead of null? or empty??
+      Server previousSelectedServer = findServerBySanitizedName(Settings.selectedServerName);
+      setSelectedServer(previousSelectedServer == null ? official : previousSelectedServer);
+    } catch (Exception e) {
+      log.error(e);
       setSelectedServer(official);
     }
 
     _ctx.getApp().selectedServerChanged();
+  }
+
+  /**
+   * Makes sure a server has its folder structure, a clean base zip and its server-specific settings keys.
+   */
+  private void registerServer (Server server)
+  {
+    // make sure we have a proper folder structure for this server.
+    String serverName = server.getSanitizedName();
+    FileUtil.createDir(getThirdPartyBaseDir() + serverName);
+    FileUtil.createDir(getThirdPartyBaseDir() + serverName + "/mods");
+
+    // make sure there's a base zip file we can use to clean files with.
+    String rootDir = server.getRootDirectory();
+    if (FileUtil.fileExists(rootDir + "/rsrc")
+      && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
+      try {
+        ZipUtil.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
+      } catch (Exception e) {
+        log.error(e);
+      }
+    }
+
+    // check server specific settings keys.
+    _ctx.getApp().getUI(SettingsUI.class).eventHandler.checkServerSettingsKeys(serverName);
+    _ctx.getApp().getUI(ModListUI.class).eventHandler.checkServerSettingsKeys(serverName);
+  }
+
+  /**
+   * Loads the servers the user added by hand. These are stored as JSON in the launcher
+   * properties file, which survives launcher updates (the updater only replaces the jar).
+   */
+  public List<Server> loadCustomServers ()
+  {
+    List<Server> servers = new ArrayList<>();
+    String raw = _settingsManager.getValue(CUSTOM_SERVERS_KEY, "");
+    if (raw.trim().isEmpty()) return servers;
+
+    try {
+      JSONArray array = new JSONArray(raw);
+      for (int i = 0; i < array.length(); i++) {
+        JSONObject json = array.getJSONObject(i);
+        String name = json.optString("name", "").trim();
+        if (name.isEmpty() || name.equalsIgnoreCase("Official")) continue;
+
+        Server server = new Server(name);
+        server.enabled = json.optInt("enabled", 1);
+        server.description = "";
+        server.managedBy = "";
+        server.version = "";
+        server.deployUrl = "null";
+        server.playerCountUrl = "null";
+        server.siteUrl = "null";
+        server.communityUrl = "null";
+        server.sourceCodeUrl = "null";
+        server.serverIcon = "null";
+        servers.add(server);
+      }
+    } catch (Exception e) {
+      log.error("Failed to parse manually added servers", e);
+    }
+
+    return servers;
+  }
+
+  /**
+   * Persists a manually added server and makes it immediately available in the switcher.
+   */
+  public void addCustomServer (Server server)
+  {
+    List<Server> servers = loadCustomServers();
+    for (Server existing : servers) {
+      if (existing.name.equalsIgnoreCase(server.name)) return;
+    }
+    servers.add(server);
+    persistCustomServers(servers);
+
+    getServerList().add(server);
+    registerServer(server);
+    setSelectedServer(server);
+  }
+
+  /**
+   * Removes a manually added server and falls back to the official server if it was selected.
+   */
+  public void removeCustomServer (Server server)
+  {
+    List<Server> servers = loadCustomServers();
+    servers.removeIf(existing -> existing.name.equalsIgnoreCase(server.name));
+    persistCustomServers(servers);
+
+    getServerList().remove(server);
+    if (getSelectedServer() == server) {
+      Server official = findServerByName("Official");
+      if (official != null) setSelectedServer(official);
+    }
+    _ctx.getApp().selectedServerChanged();
+  }
+
+  public boolean isCustomServer (Server server)
+  {
+    if (server == null) return false;
+    for (Server custom : loadCustomServers()) {
+      if (custom.name.equalsIgnoreCase(server.name)) return true;
+    }
+    return false;
+  }
+
+  private void persistCustomServers (List<Server> servers)
+  {
+    JSONArray array = new JSONArray();
+    for (Server server : servers) {
+      JSONObject json = new JSONObject();
+      json.put("name", server.name);
+      json.put("enabled", server.enabled);
+      array.put(json);
+    }
+    _settingsManager.setValue(CUSTOM_SERVERS_KEY, array.toString());
   }
 
   public void saveSelectedServer ()
@@ -390,4 +503,7 @@ public class FlamingoManager
   private final String ADDRESS = DeployConfig.getFlamingoAddress();
   private final int PORT = DeployConfig.getFlamingoPort();
   private final String THIRD_PARTY_BASE_DIR = LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator;
+
+  // Manually added servers, kept in the launcher properties so they survive updates.
+  private static final String CUSTOM_SERVERS_KEY = "launcher.customServers";
 }

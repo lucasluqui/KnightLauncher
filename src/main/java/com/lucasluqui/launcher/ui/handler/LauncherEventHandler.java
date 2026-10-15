@@ -302,6 +302,80 @@ public class LauncherEventHandler
     _ctx.getApp().getUI(SettingsUI.class).eventHandler.openRootFolderEvent(null);
   }
 
+  /**
+   * Opens a small form so the user can add a private server by hand. The connection
+   * details are stored per server, so the shared stock client can be pointed at it
+   * without downloading a separate client.
+   */
+  private void showAddServerDialog ()
+  {
+    JTextField nameField = new JTextField();
+    JTextField addressField = new JTextField();
+    JTextField portField = new JTextField("47624");
+    JTextField publicKeyField = new JTextField();
+    JTextField getdownField = new JTextField();
+
+    JPanel form = new JPanel(new GridLayout(0, 1, 4, 4));
+    form.add(new JLabel(_localeManager.getValue("m.add_server_name")));
+    form.add(nameField);
+    form.add(new JLabel(_localeManager.getValue("m.add_server_address")));
+    form.add(addressField);
+    form.add(new JLabel(_localeManager.getValue("m.add_server_port")));
+    form.add(portField);
+    form.add(new JLabel(_localeManager.getValue("m.add_server_public_key")));
+    form.add(publicKeyField);
+    form.add(new JLabel(_localeManager.getValue("m.add_server_getdown")));
+    form.add(getdownField);
+
+    int result = JOptionPane.showConfirmDialog(
+      null,
+      form,
+      _localeManager.getValue("m.add_server"),
+      JOptionPane.OK_CANCEL_OPTION,
+      JOptionPane.PLAIN_MESSAGE
+    );
+
+    if (result != JOptionPane.OK_OPTION) return;
+
+    String name = nameField.getText().trim();
+    String address = addressField.getText().trim();
+
+    if (name.isEmpty() || address.isEmpty()) {
+      Dialog.push(_localeManager.getValue("m.add_server_missing_fields"),
+        _localeManager.getValue("m.add_server"), JOptionPane.WARNING_MESSAGE);
+      return;
+    }
+
+    if (name.equalsIgnoreCase("Official") || _flamingoManager.findServerByName(name) != null) {
+      Dialog.push(_localeManager.getValue("m.add_server_duplicate"),
+        _localeManager.getValue("m.add_server"), JOptionPane.WARNING_MESSAGE);
+      return;
+    }
+
+    Server server = new Server(name);
+    server.enabled = 1;
+    server.description = "";
+    server.managedBy = "";
+    server.version = "";
+    server.deployUrl = "null";
+    server.playerCountUrl = "null";
+    server.siteUrl = "null";
+    server.communityUrl = "null";
+    server.sourceCodeUrl = "null";
+    server.serverIcon = "null";
+
+    // Connection settings live per server, reusing the same keys the Advanced tab edits.
+    _settingsManager.setValue("game.endpoint", address, server);
+    _settingsManager.setValue("game.port", portField.getText().trim(), server);
+    _settingsManager.setValue("game.publicKey", publicKeyField.getText().trim(), server);
+    String getdown = getdownField.getText().trim();
+    _settingsManager.setValue("game.getdownFullURL", getdown, server);
+    _settingsManager.setValue("game.getdownURL",
+      _ctx.getApp().getUI(SettingsUI.class).eventHandler.toClientRootUrl(getdown), server);
+
+    _flamingoManager.addCustomServer(server);
+  }
+
   public void displaySelectedServerInfo ()
   {
     Server selectedServer = _flamingoManager.getSelectedServer();
@@ -332,6 +406,19 @@ public class LauncherEventHandler
       selectedServer.name + " " + _localeManager.getValue("t.server_info"),
       JOptionPane.INFORMATION_MESSAGE
     );
+
+    // Manually added servers can also be removed from here.
+    if (_flamingoManager.isCustomServer(selectedServer)) {
+      boolean remove = Dialog.pushWithConfirm(
+        _localeManager.getValue("m.remove_server_confirm", selectedServer.name),
+        _localeManager.getValue("m.remove_server"),
+        JOptionPane.WARNING_MESSAGE
+      );
+
+      if (remove) {
+        _flamingoManager.removeCustomServer(selectedServer);
+      }
+    }
   }
 
   /**
@@ -550,14 +637,14 @@ public class LauncherEventHandler
       addServerIcon.setHorizontalAlignment(SwingConstants.CENTER);
       addServerIcon.setToolTipText(_localeManager.getValue("m.add_server"));
       addServerIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, Scale.px(18), Color.WHITE));
-      addServerIcon.setVisible(false);
+      addServerIcon.setVisible(true);
       addServerPane.add(addServerIcon);
       addServerIcon.addMouseListener(new MouseListener()
       {
         @Override
         public void mouseClicked (MouseEvent e)
         {
-          Dialog.push(_localeManager.getValue("m.add_server_text"), _localeManager.getValue("m.add_server"), JOptionPane.INFORMATION_MESSAGE);
+          showAddServerDialog();
         }
 
         @Override
@@ -587,7 +674,7 @@ public class LauncherEventHandler
 
       this.ui.serverSwitcherPane.add(addServerPane);
 
-      this.ui.serverSwitcherPane.setPreferredSize(Scale.dim(50, count * 50));
+      this.ui.serverSwitcherPane.setPreferredSize(Scale.dim(50, (count + 1) * 50));
 
       this.ui.serverSwitcherPaneScrollBar.setBounds(
         this.ui.serverSwitcherPaneScrollBar.getX(),
