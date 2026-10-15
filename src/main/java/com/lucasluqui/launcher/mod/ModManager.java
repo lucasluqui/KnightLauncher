@@ -385,7 +385,7 @@ public class ModManager
     Server selectedServer = _flamingoManager.getSelectedServer();
     if (selectedServer != null) {
       rootDir = selectedServer.getRootDirectory();
-      bundles = selectedServer.isOfficial() ? RSRC_BUNDLES : THIRDPARTY_RSRC_BUNDLES;
+      bundles = (selectedServer.isOfficial() || selectedServer.useStockClient) ? RSRC_BUNDLES : THIRDPARTY_RSRC_BUNDLES;
     }
 
     _ctx._progressBar.startTask();

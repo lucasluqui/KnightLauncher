@@ -22,6 +22,9 @@ public class Server
 {
   public String name;
 
+  // Manually added servers use the existing game installation.
+  public boolean useStockClient;
+
   public String description;
 
   public String managedBy;
@@ -92,12 +95,13 @@ public class Server
 
   public String getRootDirectory ()
   {
-    if (this.name.equalsIgnoreCase("Official")) return LauncherGlobals.USER_DIR;
+    if (isOfficial() || useStockClient) return LauncherGlobals.USER_DIR;
     return LauncherGlobals.USER_DIR + "/thirdparty/" + this.getSanitizedName() + "/";
   }
 
   public String getModsDirectory ()
   {
+    if (useStockClient) return LauncherGlobals.USER_DIR + "/thirdparty/" + getSanitizedName() + "/mods/";
     return this.getRootDirectory() + "/mods/";
   }
 
@@ -112,7 +116,7 @@ public class Server
     String localVersion = "-1";
 
     // Try reading local version from getdown.txt. This doesn't work on third party servers, mostly.
-    if (isOfficial()) {
+    if (isOfficial() || useStockClient) {
       try (InputStream is = Files.newInputStream(Paths.get(getRootDirectory() + File.separator + "getdown.txt"))) {
         Properties properties = new Properties();
         properties.load(is);
@@ -202,7 +206,8 @@ public class Server
 
   public boolean isOutdated ()
   {
-    return !isOfficial() && !this.version.equalsIgnoreCase(getLocalVersion());
+    return !isOfficial() && !useStockClient && this.version != null
+      && !this.version.equalsIgnoreCase(getLocalVersion());
   }
 
   public int getMaintenanceStatus ()

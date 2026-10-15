@@ -99,8 +99,17 @@ public class LauncherEventHandler
       Server selectedServer = _flamingoManager.getSelectedServer();
       String sanitizedServerName = selectedServer.getSanitizedName();
 
+      boolean stockPrivateServer = !selectedServer.isOfficial()
+        && (selectedServer.useStockClient || _settingsManager.hasConnectionSettings(selectedServer));
+      if (stockPrivateServer && !new File(LauncherGlobals.USER_DIR, "code/projectx-pcode.jar").isFile()) {
+        Dialog.push(_localeManager.getValue("m.shared_client_missing"), JOptionPane.WARNING_MESSAGE);
+        _ctx.getApp().toggleElementsBlock(false);
+        ui.resetLaunchButton();
+        return;
+      }
+
       // check if any game update took place since last launch.
-      if (_modManager.gameVersionChanged()) {
+      if (!stockPrivateServer && _modManager.gameVersionChanged()) {
         _modManager.checkInstalled();
         _modManager.mount();
 
@@ -143,7 +152,7 @@ public class LauncherEventHandler
 
         if (Settings.useIngameRPC) ProcessUtil.run(RPC_COMMAND_LINE, true);
         // end: official servers launch procedure
-      } else if (_settingsManager.hasConnectionSettings(selectedServer)) {
+      } else if (stockPrivateServer) {
         // start: stock-client private server launch procedure
         // This server reuses the installed client, so we only bake its connection
         // settings in and launch that client directly (no getdown, no downloads).
@@ -967,8 +976,8 @@ public class LauncherEventHandler
         LauncherGlobals.USER_DIR + File.separator + "code/commons-beanutils.jar:" +
         LauncherGlobals.USER_DIR + File.separator + "code/commons-digester.jar:" +
         LauncherGlobals.USER_DIR + File.separator + "code/commons-logging.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/discord-game-sdk4j.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/gson.jar;");
+        LauncherGlobals.USER_DIR + File.separator + "./code/discord-game-sdk4j.jar:" +
+        LauncherGlobals.USER_DIR + File.separator + "./code/gson.jar");
       argsList.add("-Dcom.threerings.getdown=false");
       if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
       if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");

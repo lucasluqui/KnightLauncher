@@ -218,7 +218,9 @@ public class FileUtil
 
   public static void purgeDirectory (File dir, String[] exceptions)
   {
-    for (File file : dir.listFiles()) {
+    File[] files = dir.listFiles();
+    if (files == null) return;
+    for (File file : files) {
       boolean skip = false;
       for (String except : exceptions) {
         if (file.getName().contains(except)) {

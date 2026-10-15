@@ -350,6 +350,7 @@ public class FlamingoManager
         if (name.isEmpty() || name.equalsIgnoreCase("Official")) continue;
 
         Server server = new Server(name);
+        server.useStockClient = true;
         server.enabled = json.optInt("enabled", 1);
         server.description = "";
         server.managedBy = "";
@@ -374,6 +375,7 @@ public class FlamingoManager
    */
   public void addCustomServer (Server server)
   {
+    server.useStockClient = true;
     List<Server> servers = loadCustomServers();
     for (Server existing : servers) {
       if (existing.name.equalsIgnoreCase(server.name)) return;
