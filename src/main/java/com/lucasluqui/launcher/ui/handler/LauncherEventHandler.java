@@ -129,7 +129,8 @@ public class LauncherEventHandler
           ProcessUtil.run(getCodeModsStartCommand(altMode), true);
         } else {
           if (Settings.PLATFORM_STEAM.equals(Settings.gamePlatform)) {
-            SteamUtil.runApp(99900, SystemUtil.isMac());
+            // determine whether this is a preview install or not. if not, go for the live server appid.
+            SteamUtil.runApp(selectedServer.isOfficialPreview() ? 99920 : 99900, SystemUtil.isMac());
           } else {
             if (SystemUtil.isWindows()) {
               ProcessUtil.run(LauncherGlobals.GETDOWN_ARGS_WIN, true);

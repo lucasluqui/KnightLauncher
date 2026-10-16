@@ -412,12 +412,13 @@ public class LauncherApp
   private void makeShellLink ()
   {
     try {
+      String name = getShortcutName();
       DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
         "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
         LauncherGlobals.USER_DIR,
         LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-512.ico",
-        "Start " + BuildConfig.getName(),
-        BuildConfig.getName()
+        "Start " + name,
+        name
       );
     } catch (Exception e) {
       log.error("Failed to create shell link");
@@ -427,12 +428,13 @@ public class LauncherApp
 
   private void makeDesktopFile ()
   {
-    File desktopFile = new File(DesktopUtil.getPathToDesktop(), BuildConfig.getName() + ".desktop");
+    String name = getShortcutName();
+    File desktopFile = new File(DesktopUtil.getPathToDesktop(), name + ".desktop");
     try {
       BufferedWriter out = new BufferedWriter(new FileWriter(desktopFile));
       out.write("[Desktop Entry]\n");
       out.write("Version=1.5\n");
-      out.write("Name=" + BuildConfig.getName() + "\n");
+      out.write("Name=" + name + "\n");
       out.write("Comment=Open source game launcher for a certain game\n");
       out.write("Exec=java -jar KnightLauncher.jar\n");
       out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.png\n");
@@ -447,7 +449,7 @@ public class LauncherApp
 
   private void makeApplicationFile ()
   {
-    String appName = "Knight Launcher";
+    String appName = getShortcutName();
     String appExec = "launch";
     String bundleId = "com.lucasluqui.knightlauncher";
 
@@ -517,6 +519,12 @@ public class LauncherApp
     } catch (IOException e) {
       log.error(e);
     }
+  }
+
+  private String getShortcutName ()
+  {
+    return LauncherGlobals.USER_DIR.contains("Preview")
+      ? BuildConfig.getName() + " (Preview)" : BuildConfig.getName();
   }
 
   private void setupHTTPSProtocol ()

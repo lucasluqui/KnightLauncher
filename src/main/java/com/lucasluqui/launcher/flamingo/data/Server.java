@@ -176,6 +176,24 @@ public class Server
     return localVersion;
   }
 
+  public boolean isOfficialPreview ()
+  {
+    // assume not by default.
+    boolean preview = false;
+
+    try (InputStream is = Files.newInputStream(Paths.get(getRootDirectory() + File.separator + "getdown.txt"))) {
+      Properties properties = new Properties();
+      properties.load(is);
+      preview = properties.getProperty("appbase").contains("spiral_preview");
+      properties.clear();
+      return preview;
+    } catch (IOException e) {
+      log.error(e);
+    }
+
+    return preview;
+  }
+
   @SuppressWarnings("all")
   public boolean isInstalled ()
   {
