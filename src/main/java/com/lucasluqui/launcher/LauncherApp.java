@@ -5,6 +5,8 @@ import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
+import com.lucasluqui.launcher.changelog.data.Release;
+import com.lucasluqui.launcher.changelog.ui.ChangelogUI;
 import com.lucasluqui.launcher.editor.ui.EditorsUI;
 import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
@@ -17,6 +19,7 @@ import com.lucasluqui.swing.Scale;
 import com.lucasluqui.util.*;
 import net.sf.image4j.codec.ico.ICOEncoder;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import oshi.SystemInfo;
 import oshi.hardware.*;
@@ -733,17 +736,32 @@ public class LauncherApp
   @SuppressWarnings("all")
   public void fetchGithubData ()
   {
-    String rawResponseLatestRelease = INetUtil.getWebpageContent(LauncherGlobals.GITHUB_API_LATEST_RELEASE);
+    String rawResponseReleases = INetUtil.getWebpageContent(LauncherGlobals.GITHUB_API_RELEASES);
 
-    if (rawResponseLatestRelease == null) {
+    if (rawResponseReleases == null) {
       log.error("Received no response from Github. Possible downtime?");
       return;
     }
 
-    JSONObject jsonLatestRelease = new JSONObject(rawResponseLatestRelease);
+    JSONArray jsonReleases = new JSONArray(rawResponseReleases);
+    List<Release> releases = new ArrayList<>();
+    for (int i = 0; i < jsonReleases.length() && releases.size() < MAX_RELEASES; i++) {
+      JSONObject jsonRelease = jsonReleases.getJSONObject(i);
+      if (jsonRelease.optBoolean("draft") || jsonRelease.optBoolean("prerelease")) continue;
+      releases.add(new Release(
+        jsonRelease.getString("tag_name"),
+        jsonRelease.optString("published_at", ""),
+        jsonRelease.optString("body", "")
+      ));
+    }
 
-    this._latestRelease = jsonLatestRelease.getString("tag_name");
-    this._latestReleaseChangelog = jsonLatestRelease.getString("body");
+    if (releases.isEmpty()) {
+      log.error("Received no releases from Github");
+      return;
+    }
+
+    this._releases = releases;
+    this._latestRelease = releases.get(0).getTag();
 
     ThreadingUtil.executeWithDelay(this::maybeUpdate, 3000);
   }
@@ -951,9 +969,12 @@ public class LauncherApp
     return this._latestRelease;
   }
 
-  public String getLatestReleaseChangelog ()
+  /**
+   * Returns up to {@link #MAX_RELEASES} of the most recent releases, newest first. Empty if GitHub couldn't be reached.
+   */
+  public List<Release> getReleases ()
   {
-    return this._latestReleaseChangelog;
+    return this._releases;
   }
 
   /**
@@ -997,7 +1018,9 @@ public class LauncherApp
   @Inject protected KeyboardController _keyboardController;
 
   protected String _latestRelease = null;
-  protected String _latestReleaseChangelog = null;
+  protected List<Release> _releases = new ArrayList<>();
+
+  private static final int MAX_RELEASES = 5;
 
   private final Map<Class<? extends BaseUI>, BaseUI> _uiMap = new HashMap<>();
   private final List<Class<? extends BaseUI>> _uiHistory = new ArrayList<>();

@@ -8,7 +8,9 @@ public class LauncherGlobals
 {
   public static final String GITHUB_AUTHOR = "lucasluqui";
   public static final String GITHUB_REPO = "KnightLauncher";
-  public static final String GITHUB_API_LATEST_RELEASE = "https://api.github.com/repos/" + GITHUB_AUTHOR + "/" + GITHUB_REPO + "/releases/latest";
+  public static final String GITHUB_API_RELEASES = "https://api.github.com/repos/" + GITHUB_AUTHOR + "/" + GITHUB_REPO + "/releases?per_page=10";
+  public static final String GITHUB_URL = "https://github.com/";
+  public static final String GITHUB_URL_REPO = GITHUB_URL + GITHUB_AUTHOR + "/" + GITHUB_REPO + "/";
 
   public static final String CDN_ENDPOINT = "cdn.knightlauncher.com";
   public static final String CDN_VERSION = "2";
@@ -18,6 +20,7 @@ public class LauncherGlobals
   public static final String URL_DISCORD = "https://discord.gg/8rE4GeAMza";
   public static final String URL_GET_MODS = "https://discord.gg/fAR8qtrat2";
   public static final String URL_DONATE = "https://ko-fi.com/lucasallegri";
+  public static final String URL_RELEASES = GITHUB_URL_REPO + "releases";
   public static final String URL_BUG_REPORT = "https://github.com/lucasluqui/KnightLauncher/issues";
 
   public static final String USER_DIR = System.getProperty("user.dir");

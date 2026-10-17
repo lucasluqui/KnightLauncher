@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.launcher.*;
+import com.lucasluqui.launcher.changelog.ui.ChangelogUI;
 import com.lucasluqui.launcher.editor.ui.EditorsUI;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
@@ -618,7 +619,7 @@ public class LauncherUI extends BaseUI
     Icon changelogIcon = IconFontSwing.buildIcon(FontAwesome.BOOK, Scale.px(18), Color.WHITE);
     changelogButton = new JButton(changelogIcon);
     changelogButton.setBounds(Scale.rect(736, 26, 36, 36));
-    changelogButton.setToolTipText(_localeManager.getValue("m.changelog"));
+    changelogButton.setToolTipText(_localeManager.getValue("m.changelog_title"));
     changelogButton.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     changelogButton.setFocusPainted(false);
     changelogButton.setFocusable(false);
