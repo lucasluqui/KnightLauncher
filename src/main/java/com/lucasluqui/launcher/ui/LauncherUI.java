@@ -3,6 +3,7 @@ package com.lucasluqui.launcher.ui;
 import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
+import com.jhlabs.image.GaussianFilter;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.launcher.*;
@@ -157,6 +158,7 @@ public class LauncherUI extends BaseUI
         } else {
           g.drawImage(banner, 0, 0, null);
         }
+        paintBannerScrim(g);
       }
     };
     panel.setLayout(null);
@@ -890,6 +892,43 @@ public class LauncherUI extends BaseUI
     bannerFadeTimer.start();
   }
 
+  private void paintBannerScrim (Graphics g)
+  {
+    if (bannerTitle == null || !bannerTitle.isVisible()) return;
+
+    float alpha = bannerTitle.getForeground().getAlpha() / 255f;
+    if (alpha <= 0f) return;
+
+    if (bannerScrim == null) bannerScrim = createBannerScrim();
+
+    Graphics2D g2d = (Graphics2D) g.create();
+    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+    g2d.drawImage(bannerScrim, 0, 0, null);
+    g2d.dispose();
+  }
+
+  /**
+   * A soft elliptical shade centered on the banner texts, fading out well before the event cards and launch button.
+   */
+  private static BufferedImage createBannerScrim ()
+  {
+    int radiusX = Scale.px(BANNER_SCRIM_RADIUS_X);
+    int radiusY = Scale.px(BANNER_SCRIM_RADIUS_Y);
+    int centerX = Scale.px(BANNER_SCRIM_CENTER_X);
+    int centerY = Scale.px(BANNER_SCRIM_CENTER_Y);
+
+    BufferedImage image = new BufferedImage(centerX + radiusX, centerY + radiusY, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2d = image.createGraphics();
+    g2d.translate(centerX, centerY);
+    g2d.scale(1, radiusY / (double) radiusX);
+    g2d.setPaint(new RadialGradientPaint(0, 0, radiusX,
+      new float[] { 0f, 0.45f, 0.75f, 1f },
+      new Color[] { new Color(0, 0, 0, 135), new Color(0, 0, 0, 115), new Color(0, 0, 0, 55), new Color(0, 0, 0, 0) }));
+    g2d.fillRect(-radiusX, -radiusX, radiusX * 2, radiusX * 2);
+    g2d.dispose();
+    return image;
+  }
+
   private void setBannerTextAlpha (float alpha)
   {
     Color color = new Color(255, 255, 255, Math.round(alpha * 255));
@@ -899,8 +938,7 @@ public class LauncherUI extends BaseUI
   }
 
   /**
-   * A label with a soft drop shadow under its text.
-   * The shadow fades along with the text's own alpha.
+   * A label with a soft shadow under its text.
    */
   private static class ShadowedLabel extends JLabel
   {
@@ -913,13 +951,12 @@ public class LauncherUI extends BaseUI
     protected void paintComponent (Graphics g)
     {
       String text = getText();
-      if (text != null && !text.isEmpty()) {
+      float alpha = getForeground().getAlpha() / 255f;
+      if (text != null && !text.isEmpty() && alpha > 0f) {
         Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2d.setFont(getFont());
-        FontMetrics metrics = g2d.getFontMetrics();
+        FontMetrics metrics = g2d.getFontMetrics(getFont());
 
-        // Place the text exactly where the label itself will draw it.
+        // Place the shadow exactly where the label itself will draw.
         Insets insets = getInsets();
         Rectangle view = new Rectangle(insets.left, insets.top,
           getWidth() - insets.left - insets.right, getHeight() - insets.top - insets.bottom);
@@ -929,15 +966,50 @@ public class LauncherUI extends BaseUI
           getVerticalAlignment(), getHorizontalAlignment(), getVerticalTextPosition(), getHorizontalTextPosition(),
           view, iconBounds, textBounds, 0);
 
-        int alpha = Math.round(SHADOW_ALPHA * (getForeground().getAlpha() / 255f));
-        g2d.setColor(new Color(0, 0, 0, alpha));
-        g2d.drawString(clipped, textBounds.x + Scale.px(1), textBounds.y + metrics.getAscent() + Scale.px(2));
+        BufferedImage shadow = getShadow(clipped, metrics);
+        int padding = (shadow.getHeight() - metrics.getHeight()) / 2;
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, SHADOW_OPACITY * alpha));
+        g2d.drawImage(shadow, textBounds.x - padding, textBounds.y - padding + Scale.px(1), null);
         g2d.dispose();
       }
       super.paintComponent(g);
     }
 
-    private static final int SHADOW_ALPHA = 90;
+    /**
+     * Returns the blurred shadow for the given text, only rendering it again when the text or font change.
+     */
+    private BufferedImage getShadow (String text, FontMetrics metrics)
+    {
+      Font font = getFont();
+      if (_shadow != null && text.equals(_shadowText) && font.equals(_shadowFont)) {
+        return _shadow;
+      }
+
+      // Bigger text gets a wider blur, so the shadow looks the same at any size.
+      int radius = Math.max(Scale.px(5), Math.round(font.getSize2D() * SHADOW_SPREAD));
+      int padding = radius * 2;
+
+      BufferedImage image = new BufferedImage(metrics.stringWidth(text) + padding * 2,
+        metrics.getHeight() + padding * 2, BufferedImage.TYPE_INT_ARGB);
+      Graphics2D g2d = image.createGraphics();
+      g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+      g2d.setFont(font);
+      g2d.setColor(Color.BLACK);
+      g2d.drawString(text, padding, padding + metrics.getAscent());
+      g2d.dispose();
+
+      _shadow = new GaussianFilter(radius).filter(image, null);
+      _shadowText = text;
+      _shadowFont = font;
+      return _shadow;
+    }
+
+    private BufferedImage _shadow;
+    private String _shadowText;
+    private Font _shadowFont;
+
+    private static final float SHADOW_OPACITY = 1.0f;
+    private static final float SHADOW_SPREAD = 0.2f;
   }
 
   public static class BannerImage
@@ -1127,8 +1199,15 @@ public class LauncherUI extends BaseUI
   private volatile BufferedImage previousBanner = null;
   private volatile float bannerFade = 1f;
   private Timer bannerFadeTimer;
+  private BufferedImage bannerScrim;
 
   private static final int BANNER_FADE_DURATION = 400;
+
+  // The scrim is an ellipse around the banner texts, sized for 100% scale.
+  private static final int BANNER_SCRIM_CENTER_X = 160;
+  private static final int BANNER_SCRIM_CENTER_Y = 130;
+  private static final int BANNER_SCRIM_RADIUS_X = 560;
+  private static final int BANNER_SCRIM_RADIUS_Y = 240;
 
   // Event cards sit in the column above the launch button, below the buttons on the top right.
   private static final int EVENT_CARDS_X = 500;
