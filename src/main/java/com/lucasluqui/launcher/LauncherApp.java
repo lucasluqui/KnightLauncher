@@ -98,12 +98,13 @@ public class LauncherApp
       return;
     }
 
-    Set<Integer> gamePids = ProcessUtil.findJavaProcesses(LauncherGlobals.GAME_MAIN_CLASS);
-    if (gamePids != null && !gamePids.isEmpty()) {
-      log.warning("The game is already running", "pids", gamePids);
-      blockStartup("error.game_already_running");
-      return;
-    }
+    // A regular game client started without us is fine, but regular launches have to wait until it closes.
+    // Alt Mode clients can run alongside a regular one, so they don't get in the way.
+    Set<Integer> gamePids = ProcessUtil.findJavaProcesses(LauncherGlobals.GAME_MAIN_CLASS, LauncherGlobals.ALT_MODE_ARG);
+    boolean gameRunning = gamePids != null && !gamePids.isEmpty();
+    if (gameRunning) log.warning("The game is already running", "pids", gamePids);
+
+    InstanceBeacon.listen(this::popBackUp);
 
     logVMInfo();
     logGameVMInfo();
@@ -120,6 +121,7 @@ public class LauncherApp
     maybeInitUI();
 
     if (!this.requiresJVMPatch() && !this.requiresUpdate()) {
+      if (gameRunning) this.getUI(LauncherUI.class).eventHandler.blockLaunchUntilGameCloses();
       initFinished();
       ThreadingUtil.executeWithDelay(this.getUI(LauncherUI.class)::switchVisibility, 200);
     }
@@ -127,7 +129,8 @@ public class LauncherApp
 
   /**
    * Makes sure this is the only launcher instance running for this game directory. The lock is let go
-   * by the system as soon as this process ends.
+   * by the system as soon as this process ends. If another instance is running hidden away in the tray,
+   * it pops back up and this one exits right away.
    *
    * @return Whether we got the lock. Also true if locking isn't possible at all, so we don't get in the way.
    */
@@ -138,12 +141,18 @@ public class LauncherApp
       FileChannel channel = FileChannel.open(lockPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 
       // When restarting (updates, Java VM patching) the previous instance starts this one right before exiting,
-      // so give it a moment to let go of the lock.
+      // so give it a moment to let go of the lock. It stops answering once exiting, so it won't get summoned.
       long deadline = System.currentTimeMillis() + INSTANCE_LOCK_TIMEOUT;
       while (true) {
         _instanceLock = channel.tryLock();
         if (_instanceLock != null) return true;
-        if (System.currentTimeMillis() >= deadline) {
+        Boolean shown = InstanceBeacon.summon();
+        if (shown != null && shown) {
+          log.info("Another launcher instance is already running, popped it back up");
+          System.exit(0);
+        }
+        // It answered but isn't hidden away, so it's sticking around and there's no point waiting.
+        if (shown != null || System.currentTimeMillis() >= deadline) {
           channel.close();
           return false;
         }
@@ -153,6 +162,18 @@ public class LauncherApp
       log.error("Failed to acquire instance lock", e);
       return true;
     }
+  }
+
+  /**
+   * Brings the launcher back up from the tray, as asked by another instance.
+   *
+   * @return Whether it was hidden away and is now coming back up.
+   */
+  private boolean popBackUp ()
+  {
+    // Not there yet while updating or patching the Java VM, which never hide away anyway.
+    BaseUI launcherUI = _uiMap.get(LauncherUI.class);
+    return launcherUI != null && ((LauncherUI) launcherUI).eventHandler.popBackUp();
   }
 
   /**

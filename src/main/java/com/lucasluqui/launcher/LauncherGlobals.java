@@ -35,6 +35,10 @@ public class LauncherGlobals
   // Every game client, official or third party, runs this class.
   public static final String GAME_MAIN_CLASS = "com.threerings.projectx.client.ProjectXApp";
 
+  // Added to the command line of every Alt Mode client we launch, so they can be told apart from regular ones.
+  // The game doesn't look at it.
+  public static final String ALT_MODE_ARG = "-Dknightlauncher.alt_mode=true";
+
   public static final String[] GETDOWN_ARGS;
   public static final String[] GETDOWN_ARGS_MAC;
   public static final String[] GETDOWN_ARGS_WIN;
@@ -109,6 +113,7 @@ public class LauncherGlobals
       "-Dcom.threerings.getdown=false",
       "-Xms512M",
       "-Xmx512M",
+      ALT_MODE_ARG,
       "-XX:+UseSerialGC",
       "-XX:SoftRefLRUPolicyMSPerMB=10",
       "-Djava.library.path=" + USER_DIR + File.separator + "./native",

@@ -84,9 +84,10 @@ public class LauncherEventHandler
       // Take note of what's already running, so we only look for the processes we're about to start.
       final Map<Integer, String> existingProcesses = ProcessUtil.listJavaProcesses();
       final Set<Integer> existingGamePids = existingProcesses == null ? null
-        : ProcessUtil.findProcesses(existingProcesses, LauncherGlobals.GAME_MAIN_CLASS);
+        : ProcessUtil.findProcesses(existingProcesses, LauncherGlobals.GAME_MAIN_CLASS, LauncherGlobals.ALT_MODE_ARG);
 
       // Only one regular game client at a time, any extra ones have to go through Alt Mode.
+      // Alt Mode clients don't count towards it.
       if (!altMode && existingGamePids != null && !existingGamePids.isEmpty()) {
         log.info("Game is already running, not launching another client", "pids", existingGamePids);
         Dialog.push(_localeManager.getValue("error.game_already_running_launch"), JOptionPane.WARNING_MESSAGE);
@@ -105,7 +106,7 @@ public class LauncherEventHandler
 
         // re-lock server switching and launch button after mounting.
         this.updateServerSwitcher(true);
-        this.ui.launchButton.setEnabled(false);
+        this.ui.setLaunchEnabled(false);
       }
 
       if (selectedServer.isOfficial()) {
@@ -115,7 +116,7 @@ public class LauncherEventHandler
 
           // re-lock server switching and launch button after mounting.
           this.updateServerSwitcher(true);
-          this.ui.launchButton.setEnabled(false);
+          this.ui.setLaunchEnabled(false);
         }
 
         _ctx.getApp().getUI(SettingsUI.class).eventHandler.saveAdditionalArgs();
@@ -375,7 +376,7 @@ public class LauncherEventHandler
 
     if (selectedServer != null) {
       if (selectedServer.isOfficial()) {
-        ui.launchButton.setEnabled(selectedServer.enabled == 1);
+        ui.setLaunchEnabled(selectedServer.enabled == 1);
         ui.selectedServerLabel.setText("Official");
         ui.playerCountLabel.setVisible(true);
         showOfficialPlayerCount(selectedServer);
@@ -383,7 +384,7 @@ public class LauncherEventHandler
         ui.serverInfoButton.setEnabled(false);
         ui.serverInfoButton.setVisible(false);
       } else {
-        ui.launchButton.setEnabled(selectedServer.enabled == 1);
+        ui.setLaunchEnabled(selectedServer.enabled == 1);
 
         ui.selectedServerLabel.setText("");
 
@@ -824,6 +825,7 @@ public class LauncherEventHandler
       if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
       argsList.add(altMode ? "-Xms512M" : "-Xms" + Settings.gameMemory + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
+      if (altMode) argsList.add(LauncherGlobals.ALT_MODE_ARG);
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
 
       if (!Settings.gameAdditionalArgs.isEmpty()) {
@@ -857,6 +859,7 @@ public class LauncherEventHandler
       if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
       argsList.add(altMode ? "-Xms512M" : "-Xms" + Settings.gameMemory + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
+      if (altMode) argsList.add(LauncherGlobals.ALT_MODE_ARG);
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
 
       if (!Settings.gameAdditionalArgs.isEmpty()) {
@@ -909,6 +912,7 @@ public class LauncherEventHandler
       }
       argsList.add(altMode ? "-Xms512M" : "-Xms" + Settings.gameMemory + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
+      if (altMode) argsList.add(LauncherGlobals.ALT_MODE_ARG);
       argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
 
@@ -951,6 +955,7 @@ public class LauncherEventHandler
       }
       argsList.add(altMode ? "-Xms512M" : "-Xms" + Settings.gameMemory + "M");
       argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
+      if (altMode) argsList.add(LauncherGlobals.ALT_MODE_ARG);
       argsList.add("-XX:+AggressiveOpts");
       argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
 
@@ -978,6 +983,7 @@ public class LauncherEventHandler
   private void checkGameLaunch (Map<Integer, String> existingProcesses)
   {
     Set<Integer> gamePids = new HashSet<>();
+    boolean regularClientLaunched = false;
     boolean detectionFailed = existingProcesses == null;
     boolean getdownSeen = false;
 
@@ -995,6 +1001,7 @@ public class LauncherEventHandler
       Set<Integer> found = ProcessUtil.findProcesses(processes, LauncherGlobals.GAME_MAIN_CLASS);
       if (!found.isEmpty()) {
         gamePids = found;
+        regularClientLaunched = !ProcessUtil.findProcesses(processes, LauncherGlobals.GAME_MAIN_CLASS, LauncherGlobals.ALT_MODE_ARG).isEmpty();
         break;
       }
 
@@ -1034,8 +1041,11 @@ public class LauncherEventHandler
     } else if (gamePids.isEmpty()) {
       Dialog.push(_localeManager.getValue("error.game_launch"), _localeManager.getValue("t.game_launch_error"), JOptionPane.ERROR_MESSAGE);
     } else {
-      log.info("Game launched", "pids", gamePids);
+      log.info("Game launched", "pids", gamePids, "regular", regularClientLaunched);
       SwingUtilities.invokeLater(this::enterGameSession);
+
+      // Only one regular client at a time, so the next regular launch has to wait until this one closes.
+      if (regularClientLaunched) blockLaunchUntilGameCloses();
     }
 
     // unblock launcher interactions
@@ -1072,6 +1082,45 @@ public class LauncherEventHandler
     _gameWatcher.cancel(false);
     _gameWatcher = null;
     SwingUtilities.invokeLater(this::exitGameSession);
+  }
+
+  /**
+   * Keeps regular launches off while a regular game client is running, as only one regular client goes
+   * at a time. Alt Mode stays available. Lifts once every regular game client has closed.
+   */
+  public void blockLaunchUntilGameCloses ()
+  {
+    if (_launchBlockWatcher != null) return;
+    log.info("Blocking regular launches until the running game closes");
+
+    _launchBlockedByGame = true;
+    SwingUtilities.invokeLater(ui::updateLaunchButtonEnabled);
+
+    _launchBlockWatcher = _scheduler.scheduleWithFixedDelay(this::checkBlockingGameClosed,
+      GAME_WATCH_INTERVAL, GAME_WATCH_INTERVAL, TimeUnit.MILLISECONDS);
+  }
+
+  /**
+   * Whether regular launches are off because a regular game client is running.
+   */
+  public boolean isLaunchBlockedByGame ()
+  {
+    return _launchBlockedByGame;
+  }
+
+  private void checkBlockingGameClosed ()
+  {
+    // Only regular clients count, Alt Mode ones don't get in the way of a regular launch.
+    Set<Integer> gamePids = ProcessUtil.findJavaProcesses(LauncherGlobals.GAME_MAIN_CLASS, LauncherGlobals.ALT_MODE_ARG);
+
+    // Can't tell right now, try again next time.
+    if (gamePids == null || !gamePids.isEmpty()) return;
+
+    log.info("Regular game client closed, regular launches are allowed again");
+    _launchBlockWatcher.cancel(false);
+    _launchBlockWatcher = null;
+    _launchBlockedByGame = false;
+    SwingUtilities.invokeLater(ui::updateLaunchButtonEnabled);
   }
 
   private void exitGameSession ()
@@ -1163,6 +1212,18 @@ public class LauncherEventHandler
     pauseBanner();
   }
 
+  /**
+   * Brings the launcher back up if it's hidden away while the game or an editor runs. Safe to call from any thread.
+   *
+   * @return Whether it was hidden away and is now coming back up.
+   */
+  public boolean popBackUp ()
+  {
+    if (!_launcherHidden) return false;
+    EventQueue.invokeLater(this::restoreLauncher);
+    return true;
+  }
+
   private void restoreLauncher ()
   {
     if (!_launcherHidden) return;
@@ -1252,6 +1313,10 @@ public class LauncherEventHandler
 
   private volatile ScheduledFuture<?> _gameWatcher;
   private ScheduledFuture<?> _playerCountRefresh;
+
+  // Watches the running regular game client, regular launches are off until it closes.
+  private volatile ScheduledFuture<?> _launchBlockWatcher;
+  private volatile boolean _launchBlockedByGame = false;
 
   // How often to refresh the player count.
   private static final int PLAYER_COUNT_REFRESH_INTERVAL = 15 * 60 * 1000;

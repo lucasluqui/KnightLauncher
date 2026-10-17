@@ -1070,24 +1070,28 @@ public class LauncherUI extends BaseUI
           launchButton.setIcon(null);
           break;
       }
-
-      if (!selectedServer.isInstalled()) {
-        launchButton.setText(_localeManager.getValue("b.install"));
-        launchButton.setToolTipText(_localeManager.getValue("b.install"));
-      } else if (selectedServer.isOutdated()) {
-        launchButton.setText(_localeManager.getValue("b.update"));
-        launchButton.setToolTipText(_localeManager.getValue("b.update"));
-      } else {
-        launchButton.setText(_localeManager.getValue("b.play"));
-        launchButton.setToolTipText(_localeManager.getValue("b.play"));
-      }
     } else {
       launchButton.setBackground(CustomColors.LAUNCH);
       launchButton.setForeground(Color.WHITE);
       launchButton.setIcon(null);
-      launchButton.setText(_localeManager.getValue("b.play"));
-      launchButton.setToolTipText(_localeManager.getValue("b.play"));
     }
+
+    String text = getLaunchButtonText();
+    launchButton.setText(text);
+    launchButton.setToolTipText(text);
+
+    updateLaunchButtonEnabled();
+  }
+
+  /**
+   * What the launch button says for the selected server, when nothing's in the way of launching.
+   */
+  private String getLaunchButtonText ()
+  {
+    Server selectedServer = _flamingoManager.getSelectedServer();
+    if (selectedServer != null && !selectedServer.isInstalled()) return _localeManager.getValue("b.install");
+    if (selectedServer != null && selectedServer.isOutdated()) return _localeManager.getValue("b.update");
+    return _localeManager.getValue("b.play");
   }
 
   public void specialKeyPressed ()
@@ -1096,6 +1100,7 @@ public class LauncherUI extends BaseUI
     launchButton.setIcon(null);
     launchButton.updateUI();
     altModeEnabledLabel.setVisible(true);
+    updateLaunchButtonEnabled();
   }
 
   public void specialKeyReleased ()
@@ -1106,12 +1111,43 @@ public class LauncherUI extends BaseUI
     altModeEnabledLabel.setVisible(false);
   }
 
+  /**
+   * Turns the launch button on or off. It might still stay off for regular launches while a regular game client
+   * is running, see {@link LauncherEventHandler#blockLaunchUntilGameCloses()}.
+   */
+  public void setLaunchEnabled (boolean enabled)
+  {
+    _launchEnabled = enabled;
+    updateLaunchButtonEnabled();
+  }
+
+  /**
+   * Applies whether the launch button can be pressed right now. Only Alt Mode can go while a regular game
+   * client is running.
+   */
+  public void updateLaunchButtonEnabled ()
+  {
+    boolean altMode = _kbController.isShiftPressed() || _kbController.isAltPressed();
+    boolean blockedByGame = eventHandler.isLaunchBlockedByGame() && !altMode;
+
+    launchButton.setEnabled(_launchEnabled && !blockedByGame);
+
+    // Say why it's off, and go back to what it said before once it's not. Only on changes, so it doesn't
+    // step on whatever else the button might be showing in the meantime, like the launch progress.
+    if (blockedByGame || _showingAlreadyRunning) {
+      String text = blockedByGame ? _localeManager.getValue("b.already_running") : getLaunchButtonText();
+      launchButton.setText(text);
+      launchButton.setToolTipText(text);
+    }
+    _showingAlreadyRunning = blockedByGame;
+  }
+
   public void toggleElementsBlock (boolean block)
   {
     super.toggleElementsBlock(block);
     this.eventHandler.updateServerSwitcher(block);
     this.updateButton.setEnabled(!block);
-    this.launchButton.setEnabled(!block);
+    this.setLaunchEnabled(!block);
     this.launchPopupMenuButton.setEnabled(!block);
     this.settingsButton.setEnabled(!block);
     this.modButton.setEnabled(!block);
@@ -1155,6 +1191,12 @@ public class LauncherUI extends BaseUI
   @Inject protected FlamingoManager _flamingoManager;
   @Inject protected DiscordPresenceClient _discordPresenceClient;
   @Inject protected KeyboardController _kbController;
+
+  // Whether the launch button would be on, if not for a regular game client running.
+  private boolean _launchEnabled = true;
+
+  // Whether the launch button says the game's already running.
+  private boolean _showingAlreadyRunning = false;
 
   // Server switcher pane
   public JPanel serverSwitcherPane;

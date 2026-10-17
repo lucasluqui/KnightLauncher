@@ -218,6 +218,30 @@ public class ProcessUtil
   }
 
   /**
+   * Finds the running Java processes whose command line contains {@code commandLineFragment},
+   * leaving out the ones whose command line also contains {@code excludedFragment}.
+   *
+   * @return The IDs of the matching processes, or null if processes couldn't be listed.
+   */
+  public static Set<Integer> findJavaProcesses (String commandLineFragment, String excludedFragment)
+  {
+    Map<Integer, String> processes = listJavaProcesses();
+    if (processes == null) return null;
+    return findProcesses(processes, commandLineFragment, excludedFragment);
+  }
+
+  /**
+   * Picks the processes whose command line contains {@code commandLineFragment} but not {@code excludedFragment}
+   * out of a {@link #listJavaProcesses()} listing.
+   */
+  public static Set<Integer> findProcesses (Map<Integer, String> processes, String commandLineFragment, String excludedFragment)
+  {
+    Set<Integer> pids = findProcesses(processes, commandLineFragment);
+    pids.removeIf(pid -> processes.get(pid).contains(excludedFragment));
+    return pids;
+  }
+
+  /**
    * Picks the processes whose command line contains {@code commandLineFragment} out of a
    * {@link #listJavaProcesses()} listing. Useful to look for several things with a single listing.
    */
