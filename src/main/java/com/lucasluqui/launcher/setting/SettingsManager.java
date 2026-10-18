@@ -114,6 +114,7 @@ public class SettingsManager
     Settings.gamePublicKey = getValue("game.publicKey");
     Settings.gameGetdownURL = getValue("game.getdownURL");
     Settings.gameGetdownFullURL = getValue("game.getdownFullURL");
+    Settings.gameContentURL = getValue("game.contentURL", Settings.gameContentURL);
     Settings.gameAdditionalArgs = getValue("game.additionalArgs.v2", "");
 
     log.info("Loaded required settings from properties file");
@@ -384,6 +385,10 @@ public class SettingsManager
     }
     if (!isBlank(Settings.gameGetdownURL)) {
       properties.setProperty("client_root_url", Settings.gameGetdownURL);
+    }
+    // The content URL is its own setting, separate from the client root URL above.
+    if (!isBlank(Settings.gameContentURL)) {
+      properties.setProperty("content_url", Settings.gameContentURL);
     }
 
     try {

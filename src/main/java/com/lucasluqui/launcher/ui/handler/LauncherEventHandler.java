@@ -372,8 +372,9 @@ public class LauncherEventHandler
     };
     publicKeyField.setText(com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler.DEFAULT_PUBLIC_KEY);
     JTextField getdownField = new JTextField(com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler.DEFAULT_GETDOWN_URL);
+    JTextField contentURLField = new JTextField(com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler.DEFAULT_CONTENT_URL);
 
-    for (JTextField field : new JTextField[]{nameField, addressField, portField, publicKeyField, getdownField}) {
+    for (JTextField field : new JTextField[]{nameField, addressField, portField, publicKeyField, getdownField, contentURLField}) {
       field.setColumns(36);
     }
 
@@ -388,6 +389,8 @@ public class LauncherEventHandler
     form.add(publicKeyField);
     form.add(new JLabel(_localeManager.getValue("m.add_server_getdown")));
     form.add(getdownField);
+    form.add(new JLabel(_localeManager.getValue("m.add_server_content_url")));
+    form.add(contentURLField);
 
     int result = JOptionPane.showConfirmDialog(
       null,
@@ -434,6 +437,7 @@ public class LauncherEventHandler
     _settingsManager.setValue("game.getdownFullURL", getdown, server);
     _settingsManager.setValue("game.getdownURL",
       _ctx.getApp().getUI(SettingsUI.class).eventHandler.toClientRootUrl(getdown), server);
+    _settingsManager.setValue("game.contentURL", contentURLField.getText().trim(), server);
 
     _flamingoManager.addCustomServer(server);
   }

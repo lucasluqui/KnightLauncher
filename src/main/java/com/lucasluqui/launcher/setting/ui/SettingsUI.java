@@ -904,9 +904,23 @@ public class SettingsUI extends BaseUI
     advancedPanel.add(portTextField);
     portTextField.setText(String.valueOf(Settings.gamePort));
 
+    JLabel contentURLLabel = new JLabel(_localeManager.getValue("m.content_url"));
+    contentURLLabel.setBounds(Scale.rect(360, 269, 255, 50));
+    contentURLLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    contentURLLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
+    advancedPanel.add(contentURLLabel);
+
+    contentURLTextField = new JTextField();
+    contentURLTextField.setBounds(Scale.rect(360, 304, 255, 25));
+    contentURLTextField.setFont(Fonts.getFont("code", 12.0f, Font.PLAIN));
+    contentURLTextField.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
+    advancedPanel.add(contentURLTextField);
+    contentURLTextField.setText(Settings.gameContentURL);
+
     JLabel publicKeyLabel = new JLabel(_localeManager.getValue("m.public_key"));
     publicKeyLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    publicKeyLabel.setBounds(Scale.rect(25, 328, 450, 50));
+    publicKeyLabel.setBounds(Scale.rect(25, 328, 330, 50));
     publicKeyLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     advancedPanel.add(publicKeyLabel);
 
@@ -971,13 +985,14 @@ public class SettingsUI extends BaseUI
     portTextField.setCaretPosition(0);
     publicKeyTextField.setCaretPosition(0);
     getdownURLTextField.setCaretPosition(0);
+    contentURLTextField.setCaretPosition(0);
 
     javax.swing.event.DocumentListener connectionSaver = new javax.swing.event.DocumentListener() {
       public void insertUpdate(javax.swing.event.DocumentEvent e) { eventHandler.saveConnectionSettings(); }
       public void removeUpdate(javax.swing.event.DocumentEvent e) { eventHandler.saveConnectionSettings(); }
       public void changedUpdate(javax.swing.event.DocumentEvent e) { eventHandler.saveConnectionSettings(); }
     };
-    for (JTextField field : new JTextField[]{serverAddressTextField, portTextField, publicKeyTextField, getdownURLTextField}) {
+    for (JTextField field : new JTextField[]{serverAddressTextField, portTextField, publicKeyTextField, getdownURLTextField, contentURLTextField}) {
       field.getDocument().addDocumentListener(connectionSaver);
     }
     removeServerButton = new JButton(_localeManager.getValue("m.remove_server"));
@@ -1166,6 +1181,7 @@ public class SettingsUI extends BaseUI
   public JTextField portTextField = new JTextField();
   public JTextField publicKeyTextField = new JTextField();
   public JTextField getdownURLTextField = new JTextField();
+  public JTextField contentURLTextField = new JTextField();
   public JButton removeServerButton = new JButton();
   public JButton resetConnectionSettingsButton = new JButton();
   public JTextField betaCodeTextField;
