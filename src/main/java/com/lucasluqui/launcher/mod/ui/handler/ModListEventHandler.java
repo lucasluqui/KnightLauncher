@@ -21,6 +21,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -248,7 +249,9 @@ public class ModListEventHandler
       }
 
       try {
-        FileUtils.moveFile(file, new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + name));
+        // Replace any mod already there with the same name, so dropping a newer version updates it.
+        FileUtils.moveFile(file, new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + name),
+          StandardCopyOption.REPLACE_EXISTING);
         log.info("Added mod: " + name);
         added = true;
       } catch (IOException e) {
