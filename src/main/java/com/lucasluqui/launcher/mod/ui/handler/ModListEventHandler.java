@@ -15,12 +15,12 @@ import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.util.DesktopUtil;
 import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.ThreadingUtil;
-import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -250,7 +250,8 @@ public class ModListEventHandler
 
       try {
         // Replace any mod already there with the same name, so dropping a newer version updates it.
-        FileUtils.moveFile(file, new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + name),
+        // FileUtils.moveFile refuses to overwrite even with REPLACE_EXISTING, so use NIO directly.
+        Files.move(file.toPath(), new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + name).toPath(),
           StandardCopyOption.REPLACE_EXISTING);
         log.info("Added mod: " + name);
         added = true;
