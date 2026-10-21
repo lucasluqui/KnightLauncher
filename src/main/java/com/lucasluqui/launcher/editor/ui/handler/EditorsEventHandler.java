@@ -162,6 +162,10 @@ public class EditorsEventHandler
       editorCmdLine.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
       editorCmdLine.add("--add-opens=java.base/java.util=ALL-UNNAMED");
       editorCmdLine.add("--enable-native-access=ALL-UNNAMED");
+      if (SystemUtil.isUnix()) {
+        // LWJGL picks EGL on Wayland sessions, but AWT still runs on XWayland and AWTGLCanvas needs GLX
+        editorCmdLine.add("-Dorg.lwjgl.opengl.contextAPI=native");
+      }
       if (thirdparty) {
         editorCmdLine.add("-XX:SoftRefLRUPolicyMSPerMB=10");
       }
@@ -243,6 +247,10 @@ public class EditorsEventHandler
       editorCmdLine.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
       editorCmdLine.add("--add-opens=java.base/java.util=ALL-UNNAMED");
       editorCmdLine.add("--enable-native-access=ALL-UNNAMED");
+      if (SystemUtil.isUnix()) {
+        // LWJGL picks EGL on Wayland sessions, but AWT still runs on XWayland and AWTGLCanvas needs GLX
+        editorCmdLine.add("-Dorg.lwjgl.opengl.contextAPI=native");
+      }
       editorCmdLine.add("-Dappdir=" + rootDir + File.separator + ".");
       editorCmdLine.add("-Dresource_dir=" + rootDir + File.separator + "./rsrc");
       editorCmdLine.add("-Dcrucible.dir=../crucible");
