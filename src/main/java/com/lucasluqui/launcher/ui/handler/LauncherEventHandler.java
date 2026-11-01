@@ -165,7 +165,24 @@ public class LauncherEventHandler
         _settingsManager.applyConnectionSettings();
 
         _ctx._progressBar.setBarValue(1);
-        ProcessUtil.run(getStockClientStartCommand(altMode), true);
+        try {
+          ProcessBuilder game = new ProcessBuilder(getStockClientStartCommand(altMode));
+          game.directory(new File(LauncherGlobals.USER_DIR));
+          game.environment().remove("_JAVA_OPTIONS");
+          // Keep the private endpoint intact by bypassing getdown for both platforms.
+          if (Settings.PLATFORM_STEAM.equals(Settings.gamePlatform)) {
+            game.environment().put("SteamAppId", "99900");
+            game.environment().put("SteamGameId", "99900");
+          } else {
+            game.environment().remove("SteamAppId");
+            game.environment().remove("SteamGameId");
+          }
+          game.redirectErrorStream(true);
+          game.redirectOutput(new File(LauncherGlobals.USER_DIR, "private-client.log"));
+          game.start();
+        } catch (java.io.IOException e) {
+          log.error(e);
+        }
         _ctx._progressBar.finishTask();
         // end: stock-client private server launch procedure
       } else {
@@ -319,10 +336,46 @@ public class LauncherEventHandler
   private void showAddServerDialog ()
   {
     JTextField nameField = new JTextField();
-    JTextField addressField = new JTextField();
+    JTextField addressField = new JTextField(com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler.DEFAULT_SERVER_ADDRESS);
     JTextField portField = new JTextField("47624");
-    JTextField publicKeyField = new JTextField();
-    JTextField getdownField = new JTextField();
+    JTextField publicKeyField = new JTextField() {
+      private String fullKey;
+      private boolean abbreviated;
+
+      @Override
+      public String getText ()
+      {
+        return abbreviated ? fullKey : super.getText();
+      }
+
+      @Override
+      public void setText (String text)
+      {
+        fullKey = text == null ? "" : text;
+        abbreviated = !hasFocus() && fullKey.length() > 48;
+        super.setText(abbreviated ? fullKey.substring(0, 45) + "..." : fullKey);
+        setCaretPosition(0);
+      }
+
+      @Override
+      protected void processFocusEvent (java.awt.event.FocusEvent event)
+      {
+        if (event.getID() == java.awt.event.FocusEvent.FOCUS_GAINED) {
+          String value = getText();
+          abbreviated = false;
+          super.setText(value);
+        } else if (event.getID() == java.awt.event.FocusEvent.FOCUS_LOST) {
+          setText(super.getText());
+        }
+        super.processFocusEvent(event);
+      }
+    };
+    publicKeyField.setText(com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler.DEFAULT_PUBLIC_KEY);
+    JTextField getdownField = new JTextField(com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler.DEFAULT_GETDOWN_URL);
+
+    for (JTextField field : new JTextField[]{nameField, addressField, portField, publicKeyField, getdownField}) {
+      field.setColumns(36);
+    }
 
     JPanel form = new JPanel(new GridLayout(0, 1, 4, 4));
     form.add(new JLabel(_localeManager.getValue("m.add_server_name")));
@@ -416,17 +469,15 @@ public class LauncherEventHandler
       JOptionPane.INFORMATION_MESSAGE
     );
 
-    // Manually added servers can also be removed from here.
-    if (_flamingoManager.isCustomServer(selectedServer)) {
-      boolean remove = Dialog.pushWithConfirm(
-        _localeManager.getValue("m.remove_server_confirm", selectedServer.name),
-        _localeManager.getValue("m.remove_server"),
-        JOptionPane.WARNING_MESSAGE
-      );
+  }
 
-      if (remove) {
-        _flamingoManager.removeCustomServer(selectedServer);
-      }
+  public void removeSelectedServer ()
+  {
+    Server selectedServer = _flamingoManager.getSelectedServer();
+    if (_flamingoManager.isCustomServer(selectedServer) && Dialog.pushWithConfirm(
+        _localeManager.getValue("m.remove_server_confirm", selectedServer.name),
+        _localeManager.getValue("m.remove_server"), JOptionPane.WARNING_MESSAGE)) {
+      _flamingoManager.removeCustomServer(selectedServer);
     }
   }
 
@@ -510,9 +561,7 @@ public class LauncherEventHandler
         ui.playerCountTooltipButton.setVisible(false);
       }
 
-      if (selectedServer.events != null || selectedServer.defaultEvent != null) {
-        updateBanner();
-      }
+      updateBanner();
 
       for (ActionListener al : ui.serverNoticeButton.getActionListeners()) {
         ui.serverNoticeButton.removeActionListener(al);
@@ -712,7 +761,10 @@ public class LauncherEventHandler
 
     List<Event> events = new ArrayList<>();
     Server selectedServer = _flamingoManager.getSelectedServer();
-    if (_flamingoManager.isOnline() && selectedServer != null) {
+    if (selectedServer != null && selectedServer.useStockClient) {
+      selectedServer = _flamingoManager.findServerByName("Official");
+    }
+    if (selectedServer != null) {
       long now = System.currentTimeMillis();
       if (selectedServer.events != null) {
         for (Event event : selectedServer.events) {
@@ -926,79 +978,46 @@ public class LauncherEventHandler
   private String[] getClientStartCommand (boolean altMode, String mainClass)
   {
     List<String> argsList = new ArrayList<>();
-
-    if (SystemUtil.isWindows()) {
-      argsList.add(LauncherGlobals.USER_DIR + File.separator + "java_vm" + File.separator + "bin" + File.separator + "java");
-      argsList.add("-classpath");
-      argsList.add(LauncherGlobals.USER_DIR + File.separator + "./code/config.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/projectx-config.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/projectx-pcode.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/lwjgl.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/lwjgl_util.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/jinput.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/jutils.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/jshortcut.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/commons-beanutils.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/commons-digester.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/commons-logging.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/discord-game-sdk4j.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/gson.jar;" +
-        LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar;");
-      argsList.add("-Dcom.threerings.getdown=false");
-      if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
-      if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
-      argsList.add(altMode ? "-Xms512M" : "-Xms" + Settings.gameMemory + "M");
-      argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
-      if (altMode) argsList.add(LauncherGlobals.ALT_MODE_ARG);
-      argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
-
-      if (!Settings.gameAdditionalArgs.isEmpty()) {
-        argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
-      }
-
-      argsList.add("-Djava.library.path=" + LauncherGlobals.USER_DIR + File.separator + "./native");
-      argsList.add("-Dorg.lwjgl.util.NoChecks=true");
-      argsList.add("-Dsun.java2d.d3d=false");
-      argsList.add("-Dappdir=" + LauncherGlobals.USER_DIR + File.separator + ".");
-      argsList.add("-Dresource_dir=" + LauncherGlobals.USER_DIR + File.separator + "./rsrc");
-      argsList.add(mainClass);
-    } else {
-      argsList.add(LauncherGlobals.USER_DIR + File.separator + "java" + File.separator + "bin" + File.separator + "java");
-      argsList.add("-classpath");
-      argsList.add(LauncherGlobals.USER_DIR + File.separator + "code/config.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "code/projectx-config.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "code/projectx-pcode.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "code/lwjgl.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "code/lwjgl_util.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "code/jinput.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "code/jshortcut.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "code/commons-beanutils.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "code/commons-digester.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "code/commons-logging.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/discord-game-sdk4j.jar:" +
-        LauncherGlobals.USER_DIR + File.separator + "./code/gson.jar");
-      argsList.add("-Dcom.threerings.getdown=false");
-      if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
-      if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
-      argsList.add(altMode ? "-Xms512M" : "-Xms" + Settings.gameMemory + "M");
-      argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
-      if (altMode) argsList.add(LauncherGlobals.ALT_MODE_ARG);
-      argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
-
-      if (!Settings.gameAdditionalArgs.isEmpty()) {
-        argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\n")));
-      }
-
-      argsList.add("-Djava.library.path=" + LauncherGlobals.USER_DIR + File.separator + "native");
-      argsList.add("-Dorg.lwjgl.util.NoChecks=true");
-      argsList.add("-Dsun.java2d.d3d=false");
-      argsList.add("-Dappdir=" + LauncherGlobals.USER_DIR + File.separator);
-      argsList.add("-Dresource_dir=" + LauncherGlobals.USER_DIR + File.separator + "rsrc");
-      argsList.add(mainClass);
+    argsList.add(JavaUtil.getGameJVMExePath());
+    argsList.add("-classpath");
+    List<String> classpath = new ArrayList<>();
+    File codeDirectory = new File(LauncherGlobals.USER_DIR, "code");
+    // Keep game configuration first; updater jars contain conflicting obfuscated classes.
+    for (String jar : new String[]{"config.jar", "projectx-config.jar", "projectx-pcode.jar"}) {
+      classpath.add(new File(codeDirectory, jar).getAbsolutePath());
     }
-
-    return argsList.toArray(new String[argsList.size()]);
+    File[] libraries = codeDirectory.listFiles(file -> file.isFile()
+      && file.getName().endsWith(".jar")
+      && !file.getName().toLowerCase(java.util.Locale.ROOT).contains("getdown")
+      && !Arrays.asList("config.jar", "projectx-config.jar", "projectx-pcode.jar").contains(file.getName()));
+    if (libraries != null) {
+      Arrays.sort(libraries, java.util.Comparator.comparing(File::getName));
+      for (File library : libraries) classpath.add(library.getAbsolutePath());
+    }
+    classpath.add(new File(LauncherGlobals.USER_DIR, "KnightLauncher.jar").getAbsolutePath());
+    argsList.add(String.join(File.pathSeparator, classpath));
+    argsList.add("-Dcom.threerings.getdown=false");
+    argsList.add(altMode ? "-Xms512M" : "-Xms" + Settings.gameMemory + "M");
+    argsList.add(altMode ? "-Xmx512M" : "-Xmx" + Settings.gameMemory + "M");
+    if (Settings.gameDisableExplicitGC) argsList.add("-XX:+DisableExplicitGC");
+    if (Settings.gameUseCustomGC) argsList.add("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+    argsList.add("-XX:SoftRefLRUPolicyMSPerMB=10");
+    if (!JavaUtil.isLegacy()) {
+      argsList.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
+      argsList.add("--add-opens=java.base/java.util=ALL-UNNAMED");
+      argsList.add("--enable-native-access=ALL-UNNAMED");
+    }
+    if (!Settings.gameAdditionalArgs.trim().isEmpty()) {
+      argsList.addAll(Arrays.asList(Settings.gameAdditionalArgs.trim().split("\r?\n")));
+    }
+    argsList.add("-Djava.library.path=" + LauncherGlobals.USER_DIR + "/native");
+    argsList.add("-Dorg.lwjgl.util.NoChecks=true");
+    argsList.add("-Dsun.java2d.d3d=false");
+    argsList.add("-Dappdir=" + LauncherGlobals.USER_DIR);
+    argsList.add("-Dresource_dir=" + LauncherGlobals.USER_DIR + "/rsrc");
+    argsList.add("-Dcrucible.dir=" + LauncherGlobals.USER_DIR + "/crucible");
+    argsList.add(mainClass);
+    return argsList.toArray(new String[0]);
   }
 
   private String[] getThirdPartyClientStartCommand (Server server, boolean altMode)

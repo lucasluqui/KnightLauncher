@@ -972,6 +972,20 @@ public class SettingsUI extends BaseUI
     publicKeyTextField.setCaretPosition(0);
     getdownURLTextField.setCaretPosition(0);
 
+    javax.swing.event.DocumentListener connectionSaver = new javax.swing.event.DocumentListener() {
+      public void insertUpdate(javax.swing.event.DocumentEvent e) { eventHandler.saveConnectionSettings(); }
+      public void removeUpdate(javax.swing.event.DocumentEvent e) { eventHandler.saveConnectionSettings(); }
+      public void changedUpdate(javax.swing.event.DocumentEvent e) { eventHandler.saveConnectionSettings(); }
+    };
+    for (JTextField field : new JTextField[]{serverAddressTextField, portTextField, publicKeyTextField, getdownURLTextField}) {
+      field.getDocument().addDocumentListener(connectionSaver);
+    }
+    removeServerButton = new JButton(_localeManager.getValue("m.remove_server"));
+    removeServerButton.setBounds(Scale.rect(435, 363, 180, 30));
+    removeServerButton.setVisible(false);
+    removeServerButton.addActionListener(e -> eventHandler.removeSelectedServer());
+    advancedPanel.add(removeServerButton);
+
     return advancedPanel;
   }
 
@@ -1117,7 +1131,7 @@ public class SettingsUI extends BaseUI
   /**
    * The translated name to show in the dropdown for the given stored platform value.
    */
-  private String getPlatformLabel (String platform)
+  public String getPlatformLabel (String platform)
   {
     return _localeManager.getValue(Settings.PLATFORM_STEAM.equals(platform) ? "o.steam" : "o.standalone");
   }
@@ -1152,6 +1166,7 @@ public class SettingsUI extends BaseUI
   public JTextField portTextField = new JTextField();
   public JTextField publicKeyTextField = new JTextField();
   public JTextField getdownURLTextField = new JTextField();
+  public JButton removeServerButton = new JButton();
   public JButton resetConnectionSettingsButton = new JButton();
   public JTextField betaCodeTextField;
   public JLabel labelFlamingoStatus = new JLabel();

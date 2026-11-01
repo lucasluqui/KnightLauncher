@@ -121,10 +121,14 @@ public class SettingsManager
 
   private void initFinished ()
   {
-    if (SystemUtil.isWindows() && !SteamUtil.isRunningInSteamapps()) {
-      Settings.gamePlatform = Settings.PLATFORM_STANDALONE;
-      setValue("game.platform", Settings.PLATFORM_STANDALONE);
-    }
+    // Platform choices are stored per server and must survive restarts.
+  }
+
+  public String getGamePlatform (Server server)
+  {
+    String platform = getValue("game.platform", Settings.PLATFORM_STANDALONE, server);
+    return platform.startsWith(Settings.PLATFORM_STEAM)
+      ? Settings.PLATFORM_STEAM : Settings.PLATFORM_STANDALONE;
   }
 
   public String getValue (String key)
@@ -160,8 +164,8 @@ public class SettingsManager
   public void setValue (String key, String value)
   {
     _prop.setProperty(key, value);
-    try {
-      _prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
+    try (OutputStream output = Files.newOutputStream(Paths.get(PROP_PATH))) {
+      _prop.store(output, null);
     } catch (IOException e) {
       log.error(e);
     }
@@ -175,8 +179,8 @@ public class SettingsManager
     } else {
       _prop.setProperty(key, value);
     }
-    try {
-      _prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
+    try (OutputStream output = Files.newOutputStream(Paths.get(PROP_PATH))) {
+      _prop.store(output, null);
     } catch (IOException e) {
       log.error(e);
     }

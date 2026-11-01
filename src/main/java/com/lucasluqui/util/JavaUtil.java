@@ -143,7 +143,7 @@ public class JavaUtil
   {
     // Third party servers.
     if (_flamingoManager != null && _flamingoManager.getSelectedServer() != null) {
-      if (!_flamingoManager.getSelectedServer().isOfficial()) {
+      if (!_flamingoManager.getSelectedServer().isOfficial() && !_flamingoManager.getSelectedServer().useStockClient) {
         String path = LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator + _flamingoManager.getSelectedServer().getSanitizedName();
         return new File(path, "java_vm").getAbsolutePath();
       }
