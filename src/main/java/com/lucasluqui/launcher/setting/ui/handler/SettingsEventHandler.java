@@ -13,6 +13,7 @@ import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
+import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.util.*;
 import com.sun.management.OperatingSystemMXBean;
 
@@ -241,7 +242,7 @@ public class SettingsEventHandler
 
   public void removeSelectedServer ()
   {
-    _ctx.getApp().getUI(com.lucasluqui.launcher.ui.LauncherUI.class).eventHandler.removeSelectedServer();
+    _ctx.getApp().getUI(LauncherUI.class).eventHandler.removeSelectedServer();
   }
 
   public void saveConnectionSettings ()
@@ -256,12 +257,8 @@ public class SettingsEventHandler
     Settings.gameGetdownURL = toClientRootUrl(Settings.gameGetdownFullURL);
     Settings.gameContentURL = this.ui.contentURLTextField.getText().trim();
 
-    _settingsManager.setValue("game.endpoint", Settings.gameEndpoint, selectedServer);
-    _settingsManager.setValue("game.port", String.valueOf(Settings.gamePort), selectedServer);
-    _settingsManager.setValue("game.publicKey", Settings.gamePublicKey, selectedServer);
-    _settingsManager.setValue("game.getdownURL", Settings.gameGetdownURL, selectedServer);
-    _settingsManager.setValue("game.getdownFullURL", Settings.gameGetdownFullURL, selectedServer);
-    _settingsManager.setValue("game.contentURL", Settings.gameContentURL, selectedServer);
+    _settingsManager.setConnectionSettings(selectedServer, Settings.gameEndpoint, String.valueOf(Settings.gamePort),
+      Settings.gamePublicKey, Settings.gameGetdownFullURL, Settings.gameContentURL);
   }
 
   private int parsePort (String port)
@@ -274,12 +271,16 @@ public class SettingsEventHandler
   }
 
   // The game expects the root URL only ("http://host"), while the settings field
-  // holds the full getdown URL the user pastes in.
-  public String toClientRootUrl (String getdownFullURL)
+  // holds the full getdown URL the user pastes in. The scheme is kept when it is http(s).
+  public static String toClientRootUrl (String getdownFullURL)
   {
-    if (getdownFullURL.isEmpty()) return "";
-    String withoutScheme = getdownFullURL.contains("://") ? getdownFullURL.split("://")[1] : getdownFullURL;
-    return "http://" + withoutScheme.split("/")[0];
+    String url = getdownFullURL.trim();
+    if (url.isEmpty()) return "";
+    int schemeEnd = url.indexOf("://");
+    String scheme = schemeEnd > 0 ? url.substring(0, schemeEnd).toLowerCase(java.util.Locale.ROOT) : "http";
+    if (!scheme.equals("http") && !scheme.equals("https")) scheme = "http";
+    String hostAndPath = schemeEnd > 0 ? url.substring(schemeEnd + 3) : url;
+    return scheme + "://" + hostAndPath.split("/")[0];
   }
 
   public void resetConnectionSettingsButtonEvent (ActionEvent action)
@@ -541,6 +542,7 @@ public class SettingsEventHandler
         this.ui.portTextField.setEnabled(true);
         this.ui.publicKeyTextField.setEnabled(true);
         this.ui.getdownURLTextField.setEnabled(true);
+        this.ui.contentURLTextField.setEnabled(true);
         this.ui.resetConnectionSettingsButton.setEnabled(true);
       } else {
         this.ui.switchDiscordIntegration.setEnabled(false);
@@ -551,11 +553,12 @@ public class SettingsEventHandler
         this.ui.memorySlider.setBounds(Scale.rect(20, 105, 350, 40));
         this.ui.memoryValue.setBounds(Scale.rect(25, 139, 350, 25));
         this.ui.labelDisclaimer.setVisible(true);
-        this.ui.serverAddressTextField.setEnabled(true);
-        this.ui.portTextField.setEnabled(true);
-        this.ui.publicKeyTextField.setEnabled(true);
-        this.ui.getdownURLTextField.setEnabled(true);
-        this.ui.resetConnectionSettingsButton.setEnabled(true);
+        this.ui.serverAddressTextField.setEnabled(false);
+        this.ui.portTextField.setEnabled(false);
+        this.ui.publicKeyTextField.setEnabled(false);
+        this.ui.getdownURLTextField.setEnabled(false);
+        this.ui.contentURLTextField.setEnabled(false);
+        this.ui.resetConnectionSettingsButton.setEnabled(false);
       }
 
       this.ui.removeServerButton.setVisible(_flamingoManager.isCustomServer(selectedServer));

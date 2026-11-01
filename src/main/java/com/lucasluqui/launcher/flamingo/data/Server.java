@@ -101,7 +101,6 @@ public class Server
 
   public String getModsDirectory ()
   {
-    if (useStockClient) return LauncherGlobals.USER_DIR + "/thirdparty/" + getSanitizedName() + "/mods/";
     return this.getRootDirectory() + "/mods/";
   }
 

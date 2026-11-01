@@ -311,6 +311,20 @@ public class FlamingoManager
    */
   private void registerServer (Server server)
   {
+    String serverName = server.getSanitizedName();
+
+    // Stock-client servers reuse the Official install: no folders and no base zip of their own.
+    if (!server.useStockClient) {
+      prepareServerFiles(server);
+    }
+
+    // check server specific settings keys.
+    _ctx.getApp().getUI(SettingsUI.class).eventHandler.checkServerSettingsKeys(serverName);
+    _ctx.getApp().getUI(ModListUI.class).eventHandler.checkServerSettingsKeys(serverName);
+  }
+
+  private void prepareServerFiles (Server server)
+  {
     // make sure we have a proper folder structure for this server.
     String serverName = server.getSanitizedName();
     FileUtil.createDir(getThirdPartyBaseDir() + serverName);
@@ -326,10 +340,6 @@ public class FlamingoManager
         log.error(e);
       }
     }
-
-    // check server specific settings keys.
-    _ctx.getApp().getUI(SettingsUI.class).eventHandler.checkServerSettingsKeys(serverName);
-    _ctx.getApp().getUI(ModListUI.class).eventHandler.checkServerSettingsKeys(serverName);
   }
 
   /**
@@ -349,18 +359,8 @@ public class FlamingoManager
         String name = json.optString("name", "").trim();
         if (name.isEmpty() || name.equalsIgnoreCase("Official")) continue;
 
-        Server server = new Server(name);
-        server.useStockClient = true;
+        Server server = newCustomServer(name);
         server.enabled = json.optInt("enabled", 1);
-        server.description = "";
-        server.managedBy = "";
-        server.version = "";
-        server.deployUrl = "null";
-        server.playerCountUrl = "null";
-        server.siteUrl = "null";
-        server.communityUrl = "null";
-        server.sourceCodeUrl = "null";
-        server.serverIcon = "null";
         servers.add(server);
       }
     } catch (Exception e) {
@@ -371,11 +371,30 @@ public class FlamingoManager
   }
 
   /**
+   * A manually added server: it reuses the installed client and has no remote metadata.
+   */
+  public Server newCustomServer (String name)
+  {
+    Server server = new Server(name);
+    server.useStockClient = true;
+    server.enabled = 1;
+    server.description = "";
+    server.managedBy = "";
+    server.version = "";
+    server.deployUrl = "null";
+    server.playerCountUrl = "null";
+    server.siteUrl = "null";
+    server.communityUrl = "null";
+    server.sourceCodeUrl = "null";
+    server.serverIcon = "null";
+    return server;
+  }
+
+  /**
    * Persists a manually added server and makes it immediately available in the switcher.
    */
   public void addCustomServer (Server server)
   {
-    server.useStockClient = true;
     List<Server> servers = loadCustomServers();
     for (Server existing : servers) {
       if (existing.name.equalsIgnoreCase(server.name)) return;

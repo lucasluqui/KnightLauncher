@@ -10,6 +10,7 @@ import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
+import com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler;
 import com.lucasluqui.util.*;
 
 import javax.swing.*;
@@ -51,7 +52,6 @@ public class SettingsManager
       log.error(e);
     } finally {
       loadSettings();
-      initFinished();
     }
   }
 
@@ -120,13 +120,10 @@ public class SettingsManager
     log.info("Loaded required settings from properties file");
   }
 
-  private void initFinished ()
-  {
-    // Platform choices are stored per server and must survive restarts.
-  }
-
   public String getGamePlatform (Server server)
   {
+    // Outside of a Steam install the Steam platform can't work, whatever was stored.
+    if (SystemUtil.isWindows() && !SteamUtil.isRunningInSteamapps()) return Settings.PLATFORM_STANDALONE;
     String platform = getValue("game.platform", Settings.PLATFORM_STANDALONE, server);
     return platform.startsWith(Settings.PLATFORM_STEAM)
       ? Settings.PLATFORM_STEAM : Settings.PLATFORM_STANDALONE;
@@ -361,60 +358,61 @@ public class SettingsManager
     return String.join(System.lineSeparator(), args);
   }
 
-  public void applyConnectionSettings ()
+  /**
+   * Bakes the selected server's connection settings into the stock client's config.jar. Blank
+   * fields fall back to the Official values, so a previous server's settings never linger.
+   *
+   * @return whether the settings were written
+   */
+  public boolean applyConnectionSettings ()
   {
     Server server = _flamingoManager.getSelectedServer();
-
-    // Every server shares the stock client, so an empty configuration must never be
-    // written over it: that would wipe the connection settings of the other servers.
-    if (isBlank(Settings.gameEndpoint) && isBlank(Settings.gamePublicKey) && isBlank(Settings.gameGetdownURL)) {
-      log.info("No connection settings to apply", "server", server == null ? "null" : server.name);
-      return;
-    }
+    String port = Settings.gamePort > 0 ? String.valueOf(Settings.gamePort) : SettingsEventHandler.DEFAULT_PORT;
 
     Properties properties = new Properties();
-    if (!isBlank(Settings.gameEndpoint)) {
-      properties.setProperty("server_host", Settings.gameEndpoint);
-    }
-    if (Settings.gamePort > 0) {
-      properties.setProperty("server_ports", String.valueOf(Settings.gamePort));
-      properties.setProperty("datagram_ports", String.valueOf(Settings.gamePort));
-    }
-    if (!isBlank(Settings.gamePublicKey)) {
-      properties.setProperty("key.public", Settings.gamePublicKey);
-    }
-    if (!isBlank(Settings.gameGetdownURL)) {
-      properties.setProperty("client_root_url", Settings.gameGetdownURL);
-    }
-    // The content URL is its own setting, separate from the client root URL above.
-    if (!isBlank(Settings.gameContentURL)) {
-      properties.setProperty("content_url", Settings.gameContentURL);
-    }
+    properties.setProperty("server_host", orDefault(Settings.gameEndpoint, SettingsEventHandler.DEFAULT_SERVER_ADDRESS));
+    properties.setProperty("server_ports", port);
+    properties.setProperty("datagram_ports", port);
+    properties.setProperty("key.public", orDefault(Settings.gamePublicKey, SettingsEventHandler.DEFAULT_PUBLIC_KEY));
+    properties.setProperty("client_root_url", orDefault(Settings.gameGetdownURL, SettingsEventHandler.toClientRootUrl(SettingsEventHandler.DEFAULT_GETDOWN_URL)));
+    properties.setProperty("content_url", orDefault(Settings.gameContentURL, SettingsEventHandler.DEFAULT_CONTENT_URL));
 
     try {
       ZipUtil.updatePropertiesInsideZip(
         Paths.get(LauncherGlobals.USER_DIR, "code", "config.jar"),
         "deployment.properties", properties);
+      return true;
     } catch (IOException | IllegalArgumentException e) {
       log.error("Failed to apply connection settings to code/config.jar",
         "server", server == null ? "null" : server.name);
       log.error(e);
+      return false;
     }
+  }
+
+  /**
+   * Stores a server's connection settings under its own keys. The root URL the game expects
+   * is derived from the full getdown URL.
+   */
+  public void setConnectionSettings (Server server, String endpoint, String port, String publicKey,
+                                     String getdownFullURL, String contentURL)
+  {
+    setValue("game.endpoint", endpoint, server);
+    setValue("game.port", port, server);
+    setValue("game.publicKey", publicKey, server);
+    setValue("game.getdownFullURL", getdownFullURL, server);
+    setValue("game.getdownURL", SettingsEventHandler.toClientRootUrl(getdownFullURL), server);
+    setValue("game.contentURL", contentURL, server);
+  }
+
+  private static String orDefault (String value, String defaultValue)
+  {
+    return isBlank(value) ? defaultValue : value;
   }
 
   private static boolean isBlank (String value)
   {
     return value == null || value.trim().isEmpty();
-  }
-
-  /**
-   * Whether the given server has connection settings worth applying. An empty endpoint
-   * means the server was left on "do not touch the client", which is the default for
-   * custom servers.
-   */
-  public boolean hasConnectionSettings (Server server)
-  {
-    return !isBlank(getValue("game.endpoint", "", server));
   }
 
   public int getMaxAllowedMemoryAlloc ()
@@ -437,6 +435,6 @@ public class SettingsManager
   private HashMap<String, Object> _migrationMap = new HashMap<>();
   private boolean _migrating = false;
 
-  private final String PROP_VER = "32";
+  private final String PROP_VER = "33";
   private final String PROP_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
 }

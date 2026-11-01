@@ -866,7 +866,7 @@ public class SettingsUI extends BaseUI
     labelConnectionSettings.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
     advancedPanel.add(labelConnectionSettings);
 
-    labelDisclaimer = new JLabel(_localeManager.getValue("m.connection_settings_thirdparty_note"));
+    labelDisclaimer = new JLabel(_localeManager.getValue("m.connection_settings_thirdparty_disclaimer"));
     labelDisclaimer.setBounds(Scale.rect(195, 255, 300, 18));
     labelDisclaimer.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     labelDisclaimer.setHorizontalAlignment(SwingConstants.LEFT);
@@ -987,13 +987,12 @@ public class SettingsUI extends BaseUI
     getdownURLTextField.setCaretPosition(0);
     contentURLTextField.setCaretPosition(0);
 
-    javax.swing.event.DocumentListener connectionSaver = new javax.swing.event.DocumentListener() {
-      public void insertUpdate(javax.swing.event.DocumentEvent e) { eventHandler.saveConnectionSettings(); }
-      public void removeUpdate(javax.swing.event.DocumentEvent e) { eventHandler.saveConnectionSettings(); }
-      public void changedUpdate(javax.swing.event.DocumentEvent e) { eventHandler.saveConnectionSettings(); }
+    java.awt.event.FocusAdapter connectionSaver = new java.awt.event.FocusAdapter() {
+      @Override
+      public void focusLost (java.awt.event.FocusEvent e) { eventHandler.saveConnectionSettings(); }
     };
     for (JTextField field : new JTextField[]{serverAddressTextField, portTextField, publicKeyTextField, getdownURLTextField, contentURLTextField}) {
-      field.getDocument().addDocumentListener(connectionSaver);
+      field.addFocusListener(connectionSaver);
     }
     removeServerButton = new JButton(_localeManager.getValue("m.remove_server"));
     removeServerButton.setBounds(Scale.rect(435, 363, 180, 30));

@@ -14,6 +14,7 @@ import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler;
 import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.util.*;
@@ -99,8 +100,7 @@ public class LauncherEventHandler
       Server selectedServer = _flamingoManager.getSelectedServer();
       String sanitizedServerName = selectedServer.getSanitizedName();
 
-      boolean stockPrivateServer = !selectedServer.isOfficial()
-        && (selectedServer.useStockClient || _settingsManager.hasConnectionSettings(selectedServer));
+      boolean stockPrivateServer = selectedServer.useStockClient;
       if (stockPrivateServer && !new File(LauncherGlobals.USER_DIR, "code/projectx-pcode.jar").isFile()) {
         Dialog.push(_localeManager.getValue("m.shared_client_missing"), JOptionPane.WARNING_MESSAGE);
         _ctx.getApp().toggleElementsBlock(false);
@@ -162,11 +162,17 @@ public class LauncherEventHandler
         _ctx._progressBar.setBarValue(0);
 
         _ctx.getApp().getUI(SettingsUI.class).eventHandler.saveConnectionSettings();
-        _settingsManager.applyConnectionSettings();
+        if (Settings.gameEndpoint.isEmpty() || !_settingsManager.applyConnectionSettings()) {
+          Dialog.push(_localeManager.getValue("m.connection_settings_apply_failed"), JOptionPane.ERROR_MESSAGE);
+          _ctx._progressBar.finishTask();
+          _ctx.getApp().toggleElementsBlock(false);
+          ui.resetLaunchButton();
+          return;
+        }
 
         _ctx._progressBar.setBarValue(1);
         try {
-          ProcessBuilder game = new ProcessBuilder(getStockClientStartCommand(altMode));
+          ProcessBuilder game = new ProcessBuilder(getClientStartCommand(altMode, "com.threerings.projectx.client.ProjectXApp"));
           game.directory(new File(LauncherGlobals.USER_DIR));
           game.environment().remove("_JAVA_OPTIONS");
           // Keep the private endpoint intact by bypassing getdown for both platforms.
@@ -336,43 +342,12 @@ public class LauncherEventHandler
   private void showAddServerDialog ()
   {
     JTextField nameField = new JTextField();
-    JTextField addressField = new JTextField(com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler.DEFAULT_SERVER_ADDRESS);
+    JTextField addressField = new JTextField(SettingsEventHandler.DEFAULT_SERVER_ADDRESS);
     JTextField portField = new JTextField("47624");
-    JTextField publicKeyField = new JTextField() {
-      private String fullKey;
-      private boolean abbreviated;
-
-      @Override
-      public String getText ()
-      {
-        return abbreviated ? fullKey : super.getText();
-      }
-
-      @Override
-      public void setText (String text)
-      {
-        fullKey = text == null ? "" : text;
-        abbreviated = !hasFocus() && fullKey.length() > 48;
-        super.setText(abbreviated ? fullKey.substring(0, 45) + "..." : fullKey);
-        setCaretPosition(0);
-      }
-
-      @Override
-      protected void processFocusEvent (java.awt.event.FocusEvent event)
-      {
-        if (event.getID() == java.awt.event.FocusEvent.FOCUS_GAINED) {
-          String value = getText();
-          abbreviated = false;
-          super.setText(value);
-        } else if (event.getID() == java.awt.event.FocusEvent.FOCUS_LOST) {
-          setText(super.getText());
-        }
-        super.processFocusEvent(event);
-      }
-    };
-    publicKeyField.setText(com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler.DEFAULT_PUBLIC_KEY);
-    JTextField getdownField = new JTextField(com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler.DEFAULT_GETDOWN_URL);
-    JTextField contentURLField = new JTextField(com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler.DEFAULT_CONTENT_URL);
+    JTextField publicKeyField = new JTextField(SettingsEventHandler.DEFAULT_PUBLIC_KEY);
+    publicKeyField.setCaretPosition(0);
+    JTextField getdownField = new JTextField(SettingsEventHandler.DEFAULT_GETDOWN_URL);
+    JTextField contentURLField = new JTextField(SettingsEventHandler.DEFAULT_CONTENT_URL);
 
     for (JTextField field : new JTextField[]{nameField, addressField, portField, publicKeyField, getdownField, contentURLField}) {
       field.setColumns(36);
@@ -404,6 +379,7 @@ public class LauncherEventHandler
 
     String name = nameField.getText().trim();
     String address = addressField.getText().trim();
+    String port = portField.getText().trim();
 
     if (name.isEmpty() || address.isEmpty()) {
       Dialog.push(_localeManager.getValue("m.add_server_missing_fields"),
@@ -411,33 +387,35 @@ public class LauncherEventHandler
       return;
     }
 
-    if (name.equalsIgnoreCase("Official") || _flamingoManager.findServerByName(name) != null) {
+    if (name.equalsIgnoreCase("Official")) {
       Dialog.push(_localeManager.getValue("m.add_server_duplicate"),
         _localeManager.getValue("m.add_server"), JOptionPane.WARNING_MESSAGE);
       return;
     }
 
-    Server server = new Server(name);
-    server.enabled = 1;
-    server.description = "";
-    server.managedBy = "";
-    server.version = "";
-    server.deployUrl = "null";
-    server.playerCountUrl = "null";
-    server.siteUrl = "null";
-    server.communityUrl = "null";
-    server.sourceCodeUrl = "null";
-    server.serverIcon = "null";
+    // The sanitized name becomes a settings key suffix, so it has to be a plain token.
+    Server server = _flamingoManager.newCustomServer(name);
+    String sanitizedName = server.getSanitizedName();
+    if (!sanitizedName.matches("[a-z0-9][a-z0-9_-]*")) {
+      Dialog.push(_localeManager.getValue("m.add_server_invalid_name"),
+        _localeManager.getValue("m.add_server"), JOptionPane.WARNING_MESSAGE);
+      return;
+    }
 
-    // Connection settings live per server, reusing the same keys the Advanced tab edits.
-    _settingsManager.setValue("game.endpoint", address, server);
-    _settingsManager.setValue("game.port", portField.getText().trim(), server);
-    _settingsManager.setValue("game.publicKey", publicKeyField.getText().trim(), server);
-    String getdown = getdownField.getText().trim();
-    _settingsManager.setValue("game.getdownFullURL", getdown, server);
-    _settingsManager.setValue("game.getdownURL",
-      _ctx.getApp().getUI(SettingsUI.class).eventHandler.toClientRootUrl(getdown), server);
-    _settingsManager.setValue("game.contentURL", contentURLField.getText().trim(), server);
+    if (_flamingoManager.findServerBySanitizedName(sanitizedName) != null) {
+      Dialog.push(_localeManager.getValue("m.add_server_duplicate"),
+        _localeManager.getValue("m.add_server"), JOptionPane.WARNING_MESSAGE);
+      return;
+    }
+
+    if (!port.matches("\\d{1,5}") || Integer.parseInt(port) < 1 || Integer.parseInt(port) > 65535) {
+      Dialog.push(_localeManager.getValue("m.add_server_invalid_port"),
+        _localeManager.getValue("m.add_server"), JOptionPane.WARNING_MESSAGE);
+      return;
+    }
+
+    _settingsManager.setConnectionSettings(server, address, port, publicKeyField.getText().trim(),
+      getdownField.getText().trim(), contentURLField.getText().trim());
 
     _flamingoManager.addCustomServer(server);
   }
@@ -472,7 +450,6 @@ public class LauncherEventHandler
       selectedServer.name + " " + _localeManager.getValue("t.server_info"),
       JOptionPane.INFORMATION_MESSAGE
     );
-
   }
 
   public void removeSelectedServer ()
@@ -970,13 +947,6 @@ public class LauncherEventHandler
   private String[] getCodeModsStartCommand (boolean altMode)
   {
     return getClientStartCommand(altMode, "com.lucasluqui.bootstrap.Bootstrap");
-  }
-
-  // Launches the installed stock client directly, without getdown and without a
-  // server-specific copy of the client.
-  private String[] getStockClientStartCommand (boolean altMode)
-  {
-    return getClientStartCommand(altMode, "com.threerings.projectx.client.ProjectXApp");
   }
 
   private String[] getClientStartCommand (boolean altMode, String mainClass)
