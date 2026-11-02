@@ -3,12 +3,10 @@ package com.lucasluqui.swing;
 import java.awt.*;
 
 /**
- * The launcher's UI scale. Every size in the UI is written for 100% and goes through here, which turns it
- * into actual pixels for the chosen scale. It's set once on startup, before any UI is built, so changing
- * it needs a restart
- *
- * TODO: In the future; when we're no longer restrained by Java 8: Upgrade this so we don't need to restart.
- *       Java 9+ should allow this to follow through smoothly without one. One day!
+ * Handles the launcher's UI scaling.
+ * Every size in the UI is written for 100% and goes through here, which turns it into
+ * actual pixels for the chosen scale.
+ * It's set once on startup, before any UI is built, so changing it needs a restart.
  */
 public final class Scale
 {
@@ -36,7 +34,8 @@ public final class Scale
   }
 
   /**
-   * The other way around: actual pixels, e.g. a component's current position, back into 100% units.
+   * The other way around: actual pixels,
+   * e.g. a component's current position, back into 100% units.
    */
   public static int unpx (int value)
   {
@@ -44,7 +43,8 @@ public final class Scale
   }
 
   /**
-   * Both edges are scaled rather than the size, so components that touch at 100% still touch when scaled.
+   * Both edges are scaled rather than the size,
+   * so components that touch at 100% still touch when scaled.
    */
   public static Rectangle rect (int x, int y, int width, int height)
   {
@@ -59,7 +59,8 @@ public final class Scale
   }
 
   /**
-   * The biggest scale at which a window of the given size, at 100%, still fits on the screen it'd be shown on.
+   * The biggest scale at which a window of the given size, at 100%,
+   * still fits on the screen it'd be shown on.
    */
   public static float maxFactorFor (int width, int height)
   {
