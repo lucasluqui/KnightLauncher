@@ -31,6 +31,12 @@
   </licenses>
 
   <properties>
+    <!--
+      The Java version the launcher is built for and runs on. Older Java installs that start the launcher make it
+      restart on a runtime of this version, which it downloads from the CDN if needed.
+    -->
+    <launcher.java.version>25</launcher.java.version>
+
     <env>dev</env>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -282,7 +288,7 @@
         <version>3.15.0</version>
         <configuration>
           <encoding>UTF-8</encoding>
-          <release>25</release>
+          <release>${launcher.java.version}</release>
         </configuration>
         <executions>
           <!--
