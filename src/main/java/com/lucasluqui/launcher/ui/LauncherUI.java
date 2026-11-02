@@ -397,7 +397,7 @@ public class LauncherUI extends BaseUI
     sidePane.add(donateButton);
     donateButton.addActionListener(e -> DesktopUtil.openWebpage(LauncherGlobals.URL_DONATE));
 
-    JLabel launcherVersion = new JLabel("v" + BuildConfig.getVersion() + " ");
+    JLabel launcherVersion = new JLabel("v" + BuildConfig.getVersion() + "  ");
     launcherVersion.setFont(Fonts.getFont("default", 9.0f, Font.ITALIC));
     launcherVersion.setForeground(CustomColors.INTERFACE_SIDEPANE_FOOTNOTE);
     launcherVersion.setHorizontalAlignment(SwingConstants.RIGHT);
