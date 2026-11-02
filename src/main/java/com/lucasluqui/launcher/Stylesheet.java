@@ -1,6 +1,7 @@
 package com.lucasluqui.launcher;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.lucasluqui.swing.FractionalMetrics;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
@@ -24,6 +25,8 @@ public class Stylesheet
     } catch (UnsupportedLookAndFeelException e) {
       log.error(e);
     }
+
+    FractionalMetrics.install();
 
     UIManager.put("TabbedPane.underlineColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
     UIManager.put("TabbedPane.inactiveUnderlineColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);

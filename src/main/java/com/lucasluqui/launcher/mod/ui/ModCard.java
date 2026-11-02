@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.mod.ui;
 
+import com.lucasluqui.swing.FractionalMetrics;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.jhlabs.image.GaussianFilter;
 import com.lucasluqui.launcher.CustomColors;
@@ -115,6 +116,7 @@ public class ModCard extends JPanel
     Graphics2D g2d = (Graphics2D) g.create();
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    FractionalMetrics.apply(g2d);
     g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
     // Clipping isn't antialiased in Java2D, so the card is drawn into a buffer holding its shape first,

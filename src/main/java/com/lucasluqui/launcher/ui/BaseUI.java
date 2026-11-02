@@ -165,7 +165,7 @@ public abstract class BaseUI
     returnButton.setVisible(false);
     returnButton.setFocusable(false);
     returnButton.setFocusPainted(false);
-    returnButton.setBorder(null);
+    //returnButton.setBorder(null);
     returnButton.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
     returnButton.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");

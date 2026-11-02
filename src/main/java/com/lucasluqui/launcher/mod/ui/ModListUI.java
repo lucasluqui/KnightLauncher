@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.mod.ui;
 
+import com.lucasluqui.swing.FractionalMetrics;
 import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
@@ -324,6 +325,7 @@ public class ModListUI extends BaseUI
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        FractionalMetrics.apply(g2d);
 
         // The screen can be taller than the window showing it, so stick to the part that's actually visible.
         Rectangle area = getVisibleRect();
