@@ -1,0 +1,166 @@
+name: Build and Release (Java 25)
+
+on:
+  workflow_dispatch
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Fetch Spiral Knights version
+        id: fetch-version
+        run: |
+          # Download getdown.txt to get the version
+          curl -sSL https://gamemedia2.spiralknights.com/spiral/client/getdown.txt -o getdown.txt
+
+          # Extract version number from the first line
+          VERSION=$(grep '^version = ' getdown.txt | head -1 | sed 's/version = //')
+          echo "SK_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          echo "Spiral Knights version: $VERSION"
+
+          # Clean up
+          rm getdown.txt
+
+      - name: Cache projectx-pcode.jar
+        id: cache-projectx
+        uses: actions/cache@v5
+        with:
+          path: lib/projectx-pcode.jar
+          key: projectx-pcode-${{ steps.fetch-version.outputs.version }}
+
+      - name: Download projectx-pcode.jar
+        if: steps.cache-projectx.outputs.cache-hit != 'true'
+        run: |
+          # Construct the URL using the version
+          JAR_URL="http://gamemedia2.spiralknights.com/spiral/${{ steps.fetch-version.outputs.version }}/code/projectx-pcode.jar"
+
+          echo "Downloading from: $JAR_URL"
+
+          # Download the jar file to lib directory
+          mkdir -p lib
+          curl -sSL "$JAR_URL" -o lib/projectx-pcode.jar
+
+          # Verify the file was downloaded
+          if [ -f lib/projectx-pcode.jar ]; then
+            echo "Successfully downloaded projectx-pcode.jar"
+            ls -lh lib/projectx-pcode.jar
+          else
+            echo "Failed to download projectx-pcode.jar"
+            exit 1
+          fi
+
+      - name: Create deploy.properties
+        run: |
+          # Create deploy.properties from template for production build
+          cp deploy.properties.template deploy.properties
+
+          # The Maven build will replace ${env} with 'prod' via -Denv=prod
+          echo "Created deploy.properties from template"
+
+      - name: Validate Maven dependencies
+        run: mvn validate
+
+      - name: Build with Maven
+        run: mvn -Denv=prod clean package
+
+      - name: Verify class file versions
+        run: |
+          # The entry point must stay runnable on Java 8 (class file version 52), so older Java installs
+          # can start the launcher and have it restart itself on Java 25 (class file version 69).
+          check_version () {
+            ACTUAL=$(javap -v -cp target/KnightLauncher.jar "$1" | grep 'major version' | awk '{print $3}')
+            echo "$1: class file version $ACTUAL"
+            if [ "$ACTUAL" != "$2" ]; then
+              echo "::error::$1 has class file version $ACTUAL, expected $2"
+              exit 1
+            fi
+          }
+          check_version com.lucasluqui.launcher.Main 52
+          check_version com.lucasluqui.launcher.runtime.RuntimeLocator 52
+          check_version com.lucasluqui.launcher.runtime.RuntimeInstaller 52
+          check_version com.lucasluqui.launcher.runtime.RuntimeSource 52
+          check_version com.lucasluqui.launcher.runtime.RuntimeDownloadWindow 52
+          check_version com.lucasluqui.launcher.LauncherApp 69
+
+          MAIN_CLASS=$(unzip -p target/KnightLauncher.jar META-INF/MANIFEST.MF | grep '^Main-Class:' | tr -d '\r' | awk '{print $2}')
+          echo "Main-Class: $MAIN_CLASS"
+          if [ "$MAIN_CLASS" != "com.lucasluqui.launcher.Main" ]; then
+            echo "::error::Main-Class is $MAIN_CLASS, expected com.lucasluqui.launcher.Main"
+            exit 1
+          fi
+
+      - name: Check launcher runtimes on the CDN
+        run: |
+          # Users download these on their first Java 25 launch. Missing ones aren't fatal, as the launcher
+          # falls back to the game's own runtime, but they're worth knowing about before releasing.
+          BASE="https://cdn.knightlauncher.com/knightlauncher/v2/runtime"
+          for RUNTIME in windows/25/runtime.zip linux-x64/25/runtime.tar.gz linux-aarch64/25/runtime.tar.gz macos/25/runtime.tar.gz; do
+            PLATFORM_DIR=$(dirname "$RUNTIME")
+            if curl -fsSI "$BASE/$RUNTIME" > /dev/null && curl -fsSI "$BASE/$PLATFORM_DIR/checksum.txt" > /dev/null; then
+              echo "Found $RUNTIME"
+            else
+              echo "::warning::Launcher runtime $RUNTIME or its checksum is missing from the CDN"
+            fi
+          done
+
+      - name: Extract version from pom.xml
+        id: extract-version
+        run: |
+          VERSION=$(grep '<version>' pom.xml | head -1 | sed 's/.*<version>\(.*\)<\/version>.*/\1/')
+          VERSION=${VERSION%-SNAPSHOT}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create README.txt
+        run: |
+          cat > README.txt << 'EOF'
+          Place the .jar file in your game's root directory and then double click it.
+          If that does not work, drag and drop the .bat or .sh script file (depending of your operating system) to that same directory
+          and double click it.
+
+          .BAT script (Windows):
+          https://github.com/lucasluqui/KnightLauncher/blob/main/scripts/KnightLauncher_windows.bat
+
+          .SH script (macOS, Linux):
+          https://github.com/lucasluqui/KnightLauncher/blob/main/scripts/KnightLauncher_mac_linux.sh
+
+
+          For a more detailed guide please click the following link:
+          https://knightlauncher.com/install
+
+          Thanks for downloading Knight Launcher!
+
+          ---------------------------------------------------------------
+
+          Author: https://github.com/lucasluqui
+          Source: https://github.com/lucasluqui/KnightLauncher
+          Releases: https://github.com/lucasluqui/KnightLauncher/releases
+          Discord: https://discord.gg/8rE4GeAMza
+          EOF
+
+      - name: Create ZIP archive
+        run: zip -j "KnightLauncher-${{ steps.extract-version.outputs.version }}.zip" target/KnightLauncher.jar README.txt
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.extract-version.outputs.version }}
+          name: Knight Launcher ${{ steps.extract-version.outputs.version }}
+          draft: true
+          prerelease: false
+          files: KnightLauncher-${{ steps.extract-version.outputs.version }}.zip
