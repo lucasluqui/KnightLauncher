@@ -1,72 +1,53 @@
 package com.lucasluqui.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.TimeZone;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class DateUtil
 {
-  private static final String TIMEZONE = "PST"; // Game's timezone
-
   public static String getFormattedTimeRemaining (long timestamp)
   {
-    long remainingMillis = timestamp - System.currentTimeMillis();
-    long minutesRemaining = (remainingMillis / 1000L) / 60L;
-    long hoursRemaining = minutesRemaining / 60L;
-    long daysRemaining = hoursRemaining / 24L;
+    Duration remaining = Duration.ofMillis(timestamp - System.currentTimeMillis());
 
-    if (daysRemaining > 0L) {
-      return daysRemaining + " {d}";
-    } else if (hoursRemaining > 0L) {
-      return hoursRemaining + " {h}";
-    } else if (minutesRemaining > 0L) {
-      return minutesRemaining + " {m}";
+    if (remaining.toDays() > 0L) {
+      return remaining.toDays() + " {d}";
+    } else if (remaining.toHours() > 0L) {
+      return remaining.toHours() + " {h}";
+    } else if (remaining.toMinutes() > 0L) {
+      return remaining.toMinutes() + " {m}";
     } else {
       return "";
     }
   }
 
-  public static String getFormattedTime (long timestamp, String timezone)
+  /**
+   * Formats a timestamp in the user's time zone.
+   */
+  public static String getFormattedTime (long timestamp)
   {
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTimeInMillis(timestamp);
-    calendar.setTimeZone(TimeZone.getTimeZone(timezone));
-
-    // Only the weekday and month, we'll concatenate the rest later.
-    // Also, force it to be in English locale.
-    SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM", java.util.Locale.ENGLISH);
-    dateFormat.setTimeZone(calendar.getTimeZone());
-
-    return dateFormat.format(calendar.getTime()) + " "
-      + getDayNumberWithSuffix(calendar.get(Calendar.DATE)) + " "
-      + String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY)) + ":"
-      + getMinuteWithTrailingZero(calendar.get(Calendar.MINUTE));
+    ZonedDateTime time = Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault());
+    return WEEKDAY_AND_MONTH.format(time) + " "
+      + getDayNumberWithSuffix(time.getDayOfMonth()) + " "
+      + HOUR_AND_MINUTE.format(time);
   }
 
-  private static String getDayNumberWithSuffix (int date)
+  private static String getDayNumberWithSuffix (int day)
   {
-    String suffix = "th";
-    switch (date) {
-      case 1:
-      case 21:
-      case 31:
-        suffix = "st";
-        break;
-      case 2:
-      case 22:
-        suffix = "nd";
-        break;
-      case 3:
-      case 23:
-        suffix = "rd";
-        break;
-    }
-    return date + suffix;
+    String suffix = switch (day) {
+      case 1, 21, 31 -> "st";
+      case 2, 22 -> "nd";
+      case 3, 23 -> "rd";
+      default -> "th";
+    };
+    return day + suffix;
   }
 
-  private static String getMinuteWithTrailingZero (int minute)
-  {
-    return minute < 10 ? "0" + minute : "" + minute;
-  }
+  // The day number goes in between with a suffix, which formatters can't do, so it's added separately.
+  private static final DateTimeFormatter WEEKDAY_AND_MONTH = DateTimeFormatter.ofPattern("EEEE, MMMM", Locale.ENGLISH);
+  private static final DateTimeFormatter HOUR_AND_MINUTE = DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH);
 
 }
