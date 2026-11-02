@@ -1,7 +1,5 @@
 package com.lucasluqui.util;
 
-import org.apache.commons.io.IOUtils;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -24,10 +22,15 @@ public class ImageUtil
     Image image = null;
 
     try {
-      image = ImageIO.read(url);
+      // Local files (like cached images) are read straight away, anything else is fetched with a timeout.
+      image = HttpUtil.isHttp(url)
+        ? ImageIO.read(new ByteArrayInputStream(HttpUtil.getBytes(HttpUtil.toURI(url))))
+        : ImageIO.read(url);
+      if (image == null) throw new IOException("Not a readable image: " + url);
       image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
     } catch (IOException e) {
       log.error(e);
+      image = null;
     }
 
     return image;
@@ -45,26 +48,12 @@ public class ImageUtil
 
   public static byte[] getAnimatedImageFromURL (String url)
   {
-    InputStream is = null;
-    byte[] imageBytes = null;
     try {
-      URL _url = new URL(url);
-      is = _url.openStream();
-      imageBytes = IOUtils.toByteArray(is);
+      return HttpUtil.getBytes(HttpUtil.toURI(new URL(url)));
     } catch (IOException e) {
       log.error(e);
-      // Perform any other exception handling that's appropriate.
-    } finally {
-      if (is != null) {
-        try {
-          is.close();
-        } catch (IOException e) {
-          log.error(e);
-        }
-      }
+      return null;
     }
-
-    return imageBytes;
   }
 
   /*

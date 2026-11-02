@@ -2,10 +2,12 @@ package com.lucasluqui.download;
 
 import com.google.inject.Singleton;
 import com.lucasluqui.download.data.URLDownloadQueue;
+import com.lucasluqui.util.HttpUtil;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,41 +19,6 @@ import static com.lucasluqui.download.Log.log;
 @Singleton
 public class DownloadManager
 {
-
-  /**
-   * The list of all stored download queues that are pending processing.
-   */
-  private final List<URLDownloadQueue> storedQueues = new ArrayList<>();
-
-  /**
-   * Map of download queues and their status.
-   * Their value will be true if all items downloaded correctly, and false if any of them failed.
-   */
-  private final HashMap<URLDownloadQueue, Boolean> queueStatusMap = new HashMap<>();
-
-  /**
-   * N. Of queues currently being processed.
-   */
-  private int queuesInProcess = 0;
-
-  /**
-   * Maximum number of retries to try to download an item in queue.
-   */
-  @SuppressWarnings("all")
-  private final int MAX_ATTEMPTS = 3;
-
-  /**
-   * Time in milliseconds until we time out a download attempt during initial connection.
-   */
-  @SuppressWarnings("all")
-  private final int CONNECTION_TIMEOUT = 0;
-
-  /**
-   * Time in milliseconds until we time out a download attempt during read.
-   */
-  @SuppressWarnings("all")
-  private final int READ_TIMEOUT = 0;
-
   public DownloadManager ()
   {
     // empty.
@@ -115,16 +82,25 @@ public class DownloadManager
         log.info("Starting download attempt of item in queue", "queue", queueName, "url", url, "localFile", localFile, "attempts", downloadAttempts);
 
         try {
-          FileUtils.copyURLToFile(
-            url,
-            localFile,
-            CONNECTION_TIMEOUT,
-            READ_TIMEOUT
-          );
+          if (HttpUtil.isHttp(url)) {
+            HttpUtil.download(HttpUtil.toURI(url), localFile.toPath());
+          } else {
+            // Not something to fetch over the network, like a local file.
+            FileUtils.copyURLToFile(url, localFile);
+          }
           downloadCompleted = true;
+        } catch (HttpUtil.HttpStatusException e) {
+          log.error(e);
+          // Things like a 404 won't fix themselves by trying again.
+          if (!e.isRetryable()) break;
+          waitBeforeRetry(downloadAttempts);
+        } catch (InterruptedIOException e) {
+          log.error(e);
+          break;
         } catch (IOException e) {
           // Keep retrying.
           log.error(e);
+          waitBeforeRetry(downloadAttempts);
         }
       }
 
@@ -142,6 +118,16 @@ public class DownloadManager
       }
     }
     this.queuesInProcess -= 1;
+  }
+
+  private void waitBeforeRetry (int attempts)
+  {
+    if (attempts > MAX_ATTEMPTS) return;
+    try {
+      Thread.sleep(RETRY_DELAY * attempts);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
   }
 
   /**
@@ -164,4 +150,32 @@ public class DownloadManager
     log.info("Cleared stored download queues");
   }
 
+  /**
+   * The list of all stored download queues that are pending processing.
+   */
+  private final List<URLDownloadQueue> storedQueues = new ArrayList<>();
+
+  /**
+   * Map of download queues and their status.
+   * Their value will be true if all items downloaded correctly, and false if any of them failed.
+   */
+  private final HashMap<URLDownloadQueue, Boolean> queueStatusMap = new HashMap<>();
+
+  /**
+   * N. Of queues currently being processed.
+   */
+  private int queuesInProcess = 0;
+
+  /**
+   * Maximum number of retries to try to download an item in queue.
+   */
+  @SuppressWarnings("all")
+  private final int MAX_ATTEMPTS = 3;
+
+  /**
+   * Time in milliseconds to wait before retrying, multiplied by the number of attempts so far.
+   * Timeouts themselves are handled by {@link HttpUtil}.
+   */
+  @SuppressWarnings("all")
+  private final long RETRY_DELAY = 1000;
 }
