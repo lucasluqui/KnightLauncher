@@ -6,6 +6,7 @@ import com.jhlabs.image.GaussianFilter;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.swing.Scale;
+import com.lucasluqui.swing.HiDpi;
 import com.lucasluqui.util.ColorUtil;
 
 import javax.swing.*;
@@ -120,9 +121,10 @@ public class ModCard extends JPanel
     g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
     // Clipping isn't antialiased in Java2D, so the card is drawn into a buffer holding its shape first,
-    // and everything else only lands where the shape is.
-    BufferedImage buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D bg = buffer.createGraphics();
+    // and everything else only lands where the shape is. Buffers are made at the display's resolution.
+    double scale = HiDpi.scale(g);
+    BufferedImage buffer = HiDpi.createBuffer(w, h, scale);
+    Graphics2D bg = HiDpi.createGraphics(buffer, w, h);
     bg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     bg.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     bg.setColor(lerp(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_DARK, CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND, t));
@@ -137,8 +139,9 @@ public class ModCard extends JPanel
 
     // The image itself fills a square against the left edge, fading out to the right into the card.
     if (image != null) {
-      BufferedImage splash = new BufferedImage(h, h, BufferedImage.TYPE_INT_ARGB);
-      Graphics2D sg = splash.createGraphics();
+      BufferedImage splash = HiDpi.createBuffer(h, h, scale);
+      Graphics2D sg = HiDpi.createGraphics(splash, h, h);
+      AffineTransform splashTransform = sg.getTransform();
       sg.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
       sg.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
       // Scaled around the center with a transform rather than rounded pixel sizes, so the zoom
@@ -147,7 +150,7 @@ public class ModCard extends JPanel
       sg.translate(h / 2.0, h / 2.0);
       sg.scale(zoom, zoom);
       sg.drawImage(image, AffineTransform.getTranslateInstance(-image.getWidth() / 2.0, -image.getHeight() / 2.0), null);
-      sg.setTransform(new AffineTransform());
+      sg.setTransform(splashTransform);
       sg.setComposite(AlphaComposite.DstIn);
       sg.setPaint(new GradientPaint(h * 0.3f, 0, Color.BLACK, h, 0, new Color(0, 0, 0, 0)));
       sg.fillRect(0, 0, h, h);
@@ -155,10 +158,10 @@ public class ModCard extends JPanel
 
       float opacity = dimmed ? 0.35f : 1f;
       bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, opacity));
-      bg.drawImage(splash, 0, 0, null);
+      bg.drawImage(splash, 0, 0, h, h, null);
     }
     bg.dispose();
-    g2d.drawImage(buffer, 0, 0, null);
+    HiDpi.drawBuffer(g2d, buffer, 0, 0, w, h);
 
     // Texts between the image and the controls on the right.
     int textX = h + Scale.px(4);

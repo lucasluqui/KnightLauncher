@@ -1,6 +1,7 @@
 package com.lucasluqui.launcher.editor.ui;
 
 import com.lucasluqui.swing.Scale;
+import com.lucasluqui.swing.HiDpi;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 import com.lucasluqui.launcher.ui.BaseUI;
@@ -294,7 +295,8 @@ public class EditorsUI extends BaseUI
 
   private static BufferedImage loadSplashImage (String path)
   {
-    return ImageUtil.resizeImage(ImageUtil.loadImageWithinJar(path), Scale.px(740), Scale.px(100));
+    // Made at the display's resolution, the cards draw it into buffers that are too.
+    return ImageUtil.resizeImage(ImageUtil.loadImageWithinJar(path), HiDpi.px(Scale.px(740)), HiDpi.px(Scale.px(100)));
   }
 
   @Inject public EditorsEventHandler eventHandler;

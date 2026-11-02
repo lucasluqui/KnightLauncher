@@ -1,8 +1,11 @@
 package com.lucasluqui.util;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import oshi.SystemInfo;
+import oshi.hardware.ComputerSystem;
+
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,75 +62,51 @@ public class SystemUtil
       System.getProperty("java.home").contains("1.8");
   }
 
+  /**
+   * Identifies this machine by its motherboard: the system UUID set in the firmware, along with the board's
+   * serial number. Some manufacturers leave the UUID at a placeholder shared by many machines, which the serial
+   * number makes up for when it's set.
+   *
+   * @return The machine ID, or null if the hardware doesn't tell us anything usable.
+   */
   private static String getMachineId ()
   {
-    String machineId = null;
-
-    if (isWindows()) {
-      machineId = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", "wmic csproduct get UUID"})[0];
-
-      try {
-        machineId = machineId.substring(machineId.indexOf("\n")).trim();
-      } catch (Exception e) {
-        log.info("Unable to get UUID using WMIC, probably not installed. Thanks Microsoft.");
-      }
-
-      // Some lazy bios manufacturers won't bother setting a valid UUID for their BIOS and thus
-      // creating a case where someone might share an invalid or default UUID with someone else
-      // (the infamous 03000200-0400-0500-0006-000700080009 UUID!).
-      // Assuming this could be the case, we gather Windows' software GUID and add it to the mix.
-      String machineIdFailsafe = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", "reg query HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid"})[0];
-
-      try {
-        machineIdFailsafe = machineIdFailsafe.substring(machineIdFailsafe.indexOf("\n")).trim();
-      } catch (Exception e) {
-        log.error(e);
-      }
-
-      // Some systems return an empty string when trying to get the failsafe, so let's not add it when that's the case.
-      if (!machineIdFailsafe.isEmpty()) {
-        machineIdFailsafe = machineIdFailsafe.split("REG_SZ")[1].trim();
-        machineId += machineIdFailsafe;
-      } else {
-        // Let's make sure they don't also have an invalid UUID before letting them through without the failsafe
-        // If they do send them to the NullPointerException realm.
-        if (machineId != null && (machineId.equalsIgnoreCase("03000200-0400-0500-0006-000700080009")
-          || machineId.equalsIgnoreCase("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")
-          || machineId.equalsIgnoreCase("00000000-0000-0000-0000-000000000000"))) {
-          machineId = null;
-        }
-      }
+    try {
+      ComputerSystem computerSystem = new SystemInfo().getHardware().getComputerSystem();
+      String uuid = usableHardwareValue(computerSystem.getHardwareUUID());
+      String serial = usableHardwareValue(computerSystem.getBaseboard().getSerialNumber());
+      if (uuid != null || serial != null) return (uuid == null ? "" : uuid) + "|" + (serial == null ? "" : serial);
+    } catch (Throwable e) {
+      log.error("Failed to get machine id", e);
     }
 
+    // On Linux the firmware's IDs are only readable as root, but the OS keeps an ID of its own anyone can read.
     if (isUnix()) {
-      machineId = ProcessUtil.runAndCapture(new String[]{"/bin/bash", "-c", "cat /etc/machine-id"})[0];
-      machineId = machineId.replaceAll("\\r|\\n", "").trim();
-    }
-
-    // TODO: Verify this even works on Mac systems.
-    if (isMac()) {
       try {
-        String command = "system_profiler SPHardwareDataType | awk '/UUID/ { print $3; }'";
-        StringBuffer output = new StringBuffer();
-
-        Process SerNumProcess = Runtime.getRuntime().exec(command);
-        BufferedReader sNumReader = new BufferedReader(new InputStreamReader(SerNumProcess.getInputStream()));
-
-        String line = "";
-        while ((line = sNumReader.readLine()) != null) {
-          output.append(line + "\n");
-        }
-
-        machineId = output.substring(output.indexOf("UUID: "), output.length()).replace("UUID: ", "");
-
-        SerNumProcess.waitFor();
-        sNumReader.close();
+        String osId = usableHardwareValue(Files.readString(Paths.get("/etc/machine-id")));
+        if (osId != null) return "|" + osId;
       } catch (Exception e) {
-        log.error(e);
+        log.error("Failed to read /etc/machine-id", e);
       }
     }
+    return null;
+  }
 
-    return machineId;
+  /**
+   * @return The value if it identifies something, or null for blanks and the placeholders firmware tends to use.
+   */
+  private static String usableHardwareValue (String value)
+  {
+    if (value == null) return null;
+    value = value.trim();
+    if (value.isEmpty() || value.equalsIgnoreCase("unknown")
+      || value.equalsIgnoreCase("Default string") || value.equalsIgnoreCase("To be filled by O.E.M.")
+      || value.equalsIgnoreCase("03000200-0400-0500-0006-000700080009")) {
+      return null;
+    }
+    // All the same digit, like 00000000-0000-... or FFFFFFFF-FFFF-...
+    if (value.replace("-", "").chars().distinct().count() == 1) return null;
+    return value;
   }
 
   public static String getHashedMachineId ()

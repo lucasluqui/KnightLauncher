@@ -1,5 +1,7 @@
 package com.lucasluqui.launcher.editor.ui;
 
+import com.lucasluqui.swing.FontIcon;
+import com.lucasluqui.swing.HiDpi;
 import com.lucasluqui.swing.FractionalMetrics;
 import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -7,7 +9,6 @@ import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.util.ColorUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
-import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,8 +34,8 @@ public class EditorCard extends JComponent
     this.title = title;
     this.description = description;
     this.image = image;
-    this.arrowIcon = IconFontSwing.buildIcon(FontAwesome.CHEVRON_RIGHT, Scale.px(14), Color.WHITE);
-    this.lockIcon = IconFontSwing.buildIcon(FontAwesome.LOCK, Scale.px(11), new Color(200, 200, 200));
+    this.arrowIcon = FontIcon.of(FontAwesome.CHEVRON_RIGHT, Scale.px(14), Color.WHITE);
+    this.lockIcon = FontIcon.of(FontAwesome.LOCK, Scale.px(11), new Color(200, 200, 200));
     setOpaque(false);
     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -135,9 +136,10 @@ public class EditorCard extends JComponent
     g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
     // Clipping isn't antialiased in Java2D, so the card is drawn into a buffer holding its shape first,
-    // and everything else only lands where the shape is.
-    BufferedImage buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D bg = buffer.createGraphics();
+    // and everything else only lands where the shape is. Buffers are made at the display's resolution.
+    double scale = HiDpi.scale(g);
+    BufferedImage buffer = HiDpi.createBuffer(w, h, scale);
+    Graphics2D bg = HiDpi.createGraphics(buffer, w, h);
     bg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     bg.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     bg.setColor(lerp(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND, CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_DARK, t));
@@ -147,8 +149,8 @@ public class EditorCard extends JComponent
     // The splash image covers the card, zooming in a little around its center while hovered,
     // and fades out towards the bottom left so the texts sit on a plain background.
     if (image != null) {
-      BufferedImage splash = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-      Graphics2D sg = splash.createGraphics();
+      BufferedImage splash = HiDpi.createBuffer(w, h, scale);
+      Graphics2D sg = HiDpi.createGraphics(splash, w, h);
       sg.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
       // Scale it to cover the whole card, cropping whatever sticks out.
       float zoom = Math.max(w / (float) image.getWidth(), h / (float) image.getHeight()) * (1f + HOVER_ZOOM * t);
@@ -164,10 +166,10 @@ public class EditorCard extends JComponent
       float opacity = available ? lerp(0.45f, 1f, t) : 0.2f;
       if (pressed) opacity *= 0.8f;
       bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, opacity));
-      bg.drawImage(splash, 0, 0, null);
+      bg.drawImage(splash, 0, 0, w, h, null);
     }
     bg.dispose();
-    g2d.drawImage(buffer, 0, 0, null);
+    HiDpi.drawBuffer(g2d, buffer, 0, 0, w, h);
 
     Composite composite = g2d.getComposite();
 

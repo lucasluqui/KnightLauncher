@@ -1,5 +1,7 @@
 package com.lucasluqui.launcher.ui.handler;
 
+import com.lucasluqui.swing.FontIcon;
+import com.lucasluqui.swing.HiDpi;
 import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
@@ -19,7 +21,6 @@ import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.util.*;
 import com.lucasluqui.swing.LoadingIcon;
 import jiconfont.icons.font_awesome.FontAwesome;
-import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
@@ -444,13 +445,8 @@ public class LauncherEventHandler
       int count = 0;
       String borderColor = ColorUtil.colorToHexString(locked ? CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER_LOCKED : CustomColors.INTERFACE_SERVERSWITCHER_HOVER_BORDER);
 
-      BufferedImage officialServerBufferedImage = ImageUtil.loadImageWithinJar("/rsrc/img/server-official.png");
-      officialServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(officialServerBufferedImage, Scale.px(32), Scale.px(32));
-      ImageIcon officialServerImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(officialServerBufferedImage, Scale.px(15)));
-
-      BufferedImage defaultServerBufferedImage = ImageUtil.loadImageWithinJar("/rsrc/img/icon-default.png");
-      defaultServerBufferedImage = ImageUtil.resizeImagePreserveTransparency(defaultServerBufferedImage, Scale.px(32), Scale.px(32));
-      ImageIcon defaultServerImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(defaultServerBufferedImage, Scale.px(15)));
+      ImageIcon officialServerImageIcon = createServerIcon(ImageUtil.loadImageWithinJar("/rsrc/img/server-official.png"));
+      ImageIcon defaultServerImageIcon = createServerIcon(ImageUtil.loadImageWithinJar("/rsrc/img/icon-default.png"));
 
       for (Server server : serverList) {
         JPanel serverIconPane = new JPanel();
@@ -468,8 +464,11 @@ public class LauncherEventHandler
           if (server.serverIcon.equalsIgnoreCase("null")) {
             serverIconImageIcon = defaultServerImageIcon;
           } else {
-            BufferedImage serverIconBufferedImage = _cacheManager.fetchImage(server.serverIcon, Scale.px(32), Scale.px(32));
-            serverIconImageIcon = new ImageIcon(ImageUtil.addRoundedCorners(serverIconBufferedImage, Scale.px(15)));
+            int size = HiDpi.px(Scale.px(32));
+            BufferedImage serverIconBufferedImage = _cacheManager.fetchImage(server.serverIcon, size, size);
+            serverIconImageIcon = serverIconBufferedImage != null
+              ? createServerIcon(serverIconBufferedImage)
+              : defaultServerImageIcon;
           }
           serverIcon.setIcon(server.serverIcon.equalsIgnoreCase("null") ? defaultServerImageIcon : serverIconImageIcon);
         }
@@ -533,7 +532,7 @@ public class LauncherEventHandler
       addServerIcon.setBounds(Scale.rect(4, 4, 42, 42));
       addServerIcon.setHorizontalAlignment(SwingConstants.CENTER);
       addServerIcon.setToolTipText(_localeManager.getValue("m.add_server"));
-      addServerIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.PLUS, Scale.px(18), Color.WHITE));
+      addServerIcon.setIcon(FontIcon.of(FontAwesome.PLUS, Scale.px(18), Color.WHITE));
       addServerIcon.setVisible(false);
       addServerPane.add(addServerIcon);
       addServerIcon.addMouseListener(new MouseListener()
@@ -695,6 +694,18 @@ public class LauncherEventHandler
     });
   }
 
+  /**
+   * A server icon for the server switcher, rounded off and made at the display's resolution.
+   */
+  private static ImageIcon createServerIcon (BufferedImage image)
+  {
+    double scale = HiDpi.scale();
+    int size = Scale.px(32);
+    BufferedImage resized = ImageUtil.resizeImagePreserveTransparency(image, HiDpi.px(size, scale), HiDpi.px(size, scale));
+    Image rounded = ImageUtil.addRoundedCorners(resized, HiDpi.px(Scale.px(15), scale));
+    return HiDpi.icon(ImageUtil.toBufferedImage(rounded), size, size);
+  }
+
   private LauncherUI.BannerImage loadBannerImage (Event event)
   {
     LauncherUI.BannerImage image = _bannerImageCache.get(event.banner);
@@ -704,7 +715,7 @@ public class LauncherEventHandler
       String bannerImage = event.banner.split("\\|")[0];
       double bannerIntensity = Double.parseDouble(event.banner.split("\\|")[1]);
       if (!bannerImage.contains(".gif")) {
-        image = new LauncherUI.BannerImage(this.ui.processImageForBanner(_cacheManager.fetchImage(bannerImage, Scale.px(800), Scale.px(550)), bannerIntensity));
+        image = new LauncherUI.BannerImage(this.ui.processImageForBanner(_cacheManager.fetchImage(bannerImage, HiDpi.px(Scale.px(800)), HiDpi.px(Scale.px(550))), bannerIntensity));
       } else {
         image = this.ui.processAnimatedImageForBanner(ImageUtil.getAnimatedImageFromURL(bannerImage), bannerIntensity);
       }
@@ -792,8 +803,8 @@ public class LauncherEventHandler
     Settings.playAnimatedBanners = !Settings.playAnimatedBanners;
     _settingsManager.setValue("launcher.playAnimatedBanners", Boolean.toString(Settings.playAnimatedBanners));
 
-    Icon playAnimatedBannersIconEnabled = IconFontSwing.buildIcon(FontAwesome.EYE, Scale.px(18), Color.WHITE);
-    Icon playAnimatedBannersIconDisabled = IconFontSwing.buildIcon(FontAwesome.EYE_SLASH, Scale.px(18), Color.WHITE);
+    Icon playAnimatedBannersIconEnabled = FontIcon.of(FontAwesome.EYE, Scale.px(18), Color.WHITE);
+    Icon playAnimatedBannersIconDisabled = FontIcon.of(FontAwesome.EYE_SLASH, Scale.px(18), Color.WHITE);
     this.ui.playAnimatedBannersButton.setIcon(Settings.playAnimatedBanners ? playAnimatedBannersIconEnabled : playAnimatedBannersIconDisabled);
     this.ui.playAnimatedBannersButton.setToolTipText(_localeManager.getValue(Settings.playAnimatedBanners ? "m.animated_banners_disable" : "m.animated_banners_enable"));
     this.ui.playAnimatedBannersButton.setBackground(Settings.playAnimatedBanners ? CustomColors.INTERFACE_BUTTON_BACKGROUND : CustomColors.LIGHT_RED);

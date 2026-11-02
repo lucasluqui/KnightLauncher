@@ -1,12 +1,12 @@
 package com.lucasluqui.launcher.ui;
 
+import com.lucasluqui.swing.FontIcon;
 import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.util.ColorUtil;
 import com.lucasluqui.util.SystemUtil;
 import jiconfont.icons.font_awesome.FontAwesome;
-import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
@@ -103,7 +103,7 @@ public abstract class BaseUI
       final int BUTTON_WIDTH = 35;
       final int BUTTON_HEIGHT = 35;
 
-      Icon closeIcon = IconFontSwing.buildIcon(FontAwesome.TIMES, Scale.px(17), ColorUtil.getForegroundColor());
+      Icon closeIcon = FontIcon.of(FontAwesome.TIMES, Scale.px(17), ColorUtil.getForegroundColor());
       closeButton = new JButton(closeIcon);
 
       if (SystemUtil.isMac()) {
@@ -143,7 +143,7 @@ public abstract class BaseUI
         }
       });
 
-      Icon minimizeIcon = IconFontSwing.buildIcon(FontAwesome.WINDOW_MINIMIZE, Scale.px(12), ColorUtil.getForegroundColor());
+      Icon minimizeIcon = FontIcon.of(FontAwesome.WINDOW_MINIMIZE, Scale.px(12), ColorUtil.getForegroundColor());
       minimizeButton = new JButton(minimizeIcon);
 
       if (SystemUtil.isMac()) {
@@ -161,7 +161,7 @@ public abstract class BaseUI
       minimizeButton.addActionListener(e -> guiFrame.setState(Frame.ICONIFIED));
     }
 
-    returnButton = new JButton(IconFontSwing.buildIcon(FontAwesome.ARROW_LEFT, Scale.px(12), Color.WHITE));
+    returnButton = new JButton(FontIcon.of(FontAwesome.ARROW_LEFT, Scale.px(12), Color.WHITE));
     returnButton.setVisible(false);
     returnButton.setFocusable(false);
     returnButton.setFocusPainted(false);

@@ -16,7 +16,6 @@ import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.BuildConfig;
 
 import jiconfont.icons.font_awesome.FontAwesome;
-import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

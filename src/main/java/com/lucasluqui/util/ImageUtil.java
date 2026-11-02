@@ -144,6 +144,9 @@ public class ImageUtil
   {
     BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
     Graphics2D graphics2D = resizedImage.createGraphics();
+    // Without these it picks the nearest pixel, which looks blocky when scaling up and grainy when scaling down.
+    graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+    graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
     graphics2D.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
     graphics2D.dispose();
     return resizedImage;

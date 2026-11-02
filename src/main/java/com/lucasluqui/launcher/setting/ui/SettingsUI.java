@@ -1,5 +1,7 @@
 package com.lucasluqui.launcher.setting.ui;
 
+import com.lucasluqui.swing.FontIcon;
+import com.lucasluqui.swing.HiDpi;
 import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
@@ -14,7 +16,6 @@ import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
-import jiconfont.swing.IconFontSwing;
 import org.apache.commons.text.WordUtils;
 
 import javax.swing.*;
@@ -23,7 +24,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -467,7 +467,7 @@ public class SettingsUI extends BaseUI
     labelFileCleanExplained.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     gamePanel.add(labelFileCleanExplained);
 
-    Icon startIcon = IconFontSwing.buildIcon(FontAwesome.SHARE, Scale.px(16), ColorUtil.getForegroundColor());
+    Icon startIcon = FontIcon.of(FontAwesome.SHARE, Scale.px(16), ColorUtil.getForegroundColor());
     forceRebuildButton = new JButton(startIcon);
     forceRebuildButton.setBounds(Scale.rect(575, 310, 40, 23));
     forceRebuildButton.setFocusPainted(false);
@@ -634,10 +634,8 @@ public class SettingsUI extends BaseUI
     activeCodesLabel.setVisible(false);
     betasPanel.add(activeCodesLabel);
 
-    BufferedImage activeCodesBackgroundImage = ImageUtil.generatePlainColorImage(Scale.px(475), Scale.px(140), CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
-    activeCodesBackgroundImage = (BufferedImage) ImageUtil.addRoundedCorners(activeCodesBackgroundImage, Scale.px(25));
     activeCodesBackground = new JLabel("");
-    activeCodesBackground.setIcon(new ImageIcon(activeCodesBackgroundImage));
+    activeCodesBackground.setIcon(HiDpi.roundedRectIcon(Scale.px(475), Scale.px(140), Scale.px(25), CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND));
     activeCodesBackground.setBounds(Scale.rect(25, 220, 475, 140));
     activeCodesBackground.setVisible(false);
     betasPanel.add(activeCodesBackground);
@@ -993,10 +991,8 @@ public class SettingsUI extends BaseUI
     creditsLabel.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
     aboutPanel.add(creditsLabel);
 
-    BufferedImage creditsBackgroundImage = ImageUtil.generatePlainColorImage(Scale.px(565), Scale.px(195), CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
-    creditsBackgroundImage = (BufferedImage) ImageUtil.addRoundedCorners(creditsBackgroundImage, Scale.px(25));
     JLabel creditsBackground = new JLabel("");
-    creditsBackground.setIcon(new ImageIcon(creditsBackgroundImage));
+    creditsBackground.setIcon(HiDpi.roundedRectIcon(Scale.px(565), Scale.px(195), Scale.px(25), CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND));
     creditsBackground.setBounds(Scale.rect(20, 120, 575, 195));
     aboutPanel.add(creditsBackground);
     aboutPanel.setComponentZOrder(creditsBackground, 1);

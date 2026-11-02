@@ -4,6 +4,7 @@ import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.swing.FractionalMetrics;
 import com.lucasluqui.swing.Scale;
+import com.lucasluqui.swing.HiDpi;
 
 import javax.swing.*;
 import java.awt.*;
@@ -107,8 +108,9 @@ public class EventCard extends JComponent
 
     // Clipping isn't antialiased in Java2D, which leaves the slanted edges jagged. Instead, draw the
     // antialiased shape into a buffer first, and paint the background only where the shape is.
-    BufferedImage buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D bg = buffer.createGraphics();
+    // Made at the display's resolution.
+    BufferedImage buffer = HiDpi.createBuffer(w, h, HiDpi.scale(g));
+    Graphics2D bg = HiDpi.createGraphics(buffer, w, h);
     bg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     bg.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     bg.setColor(Color.WHITE);
@@ -139,7 +141,7 @@ public class EventCard extends JComponent
     bg.fillRect(0, 0, w, h);
     bg.dispose();
 
-    g2d.drawImage(buffer, 0, 0, null);
+    HiDpi.drawBuffer(g2d, buffer, 0, 0, w, h);
 
     // Badge, a pill against the right edge. Halfway down, each slanted edge sits half the slant in.
     int badgeSpace = 0;
