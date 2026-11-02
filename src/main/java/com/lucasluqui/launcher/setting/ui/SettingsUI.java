@@ -3,8 +3,6 @@ package com.lucasluqui.launcher.setting.ui;
 import com.lucasluqui.swing.FontIcon;
 import com.lucasluqui.swing.HiDpi;
 import com.lucasluqui.swing.Scale;
-import com.formdev.flatlaf.FlatClientProperties;
-import com.google.inject.Inject;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.launcher.*;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
@@ -15,8 +13,11 @@ import com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.*;
+
 import jiconfont.icons.font_awesome.FontAwesome;
 import org.apache.commons.text.WordUtils;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.google.inject.Inject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +26,9 @@ import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SettingsUI extends BaseUI
 {
@@ -620,11 +623,7 @@ public class SettingsUI extends BaseUI
 
       betaCodeResultLabel.setVisible(true);
 
-      // Hide the result label after some time.
-      Thread hideResultThread = new Thread(() -> {
-        betaCodeResultLabel.setVisible(false);
-      });
-      ThreadingUtil.executeWithDelay(hideResultThread, 5000);
+      hideLater(betaCodeResultLabel);
     });
 
     activeCodesLabel = new JLabel(_localeManager.getValue("m.beta_code_activated"));
@@ -683,11 +682,7 @@ public class SettingsUI extends BaseUI
       betaCodeSpecialResultLabel.setVisible(true);
       betaCodeSpecialResultLabel.setText(_localeManager.getValue("m.beta_code_revalidated"));
 
-      // Hide the result label after some time.
-      Thread hideResultThread = new Thread(() -> {
-        betaCodeSpecialResultLabel.setVisible(false);
-      });
-      ThreadingUtil.executeWithDelay(hideResultThread, 5000);
+      hideLater(betaCodeSpecialResultLabel);
     });
 
     betaCodeClearLocalButton = new JButton(_localeManager.getValue("b.beta_code_clear_local"));
@@ -709,15 +704,25 @@ public class SettingsUI extends BaseUI
         betaCodeSpecialResultLabel.setVisible(true);
         betaCodeSpecialResultLabel.setText(_localeManager.getValue("m.beta_code_cleared"));
 
-        // Hide the result label after some time.
-        Thread hideResultThread = new Thread(() -> {
-          betaCodeSpecialResultLabel.setVisible(false);
-        });
-        ThreadingUtil.executeWithDelay(hideResultThread, 5000);
+        hideLater(betaCodeSpecialResultLabel);
       }
     });
 
     return betasPanel;
+  }
+
+  /**
+   * Hides a result label after a while. Showing a new result before then starts the wait over, so it doesn't
+   * vanish right after appearing.
+   */
+  private void hideLater (JComponent label)
+  {
+    javax.swing.Timer timer = _hideTimers.computeIfAbsent(label, l -> {
+      javax.swing.Timer t = new javax.swing.Timer(RESULT_HIDE_DELAY, e -> l.setVisible(false));
+      t.setRepeats(false);
+      return t;
+    });
+    timer.restart();
   }
 
   public void updateActiveBetaCodes ()
@@ -1122,6 +1127,8 @@ public class SettingsUI extends BaseUI
   @Inject public SettingsEventHandler eventHandler;
 
   @Inject protected LocaleManager _localeManager;
+  private final Map<JComponent, javax.swing.Timer> _hideTimers = new HashMap<>();
+  private static final int RESULT_HIDE_DELAY = 5000;
   @Inject protected SettingsManager _settingsManager;
   @Inject protected FlamingoManager _flamingoManager;
 

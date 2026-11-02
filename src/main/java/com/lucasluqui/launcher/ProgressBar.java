@@ -1,10 +1,11 @@
 package com.lucasluqui.launcher;
 
-import com.google.inject.Inject;
 import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.util.ThreadingUtil;
 import com.lucasluqui.swing.LoadingIcon;
+
+import com.google.inject.Inject;
 
 import javax.swing.*;
 
@@ -35,13 +36,12 @@ public class ProgressBar
     if (activeTasks == 0) {
       setState("Finished");
       _ctx.getApp().getUI(LauncherUI.class).launchState.setIcon(null);
-      Thread finishDelayThread = new Thread(() -> {
+      ThreadingUtil.invokeLater(() -> {
         long now = System.currentTimeMillis();
         if (now - lastTaskStartedAt > HIDE_BAR_TIME) {
           showBar(false);
         }
-      });
-      ThreadingUtil.executeWithDelay(finishDelayThread, HIDE_BAR_TIME);
+      }, (int) HIDE_BAR_TIME);
     }
   }
 

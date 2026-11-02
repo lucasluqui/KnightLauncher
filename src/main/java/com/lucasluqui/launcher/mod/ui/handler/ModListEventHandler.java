@@ -51,7 +51,7 @@ public class ModListEventHandler
 
   public void refreshMods (boolean mount)
   {
-    Thread refreshThread = new Thread(() -> {
+    ThreadingUtil.start("ModRefresh", () -> {
       this.ui.refreshButton.setEnabled(false);
       this.ui.enableAllModsButton.setEnabled(false);
       this.ui.disableAllModsButton.setEnabled(false);
@@ -73,7 +73,6 @@ public class ModListEventHandler
       this.ui.disableAllModsButton.setEnabled(true);
       this.ui.addModButton.setEnabled(true);
     });
-    refreshThread.start();
   }
 
   @SuppressWarnings("unused")
@@ -158,11 +157,10 @@ public class ModListEventHandler
     }
 
     // Show the warning with a slight delay to make sure the GUI can load beforehand.
-    Thread showDirectoriesWarningThread = new Thread(() -> {
+    ThreadingUtil.invokeLater(() -> {
       this.ui.globalWarningButton.setVisible(true);
       this.ui.globalWarningMessage = _localeManager.getValue("error.folders_within_mods_folder");
-    });
-    ThreadingUtil.executeWithDelay(showDirectoriesWarningThread, 2000);
+    }, 2000);
   }
 
   public void searchMod ()
@@ -175,7 +173,7 @@ public class ModListEventHandler
     Server selectedServer = _flamingoManager.getSelectedServer();
 
     if (selectedServer != null) {
-      new Thread(_modManager::checkInstalled).start();
+      ThreadingUtil.start("ModCheck", _modManager::checkInstalled);
 
       if (selectedServer.isOfficial()) {
         this.ui.viewingModsLabel.setVisible(false);

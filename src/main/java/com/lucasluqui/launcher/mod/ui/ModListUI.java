@@ -1,14 +1,5 @@
 package com.lucasluqui.launcher.mod.ui;
 
-import com.lucasluqui.swing.FontIcon;
-import com.lucasluqui.swing.HiDpi;
-import com.lucasluqui.swing.FractionalMetrics;
-import com.lucasluqui.swing.Scale;
-import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.icons.FlatSearchIcon;
-import com.google.inject.Inject;
-import com.jhlabs.image.GaussianFilter;
-import com.jhlabs.image.GrayscaleFilter;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.launcher.ui.BaseUI;
 import com.lucasluqui.launcher.mod.ui.handler.ModListEventHandler;
@@ -23,9 +14,19 @@ import com.lucasluqui.launcher.mod.data.ZipMod;
 import com.lucasluqui.swing.SlimProgressBarUI;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.swing.SmoothScrollPane;
-import com.lucasluqui.util.ColorUtil;
+import com.lucasluqui.swing.FontIcon;
+import com.lucasluqui.swing.HiDpi;
+import com.lucasluqui.swing.FractionalMetrics;
+import com.lucasluqui.swing.Scale;
 import com.lucasluqui.util.ImageUtil;
+import com.lucasluqui.util.ThreadingUtil;
+
 import jiconfont.icons.font_awesome.FontAwesome;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
+import com.google.inject.Inject;
+import com.jhlabs.image.GaussianFilter;
+import com.jhlabs.image.GrayscaleFilter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -406,7 +407,7 @@ public class ModListUI extends BaseUI
           event.dropComplete(true);
 
           // Off the drop itself, so the app the files were dragged from isn't kept waiting on us or a dialog.
-          new Thread(() -> eventHandler.addModFiles(files)).start();
+          ThreadingUtil.start("ModDrop", () -> eventHandler.addModFiles(files));
         } catch (Exception e) {
           log.error("Failed to receive dropped files", e);
           event.dropComplete(false);

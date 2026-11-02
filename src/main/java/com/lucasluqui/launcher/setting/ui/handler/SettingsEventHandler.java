@@ -101,7 +101,7 @@ public class SettingsEventHandler
   public void forceRebuildEvent ()
   {
     _modManager.setMountRequired(true);
-    new Thread(_modManager::startStrictFileRebuild).start();
+    ThreadingUtil.start("FileRebuild", _modManager::startStrictFileRebuild);
     _ctx.getApp().returnToHome();
   }
 
@@ -537,7 +537,7 @@ public class SettingsEventHandler
 
   public void updateGameJavaVMData ()
   {
-    Thread thread = new Thread(() -> {
+    ThreadingUtil.start("GameJVMData", () -> {
       this.ui.javaVMBadge.setText(_localeManager.getValue("m.game_java_vm_data", JavaUtil.getReadableGameJVMData()));
 
       boolean is64Bit = JavaUtil.getJVMArch(JavaUtil.getGameJVMExePath()) == 64;
@@ -548,7 +548,6 @@ public class SettingsEventHandler
         }
       } catch (Exception ignored) {}
     });
-    thread.start();
   }
 
   public void checkBetaCodes ()

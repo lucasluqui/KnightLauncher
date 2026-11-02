@@ -134,16 +134,14 @@ public class ProcessUtil
   public static void discardOutput (Process process)
   {
     for (InputStream stream : new InputStream[] { process.getInputStream(), process.getErrorStream() }) {
-      Thread drainer = new Thread(() -> {
+      ThreadingUtil.startDaemon("ProcessOutputDrainer", () -> {
         byte[] buffer = new byte[8192];
         try (InputStream in = stream) {
           while (in.read(buffer) != -1) ;
         } catch (IOException ignored) {
           // The process went away, nothing left to read.
         }
-      }, "ProcessOutputDrainer");
-      drainer.setDaemon(true);
-      drainer.start();
+      });
     }
   }
 

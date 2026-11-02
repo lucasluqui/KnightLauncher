@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.function.BooleanSupplier;
 
 import static com.lucasluqui.launcher.ui.Log.log;
@@ -485,7 +484,7 @@ public class LauncherUI extends BaseUI
         Server selectedServer = _flamingoManager.getSelectedServer();
         if (selectedServer.getMaintenanceStatus() == 1) {
           Dialog.push(
-            _localeManager.getValue("m.scheduled_maintenance_warning", new String[] { DateUtil.getFormattedTime(selectedServer.maintenanceEndsAt, TimeZone.getDefault().getID()) }),
+            _localeManager.getValue("m.scheduled_maintenance_warning", new String[] { DateUtil.getFormattedTime(selectedServer.maintenanceEndsAt) }),
             _localeManager.getValue("t.scheduled_maintenance"),
             JOptionPane.WARNING_MESSAGE
           );
@@ -766,7 +765,7 @@ public class LauncherUI extends BaseUI
    */
   public void playAnimatedBanner (BannerImage image, BooleanSupplier active)
   {
-    Thread animThread = new Thread(() -> {
+    ThreadingUtil.startDaemon("AnimatedBanner", () -> {
       while (active.getAsBoolean()) {
         for (int i = 0; i < image.frames.size(); i++) {
           try {
@@ -783,8 +782,6 @@ public class LauncherUI extends BaseUI
         }
       }
     });
-    animThread.setDaemon(true);
-    animThread.start();
   }
 
   /**

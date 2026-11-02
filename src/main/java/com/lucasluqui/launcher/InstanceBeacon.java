@@ -1,5 +1,7 @@
 package com.lucasluqui.launcher;
 
+import com.lucasluqui.util.ThreadingUtil;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -32,7 +34,7 @@ public class InstanceBeacon
 
       // We start listening before the launcher sets up its directories, so it might not be there yet on a first run.
       Files.createDirectories(INSTANCE_FILE_PATH.getParent());
-      Files.write(INSTANCE_FILE_PATH, String.valueOf(server.getLocalPort()).getBytes(StandardCharsets.UTF_8));
+      Files.writeString(INSTANCE_FILE_PATH, String.valueOf(server.getLocalPort()));
 
       // Stop answering as soon as we start exiting. Restarts start the new instance right before exiting,
       // and it shouldn't mistake us for a launcher that's sticking around.
@@ -43,7 +45,7 @@ public class InstanceBeacon
         }
       }));
 
-      Thread listener = new Thread(() -> {
+      ThreadingUtil.startDaemon("InstanceBeacon", () -> {
         while (!server.isClosed()) {
           try (Socket socket = server.accept()) {
             socket.setSoTimeout(TIMEOUT);
@@ -60,9 +62,7 @@ public class InstanceBeacon
             if (!server.isClosed()) log.error("Failed to answer another launcher instance", e);
           }
         }
-      }, "InstanceBeacon");
-      listener.setDaemon(true);
-      listener.start();
+      });
     } catch (IOException e) {
       log.error("Failed to start listening for other launcher instances", e);
     }
@@ -77,7 +77,7 @@ public class InstanceBeacon
   {
     int port;
     try {
-      port = Integer.parseInt(new String(Files.readAllBytes(INSTANCE_FILE_PATH), StandardCharsets.UTF_8).trim());
+      port = Integer.parseInt(Files.readString(INSTANCE_FILE_PATH).trim());
     } catch (Exception e) {
       // Nobody left a port behind, likely an older version that doesn't listen.
       return null;

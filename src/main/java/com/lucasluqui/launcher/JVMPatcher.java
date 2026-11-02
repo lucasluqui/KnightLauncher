@@ -170,8 +170,7 @@ public class JVMPatcher extends BaseUI
 
   private void initPatcher ()
   {
-    Thread patchThread = new Thread(this::patch);
-    patchThread.start();
+    ThreadingUtil.start("JVMPatcher", this::patch);
   }
 
   private void patch ()

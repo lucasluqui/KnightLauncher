@@ -1,15 +1,14 @@
 package com.lucasluqui.launcher;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.util.FileUtil;
-import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.SystemUtil;
 import com.lucasluqui.util.ZipUtil;
+import com.lucasluqui.util.ThreadingUtil;
 
-import java.io.File;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import java.io.IOException;
 
 import static com.lucasluqui.launcher.Log.log;
@@ -31,11 +30,10 @@ public class ModuleManager
 
   public void loadModules ()
   {
-    Thread moduleThread = new Thread(() -> {
+    ThreadingUtil.start("ModuleLoader", () -> {
       loadIngameRPC();
       loadExtraPerf();
     });
-    moduleThread.start();
   }
 
   protected void loadIngameRPC ()

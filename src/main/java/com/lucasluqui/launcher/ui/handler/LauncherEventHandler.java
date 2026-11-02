@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -77,7 +76,7 @@ public class LauncherEventHandler
 
   public void launchGameEvent (boolean altMode)
   {
-    Thread launchThread = new Thread(() -> {
+    ThreadingUtil.start("GameLaunch", () -> {
 
       // block interactions with the launcher
       _ctx.getApp().toggleElementsBlock(true);
@@ -245,13 +244,12 @@ public class LauncherEventHandler
       ui.launchButton.setText(_localeManager.getValue("m.launching"));
       checkGameLaunch(existingProcesses);
     });
-    launchThread.start();
 
   }
 
   public void launchGameAltEvent ()
   {
-    Thread launchAltThread = new Thread(() -> {
+    ThreadingUtil.start("GameLaunchAlt", () -> {
 
       if (_flamingoManager.getSelectedServer().isOfficial()) {
         // official servers alt launch procedure
@@ -262,18 +260,16 @@ public class LauncherEventHandler
       }
 
     });
-    launchAltThread.start();
 
   }
 
   public void repairGameFilesEvent ()
   {
-    Thread repairThread = new Thread(() -> {
+    ThreadingUtil.start("GameRepair", () -> {
       _modManager.setMountRequired(true);
       _modManager.startStrictFileRebuild();
       _modManager.mount();
     });
-    repairThread.start();
   }
 
   public void gameSettingsEvent ()
@@ -778,7 +774,7 @@ public class LauncherEventHandler
       if (event.startsAt > System.currentTimeMillis()) {
         // The event has not yet started
         this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_starts_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(event.startsAt))));
-        this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(event.startsAt, TimeZone.getDefault().getID())));
+        this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_starts_at_time", DateUtil.getFormattedTime(event.startsAt)));
       } else if (System.currentTimeMillis() > event.endsAt) {
         // The event already ended
         this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_ended"));
@@ -786,7 +782,7 @@ public class LauncherEventHandler
       } else {
         // The event is currently running
         this.ui.bannerTimer.setText(_localeManager.getValue("m.banner_ends_at_time_remaining", localizeTimeRemaining(DateUtil.getFormattedTimeRemaining(event.endsAt))));
-        this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_ends_at_time", DateUtil.getFormattedTime(event.endsAt, TimeZone.getDefault().getID())));
+        this.ui.bannerTimer.setToolTipText(_localeManager.getValue("m.banner_ends_at_time", DateUtil.getFormattedTime(event.endsAt)));
       }
 
       // In any case, the timer needs to be visible
@@ -1157,7 +1153,7 @@ public class LauncherEventHandler
     // We'll be holding on to the process until it closes, so keep its output from piling up.
     ProcessUtil.discardOutput(process);
 
-    Thread watcher = new Thread(() -> {
+    ThreadingUtil.startDaemon("EditorWatcher", () -> {
       try {
         waitForEditorWindow(process);
         if (process.isAlive()) SwingUtilities.invokeLater(this::hideLauncher);
@@ -1166,9 +1162,7 @@ public class LauncherEventHandler
         log.error(e);
       }
       SwingUtilities.invokeLater(this::exitEditorSession);
-    }, "EditorWatcher");
-    watcher.setDaemon(true);
-    watcher.start();
+    });
   }
 
   /**

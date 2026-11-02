@@ -128,7 +128,7 @@ public class LauncherApp
     if (!this.requiresJVMPatch() && !this.requiresUpdate()) {
       if (gameRunning) this.getUI(LauncherUI.class).eventHandler.blockLaunchUntilGameCloses();
       initFinished();
-      ThreadingUtil.executeWithDelay(this.getUI(LauncherUI.class)::switchVisibility, 200);
+      ThreadingUtil.invokeLater(this.getUI(LauncherUI.class)::switchVisibility, 200);
     }
   }
 
@@ -290,7 +290,7 @@ public class LauncherApp
 
     // Only re-check installed mods if we got a different selected server.
     if (!_flamingoManager.getSelectedServer().isOfficial())
-      new Thread(_modManager::checkInstalled).start();
+      ThreadingUtil.start("ModCheck", _modManager::checkInstalled);
 
     _discordPresenceClient.setDetails(_localeManager.getValue("presence.ready"));
   }
@@ -479,17 +479,17 @@ public class LauncherApp
     String name = getShortcutName();
     File desktopFile = new File(DesktopUtil.getPathToDesktop(), name + ".desktop");
     try {
-      BufferedWriter out = new BufferedWriter(new FileWriter(desktopFile));
-      out.write("[Desktop Entry]\n");
-      out.write("Version=1.5\n");
-      out.write("Name=" + name + "\n");
-      out.write("Comment=Open source game launcher for a certain game\n");
-      out.write("Exec=\"" + JavaUtil.getLauncherJavaExePath() + "\" -jar KnightLauncher.jar\n");
-      out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.png\n");
-      out.write("Path=" + LauncherGlobals.USER_DIR + "/\n");
-      out.write("Type=Application\n");
-      out.write("Categories=Game;\n");
-      out.close();
+      // Desktop entries are always UTF-8.
+      Files.writeString(desktopFile.toPath(),
+        "[Desktop Entry]\n" +
+        "Version=1.5\n" +
+        "Name=" + name + "\n" +
+        "Comment=Open source game launcher for a certain game\n" +
+        "Exec=\"" + JavaUtil.getLauncherJavaExePath() + "\" -jar KnightLauncher.jar\n" +
+        "Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.png\n" +
+        "Path=" + LauncherGlobals.USER_DIR + "/\n" +
+        "Type=Application\n" +
+        "Categories=Game;\n");
     } catch (IOException e) {
       log.error(e);
     }
@@ -525,7 +525,7 @@ public class LauncherApp
       "\"" + JavaUtil.getLauncherJavaExePath() + "\" -jar KnightLauncher.jar\n";
 
     try {
-      Files.write(launcher, launcherScript.getBytes("UTF-8"));
+      Files.writeString(launcher, launcherScript);
     } catch (IOException e) {
       log.error(e);
     }
@@ -553,7 +553,7 @@ public class LauncherApp
       "</plist>\n";
 
     try {
-      Files.write(contents.resolve("Info.plist"), plist.getBytes("UTF-8"));
+      Files.writeString(contents.resolve("Info.plist"), plist);
     } catch (IOException e) {
       log.error(e);
     }
@@ -752,14 +752,14 @@ public class LauncherApp
 
   private void loadOnline ()
   {
-    new Thread(() -> {
+    ThreadingUtil.start("OnlineLoader", () -> {
       _flamingoManager.load();
       if (_flamingoManager.isOnline()) {
         for (BaseUI ui : getUIMap().values()) {
           ui.loadOnline();
         }
       }
-    }).start();
+    });
   }
 
   public PlayerCount getPlayerCount ()

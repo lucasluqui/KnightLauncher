@@ -1,10 +1,12 @@
 package com.lucasluqui.launcher;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.lucasluqui.launcher.runtime.RuntimeInstaller;
 import com.lucasluqui.launcher.runtime.RuntimeLocator;
 import com.lucasluqui.launcher.runtime.RuntimeSource;
+import com.lucasluqui.util.ThreadingUtil;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.io.File;
 
@@ -50,9 +52,7 @@ public class RuntimeManager
    */
   public void maybeUpdateRuntimeInBackground ()
   {
-    Thread thread = new Thread(this::maybeUpdateRuntime, "RuntimeUpdater");
-    thread.setDaemon(true);
-    thread.start();
+    ThreadingUtil.startDaemon("RuntimeUpdater", this::maybeUpdateRuntime);
   }
 
   private void maybeUpdateRuntime ()

@@ -15,6 +15,7 @@ import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.ProcessUtil;
 import com.lucasluqui.util.SystemUtil;
+import com.lucasluqui.util.ThreadingUtil;
 
 import javax.swing.*;
 import java.io.File;
@@ -96,7 +97,7 @@ public class EditorsEventHandler
 
     if (!isBooting) {
       isBooting = true;
-      new Thread(this::startedBooting).start();
+      ThreadingUtil.start("EditorBoot", this::startedBooting);
 
       String libSeparator = JavaUtil.getJavaVMCommandLineSeparator();
       String classpath = "";
@@ -184,7 +185,7 @@ public class EditorsEventHandler
   {
     if (!isBooting) {
       isBooting = true;
-      new Thread(this::startedBooting).start();
+      ThreadingUtil.start("EditorBoot", this::startedBooting);
 
       String libSeparator = JavaUtil.getJavaVMCommandLineSeparator();
       String classpath = "";

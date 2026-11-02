@@ -14,9 +14,11 @@ import com.lucasluqui.util.ImageUtil;
 import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.ProcessUtil;
 import com.lucasluqui.util.ZipUtil;
+import com.lucasluqui.util.ThreadingUtil;
 import com.lucasluqui.swing.LoadingIcon;
 import com.lucasluqui.swing.SlimProgressBarUI;
 import com.lucasluqui.swing.TaskbarProgress;
+
 import jiconfont.icons.font_awesome.FontAwesome;
 
 import javax.swing.*;
@@ -163,8 +165,7 @@ public class Updater extends BaseUI
 
   private void startUpdate ()
   {
-    Thread updateThread = new Thread(this::update);
-    updateThread.start();
+    ThreadingUtil.start("Updater", this::update);
   }
 
   private void update ()
