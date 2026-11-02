@@ -30,31 +30,6 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public final class HttpUtil
 {
-  /**
-   * How long to wait for a connection to be established.
-   */
-  public static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(10);
-
-  /**
-   * How long to wait for a reply to a small request (API calls, web pages, images).
-   */
-  public static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(20);
-
-  /**
-   * How long a download can go without receiving anything before we give up on it.
-   * Downloads have no overall time limit, as large ones on slow connections can take a long time.
-   */
-  public static final Duration STALL_TIMEOUT = Duration.ofSeconds(30);
-
-  private static final HttpClient CLIENT = HttpClient.newBuilder()
-    .connectTimeout(CONNECT_TIMEOUT)
-    // Doesn't follow redirects from https to http, which the old URL connections didn't either.
-    .followRedirects(HttpClient.Redirect.NORMAL)
-    .build();
-
-  private static final String USER_AGENT = "KnightLauncher/" + BuildConfig.getVersion()
-    + " (+https://github.com/lucasluqui/KnightLauncher)";
-
   private HttpUtil ()
   {
     // empty.
@@ -284,4 +259,29 @@ public final class HttpUtil
       delegate.onComplete();
     }
   }
+
+  /**
+   * How long to wait for a connection to be established.
+   */
+  public static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(10);
+
+  /**
+   * How long to wait for a reply to a small request (API calls, web pages, images).
+   */
+  public static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(20);
+
+  /**
+   * How long a download can go without receiving anything before we give up on it.
+   * Downloads have no overall time limit, as large ones on slow connections can take a long time.
+   */
+  public static final Duration STALL_TIMEOUT = Duration.ofSeconds(30);
+
+  private static final HttpClient CLIENT = HttpClient.newBuilder()
+    .connectTimeout(CONNECT_TIMEOUT)
+    // Doesn't follow redirects from https to http, which the old URL connections didn't either.
+    .followRedirects(HttpClient.Redirect.NORMAL)
+    .build();
+
+  private static final String USER_AGENT =
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11";
 }
