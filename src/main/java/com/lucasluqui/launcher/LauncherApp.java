@@ -1,6 +1,5 @@
 package com.lucasluqui.launcher;
 
-import com.google.inject.*;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.download.DownloadManager;
@@ -17,10 +16,16 @@ import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.swing.Scale;
 import com.lucasluqui.util.*;
+
+import com.google.inject.*;
+
 import net.sf.image4j.codec.ico.ICOEncoder;
+
 import org.apache.commons.io.FileUtils;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.software.os.OperatingSystem;
@@ -78,7 +83,7 @@ public class LauncherApp
   @SuppressWarnings("ConstantConditions")
   private void init ()
   {
-    // This goes first, another instance might be running and we don't want to mess with its files (e.g. logs).
+    // This goes first, another instance might be running, and we don't want to mess with its files (e.g. logs).
     boolean instanceLocked = acquireInstanceLock();
 
     if (instanceLocked) setupLogging();
@@ -193,6 +198,7 @@ public class LauncherApp
     _cacheManager.init();
     _downloadManager.init();
     _keyboardController.init();
+    _runtimeManager.init();
 
     if (SystemUtil.isARM() || SystemUtil.isMac()) {
       _discordPresenceClient.init("0", true);
@@ -269,6 +275,8 @@ public class LauncherApp
   private void initFinished ()
   {
     _moduleManager.loadModules();
+
+    _runtimeManager.maybeUpdateRuntimeInBackground();
 
     checkGetdown();
 
@@ -390,18 +398,32 @@ public class LauncherApp
     }
   }
 
-  // Create a shortcut to the application if there's none.
-  private void checkShortcut ()
+  /**
+   * Updates the shortcut to the application if there is one and it points to an outdated Java runtime,
+   * e.g. after a new launcher runtime got installed.
+   */
+  public void refreshShortcut ()
   {
-    if (SystemUtil.isWindows() && FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName())) {
+    checkShortcut();
+  }
+
+  // Create a shortcut to the application if there's none, or update it if it points to an outdated Java runtime.
+  private synchronized void checkShortcut ()
+  {
+    // Shortcuts point straight to a Java runtime, see if it's still the one the launcher should be using.
+    // Only a hash of its path is kept around so the username doesn't end up in the logs.
+    String shortcutJava = String.valueOf(JavaUtil.getLauncherJavaExePath().hashCode());
+    boolean shortcutJavaChanged = !shortcutJava.equals(_settingsManager.getValue("launcher.shortcutJava"));
+
+    if (SystemUtil.isWindows() && FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName()) && !shortcutJavaChanged) {
       return;
     }
 
-    if (SystemUtil.isUnix() && FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName() + ".desktop")) {
+    if (SystemUtil.isUnix() && FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName() + ".desktop") && !shortcutJavaChanged) {
       return;
     }
 
-    if (SystemUtil.isMac() && FileUtil.fileExists(System.getProperty("user.home") + "/Applications/Knight Launcher.app")) {
+    if (SystemUtil.isMac() && FileUtil.fileExists(System.getProperty("user.home") + "/Applications/Knight Launcher.app") && !shortcutJavaChanged) {
       return;
     }
 
@@ -430,6 +452,8 @@ public class LauncherApp
       } else if (SystemUtil.isMac()) {
         makeApplicationFile();
       }
+
+      _settingsManager.setValue("launcher.shortcutJava", shortcutJava);
     }
   }
 
@@ -437,7 +461,7 @@ public class LauncherApp
   {
     try {
       String name = getShortcutName();
-      DesktopUtil.createShellLink(System.getProperty("java.home") + "\\bin\\javaw.exe",
+      DesktopUtil.createShellLink(JavaUtil.getLauncherJavaExePath(),
         "-jar \"" + LauncherGlobals.USER_DIR + "\\KnightLauncher.jar\"",
         LauncherGlobals.USER_DIR,
         LauncherGlobals.USER_DIR + "\\KnightLauncher\\images\\icon-512.ico",
@@ -460,7 +484,7 @@ public class LauncherApp
       out.write("Version=1.5\n");
       out.write("Name=" + name + "\n");
       out.write("Comment=Open source game launcher for a certain game\n");
-      out.write("Exec=java -jar KnightLauncher.jar\n");
+      out.write("Exec=\"" + JavaUtil.getLauncherJavaExePath() + "\" -jar KnightLauncher.jar\n");
       out.write("Icon=" + LauncherGlobals.USER_DIR + "/KnightLauncher/images/icon-512.png\n");
       out.write("Path=" + LauncherGlobals.USER_DIR + "/\n");
       out.write("Type=Application\n");
@@ -498,7 +522,7 @@ public class LauncherApp
     String launcherScript =
       "#!/bin/bash\n" +
       "cd \"" + LauncherGlobals.USER_DIR + "\"\n" +
-      "java -jar KnightLauncher.jar\n";
+      "\"" + JavaUtil.getLauncherJavaExePath() + "\" -jar KnightLauncher.jar\n";
 
     try {
       Files.write(launcher, launcherScript.getBytes("UTF-8"));
@@ -553,7 +577,7 @@ public class LauncherApp
 
   private void setupHTTPSProtocol ()
   {
-    System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
+    System.setProperty("https.protocols", "TLSv1.2,TLSv1.3");
     System.setProperty("http.agent", "Mozilla/5.0");
     System.setProperty("https.agent", "Mozilla/5.0");
   }
@@ -841,7 +865,7 @@ public class LauncherApp
       // Sleep the thread for a bit to be fully sure updater.jar isn't locked.
       Thread.sleep(1000);
 
-      ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/updater.jar", "update", newVersion}, true);
+      ProcessUtil.run(JavaUtil.getLauncherCommandForJar(LauncherGlobals.USER_DIR + File.separator + "updater.jar", "update", newVersion), true);
       exit();
     } catch (Exception e) {
       String downloadErrMsg = "An error occurred while trying to start the launcher updater." +
@@ -1004,7 +1028,7 @@ public class LauncherApp
   public void restart ()
   {
     log.info("Restarting launcher");
-    ProcessUtil.run(new String[]{"java", "-jar", LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar"}, true);
+    ProcessUtil.run(JavaUtil.getLauncherCommand(), true);
     exit();
   }
 
@@ -1037,6 +1061,7 @@ public class LauncherApp
   @Inject protected CacheManager _cacheManager;
   @Inject protected DownloadManager _downloadManager;
   @Inject protected KeyboardController _keyboardController;
+  @Inject protected RuntimeManager _runtimeManager;
 
   protected String _latestRelease = null;
   protected List<Release> _releases = new ArrayList<>();

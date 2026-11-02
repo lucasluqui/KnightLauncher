@@ -2,13 +2,13 @@ package com.lucasluqui.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.lucasluqui.util.Log.log;
 
@@ -152,46 +152,24 @@ public class SystemUtil
     return hashedMachineId;
   }
 
+  /**
+   * Environment variables to override in every process we start, see {@link ProcessUtil}.
+   * <p>
+   * Our own environment can't be changed anymore on recent Java versions, so these are applied when starting processes instead.
+   */
+  private static final Map<String, String> ENV_OVERRIDES = new ConcurrentHashMap<>();
+
   public static void setEnv (Map<String, String> newenv)
   {
-    try {
-      Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
-      Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
-      theEnvironmentField.setAccessible(true);
-      Map<String, String> env = (Map<String, String>) theEnvironmentField.get(null);
-      env.putAll(newenv);
-      Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
-      theCaseInsensitiveEnvironmentField.setAccessible(true);
-      Map<String, String> cienv = (Map<String, String>) theCaseInsensitiveEnvironmentField.get(null);
-      cienv.putAll(newenv);
-    } catch (NoSuchFieldException e) {
-      Class[] classes = Collections.class.getDeclaredClasses();
-      Map<String, String> env = System.getenv();
-      for (Class cl : classes) {
-        if ("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
-          Field field = null;
-          try {
-            field = cl.getDeclaredField("m");
-          } catch (NoSuchFieldException ex) {
-            log.error(e);
-          }
-          field.setAccessible(true);
-          Object obj = null;
-          try {
-            obj = field.get(env);
-          } catch (IllegalAccessException ex) {
-            log.error(e);
-          }
-          Map<String, String> map = (Map<String, String>) obj;
-          map.clear();
-          map.putAll(newenv);
-        }
-      }
-    } catch (ClassNotFoundException e) {
-      log.error(e);
-    } catch (IllegalAccessException e) {
-      log.error(e);
-    }
+    ENV_OVERRIDES.putAll(newenv);
+  }
+
+  /**
+   * @return The environment variables set through {@link #setEnv(Map)}.
+   */
+  public static Map<String, String> getEnvOverrides ()
+  {
+    return Collections.unmodifiableMap(ENV_OVERRIDES);
   }
 
   public static void fixTempDir (String newDir)

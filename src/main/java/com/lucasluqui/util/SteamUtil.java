@@ -1,10 +1,10 @@
 package com.lucasluqui.util;
 
+import com.sun.jna.platform.win32.Advapi32Util;
+import com.sun.jna.platform.win32.WinReg;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
 
 import static com.lucasluqui.util.Log.log;
 
@@ -31,8 +31,12 @@ public class SteamUtil
 
   public static String getSteamPath ()
   {
+    if (!SystemUtil.isWindows()) return null;
+
     try {
-      return WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "Software\\Valve\\Steam", "SteamPath", 0);
+      if (Advapi32Util.registryValueExists(WinReg.HKEY_CURRENT_USER, "Software\\Valve\\Steam", "SteamPath")) {
+        return Advapi32Util.registryGetStringValue(WinReg.HKEY_CURRENT_USER, "Software\\Valve\\Steam", "SteamPath");
+      }
     } catch (Exception e) {
       log.error(e);
     }

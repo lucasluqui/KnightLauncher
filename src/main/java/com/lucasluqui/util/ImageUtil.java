@@ -4,7 +4,6 @@ import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.xml.bind.DatatypeConverter;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
@@ -129,7 +128,8 @@ public class ImageUtil
     if (data == null) return null;
 
     String base64Image = data.contains(",") ? data.split(",")[1] : data;
-    byte[] imageBytes = DatatypeConverter.parseBase64Binary(base64Image);
+    // The MIME decoder skips over line breaks and other stray characters, like DatatypeConverter used to.
+    byte[] imageBytes = Base64.getMimeDecoder().decode(base64Image);
     BufferedImage img = null;
     try {
       img = ImageIO.read(new ByteArrayInputStream(imageBytes));

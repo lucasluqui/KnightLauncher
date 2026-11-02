@@ -1,8 +1,5 @@
 package com.lucasluqui.util;
 
-import com.sun.jna.Pointer;
-import com.sun.jna.platform.win32.Kernel32;
-import com.sun.jna.platform.win32.WinNT;
 import org.apache.commons.io.IOUtils;
 import oshi.SystemInfo;
 import oshi.software.os.OSDesktopWindow;
@@ -12,7 +9,6 @@ import oshi.software.os.OperatingSystem;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,7 +36,8 @@ public class ProcessUtil
 
     Process process = null;
     try {
-      Map<String, String> env = System.getenv();
+      Map<String, String> env = new HashMap<>(System.getenv());
+      env.putAll(SystemUtil.getEnvOverrides());
 
       String[] cleanEnv = env.entrySet().stream()
         .filter(e -> !e.getKey().equals("_JAVA_OPTIONS"))
@@ -71,6 +68,7 @@ public class ProcessUtil
 
     // Get rid of _JAVA_OPTIONS, usually just contains garbage.
     pb.environment().remove("_JAVA_OPTIONS");
+    pb.environment().putAll(SystemUtil.getEnvOverrides());
 
     if (!silent) {
       log.info("Running process command from directory",
@@ -110,6 +108,7 @@ public class ProcessUtil
 
       // Get rid of _JAVA_OPTIONS, usually just contains garbage.
       processBuilder.environment().remove("_JAVA_OPTIONS");
+      processBuilder.environment().putAll(SystemUtil.getEnvOverrides());
 
       // Start the process.
       process = processBuilder.start();
@@ -149,39 +148,15 @@ public class ProcessUtil
   }
 
   /**
-   * Gets the ID of a process we started. Java 8 has no way of asking for it, so this digs it out of the
-   * platform's process implementation.
+   * Gets the ID of a process we started.
    *
    * @return The process ID, or -1 if it couldn't be found out.
    */
   public static long getProcessId (Process process)
   {
     try {
-      // Java 9 onwards. Looked up on Process itself, as the platform's implementation class isn't
-      // public and calling the method through it is refused.
-      return (long) Process.class.getMethod("pid").invoke(process);
-    } catch (NoSuchMethodException ignored) {
-      // Java 8, move on.
-    } catch (Throwable e) {
-      log.error("Failed to get process id", e);
-      return -1;
-    }
-
-    try {
-      Class<?> clazz = process.getClass();
-      if (SystemUtil.isWindows()) {
-        // Windows only keeps a handle to the process around.
-        Field handleField = clazz.getDeclaredField("handle");
-        handleField.setAccessible(true);
-        long handle = handleField.getLong(process);
-        int pid = Kernel32.INSTANCE.GetProcessId(new WinNT.HANDLE(Pointer.createConstant(handle)));
-        return pid != 0 ? pid : -1;
-      } else {
-        Field pidField = clazz.getDeclaredField("pid");
-        pidField.setAccessible(true);
-        return pidField.getInt(process);
-      }
-    } catch (Throwable e) {
+      return process.pid();
+    } catch (UnsupportedOperationException e) {
       log.error("Failed to get process id", e);
       return -1;
     }

@@ -3,6 +3,7 @@ package com.lucasluqui.util;
 import com.google.inject.Inject;
 import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
+import com.lucasluqui.launcher.runtime.RuntimeLocator;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -197,6 +198,41 @@ public class JavaUtil
   public static String getJavaVMCommandLineSeparator ()
   {
     return SystemUtil.isWindows() ? ";" : ":";
+  }
+
+  /**
+   * The Java executable to start the launcher with.
+   * Our own runtime if it's installed, otherwise the one we're running on right now.
+   */
+  public static String getLauncherJavaExePath ()
+  {
+    File home = RuntimeLocator.getInstalledRuntimeDir();
+    if (home == null) home = RuntimeLocator.getCurrentJavaHome();
+
+    File exe = RuntimeLocator.getJavaExecutable(home, true);
+    if (!exe.isFile()) exe = RuntimeLocator.getJavaExecutable(home, false);
+    return exe.getAbsolutePath();
+  }
+
+  /**
+   * A command that starts the launcher from the given jar, using {@link #getLauncherJavaExePath()}.
+   */
+  public static String[] getLauncherCommandForJar (String jarPath, String... args)
+  {
+    String[] command = new String[3 + args.length];
+    command[0] = getLauncherJavaExePath();
+    command[1] = "-jar";
+    command[2] = jarPath;
+    System.arraycopy(args, 0, command, 3, args.length);
+    return command;
+  }
+
+  /**
+   * A command that starts the launcher from its jar file, using {@link #getLauncherJavaExePath()}.
+   */
+  public static String[] getLauncherCommand (String... args)
+  {
+    return getLauncherCommandForJar(LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.jar", args);
   }
 
 //  public static synchronized void loadLibrary (File jar)

@@ -1,9 +1,5 @@
 package com.lucasluqui.launcher.ui;
 
-import com.lucasluqui.swing.Scale;
-import com.formdev.flatlaf.FlatClientProperties;
-import com.google.inject.Inject;
-import com.jhlabs.image.GaussianFilter;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.launcher.*;
@@ -19,9 +15,16 @@ import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.swing.SlimProgressBarUI;
 import com.lucasluqui.util.*;
 import com.lucasluqui.swing.LoadingIcon;
+import com.lucasluqui.swing.Scale;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
+import com.google.inject.Inject;
+
+import com.jhlabs.image.GaussianFilter;
+
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
-import org.madlonkay.desktopsupport.DesktopSupport;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,7 +60,9 @@ public class LauncherUI extends BaseUI
           Image image = Toolkit.getDefaultToolkit().getImage(
             LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "images" + File.separator + "icon-512.png"
           );
-          DesktopSupport.getSupport().setDockIconImage(image);
+          if (Taskbar.isTaskbarSupported() && Taskbar.getTaskbar().isSupported(Taskbar.Feature.ICON_IMAGE)) {
+            Taskbar.getTaskbar().setIconImage(image);
+          }
         } catch (Exception e) {
           log.error("Failed to set macOS dock image", e);
         }

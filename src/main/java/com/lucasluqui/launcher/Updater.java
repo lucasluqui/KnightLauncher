@@ -9,6 +9,7 @@ import com.lucasluqui.download.data.URLDownloadQueue;
 import com.lucasluqui.launcher.ui.BaseUI;
 import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.ImageUtil;
+import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.ProcessUtil;
 import com.lucasluqui.util.ZipUtil;
 import com.lucasluqui.swing.LoadingIcon;
@@ -255,9 +256,9 @@ public class Updater extends BaseUI
 
     String[] startParams;
     if (success) {
-      startParams = new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/KnightLauncher.jar"};
+      startParams = JavaUtil.getLauncherCommand();
     } else {
-      startParams = new String[]{"java", "-jar", LauncherGlobals.USER_DIR + "/KnightLauncher.jar", "updateFailed"};
+      startParams = JavaUtil.getLauncherCommand("updateFailed");
     }
     ProcessUtil.run(startParams, true);
 
