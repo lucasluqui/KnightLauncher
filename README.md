@@ -71,7 +71,7 @@ After following those steps, the launcher will be up to date.
 To build Knight Launcher follow these steps:
 
 1. Prerequisites 
-   - [Java 8 JDK](https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html) installed.
+   - [Java 25 JDK](https://adoptium.net/temurin/releases/?version=25) installed.
    - [Maven](https://maven.apache.org/download.cgi) installed:
      - **Windows**: Download the ZIP from the link above, extract, then add `bin/` to your `PATH`.
      - **macOS (Homebrew)**: `brew install maven`.
@@ -91,6 +91,11 @@ To build Knight Launcher follow these steps:
    - `mvn -Denv=prod clean package`
 7. Copy the package built by Maven to your Spiral Knights folder and run it.
    - `java -jar KnightLauncher.jar`
+
+> [!NOTE]
+> The launcher runs on Java 25. Its entry point (`com.lucasluqui.launcher.Main`, under `src/main/java8`) is compiled for Java 8 instead, so that
+> starting it with an older Java restarts it on a Java 25 runtime: its own one in `KnightLauncher/runtime`, or the one the game ships with.
+> Code under `src/main/java8` must only use Java 8 APIs, and no launcher classes or libraries outside of `src/main/java8`.
 
 ## Discord
 We've built an amazing community on Discord focused on both helping newcomers get along with the launcher and giving a hand to modders, come join us!
