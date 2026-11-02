@@ -254,6 +254,29 @@
           <appendAssemblyId>false</appendAssemblyId>
         </configuration>
       </plugin>
+      <!--
+        Registers 'src/main/java8' as a source directory, mostly so IDEs pick it up.
+        It's compiled on its own for Java 8 though, see the compiler plugin below.
+      -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.6.2</version>
+        <executions>
+          <execution>
+            <id>add-java8-sources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.basedir}/src/main/java8</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.15.0</version>
@@ -262,6 +285,18 @@
           <release>25</release>
         </configuration>
         <executions>
+          <!--
+            The regular compilation only covers 'src/main/java'. Without this, it'd also pick up 'src/main/java8'
+            (added above) and compile it for Java 25, replacing its Java 8 classes.
+          -->
+          <execution>
+            <id>default-compile</id>
+            <configuration>
+              <compileSourceRoots>
+                <compileSourceRoot>${project.basedir}/src/main/java</compileSourceRoot>
+              </compileSourceRoots>
+            </configuration>
+          </execution>
           <!--
             Everything in 'src/main/java8' is compiled for Java 8, and before the rest so it can use it.
             That's the jar's entry point (com.lucasluqui.launcher.Main), which has to run on whatever Java the
