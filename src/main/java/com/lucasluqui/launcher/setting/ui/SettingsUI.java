@@ -1017,6 +1017,7 @@ public class SettingsUI extends BaseUI
     credits.setBackground(null);
     credits.setEditable(false);
     credits.setHighlighter(null);
+    credits.setFocusable(false);
     credits.setAlignmentX(0);
     credits.setText(_localeManager.getValue(
       "m.credits_template", new String[]{
