@@ -330,39 +330,27 @@ public class ZipUtil
   }
 
 
+  /**
+   * An MD5 hash of the contents of every entry in the zip in the order they're stored.
+   * Stays the same regardless of compression or timestamps.
+   *
+   * @return The hash as lowercase hex, or null if the zip couldn't be read.
+   */
   @SuppressWarnings("unused")
   public static String getZipHash (String source)
   {
-    InputStream file = null;
-    String hash = null;
-    try {
-      file = new FileInputStream(source);
-    } catch (FileNotFoundException e) {
-      log.error(e);
-    }
-    ZipInputStream stream = new ZipInputStream(file);
-    try {
-      ZipEntry entry;
-      while ((entry = stream.getNextEntry()) != null) {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        DigestInputStream dis = new DigestInputStream(stream, md);
-        byte[] buffer = new byte[BUFFER_SIZE];
-        int read = dis.read(buffer);
-        while (read > -1) {
-          read = dis.read(buffer);
-        }
-        hash = new String(dis.getMessageDigest().digest());
+    try (ZipInputStream stream = new ZipInputStream(new FileInputStream(source))) {
+      MessageDigest md = MessageDigest.getInstance("MD5");
+      DigestInputStream dis = new DigestInputStream(stream, md);
+      byte[] buffer = new byte[BUFFER_SIZE];
+      while (stream.getNextEntry() != null) {
+        while (dis.read(buffer) > -1) ;
       }
+      return HexFormat.of().formatHex(md.digest());
     } catch (NoSuchAlgorithmException | IOException e) {
       log.error(e);
-    } finally {
-      try {
-        stream.close();
-      } catch (IOException e) {
-        log.error(e);
-      }
+      return null;
     }
-    return hash;
   }
 
   public static List<String> getFileListFromZip (String zipPath)
