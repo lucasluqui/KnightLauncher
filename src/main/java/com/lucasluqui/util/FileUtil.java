@@ -133,18 +133,23 @@ public class FileUtil
     return exists;
   }
 
+  /**
+   * Reads a whole text file as UTF-8.
+   * <p>
+   * Not {@link Files#readString}, which fails outright on anything that isn't valid UTF-8.
+   * Some of the files read through here (like extra.txt) can be edited by hand
+   * and saved in another encoding, and a few odd characters are better than not reading them at all.
+   */
   public static String readFile (String path)
     throws IOException
   {
-    byte[] encoded = Files.readAllBytes(Paths.get(path));
-    return new String(encoded, StandardCharsets.UTF_8);
+    return new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
   }
 
   public static void writeFile (String path, String content)
   {
-    try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-      new FileOutputStream(path), StandardCharsets.UTF_8))) {
-      writer.write(content);
+    try {
+      Files.writeString(Paths.get(path), content);
     } catch (IOException e) {
       log.error(e);
     }
