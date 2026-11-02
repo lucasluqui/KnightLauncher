@@ -14,6 +14,7 @@ import com.lucasluqui.util.ProcessUtil;
 import com.lucasluqui.util.ZipUtil;
 import com.lucasluqui.swing.LoadingIcon;
 import com.lucasluqui.swing.SlimProgressBarUI;
+import com.lucasluqui.swing.TaskbarProgress;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
@@ -145,6 +146,7 @@ public class Updater extends BaseUI
     updaterProgressBar.setBounds(Scale.rect(116 - SlimProgressBarUI.GLOW_MARGIN, 124 - 8, 320 + SlimProgressBarUI.GLOW_MARGIN * 2, 16));
     updaterProgressBar.addChangeListener(e ->
       updaterStep.setText(updaterProgressBar.getValue() + " / " + updaterProgressBar.getMaximum()));
+    TaskbarProgress.follow(updaterProgressBar);
     content.add(updaterProgressBar);
 
     JLabel footnote = new JLabel("The launcher will restart by itself once it's done.");

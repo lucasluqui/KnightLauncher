@@ -13,6 +13,7 @@ import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.launcher.ui.handler.LauncherEventHandler;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.swing.SlimProgressBarUI;
+import com.lucasluqui.swing.TaskbarProgress;
 import com.lucasluqui.util.*;
 import com.lucasluqui.swing.LoadingIcon;
 import com.lucasluqui.swing.Scale;
@@ -620,6 +621,8 @@ public class LauncherUI extends BaseUI
     // The percentage follows the bar's animation rather than jumping straight to the new value.
     launchProgressBar.addChangeListener(e ->
       launchProgressPercent.setText(Math.round(launchProgressBar.getPercentComplete() * 100) + "%"));
+    // Every task goes through this bar (the mods screen's bar mirrors it), so it speaks for the whole launcher.
+    TaskbarProgress.follow(launchProgressBar);
     panel.add(launchProgressBar);
     panel.setComponentZOrder(launchProgressBar, 0);
 

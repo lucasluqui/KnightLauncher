@@ -14,6 +14,7 @@ import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.util.*;
 import com.lucasluqui.swing.LoadingIcon;
 import com.lucasluqui.swing.SlimProgressBarUI;
+import com.lucasluqui.swing.TaskbarProgress;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -124,6 +125,7 @@ public class JVMPatcher extends BaseUI
     jvmPatcherProgressBar.setBounds(Scale.rect(25 - SlimProgressBarUI.GLOW_MARGIN, 205, 450 + SlimProgressBarUI.GLOW_MARGIN * 2, 16));
     jvmPatcherProgressBar.setVisible(false);
     jvmPatcherProgressBar.setShouldPaintString(false);
+    TaskbarProgress.follow(jvmPatcherProgressBar);
     guiFrame.getContentPane().add(jvmPatcherProgressBar);
 
     buttonAccept = new JButton("Start patching");
