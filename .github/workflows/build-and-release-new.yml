@@ -1,4 +1,4 @@
-name: Build and Release (Java 25)
+name: Build and Release (New)
 
 on:
   workflow_dispatch
