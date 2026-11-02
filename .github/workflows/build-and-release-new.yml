@@ -13,10 +13,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Java 25
+      - name: Read launcher Java version from pom.xml
+        id: java-version
+        run: |
+          JAVA_VERSION=$(sed -n 's/.*<launcher.java.version>\(.*\)<\/launcher.java.version>.*/\1/p' pom.xml | head -1)
+          if [ -z "$JAVA_VERSION" ]; then
+            echo "::error::Couldn't find launcher.java.version in pom.xml"
+            exit 1
+          fi
+          echo "Launcher Java version: $JAVA_VERSION"
+          echo "LAUNCHER_JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_ENV
+          echo "version=$JAVA_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set up Java ${{ steps.java-version.outputs.version }}
         uses: actions/setup-java@v5
         with:
-          java-version: '25'
+          java-version: ${{ steps.java-version.outputs.version }}
           distribution: 'temurin'
           cache: 'maven'
 
@@ -81,7 +93,8 @@ jobs:
       - name: Verify class file versions
         run: |
           # The entry point must stay runnable on Java 8 (class file version 52), so older Java installs
-          # can start the launcher and have it restart itself on Java 25 (class file version 69).
+          # can start the launcher and have it restart itself on the launcher's Java version (e.g. 69 for Java 25).
+          LAUNCHER_CLASS_VERSION=$((LAUNCHER_JAVA_VERSION + 44))
           check_version () {
             ACTUAL=$(javap -v -cp target/KnightLauncher.jar "$1" | grep 'major version' | awk '{print $3}')
             echo "$1: class file version $ACTUAL"
@@ -95,7 +108,15 @@ jobs:
           check_version com.lucasluqui.launcher.runtime.RuntimeInstaller 52
           check_version com.lucasluqui.launcher.runtime.RuntimeSource 52
           check_version com.lucasluqui.launcher.runtime.RuntimeDownloadWindow 52
-          check_version com.lucasluqui.launcher.LauncherApp 69
+          check_version com.lucasluqui.launcher.LauncherApp "$LAUNCHER_CLASS_VERSION"
+
+          # The entry point reads the Java version it needs from here.
+          BUILT_JAVA_VERSION=$(unzip -p target/KnightLauncher.jar build.properties | tr -d '\r' | sed -n 's/^java_version=//p')
+          echo "build.properties java_version: $BUILT_JAVA_VERSION"
+          if [ "$BUILT_JAVA_VERSION" != "$LAUNCHER_JAVA_VERSION" ]; then
+            echo "::error::build.properties has java_version '$BUILT_JAVA_VERSION', expected $LAUNCHER_JAVA_VERSION"
+            exit 1
+          fi
 
           MAIN_CLASS=$(unzip -p target/KnightLauncher.jar META-INF/MANIFEST.MF | grep '^Main-Class:' | tr -d '\r' | awk '{print $2}')
           echo "Main-Class: $MAIN_CLASS"
@@ -106,10 +127,11 @@ jobs:
 
       - name: Check launcher runtimes on the CDN
         run: |
-          # Users download these on their first Java 25 launch. Missing ones aren't fatal, as the launcher
-          # falls back to the game's own runtime, but they're worth knowing about before releasing.
+          # Users download these when they don't have a runtime of the launcher's Java version yet. Missing ones aren't
+          # fatal, as the launcher falls back to the game's own runtime, but they're worth knowing about before releasing.
           BASE="https://cdn.knightlauncher.com/knightlauncher/v2/runtime"
-          for RUNTIME in windows/25/runtime.zip linux-x64/25/runtime.tar.gz linux-aarch64/25/runtime.tar.gz macos/25/runtime.tar.gz; do
+          V="$LAUNCHER_JAVA_VERSION"
+          for RUNTIME in windows/$V/runtime.zip linux-x64/$V/runtime.tar.gz linux-aarch64/$V/runtime.tar.gz macos/$V/runtime.tar.gz; do
             PLATFORM_DIR=$(dirname "$RUNTIME")
             if curl -fsSI "$BASE/$RUNTIME" > /dev/null && curl -fsSI "$BASE/$PLATFORM_DIR/checksum.txt" > /dev/null; then
               echo "Found $RUNTIME"
