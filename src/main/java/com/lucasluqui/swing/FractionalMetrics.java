@@ -10,6 +10,7 @@ import com.formdev.flatlaf.ui.FlatToolTipUI;
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
 
 /**
  * Draws text with fractional metrics.
@@ -72,6 +73,103 @@ public final class FractionalMetrics
       apply(g);
       super.update(g, c);
     }
+
+    // Both the preferred size and the text's position when painting come from here.
+    // Measuring with the same metrics the text is drawn with keeps it from overflowing
+    // the label and getting cut off.
+    @Override
+    protected String layoutCL (JLabel label, FontMetrics fontMetrics, String text, Icon icon,
+                               Rectangle viewR, Rectangle iconR, Rectangle textR)
+    {
+      return super.layoutCL(label, new Metrics(fontMetrics), text, icon, viewR, iconR, textR);
+    }
+  }
+
+  /**
+   * Swing measures text with whole-pixel metrics at 100% scale which won't match text drawn with fractional
+   * metrics at the actual scale; it can come out wider than measured. This measures widths the way they're drawn,
+   * also counting glyphs that hang past their advance (italics), and rounds up.
+   */
+  private static final class Metrics extends FontMetrics
+  {
+    Metrics (FontMetrics base)
+    {
+      super(base.getFont());
+      _base = base;
+    }
+
+    @Override
+    public int stringWidth (String str)
+    {
+      if (str == null || str.isEmpty()) return 0;
+      double advance = font.getStringBounds(str, FRC).getWidth();
+      double visual = font.createGlyphVector(FRC, str).getVisualBounds().getMaxX();
+      return (int) Math.ceil(Math.max(advance, visual));
+    }
+
+    @Override
+    public int charsWidth (char[] data, int off, int len)
+    {
+      return stringWidth(new String(data, off, len));
+    }
+
+    @Override
+    public int charWidth (char ch)
+    {
+      return stringWidth(String.valueOf(ch));
+    }
+
+    @Override
+    public int charWidth (int codePoint)
+    {
+      return stringWidth(new String(Character.toChars(codePoint)));
+    }
+
+    @Override
+    public FontRenderContext getFontRenderContext ()
+    {
+      return FRC;
+    }
+
+    @Override
+    public int getAscent ()
+    {
+      return _base.getAscent();
+    }
+
+    @Override
+    public int getDescent ()
+    {
+      return _base.getDescent();
+    }
+
+    @Override
+    public int getLeading ()
+    {
+      return _base.getLeading();
+    }
+
+    @Override
+    public int getMaxAscent ()
+    {
+      return _base.getMaxAscent();
+    }
+
+    @Override
+    public int getMaxDescent ()
+    {
+      return _base.getMaxDescent();
+    }
+
+    @Override
+    public int getMaxAdvance ()
+    {
+      return _base.getMaxAdvance();
+    }
+
+    private final FontMetrics _base;
+
+    private static final FontRenderContext FRC = new FontRenderContext(null, true, true);
   }
 
   public static class Button extends FlatButtonUI
