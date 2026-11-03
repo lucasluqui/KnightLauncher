@@ -26,6 +26,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipFile;
 
 import static com.lucasluqui.launcher.mod.Log.log;
@@ -49,8 +50,8 @@ public class ModManager
 
   public void checkInstalled ()
   {
-    if (!_checking) {
-      _checking = true;
+    // The startup check and a manual refresh can overlap, only let one of them through.
+    if (_checking.compareAndSet(false, true)) {
       _ctx.getApp().toggleElementsBlock(true);
       ModListUI modListUI = _ctx.getApp().getUI(ModListUI.class);
 
@@ -144,7 +145,7 @@ public class ModManager
       modListUI.labelModCount.setText(String.valueOf(getModList().size()));
       modListUI.updateModList(null);
       _ctx.getApp().toggleElementsBlock(false);
-      _checking = false;
+      _checking.set(false);
     }
   }
 
@@ -204,7 +205,7 @@ public class ModManager
     _discordPresenceClient.setDetails(_localeManager.getValue("m.mount"));
     LinkedList<Mod> localList = getModList();
 
-    for (int i = 0; i < getModCount(); i++) {
+    for (int i = 0; i < localList.size(); i++) {
       Mod mod = localList.get(i);
       if (mod.isEnabled()) {
         if (mod instanceof Modpack) {
@@ -455,7 +456,7 @@ public class ModManager
   {
     Set<Long> hashSet = new HashSet<>();
     String rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
-    for (Mod mod : _modList.getAll()) {
+    for (Mod mod : _modList.getClone()) {
       long lastModified = new File(rootDir + "/mods/" + mod.getFileName()).lastModified();
       if (mod.isEnabled()) hashSet.add(lastModified);
     }
@@ -482,7 +483,7 @@ public class ModManager
     if (rawString.equals("")) return;
 
     String[] fileNames = rawString.split(",");
-    for (Mod mod : _modList.getAll()) {
+    for (Mod mod : _modList.getClone()) {
       for (int i = 0; i < fileNames.length; i++) {
         if (mod.getFileName().equals(fileNames[i])) {
           mod.setEnabled(false);
@@ -507,7 +508,7 @@ public class ModManager
     int gameJVMVersion = JavaUtil.getJVMVersion(JavaUtil.getGameJVMExePath());
     String pxVersion = _flamingoManager.getSelectedServer().getLocalVersion();
 
-    for (Mod mod : _modList.getAll()) {
+    for (Mod mod : _modList.getClone()) {
       // Parse whether the mod is compatible with the current game version.
       // Not a strict requirement for most mods, only for ZipMods with 'class' type and JarMods.
       boolean pxCompatible = pxVersion.equalsIgnoreCase(mod.getPXVersion());
@@ -658,7 +659,8 @@ public class ModManager
 
   public LinkedList<Mod> getModList ()
   {
-    return _modList.getAll();
+    // A copy, the UI reads it on the EDT while mod checks might be rebuilding the list.
+    return _modList.getClone();
   }
 
   public Boolean getMountRequired ()
@@ -704,7 +706,7 @@ public class ModManager
      * Adds a <code>Mod</code> to the list.
      * @param mod The <code>Mod</code> to be added.
      */
-    private void addMod (Mod mod)
+    private synchronized void addMod (Mod mod)
     {
       this.mods.add(mod);
       mod.wasAdded();
@@ -713,7 +715,7 @@ public class ModManager
     /**
      * Clears the <code>LinkedList</code> within this class.
      */
-    private void clear ()
+    private synchronized void clear ()
     {
       this.mods.clear();
     }
@@ -722,7 +724,7 @@ public class ModManager
      * Get the number of <code>Mod</code> objects in the list.
      * @return Number of <code>Mod</code> objects within the <code>LinkedList</code>.
      */
-    private int getModCount ()
+    private synchronized int getModCount ()
     {
       return this.mods.size();
     }
@@ -731,7 +733,7 @@ public class ModManager
      * Get the number of ENABLED <code>Mod</code> objects in the list.
      * @return Number of <code>Mod</code> objects within the <code>LinkedList</code> that are set as enabled.
      */
-    private int getEnabledModCount ()
+    private synchronized int getEnabledModCount ()
     {
       int count = 0;
       for (Mod mod : this.mods) {
@@ -742,22 +744,11 @@ public class ModManager
     }
 
     /**
-     * Get the <code>LinkedList</code> within this class.
-     * This does not sound like a good idea. Everything should be handled in here.
-     * But I don't have the time to refactor that whole thing. So for now it stays this way.
-     * @return The <code>LinkedList</code> with all <code>Mod</code> objects.
-     */
-    private LinkedList<Mod> getAll ()
-    {
-      return this.mods;
-    }
-
-    /**
      * Get a CLONE of the <code>LinkedList</code> within this class.
      * This is how it should work!
      * @return A clone of the <code>LinkedList</code> with all <code>Mod</code> objects.
      */
-    private LinkedList<Mod> getClone ()
+    private synchronized LinkedList<Mod> getClone ()
     {
       // We don't want to return the actual object, so let's clone it first.
       return new LinkedList<Mod>(this.mods);
@@ -802,7 +793,7 @@ public class ModManager
   protected Boolean _rebuildRequired = false;
 
   /** Flags whether we're currently parsing files in the mods directory. */
-  protected Boolean _checking = false;
+  protected final AtomicBoolean _checking = new AtomicBoolean(false);
 
   /** Number of times a forced mod mount will be required for a newly detected
    * client version. */

@@ -423,6 +423,12 @@ public class ModListUI extends BaseUI
 
   public void updateModList (String searchString)
   {
+    // Mod checks and refreshes call this from their own threads, rebuilding the list has to happen on the EDT.
+    if (!SwingUtilities.isEventDispatchThread()) {
+      SwingUtilities.invokeLater(() -> updateModList(searchString));
+      return;
+    }
+
     int count = 0;
 
     if (modListPane == null) {

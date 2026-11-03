@@ -434,6 +434,12 @@ public class LauncherEventHandler
 
   public void updateServerSwitcher (boolean locked)
   {
+    // Rebuilding the switcher calls updateUI(), which blows up if it races with the EDT.
+    if (!SwingUtilities.isEventDispatchThread()) {
+      SwingUtilities.invokeLater(() -> updateServerSwitcher(locked));
+      return;
+    }
+
     this.ui.serverSwitcherPane.removeAll();
 
     List<Server> serverList = _flamingoManager.getServerList();

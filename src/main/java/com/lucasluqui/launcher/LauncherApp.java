@@ -848,7 +848,7 @@ public class LauncherApp
       }
 
       Settings.isOutdated = true;
-      launcherUI.updateButton.setVisible(true);
+      SwingUtilities.invokeLater(() -> launcherUI.updateButton.setVisible(true));
     }
   }
 
@@ -963,6 +963,12 @@ public class LauncherApp
 
   public void toggleElementsBlock (boolean block)
   {
+    // Called from background tasks too (mod checks, mounting), but Swing must only be touched from the EDT.
+    if (!SwingUtilities.isEventDispatchThread()) {
+      SwingUtilities.invokeLater(() -> toggleElementsBlock(block));
+      return;
+    }
+
     for (BaseUI ui : _ctx.getApp().getUIMap().values()) {
       ui.toggleElementsBlock(block);
     }
@@ -970,6 +976,12 @@ public class LauncherApp
 
   public void selectedServerChanged ()
   {
+    // Server list updates happen off the EDT (startup, refreshes), hop over so we don't race with Swing.
+    if (!SwingUtilities.isEventDispatchThread()) {
+      SwingUtilities.invokeLater(this::selectedServerChanged);
+      return;
+    }
+
     for (BaseUI ui : _ctx.getApp().getUIMap().values()) {
       ui.selectedServerChanged();
     }

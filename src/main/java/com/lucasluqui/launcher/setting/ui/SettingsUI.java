@@ -727,6 +727,12 @@ public class SettingsUI extends BaseUI
 
   public void updateActiveBetaCodes ()
   {
+    // Called from the online loader too, rebuilding the list has to happen on the EDT.
+    if (!SwingUtilities.isEventDispatchThread()) {
+      SwingUtilities.invokeLater(this::updateActiveBetaCodes);
+      return;
+    }
+
     List<Server> entitledServers = new ArrayList<>();
 
     for (Server server : _flamingoManager.getServerList()) {
