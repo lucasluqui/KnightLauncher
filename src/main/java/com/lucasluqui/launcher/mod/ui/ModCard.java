@@ -120,9 +120,31 @@ public class ModCard extends JPanel
     FractionalMetrics.apply(g2d);
     g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-    // Clipping isn't antialiased in Java2D, so the card is drawn into a buffer holding its shape first,
-    // and everything else only lands where the shape is. Buffers are made at the display's resolution.
+    // Cards get repainted on every frame while the list scrolls, so the background is only rendered again
+    // when something it depends on changes, and otherwise reused as is.
     double scale = HiDpi.scale(g);
+    if (background == null || backgroundWidth != w || backgroundHeight != h || backgroundScale != scale
+      || backgroundT != t || backgroundDimmed != dimmed) {
+      background = renderBackground(w, h, scale, t);
+      backgroundWidth = w;
+      backgroundHeight = h;
+      backgroundScale = scale;
+      backgroundT = t;
+      backgroundDimmed = dimmed;
+    }
+    HiDpi.drawBuffer(g2d, background, 0, 0, w, h);
+
+    paintTexts(g2d, w, h);
+
+    g2d.dispose();
+  }
+
+  /**
+   * Clipping isn't antialiased in Java2D, so the card is drawn into a buffer holding its shape first,
+   * and everything else only lands where the shape is. Buffers are made at the display's resolution.
+   */
+  private BufferedImage renderBackground (int w, int h, double scale, float t)
+  {
     BufferedImage buffer = HiDpi.createBuffer(w, h, scale);
     Graphics2D bg = HiDpi.createGraphics(buffer, w, h);
     bg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -161,8 +183,11 @@ public class ModCard extends JPanel
       bg.drawImage(splash, 0, 0, h, h, null);
     }
     bg.dispose();
-    HiDpi.drawBuffer(g2d, buffer, 0, 0, w, h);
+    return buffer;
+  }
 
+  private void paintTexts (Graphics2D g2d, int w, int h)
+  {
     // Texts between the image and the controls on the right.
     int textX = h + Scale.px(4);
     int controlsWidth = Math.max(toggle == null ? 0 : toggle.getPreferredSize().width,
@@ -176,8 +201,19 @@ public class ModCard extends JPanel
     FontMetrics descriptionMetrics = g2d.getFontMetrics(descriptionFont);
     FontMetrics footerMetrics = g2d.getFontMetrics(footerFont);
 
+    // Fitting the texts to the width takes measuring them over and over,
+    // so it's only done when the space or the display scale changes.
     int badgeWidth = badgeLabel == null ? 0 : badgeLabel.getPreferredSize().width;
-    String titleText = ellipsize(title, titleMetrics, textWidth - (badgeLabel == null ? 0 : badgeWidth + Scale.px(8)));
+    double scale = HiDpi.scale(g2d);
+    if (textLayoutWidth != textWidth || textLayoutBadgeWidth != badgeWidth || textLayoutScale != scale) {
+      titleText = ellipsize(title, titleMetrics, textWidth - (badgeLabel == null ? 0 : badgeWidth + Scale.px(8)));
+      descriptionLines = description == null || description.isEmpty()
+        ? new ArrayList<>() : wrap(description, descriptionMetrics, textWidth, MAX_DESCRIPTION_LINES);
+      footerText = ellipsize(footer, footerMetrics, textWidth);
+      textLayoutWidth = textWidth;
+      textLayoutBadgeWidth = badgeWidth;
+      textLayoutScale = scale;
+    }
     int titleY = PADDING + titleMetrics.getAscent() - Scale.px(2);
     g2d.setFont(titleFont);
     g2d.setColor(new Color(0, 0, 0, 90));
@@ -193,8 +229,6 @@ public class ModCard extends JPanel
       if (!bounds.equals(badgeLabel.getBounds())) badgeLabel.setBounds(bounds);
     }
 
-    List<String> descriptionLines = description == null || description.isEmpty()
-      ? new ArrayList<>() : wrap(description, descriptionMetrics, textWidth, MAX_DESCRIPTION_LINES);
     int descriptionY = titleY + titleMetrics.getDescent() + Scale.px(6) + descriptionMetrics.getAscent();
     g2d.setFont(descriptionFont);
     g2d.setColor(dimmed ? new Color(120, 124, 135) : new Color(185, 189, 200));
@@ -205,10 +239,8 @@ public class ModCard extends JPanel
     // Footer lines up with the action buttons at the bottom.
     g2d.setFont(footerFont);
     g2d.setColor(new Color(125, 130, 145));
-    g2d.drawString(ellipsize(footer, footerMetrics, textWidth), textX,
+    g2d.drawString(footerText, textX,
       h - PADDING - (ACTION_SIZE - footerMetrics.getHeight()) / 2 - footerMetrics.getDescent());
-
-    g2d.dispose();
   }
 
   private final MouseAdapter hoverListener = new MouseAdapter()
@@ -322,6 +354,22 @@ public class ModCard extends JPanel
   private float hoverTarget = 0f;
   private Timer hoverTimer;
   private boolean dimmed = false;
+
+  // The last rendered background, and what it was rendered for.
+  private BufferedImage background;
+  private int backgroundWidth;
+  private int backgroundHeight;
+  private double backgroundScale;
+  private float backgroundT;
+  private boolean backgroundDimmed;
+
+  // The texts as last fitted to the card, and the space they were fitted to.
+  private String titleText;
+  private List<String> descriptionLines;
+  private String footerText;
+  private int textLayoutWidth = -1;
+  private int textLayoutBadgeWidth = -1;
+  private double textLayoutScale;
 
   // At 100% scale, the list scales it when placing the card. Everything below is in actual pixels.
   public static final int HEIGHT = 116;

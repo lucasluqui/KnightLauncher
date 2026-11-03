@@ -411,16 +411,18 @@ public class ModListUI extends BaseUI
     if (show == floatingBar.isVisible()) return;
 
     floatingBar.setVisible(show);
-    if (show && searchBox.isFocusOwner()) {
+    if (show) {
+      // Ready to type into straight away, picking up after anything already typed.
       floatingSearchBox.requestFocusInWindow();
-    } else if (!show && floatingSearchBox.isFocusOwner()) {
+      floatingSearchBox.setCaretPosition(floatingSearchBox.getDocument().getLength());
+    } else if (floatingSearchBox.isFocusOwner()) {
       searchBox.requestFocusInWindow();
     }
   }
 
   private int floatingBarThreshold ()
   {
-    return searchBox.getY() + searchBox.getHeight() / 2;
+    return searchBox.getY() + searchBox.getHeight();
   }
 
   /**
