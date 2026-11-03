@@ -7,6 +7,8 @@ import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.RGBImageFilter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,12 +24,22 @@ public final class FontIcon implements Icon, FlatLaf.DisabledIconProvider
    */
   public static FontIcon of (IconCode code, float size, Color color)
   {
-    return new FontIcon(code, size, color);
+    return new FontIcon(code, size, color, false);
   }
 
-  private FontIcon (IconCode code, float size, Color color)
+  /**
+   * Like {@link #of}, but the glyph's visible shape is centered horizontally in the icon, instead of being
+   * placed by its advance width. Some glyphs have uneven side bearings and look off center in square buttons.
+   */
+  public static FontIcon centered (IconCode code, float size, Color color)
+  {
+    return new FontIcon(code, size, color, true);
+  }
+
+  private FontIcon (IconCode code, float size, Color color, boolean centered)
   {
     this.code = code;
+    this.centered = centered;
     this.size = size;
     this.color = color;
     this.text = Character.toString(code.getUnicode());
@@ -39,6 +51,14 @@ public final class FontIcon implements Icon, FlatLaf.DisabledIconProvider
     Dimension preferred = label.getPreferredSize();
     this.width = preferred.width + 1;
     this.height = preferred.height + 1;
+
+    if (centered) {
+      FontRenderContext frc = new FontRenderContext(null, true, true);
+      Rectangle2D bounds = font.createGlyphVector(frc, text).getVisualBounds();
+      this.offsetX = (float) ((width - bounds.getWidth()) / 2 - bounds.getX());
+    } else {
+      this.offsetX = 0f;
+    }
   }
 
   @Override
@@ -53,7 +73,7 @@ public final class FontIcon implements Icon, FlatLaf.DisabledIconProvider
       FontMetrics metrics = g2d.getFontMetrics();
       // Vertically centered the way a label would have it.
       int textY = y + (height - metrics.getHeight()) / 2 + metrics.getAscent();
-      g2d.drawString(text, x, textY);
+      g2d.drawString(text, x + offsetX, textY);
     } finally {
       g2d.dispose();
     }
@@ -82,7 +102,7 @@ public final class FontIcon implements Icon, FlatLaf.DisabledIconProvider
       ? rgbFilter
       : GrayFilter.createDisabledIconFilter(FlatLaf.isLafDark());
     Color disabled = new Color(grayFilter.filterRGB(0, 0, color.getRGB()), true);
-    return new FontIcon(code, size, disabled);
+    return new FontIcon(code, size, disabled, centered);
   }
 
   /**
@@ -102,4 +122,6 @@ public final class FontIcon implements Icon, FlatLaf.DisabledIconProvider
   private final Font font;
   private final int width;
   private final int height;
+  private final boolean centered;
+  private final float offsetX;
 }

@@ -23,12 +23,16 @@ public final class SmoothScrollPane extends JScrollPane
     _animator = new Timer(1000 / FPS, e -> animate());
     _animator.setRepeats(true);
 
+    _scrollToAnimator = new Timer(1000 / FPS, e -> animateScrollTo());
+    _scrollToAnimator.setRepeats(true);
+
     // prevents authoritative scrolling from getting borked.
     vBar.addAdjustmentListener(e -> {
       if (e.getValueIsAdjusting()) {
         _velY = 0;
         _targetY = e.getValue();
         _animator.stop();
+        _scrollToAnimator.stop();
       }
     });
 
@@ -41,6 +45,7 @@ public final class SmoothScrollPane extends JScrollPane
       if (e.isControlDown()) return;
 
       e.consume();
+      _scrollToAnimator.stop();
 
       JScrollBar vBar = getVerticalScrollBar();
       _targetY = vBar.getValue();
@@ -70,6 +75,55 @@ public final class SmoothScrollPane extends JScrollPane
     vBar.setValue((int) _targetY);
 
     _velY *= _friction;
+  }
+
+  /**
+   * Eases the view to the given vertical position, e.g. for a back to top button.
+   * Scrolling with the wheel or grabbing the scroll bar interrupts it.
+   */
+  public void smoothScrollTo (int y)
+  {
+    _velY = 0;
+    _animator.stop();
+
+    JScrollBar vBar = getVerticalScrollBar();
+    _scrollToY = Math.max(vBar.getMinimum(), Math.min(y, vBar.getMaximum() - vBar.getVisibleAmount()));
+
+    if (!_scrollToAnimator.isRunning()) {
+      _scrollToAnimator.start();
+    }
+  }
+
+  /**
+   * Jumps straight to the given vertical position, stopping any scrolling that was still in motion so it
+   * doesn't carry on from there.
+   */
+  public void scrollToImmediately (int y)
+  {
+    _velY = 0;
+    _animator.stop();
+    _scrollToAnimator.stop();
+
+    JScrollBar vBar = getVerticalScrollBar();
+    _targetY = Math.max(vBar.getMinimum(), Math.min(y, vBar.getMaximum() - vBar.getVisibleAmount()));
+    vBar.setValue((int) _targetY);
+  }
+
+  private void animateScrollTo ()
+  {
+    JScrollBar vBar = getVerticalScrollBar();
+    int diff = _scrollToY - vBar.getValue();
+
+    if (Math.abs(diff) <= 1) {
+      vBar.setValue(_scrollToY);
+      _targetY = _scrollToY;
+      _scrollToAnimator.stop();
+      return;
+    }
+
+    // Covers a fraction of the remaining distance each frame, at least a pixel so it always gets there.
+    int step = (int) Math.signum(diff) * Math.max(1, (int) Math.abs(diff * 0.2));
+    vBar.setValue(vBar.getValue() + step);
   }
 
   private void clampTarget ()
@@ -111,6 +165,8 @@ public final class SmoothScrollPane extends JScrollPane
   }
 
   private final Timer _animator;
+  private final Timer _scrollToAnimator;
+  private int _scrollToY;
   private double _friction = 0.80;
   private double _maxVel = 60;
   private int _scrollSpeed = 36;

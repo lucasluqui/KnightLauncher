@@ -83,17 +83,23 @@ public class ModListUI extends BaseUI
     guiFrame.getContentPane().setLayout(null);
     panel = (JPanel) guiFrame.getContentPane();
 
+    // Everything on this screen, controls included, scrolls as one so the mod cards can use the whole
+    // height once the controls are scrolled past. A floating search bar takes over from there.
+    screenPane = new JPanel();
+    screenPane.setLayout(null);
+    screenPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+
     labelModCount = new JLabel();
     labelModCount.setHorizontalAlignment(SwingConstants.LEFT);
     labelModCount.setBounds(Scale.rect(25, 2, 188, 40));
     labelModCount.setFont(Fonts.getFont("default", 40.0f, Font.BOLD));
-    guiFrame.getContentPane().add(labelModCount);
+    screenPane.add(labelModCount);
 
     labelModCountText = new JLabel(_localeManager.getValue("m.mods_installed"));
     labelModCountText.setHorizontalAlignment(SwingConstants.LEFT);
     labelModCountText.setBounds(Scale.rect(26, 47, 188, 14));
     labelModCountText.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
-    guiFrame.getContentPane().add(labelModCountText);
+    screenPane.add(labelModCountText);
 
     globalWarningButton = new JButton(_localeManager.getValue("m.warning"));
     globalWarningButton.setIcon(FontIcon.of(FontAwesome.EXCLAMATION_TRIANGLE, Scale.px(13), Color.BLACK));
@@ -109,7 +115,7 @@ public class ModListUI extends BaseUI
     globalWarningButton.addActionListener(l -> {
       Dialog.push(globalWarningMessage, _localeManager.getValue("t.warning"), JOptionPane.ERROR_MESSAGE);
     });
-    guiFrame.getContentPane().add(globalWarningButton);
+    screenPane.add(globalWarningButton);
 
     JPanel modStoreButtonPane = new JPanel()
     {
@@ -170,7 +176,7 @@ public class ModListUI extends BaseUI
          */
       }
     });
-    guiFrame.add(modStoreButtonPane);
+    screenPane.add(modStoreButtonPane);
 
     JButton getModsButton = new JButton(_localeManager.getValue("b.get_mods"));
     getModsButton.setBounds(Scale.rect(420, 5, 175, 25));
@@ -182,7 +188,7 @@ public class ModListUI extends BaseUI
     getModsButton.setToolTipText(_localeManager.getValue("b.get_mods"));
     getModsButton.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
-    guiFrame.getContentPane().add(getModsButton);
+    screenPane.add(getModsButton);
     getModsButton.addActionListener(this.eventHandler::getModsEvent);
 
     JButton modFolderButton = new JButton(_localeManager.getValue("b.open_mods_dir"));
@@ -195,7 +201,7 @@ public class ModListUI extends BaseUI
     modFolderButton.setToolTipText(_localeManager.getValue("b.open_mods_dir"));
     modFolderButton.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
-    guiFrame.getContentPane().add(modFolderButton);
+    screenPane.add(modFolderButton);
     modFolderButton.addActionListener(this.eventHandler::openModsFolderEvent);
 
     enableAllModsButton = new JButton(_localeManager.getValue("b.enable_all_mods"));
@@ -208,7 +214,7 @@ public class ModListUI extends BaseUI
     enableAllModsButton.setToolTipText(_localeManager.getValue("b.enable_all_mods"));
     enableAllModsButton.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
-    guiFrame.getContentPane().add(enableAllModsButton);
+    screenPane.add(enableAllModsButton);
     enableAllModsButton.addActionListener(this.eventHandler::enableAllModsEvent);
 
     disableAllModsButton = new JButton(_localeManager.getValue("b.disable_all_mods"));
@@ -221,12 +227,12 @@ public class ModListUI extends BaseUI
     disableAllModsButton.setToolTipText(_localeManager.getValue("b.disable_all_mods"));
     disableAllModsButton.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
-    guiFrame.getContentPane().add(disableAllModsButton);
+    screenPane.add(disableAllModsButton);
     disableAllModsButton.addActionListener(this.eventHandler::disableAllModsEvent);
 
     JSeparator separator = new JSeparator();
     separator.setBounds(Scale.rect(25, 75, 750, 2));
-    guiFrame.getContentPane().add(separator);
+    screenPane.add(separator);
 
     addModButton = new JButton(_localeManager.getValue("b.add"));
     addModButton.setIcon(FontIcon.of(FontAwesome.PLUS, Scale.px(13), Color.WHITE));
@@ -238,7 +244,7 @@ public class ModListUI extends BaseUI
     addModButton.setToolTipText(_localeManager.getValue("m.add_mod_tooltip"));
     addModButton.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
-    guiFrame.getContentPane().add(addModButton);
+    screenPane.add(addModButton);
     addModButton.addActionListener(this.eventHandler::addModEvent);
 
     refreshButton = new JButton(_localeManager.getValue("b.refresh"));
@@ -251,18 +257,8 @@ public class ModListUI extends BaseUI
     refreshButton.setToolTipText(_localeManager.getValue("m.refresh_tooltip"));
     refreshButton.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
-    guiFrame.getContentPane().add(refreshButton);
+    screenPane.add(refreshButton);
     refreshButton.addActionListener(this.eventHandler::refreshEvent);
-
-    // A thin line along the bottom of the list. Bounds include the room the bar's glow needs around it.
-    refreshProgressBar = new SmoothProgressBar();
-    refreshProgressBar.setUI(new SlimProgressBarUI(CustomColors.LAUNCH, 3f));
-    refreshProgressBar.setOpaque(false);
-    refreshProgressBar.setBorder(null);
-    refreshProgressBar.setBounds(Scale.rect(25 - SlimProgressBarUI.GLOW_MARGIN, 446 - 5, 740 + SlimProgressBarUI.GLOW_MARGIN * 2, 10));
-    refreshProgressBar.setShouldPaintString(false);
-    refreshProgressBar.setVisible(false);
-    guiFrame.getContentPane().add(refreshProgressBar);
 
     searchBox = new JTextField();
     searchBox.setBounds(Scale.rect(250, 85, 300, 27));
@@ -272,7 +268,7 @@ public class ModListUI extends BaseUI
       "arc: 999; borderWidth: 0");
     searchBox.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
       new FlatSearchIcon());
-    guiFrame.getContentPane().add(searchBox);
+    screenPane.add(searchBox);
     searchBox.addActionListener(l -> eventHandler.searchMod());
     searchBox.addKeyListener(new KeyAdapter()
     {
@@ -283,33 +279,148 @@ public class ModListUI extends BaseUI
     });
 
     modListPane = new JPanel();
+    modListPane.setLayout(null);
     modListPane.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
-
-    modListPaneScrollBar = new SmoothScrollPane(modListPane);
-    modListPaneScrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-    modListPaneScrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    modListPaneScrollBar.setBounds(Scale.rect(25, 120, 750, Math.min(MOD_LIST_MAX_HEIGHT, _modManager.getModCount() * CARD_STRIDE)));
-    modListPaneScrollBar.setBorder(null);
-    modListPaneScrollBar.getVerticalScrollBar().setUnitIncrement(Scale.px(20));
-    guiFrame.getContentPane().add(modListPaneScrollBar);
+    modListPane.setBounds(Scale.rect(25, LIST_Y, CARD_WIDTH, 0));
+    screenPane.add(modListPane);
 
     displayedModsLabel = new JLabel();
     displayedModsLabel.setBounds(Scale.rect(25, 451, 300, 15));
     displayedModsLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     displayedModsLabel.setHorizontalAlignment(SwingConstants.LEFT);
     displayedModsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
-    guiFrame.getContentPane().add(displayedModsLabel);
+    screenPane.add(displayedModsLabel);
 
     viewingModsLabel = new JLabel(_localeManager.getValue("m.viewing_mods", "Official"));
     viewingModsLabel.setBounds(Scale.rect(25, 451, 740, 15));
     viewingModsLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     viewingModsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     viewingModsLabel.setForeground(CustomColors.INTERFACE_MAINPANE_FOOTNOTE);
-    guiFrame.getContentPane().add(viewingModsLabel);
+    screenPane.add(viewingModsLabel);
 
+    setupScreenScrolling();
     setupModDropping();
 
     updateModList(null);
+  }
+
+  /**
+   * Puts the whole screen in a scroll pane, with a floating search bar and a back to top button over it that
+   * show up once the controls at the top have been scrolled out of view.
+   */
+  private void setupScreenScrolling ()
+  {
+    screenScrollPane = new SmoothScrollPane(screenPane);
+    screenScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    screenScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    screenScrollPane.setBorder(null);
+    screenScrollPane.getViewport().setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+    screenScrollPane.getVerticalScrollBar().setUnitIncrement(Scale.px(20));
+    screenScrollPane.setBounds(Scale.rect(0, 0, SCREEN_WIDTH, VIEW_HEIGHT));
+
+    floatingBar = new JPanel()
+    {
+      @Override
+      protected void paintComponent (Graphics g)
+      {
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setColor(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+        g2d.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, getHeight(), getHeight());
+        g2d.setColor(new Color(255, 255, 255, 40));
+        g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, getHeight(), getHeight());
+        g2d.dispose();
+      }
+    };
+    floatingBar.setLayout(null);
+    floatingBar.setOpaque(false);
+    floatingBar.setBounds(Scale.rect((SCREEN_WIDTH - FLOATING_BAR_WIDTH) / 2, 8, FLOATING_BAR_WIDTH, 39));
+    floatingBar.setVisible(false);
+    // Wheel scrolling over the bar still scrolls the list underneath.
+    floatingBar.addMouseWheelListener(e ->
+      screenScrollPane.dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, screenScrollPane)));
+
+    // Shares its text with the regular search box, so whatever's typed shows up in both.
+    floatingSearchBox = new JTextField();
+    floatingSearchBox.setDocument(searchBox.getDocument());
+    floatingSearchBox.setBounds(Scale.rect(6, 6, 300, 27));
+    floatingSearchBox.setFont(searchBox.getFont());
+    floatingSearchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, _localeManager.getValue("m.modlist_searchbox_placeholder"));
+    floatingSearchBox.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0");
+    floatingSearchBox.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+      new FlatSearchIcon());
+    floatingSearchBox.addActionListener(l -> eventHandler.searchMod());
+    floatingSearchBox.addKeyListener(new KeyAdapter()
+    {
+      public void keyReleased (KeyEvent e)
+      {
+        eventHandler.searchMod();
+      }
+    });
+    floatingBar.add(floatingSearchBox);
+
+    scrollToTopButton = new JButton(FontIcon.centered(FontAwesome.ARROW_UP, Scale.px(12), Color.WHITE));
+    scrollToTopButton.setBounds(Scale.rect(312, 6, 27, 27));
+    scrollToTopButton.setFocusPainted(false);
+    scrollToTopButton.setFocusable(false);
+    scrollToTopButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
+    scrollToTopButton.setToolTipText(_localeManager.getValue("m.scroll_to_top"));
+    scrollToTopButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 999; borderWidth: 0; margin: 0,0,0,0");
+    scrollToTopButton.addActionListener(l -> screenScrollPane.smoothScrollTo(0));
+    floatingBar.add(scrollToTopButton);
+
+    // A thin line along the bottom of the view. Bounds include the room the bar's glow needs around it.
+    refreshProgressBar = new SmoothProgressBar();
+    refreshProgressBar.setUI(new SlimProgressBarUI(CustomColors.LAUNCH, 3f));
+    refreshProgressBar.setOpaque(false);
+    refreshProgressBar.setBorder(null);
+    refreshProgressBar.setBounds(Scale.rect(25 - SlimProgressBarUI.GLOW_MARGIN, VIEW_HEIGHT - 12, 750 + SlimProgressBarUI.GLOW_MARGIN * 2, 10));
+    refreshProgressBar.setShouldPaintString(false);
+    refreshProgressBar.setVisible(false);
+
+    // Holds the scroll pane and what floats over it. Children overlap, so it can't use optimized drawing,
+    // otherwise repainting the list while scrolling would paint over the floating bar.
+    JPanel screenHost = new JPanel()
+    {
+      @Override
+      public boolean isOptimizedDrawingEnabled ()
+      {
+        return false;
+      }
+    };
+    screenHost.setLayout(null);
+    screenHost.setOpaque(false);
+    screenHost.setBounds(Scale.rect(0, 0, SCREEN_WIDTH, VIEW_HEIGHT));
+    screenHost.add(refreshProgressBar);
+    screenHost.add(floatingBar);
+    screenHost.add(screenScrollPane);
+    panel.add(screenHost);
+
+    screenScrollPane.getViewport().addChangeListener(e -> updateFloatingBar());
+  }
+
+  /**
+   * Shows the floating bar once the regular search box has been scrolled out of view, and hides it again
+   * when it comes back. Whichever search box was being typed in hands focus over to the other.
+   */
+  private void updateFloatingBar ()
+  {
+    boolean show = screenScrollPane.getViewport().getViewPosition().y >= floatingBarThreshold();
+    if (show == floatingBar.isVisible()) return;
+
+    floatingBar.setVisible(show);
+    if (show && searchBox.isFocusOwner()) {
+      floatingSearchBox.requestFocusInWindow();
+    } else if (!show && floatingSearchBox.isFocusOwner()) {
+      searchBox.requestFocusInWindow();
+    }
+  }
+
+  private int floatingBarThreshold ()
+  {
+    return searchBox.getY() + searchBox.getHeight() / 2;
   }
 
   /**
@@ -456,37 +567,27 @@ public class ModListUI extends BaseUI
       count++;
     }
 
-    modListPane.setLayout(null);
-
     int listHeight = Math.max(0, count * CARD_STRIDE - CARD_GAP);
-    modListPane.setPreferredSize(Scale.dim(750, listHeight));
+    modListPane.setBounds(Scale.rect(25, LIST_Y, CARD_WIDTH, listHeight));
 
-    modListPaneScrollBar.setBounds(
-      modListPaneScrollBar.getX(),
-      modListPaneScrollBar.getY(),
-      modListPaneScrollBar.getWidth(),
-      Scale.px(Math.min(MOD_LIST_MAX_HEIGHT, listHeight))
-    );
-
+    int footerY = LIST_Y + listHeight + 6;
     displayedModsLabel.setText(_localeManager.getValue("m.modlist_footer", new String[]{String.valueOf(count), String.valueOf(_modManager.getModCount())}));
-    displayedModsLabel.setBounds(
-      displayedModsLabel.getX(),
-      modListPaneScrollBar.getHeight() + modListPaneScrollBar.getY() + Scale.px(6),
-      displayedModsLabel.getWidth(),
-      displayedModsLabel.getHeight()
-    );
+    displayedModsLabel.setBounds(Scale.rect(25, footerY, 300, 15));
+    viewingModsLabel.setBounds(Scale.rect(25, footerY, 740, 15));
 
-    viewingModsLabel.setBounds(
-      viewingModsLabel.getX(),
-      modListPaneScrollBar.getHeight() + modListPaneScrollBar.getY() + Scale.px(6),
-      viewingModsLabel.getWidth(),
-      viewingModsLabel.getHeight()
-    );
+    // Sized to exactly what's shown, so there's only something to scroll when it doesn't all fit.
+    screenPane.setPreferredSize(Scale.dim(SCREEN_WIDTH, footerY + 15 + 9));
+    screenPane.revalidate();
 
-    modListPane.updateUI();
+    modListPane.revalidate();
+    modListPane.repaint();
 
-    // Put the scroll bar back to the top after updating.
-    SwingUtilities.invokeLater(() -> modListPaneScrollBar.getViewport().setViewPosition(new Point(0, 0)));
+    // Back to the top after every update, searches included. If the search was typed in the floating bar,
+    // it hides and the regular search box takes over the focus.
+    if (screenScrollPane != null) {
+      screenScrollPane.validate();
+      screenScrollPane.scrollToImmediately(0);
+    }
   }
 
   private ModCard buildModCard (Mod mod, BufferedImage defaultModImageBuffImg)
@@ -597,16 +698,28 @@ public class ModListUI extends BaseUI
   {
     super.toggleElementsBlock(block);
     this.searchBox.setEnabled(!block);
+    this.floatingSearchBox.setEnabled(!block);
   }
 
   @Inject public ModListEventHandler eventHandler;
+
   @Inject protected ModManager _modManager;
   @Inject protected LocaleManager _localeManager;
 
   public String globalWarningMessage = "";
 
+  // Covers the whole screen to receive dropped mod files, and shows a hint while they're dragged over it.
+  private JComponent dropOverlay;
+
+  // The whole screen scrolls, with the floating search bar over it once the controls are out of view.
+  private JPanel screenPane;
+  private SmoothScrollPane screenScrollPane;
+  private JPanel floatingBar;
+  private JButton scrollToTopButton;
+  private boolean draggingFiles = false;
+
   public JPanel modListPane = new JPanel();
-  public SmoothScrollPane modListPaneScrollBar = new SmoothScrollPane();
+  public JTextField floatingSearchBox = new JTextField();
   public JLabel labelModCount;
   public JButton addModButton;
   public JButton refreshButton;
@@ -622,15 +735,17 @@ public class ModListUI extends BaseUI
   public BufferedImage modStoreButtonImageFocused = null;
   public BufferedImage modStoreButtonImageUnfocused = null;
 
-  private static final int MOD_LIST_MAX_HEIGHT = 325;
+  // The panel is 800x550 but placed 75px down the launcher's 550px window, so only this much of it is visible.
+  private static final int SCREEN_WIDTH = 800;
+  private static final int VIEW_HEIGHT = 475;
+
+  // Where the mod cards start, below the controls.
+  private static final int LIST_Y = 120;
+
+  private static final int FLOATING_BAR_WIDTH = 345;
 
   // Mod cards are stacked one after the other.
-  private static final int CARD_WIDTH = 735;
+  private static final int CARD_WIDTH = 750;
   private static final int CARD_GAP = 8;
   private static final int CARD_STRIDE = ModCard.HEIGHT + CARD_GAP;
-
-  // Covers the whole screen to receive dropped mod files, and shows a hint while they're dragged over it.
-  private JComponent dropOverlay;
-  private boolean draggingFiles = false;
-
 }
