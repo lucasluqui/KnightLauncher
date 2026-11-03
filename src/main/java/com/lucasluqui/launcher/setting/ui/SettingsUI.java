@@ -834,7 +834,15 @@ public class SettingsUI extends BaseUI
     advancedPanel.add(jvmArgDocsButton);
     jvmArgDocsButton.addActionListener(l -> DesktopUtil.openWebpage(URL_JVM_ARG_DOCS));
 
-    argumentsPane = new JEditorPane();
+    argumentsPane = new JEditorPane()
+    {
+      @Override
+      public void setText (String text)
+      {
+        super.setText(text);
+        setCaretPosition(0);
+      }
+    };
     argumentsPane.setBounds(Scale.rect(25, 117, 615, 100));
     argumentsPane.setFont(Fonts.getFont("code", 12.0f, Font.PLAIN));
     advancedPanel.add(argumentsPane);
@@ -861,8 +869,6 @@ public class SettingsUI extends BaseUI
     scrollBar.putClientProperty(FlatClientProperties.STYLE,
       "arc: 10; borderWidth: 1;");
     advancedPanel.add(scrollBar);
-
-    argumentsPane.setCaretPosition(0);
 
     eventHandler.checkExistingArguments();
 
