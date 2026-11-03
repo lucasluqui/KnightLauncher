@@ -11,12 +11,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
-      - name: Set up Java 8
-        uses: actions/setup-java@v5
+      - name: Read launcher Java version from pom.xml
+        id: java-version
+        run: |
+          JAVA_VERSION=$(sed -n 's/.*<launcher.java.version>\(.*\)<\/launcher.java.version>.*/\1/p' pom.xml | head -1)
+          if [ -z "$JAVA_VERSION" ]; then
+            echo "::error::Couldn't find launcher.java.version in pom.xml"
+            exit 1
+          fi
+          echo "Launcher Java version: $JAVA_VERSION"
+          echo "LAUNCHER_JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_ENV
+          echo "version=$JAVA_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set up Java ${{ steps.java-version.outputs.version }}
+        uses: actions/setup-java@v6
         with:
-          java-version: '8'
+          java-version: ${{ steps.java-version.outputs.version }}
           distribution: 'temurin'
           cache: 'maven'
 
@@ -24,7 +36,7 @@ jobs:
         id: fetch-version
         run: |
           # Download getdown.txt to get the version
-          curl -sSL https://gamemedia2.spiralknights.com/spiral/client/getdown.txt -o getdown.txt
+          curl -sSL https://gamemedia.spiralknights.com/spiral/latest/getdown.txt -o getdown.txt
 
           # Extract version number from the first line
           VERSION=$(grep '^version = ' getdown.txt | head -1 | sed 's/version = //')
@@ -38,7 +50,7 @@ jobs:
 
       - name: Cache projectx-pcode.jar
         id: cache-projectx
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: lib/projectx-pcode.jar
           key: projectx-pcode-${{ steps.fetch-version.outputs.version }}
@@ -77,6 +89,52 @@ jobs:
 
       - name: Build with Maven
         run: mvn -Denv=prod clean package
+
+      - name: Verify class file versions
+        run: |
+          # The entry point must stay runnable on Java 8 (class file version 52), so older Java installs
+          # can start the launcher and have it restart itself on the launcher's Java version (e.g. 69 for Java 25).
+          LAUNCHER_CLASS_VERSION=$((LAUNCHER_JAVA_VERSION + 44))
+          check_version () {
+            ACTUAL=$(javap -v -cp target/KnightLauncher.jar "$1" | grep 'major version' | awk '{print $3}')
+            echo "$1: class file version $ACTUAL"
+            if [ "$ACTUAL" != "$2" ]; then
+              echo "::error::$1 has class file version $ACTUAL, expected $2"
+              exit 1
+            fi
+          }
+          check_version com.lucasluqui.launcher.Main 52
+          check_version com.lucasluqui.launcher.LauncherApp "$LAUNCHER_CLASS_VERSION"
+
+          # The entry point reads the Java version it needs from here.
+          BUILT_JAVA_VERSION=$(unzip -p target/KnightLauncher.jar build.properties | tr -d '\r' | sed -n 's/^java_version=//p')
+          echo "build.properties java_version: $BUILT_JAVA_VERSION"
+          if [ "$BUILT_JAVA_VERSION" != "$LAUNCHER_JAVA_VERSION" ]; then
+            echo "::error::build.properties has java_version '$BUILT_JAVA_VERSION', expected $LAUNCHER_JAVA_VERSION"
+            exit 1
+          fi
+
+          MAIN_CLASS=$(unzip -p target/KnightLauncher.jar META-INF/MANIFEST.MF | grep '^Main-Class:' | tr -d '\r' | awk '{print $2}')
+          echo "Main-Class: $MAIN_CLASS"
+          if [ "$MAIN_CLASS" != "com.lucasluqui.launcher.Main" ]; then
+            echo "::error::Main-Class is $MAIN_CLASS, expected com.lucasluqui.launcher.Main"
+            exit 1
+          fi
+
+      - name: Check launcher runtimes on the CDN
+        run: |
+          # Users download these when they don't have a runtime of the launcher's Java version yet. Missing ones aren't
+          # fatal, as the launcher falls back to the game's own runtime, but they're worth knowing about before releasing.
+          BASE="https://cdn.knightlauncher.com/knightlauncher/v2/runtime"
+          V="$LAUNCHER_JAVA_VERSION"
+          for RUNTIME in windows/$V/runtime.zip linux-x64/$V/runtime.tar.gz linux-aarch64/$V/runtime.tar.gz macos/$V/runtime.tar.gz; do
+            PLATFORM_DIR=$(dirname "$RUNTIME")
+            if curl -fsSI "$BASE/$RUNTIME" > /dev/null && curl -fsSI "$BASE/$PLATFORM_DIR/checksum.txt" > /dev/null; then
+              echo "Found $RUNTIME"
+            else
+              echo "::warning::Launcher runtime $RUNTIME or its checksum is missing from the CDN"
+            fi
+          done
 
       - name: Extract version from pom.xml
         id: extract-version
@@ -117,7 +175,7 @@ jobs:
         run: zip -j "KnightLauncher-${{ steps.extract-version.outputs.version }}.zip" target/KnightLauncher.jar README.txt
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.extract-version.outputs.version }}
           name: Knight Launcher ${{ steps.extract-version.outputs.version }}
