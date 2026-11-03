@@ -4,12 +4,12 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.launcher.changelog.data.Release;
+import com.lucasluqui.swing.HiddenCaret;
 import com.lucasluqui.swing.Scale;
 import com.lucasluqui.util.ColorUtil;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -70,7 +70,7 @@ public class ChangelogEntry extends JPanel
     changelogPane.setOpaque(false);
     changelogPane.setBorder(null);
     changelogPane.setMargin(new Insets(0, 0, 0, Scale.px(10)));
-    ((DefaultCaret) changelogPane.getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+    changelogPane.setCaret(new HiddenCaret());
     changelogPane.setStyledDocument(document);
     changelogPane.addMouseListener(new MouseAdapter()
     {

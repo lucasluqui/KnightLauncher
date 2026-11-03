@@ -3,6 +3,7 @@ package com.lucasluqui.dialog;
 import com.lucasluqui.util.BuildConfig;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
+import com.lucasluqui.swing.HiddenCaret;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,6 +46,7 @@ public class Dialog
     message.setForeground(CustomColors.INTERFACE_DEFAULT);
     message.setBackground(CustomColors.INTERFACE_DEFAULT_BACKGROUND);
     message.setEditable(false);
+    message.setCaret(new HiddenCaret());
     return message;
   }
 
