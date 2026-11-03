@@ -36,7 +36,7 @@ jobs:
         id: fetch-version
         run: |
           # Download getdown.txt to get the version
-          curl -sSL https://gamemedia2.spiralknights.com/spiral/client/getdown.txt -o getdown.txt
+          curl -sSL https://gamemedia.spiralknights.com/spiral/latest/getdown.txt -o getdown.txt
 
           # Extract version number from the first line
           VERSION=$(grep '^version = ' getdown.txt | head -1 | sed 's/version = //')
