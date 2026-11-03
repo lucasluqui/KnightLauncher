@@ -58,9 +58,8 @@ public class LauncherUI extends BaseUI
       // Tends to fail on anything that's not 26+ (Tahoe).
       if (SystemUtil.isMac()) {
         try {
-          Image image = Toolkit.getDefaultToolkit().getImage(
-            LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "images" + File.separator + "icon-512.png"
-          );
+          // Load it from the jar: on macOS only icon-512.icns is written to the images folder, never a png.
+          Image image = ImageUtil.loadImageWithinJar("/rsrc/img/icon-512.png");
           if (Taskbar.isTaskbarSupported() && Taskbar.getTaskbar().isSupported(Taskbar.Feature.ICON_IMAGE)) {
             Taskbar.getTaskbar().setIconImage(image);
           }
