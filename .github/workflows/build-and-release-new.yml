@@ -104,10 +104,6 @@ jobs:
             fi
           }
           check_version com.lucasluqui.launcher.Main 52
-          check_version com.lucasluqui.launcher.runtime.RuntimeLocator 52
-          check_version com.lucasluqui.launcher.runtime.RuntimeInstaller 52
-          check_version com.lucasluqui.launcher.runtime.RuntimeSource 52
-          check_version com.lucasluqui.launcher.runtime.RuntimeDownloadWindow 52
           check_version com.lucasluqui.launcher.LauncherApp "$LAUNCHER_CLASS_VERSION"
 
           # The entry point reads the Java version it needs from here.
