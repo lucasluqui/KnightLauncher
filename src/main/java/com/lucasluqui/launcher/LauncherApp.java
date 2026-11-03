@@ -410,9 +410,11 @@ public class LauncherApp
   // Create a shortcut to the application if there's none, or update it if it points to an outdated Java runtime.
   private synchronized void checkShortcut ()
   {
-    // Shortcuts point straight to a Java runtime, see if it's still the one the launcher should be using.
-    // Only a hash of its path is kept around so the username doesn't end up in the logs.
-    String shortcutJava = String.valueOf(JavaUtil.getLauncherJavaExePath().hashCode());
+    // Shortcuts point straight to a Java runtime and to this folder, see if they're still what the launcher uses.
+    // Moving the launcher must rebuild the shortcut too, or it keeps opening nothing from the old folder, and the
+    // version is in there so an update refreshes the shortcut's icon as well.
+    // Only a hash is kept around so the username doesn't end up in the logs.
+    String shortcutJava = String.valueOf((JavaUtil.getLauncherJavaExePath() + "|" + LauncherGlobals.USER_DIR + "|" + BuildConfig.getVersion()).hashCode());
     boolean shortcutJavaChanged = !shortcutJava.equals(_settingsManager.getValue("launcher.shortcutJava"));
 
     if (SystemUtil.isWindows() && FileUtil.fileExists(DesktopUtil.getPathToDesktop() + "/" + BuildConfig.getName()) && !shortcutJavaChanged) {
