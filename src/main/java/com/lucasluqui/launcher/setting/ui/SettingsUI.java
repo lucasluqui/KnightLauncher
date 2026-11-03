@@ -839,6 +839,7 @@ public class SettingsUI extends BaseUI
       @Override
       public void setText (String text)
       {
+        // makes it respect the set caret position after updating text.
         super.setText(text);
         setCaretPosition(0);
       }
