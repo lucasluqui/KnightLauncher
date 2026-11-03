@@ -350,18 +350,15 @@ public class SettingsManager
   {
     if (argString.isEmpty()) return argString;
 
-    // iterate through all args.
-    List<String> args = Arrays.asList(argString.split("\\r?\\n"));
-    for (String arg : args) {
-      // filter out stuff we don't want while in extra perf mode.
-      if (Settings.gameExtraPerfMode) {
-        if (arg.startsWith("-Xms") || arg.startsWith("-Xmx")) {
-          args.remove(arg);
-        }
-      }
+    // iterate through all args. A copy: Arrays.asList is fixed-size and can't have elements removed.
+    List<String> args = new ArrayList<>(Arrays.asList(argString.split("\\r?\\n")));
 
-      // any other filters, if any, should go here below.
+    // filter out stuff we don't want while in extra perf mode.
+    if (Settings.gameExtraPerfMode) {
+      args.removeIf(arg -> arg.startsWith("-Xms") || arg.startsWith("-Xmx"));
     }
+
+    // any other filters, if any, should go here below.
 
     // return the filtered args as a single string.
     return String.join(System.lineSeparator(), args);
