@@ -67,6 +67,28 @@ public class SettingsManager
     }
   }
 
+  private void saveProp ()
+  {
+    try (OutputStream os = Files.newOutputStream(Paths.get(PROP_PATH))) {
+      _prop.store(os, null);
+    } catch (IOException e) {
+      log.error(e);
+    }
+  }
+
+  /**
+   * Key order of the bundled properties file, so the user's copy is saved in the same order.
+   */
+  private static List<String> readBaseKeyOrder ()
+  {
+    try (InputStream is = SettingsManager.class.getResourceAsStream("/rsrc/config/launcher.properties")) {
+      if (is != null) return OrderedProperties.readKeyOrder(is);
+    } catch (IOException e) {
+      log.error(e);
+    }
+    return Collections.emptyList();
+  }
+
   private void loadSettings ()
   {
     // Launcher settings
@@ -161,11 +183,7 @@ public class SettingsManager
   public void setValue (String key, String value)
   {
     _prop.setProperty(key, value);
-    try {
-      _prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
-    } catch (IOException e) {
-      log.error(e);
-    }
+    saveProp();
     log.info("Setting new key", "key", key, "value", value);
   }
 
@@ -176,11 +194,7 @@ public class SettingsManager
     } else {
       _prop.setProperty(key, value);
     }
-    try {
-      _prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
-    } catch (IOException e) {
-      log.error(e);
-    }
+    saveProp();
     log.info("Setting new server-specific key", "key", key, "value", value, "server", server == null ? "null" : server.name);
   }
 
@@ -197,11 +211,7 @@ public class SettingsManager
   {
     if (_prop.getProperty(key) == null) {
       _prop.setProperty(key, value);
-      try {
-        _prop.store(Files.newOutputStream(Paths.get(PROP_PATH)), null);
-      } catch (IOException e) {
-        log.error(e);
-      }
+      saveProp();
       log.info("Setting new key", "key", key, "value", value);
     } else {
       log.info("Key already exists", "key", key, "value", value);
@@ -425,7 +435,7 @@ public class SettingsManager
   @Inject protected LocaleManager _localeManager;
   @Inject protected FlamingoManager _flamingoManager;
 
-  private final Properties _prop = new Properties();
+  private final Properties _prop = new OrderedProperties(readBaseKeyOrder());
   private HashMap<String, Object> _migrationMap = new HashMap<>();
   private boolean _migrating = false;
 
