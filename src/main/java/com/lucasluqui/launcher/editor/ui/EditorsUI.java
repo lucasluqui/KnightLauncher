@@ -223,9 +223,11 @@ public class EditorsUI extends BaseUI
 
     eventHandler.editors = editors;
 
-    // Two columns, filling up rows from left to right. With an odd amount, the last one takes up
-    // the whole row instead of leaving a gap next to it.
+    // Two columns, filling up rows from left to right. With an odd amount, the first one takes up
+    // the whole row instead of leaving a gap next to the last one.
     int count = eventHandler.editors.size();
+    // Empty cells the last row would have, the first card stretches over them instead.
+    int leftover = (EDITOR_COLUMNS - count % EDITOR_COLUMNS) % EDITOR_COLUMNS;
     int rows = (count + EDITOR_COLUMNS - 1) / EDITOR_COLUMNS;
     int height = rows * (EDITOR_CARD_HEIGHT + EDITOR_CARD_GAP) - EDITOR_CARD_GAP;
     editorListPane.setPreferredSize(Scale.dim(740, height));
@@ -251,9 +253,10 @@ public class EditorsUI extends BaseUI
 
       // Cards have no size of their own, the equal weights split the space evenly between them.
       GridBagConstraints constraints = new GridBagConstraints();
-      constraints.gridx = i % EDITOR_COLUMNS;
-      constraints.gridy = i / EDITOR_COLUMNS;
-      constraints.gridwidth = i == count - 1 ? EDITOR_COLUMNS - constraints.gridx : 1;
+      int slot = i == 0 ? 0 : i + leftover;
+      constraints.gridx = slot % EDITOR_COLUMNS;
+      constraints.gridy = slot / EDITOR_COLUMNS;
+      constraints.gridwidth = i == 0 ? leftover + 1 : 1;
       constraints.weightx = 1;
       constraints.weighty = 1;
       constraints.fill = GridBagConstraints.BOTH;

@@ -848,8 +848,7 @@ public class SettingsUI extends BaseUI
     argumentsPane.setFont(Fonts.getFont("code", 12.0f, Font.PLAIN));
     advancedPanel.add(argumentsPane);
     argumentsPane.setText(Settings.gameAdditionalArgs);
-    argumentsPane.addFocusListener(new FocusListener()
-    {
+    argumentsPane.addFocusListener(new FocusListener() {
       @Override
       public void focusLost (FocusEvent e)
       {
@@ -858,8 +857,7 @@ public class SettingsUI extends BaseUI
 
       @Override
       public void focusGained (FocusEvent e)
-      {
-      }
+      {}
     });
 
     SmoothScrollPane scrollBar = new SmoothScrollPane(argumentsPane);
