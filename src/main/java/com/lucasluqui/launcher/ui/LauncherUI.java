@@ -362,7 +362,9 @@ public class LauncherUI extends BaseUI
     });
     sidePane.add(silverweaveButton);
 
-    JButton discordButton = new JButton(ImageUtil.imageStreamToIcon(LauncherUI.class.getResourceAsStream("/rsrc/img/icon-discord.png")));
+    BufferedImage discordIconBase = ImageUtil.resizeImagePreserveTransparency(
+      ImageUtil.loadImageWithinJar("/rsrc/img/icon-discord.png"), HiDpi.px(Scale.px(16)), HiDpi.px(Scale.px(16)));
+    JButton discordButton = new JButton(HiDpi.icon(discordIconBase, Scale.px(16), Scale.px(16)));
     discordButton.setBounds(Scale.rect(65, 440, 36, 36));
     discordButton.setToolTipText(_localeManager.getValue("b.discord"));
     discordButton.setFocusPainted(false);
