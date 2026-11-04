@@ -11,11 +11,11 @@ import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.ui.BaseUI;
 import com.lucasluqui.launcher.setting.ui.handler.SettingsEventHandler;
 import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.swing.ScrollablePanel;
 import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.util.*;
 
 import jiconfont.icons.font_awesome.FontAwesome;
-import org.apache.commons.text.WordUtils;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.inject.Inject;
 
@@ -1004,20 +1004,52 @@ public class SettingsUI extends BaseUI
     JLabel creditsLabel = new JLabel(_localeManager.getValue("m.credits"));
     creditsLabel.setHorizontalAlignment(SwingConstants.LEFT);
     creditsLabel.setBounds(Scale.rect(25, 90, 200, 20));
-    creditsLabel.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    creditsLabel.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     aboutPanel.add(creditsLabel);
 
+    // Bounds match the icon, so the scroll pane below can sit evenly inside it.
     JLabel creditsBackground = new JLabel("");
     creditsBackground.setIcon(HiDpi.roundedRectIcon(Scale.px(565), Scale.px(195), Scale.px(25), CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND));
-    creditsBackground.setBounds(Scale.rect(20, 120, 575, 195));
+    creditsBackground.setBounds(Scale.rect(20, 120, 565, 195));
     aboutPanel.add(creditsBackground);
     aboutPanel.setComponentZOrder(creditsBackground, 1);
 
-    JPanel creditsPane = new JPanel();
+    JPanel creditsPane = new ScrollablePanel();
+    creditsPane.setLayout(new BoxLayout(creditsPane, BoxLayout.Y_AXIS));
     creditsPane.setBackground(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
+    creditsPane.setBorder(BorderFactory.createEmptyBorder(Scale.px(4), Scale.px(6), Scale.px(4), Scale.px(14)));
+
+    String credits = _localeManager.getValue("m.credits_template", new String[]{
+      _localeManager.getValue("m.credits_contributors"),
+      _localeManager.getValue("m.credits_translators"),
+      _localeManager.getValue("m.credits_qa"),
+      _localeManager.getValue("m.credits_libs")
+    });
+
+    for (String section : credits.split("\n\n")) {
+      String[] lines = section.split("\n", 2);
+
+      JLabel heading = new JLabel(lines[0].replaceAll("[\\s:：]+$", ""));
+      heading.setFont(Fonts.getFont("default", 12.0f, Font.BOLD | Font.ITALIC));
+      heading.setBorder(BorderFactory.createEmptyBorder(creditsPane.getComponentCount() > 0 ? Scale.px(10) : 0, 0, Scale.px(2), 0));
+      creditsPane.add(heading);
+
+      JTextArea text = new JTextArea(lines.length > 1 ? lines[1] : "");
+      text.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
+      text.setForeground(CustomColors.INTERFACE_DEFAULT);
+      text.setOpaque(false);
+      text.setBorder(null);
+      text.setEditable(false);
+      text.setHighlighter(null);
+      text.setFocusable(false);
+      text.setLineWrap(true);
+      text.setWrapStyleWord(true);
+      text.setAlignmentX(Component.LEFT_ALIGNMENT);
+      creditsPane.add(text);
+    }
 
     SmoothScrollPane creditsPaneScrollBar = new SmoothScrollPane(creditsPane);
-    creditsPaneScrollBar.setBounds(Scale.rect(25, 130, 550, 175));
+    creditsPaneScrollBar.setBounds(Scale.rect(30, 130, 545, 175));
     creditsPaneScrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     creditsPaneScrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     creditsPaneScrollBar.setBorder(null);
@@ -1025,26 +1057,6 @@ public class SettingsUI extends BaseUI
     creditsPaneScrollBar.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "background:" + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND));
     creditsPaneScrollBar.getVerticalScrollBar().setUnitIncrement(Scale.px(16));
     aboutPanel.add(creditsPaneScrollBar);
-
-    JTextArea credits = new JTextArea();
-    credits.setBounds(Scale.rect(0, 0, 550, 250));
-    credits.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
-    credits.setForeground(CustomColors.INTERFACE_DEFAULT);
-    credits.setBackground(null);
-    credits.setEditable(false);
-    credits.setHighlighter(null);
-    credits.setFocusable(false);
-    credits.setAlignmentX(0);
-    credits.setText(_localeManager.getValue(
-      "m.credits_template", new String[]{
-        WordUtils.wrap(_localeManager.getValue("m.credits_contributors"), 90),
-        _localeManager.getValue("m.credits_translators"),
-        WordUtils.wrap(_localeManager.getValue("m.credits_qa"), 90),
-        WordUtils.wrap(_localeManager.getValue("m.credits_libs"), 90)
-      })
-    );
-    creditsPane.add(credits);
-    credits.setCaretPosition(0);
 
     aboutPanel.setComponentZOrder(creditsPaneScrollBar, 0);
 
