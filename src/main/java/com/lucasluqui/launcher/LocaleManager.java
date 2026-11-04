@@ -22,6 +22,7 @@ public class LocaleManager
 
   public void init ()
   {
+    _loadedLang = Settings.lang;
     InputStream langStream = LocaleManager.class.getResourceAsStream("/rsrc/lang/lang_" + Settings.lang + ".properties");
     InputStream langFallbackStream = LocaleManager.class.getResourceAsStream("/rsrc/lang/lang_en.properties");
 
@@ -180,6 +181,15 @@ public class LocaleManager
     "Chinese (Traditional)",
   };
 
+  /**
+   * The language code this session's strings were loaded in.
+   */
+  public String getLoadedLang ()
+  {
+    return _loadedLang;
+  }
+
+  private String _loadedLang;
   private final Properties _lang = new Properties();
   private final Properties _langFallback = new Properties();
 }

@@ -115,8 +115,14 @@ public class SettingsEventHandler
   {
     if (event.getStateChange() == ItemEvent.SELECTED) return; // Prevent triggering 2 times
     Settings.lang = _localeManager.getLangCode((String) this.ui.choiceLanguage.getSelectedItem());
-    _settingsManager.setValue("launcher.lang", _localeManager.getLangCode((String) this.ui.choiceLanguage.getSelectedItem()));
-    Dialog.push(_localeManager.getValue("m.prompt_restart_required"), JOptionPane.INFORMATION_MESSAGE);
+    _settingsManager.setValue("launcher.lang", Settings.lang);
+
+    // Back to the language this instance started with.
+    if (Settings.lang.equals(_localeManager.getLoadedLang())) return;
+
+    if (Dialog.pushWithConfirm(_localeManager.getValue("m.language_restart_prompt"), JOptionPane.WARNING_MESSAGE)) {
+      _ctx.getApp().restart();
+    }
   }
 
   public void customGCChangeEvent (ActionEvent action)
