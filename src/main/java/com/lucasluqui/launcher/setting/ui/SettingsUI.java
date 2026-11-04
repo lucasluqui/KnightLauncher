@@ -126,7 +126,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelLanguage = new JLabel(_localeManager.getValue("m.language"));
     labelLanguage.setBounds(Scale.rect(10, 0, 175, 20));
-    labelLanguage.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelLanguage.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     launcherSubPanel.add(labelLanguage);
 
     choiceLanguage = new JComboBox<>();
@@ -142,7 +142,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelUIScale = new JLabel(_localeManager.getValue("m.ui_scale"));
     labelUIScale.setBounds(Scale.rect(10, 50, 350, 20));
-    labelUIScale.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelUIScale.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     launcherSubPanel.add(labelUIScale);
 
     JLabel labelUIScaleExplained = new JLabel(_localeManager.getValue("m.ui_scale_explained"));
@@ -176,7 +176,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelCleaning = new JLabel(_localeManager.getValue("m.rebuilds"));
     labelCleaning.setBounds(Scale.rect(10, 115, 350, 20));
-    labelCleaning.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelCleaning.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     launcherSubPanel.add(labelCleaning);
 
     JLabel labelCleaningExplained = new JLabel(_localeManager.getValue("m.file_cleaning_explained"));
@@ -197,7 +197,7 @@ public class SettingsUI extends BaseUI
 
     labelFilePurging = new JLabel(_localeManager.getValue("m.file_purging"));
     labelFilePurging.setBounds(Scale.rect(10, 180, 350, 20));
-    labelFilePurging.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelFilePurging.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     launcherSubPanel.add(labelFilePurging);
 
     labelFilePurgingExplained = new JLabel(_localeManager.getValue("m.file_purging_explained"));
@@ -218,7 +218,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelShortcut = new JLabel(_localeManager.getValue("m.create_shortcut"));
     labelShortcut.setBounds(Scale.rect(10, 245, 225, 20));
-    labelShortcut.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelShortcut.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     launcherSubPanel.add(labelShortcut);
 
     JLabel labelShortcutExplained = new JLabel(_localeManager.getValue("m.create_shortcut_explained"));
@@ -239,7 +239,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelHideWhileGameRunning = new JLabel(_localeManager.getValue("m.hide_while_game_running"));
     labelHideWhileGameRunning.setBounds(Scale.rect(10, 310, 350, 20));
-    labelHideWhileGameRunning.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelHideWhileGameRunning.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     launcherSubPanel.add(labelHideWhileGameRunning);
 
     JLabel labelHideWhileGameRunningExplained = new JLabel(_localeManager.getValue("m.hide_while_game_running_explained"));
@@ -260,7 +260,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelHideWhileEditorRunning = new JLabel(_localeManager.getValue("m.hide_while_editor_running"));
     labelHideWhileEditorRunning.setBounds(Scale.rect(10, 375, 350, 20));
-    labelHideWhileEditorRunning.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelHideWhileEditorRunning.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     launcherSubPanel.add(labelHideWhileEditorRunning);
 
     JLabel labelHideWhileEditorRunningExplained = new JLabel(_localeManager.getValue("m.hide_while_editor_running_explained"));
@@ -281,7 +281,7 @@ public class SettingsUI extends BaseUI
 
     labelDiscordIntegration = new JLabel(_localeManager.getValue("m.use_ingame_rpc"));
     labelDiscordIntegration.setBounds(Scale.rect(10, 440, 350, 20));
-    labelDiscordIntegration.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelDiscordIntegration.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     launcherSubPanel.add(labelDiscordIntegration);
 
     labelDiscordIntegrationExplained = new JLabel(_localeManager.getValue("m.use_ingame_rpc_explained"));
@@ -303,7 +303,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelAutoUpdate = new JLabel(_localeManager.getValue("m.autoupdate"));
     labelAutoUpdate.setBounds(Scale.rect(10, 505, 350, 20));
-    labelAutoUpdate.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelAutoUpdate.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     launcherSubPanel.add(labelAutoUpdate);
 
     JLabel labelAutoUpdateExplained = new JLabel(_localeManager.getValue("m.autoupdate_explained"));
@@ -351,7 +351,7 @@ public class SettingsUI extends BaseUI
 
     labelPlatform = new JLabel(_localeManager.getValue("m.platform"));
     labelPlatform.setBounds(Scale.rect(25, 90, 125, 18));
-    labelPlatform.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelPlatform.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     gamePanel.add(labelPlatform);
 
     choicePlatform = new JComboBox<String>();
@@ -376,7 +376,7 @@ public class SettingsUI extends BaseUI
 
     labelMemory = new JLabel(_localeManager.getValue("m.allocated_memory"));
     labelMemory.setBounds(Scale.rect(275, 90, 275, 18));
-    labelMemory.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelMemory.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     gamePanel.add(labelMemory);
 
     // Make sure the currently selected game memory does not exceed the max.
@@ -405,7 +405,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelUseCustomGC = new JLabel(_localeManager.getValue("m.use_custom_gc"));
     labelUseCustomGC.setBounds(Scale.rect(25, 175, 375, 18));
-    labelUseCustomGC.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelUseCustomGC.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     gamePanel.add(labelUseCustomGC);
 
     JLabel labelUseCustomGCExplained = new JLabel(_localeManager.getValue("m.use_custom_gc_explained"));
@@ -440,7 +440,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelExplicitGC = new JLabel(_localeManager.getValue("m.disable_explicit_gc"));
     labelExplicitGC.setBounds(Scale.rect(25, 240, 300, 18));
-    labelExplicitGC.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelExplicitGC.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     gamePanel.add(labelExplicitGC);
 
     JLabel labelExplicitGCExplained = new JLabel(_localeManager.getValue("m.explicit_gc_explained"));
@@ -462,7 +462,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelFileClean = new JLabel(_localeManager.getValue("m.rebuild_files"));
     labelFileClean.setBounds(Scale.rect(25, 305, 275, 18));
-    labelFileClean.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelFileClean.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     gamePanel.add(labelFileClean);
 
     JLabel labelFileCleanExplained = new JLabel(_localeManager.getValue("m.rebuild_files_explained"));
@@ -491,7 +491,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelJVMPatch = new JLabel(_localeManager.getValue("m.force_jvm_patch"));
     labelJVMPatch.setBounds(Scale.rect(25, 370, 350, 18));
-    labelJVMPatch.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelJVMPatch.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     labelJVMPatch.setVisible(false);
     gamePanel.add(labelJVMPatch);
 
@@ -564,7 +564,7 @@ public class SettingsUI extends BaseUI
     JLabel betaCodeLabel = new JLabel(_localeManager.getValue("m.beta_code_activate"));
     betaCodeLabel.setHorizontalAlignment(SwingConstants.LEFT);
     betaCodeLabel.setBounds(Scale.rect(25, 72, 450, 50));
-    betaCodeLabel.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    betaCodeLabel.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     betasPanel.add(betaCodeLabel);
 
     betaCodeTextField = new JTextField();
@@ -629,7 +629,7 @@ public class SettingsUI extends BaseUI
     activeCodesLabel = new JLabel(_localeManager.getValue("m.beta_code_activated"));
     activeCodesLabel.setHorizontalAlignment(SwingConstants.LEFT);
     activeCodesLabel.setBounds(Scale.rect(25, 190, 200, 30));
-    activeCodesLabel.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    activeCodesLabel.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     activeCodesLabel.setVisible(false);
     betasPanel.add(activeCodesLabel);
 
@@ -817,7 +817,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelArguments = new JLabel(_localeManager.getValue("m.extratxt_write_arguments") + " (extra.txt)");
     labelArguments.setBounds(Scale.rect(25, 90, 600, 20));
-    labelArguments.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelArguments.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     advancedPanel.add(labelArguments);
 
     JButton jvmArgDocsButton = new JButton(_localeManager.getValue("b.jvm_arg_docs"));
@@ -877,7 +877,7 @@ public class SettingsUI extends BaseUI
 
     JLabel labelConnectionSettings = new JLabel(_localeManager.getValue("m.connection_settings"));
     labelConnectionSettings.setBounds(Scale.rect(25, 254, 600, 20));
-    labelConnectionSettings.setFont(Fonts.getFont("default", 14.0f, Font.ITALIC));
+    labelConnectionSettings.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     advancedPanel.add(labelConnectionSettings);
 
     labelDisclaimer = new JLabel(_localeManager.getValue("m.connection_settings_thirdparty_disclaimer"));
@@ -1138,10 +1138,10 @@ public class SettingsUI extends BaseUI
   @Inject public SettingsEventHandler eventHandler;
 
   @Inject protected LocaleManager _localeManager;
-  private final Map<JComponent, javax.swing.Timer> _hideTimers = new HashMap<>();
-  private static final int RESULT_HIDE_DELAY = 5000;
   @Inject protected SettingsManager _settingsManager;
   @Inject protected FlamingoManager _flamingoManager;
+
+  private final Map<JComponent, javax.swing.Timer> _hideTimers = new HashMap<>();
 
   public JTabbedPane tabbedPane;
   public JComboBox<String> choicePlatform = new JComboBox<String>();
@@ -1191,6 +1191,8 @@ public class SettingsUI extends BaseUI
   public JLabel labelFilePurging;
   public JLabel labelFilePurgingExplained;
   public JCheckBox switchFilePurging;
+
+  private static final int RESULT_HIDE_DELAY = 5000;
 
   private final String URL_JVM_ARG_DOCS = "https://docs.oracle.com/en/java/javase/25/docs/specs/man/java.html#advanced-options-for-java";
 }
