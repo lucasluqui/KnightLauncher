@@ -13,6 +13,7 @@ import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.launcher.ui.handler.LauncherEventHandler;
+import com.lucasluqui.swing.ShadowedLabel;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.swing.SlimProgressBarUI;
 import com.lucasluqui.swing.TaskbarProgress;
@@ -23,8 +24,6 @@ import com.lucasluqui.swing.Scale;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import com.google.inject.Inject;
-
-import com.jhlabs.image.GaussianFilter;
 
 import jiconfont.icons.font_awesome.FontAwesome;
 
@@ -947,81 +946,6 @@ public class LauncherUI extends BaseUI
     bannerTitle.setForeground(color);
     bannerSubtitle1.setForeground(color);
     bannerSubtitle2.setForeground(color);
-  }
-
-  /**
-   * A label with a soft shadow under its text.
-   */
-  private static class ShadowedLabel extends JLabel
-  {
-    public ShadowedLabel (String text)
-    {
-      super(text);
-    }
-
-    @Override
-    protected void paintComponent (Graphics g)
-    {
-      String text = getText();
-      float alpha = getForeground().getAlpha() / 255f;
-      if (text != null && !text.isEmpty() && alpha > 0f) {
-        Graphics2D g2d = (Graphics2D) g.create();
-        FontMetrics metrics = g2d.getFontMetrics(getFont());
-
-        // Place the shadow exactly where the label itself will draw.
-        Insets insets = getInsets();
-        Rectangle view = new Rectangle(insets.left, insets.top,
-          getWidth() - insets.left - insets.right, getHeight() - insets.top - insets.bottom);
-        Rectangle iconBounds = new Rectangle();
-        Rectangle textBounds = new Rectangle();
-        String clipped = SwingUtilities.layoutCompoundLabel(this, metrics, text, null,
-          getVerticalAlignment(), getHorizontalAlignment(), getVerticalTextPosition(), getHorizontalTextPosition(),
-          view, iconBounds, textBounds, 0);
-
-        BufferedImage shadow = getShadow(clipped, metrics);
-        int padding = (shadow.getHeight() - metrics.getHeight()) / 2;
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, SHADOW_OPACITY * alpha));
-        g2d.drawImage(shadow, textBounds.x - padding, textBounds.y - padding + Scale.px(1), null);
-        g2d.dispose();
-      }
-      super.paintComponent(g);
-    }
-
-    /**
-     * Returns the blurred shadow for the given text, only rendering it again when the text or font change.
-     */
-    private BufferedImage getShadow (String text, FontMetrics metrics)
-    {
-      Font font = getFont();
-      if (_shadow != null && text.equals(_shadowText) && font.equals(_shadowFont)) {
-        return _shadow;
-      }
-
-      // Bigger text gets a wider blur, so the shadow looks the same at any size.
-      int radius = Math.max(Scale.px(5), Math.round(font.getSize2D() * SHADOW_SPREAD));
-      int padding = radius * 2;
-
-      BufferedImage image = new BufferedImage(metrics.stringWidth(text) + padding * 2,
-        metrics.getHeight() + padding * 2, BufferedImage.TYPE_INT_ARGB);
-      Graphics2D g2d = image.createGraphics();
-      g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-      g2d.setFont(font);
-      g2d.setColor(Color.BLACK);
-      g2d.drawString(text, padding, padding + metrics.getAscent());
-      g2d.dispose();
-
-      _shadow = new GaussianFilter(radius).filter(image, null);
-      _shadowText = text;
-      _shadowFont = font;
-      return _shadow;
-    }
-
-    private BufferedImage _shadow;
-    private String _shadowText;
-    private Font _shadowFont;
-
-    private static final float SHADOW_OPACITY = 1.0f;
-    private static final float SHADOW_SPREAD = 0.2f;
   }
 
   public static class BannerImage
