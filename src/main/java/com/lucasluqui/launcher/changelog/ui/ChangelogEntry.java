@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.launcher.changelog.data.Release;
+import com.lucasluqui.swing.FractionalTextPane;
 import com.lucasluqui.swing.HiddenCaret;
 import com.lucasluqui.swing.Scale;
 import com.lucasluqui.util.ColorUtil;
@@ -65,7 +66,7 @@ public class ChangelogEntry extends JPanel
 
     add(header, BorderLayout.NORTH);
 
-    JTextPane changelogPane = new JTextPane();
+    JTextPane changelogPane = new FractionalTextPane();
     changelogPane.setEditable(false);
     changelogPane.setOpaque(false);
     changelogPane.setBorder(null);
