@@ -46,8 +46,8 @@ public final class RuntimeSource
     }
 
     if (RuntimeLocator.isMac()) {
-      // Only Apple silicon, Intel Macs aren't supported.
-      return RuntimeLocator.isAppleSilicon() ? new RuntimeSource("macos", true) : null;
+      // Apple silicon gets the native runtime even when we're running on an Intel Java through Rosetta.
+      return new RuntimeSource(RuntimeLocator.isAppleSilicon() ? "macos" : "macos-intel", true);
     }
 
     String arch = System.getProperty("os.arch", "").toLowerCase(Locale.ROOT);
