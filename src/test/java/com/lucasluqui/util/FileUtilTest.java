@@ -43,4 +43,26 @@ public class FileUtilTest
 
     assertEquals("new", Files.readString(target));
   }
+
+  @Test
+  public void purgeDirectoryDoesNothingForAMissingDirectory ()
+  {
+    FileUtil.purgeDirectory(dir.resolve("not-there").toFile(), new String[0]);
+  }
+
+  @Test
+  public void purgeDirectoryEmptiesTheDirectoryExceptWhatIsExcluded ()
+    throws IOException
+  {
+    Files.createDirectories(dir.resolve("sub/deeper"));
+    Files.writeString(dir.resolve("sub/deeper/a.txt"), "a");
+    Files.writeString(dir.resolve("b.txt"), "b");
+    Files.writeString(dir.resolve("keep.jar"), "k");
+
+    FileUtil.purgeDirectory(dir.toFile(), new String[] {".jar"});
+
+    assertEquals("k", Files.readString(dir.resolve("keep.jar")));
+    assertFalse(Files.exists(dir.resolve("b.txt")));
+    assertFalse(Files.exists(dir.resolve("sub")));
+  }
 }
