@@ -263,9 +263,10 @@ public class ZipUtil
       while (entries.hasMoreElements()) {
         ZipEntry entry = entries.nextElement();
         if (entry.isDirectory()) {
-          File efile = new File(target, entry.getName());
-          if (efile.exists()) {
-            for (File f : efile.listFiles()) {
+          File efile = entryFile(target, entry.getName());
+          File[] existing = efile == null || !efile.isDirectory() ? null : efile.listFiles();
+          if (existing != null) {
+            for (File f : existing) {
               if (!f.isDirectory())
                 f.delete();
             }
@@ -280,7 +281,12 @@ public class ZipUtil
       if (filter != null && !filter.test(entry.getName())) {
         continue;
       }
-      File efile = new File(target, entry.getName());
+      // Jars come from the game's servers, so an entry name is not trusted to stay inside the target.
+      File efile = entryFile(target, entry.getName());
+      if (efile == null) {
+        log.warning("Skipping jar entry outside the target directory", "jar", jar, "entry", entry);
+        continue;
+      }
 
       // if we're unpacking a normal jar file, it will have special path
       // entries that allow us to create our directories first
@@ -307,6 +313,17 @@ public class ZipUtil
           Logger.format("Failure unpacking", "jar", jar, "entry", efile), e);
       }
     }
+  }
+
+  /**
+   * Where an archive entry lands inside {@code target}, or null if its name would put it anywhere else
+   * ("../x", an absolute path).
+   */
+  static File entryFile (File target, String entryName)
+  {
+    java.nio.file.Path root = target.toPath().toAbsolutePath().normalize();
+    java.nio.file.Path resolved = root.resolve(entryName).normalize();
+    return resolved.startsWith(root) ? resolved.toFile() : null;
   }
 
   public static String readFileInsideZip (String zip, String pathInZip)

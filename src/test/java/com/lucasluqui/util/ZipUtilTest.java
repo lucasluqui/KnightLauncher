@@ -77,4 +77,47 @@ public class ZipUtilTest
     }
     assertEquals(false, Files.exists(target.resolve("mod/Foo.class")));
   }
+
+  @Test
+  public void unpackJarNeverWritesOutsideTheTarget ()
+    throws IOException
+  {
+    Path evil = dir.resolve("evil.jar");
+    try (OutputStream out = Files.newOutputStream(evil); ZipOutputStream zip = new ZipOutputStream(out)) {
+      for (String name : new String[] {"../escaped.txt", "a/../../escaped2.txt", "/tmp/escaped3.txt", "ok/fine.txt"}) {
+        zip.putNextEntry(new ZipEntry(name));
+        zip.write("x".getBytes());
+        zip.closeEntry();
+      }
+    }
+    Path target = dir.resolve("out");
+    Files.createDirectories(target);
+    try (ZipFile zip = new ZipFile(evil.toFile())) {
+      ZipUtil.unpackJar(zip, target.toFile(), false);
+    }
+    assertEquals("x", Files.readString(target.resolve("ok/fine.txt")));
+    assertEquals(false, Files.exists(dir.resolve("escaped.txt")));
+    assertEquals(false, Files.exists(dir.resolve("escaped2.txt")));
+    assertEquals(false, Files.exists(Path.of("/tmp/escaped3.txt")));
+  }
+
+  @Test
+  public void cleaningNeverDeletesOutsideTheTarget ()
+    throws IOException
+  {
+    Path victim = dir.resolve("victim");
+    Files.createDirectories(victim);
+    Files.writeString(victim.resolve("keep.txt"), "keep");
+    Path evil = dir.resolve("evil.jar");
+    try (OutputStream out = Files.newOutputStream(evil); ZipOutputStream zip = new ZipOutputStream(out)) {
+      zip.putNextEntry(new ZipEntry("../victim/"));
+      zip.closeEntry();
+    }
+    Path target = dir.resolve("out");
+    Files.createDirectories(target);
+    try (ZipFile zip = new ZipFile(evil.toFile())) {
+      ZipUtil.unpackJar(zip, target.toFile(), true);
+    }
+    assertEquals("keep", Files.readString(victim.resolve("keep.txt")));
+  }
 }
