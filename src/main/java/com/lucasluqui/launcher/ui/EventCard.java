@@ -319,9 +319,10 @@ public class EventCard extends JComponent
   private long progressStart;
   private int progressDuration = 0;
   private Timer progressTimer;
+  private final TextShadow titleShadow = new TextShadow();
+
   // Where the card's background gets painted, reused as long as the card's size and the display's scale stay put.
   private BufferedImage buffer;
-  private final TextShadow titleShadow = new TextShadow();
 
   // In actual pixels, for the current UI scale.
   private static final int PADDING = Scale.px(12);
@@ -339,6 +340,7 @@ public class EventCard extends JComponent
 
   // How much less the elapsed part of the active card is darkened.
   private static final int PROGRESS_LIGHTEN = 70;
+
   // Roughly 30 fps, plenty for a slow sweep.
   private static final int PROGRESS_FRAME_INTERVAL = 33;
 }
