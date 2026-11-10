@@ -109,6 +109,7 @@ public class EventCard extends JComponent
     super.removeNotify();
     if (progressTimer != null) progressTimer.stop();
     if (hoverTimer != null) hoverTimer.stop();
+    buffer = null;
   }
 
   private void updateHover ()
@@ -142,18 +143,24 @@ public class EventCard extends JComponent
 
     // Clipping isn't antialiased in Java2D, which leaves the slanted edges jagged. Instead, draw the
     // antialiased shape into a buffer first, and paint the background only where the shape is.
-    // Made at the display's resolution.
-    BufferedImage buffer = HiDpi.createBuffer(w, h, HiDpi.scale(g));
+    // Made at the display's resolution, and kept around between paints: the active card repaints constantly
+    // while its progress sweeps across, and a new buffer each time adds up to a lot of garbage.
+    double scale = HiDpi.scale(g);
+    if (buffer == null || buffer.getWidth() != HiDpi.px(w, scale) || buffer.getHeight() != HiDpi.px(h, scale)) {
+      buffer = HiDpi.createBuffer(w, h, scale);
+    }
     Graphics2D bg = HiDpi.createGraphics(buffer, w, h);
+    bg.setComposite(AlphaComposite.Clear);
+    bg.fillRect(0, 0, w, h);
+    bg.setComposite(AlphaComposite.SrcOver);
     bg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     bg.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     bg.setColor(Color.WHITE);
     bg.fill(getShape(0, w, h));
     bg.setComposite(AlphaComposite.SrcIn);
 
-    // Background: the event's banner covering the card, cropped around its center, and zooming in a little
-    // while hovered. Eased out, so the movement settles in gently. Scaled with a transform rather than
-    // rounded pixel sizes, so the zoom moves smoothly instead of jumping a pixel at a time.
+    // Scaled with a transform rather than rounded pixel sizes,
+    // so the zoom moves smoothly instead of jumping a pixel at a time.
     if (image != null) {
       float zoom = Math.max(w / (float) image.getWidth(), h / (float) image.getHeight())
         * (1f + HOVER_ZOOM * (1f - (1f - hoverProgress) * (1f - hoverProgress)));
@@ -312,6 +319,8 @@ public class EventCard extends JComponent
   private long progressStart;
   private int progressDuration = 0;
   private Timer progressTimer;
+  // Where the card's background gets painted, reused as long as the card's size and the display's scale stay put.
+  private BufferedImage buffer;
   private final TextShadow titleShadow = new TextShadow();
 
   // In actual pixels, for the current UI scale.
