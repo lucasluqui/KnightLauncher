@@ -17,6 +17,7 @@ import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.swing.FontIcon;
 import com.lucasluqui.swing.HiDpi;
 import com.lucasluqui.swing.FractionalMetrics;
+import com.lucasluqui.swing.HandCursor;
 import com.lucasluqui.swing.Scale;
 import com.lucasluqui.util.ImageUtil;
 import com.lucasluqui.util.ThreadingUtil;
@@ -467,11 +468,13 @@ public class ModListUI extends BaseUI
         g2d.dispose();
       }
     };
+
     // The overlay always covers the whole screen and owns the drop target, otherwise components with their
     // own drop target (like the search box) would take over the drag while hovering them. It has no mouse
     // listeners, so clicks and scrolling still go through to whatever is below it.
     panel.add(dropOverlay);
     panel.setComponentZOrder(dropOverlay, 0);
+    HandCursor.passThrough(dropOverlay);
     dropOverlay.setBounds(0, 0, panel.getWidth(), panel.getHeight());
     panel.addComponentListener(new ComponentAdapter()
     {

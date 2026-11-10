@@ -2,6 +2,7 @@ package com.lucasluqui.launcher;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.lucasluqui.swing.FractionalMetrics;
+import com.lucasluqui.swing.HandCursor;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
@@ -27,6 +28,7 @@ public class Stylesheet
     }
 
     FractionalMetrics.install();
+    HandCursor.installDelegates();
 
     UIManager.put("TabbedPane.underlineColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
     UIManager.put("TabbedPane.inactiveUnderlineColor", CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND);
