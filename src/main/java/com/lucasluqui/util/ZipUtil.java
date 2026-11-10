@@ -252,6 +252,12 @@ public class ZipUtil
   public static void unpackJar (java.util.zip.ZipFile jar, File target, boolean cleanExistingDirs)
     throws IOException
   {
+    unpackJar(jar, target, cleanExistingDirs, null);
+  }
+
+  public static void unpackJar (java.util.zip.ZipFile jar, File target, boolean cleanExistingDirs, java.util.function.Predicate<String> filter)
+    throws IOException
+  {
     if (cleanExistingDirs) {
       Enumeration<? extends ZipEntry> entries = jar.entries();
       while (entries.hasMoreElements()) {
@@ -271,6 +277,9 @@ public class ZipUtil
     Enumeration<? extends ZipEntry> entries = jar.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = entries.nextElement();
+      if (filter != null && !filter.test(entry.getName())) {
+        continue;
+      }
       File efile = new File(target, entry.getName());
 
       // if we're unpacking a normal jar file, it will have special path

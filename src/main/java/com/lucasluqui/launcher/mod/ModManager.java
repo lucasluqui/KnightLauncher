@@ -195,6 +195,12 @@ public class ModManager
     Server selectedServer = _flamingoManager.getSelectedServer();
     String rootDir = selectedServer.getRootDirectory();
 
+    // Clean any lingering staging directories from previous runs/crashes
+    try {
+      FileUtils.deleteDirectory(new File(rootDir + "/code/class-changes"));
+      FileUtils.deleteDirectory(new File(rootDir + "/code/locale-changes"));
+    } catch (IOException ignored) {}
+
     if (Settings.doRebuilds && _rebuildRequired) startFileRebuild();
 
     _ctx.getApp().toggleElementsBlock(true);
@@ -301,7 +307,7 @@ public class ModManager
     log.info("Mounting class changes...");
     try {
       ZipFile config = new ZipFile(rootDir + "/code/config.jar");
-      ZipUtil.unpackJar(config, new File(rootDir + "/code/class-changes/"), false);
+      ZipUtil.unpackJar(config, new File(rootDir + "/code/class-changes/"), false, name -> !name.endsWith(".class"));
       config.close();
     } catch (IOException e) {
       log.error(e);
@@ -315,14 +321,20 @@ public class ModManager
     }
 
     // And now after merging their contents, we turn it back into a jar.
+    boolean jarCreated = false;
     try {
       JavaUtil.createJar(
         Paths.get(rootDir + "/code/class-changes/"),
         Paths.get(rootDir + "/code/config-new.jar"),
         null
       );
+      jarCreated = true;
     } catch (Exception e) {
       log.error(e);
+      try {
+        FileUtils.delete(new File(rootDir + "/code/config-new.jar"));
+      } catch (Exception ignored) {
+      }
     }
 
     try {
@@ -330,7 +342,7 @@ public class ModManager
       FileUtils.deleteDirectory(new File(rootDir + "/code/class-changes"));
 
       // Rename the current config to old and the new one to its original name.
-      if (FileUtil.fileExists(rootDir + "/code/config-new.jar")) {
+      if (jarCreated && FileUtil.fileExists(rootDir + "/code/config-new.jar")) {
         FileUtils.moveFile(new File(rootDir + "/code/config.jar"), new File(rootDir + "/code/config-old.jar"));
         FileUtils.moveFile(new File(rootDir + "/code/config-new.jar"), new File(rootDir + "/code/config.jar"));
       }
@@ -501,6 +513,10 @@ public class ModManager
     for (String filePath : FileUtil.fileNamesInDirectory(rootDir + "/mods", ".hash")) {
       new File(rootDir + "/mods/" + filePath).delete();
     }
+    try {
+      FileUtils.deleteDirectory(new File(rootDir + "/code/class-changes"));
+      FileUtils.deleteDirectory(new File(rootDir + "/code/locale-changes"));
+    } catch (IOException ignored) {}
   }
 
   private void checkModCompatibility ()
