@@ -5,6 +5,7 @@ import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.swing.FractionalMetrics;
 import com.lucasluqui.swing.Scale;
 import com.lucasluqui.swing.HiDpi;
+import com.lucasluqui.swing.TextShadow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +17,8 @@ import java.awt.image.BufferedImage;
 
 /**
  * A small clickable card representing one of the active events, using its banner as the background.
- * The event currently on display is highlighted, the rest are dimmed.
+ * The event currently on display is highlighted, the rest are dimmed. The highlighted card also lights up from
+ * left to right as its display time runs out, until the rotation moves on to the next one.
  */
 public class EventCard extends JComponent
 {
@@ -70,11 +72,43 @@ public class EventCard extends JComponent
     repaint();
   }
 
-  public void setActive (boolean active)
+  /**
+   * @param duration How long, in milliseconds, the event stays on display before rotating to the next one,
+   *                 or 0 if it doesn't rotate. Only used when becoming active, and restarts the progress.
+   */
+  public void setActive (boolean active, int duration)
   {
-    if (this.active == active) return;
     this.active = active;
+    this.progressDuration = active ? duration : 0;
+    this.progressStart = System.nanoTime();
+    if (progressDuration > 0) {
+      if (progressTimer == null) progressTimer = new Timer(PROGRESS_FRAME_INTERVAL, e -> repaint());
+      progressTimer.restart();
+    } else if (progressTimer != null) {
+      progressTimer.stop();
+    }
     repaint();
+  }
+
+  /**
+   * How much of the active event's display time has gone by, from 0 to 1.
+   */
+  private float getProgress ()
+  {
+    if (progressDuration <= 0) return 0f;
+    float elapsed = (System.nanoTime() - progressStart) / 1_000_000f;
+    float progress = Math.min(1f, elapsed / progressDuration);
+    if (progress >= 1f && progressTimer != null) progressTimer.stop();
+    return progress;
+  }
+
+  @Override
+  public void removeNotify ()
+  {
+    // Cards get thrown away whenever the events change, don't leave their timers running.
+    super.removeNotify();
+    if (progressTimer != null) progressTimer.stop();
+    if (hoverTimer != null) hoverTimer.stop();
   }
 
   private void updateHover ()
@@ -137,8 +171,27 @@ public class EventCard extends JComponent
     int leftAlpha = active ? 150 : (hovered ? 170 : 200);
     int rightAlpha = active ? 30 : (hovered ? 100 : 140);
     bg.setComposite(AlphaComposite.SrcAtop);
-    bg.setPaint(new GradientPaint(0, 0, new Color(0, 0, 0, leftAlpha), w, 0, new Color(0, 0, 0, rightAlpha)));
-    bg.fillRect(0, 0, w, h);
+    float progress = active ? getProgress() : 0f;
+    if (progress > 0f) {
+      // The part of the display time that has gone by is darkened less, sweeping across the card. Its edge leans
+      // the same way as the card's sides. The lighter shade goes everywhere first and the regular one over the
+      // rest, so there's a single antialiased edge between them and no seam.
+      bg.setPaint(new GradientPaint(0, 0, new Color(0, 0, 0, leftAlpha - PROGRESS_LIGHTEN), w, 0,
+        new Color(0, 0, 0, Math.max(0, rightAlpha - PROGRESS_LIGHTEN))));
+      bg.fillRect(0, 0, w, h);
+      float edge = progress * (w - SLANT);
+      Path2D.Float remaining = new Path2D.Float();
+      remaining.moveTo(edge + SLANT, 0);
+      remaining.lineTo(w, 0);
+      remaining.lineTo(w, h);
+      remaining.lineTo(edge, h);
+      remaining.closePath();
+      bg.setPaint(new GradientPaint(0, 0, new Color(0, 0, 0, leftAlpha), w, 0, new Color(0, 0, 0, rightAlpha)));
+      bg.fill(remaining);
+    } else {
+      bg.setPaint(new GradientPaint(0, 0, new Color(0, 0, 0, leftAlpha), w, 0, new Color(0, 0, 0, rightAlpha)));
+      bg.fillRect(0, 0, w, h);
+    }
     bg.dispose();
 
     HiDpi.drawBuffer(g2d, buffer, 0, 0, w, h);
@@ -166,7 +219,10 @@ public class EventCard extends JComponent
     FontMetrics metrics = g2d.getFontMetrics();
     // Keep the text clear of both slanted edges, and of the badge.
     String text = ellipsize(title, metrics, w - PADDING * 2 - SLANT - badgeSpace);
-    g2d.drawString(text, PADDING + SLANT / 2, (h - metrics.getHeight()) / 2 + metrics.getAscent());
+    int textX = PADDING + SLANT / 2;
+    int textTop = (h - metrics.getHeight()) / 2;
+    titleShadow.paint(g2d, text, g2d.getFont(), metrics, textX, textTop, 1f);
+    g2d.drawString(text, textX, textTop + metrics.getAscent());
 
     // Outline, brighter for the active event. Inset a bit so the stroke isn't cut by the bounds.
     g2d.setStroke(new BasicStroke(Scale.px(active ? 1.5f : 1f)));
@@ -253,6 +309,10 @@ public class EventCard extends JComponent
   private float hoverProgress = 0f;
   private float hoverTarget = 0f;
   private Timer hoverTimer;
+  private long progressStart;
+  private int progressDuration = 0;
+  private Timer progressTimer;
+  private final TextShadow titleShadow = new TextShadow();
 
   // In actual pixels, for the current UI scale.
   private static final int PADDING = Scale.px(12);
@@ -267,4 +327,9 @@ public class EventCard extends JComponent
 
   private static final int HOVER_DURATION = 180;
   private static final float HOVER_ZOOM = 0.05f;
+
+  // How much less the elapsed part of the active card is darkened.
+  private static final int PROGRESS_LIGHTEN = 70;
+  // Roughly 30 fps, plenty for a slow sweep.
+  private static final int PROGRESS_FRAME_INTERVAL = 33;
 }

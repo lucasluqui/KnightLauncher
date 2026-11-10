@@ -672,7 +672,6 @@ public class LauncherEventHandler
     final int generation = _bannerGeneration.incrementAndGet();
 
     _bannerIndex = index;
-    this.ui.setActiveEventCard(index);
 
     // Restarting here also resets the countdown when the user navigates manually.
     if (events.size() > 1) {
@@ -680,6 +679,7 @@ public class LauncherEventHandler
     } else {
       _bannerCycleTimer.stop();
     }
+    this.ui.setActiveEventCard(index, events.size() > 1 ? BANNER_CYCLE_INTERVAL : 0);
 
     _bannerExecutor.execute(() -> {
       // The user might have already moved on to another banner.

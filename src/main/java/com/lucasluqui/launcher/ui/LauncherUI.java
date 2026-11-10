@@ -843,9 +843,12 @@ public class LauncherUI extends BaseUI
     if (index < eventCards.size()) eventCards.get(index).setImage(image);
   }
 
-  public void setActiveEventCard (int index)
+  /**
+   * @param duration How long the event stays on display before rotating, in milliseconds, or 0 if it doesn't.
+   */
+  public void setActiveEventCard (int index, int duration)
   {
-    for (int i = 0; i < eventCards.size(); i++) eventCards.get(i).setActive(i == index);
+    for (int i = 0; i < eventCards.size(); i++) eventCards.get(i).setActive(i == index, duration);
   }
 
   /**
