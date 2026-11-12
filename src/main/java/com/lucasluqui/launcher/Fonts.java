@@ -37,10 +37,12 @@ public class Fonts
 
     if ("jp".equals(language) || "ru".equals(language)) {
       _sizeMultiplier = 1.1f;
+      _codeUsesDefault = true;
       return new String[] { PATH_JP_REGULAR, PATH_JP_MEDIUM };
     }
 
     if ("ar".equals(language)) {
+      _codeUsesDefault = true;
       return new String[] { PATH_AR_REGULAR, PATH_AR_MEDIUM };
     }
 
@@ -59,6 +61,12 @@ public class Fonts
     if (Settings.lang.equalsIgnoreCase("zh-hans")
       || Settings.lang.equalsIgnoreCase("zh-hant")) {
       return FONT_NULL;
+    }
+
+    // Languages with their own font use it for 'code' too, so it matches the rest of the interface instead of
+    // mixing in the 'code' font, or whatever font Java falls back to for glyphs it lacks.
+    if (_codeUsesDefault && FONT_FAMILY_CODE.equals(fontFamily)) {
+      fontFamily = FONT_FAMILY_DEFAULT;
     }
 
     String resolvedFontName = resolveFontVariant(fontFamily, style);
@@ -191,6 +199,7 @@ public class Fonts
   }
 
   private static float _sizeMultiplier = 1.0f;
+  private static boolean _codeUsesDefault = false;
 
   private static final Map<String, Font> _fonts = new HashMap<>();
   private static final Map<String, Font> _derivedFonts = new HashMap<>();
