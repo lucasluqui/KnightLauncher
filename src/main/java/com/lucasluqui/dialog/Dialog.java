@@ -3,6 +3,7 @@ package com.lucasluqui.dialog;
 import com.lucasluqui.util.BuildConfig;
 import com.lucasluqui.launcher.CustomColors;
 import com.lucasluqui.launcher.Fonts;
+import com.lucasluqui.swing.FractionalText;
 import com.lucasluqui.swing.HiddenCaret;
 
 import javax.swing.*;
@@ -41,7 +42,7 @@ public class Dialog
 
   private static JTextArea formatMessage (String msg)
   {
-    JTextArea message = new JTextArea(msg);
+    JTextArea message = new FractionalText.Area(msg);
     message.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     message.setForeground(CustomColors.INTERFACE_DEFAULT);
     message.setBackground(CustomColors.INTERFACE_DEFAULT_BACKGROUND);

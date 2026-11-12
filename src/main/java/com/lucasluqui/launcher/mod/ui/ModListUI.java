@@ -17,6 +17,7 @@ import com.lucasluqui.swing.SmoothScrollPane;
 import com.lucasluqui.swing.FontIcon;
 import com.lucasluqui.swing.HiDpi;
 import com.lucasluqui.swing.FractionalMetrics;
+import com.lucasluqui.swing.FractionalText;
 import com.lucasluqui.swing.HandCursor;
 import com.lucasluqui.swing.Scale;
 import com.lucasluqui.util.ImageUtil;
@@ -261,7 +262,7 @@ public class ModListUI extends BaseUI
     screenPane.add(refreshButton);
     refreshButton.addActionListener(this.eventHandler::refreshEvent);
 
-    searchBox = new JTextField();
+    searchBox = new FractionalText.Field();
     searchBox.setBounds(Scale.rect(250, 85, 300, 27));
     searchBox.setFont(Fonts.getFont("code", 11.0f, Font.ITALIC));
     searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, _localeManager.getValue("m.modlist_searchbox_placeholder"));
@@ -342,7 +343,7 @@ public class ModListUI extends BaseUI
       screenScrollPane.dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, screenScrollPane)));
 
     // Shares its text with the regular search box, so whatever's typed shows up in both.
-    floatingSearchBox = new JTextField();
+    floatingSearchBox = new FractionalText.Field();
     floatingSearchBox.setDocument(searchBox.getDocument());
     floatingSearchBox.setBounds(Scale.rect(6, 6, 300, 27));
     floatingSearchBox.setFont(searchBox.getFont());
@@ -724,7 +725,7 @@ public class ModListUI extends BaseUI
   private boolean draggingFiles = false;
 
   public JPanel modListPane = new JPanel();
-  public JTextField floatingSearchBox = new JTextField();
+  public JTextField floatingSearchBox = new FractionalText.Field();
   public JLabel labelModCount;
   public JButton addModButton;
   public JButton refreshButton;

@@ -1,6 +1,7 @@
 package com.lucasluqui.launcher.setting.ui;
 
 import com.lucasluqui.swing.FontIcon;
+import com.lucasluqui.swing.FractionalText;
 import com.lucasluqui.swing.HiDpi;
 import com.lucasluqui.swing.Scale;
 import com.lucasluqui.dialog.Dialog;
@@ -567,7 +568,7 @@ public class SettingsUI extends BaseUI
     betaCodeLabel.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
     betasPanel.add(betaCodeLabel);
 
-    betaCodeTextField = new JTextField();
+    betaCodeTextField = new FractionalText.Field();
     betaCodeTextField.setBounds(Scale.rect(25, 112, 250, 25));
     betaCodeTextField.setFont(Fonts.getFont("code", 12.0f, Font.PLAIN));
     betaCodeTextField.putClientProperty(FlatClientProperties.STYLE,
@@ -834,7 +835,7 @@ public class SettingsUI extends BaseUI
     advancedPanel.add(jvmArgDocsButton);
     jvmArgDocsButton.addActionListener(l -> DesktopUtil.openWebpage(URL_JVM_ARG_DOCS));
 
-    argumentsPane = new JEditorPane()
+    argumentsPane = new FractionalText.EditorPane()
     {
       @Override
       public void setText (String text)
@@ -893,7 +894,7 @@ public class SettingsUI extends BaseUI
     serverAddressLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     advancedPanel.add(serverAddressLabel);
 
-    serverAddressTextField = new JTextField();
+    serverAddressTextField = new FractionalText.Field();
     serverAddressTextField.setBounds(Scale.rect(25, 304, 250, 25));
     serverAddressTextField.setFont(Fonts.getFont("code", 12.0f, Font.PLAIN));
     serverAddressTextField.putClientProperty(FlatClientProperties.STYLE,
@@ -910,7 +911,7 @@ public class SettingsUI extends BaseUI
     portLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     advancedPanel.add(portLabel);
 
-    portTextField = new JTextField();
+    portTextField = new FractionalText.Field();
     portTextField.setBounds(Scale.rect(280, 304, 65, 25));
     portTextField.setFont(Fonts.getFont("code", 12.0f, Font.PLAIN));
     portTextField.putClientProperty(FlatClientProperties.STYLE,
@@ -924,7 +925,7 @@ public class SettingsUI extends BaseUI
     publicKeyLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     advancedPanel.add(publicKeyLabel);
 
-    publicKeyTextField = new JTextField();
+    publicKeyTextField = new FractionalText.Field();
     publicKeyTextField.setBounds(Scale.rect(25, 363, 355, 30));
     publicKeyTextField.setFont(Fonts.getFont("code", 12.0f, Font.PLAIN));
     publicKeyTextField.putClientProperty(FlatClientProperties.STYLE,
@@ -949,7 +950,7 @@ public class SettingsUI extends BaseUI
     getdownURLLabel.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
     advancedPanel.add(getdownURLLabel);
 
-    getdownURLTextField = new JTextField();
+    getdownURLTextField = new FractionalText.Field();
     getdownURLTextField.setBounds(Scale.rect(25, 422, 355, 30));
     getdownURLTextField.setFont(Fonts.getFont("code", 12.0f, Font.PLAIN));
     getdownURLTextField.putClientProperty(FlatClientProperties.STYLE,
@@ -1034,7 +1035,7 @@ public class SettingsUI extends BaseUI
       heading.setBorder(BorderFactory.createEmptyBorder(creditsPane.getComponentCount() > 0 ? Scale.px(10) : 0, 0, Scale.px(2), 0));
       creditsPane.add(heading);
 
-      JTextArea text = new JTextArea(lines.length > 1 ? lines[1] : "");
+      JTextArea text = new FractionalText.Area(lines.length > 1 ? lines[1] : "");
       text.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
       text.setForeground(CustomColors.INTERFACE_DEFAULT);
       text.setOpaque(false);
@@ -1175,10 +1176,10 @@ public class SettingsUI extends BaseUI
   public JCheckBox switchAutoUpdate;
   public JEditorPane argumentsPane;
   public JLabel labelDisclaimer = new JLabel();
-  public JTextField serverAddressTextField = new JTextField();
-  public JTextField portTextField = new JTextField();
-  public JTextField publicKeyTextField = new JTextField();
-  public JTextField getdownURLTextField = new JTextField();
+  public JTextField serverAddressTextField = new FractionalText.Field();
+  public JTextField portTextField = new FractionalText.Field();
+  public JTextField publicKeyTextField = new FractionalText.Field();
+  public JTextField getdownURLTextField = new FractionalText.Field();
   public JButton resetConnectionSettingsButton = new JButton();
   public JTextField betaCodeTextField;
   public JLabel labelFlamingoStatus = new JLabel();

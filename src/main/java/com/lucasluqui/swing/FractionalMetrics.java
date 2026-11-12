@@ -22,7 +22,7 @@ import java.awt.font.FontRenderContext;
  * <p>
  * Swing has no global switch for it, so it's set by the UI delegates of the components that show text. Text
  * components (text fields, text areas...) are left out on purpose: Swing places their caret and selection using
- * whole-pixel metrics, which would then drift away from the text.
+ * whole-pixel metrics, which would then drift away from the text. Use the ones in {@link FractionalText} instead.
  * <p>
  * Custom painting code drawing text should call {@link #apply(Graphics)} too, before getting any font metrics.
  */
