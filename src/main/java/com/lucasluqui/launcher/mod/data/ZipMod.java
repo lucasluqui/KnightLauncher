@@ -5,6 +5,7 @@ import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,28 +39,28 @@ public class ZipMod extends Mod
 
   public void mount (String rootDir, String[] filter, Properties stamps)
   {
-    ZipFile zipFile = new ZipFile(this.getAbsolutePath());
+    try (ZipFile zipFile = new ZipFile(this.getAbsolutePath())) {
+      if (this.type == null) {
+        log.info("Mounting Zip mod", "mod", this.displayName);
 
-    if (this.type == null) {
-      log.info("Mounting Zip mod", "mod", this.displayName);
-
-      for (Map.Entry<FileHeader, Integer> entry : fileHeaderData.getFileHeaders().entrySet()) {
-        if (entry.getValue() < 1) ZipUtil.unzipFileHeader(
-          zipFile, entry.getKey(), rootDir + "/rsrc/", false);
-        ZipUtil.closeZip(zipFile);
-      }
-
-      log.info("Zip mod mounted successfully", "mod", this.displayName);
-    } else {
-      log.info("Mounting Zip mod with " + this.type + " type", "mod", this.displayName);
-      if (isClassType()) {
         for (Map.Entry<FileHeader, Integer> entry : fileHeaderData.getFileHeaders().entrySet()) {
           if (entry.getValue() < 1) ZipUtil.unzipFileHeader(
-            zipFile, entry.getKey(), rootDir + "/code/class-changes/", false);
-          ZipUtil.closeZip(zipFile);
+            zipFile, entry.getKey(), rootDir + "/rsrc/", false);
         }
+
+        log.info("Zip mod mounted successfully", "mod", this.displayName);
+      } else {
+        log.info("Mounting Zip mod with " + this.type + " type", "mod", this.displayName);
+        if (isClassType()) {
+          for (Map.Entry<FileHeader, Integer> entry : fileHeaderData.getFileHeaders().entrySet()) {
+            if (entry.getValue() < 1) ZipUtil.unzipFileHeader(
+              zipFile, entry.getKey(), rootDir + "/code/class-changes/", false);
+          }
+        }
+        log.info("Zip mod with " + this.type + " type mounted successfully", "mod", this.displayName);
       }
-      log.info("Zip mod with " + this.type + " type mounted successfully", "mod", this.displayName);
+    } catch (IOException e) {
+      log.error("Failed to mount zip mod", "mod", this.displayName, "error", e.getMessage());
     }
   }
 

@@ -13,8 +13,11 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -121,6 +124,21 @@ public class FileUtil
     return files;
   }
 
+  /**
+   * Puts {@code replacement} in place of {@code target} in a single step, so an interruption leaves either
+   * the old file or the new one, never neither. Falls back to a plain replace on a filesystem that cannot
+   * move atomically.
+   */
+  public static void replaceFile (Path replacement, Path target)
+    throws IOException
+  {
+    try {
+      Files.move(replacement, target, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+    } catch (AtomicMoveNotSupportedException e) {
+      Files.move(replacement, target, StandardCopyOption.REPLACE_EXISTING);
+    }
+  }
+
   public static boolean fileExists (String path)
   {
     File file = new File(path);
@@ -223,7 +241,10 @@ public class FileUtil
 
   public static void purgeDirectory (File dir, String[] exceptions)
   {
-    for (File file : dir.listFiles()) {
+    // Null when the directory is missing or unreadable (a first run, say): nothing to purge.
+    File[] files = dir.listFiles();
+    if (files == null) return;
+    for (File file : files) {
       boolean skip = false;
       for (String except : exceptions) {
         if (file.getName().contains(except)) {

@@ -195,6 +195,12 @@ public class ModManager
     Server selectedServer = _flamingoManager.getSelectedServer();
     String rootDir = selectedServer.getRootDirectory();
 
+    // Clean any lingering staging directories from previous runs/crashes
+    try {
+      FileUtils.deleteDirectory(new File(rootDir + "/code/class-changes"));
+      FileUtils.deleteDirectory(new File(rootDir + "/code/locale-changes"));
+    } catch (IOException ignored) {}
+
     if (Settings.doRebuilds && _rebuildRequired) startFileRebuild();
 
     _ctx.getApp().toggleElementsBlock(true);
@@ -267,30 +273,37 @@ public class ModManager
         }
 
         // Turn all the locale changes back into a jar file.
+        boolean localeJarCreated = false;
         try {
           JavaUtil.createJar(
             Paths.get(rootDir + "/code/locale-changes/"),
             Paths.get(rootDir + "/code/projectx-config-new.jar"),
             null
           );
+          localeJarCreated = true;
         } catch (Exception e) {
           log.error(e);
+          // Never leave a half-written jar to be swapped in.
+          try {
+            FileUtils.delete(new File(rootDir + "/code/projectx-config-new.jar"));
+          } catch (Exception ignored) {
+          }
         }
 
         // Delete the temporary directory used to store locale changes.
         FileUtils.deleteDirectory(new File(rootDir + "/code/locale-changes"));
 
 
-        // Rename the current projectx-config to old and the new one to its original name.
-        if (FileUtil.fileExists(rootDir + "/code/projectx-config-new.jar")) {
-          FileUtils.moveFile(new File(rootDir + "/code/projectx-config.jar"), new File(rootDir + "/code/projectx-config-old.jar"));
-          FileUtils.moveFile(new File(rootDir + "/code/projectx-config-new.jar"), new File(rootDir + "/code/projectx-config.jar"));
+        // Put the new projectx-config in place of the current one in a single step, so an interruption
+        // leaves one of them rather than neither. The original is fetched from getdown when a rebuild
+        // is triggered.
+        if (localeJarCreated && FileUtil.fileExists(rootDir + "/code/projectx-config-new.jar")) {
+          FileUtil.replaceFile(
+            Paths.get(rootDir + "/code/projectx-config-new.jar"),
+            Paths.get(rootDir + "/code/projectx-config.jar")
+          );
+          log.info("Locale changes mounted");
         }
-
-        // And finally, remove the old one. We don't need to store it as we'll fetch the original from getdown
-        // when a rebuild is triggered.
-        FileUtils.delete(new File(rootDir + "/code/projectx-config-old.jar"));
-        log.info("Locale changes mounted");
       } catch (Exception e) {
         log.error(e);
       }
@@ -301,7 +314,7 @@ public class ModManager
     log.info("Mounting class changes...");
     try {
       ZipFile config = new ZipFile(rootDir + "/code/config.jar");
-      ZipUtil.unpackJar(config, new File(rootDir + "/code/class-changes/"), false);
+      ZipUtil.unpackJar(config, new File(rootDir + "/code/class-changes/"), false, name -> !name.endsWith(".class"));
       config.close();
     } catch (IOException e) {
       log.error(e);
@@ -315,30 +328,32 @@ public class ModManager
     }
 
     // And now after merging their contents, we turn it back into a jar.
+    boolean jarCreated = false;
     try {
       JavaUtil.createJar(
         Paths.get(rootDir + "/code/class-changes/"),
         Paths.get(rootDir + "/code/config-new.jar"),
         null
       );
+      jarCreated = true;
     } catch (Exception e) {
       log.error(e);
+      try {
+        FileUtils.delete(new File(rootDir + "/code/config-new.jar"));
+      } catch (Exception ignored) {
+      }
     }
 
     try {
       // Delete the temporary directory used to store class changes.
       FileUtils.deleteDirectory(new File(rootDir + "/code/class-changes"));
 
-      // Rename the current config to old and the new one to its original name.
-      if (FileUtil.fileExists(rootDir + "/code/config-new.jar")) {
-        FileUtils.moveFile(new File(rootDir + "/code/config.jar"), new File(rootDir + "/code/config-old.jar"));
-        FileUtils.moveFile(new File(rootDir + "/code/config-new.jar"), new File(rootDir + "/code/config.jar"));
+      // Put the new config in place of the current one in a single step, so an interruption leaves one
+      // of them rather than neither. The original is fetched from getdown when a rebuild is triggered.
+      if (jarCreated && FileUtil.fileExists(rootDir + "/code/config-new.jar")) {
+        FileUtil.replaceFile(Paths.get(rootDir + "/code/config-new.jar"), Paths.get(rootDir + "/code/config.jar"));
+        log.info("Class changes mounted");
       }
-
-      // And finally, remove the old one. We don't need to store it as we'll fetch the original from getdown
-      // when a rebuild is triggered.
-      FileUtils.delete(new File(rootDir + "/code/config-old.jar"));
-      log.info("Class changes mounted");
     } catch (IOException e) {
       log.error(e);
     }
@@ -501,6 +516,10 @@ public class ModManager
     for (String filePath : FileUtil.fileNamesInDirectory(rootDir + "/mods", ".hash")) {
       new File(rootDir + "/mods/" + filePath).delete();
     }
+    try {
+      FileUtils.deleteDirectory(new File(rootDir + "/code/class-changes"));
+      FileUtils.deleteDirectory(new File(rootDir + "/code/locale-changes"));
+    } catch (IOException ignored) {}
   }
 
   private void checkModCompatibility ()
