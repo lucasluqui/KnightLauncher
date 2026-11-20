@@ -95,8 +95,9 @@ public class ModManager
         }
       }
 
-      // Finally, let's see which have been set as disabled.
+      // Finally, let's see which have been set as disabled, and put them in their mount order.
       parseDisabledMods();
+      applyModOrder();
 
       // Check if there's any incompatible mods.
       checkModCompatibility();
@@ -203,7 +204,9 @@ public class ModManager
     _ctx._progressBar.setBarMax(getEnabledModCount());
     _ctx._progressBar.setState(_localeManager.getValue("m.mount"));
     _discordPresenceClient.setDetails(_localeManager.getValue("m.mount"));
+    // Mods higher up the list take priority, so they're mounted last and overwrite the files of those below.
     LinkedList<Mod> localList = getModList();
+    Collections.reverse(localList);
 
     for (int i = 0; i < localList.size(); i++) {
       Mod mod = localList.get(i);
@@ -454,14 +457,74 @@ public class ModManager
 
   private int getEnabledModsHash ()
   {
-    Set<Long> hashSet = new HashSet<>();
+    // In mount order, so reordering mods also counts as a change.
+    List<Long> stamps = new ArrayList<>();
     String rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
     for (Mod mod : _modList.getClone()) {
-      long lastModified = new File(rootDir + "/mods/" + mod.getFileName()).lastModified();
-      if (mod.isEnabled()) hashSet.add(lastModified);
+      if (mod.isEnabled()) stamps.add(new File(rootDir + "/mods/" + mod.getFileName()).lastModified());
     }
 
-    return hashSet.hashCode();
+    return stamps.hashCode();
+  }
+
+  /**
+   * Sorts the mod list by the saved order. Mods missing from it go last, at the lowest priority,
+   * in the order they were found.
+   */
+  private void applyModOrder ()
+  {
+    List<String> order = Arrays.asList(
+      _settingsManager.getValue("modloader.modOrder", _flamingoManager.getSelectedServer()).split(","));
+    _modList.sort(Comparator.comparingInt(mod -> {
+      int index = order.indexOf(mod.getFileName());
+      return index < 0 ? Integer.MAX_VALUE : index;
+    }));
+  }
+
+  /**
+   * Saves the given order of mods, highest priority first. Their files win over those of the mods after them.
+   */
+  public void setModOrder (List<Mod> mods)
+  {
+    _modList.setOrder(mods);
+    List<String> fileNames = new ArrayList<>();
+    for (Mod mod : mods) fileNames.add(mod.getFileName());
+    _settingsManager.setValue("modloader.modOrder", String.join(",", fileNames), _flamingoManager.getSelectedServer());
+    _mountRequired = true;
+  }
+
+  /**
+   * Files of the given mod overridden by enabled mods higher up the list that mount to the same place,
+   * by mod in list order. Empty for disabled mods.
+   */
+  public Map<Mod, List<String>> getCollisions (Mod mod)
+  {
+    Map<Mod, List<String>> collisions = new LinkedHashMap<>();
+    if (!mod.isEnabled() || mod.getFiles().isEmpty()) return collisions;
+
+    // Windows doesn't care about case, so neither do we.
+    Set<String> files = new HashSet<>();
+    for (String file : mod.getFiles()) files.add(file.toLowerCase(Locale.ROOT));
+
+    for (Mod other : _modList.getClone()) {
+      // Only the mods above take priority, so the rest of the list can't override anything.
+      if (other == mod) break;
+      if (!other.isEnabled() || isClassMod(other) != isClassMod(mod)) continue;
+      List<String> shared = new ArrayList<>();
+      for (String file : other.getFiles()) {
+        if (files.contains(file.toLowerCase(Locale.ROOT))) shared.add(file);
+      }
+      if (!shared.isEmpty()) collisions.put(other, shared);
+    }
+    return collisions;
+  }
+
+  /**
+   * Class mods are mounted into the game's code rather than its resources, so they only collide with each other.
+   */
+  public static boolean isClassMod (Mod mod)
+  {
+    return mod instanceof ZipMod && ((ZipMod) mod).isClassType();
   }
 
   private void clearModList ()
@@ -718,6 +781,24 @@ public class ModManager
     private synchronized void clear ()
     {
       this.mods.clear();
+    }
+
+    private synchronized void sort (Comparator<Mod> comparator)
+    {
+      this.mods.sort(comparator);
+    }
+
+    /**
+     * Puts the mods in the given order.
+     * Mods not in the list are removed.
+     */
+    private synchronized void setOrder (List<Mod> order)
+    {
+      List<Mod> ordered = new ArrayList<>(order);
+      ordered.retainAll(this.mods);
+      for (Mod mod : this.mods) if (!ordered.contains(mod)) ordered.add(mod);
+      this.mods.clear();
+      this.mods.addAll(ordered);
     }
 
     /**

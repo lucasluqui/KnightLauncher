@@ -57,6 +57,21 @@ public class ModCard extends JPanel
   }
 
   /**
+   * The component to grab the card by and move it around.
+   */
+  public void setHandle (JComponent handle)
+  {
+    this.handle = handle;
+    handle.addMouseListener(hoverListener);
+    add(handle);
+  }
+
+  public JComponent getHandle ()
+  {
+    return this.handle;
+  }
+
+  /**
    * The component at the top right, to toggle the mod on and off.
    */
   public void setToggle (JComponent toggle)
@@ -67,13 +82,22 @@ public class ModCard extends JPanel
   }
 
   /**
-   * Adds a button to the bottom right row. The first one added is the rightmost.
+   * Adds a button to the bottom right row. The first one added is the rightmost. Hidden ones take no room.
    */
   public void addAction (JButton button)
   {
     actions.add(button);
     button.addMouseListener(hoverListener);
     add(button);
+  }
+
+  /**
+   * Outlines the card while it's picked up to be moved around.
+   */
+  public void setLifted (boolean lifted)
+  {
+    this.lifted = lifted;
+    repaint();
   }
 
   /**
@@ -91,6 +115,8 @@ public class ModCard extends JPanel
     int w = getWidth();
     int h = getHeight();
 
+    if (handle != null) handle.setBounds(0, 0, HANDLE_WIDTH, h);
+
     if (toggle != null) {
       Dimension size = toggle.getPreferredSize();
       toggle.setBounds(w - PADDING - size.width + Scale.px(4), PADDING - Scale.px(3), size.width, size.height);
@@ -98,6 +124,7 @@ public class ModCard extends JPanel
 
     int x = w - PADDING;
     for (JButton action : actions) {
+      if (!action.isVisible()) continue;
       x -= ACTION_SIZE;
       action.setBounds(x, h - PADDING - ACTION_SIZE, ACTION_SIZE, ACTION_SIZE);
       x -= ACTION_GAP;
@@ -136,6 +163,14 @@ public class ModCard extends JPanel
 
     paintTexts(g2d, w, h);
 
+    if (lifted) {
+      g2d.setColor(new Color(255, 255, 255, 110));
+      g2d.setStroke(new BasicStroke(Scale.px(1.5f)));
+      int x = bodyX();
+      g2d.draw(getShape(x + 0.75f, w - x - 1.5f, h - 1.5f));
+      if (handle != null) g2d.draw(getShape(0.75f, HANDLE_WIDTH - 1.5f, h - 1.5f));
+    }
+
     g2d.dispose();
   }
 
@@ -149,17 +184,19 @@ public class ModCard extends JPanel
     Graphics2D bg = HiDpi.createGraphics(buffer, w, h);
     bg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     bg.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+    int x = bodyX();
     bg.setColor(lerp(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_DARK, CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND, t));
-    bg.fill(getShape(w, h));
+    bg.fill(getShape(x, w - x, h));
+    if (handle != null) bg.fill(getShape(0, HANDLE_WIDTH, h));
 
-    // A blurred copy of the image tints the whole card with its colors.
+    // A blurred copy of the image tints the whole body with its colors.
     if (ambient != null) {
       float opacity = dimmed ? 0.06f : lerp(0.2f, 0.3f, t);
       bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, opacity));
-      bg.drawImage(ambient, 0, 0, w, h, null);
+      bg.drawImage(ambient, x, 0, w - x, h, null);
     }
 
-    // The image itself fills a square against the left edge, fading out to the right into the card.
+    // The image itself fills a square against the body's left edge, fading out to the right into the card.
     if (image != null) {
       BufferedImage splash = HiDpi.createBuffer(h, h, scale);
       Graphics2D sg = HiDpi.createGraphics(splash, h, h);
@@ -180,7 +217,7 @@ public class ModCard extends JPanel
 
       float opacity = dimmed ? 0.35f : 1f;
       bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, opacity));
-      bg.drawImage(splash, 0, 0, h, h, null);
+      bg.drawImage(splash, x, 0, h, h, null);
     }
     bg.dispose();
     return buffer;
@@ -189,9 +226,11 @@ public class ModCard extends JPanel
   private void paintTexts (Graphics2D g2d, int w, int h)
   {
     // Texts between the image and the controls on the right.
-    int textX = h + Scale.px(4);
+    int textX = bodyX() + h + Scale.px(4);
+    int visibleActions = 0;
+    for (JButton action : actions) if (action.isVisible()) visibleActions++;
     int controlsWidth = Math.max(toggle == null ? 0 : toggle.getPreferredSize().width,
-      actions.size() * (ACTION_SIZE + ACTION_GAP));
+      visibleActions * (ACTION_SIZE + ACTION_GAP));
     int textWidth = w - textX - PADDING - controlsWidth - Scale.px(16);
 
     Font titleFont = Fonts.getFont("default", 16.0f, Font.BOLD);
@@ -277,9 +316,17 @@ public class ModCard extends JPanel
     hoverTimer.start();
   }
 
-  private static Shape getShape (int width, int height)
+  /**
+   * Where the card's body starts, after the handle's pill if it has one.
+   */
+  private int bodyX ()
   {
-    return new RoundRectangle2D.Float(0, 0, width, height, CORNER_RADIUS * 2, CORNER_RADIUS * 2);
+    return handle == null ? 0 : HANDLE_WIDTH + HANDLE_GAP;
+  }
+
+  private static Shape getShape (float x, float width, float height)
+  {
+    return new RoundRectangle2D.Float(x, 0, width, height, CORNER_RADIUS * 2, CORNER_RADIUS * 2);
   }
 
   /**
@@ -348,12 +395,14 @@ public class ModCard extends JPanel
   private final BufferedImage ambient;
   private JLabel badgeLabel;
   private JComponent toggle;
+  private JComponent handle;
   private final List<JButton> actions = new ArrayList<>();
   private boolean hovered = false;
   private float hoverProgress = 0f;
   private float hoverTarget = 0f;
   private Timer hoverTimer;
   private boolean dimmed = false;
+  private boolean lifted = false;
 
   // The last rendered background, and what it was rendered for.
   private BufferedImage background;
@@ -381,6 +430,9 @@ public class ModCard extends JPanel
   private static final int ACTION_GAP = Scale.px(6);
 
   private static final int BADGE_HEIGHT = Scale.px(18);
+
+  private static final int HANDLE_WIDTH = Scale.px(34);
+  private static final int HANDLE_GAP = Scale.px(6);
 
   private static final int MAX_DESCRIPTION_LINES = 2;
 

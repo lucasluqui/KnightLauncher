@@ -6,6 +6,7 @@ import net.lingala.zip4j.model.FileHeader;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -160,6 +161,23 @@ public class ZipMod extends Mod
     return this.localeChanges;
   }
 
+  /**
+   * List only the files that passed through the filters and will actually be mounted.
+   */
+  @Override
+  public List<String> getFiles ()
+  {
+    if (this.files == null) {
+      List<String> files = new ArrayList<>();
+      for (Map.Entry<FileHeader, Integer> entry : fileHeaderData.getFileHeaders().entrySet()) {
+        if (entry.getValue() < 1) files.add(entry.getKey().getFileName());
+      }
+      Collections.sort(files);
+      this.files = files;
+    }
+    return this.files;
+  }
+
   public FileHeaderData getFileHeaderData ()
   {
     return this.fileHeaderData;
@@ -187,6 +205,7 @@ public class ZipMod extends Mod
 
   private final List<LocaleChange> localeChanges = new ArrayList<>();
   private final FileHeaderData fileHeaderData = new FileHeaderData();
+  private List<String> files;
   protected String type;
   protected Boolean hasInvalidFileHeaders;
 }

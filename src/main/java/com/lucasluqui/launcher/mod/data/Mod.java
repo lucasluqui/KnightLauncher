@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
 
 import static com.lucasluqui.launcher.mod.Log.log;
 
@@ -138,6 +140,14 @@ public abstract class Mod
         }
       }
     }
+  }
+
+  /**
+   * Files this mod places into the game when mounted.
+   */
+  public List<String> getFiles ()
+  {
+    return Collections.emptyList();
   }
 
   public String getWarningMessage ()

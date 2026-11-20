@@ -38,11 +38,16 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.lucasluqui.launcher.mod.ui.Log.log;
 
@@ -303,6 +308,8 @@ public class ModListUI extends BaseUI
     setupScreenScrolling();
     setupModDropping();
 
+    dragTimer = new Timer(15, _ -> stepDrag());
+
     updateModList(null);
   }
 
@@ -554,12 +561,19 @@ public class ModListUI extends BaseUI
     }
 
     modListPane.removeAll();
+    stopDrag();
+    slots.clear();
+    cardMods.clear();
+    cardY.clear();
+    collisionButtons.clear();
 
     BufferedImage defaultModImageBuffImg = ImageUtil.loadImageWithinJar("/rsrc/img/icon-default.png");
     defaultModImageBuffImg = ImageUtil.resizeImagePreserveTransparency(
       defaultModImageBuffImg, HiDpi.px(Scale.px(128)), HiDpi.px(Scale.px(128)));
 
+    int position = 0;
     for (Mod mod : _modManager.getModList()) {
+      position++;
 
       if (searchString != null) {
         // mod name or author doesn't match the search string, sayonara.
@@ -567,11 +581,15 @@ public class ModListUI extends BaseUI
           && !mod.getAuthor().toLowerCase().contains(searchString.toLowerCase())) continue;
       }
 
-      ModCard modCard = buildModCard(mod, defaultModImageBuffImg);
+      ModCard modCard = buildModCard(mod, defaultModImageBuffImg, position);
       modCard.setBounds(Scale.rect(0, count * CARD_STRIDE, CARD_WIDTH, ModCard.HEIGHT));
       modListPane.add(modCard);
+      slots.add(modCard);
+      cardMods.put(modCard, mod);
+      cardY.put(modCard, (float) modCard.getY());
       count++;
     }
+    refreshCollisions();
 
     int listHeight = Math.max(0, count * CARD_STRIDE - CARD_GAP);
     modListPane.setBounds(Scale.rect(25, LIST_Y, CARD_WIDTH, listHeight));
@@ -596,7 +614,10 @@ public class ModListUI extends BaseUI
     }
   }
 
-  private ModCard buildModCard (Mod mod, BufferedImage defaultModImageBuffImg)
+  /**
+   * @param position The mod's place in the list, starting at 1.
+   */
+  private ModCard buildModCard (Mod mod, BufferedImage defaultModImageBuffImg, int position)
   {
     // Badge text and colors depend on the mod type.
     String badgeText = null;
@@ -650,14 +671,33 @@ public class ModListUI extends BaseUI
         eventHandler.disableMod(mod);
       }
       modCard.setDimmed(!enabledCheckbox.isSelected());
+      refreshCollisions();
     });
     modCard.setToggle(enabledCheckbox);
+
+    // Grabbed to move the card around, showing where in the list it is.
+    JLabel handle = new JLabel(String.valueOf(position), FontIcon.of(FontAwesome.BARS, Scale.px(12), new Color(150, 155, 170)), SwingConstants.CENTER);
+    handle.setFont(Fonts.getFont("default", 13.0f, Font.BOLD));
+    handle.setForeground(Color.WHITE);
+    handle.setVerticalTextPosition(SwingConstants.TOP);
+    handle.setHorizontalTextPosition(SwingConstants.CENTER);
+    handle.setIconTextGap(Scale.px(6));
+    handle.setEnabled(!isSearching());
+    handle.setToolTipText(_localeManager.getValue(isSearching() ? "m.modlist_order_hint_search" : "m.modlist_order_hint"));
+    modCard.setHandle(handle);
+    installHandleDrag(modCard, handle);
 
     // Icon-only actions, from right to left.
     JButton removeButton = createCardActionButton(FontAwesome.TRASH, Color.WHITE, CustomColors.DANGER,
       _localeManager.getValue("m.remove_mod", mod.getDisplayName()));
     removeButton.addActionListener(l -> eventHandler.removeModEvent(mod));
     modCard.addAction(removeButton);
+
+    JButton collisionButton = createCardActionButton(FontAwesome.FILES_O, Color.BLACK, CustomColors.WARNING, null);
+    collisionButton.setVisible(false);
+    collisionButton.addActionListener(l -> eventHandler.showConflictsEvent(mod));
+    modCard.addAction(collisionButton);
+    collisionButtons.put(mod, collisionButton);
 
     if (mod.showWarningMessage()) {
       JButton warningButton = createCardActionButton(FontAwesome.EXCLAMATION_TRIANGLE, Color.BLACK, CustomColors.WARNING,
@@ -674,6 +714,175 @@ public class ModListUI extends BaseUI
     }
 
     return modCard;
+  }
+
+  /**
+   * Shows the conflict button on the cards of enabled mods sharing files with other enabled mods.
+   */
+  private void refreshCollisions ()
+  {
+    for (Map.Entry<Mod, JButton> entry : collisionButtons.entrySet()) {
+      Map<Mod, List<String>> collisions = _modManager.getCollisions(entry.getKey());
+      List<String> names = new ArrayList<>();
+      for (Mod other : collisions.keySet()) names.add(other.getDisplayName());
+
+      JButton button = entry.getValue();
+      button.setVisible(!collisions.isEmpty());
+      button.setToolTipText(_localeManager.getValue("m.mod_conflicts_tooltip", String.join(", ", names)));
+      button.getParent().revalidate();
+      button.getParent().repaint();
+    }
+  }
+
+  private boolean isSearching ()
+  {
+    return searchBox != null && !searchBox.getText().trim().isEmpty();
+  }
+
+  /**
+   * Dragging the handle moves the card around the list to change the mount priority.
+   */
+  private void installHandleDrag (ModCard card, JComponent handle)
+  {
+    // The handle sits at the card's top left, so its coordinates are the card's.
+    if (handle.isEnabled()) handle.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+    MouseAdapter drag = new MouseAdapter()
+    {
+      @Override
+      public void mousePressed (MouseEvent e)
+      {
+        if (SwingUtilities.isLeftMouseButton(e) && canReorder()) {
+          startDrag(card, e.getY());
+          dragMouse = e.getLocationOnScreen();
+        }
+      }
+
+      @Override
+      public void mouseDragged (MouseEvent e)
+      {
+        if (dragCard == card) dragMouse = e.getLocationOnScreen();
+      }
+
+      @Override
+      public void mouseReleased (MouseEvent e)
+      {
+        if (dragCard == card) endDrag();
+      }
+    };
+    handle.addMouseListener(drag);
+    handle.addMouseMotionListener(drag);
+  }
+
+  /**
+   * Only the whole list can be reordered, a filtered one leaves it unclear where the hidden mods would go.
+   */
+  private boolean canReorder ()
+  {
+    return slots.size() > 1 && !isSearching() && addModButton.isEnabled();
+  }
+
+  private void startDrag (ModCard card, int grabY)
+  {
+    if (droppedCard != null) droppedCard.setLifted(false);
+    droppedCard = null;
+    dragCard = card;
+    dragGrabY = grabY;
+    card.setLifted(true);
+    // Drawn over the others.
+    modListPane.setComponentZOrder(card, 0);
+    dragTimer.start();
+  }
+
+  private void endDrag ()
+  {
+    droppedCard = dragCard;
+    dragCard = null;
+    dragMouse = null;
+
+    List<Mod> order = new ArrayList<>();
+    for (ModCard card : slots) order.add(cardMods.get(card));
+    if (!order.equals(_modManager.getModList())) {
+      eventHandler.reorderMods(order);
+      // Which mod's files win depends on the order.
+      refreshCollisions();
+    }
+  }
+
+  private void stopDrag ()
+  {
+    if (dragTimer != null) dragTimer.stop();
+    dragCard = null;
+    dragMouse = null;
+    droppedCard = null;
+  }
+
+  /**
+   * Dragging "frame", picked up card rendering, and re-formats the list to accommodate.
+   */
+  private void stepDrag ()
+  {
+    if (dragCard != null && dragMouse != null) {
+      autoScroll();
+      Point mouse = new Point(dragMouse);
+      SwingUtilities.convertPointFromScreen(mouse, modListPane);
+      float y = Math.max(0, Math.min(mouse.y - dragGrabY, slotY(slots.size() - 1)));
+      cardY.put(dragCard, y);
+
+      int slot = Math.max(0, Math.min(slots.size() - 1, Math.round(y / Scale.px((float) CARD_STRIDE))));
+      if (slot != slots.indexOf(dragCard)) {
+        slots.remove(dragCard);
+        slots.add(slot, dragCard);
+        // Only the whole list can be dragged, so slots are mount positions.
+        for (int i = 0; i < slots.size(); i++) ((JLabel) slots.get(i).getHandle()).setText(String.valueOf(i + 1));
+      }
+    }
+
+    boolean settled = true;
+    for (int i = 0; i < slots.size(); i++) {
+      ModCard card = slots.get(i);
+      float y = cardY.get(card);
+      if (card != dragCard) {
+        float target = slotY(i);
+        y += (target - y) * 0.3f;
+        if (Math.abs(target - y) < 0.5f) {
+          y = target;
+        } else {
+          settled = false;
+        }
+        cardY.put(card, y);
+      }
+      card.setLocation(card.getX(), Math.round(y));
+    }
+
+    if (dragCard == null && settled) {
+      dragTimer.stop();
+      if (droppedCard != null) droppedCard.setLifted(false);
+      droppedCard = null;
+    }
+  }
+
+  private float slotY (int slot)
+  {
+    return Scale.px(slot * CARD_STRIDE);
+  }
+
+  /**
+   * Scrolls while the mouse is near the top or bottom of the view, faster the closer it gets.
+   */
+  private void autoScroll ()
+  {
+    JViewport viewport = screenScrollPane.getViewport();
+    Point mouse = new Point(dragMouse);
+    SwingUtilities.convertPointFromScreen(mouse, viewport);
+
+    int edge = Scale.px(60);
+    float speed = 0;
+    if (mouse.y < edge) {
+      speed = -Math.min(1f, (edge - mouse.y) / (float) edge);
+    } else if (mouse.y > viewport.getHeight() - edge) {
+      speed = Math.min(1f, (mouse.y - viewport.getHeight() + edge) / (float) edge);
+    }
+    if (speed != 0) screenScrollPane.scrollToImmediately(viewport.getViewPosition().y + Math.round(speed * Scale.px(16)));
   }
 
   private JButton createCardActionButton (FontAwesome icon, Color foreground, Color background, String tooltip)
@@ -723,6 +932,17 @@ public class ModListUI extends BaseUI
   private JPanel floatingBar;
   private JButton scrollToTopButton;
   private boolean draggingFiles = false;
+
+  // The list's cards in their current slots, and where each is drawn while they move around.
+  private final List<ModCard> slots = new ArrayList<>();
+  private final Map<ModCard, Mod> cardMods = new HashMap<>();
+  private final Map<ModCard, Float> cardY = new HashMap<>();
+  private final Map<Mod, JButton> collisionButtons = new LinkedHashMap<>();
+  private Timer dragTimer;
+  private ModCard dragCard;
+  private ModCard droppedCard;
+  private int dragGrabY;
+  private Point dragMouse;
 
   public JPanel modListPane = new JPanel();
   public JTextField floatingSearchBox = new FractionalText.Field();

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static com.lucasluqui.launcher.mod.ui.Log.log;
 
@@ -147,6 +148,11 @@ public class ModListEventHandler
     mod.setEnabled(true);
     _modManager.setMountRequired(true);
     _modManager.setRebuildRequired(true);
+  }
+
+  public void reorderMods (List<Mod> mods)
+  {
+    _modManager.setModOrder(mods);
   }
 
   public void showDirectoriesWarning (boolean show)
@@ -280,6 +286,20 @@ public class ModListEventHandler
   {
     Dialog.push(
       _localeManager.getValue("m.mod_warnings", new String[]{mod.getDisplayName(), mod.getWarningMessage()}), _localeManager.getValue("t.warning"), JOptionPane.WARNING_MESSAGE);
+  }
+
+  /**
+   * Lists the mod's files that mods higher up the list override, by mod.
+   */
+  public void showConflictsEvent (Mod mod)
+  {
+    StringBuilder message = new StringBuilder(mod.getDisplayName());
+    for (Map.Entry<Mod, List<String>> entry : _modManager.getCollisions(mod).entrySet()) {
+      message.append("\n\n").append(_localeManager.getValue("m.mod_conflict",
+        new String[]{entry.getKey().getDisplayName(), String.valueOf(entry.getValue().size())}));
+      message.append("\n").append(String.join("\n", entry.getValue()));
+    }
+    Dialog.push(message.toString(), _localeManager.getValue("m.mod_conflicts"), JOptionPane.WARNING_MESSAGE);
   }
 
   private SystemFileChooser getModFileChooser ()
