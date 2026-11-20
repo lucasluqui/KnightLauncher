@@ -16,6 +16,8 @@ import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.launcher.playercount.ui.PlayerCountUI;
+import com.lucasluqui.launcher.playercount.ui.handler.PlayerCountEventHandler;
 import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.util.*;
@@ -320,16 +322,12 @@ public class LauncherEventHandler
    */
   private void showOfficialPlayerCount (Server official)
   {
-    if (official.playerCountUrl == null) return;
+    if (!_flamingoManager.isOnline()) return;
 
-    // Decrease the font size if the player count string is "too" long.
-    float fontSize = official.playerCountUrl.length() > 5 ? 12.0f : 13.0f;
-    ui.playerCountLabel.setFont(Fonts.getFont("default", fontSize, Font.BOLD | Font.ITALIC));
-
-    ui.playerCountLabel.setText(official.playerCountUrl);
-    ui.playerCountLabel.setVisible(true);
-    ui.playerCountLabel.setIcon(null);
-    ui.playerCountTooltipButton.setVisible(true);
+    ui.officialPlayerCountLabel.setText(official.playerCount < 0 ? "???" : String.valueOf(official.playerCount));
+    ui.officialPlayerCountLabel.setIcon(PlayerCountUI.trendIcon(official.playerCountTrend, 13));
+    ui.officialPlayerCountLabel.setToolTipText(PlayerCountUI.trendText(_localeManager, official.playerCountTrend));
+    ui.setOfficialPlayerCountLoading(false);
   }
 
   /**
@@ -353,17 +351,19 @@ public class LauncherEventHandler
     // Back to the loading animation while we fetch the new count.
     SwingUtilities.invokeLater(() -> {
       if (_flamingoManager.getSelectedServer() == official) {
-        ui.playerCountLabel.setText("");
-        ui.playerCountLabel.setIcon(new LoadingIcon(16));
+        ui.setOfficialPlayerCountLoading(true);
       }
     });
 
-    PlayerCount playerCount = _flamingoManager.fetchOfficialPlayerCount(official);
-    log.info("Refreshed player count", "count", official.playerCountUrl);
+    _flamingoManager.fetchOfficialPlayerCount(official);
+    log.info("Refreshed player count", "count", official.playerCount);
 
     SwingUtilities.invokeLater(() -> {
-      if (playerCount != null) ui.updatePlayerCountTooltip(playerCount);
       if (_flamingoManager.getSelectedServer() == official) showOfficialPlayerCount(official);
+
+      // Keep the history in step with the count, if it's open.
+      PlayerCountUI playerCountUI = _ctx.getApp().getUI(PlayerCountUI.class);
+      if (playerCountUI.isShowing()) playerCountUI.eventHandler.refreshHistory();
     });
   }
 
@@ -375,7 +375,9 @@ public class LauncherEventHandler
       if (selectedServer.isOfficial()) {
         ui.setLaunchEnabled(selectedServer.enabled == 1);
         ui.selectedServerLabel.setText("Official");
-        ui.playerCountLabel.setVisible(true);
+        ui.playerCountTitleLabel.setVisible(false);
+        ui.playerCountLabel.setVisible(false);
+        ui.officialPlayerCountButton.setVisible(true);
         showOfficialPlayerCount(selectedServer);
         startOfficialPlayerCountRefresh();
         ui.serverInfoButton.setEnabled(false);
@@ -390,9 +392,9 @@ public class LauncherEventHandler
         ui.serverInfoButton.setText(selectedServer.name);
 
         // TODO: Fetch player count.
-        ui.playerCountLabel.setText("??? ");
-        ui.playerCountLabel.setIcon(null);
-        ui.playerCountTooltipButton.setVisible(false);
+        ui.playerCountTitleLabel.setVisible(true);
+        ui.playerCountLabel.setVisible(true);
+        ui.officialPlayerCountButton.setVisible(false);
       }
 
       if (selectedServer.events != null || selectedServer.defaultEvent != null) {
@@ -1330,7 +1332,7 @@ public class LauncherEventHandler
   private volatile boolean _launchBlockedByGame = false;
 
   // How often to refresh the player count.
-  private static final int PLAYER_COUNT_REFRESH_INTERVAL = 15 * 60 * 1000;
+  private static final long PLAYER_COUNT_REFRESH_INTERVAL = PlayerCountEventHandler.REFRESH_INTERVAL;
 
   private volatile boolean _launcherHidden = false;
 

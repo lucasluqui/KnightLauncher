@@ -1,11 +1,13 @@
 package com.lucasluqui.launcher.ui;
 
 import com.lucasluqui.swing.FontIcon;
+import com.lucasluqui.swing.HandCursor;
 import com.lucasluqui.swing.HiDpi;
 import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.launcher.*;
 import com.lucasluqui.launcher.changelog.ui.ChangelogUI;
+import com.lucasluqui.launcher.playercount.ui.PlayerCountUI;
 import com.lucasluqui.launcher.editor.ui.EditorsUI;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
@@ -28,6 +30,7 @@ import com.google.inject.Inject;
 import jiconfont.icons.font_awesome.FontAwesome;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
@@ -195,6 +198,7 @@ public class LauncherUI extends BaseUI
     launcherLogo.setBounds(Scale.rect(0, -27, 251, 200));
     launcherLogo.setHorizontalAlignment(SwingConstants.CENTER);
     launcherLogo.setIcon(new ImageIcon(launcherLogoImage));
+    HandCursor.install(launcherLogo);
     sidePane.add(launcherLogo);
     launcherLogo.addMouseListener(new MouseListener()
     {
@@ -256,34 +260,66 @@ public class LauncherUI extends BaseUI
     serverInfoButton.addActionListener(l -> this.eventHandler.displaySelectedServerInfo());
     sidePane.add(serverInfoButton);
 
+    // Third party servers have no player count to show yet, just a placeholder next to the title.
     Icon playerCountTitleIcon = FontIcon.of(FontAwesome.USERS, Scale.px(17), CustomColors.INTERFACE_DEFAULT);
-    JLabel playerCountTitleLabel = new JLabel(_localeManager.getValue("m.players_online"));
+    playerCountTitleLabel = new JLabel(_localeManager.getValue("m.players_online"));
     playerCountTitleLabel.setIcon(playerCountTitleIcon);
     playerCountTitleLabel.setBounds(Scale.rect(35, 188, 135, 20));
     playerCountTitleLabel.setFont(Fonts.getFont("default", 13.0f, Font.BOLD | Font.ITALIC));
+    playerCountTitleLabel.setVisible(false);
     sidePane.add(playerCountTitleLabel);
 
-    playerCountLabel = new JLabel("");
-    playerCountLabel.setIcon(new LoadingIcon(16));
+    playerCountLabel = new JLabel("??? ");
     playerCountLabel.setBounds(Scale.rect(25, 188, 190, 20));
     playerCountLabel.setFont(Fonts.getFont("default", 13.0f, Font.BOLD | Font.ITALIC));
     playerCountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     playerCountLabel.setVisible(false);
     sidePane.add(playerCountLabel);
 
-    playerCountTooltipButton = new JButton(_localeManager.getValue("b.learn_more"));
-    playerCountTooltipButton.setBounds(Scale.rect(35, 213, 178, 25));
-    playerCountTooltipButton.setEnabled(true);
-    playerCountTooltipButton.setFocusable(false);
-    playerCountTooltipButton.setFocusPainted(false);
-    playerCountTooltipButton.setBorderPainted(false);
-    playerCountTooltipButton.setBackground(CustomColors.INTERFACE_BUTTON_BACKGROUND);
-    playerCountTooltipButton.setForeground(Color.WHITE);
-    playerCountTooltipButton.putClientProperty(FlatClientProperties.STYLE,
-      "arc: 999; borderWidth: 0");
-    updatePlayerCountTooltip(null);
-    sidePane.add(playerCountTooltipButton);
-    playerCountTooltipButton.setVisible(false);
+    // The official server's player count, which opens up its history. Laid out like the history's stat cards,
+    // count first.
+    officialPlayerCountLabel = new JLabel("");
+    officialPlayerCountLabel.setFont(Fonts.getFont("default", 18.0f, Font.BOLD));
+    officialPlayerCountLabel.setForeground(Color.WHITE);
+    officialPlayerCountLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+    officialPlayerCountLabel.setIconTextGap(Scale.px(6));
+
+    JLabel officialPlayerCountCaption = new JLabel(_localeManager.getValue("m.players_online"));
+    officialPlayerCountCaption.setFont(Fonts.getFont("default", 11.0f, Font.PLAIN));
+    officialPlayerCountCaption.setForeground(CustomColors.INTERFACE_DEFAULT);
+    officialPlayerCountCaption.setIcon(FontIcon.of(FontAwesome.USERS, Scale.px(14), CustomColors.INTERFACE_DEFAULT));
+
+    JPanel officialPlayerCountText = new JPanel();
+    officialPlayerCountText.setLayout(new BoxLayout(officialPlayerCountText, BoxLayout.Y_AXIS));
+    officialPlayerCountText.setOpaque(false);
+    officialPlayerCountText.add(Box.createVerticalGlue());
+    officialPlayerCountText.add(officialPlayerCountLabel);
+    officialPlayerCountText.add(officialPlayerCountCaption);
+    officialPlayerCountText.add(Box.createVerticalGlue());
+
+    JPanel officialPlayerCountContent = new JPanel(new BorderLayout());
+    officialPlayerCountContent.setOpaque(false);
+    officialPlayerCountContent.add(officialPlayerCountText, BorderLayout.CENTER);
+    officialPlayerCountContent.add(new JLabel(FontIcon.of(FontAwesome.ANGLE_RIGHT, Scale.px(16), CustomColors.INTERFACE_DEFAULT)), BorderLayout.EAST);
+
+    // Just the loading circle in the middle until there's a count to show. The margin is wider on the left,
+    // so this evens it out.
+    JLabel officialPlayerCountLoading = new JLabel(new LoadingIcon(16), SwingConstants.CENTER);
+    officialPlayerCountLoading.setBorder(new EmptyBorder(0, 0, 0, Scale.px(4)));
+
+    officialPlayerCountButton = new JButton();
+    officialPlayerCountButton.setLayout(new CardLayout());
+    officialPlayerCountButton.setBounds(Scale.rect(35, 177, 178, 58));
+    officialPlayerCountButton.setFocusable(false);
+    officialPlayerCountButton.setFocusPainted(false);
+    officialPlayerCountButton.setBackground(CustomColors.INTERFACE_SIDEPANE_SUBBACKGROUND);
+    officialPlayerCountButton.putClientProperty(FlatClientProperties.STYLE,
+      "arc: 15; borderWidth: 0; margin: 0,18,0,14;"
+        + " hoverBackground: " + ColorUtil.colorToHexString(CustomColors.INTERFACE_MAINPANE_BACKGROUND));
+    officialPlayerCountButton.add(officialPlayerCountLoading, OFFICIAL_PLAYER_COUNT_LOADING);
+    officialPlayerCountButton.add(officialPlayerCountContent, OFFICIAL_PLAYER_COUNT_CONTENT);
+    officialPlayerCountButton.addActionListener(l -> _ctx.getApp().getUI(PlayerCountUI.class).open());
+    sidePane.add(officialPlayerCountButton);
 
     // silverweave button needs the group to sit higher to stay centered between its neighbors.
     int sideButtonsY = 260;
@@ -1094,34 +1130,17 @@ public class LauncherUI extends BaseUI
     if (this.silverweaveButton != null) this.silverweaveButton.setEnabled(!block);
   }
 
-  public void updatePlayerCountTooltip (PlayerCount playerCount)
+  /**
+   * Swaps the official server's player count for a loading circle, or back.
+   */
+  public void setOfficialPlayerCountLoading (boolean loading)
   {
-    // when we got no player count, do nothing.
-    if (playerCount == null) {
-      return;
-    }
-
-    String playerCountTooltipTitle = _localeManager.getValue("m.players_online");
-    String playerCountTooltipText = _localeManager.getValue(
-      "m.players_online_text",
-      new String[] {
-        String.valueOf(playerCount.getProdCount()),
-        String.valueOf(playerCount.getProdEstimated()),
-        String.valueOf(playerCount.getPreviewCount()),
-        String.valueOf(playerCount.getPreviewEstimated())
-      }
-    );
-
-    playerCountTooltipButton.setToolTipText(playerCountTooltipTitle);
-
-    // This gets called every time the player count is refreshed, so get rid of the previous count's listener.
-    for (ActionListener listener : playerCountTooltipButton.getActionListeners()) {
-      playerCountTooltipButton.removeActionListener(listener);
-    }
-    playerCountTooltipButton.addActionListener(l -> {
-      Dialog.push(playerCountTooltipText, playerCountTooltipTitle, JOptionPane.INFORMATION_MESSAGE);
-    });
+    ((CardLayout) officialPlayerCountButton.getLayout()).show(officialPlayerCountButton,
+      loading ? OFFICIAL_PLAYER_COUNT_LOADING : OFFICIAL_PLAYER_COUNT_CONTENT);
   }
+
+  private static final String OFFICIAL_PLAYER_COUNT_LOADING = "loading";
+  private static final String OFFICIAL_PLAYER_COUNT_CONTENT = "content";
 
   @Inject public LauncherEventHandler eventHandler;
 
@@ -1146,7 +1165,9 @@ public class LauncherUI extends BaseUI
   public JButton modButton;
   public JButton editorsButton;
   public JButton silverweaveButton;
-  public JButton playerCountTooltipButton;
+  public JButton officialPlayerCountButton;
+  public JLabel officialPlayerCountLabel;
+  public JLabel playerCountTitleLabel;
   public JLabel playerCountLabel;
   public JLabel selectedServerLabel;
   public JButton serverInfoButton;

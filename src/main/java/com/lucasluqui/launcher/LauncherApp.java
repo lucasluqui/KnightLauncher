@@ -6,6 +6,7 @@ import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
 import com.lucasluqui.launcher.changelog.data.Release;
 import com.lucasluqui.launcher.changelog.ui.ChangelogUI;
+import com.lucasluqui.launcher.playercount.ui.PlayerCountUI;
 import com.lucasluqui.launcher.editor.ui.EditorsUI;
 import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
@@ -61,14 +62,14 @@ public class LauncherApp
 {
   public LauncherApp ()
   {
-    this.args = null;
-    this.injector = null;
+    this._args = null;
+    this._injector = null;
   }
 
   public LauncherApp (String[] args, Injector injector)
   {
-    this.args = args;
-    this.injector = injector;
+    this._args = args;
+    this._injector = injector;
   }
 
   public static void main (String[] args)
@@ -253,6 +254,7 @@ public class LauncherApp
     this.initUI(ModListUI.class);
     this.initUI(EditorsUI.class);
     this.initUI(ChangelogUI.class);
+    this.initUI(PlayerCountUI.class);
   }
 
   private <T extends BaseUI> void initUI(Class<T> clazz)
@@ -260,7 +262,7 @@ public class LauncherApp
     try {
       EventQueue.invokeAndWait(() -> {
         try {
-          T ui = injector.getInstance(clazz);
+          T ui = _injector.getInstance(clazz);
           ui.init();
           this.registerUI(ui);
         } catch (Exception e) {
@@ -300,17 +302,17 @@ public class LauncherApp
     try {
       EventQueue.invokeAndWait(() -> {
         try {
-          JVMPatcher jvmPatcher = injector.getInstance(JVMPatcher.class);
+          JVMPatcher jvmPatcher = _injector.getInstance(JVMPatcher.class);
 
           final String path;
           final boolean legacy;
 
-          if (args.length > 1) {
+          if (_args.length > 1) {
             // If there are more than one argument, it means this is a forced JVM patch, and there's extra info we should parse.
             // Set the path dir to wherever we're being forced to patch to, and set legacy to only allow legacy JVMs.
             // This is primarily used for patching when a third party server was selected.
-            path = args[1];
-            legacy = Boolean.parseBoolean(args[2]);
+            path = _args[1];
+            legacy = Boolean.parseBoolean(_args[2]);
           } else {
             // Organic JVM patch.
             path = LauncherGlobals.USER_DIR;
@@ -334,8 +336,8 @@ public class LauncherApp
     try {
       EventQueue.invokeAndWait(() -> {
         try {
-          Updater updater = injector.getInstance(Updater.class);
-          updater.init(this.args[1]);
+          Updater updater = _injector.getInstance(Updater.class);
+          updater.init(this._args[1]);
         } catch (Exception e) {
           log.error(e);
         }
@@ -702,7 +704,7 @@ public class LauncherApp
   private boolean requiresJVMPatch ()
   {
     // First see if we're being forced to patch.
-    if (this.args.length > 0 && this.args[0].equals("forceJVMPatch")) {
+    if (this._args.length > 0 && this._args[0].equals("forceJVMPatch")) {
       return true;
     }
 
@@ -726,7 +728,7 @@ public class LauncherApp
 
   private boolean requiresUpdate ()
   {
-    return this.args.length > 0 && this.args[0].equals("update");
+    return this._args.length > 0 && this._args[0].equals("update");
   }
 
   private void loadOnline ()
@@ -739,22 +741,6 @@ public class LauncherApp
         }
       }
     });
-  }
-
-  public PlayerCount getPlayerCount ()
-  {
-    int prodSteamPlayers = SteamUtil.getCurrentPlayers("99900"); // Spiral Knights app
-    int previewSteamPlayers = SteamUtil.getCurrentPlayers("99920"); // Spiral Knights Preview app
-
-    PlayerCount playerCount = new PlayerCount(prodSteamPlayers, previewSteamPlayers);
-
-    if (prodSteamPlayers == 0) {
-      // While Steam is down it will return 0 for any game's player count. When that's the case
-      // simply return null and let the launcher handle the rest.
-      return null;
-    } else {
-      return playerCount;
-    }
   }
 
   @SuppressWarnings("all")
@@ -820,7 +806,7 @@ public class LauncherApp
       if (Settings.autoUpdate) {
         // Check if we're coming from a failed update
         // In that case do not autoupdate even if all other conditions matched.
-        boolean updateFailed = this.args.length > 0 && this.args[0].equals("updateFailed");
+        boolean updateFailed = this._args.length > 0 && this._args[0].equals("updateFailed");
         if (!updateFailed) {
           doUpdate(this._latestRelease);
         }
@@ -1054,10 +1040,9 @@ public class LauncherApp
   @Inject protected KeyboardController _keyboardController;
   @Inject protected RuntimeManager _runtimeManager;
 
+
   protected String _latestRelease = null;
   protected List<Release> _releases = new ArrayList<>();
-
-  private static final int MAX_RELEASES = 5;
 
   private final Map<Class<? extends BaseUI>, BaseUI> _uiMap = new HashMap<>();
   private final List<Class<? extends BaseUI>> _uiHistory = new ArrayList<>();
@@ -1065,9 +1050,11 @@ public class LauncherApp
   // Held for as long as the launcher runs so no other instance can start.
   private FileLock _instanceLock;
 
+  private final String[] _args;
+  private final Injector _injector;
+
+  private static final int MAX_RELEASES = 5;
+
   // How long to wait for a previous instance to exit when restarting.
   private static final int INSTANCE_LOCK_TIMEOUT = 5000;
-
-  private final String[] args;
-  private final Injector injector;
 }

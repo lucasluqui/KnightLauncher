@@ -2,9 +2,6 @@ package com.lucasluqui.util;
 
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.WinReg;
-import org.json.JSONObject;
-
-import java.awt.*;
 
 import static com.lucasluqui.util.Log.log;
 
@@ -47,15 +44,6 @@ public class SteamUtil
   {
     String steamPath = getSteamPath();
     return steamPath != null ? steamPath + "/steamapps/common/Spiral Knights" : null;
-  }
-
-  public static int getCurrentPlayers (String id)
-  {
-    String rawResponse = INetUtil.getWebpageContent("https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=" + id);
-    if (rawResponse == null) return 0;
-    JSONObject jsonResponse = new JSONObject(rawResponse);
-    String currentPlayers = String.valueOf(jsonResponse.getJSONObject("response").getInt("player_count"));
-    return Integer.parseInt(currentPlayers);
   }
 
   public static boolean isRunningInSteamapps ()

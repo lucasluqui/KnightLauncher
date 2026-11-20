@@ -1,7 +1,6 @@
 package com.lucasluqui.launcher.flamingo.data;
 
 import com.lucasluqui.launcher.LauncherGlobals;
-import com.lucasluqui.launcher.setting.Log;
 import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.ZipUtil;
 
@@ -35,6 +34,12 @@ public class Server
   public String deployUrl;
 
   public String playerCountUrl;
+
+  // Estimated player count, -1 when unknown.
+  public int playerCount = -1;
+
+  // Whether the player count is going up (1), down (-1) or neither (0).
+  public int playerCountTrend = 0;
 
   public String siteUrl;
 
@@ -244,6 +249,8 @@ public class Server
       ", deployMethod=" + deployMethod +
       ", deployUrl='" + deployUrl + '\'' +
       ", playerCountUrl='" + playerCountUrl + '\'' +
+      ", playerCount=" + playerCount +
+      ", playerCountTrend=" + playerCountTrend +
       ", siteUrl='" + siteUrl + '\'' +
       ", communityUrl='" + communityUrl + '\'' +
       ", sourceCodeUrl='" + sourceCodeUrl + '\'' +

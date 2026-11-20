@@ -18,6 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -87,6 +88,8 @@ public class FlamingoManager
         server.deployMethod = serverJson.getInt("deployMethod");
         server.deployUrl = serverJson.getString("deployUrl");
         server.playerCountUrl = serverJson.getString("playerCountUrl");
+        server.playerCount = serverJson.optInt("playerCount", -1);
+        server.playerCountTrend = serverJson.optInt("playerCountTrend", 0);
         server.siteUrl = serverJson.getString("siteUrl");
         server.communityUrl = serverJson.getString("communityUrl");
         server.sourceCodeUrl = serverJson.getString("sourceCodeUrl");
@@ -175,16 +178,19 @@ public class FlamingoManager
       .showWarning(_localeManager.getValue("error.flamingo_offline"));
   }
 
-  /**
-   * Fetches the current player count from Steam and stores the estimated total in the given official server.
-   *
-   * @return The player count, or null when Steam didn't give us one.
-   */
-  public PlayerCount fetchOfficialPlayerCount (Server official)
+  public void fetchOfficialPlayerCount (Server official)
   {
-    PlayerCount playerCount = _ctx.getApp().getPlayerCount();
-    official.playerCountUrl = playerCount == null ? "???" : "~" + playerCount.getEstimated() + " ";
-    return playerCount;
+    JSONObject response = sendRequest("GET", "/player-count/", new String[]{});
+    official.playerCount = response == null ? -1 : response.optInt("playerCount", -1);
+    official.playerCountTrend = response == null ? 0 : response.optInt("trend", 0);
+  }
+
+  /**
+   * Fetches the official server's player count history, bucketed into days and months in our time zone.
+   */
+  public JSONObject fetchPlayerCountHistory ()
+  {
+    return sendRequest("GET", "/player-count/history/", new String[]{"tz=" + ZoneId.systemDefault().getId()});
   }
 
   public Server findServerByName (String serverName)
@@ -250,11 +256,8 @@ public class FlamingoManager
     if (newServerList != null) {
       for (Server server : newServerList) {
         if (server.name.equalsIgnoreCase("Official")) {
-          PlayerCount playerCount = fetchOfficialPlayerCount(official);
-
-          // TODO: Too hacky, why not just have the values lie in the server object itself?
-          if (playerCount != null) _ctx.getApp().getUI(LauncherUI.class).updatePlayerCountTooltip(playerCount);
-
+          official.playerCount = server.playerCount;
+          official.playerCountTrend = server.playerCountTrend;
           official.maintenanceStartsAt = server.maintenanceStartsAt;
           official.maintenanceEndsAt = server.maintenanceEndsAt;
           official.defaultEvent = server.defaultEvent;
