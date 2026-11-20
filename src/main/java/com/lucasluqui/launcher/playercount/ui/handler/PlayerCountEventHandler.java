@@ -24,7 +24,7 @@ public class PlayerCountEventHandler
   public void loadHistory ()
   {
     long now = System.currentTimeMillis();
-    if (now - _lastLoad < REFRESH_INTERVAL) return;
+    if (now - _lastLoad < _refreshInterval) return;
     _lastLoad = now;
 
     ui.showLoading();
@@ -51,11 +51,19 @@ public class PlayerCountEventHandler
     // empty.
   }
 
+  /**
+   * How often the player count is refreshed, in milliseconds.
+   */
+  public long getRefreshInterval ()
+  {
+    return _refreshInterval;
+  }
+
   @Inject private PlayerCountUI ui;
   @Inject protected FlamingoManager _flamingoManager;
   protected LocaleManager _localeManager;
 
   private long _lastLoad = 0;
 
-  public static final long REFRESH_INTERVAL = 5 * 60 * 1000; // every 5 min.
+  private final long _refreshInterval = 5 * 60 * 1000; // every 5 min.
 }

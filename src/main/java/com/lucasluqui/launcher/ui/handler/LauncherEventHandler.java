@@ -17,7 +17,6 @@ import com.lucasluqui.launcher.mod.ModManager;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.playercount.ui.PlayerCountUI;
-import com.lucasluqui.launcher.playercount.ui.handler.PlayerCountEventHandler;
 import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
 import com.lucasluqui.util.*;
@@ -336,8 +335,9 @@ public class LauncherEventHandler
   private void startOfficialPlayerCountRefresh ()
   {
     if (_playerCountRefresh != null) return;
+    long interval = _ctx.getApp().getUI(PlayerCountUI.class).eventHandler.getRefreshInterval();
     _playerCountRefresh = _scheduler.scheduleWithFixedDelay(this::refreshOfficialPlayerCount,
-      PLAYER_COUNT_REFRESH_INTERVAL, PLAYER_COUNT_REFRESH_INTERVAL, TimeUnit.MILLISECONDS);
+      interval, interval, TimeUnit.MILLISECONDS);
   }
 
   private void refreshOfficialPlayerCount ()
@@ -1330,9 +1330,6 @@ public class LauncherEventHandler
   // Watches the running regular game client, regular launches are off until it closes.
   private volatile ScheduledFuture<?> _launchBlockWatcher;
   private volatile boolean _launchBlockedByGame = false;
-
-  // How often to refresh the player count.
-  private static final long PLAYER_COUNT_REFRESH_INTERVAL = PlayerCountEventHandler.REFRESH_INTERVAL;
 
   private volatile boolean _launcherHidden = false;
 

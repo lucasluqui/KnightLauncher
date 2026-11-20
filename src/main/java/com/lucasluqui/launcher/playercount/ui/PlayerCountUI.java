@@ -147,7 +147,7 @@ public class PlayerCountUI extends BaseUI
     // Its height depends on how wide it is, so it's measured
     // against the list's width instead of whatever width it had before.
     JTextArea noteLabel = new FractionalText.Area(_localeManager.getValue("m.player_count_note",
-      String.valueOf(TimeUnit.MILLISECONDS.toMinutes(PlayerCountEventHandler.REFRESH_INTERVAL))))
+      String.valueOf(TimeUnit.MILLISECONDS.toMinutes(eventHandler.getRefreshInterval()))))
     {
       @Override
       public Dimension getPreferredSize ()
