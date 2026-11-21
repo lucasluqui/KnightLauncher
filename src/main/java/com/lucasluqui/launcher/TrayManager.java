@@ -3,6 +3,7 @@ package com.lucasluqui.launcher;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.lucasluqui.util.ImageUtil;
+import com.lucasluqui.util.SystemUtil;
 
 import java.awt.*;
 
@@ -48,7 +49,14 @@ public class TrayManager
       exitItem.addActionListener(e -> onExit.run());
       menu.add(exitItem);
 
-      TrayIcon trayIcon = new TrayIcon(ImageUtil.loadImageWithinJar("/rsrc/img/icon-64.png"), _localeManager.getValue("m.tray_tooltip"), menu);
+      // macOS gets a black and transparent version it can recolor to fit the menu bar, like its own icons.
+      String icon = "/rsrc/img/icon-64.png";
+      if (SystemUtil.isMac()) {
+        System.setProperty("apple.awt.enableTemplateImages", "true");
+        icon = "/rsrc/img/icon-256-mac.png";
+      }
+
+      TrayIcon trayIcon = new TrayIcon(ImageUtil.loadImageWithinJar(icon), _localeManager.getValue("m.tray_tooltip"), menu);
       trayIcon.setImageAutoSize(true);
 
       // Double-clicking the icon also brings the launcher back.
