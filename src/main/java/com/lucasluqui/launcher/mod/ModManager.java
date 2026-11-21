@@ -469,16 +469,26 @@ public class ModManager
 
   /**
    * Sorts the mod list by the saved order. Mods missing from it go last, at the lowest priority,
-   * in the order they were found.
+   * in the order they were found. Entries for mods that are no longer present are dropped from the saved order.
    */
   private void applyModOrder ()
   {
-    List<String> order = Arrays.asList(
-      _settingsManager.getValue("modloader.modOrder", _flamingoManager.getSelectedServer()).split(","));
+    Server server = _flamingoManager.getSelectedServer();
+    String savedOrder = _settingsManager.getValue("modloader.modOrder", server);
+    List<String> order = Arrays.asList(savedOrder.split(","));
     _modList.sort(Comparator.comparingInt(mod -> {
       int index = order.indexOf(mod.getFileName());
       return index < 0 ? Integer.MAX_VALUE : index;
     }));
+
+    Set<String> present = new HashSet<>();
+    for (Mod mod : _modList.getClone()) present.add(mod.getFileName());
+    List<String> pruned = new ArrayList<>(order);
+    pruned.removeIf(fileName -> !present.contains(fileName));
+    String prunedOrder = String.join(",", pruned);
+    if (!prunedOrder.equals(savedOrder)) {
+      _settingsManager.setValue("modloader.modOrder", prunedOrder, server);
+    }
   }
 
   /**
