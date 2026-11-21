@@ -9,6 +9,7 @@ import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.launcher.LocaleManager;
 import com.lucasluqui.launcher.mod.data.JarMod;
 import com.lucasluqui.launcher.mod.data.Mod;
+import com.lucasluqui.launcher.mod.data.ModGroup;
 import com.lucasluqui.launcher.mod.data.Modpack;
 import com.lucasluqui.launcher.mod.data.ZipMod;
 import com.lucasluqui.swing.SlimProgressBarUI;
@@ -563,6 +564,8 @@ public class ModListUI extends BaseUI
     modListPane.removeAll();
     stopDrag();
     slots.clear();
+    slotTops.clear();
+    slotGroups.clear();
     cardMods.clear();
     cardY.clear();
     collisionButtons.clear();
@@ -572,6 +575,9 @@ public class ModListUI extends BaseUI
       defaultModImageBuffImg, HiDpi.px(Scale.px(128)), HiDpi.px(Scale.px(128)));
 
     int position = 0;
+    int y = 0;
+    ModGroup group = null;
+    ModGroupHeader header = null;
     for (Mod mod : _modManager.getModList()) {
       position++;
 
@@ -581,17 +587,31 @@ public class ModListUI extends BaseUI
           && !mod.getAuthor().toLowerCase().contains(searchString.toLowerCase())) continue;
       }
 
+      // Display the mods ordered by their respective groups.
+      if (ModGroup.of(mod) != group) {
+        if (group != null) y += GROUP_GAP;
+        group = ModGroup.of(mod);
+        header = new ModGroupHeader(_localeManager.getValue(group.getTitleKey()), group.getColor());
+        header.setBounds(Scale.rect(0, y, CARD_WIDTH, GROUP_HEADER_HEIGHT));
+        modListPane.add(header);
+        y += GROUP_HEADER_HEIGHT;
+      }
+      header.addMod();
+
       ModCard modCard = buildModCard(mod, defaultModImageBuffImg, position);
-      modCard.setBounds(Scale.rect(0, count * CARD_STRIDE, CARD_WIDTH, ModCard.HEIGHT));
+      modCard.setBounds(Scale.rect(0, y, CARD_WIDTH, ModCard.HEIGHT));
       modListPane.add(modCard);
       slots.add(modCard);
+      slotTops.add(y);
+      slotGroups.add(group);
       cardMods.put(modCard, mod);
       cardY.put(modCard, (float) modCard.getY());
+      y += CARD_STRIDE;
       count++;
     }
     refreshCollisions();
 
-    int listHeight = Math.max(0, count * CARD_STRIDE - CARD_GAP);
+    int listHeight = count == 0 ? 0 : y - CARD_GAP;
     modListPane.setBounds(Scale.rect(25, LIST_Y, CARD_WIDTH, listHeight));
 
     int footerY = LIST_Y + listHeight + 6;
@@ -651,7 +671,8 @@ public class ModListUI extends BaseUI
       modImageBuffImg = ImageUtil.resizeImagePreserveTransparency(modImageBuffImg, HiDpi.px(Scale.px(128)), HiDpi.px(Scale.px(128)));
     }
 
-    ModCard modCard = new ModCard(mod.getDisplayName(), badgeText, accent, badgeForeground, mod.getDescription(),
+    // The groups already say what type each mod is, so the badge isn't shown.
+    ModCard modCard = new ModCard(mod.getDisplayName(), SHOW_TYPE_BADGE ? badgeText : null, accent, badgeForeground, mod.getDescription(),
       _localeManager.getValue("m.mod_footer", new String[]{mod.getVersion(), mod.getAuthor()}),
       modImageBuffImg == null ? defaultModImageBuffImg : modImageBuffImg);
     modCard.setDimmed(!mod.isEnabled());
@@ -825,10 +846,13 @@ public class ModListUI extends BaseUI
       autoScroll();
       Point mouse = new Point(dragMouse);
       SwingUtilities.convertPointFromScreen(mouse, modListPane);
-      float y = Math.max(0, Math.min(mouse.y - dragGrabY, slotY(slots.size() - 1)));
+      // Kept within the card's own group, whose slots are all next to each other.
+      ModGroup group = slotGroups.get(slots.indexOf(dragCard));
+      int first = slotGroups.indexOf(group);
+      float y = Math.max(slotY(first), Math.min(mouse.y - dragGrabY, slotY(slotGroups.lastIndexOf(group))));
       cardY.put(dragCard, y);
 
-      int slot = Math.max(0, Math.min(slots.size() - 1, Math.round(y / Scale.px((float) CARD_STRIDE))));
+      int slot = first + Math.round((y - slotY(first)) / Scale.px((float) CARD_STRIDE));
       if (slot != slots.indexOf(dragCard)) {
         slots.remove(dragCard);
         slots.add(slot, dragCard);
@@ -863,7 +887,7 @@ public class ModListUI extends BaseUI
 
   private float slotY (int slot)
   {
-    return Scale.px(slot * CARD_STRIDE);
+    return Scale.px(slotTops.get(slot));
   }
 
   /**
@@ -935,6 +959,11 @@ public class ModListUI extends BaseUI
 
   // The list's cards in their current slots, and where each is drawn while they move around.
   private final List<ModCard> slots = new ArrayList<>();
+
+  // Where each slot is, unscaled, and which group it belongs to. Neither changes while dragging.
+  private final List<Integer> slotTops = new ArrayList<>();
+  private final List<ModGroup> slotGroups = new ArrayList<>();
+
   private final Map<ModCard, Mod> cardMods = new HashMap<>();
   private final Map<ModCard, Float> cardY = new HashMap<>();
   private final Map<Mod, JButton> collisionButtons = new LinkedHashMap<>();
@@ -961,7 +990,6 @@ public class ModListUI extends BaseUI
   public BufferedImage modStoreButtonImageFocused = null;
   public BufferedImage modStoreButtonImageUnfocused = null;
 
-  // The panel is 800x550 but placed 75px down the launcher's 550px window, so only this much of it is visible.
   private static final int SCREEN_WIDTH = 800;
   private static final int VIEW_HEIGHT = 475;
 
@@ -970,8 +998,74 @@ public class ModListUI extends BaseUI
 
   private static final int FLOATING_BAR_WIDTH = 345;
 
-  // Mod cards are stacked one after the other.
+  // Mod cards that are stacked one after the other.
   private static final int CARD_WIDTH = 750;
   private static final int CARD_GAP = 8;
   private static final int CARD_STRIDE = ModCard.HEIGHT + CARD_GAP;
+
+  // Mod group header shenanigans.
+  private static final int GROUP_HEADER_HEIGHT = 28;
+  private static final int GROUP_GAP = 12;
+
+  // Whether cards show a badge with their mod's type next to its name.
+  private static final boolean SHOW_TYPE_BADGE = false;
+
+  /**
+   * A simple divider over a group of mods.
+   */
+  private static class ModGroupHeader extends JPanel
+  {
+    public ModGroupHeader (String title, Color accent)
+    {
+      this.title = title;
+      this.accent = accent;
+      setLayout(null);
+      setOpaque(false);
+
+      titleLabel.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
+      add(titleLabel);
+      add(separator);
+    }
+
+    /**
+     * Counts the mods under this header.
+     */
+    public void addMod ()
+    {
+      titleLabel.setText(title + " (" + ++count + ")");
+      revalidate();
+    }
+
+    @Override
+    public void doLayout ()
+    {
+      int x = BAR_WIDTH + Scale.px(10);
+      Dimension size = titleLabel.getPreferredSize();
+      titleLabel.setBounds(x, (getHeight() - size.height) / 2, size.width, size.height);
+      x += size.width + Scale.px(12);
+
+      size = separator.getPreferredSize();
+      separator.setBounds(x, (getHeight() - size.height) / 2, Math.max(0, getWidth() - x), size.height);
+    }
+
+    @Override
+    protected void paintComponent (Graphics g)
+    {
+      super.paintComponent(g);
+      Graphics2D g2 = (Graphics2D) g.create();
+      g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+      g2.setColor(accent);
+      int barHeight = titleLabel.getHeight();
+      g2.fillRoundRect(0, (getHeight() - barHeight) / 2, BAR_WIDTH, barHeight, BAR_WIDTH, BAR_WIDTH);
+      g2.dispose();
+    }
+
+    private final String title;
+    private final Color accent;
+    private final JLabel titleLabel = new JLabel();
+    private final JSeparator separator = new JSeparator();
+    private int count = 0;
+
+    private static final int BAR_WIDTH = Scale.px(3);
+  }
 }

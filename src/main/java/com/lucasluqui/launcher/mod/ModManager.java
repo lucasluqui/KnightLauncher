@@ -476,7 +476,7 @@ public class ModManager
     Server server = _flamingoManager.getSelectedServer();
     String savedOrder = _settingsManager.getValue("modloader.modOrder", server);
     List<String> order = Arrays.asList(savedOrder.split(","));
-    _modList.sort(Comparator.comparingInt(mod -> {
+    _modList.sort(Comparator.comparing(ModGroup::of).thenComparingInt(mod -> {
       int index = order.indexOf(mod.getFileName());
       return index < 0 ? Integer.MAX_VALUE : index;
     }));
