@@ -17,21 +17,13 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
 
 import static com.lucasluqui.launcher.Log.log;
 
 @Singleton
 public class CacheManager
 {
-  @Inject protected DownloadManager _downloadManager;
-
-  public String CACHE_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "cache" + File.separator;
-
-  /**
-   * Images are kept apart from other cached files. Older versions cached them already resized, at the old paths.
-   */
-  private static final String IMAGE_CACHE_DIR = "images" + File.separator;
-
   public CacheManager ()
   {
     // empty.
@@ -61,20 +53,31 @@ public class CacheManager
   {
     Path cacheFile = Paths.get(getLocalPath(url, IMAGE_CACHE_DIR));
 
+    // Kept around when stale, in case fetching it again fails.
+    BufferedImage cached = null;
     try {
       if (Files.exists(cacheFile)) {
         log.info("Loading image from cache", "localPath", cacheFile);
-        BufferedImage image = ImageIO.read(cacheFile.toFile());
-        if (image != null) return image;
-        // Not readable anymore, fetch it again.
-        Files.deleteIfExists(cacheFile);
+        cached = ImageIO.read(cacheFile.toFile());
+        if (cached == null) {
+          // Not readable anymore, fetch it again.
+          Files.deleteIfExists(cacheFile);
+        } else if (isStale(cacheFile)) {
+          log.info("Cached image is stale, fetching it again", "localPath", cacheFile);
+        } else {
+          return cached;
+        }
       }
+    } catch (IOException | RuntimeException e) {
+      log.error("Failed to read cached image", "localPath", cacheFile, e);
+    }
 
+    try {
       byte[] data = HttpUtil.getBytes(HttpUtil.toURI(new URL(url)));
       BufferedImage image = ImageIO.read(new ByteArrayInputStream(data));
       if (image == null) {
         log.error("Not a readable image", "url", url);
-        return null;
+        return cached;
       }
 
       // Saved as downloaded rather than written back out, which could lose quality or animation.
@@ -84,8 +87,14 @@ public class CacheManager
       return image;
     } catch (IOException | RuntimeException e) {
       log.error("Failed to fetch image", "url", url, e);
-      return null;
+      return cached;
     }
+  }
+
+  private static boolean isStale (Path file) throws IOException
+  {
+    long age = System.currentTimeMillis() - Files.getLastModifiedTime(file).toMillis();
+    return age > IMAGE_MAX_AGE_MS;
   }
 
   public File fetchFile (String url)
@@ -122,4 +131,18 @@ public class CacheManager
     return localPath;
   }
 
+  @Inject protected DownloadManager _downloadManager;
+
+  public String CACHE_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "cache" + File.separator;
+
+  /**
+   * Images are kept apart from other cached files.
+   * Older versions cached them already resized, at the old paths.
+   */
+  private static final String IMAGE_CACHE_DIR = "images" + File.separator;
+
+  /**
+   * Cached images older than this are re-fetched.
+   */
+  private static final long IMAGE_MAX_AGE_MS = TimeUnit.DAYS.toMillis(30);
 }
