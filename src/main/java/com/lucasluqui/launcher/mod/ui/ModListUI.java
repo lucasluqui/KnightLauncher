@@ -270,7 +270,7 @@ public class ModListUI extends BaseUI
 
     searchBox = new FractionalText.Field();
     searchBox.setBounds(Scale.rect(250, 85, 300, 27));
-    searchBox.setFont(Fonts.getFont("code", 11.0f, Font.ITALIC));
+    searchBox.setFont(Fonts.getFont("code", 12.0f, Font.ITALIC));
     searchBox.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, _localeManager.getValue("m.modlist_searchbox_placeholder"));
     searchBox.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
