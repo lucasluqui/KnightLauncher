@@ -8,7 +8,9 @@ import com.lucasluqui.launcher.runtime.RuntimeLocator;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -20,14 +22,26 @@ public class JavaUtil
 {
   @Inject private static FlamingoManager _flamingoManager;
 
+  /**
+   * The output of running {@code -version} on the given Java executable. It will be cached and only run again once the executable changes.
+   */
   public static String getJVMVersionOutput (String path)
   {
+    File exe = new File(path);
+    String key = path + "|" + exe.lastModified() + "|" + exe.length();
+
+    String cached = _javaVersionOutputs.get(key);
+    if (cached != null) return cached;
+
     String output = "";
     if (SystemUtil.isWindows()) {
       output = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", path, "-version" }, true)[1];
     } else {
       output = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "\"" + path + "\" -version" }, true)[1];
     }
+
+    // Failed runs might work out next time.
+    if (output != null && !output.isEmpty()) _javaVersionOutputs.put(key, output);
     return output;
   }
 
@@ -342,4 +356,6 @@ public class JavaUtil
       && !arg.contains(" ")
       && arg.length() > 3;
   }
+
+  private static final Map<String, String> _javaVersionOutputs = new ConcurrentHashMap<>();
 }
