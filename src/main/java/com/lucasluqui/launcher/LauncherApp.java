@@ -46,10 +46,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -127,9 +129,15 @@ public class LauncherApp
     maybeInitUI();
 
     if (!this.requiresJVMPatch() && !this.requiresUpdate()) {
-      if (gameRunning) this.getUI(LauncherUI.class).eventHandler.blockLaunchUntilGameCloses();
+      LauncherUI launcherUI = this.getUI(LauncherUI.class);
+      if (gameRunning) launcherUI.eventHandler.blockLaunchUntilGameCloses();
+
+      // Up on screen as soon as the main window is ready, the rest gets built while it is.
+      SwingUtilities.invokeLater(launcherUI::switchVisibility);
+      initSecondaryUI();
+
+      // Only once every UI is ready.
       initFinished();
-      ThreadingUtil.invokeLater(this.getUI(LauncherUI.class)::switchVisibility, 200);
     }
   }
 
@@ -247,30 +255,60 @@ public class LauncherApp
     }
   }
 
+  /**
+   * Builds the main window only, so it can be shown right away. See {@link #initSecondaryUI()} for the rest.
+   */
   private void initUI ()
   {
     this.initUI(LauncherUI.class);
-    this.initUI(SettingsUI.class);
-    this.initUI(ModListUI.class);
-    this.initUI(EditorsUI.class);
-    this.initUI(ChangelogUI.class);
-    this.initUI(PlayerCountUI.class);
   }
 
-  private <T extends BaseUI> void initUI(Class<T> clazz)
+  /**
+   * Builds the UIs behind the main window, each in its own go on the EDT so the main window
+   * can paint and respond in between. Anything needing one of them sooner gets it built on the spot, see {@link #getUI}.
+   */
+  private void initSecondaryUI ()
   {
+    for (Class<? extends BaseUI> clazz : SECONDARY_UIS) {
+      this.initUI(clazz);
+    }
+  }
+
+  /**
+   * Builds and registers the given UI on the EDT, unless it's there already.
+   *
+   * @return The UI, or null if it couldn't be built.
+   */
+  private <T extends BaseUI> T initUI (Class<T> clazz)
+  {
+    if (SwingUtilities.isEventDispatchThread()) return buildUI(clazz);
+
+    AtomicReference<T> ui = new AtomicReference<>();
     try {
-      EventQueue.invokeAndWait(() -> {
-        try {
-          T ui = _injector.getInstance(clazz);
-          ui.init();
-          this.registerUI(ui);
-        } catch (Exception e) {
-          log.error(e);
-        }
-      });
+      EventQueue.invokeAndWait(() -> ui.set(buildUI(clazz)));
     } catch (Exception e) {
       log.error(e);
+    }
+    return ui.get();
+  }
+
+  private <T extends BaseUI> T buildUI (Class<T> clazz)
+  {
+    BaseUI existing = _uiMap.get(clazz);
+    if (existing != null) return clazz.cast(existing);
+
+    // A UI asking for itself while being built would otherwise build itself forever.
+    if (!_uiBuilding.add(clazz)) return null;
+    try {
+      T ui = _injector.getInstance(clazz);
+      ui.init();
+      this.registerUI(ui);
+      return ui;
+    } catch (Exception e) {
+      log.error(e);
+      return null;
+    } finally {
+      _uiBuilding.remove(clazz);
     }
   }
 
@@ -909,6 +947,12 @@ public class LauncherApp
   {
     BaseUI ui = _uiMap.get(clazz);
 
+    // Not built yet during startup, see initSecondaryUIs. Only once the main window is up, so the
+    // updater and the Java VM patcher, which don't use these, don't end up building them.
+    if (ui == null && SECONDARY_UIS.contains(clazz) && _uiMap.containsKey(LauncherUI.class)) {
+      ui = initUI(clazz);
+    }
+
     if (ui == null) {
       log.error("Tried to get non-existent UI", "class", clazz.getSimpleName());
     }
@@ -1044,7 +1088,20 @@ public class LauncherApp
   protected String _latestRelease = null;
   protected List<Release> _releases = new ArrayList<>();
 
-  private final Map<Class<? extends BaseUI>, BaseUI> _uiMap = new HashMap<>();
+  /**
+   * UIs built right after the main window is shown, rather than before.
+   * See {@link #initSecondaryUI()}.
+   */
+  private static final List<Class<? extends BaseUI>> SECONDARY_UIS = List.of(
+    SettingsUI.class,
+    ModListUI.class,
+    EditorsUI.class,
+    ChangelogUI.class,
+    PlayerCountUI.class
+  );
+
+  private final Map<Class<? extends BaseUI>, BaseUI> _uiMap = new ConcurrentHashMap<>();
+  private final Set<Class<? extends BaseUI>> _uiBuilding = new HashSet<>();
   private final List<Class<? extends BaseUI>> _uiHistory = new ArrayList<>();
 
   // Held for as long as the launcher runs so no other instance can start.
