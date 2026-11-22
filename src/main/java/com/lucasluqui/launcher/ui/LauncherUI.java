@@ -35,7 +35,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -691,7 +690,7 @@ public class LauncherUI extends BaseUI
     warningNotice.setFont(Fonts.getFont("default", 11.0f, Font.BOLD));
     warningNotice.setVisible(false);
     warningNotice.addActionListener(l -> {
-      Dialog.push(this.eventHandler.currentWarning, _localeManager.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
+      Dialog.push(this.eventHandler._currentWarning, _localeManager.getValue("m.warning_notice"), JOptionPane.ERROR_MESSAGE);
     });
     panel.add(warningNotice);
 
@@ -758,7 +757,7 @@ public class LauncherUI extends BaseUI
     }
 
     warningNotice.setVisible(true);
-    this.eventHandler.currentWarning = message;
+    this.eventHandler._currentWarning = message;
   }
 
   public BufferedImage processImageForBanner (BufferedImage image, double intensity)

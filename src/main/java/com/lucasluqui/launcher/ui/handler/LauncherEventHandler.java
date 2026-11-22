@@ -343,7 +343,7 @@ public class LauncherEventHandler
   private void refreshOfficialPlayerCount ()
   {
     // Nobody's looking while we're hidden away in the tray, skip it until we're back.
-    if (_launcherHidden) return;
+    if (_hidden) return;
 
     Server official = _flamingoManager.findServerByName("Official");
     if (official == null) return;
@@ -1105,13 +1105,13 @@ public class LauncherEventHandler
    */
   public void blockLaunchUntilGameCloses ()
   {
-    if (_launchBlockWatcher != null) return;
+    if (_blockWatcher != null) return;
     log.info("Blocking regular launches until the running game closes");
 
-    _launchBlockedByGame = true;
+    _blockedByGame = true;
     SwingUtilities.invokeLater(ui::updateLaunchButtonEnabled);
 
-    _launchBlockWatcher = _scheduler.scheduleWithFixedDelay(this::checkBlockingGameClosed,
+    _blockWatcher = _scheduler.scheduleWithFixedDelay(this::checkBlockingGameClosed,
       GAME_WATCH_INTERVAL, GAME_WATCH_INTERVAL, TimeUnit.MILLISECONDS);
   }
 
@@ -1120,7 +1120,7 @@ public class LauncherEventHandler
    */
   public boolean isLaunchBlockedByGame ()
   {
-    return _launchBlockedByGame;
+    return _blockedByGame;
   }
 
   private void checkBlockingGameClosed ()
@@ -1132,9 +1132,9 @@ public class LauncherEventHandler
     if (gamePids == null || !gamePids.isEmpty()) return;
 
     log.info("Regular game client closed, regular launches are allowed again");
-    _launchBlockWatcher.cancel(false);
-    _launchBlockWatcher = null;
-    _launchBlockedByGame = false;
+    _blockWatcher.cancel(false);
+    _blockWatcher = null;
+    _blockedByGame = false;
     SwingUtilities.invokeLater(ui::updateLaunchButtonEnabled);
   }
 
@@ -1201,8 +1201,8 @@ public class LauncherEventHandler
 
   private void hideLauncher ()
   {
-    if (_launcherHidden) return;
-    _launcherHidden = true;
+    if (_hidden) return;
+    _hidden = true;
 
     if (_trayManager.show(this::restoreLauncher, () -> _ctx.getApp().exit())) {
       ui.guiFrame.setVisible(false);
@@ -1232,15 +1232,15 @@ public class LauncherEventHandler
    */
   public boolean popBackUp ()
   {
-    if (!_launcherHidden) return false;
+    if (!_hidden) return false;
     EventQueue.invokeLater(this::restoreLauncher);
     return true;
   }
 
   private void restoreLauncher ()
   {
-    if (!_launcherHidden) return;
-    _launcherHidden = false;
+    if (!_hidden) return;
+    _hidden = false;
 
     _trayManager.hide();
     ui.guiFrame.setVisible(true);
@@ -1294,8 +1294,8 @@ public class LauncherEventHandler
   protected DiscordPresenceClient _discordPresenceClient;
   protected TrayManager _trayManager;
 
-  public String currentWarning = "";
-  public String latestRelease = "";
+  public String _currentWarning = "";
+  public String _latestRelease = "";
 
   private final Timer _bannerCycleTimer = new Timer(BANNER_CYCLE_INTERVAL, e -> nextBannerEvent());
 
@@ -1314,9 +1314,6 @@ public class LauncherEventHandler
   private List<Event> _bannerEvents = new ArrayList<>();
   private int _bannerIndex = 0;
 
-  // How long each event stays on screen before rotating to the next one.
-  private static final int BANNER_CYCLE_INTERVAL = 8000;
-
   // Runs the periodic background checks: the game watcher and the player count refresh.
   private final ScheduledExecutorService _scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
     Thread thread = new Thread(r, "LauncherScheduler");
@@ -1328,10 +1325,11 @@ public class LauncherEventHandler
   private ScheduledFuture<?> _playerCountRefresh;
 
   // Watches the running regular game client, regular launches are off until it closes.
-  private volatile ScheduledFuture<?> _launchBlockWatcher;
-  private volatile boolean _launchBlockedByGame = false;
+  private volatile ScheduledFuture<?> _blockWatcher;
+  private volatile boolean _blockedByGame = false;
 
-  private volatile boolean _launcherHidden = false;
+  // Whether the launcher is currently hidden in tray.
+  private volatile boolean _hidden = false;
 
   // Editors we're hidden away for, only touched from the event dispatch thread.
   private int _editorSessions = 0;
@@ -1351,6 +1349,9 @@ public class LauncherEventHandler
 
   // How often to check whether the game client is still running while the launcher is hidden.
   private static final int GAME_WATCH_INTERVAL = 3000;
+
+  // How long each event stays on screen before rotating to the next one.
+  private static final int BANNER_CYCLE_INTERVAL = 8000;
 
   private final String[] RPC_COMMAND_LINE = new String[]{".\\KnightLauncher\\modules\\skdiscordrpc\\SK-DiscordRPC.exe", BuildConfig.getVersion()};
 }
