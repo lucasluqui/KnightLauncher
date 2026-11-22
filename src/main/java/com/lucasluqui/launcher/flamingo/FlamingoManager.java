@@ -71,7 +71,7 @@ public class FlamingoManager
 
     try {
       JSONObject response = sendRequest("GET", "/server-list/", new String[]{"machineId=" + this._machineId});
-      log.info("Got server list from flamingo");
+      log.debug("Got server list from flamingo");
 
       // we got an empty server list, so empty we return it.
       if (response.toString().equalsIgnoreCase("{}")) return servers;
@@ -157,7 +157,7 @@ public class FlamingoManager
 
     try {
       JSONObject response = sendRequest("GET", "/status/", new String[]{});
-      log.info("Got status from flamingo: " + response);
+      log.debug("Got status from flamingo: " + response);
 
       Status status = new Status();
       status.version = response.getString("version");

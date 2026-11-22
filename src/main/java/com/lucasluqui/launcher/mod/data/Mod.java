@@ -106,7 +106,7 @@ public abstract class Mod
    */
   public void parseMetadata ()
   {
-    log.info("Parsing mod metadata...", "fileName", this.fileName);
+    log.debug("Parsing mod metadata...", "fileName", this.fileName);
 
     try {
       String jsonString = ZipUtil.readFileInsideZip(this.getAbsolutePath(), "mod.json");

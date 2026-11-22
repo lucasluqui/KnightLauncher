@@ -57,7 +57,7 @@ public class CacheManager
     BufferedImage cached = null;
     try {
       if (Files.exists(cacheFile)) {
-        log.info("Loading image from cache", "localPath", cacheFile);
+        log.debug("Loading image from cache", "localPath", cacheFile);
         cached = ImageIO.read(cacheFile.toFile());
         if (cached == null) {
           // Not readable anymore, fetch it again.

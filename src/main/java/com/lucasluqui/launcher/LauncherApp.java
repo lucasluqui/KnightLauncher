@@ -232,7 +232,7 @@ public class LauncherApp
     // FlatLaf scales its own parts (borders, arcs, checkboxes, scrollbars...) to match. Left alone at 100%,
     // so it keeps working as it always did.
     if (percent != 100) System.setProperty("flatlaf.uiScale", String.valueOf(percent / 100f));
-    log.info("UI scale", "percent", percent);
+    log.info("UI scale", "scale", percent);
   }
 
   /**
@@ -943,7 +943,7 @@ public class LauncherApp
   public <T extends BaseUI> void registerUI (BaseUI ui)
   {
     _uiMap.put(ui.getClass(), ui);
-    log.info("Registered UI", "class", ui.getClass().getSimpleName());
+    log.debug("Registered UI", "class", ui.getClass().getSimpleName());
   }
 
   public <T extends BaseUI> T getUI (Class<T> clazz)

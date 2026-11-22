@@ -356,7 +356,7 @@ public class LauncherEventHandler
     });
 
     _flamingoManager.fetchOfficialPlayerCount(official);
-    log.info("Refreshed player count", "count", official.playerCount);
+    log.debug("Refreshed player count", "count", official.playerCount);
 
     SwingUtilities.invokeLater(() -> {
       if (_flamingoManager.getSelectedServer() == official) showOfficialPlayerCount(official);

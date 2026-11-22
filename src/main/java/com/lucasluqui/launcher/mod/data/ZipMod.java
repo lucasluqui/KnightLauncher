@@ -71,7 +71,7 @@ public class ZipMod extends Mod
 
   private void parseFileHeaderData (String[] filter, Properties stamps)
   {
-    log.info("Parsing mod file headers...", "fileName", this.getFileName());
+    log.debug("Parsing mod file headers...", "fileName", this.getFileName());
     List<FileHeader> fileHeaders = ZipUtil.getZipFileHeaders(this.getAbsolutePath());
 
     for (FileHeader fileHeader : fileHeaders) {

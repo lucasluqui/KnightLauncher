@@ -93,7 +93,7 @@ public class DiscordPresenceClient
     presence.setDetails(details);
     presence.setBigImage("icon-512", "Knight Launcher " + BuildConfig.getVersion());
     DiscordRPC.discordUpdatePresence(presence.build());
-    log.info("Updating discord presence detail", "detail", details);
+    log.debug("Updating discord presence detail", "detail", details);
   }
 
   public synchronized void stop ()

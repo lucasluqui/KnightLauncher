@@ -123,7 +123,7 @@ public class Server
         properties.load(is);
         localVersion = properties.getProperty("version");
         properties.clear();
-        log.info("Successfully read local version from getdown.txt", "version", localVersion);
+        log.debug("Successfully read local version from getdown.txt", "version", localVersion);
       } catch (IOException e) {
         log.error(e);
       }
@@ -137,7 +137,7 @@ public class Server
         properties.load(new ByteArrayInputStream(buildString.getBytes(StandardCharsets.UTF_8)));
         localVersion = properties.getProperty("version");
         properties.clear();
-        log.info("Successfully read local version from inside config.jar", "version", localVersion);
+        log.debug("Successfully read local version from inside config.jar", "version", localVersion);
       } catch (Exception e) {
         log.error(e);
       }
@@ -157,7 +157,7 @@ public class Server
           properties.load(is);
           localVersion = properties.getProperty("version");
           properties.clear();
-          log.info("Successfully read local version from extracting config.jar", "version", localVersion);
+          log.debug("Successfully read local version after extracting config.jar", "version", localVersion);
           FileUtil.deleteFile(getRootDirectory() + File.separator + "code" + File.separator + "config");
         } catch (IOException e) {
           log.error(e);
@@ -171,7 +171,7 @@ public class Server
     if (localVersion.equalsIgnoreCase("-1")) {
       try {
         localVersion = FileUtil.readFile(getRootDirectory() + File.separator + "version.txt").trim();
-        log.info("Successfully read local version from version.txt", "version", localVersion);
+        log.debug("Successfully read local version from version.txt", "version", localVersion);
       } catch (Exception e) {
         log.error(e);
       }

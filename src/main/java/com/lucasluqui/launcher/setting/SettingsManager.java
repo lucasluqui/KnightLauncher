@@ -195,7 +195,7 @@ public class SettingsManager
       _prop.setProperty(key, value);
     }
     saveProp();
-    log.info("Setting new server-specific key", "key", key, "value", value, "server", server == null ? "null" : server.name);
+    log.debug("Setting new server-specific key", "key", key, "value", value, "server", server == null ? "null" : server.name);
   }
 
   private HashMap<String, Object> getAllKeyValues ()
@@ -214,7 +214,7 @@ public class SettingsManager
       saveProp();
       log.debug("Setting new key", "key", key, "value", value);
     } else {
-      log.info("Key already exists", "key", key, "value", value);
+      log.debug("Key already exists", "key", key, "value", value);
     }
   }
 
