@@ -436,6 +436,6 @@ public class SettingsManager
   private HashMap<String, Object> _migrationMap = new HashMap<>();
   private boolean _migrating = false;
 
-  private final String PROP_VER = "32";
+  private final String PROP_VER = "33";
   private final String PROP_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
 }
