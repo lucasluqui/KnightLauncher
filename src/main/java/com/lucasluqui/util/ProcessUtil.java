@@ -124,7 +124,8 @@ public class ProcessUtil
       // No need to keep the process active.
       if (process != null) process.destroy();
     }
-    return new String[1];
+
+    return new String[]{"", ""};
   }
 
   /**
