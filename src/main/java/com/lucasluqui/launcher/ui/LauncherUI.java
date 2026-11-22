@@ -488,7 +488,7 @@ public class LauncherUI extends BaseUI
     serverNoticeButton.setBackground(CustomColors.WARNING);
     serverNoticeButton.setBorderPainted(false);
     serverNoticeButton.setForeground(Color.BLACK);
-    //serverNoticeButton.setVisible(false);
+    serverNoticeButton.setVisible(false);
     serverNoticeButton.putClientProperty(FlatClientProperties.STYLE,
       "arc: 999; borderWidth: 0");
     serverNoticeButton.setToolTipText(_localeManager.getValue("b.server_notice"));

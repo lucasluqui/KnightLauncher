@@ -414,7 +414,7 @@ public class LauncherEventHandler
         ui.serverNoticeButton.setToolTipText(noticeTitle);
 
         ui.serverNoticeButton.addActionListener(
-          action -> Dialog.push(selectedServer.notice, noticeTitle, JOptionPane.WARNING_MESSAGE)
+          _ -> Dialog.push(selectedServer.notice, noticeTitle, JOptionPane.WARNING_MESSAGE)
         );
 
         ui.serverNoticeButton.setVisible(true);
