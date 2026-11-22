@@ -95,6 +95,7 @@ public class LauncherApp
     // Just what's needed to be able to show localized and styled dialogs.
     _ctx.init(this);
     _settingsManager.init();
+    if (Boolean.parseBoolean(_settingsManager.getValue("launcher.debug"))) setupDebugLogging();
     _localeManager.init();
     setupUIScale();
     Fonts.setup();
@@ -657,6 +658,8 @@ public class LauncherApp
     Logger rootLogger = LogManager
       .getLogManager()
       .getLogger("");
+    // Dev builds turn it on before settings are even loaded, then launcher.debug might ask for it again.
+    if (rootLogger.getLevel() == Level.ALL) return;
     rootLogger.setLevel(Level.ALL);
     for (Handler handler : rootLogger.getHandlers()) {
       handler.setLevel(Level.ALL);

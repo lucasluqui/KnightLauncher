@@ -159,7 +159,7 @@ public class SettingsManager
   {
     String value;
     value = _prop.getProperty(key);
-    log.info("Request for key", "key", key, "value", value);
+    log.debug("Request for key", "key", key, "value", value);
     return value != null ? value : defVal;
   }
 
@@ -176,7 +176,7 @@ public class SettingsManager
     } else {
       value = _prop.getProperty(key);
     }
-    log.info("Request for key", "key", key, "value", value);
+    log.debug("Request for key", "key", key, "value", value);
     return value != null ? value : defVal;
   }
 
@@ -184,7 +184,7 @@ public class SettingsManager
   {
     _prop.setProperty(key, value);
     saveProp();
-    log.info("Setting new key", "key", key, "value", value);
+    log.debug("Setting new key", "key", key, "value", value);
   }
 
   public void setValue (String key, String value, Server server)
@@ -212,7 +212,7 @@ public class SettingsManager
     if (_prop.getProperty(key) == null) {
       _prop.setProperty(key, value);
       saveProp();
-      log.info("Setting new key", "key", key, "value", value);
+      log.debug("Setting new key", "key", key, "value", value);
     } else {
       log.info("Key already exists", "key", key, "value", value);
     }
