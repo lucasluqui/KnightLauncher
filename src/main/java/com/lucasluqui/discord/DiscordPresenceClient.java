@@ -3,6 +3,7 @@ package com.lucasluqui.discord;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.lucasluqui.util.BuildConfig;
+import com.lucasluqui.util.ThreadingUtil;
 import com.lucasluqui.launcher.LocaleManager;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
@@ -58,13 +59,19 @@ public class DiscordPresenceClient
     if (stub) return;
 
     this.clientId = clientId;
-    DiscordRPC.discordInitialize(this.clientId, this.getEventHandlers(), true);
-    this.running = true;
-    setDetails(_localeManager.getValue("presence.starting"));
-    log.info("Discord presence client is now running");
+
+    ThreadingUtil.start("DiscordPresence", () -> {
+      DiscordRPC.discordInitialize(this.clientId, this.getEventHandlers(), true);
+      synchronized (this) {
+        this.running = true;
+        // Details set while we were starting up are newer than the "starting" ones.
+        updatePresenceDetails(details != null ? details : _localeManager.getValue("presence.starting"));
+      }
+      log.info("Discord presence client is now running");
+    });
   }
 
-  public void setDetails (String details)
+  public synchronized void setDetails (String details)
   {
     if (stub) return;
 
@@ -89,7 +96,7 @@ public class DiscordPresenceClient
     log.info("Updating discord presence detail", "detail", details);
   }
 
-  public void stop ()
+  public synchronized void stop ()
   {
     if (stub || !running) return;
     DiscordRPC.discordShutdown();
@@ -100,7 +107,7 @@ public class DiscordPresenceClient
   /**
    * Starts the client back up after being stopped, restoring the last known details.
    */
-  public void resume ()
+  public synchronized void resume ()
   {
     if (stub || running || clientId == null) return;
     DiscordRPC.discordInitialize(this.clientId, this.getEventHandlers(), true);
