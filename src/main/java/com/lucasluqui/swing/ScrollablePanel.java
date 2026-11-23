@@ -23,6 +23,33 @@ public class ScrollablePanel extends JPanel implements Scrollable
   }
 
   @Override
+  public Dimension getPreferredSize ()
+  {
+    // Wrapping children rewrap while being measured, invalidating us, and with that the layout's cached sizes,
+    // halfway through measuring them. Hold that off until the measuring is done.
+    _measuring = true;
+    try {
+      return super.getPreferredSize();
+    } finally {
+      _measuring = false;
+      if (_invalidatedWhileMeasuring) {
+        _invalidatedWhileMeasuring = false;
+        invalidate();
+      }
+    }
+  }
+
+  @Override
+  public void invalidate ()
+  {
+    if (_measuring) {
+      _invalidatedWhileMeasuring = true;
+    } else {
+      super.invalidate();
+    }
+  }
+
+  @Override
   public Dimension getPreferredScrollableViewportSize ()
   {
     return getPreferredSize();
@@ -53,4 +80,6 @@ public class ScrollablePanel extends JPanel implements Scrollable
   }
 
   private int _laidOutWidth = -1;
+  private boolean _measuring;
+  private boolean _invalidatedWhileMeasuring;
 }
