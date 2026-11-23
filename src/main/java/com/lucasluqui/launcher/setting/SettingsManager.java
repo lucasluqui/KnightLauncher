@@ -42,7 +42,7 @@ public class SettingsManager
         _prop.clear();
         FileUtil.deleteFile(PROP_PATH);
         ZipUtil.extractFileWithinJar("/rsrc/config/launcher.properties", PROP_PATH);
-        log.info("Extracting latest properties file...");
+        log.debug("Extracting latest properties file...");
         loadProp();
         migrateSettings();
         _prop.clear();
@@ -58,10 +58,10 @@ public class SettingsManager
 
   private void loadProp ()
   {
-    log.info("Loading properties...");
+    log.debug("Loading properties...");
     try (InputStream is = Files.newInputStream(Paths.get(PROP_PATH))) {
       _prop.load(is);
-      log.info("Loaded properties");
+      log.debug("Loaded properties");
     } catch (IOException e) {
       log.error(e);
     }
@@ -221,7 +221,7 @@ public class SettingsManager
   private void migrateSettings ()
   {
     _migrating = true;
-    log.info("Migrating settings to new properties file...");
+    log.debug("Migrating settings to new properties file...");
     for (String key : _migrationMap.keySet()) {
       if (key.equals("PROP_VER")) continue;
       setValue(key, (String) _migrationMap.get(key));
@@ -337,7 +337,7 @@ public class SettingsManager
     for (String arg : args) {
       // invalid arg? mark the whole thing as invalid.
       if (!JavaUtil.validJVMArg(arg)) {
-        log.info("Ignoring all additional args due to invalid JVM arg", "arg", arg);
+        log.warning("Ignoring all additional args due to invalid JVM arg", "arg", arg);
         return false;
       }
     }
