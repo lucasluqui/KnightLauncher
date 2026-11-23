@@ -22,17 +22,10 @@ public class ProcessUtil
 {
   public static void run (String[] command, boolean keepAlive)
   {
-    run(command, keepAlive, false);
-  }
-
-  public static void run (String[] command, boolean keepAlive, boolean silent)
-  {
-    if (!silent) {
-      log.info("Running process command",
-        "keepAlive", keepAlive,
-        "command", String.join(" ", command)
-      );
-    }
+    log.debug("Running process command",
+      "keepAlive", keepAlive,
+      "command", String.join(" ", command)
+    );
 
     Process process = null;
     try {
@@ -53,15 +46,10 @@ public class ProcessUtil
     }
   }
 
-  public static Process runFromDirectory (String[] command, String workDir, boolean keepAlive)
-  {
-    return runFromDirectory(command, workDir, keepAlive, false);
-  }
-
   /**
    * @return The started process, or null if it failed to start or wasn't kept alive.
    */
-  public static Process runFromDirectory (String[] command, String workDir, boolean keepAlive, boolean silent)
+  public static Process runFromDirectory (String[] command, String workDir, boolean keepAlive)
   {
     ProcessBuilder pb = new ProcessBuilder(command);
     pb.directory(new File(workDir));
@@ -70,12 +58,10 @@ public class ProcessUtil
     pb.environment().remove("_JAVA_OPTIONS");
     pb.environment().putAll(SystemUtil.getEnvOverrides());
 
-    if (!silent) {
-      log.info("Running process command from directory",
-        "directory", workDir,
-        "command", String.join(" ", command)
-      );
-    }
+    log.debug("Running process command from directory",
+      "directory", workDir,
+      "command", String.join(" ", command)
+    );
 
     Process process = null;
     try {
@@ -91,16 +77,9 @@ public class ProcessUtil
 
   public static String[] runAndCapture (String[] command)
   {
-    return runAndCapture(command, false);
-  }
-
-  public static String[] runAndCapture (String[] command, boolean silent)
-  {
-    if (!silent) {
-      log.info("Running process command and capturing",
-        "command", String.join(" ", command)
-      );
-    }
+    log.debug("Running process command and capturing",
+      "command", String.join(" ", command)
+    );
 
     Process process = null;
     try {
@@ -260,5 +239,4 @@ public class ProcessUtil
   }
 
   private static OperatingSystem _operatingSystem;
-
 }

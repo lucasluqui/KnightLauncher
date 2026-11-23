@@ -1138,9 +1138,6 @@ public class LauncherUI extends BaseUI
       loading ? OFFICIAL_PLAYER_COUNT_LOADING : OFFICIAL_PLAYER_COUNT_CONTENT);
   }
 
-  private static final String OFFICIAL_PLAYER_COUNT_LOADING = "loading";
-  private static final String OFFICIAL_PLAYER_COUNT_CONTENT = "content";
-
   @Inject public LauncherEventHandler eventHandler;
 
   @Inject protected LauncherContext _ctx;
@@ -1187,9 +1184,6 @@ public class LauncherUI extends BaseUI
   public JButton playAnimatedBannersButton;
   public JLabel launchBackground;
   public JLabel launchState;
-  // The main window's size at 100% scale. It's the biggest window, so it decides which scales fit on screen.
-  public static final int WIDTH = 1100;
-  public static final int HEIGHT = 550;
 
   public JLabel launchProgressPercent;
   public SmoothProgressBar launchProgressBar = new SmoothProgressBar(); // does this need to init here? why?
@@ -1201,6 +1195,10 @@ public class LauncherUI extends BaseUI
   private volatile float bannerFade = 1f;
   private Timer bannerFadeTimer;
   private BufferedImage bannerScrim;
+
+  // The main window's size at 100% scale. It's the biggest window, so it decides which scales fit on screen.
+  public static final int WIDTH = 1100;
+  public static final int HEIGHT = 550;
 
   private static final int BANNER_FADE_DURATION = 400;
 
@@ -1220,4 +1218,7 @@ public class LauncherUI extends BaseUI
 
   // Space between the bottom card and the button right below the stack.
   private static final int EVENT_CARDS_BOTTOM_MARGIN = 14;
+
+  private static final String OFFICIAL_PLAYER_COUNT_LOADING = "loading";
+  private static final String OFFICIAL_PLAYER_COUNT_CONTENT = "content";
 }

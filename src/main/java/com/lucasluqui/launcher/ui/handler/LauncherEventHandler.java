@@ -90,7 +90,7 @@ public class LauncherEventHandler
       // Only one regular game client at a time, any extra ones have to go through Alt Mode.
       // Alt Mode clients don't count towards it.
       if (!altMode && existingGamePids != null && !existingGamePids.isEmpty()) {
-        log.info("Game is already running, not launching another client", "pids", existingGamePids);
+        log.debug("Game is already running, not launching another client", "pids", existingGamePids);
         Dialog.push(_localeManager.getValue("error.game_already_running_launch"), JOptionPane.WARNING_MESSAGE);
         _ctx.getApp().toggleElementsBlock(false);
         ui.resetLaunchButton();
@@ -214,7 +214,7 @@ public class LauncherEventHandler
             }
           }
         }
-        log.info("Third party client up to date", "client", selectedServer.name);
+        log.debug("Third party client up to date", "client", selectedServer.name);
 
         // make sure there's a base zip file we can use to clean files with.
         String rootDir = selectedServer.getRootDirectory();
@@ -239,7 +239,7 @@ public class LauncherEventHandler
         _ctx._progressBar.finishTask();
       }
 
-      log.info("Starting game", "server", selectedServer.name, "platform", Settings.gamePlatform, "codeMods", Settings.loadCodeMods);
+      log.info("Starting game", "server", selectedServer.name, "platform", Settings.gamePlatform, "code", Settings.loadCodeMods);
       _ctx._progressBar.setState(_localeManager.getValue("m.game_launching"));
       ui.launchButton.setIcon(new LoadingIcon());
       ui.launchButton.setText(_localeManager.getValue("m.launching"));
@@ -1024,7 +1024,7 @@ public class LauncherEventHandler
       // updating or waiting on the user. The game can't show up until it's done, so keep waiting while it's open.
       if (!ProcessUtil.findProcesses(processes, GETDOWN_COMMAND_LINE).isEmpty()) {
         if (!getdownSeen) {
-          log.info("Getdown is running, waiting for it to start the game");
+          log.debug("Getdown is running, waiting for it to start the game");
 
           // Getdown has its own window, so we can get out of the way already.
           if (Settings.hideWhileGameRunning) SwingUtilities.invokeLater(this::hideLauncher);
@@ -1106,7 +1106,7 @@ public class LauncherEventHandler
   public void blockLaunchUntilGameCloses ()
   {
     if (_blockWatcher != null) return;
-    log.info("Blocking regular launches until the running game closes");
+    log.debug("Blocking regular launches until the running game closes");
 
     _blockedByGame = true;
     SwingUtilities.invokeLater(ui::updateLaunchButtonEnabled);
@@ -1131,7 +1131,7 @@ public class LauncherEventHandler
     // Can't tell right now, try again next time.
     if (gamePids == null || !gamePids.isEmpty()) return;
 
-    log.info("Regular game client closed, regular launches are allowed again");
+    log.debug("Regular game client closed, regular launches are allowed again");
     _blockWatcher.cancel(false);
     _blockWatcher = null;
     _blockedByGame = false;
@@ -1192,7 +1192,7 @@ public class LauncherEventHandler
 
   private void exitEditorSession ()
   {
-    log.info("Editor closed");
+    log.debug("Editor closed");
     _editorSessions--;
 
     // A game client might still be running, it'll bring us back once it closes.
