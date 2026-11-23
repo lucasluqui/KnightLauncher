@@ -310,8 +310,6 @@ public class FlamingoManager
     } else {
       setSelectedServer(official);
     }
-
-    _ctx.getApp().selectedServerChanged();
   }
 
   public void saveSelectedServer ()

@@ -179,7 +179,12 @@ public class ModListEventHandler
     Server selectedServer = _flamingoManager.getSelectedServer();
 
     if (selectedServer != null) {
-      ThreadingUtil.start("ModCheck", _modManager::checkInstalled);
+      // Server list refreshes re-select the same server, only rescan when we're looking at a different mods dir.
+      String modsDirectory = selectedServer.getModsDirectory();
+      if (!modsDirectory.equals(_lastCheckedModsDirectory)) {
+        _lastCheckedModsDirectory = modsDirectory;
+        ThreadingUtil.start("ModCheck", _modManager::checkInstalled);
+      }
 
       if (selectedServer.isOfficial()) {
         this.ui.viewingModsLabel.setVisible(false);
@@ -319,4 +324,7 @@ public class ModListEventHandler
   protected LocaleManager _localeManager;
   protected SettingsManager _settingsManager;
   protected FlamingoManager _flamingoManager;
+
+  /** Mods dir of the server we last scanned for, so re-selecting the same server doesn't rescan. */
+  private String _lastCheckedModsDirectory = null;
 }
