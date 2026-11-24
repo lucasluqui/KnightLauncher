@@ -187,7 +187,10 @@ public class ModCard extends JPanel
     int x = bodyX();
     bg.setColor(lerp(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND_FOCUS_DARK, CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND, t));
     bg.fill(getShape(x, w - x, h));
-    if (handle != null) bg.fill(getShape(0, HANDLE_WIDTH, h));
+    if (handle != null) {
+      bg.setColor(lerp(CustomColors.INTERFACE_MAINPANE_SUBBACKGROUND, CustomColors.INTERFACE_MAINPANE_BACKGROUND_FOCUS, t));
+      bg.fill(getShape(0, HANDLE_WIDTH, h));
+    }
 
     // A blurred copy of the image tints the whole body with its colors.
     if (ambient != null) {
