@@ -10,6 +10,7 @@ import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.flamingo.data.Status;
 import com.lucasluqui.launcher.mod.ModManager;
+import com.lucasluqui.launcher.mod.ui.ModListUI;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.launcher.setting.ui.SettingsUI;
@@ -96,6 +97,15 @@ public class SettingsEventHandler
   {
     Settings.hideWhileEditorRunning = this.ui.switchHideWhileEditorRunning.isSelected();
     _settingsManager.setValue("launcher.hideWhileEditorRunning", String.valueOf(this.ui.switchHideWhileEditorRunning.isSelected()));
+  }
+
+  public void compactModsListChangeEvent (ActionEvent event)
+  {
+    Settings.compactModsList = this.ui.switchCompactModsList.isSelected();
+    _settingsManager.setValue("launcher.compactModsList", String.valueOf(Settings.compactModsList));
+
+    // rebuild the list right away. keeping whatever search is in place.
+    _ctx.getApp().getUI(ModListUI.class).eventHandler.searchMod();
   }
 
   public void forceRebuildEvent ()

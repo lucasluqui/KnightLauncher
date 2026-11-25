@@ -83,6 +83,7 @@ public class SettingsUI extends BaseUI
 
     tabbedPane.addTab(_localeManager.getValue("tab.launcher"), createLauncherPanel());
     tabbedPane.addTab(_localeManager.getValue("tab.game"), createGamePanel());
+    tabbedPane.addTab(_localeManager.getValue("tab.mods"), createModsPanel());
     if (showBetas()) {
       tabbedPane.addTab(_localeManager.getValue("tab.betas"), createBetasPanel());
     }
@@ -320,6 +321,38 @@ public class SettingsUI extends BaseUI
     switchAutoUpdate.addActionListener(eventHandler::autoUpdateChangeEvent);
 
     return launcherPanel;
+  }
+
+  protected JPanel createModsPanel ()
+  {
+    JPanel modsPanel = new JPanel();
+    modsPanel.setLayout(null);
+    modsPanel.setBackground(CustomColors.INTERFACE_MAINPANE_BACKGROUND);
+
+    JLabel headerLabel = new JLabel(_localeManager.getValue("tab.mods"));
+    headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    headerLabel.setBounds(Scale.rect(25, 11, 450, 60));
+    headerLabel.setFont(Fonts.getFont("default", 40.0f, Font.BOLD));
+    modsPanel.add(headerLabel);
+
+    JLabel labelCompactModsList = new JLabel(_localeManager.getValue("m.compact_mods_list"));
+    labelCompactModsList.setBounds(Scale.rect(25, 90, 350, 20));
+    labelCompactModsList.setFont(Fonts.getFont("default", 14.0f, Font.BOLD | Font.ITALIC));
+    modsPanel.add(labelCompactModsList);
+
+    JLabel labelCompactModsListExplained = new JLabel(_localeManager.getValue("m.compact_mods_list_explained"));
+    labelCompactModsListExplained.setBounds(Scale.rect(25, 110, 540, 16));
+    labelCompactModsListExplained.setFont(Fonts.getFont("default", 11.0f, Font.ITALIC));
+    modsPanel.add(labelCompactModsListExplained);
+
+    switchCompactModsList = new JCheckBox("");
+    switchCompactModsList.setBounds(Scale.rect(590, 95, 30, 23));
+    switchCompactModsList.setFocusPainted(false);
+    modsPanel.add(switchCompactModsList);
+    switchCompactModsList.setSelected(Settings.compactModsList);
+    switchCompactModsList.addActionListener(eventHandler::compactModsListChangeEvent);
+
+    return modsPanel;
   }
 
   protected JPanel createGamePanel ()
@@ -1163,6 +1196,7 @@ public class SettingsUI extends BaseUI
   public JCheckBox switchCleaning;
   public JCheckBox switchHideWhileGameRunning;
   public JCheckBox switchHideWhileEditorRunning;
+  public JCheckBox switchCompactModsList;
   public JSlider sliderUIScale;
   public JLabel labelUIScaleValue;
   public JCheckBox switchShortcut;

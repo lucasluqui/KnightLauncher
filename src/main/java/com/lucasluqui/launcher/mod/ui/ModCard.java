@@ -18,21 +18,25 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A card for one installed mod. Its image sits against the left edge and fades into the card, while a
  * blurred copy of it tints the whole background. Name, type badge, description and footer sit next to it,
  * with the enabled toggle at the top right and the action buttons at the bottom right.
+ * There's an option to make "compact" cards that are about half as tall.
  */
 public class ModCard extends JPanel
 {
   /**
    * @param badge Text for the type badge next to the name, or null for none.
    * @param accent The mod type's color, used for the badge.
+   * @param compact Whether to lay the card out in its slimmer form, see {@link #height}.
    */
   public ModCard (String title, String badge, Color accent, Color badgeForeground,
-                  String description, String footer, BufferedImage image)
+                  String description, String footer, BufferedImage image, boolean compact)
   {
+    this.compact = compact;
     this.title = title;
     this.description = description;
     this.footer = footer;
@@ -117,6 +121,25 @@ public class ModCard extends JPanel
 
     if (handle != null) handle.setBounds(0, 0, HANDLE_WIDTH, h);
 
+    if (compact) {
+      // everything on one row centered on the right.
+      // the toggle last and the actions before it.
+      int x = w - PADDING;
+      if (toggle != null) {
+        Dimension size = toggle.getPreferredSize();
+        x += Scale.px(4);
+        toggle.setBounds(x - size.width, (h - size.height) / 2, size.width, size.height);
+        x -= size.width + ACTION_GAP * 2;
+      }
+      for (JButton action : actions) {
+        if (!action.isVisible()) continue;
+        x -= ACTION_SIZE;
+        action.setBounds(x, (h - ACTION_SIZE) / 2, ACTION_SIZE, ACTION_SIZE);
+        x -= ACTION_GAP;
+      }
+      return;
+    }
+
     if (toggle != null) {
       Dimension size = toggle.getPreferredSize();
       toggle.setBounds(w - PADDING - size.width + Scale.px(4), PADDING - Scale.px(3), size.width, size.height);
@@ -129,6 +152,14 @@ public class ModCard extends JPanel
       action.setBounds(x, h - PADDING - ACTION_SIZE, ACTION_SIZE, ACTION_SIZE);
       x -= ACTION_GAP;
     }
+  }
+
+  /**
+   * How tall a card is at 100% scale.
+   */
+  public static int height (boolean compact)
+  {
+    return compact ? COMPACT_HEIGHT : HEIGHT;
   }
 
   @Override
@@ -232,9 +263,18 @@ public class ModCard extends JPanel
     int textX = bodyX() + h + Scale.px(4);
     int visibleActions = 0;
     for (JButton action : actions) if (action.isVisible()) visibleActions++;
-    int controlsWidth = Math.max(toggle == null ? 0 : toggle.getPreferredSize().width,
-      visibleActions * (ACTION_SIZE + ACTION_GAP));
+    int toggleWidth = toggle == null ? 0 : toggle.getPreferredSize().width;
+    int actionsWidth = visibleActions * (ACTION_SIZE + ACTION_GAP);
+    // compact cards have the toggle and actions side by side, regular ones stacked.
+    int controlsWidth = compact
+      ? (toggle == null ? 0 : toggleWidth - Scale.px(4) + ACTION_GAP * 2) + actionsWidth
+      : Math.max(toggleWidth, actionsWidth);
     int textWidth = w - textX - PADDING - controlsWidth - Scale.px(16);
+
+    if (compact) {
+      paintCompactTexts(g2d, textX, textWidth, h);
+      return;
+    }
 
     Font titleFont = Fonts.getFont("default", 16.0f, Font.BOLD);
     Font descriptionFont = Fonts.getFont("default", 11.0f, Font.PLAIN);
@@ -249,8 +289,7 @@ public class ModCard extends JPanel
     double scale = HiDpi.scale(g2d);
     if (textLayoutWidth != textWidth || textLayoutBadgeWidth != badgeWidth || textLayoutScale != scale) {
       titleText = ellipsize(title, titleMetrics, textWidth - (badgeLabel == null ? 0 : badgeWidth + Scale.px(8)));
-      descriptionLines = description == null || description.isEmpty()
-        ? new ArrayList<>() : wrap(description, descriptionMetrics, textWidth, MAX_DESCRIPTION_LINES);
+      fitDescription(descriptionMetrics, textWidth, MAX_DESCRIPTION_LINES);
       footerText = ellipsize(footer, footerMetrics, textWidth);
       textLayoutWidth = textWidth;
       textLayoutBadgeWidth = badgeWidth;
@@ -283,6 +322,82 @@ public class ModCard extends JPanel
     g2d.setColor(new Color(125, 130, 145));
     g2d.drawString(footerText, textX,
       h - PADDING - (ACTION_SIZE - footerMetrics.getHeight()) / 2 - footerMetrics.getDescent());
+  }
+
+  /**
+   * Name, badge and footer on the first row, one line of description below, both rows centered.
+   */
+  private void paintCompactTexts (Graphics2D g2d, int textX, int textWidth, int h)
+  {
+    Font titleFont = Fonts.getFont("default", 14.0f, Font.BOLD);
+    Font descriptionFont = Fonts.getFont("default", 11.0f, Font.PLAIN);
+    Font footerFont = Fonts.getFont("default", 10.0f, Font.ITALIC);
+    FontMetrics titleMetrics = g2d.getFontMetrics(titleFont);
+    FontMetrics descriptionMetrics = g2d.getFontMetrics(descriptionFont);
+    FontMetrics footerMetrics = g2d.getFontMetrics(footerFont);
+
+    int badgeWidth = badgeLabel == null ? 0 : badgeLabel.getPreferredSize().width;
+    int badgeSpace = badgeLabel == null ? 0 : badgeWidth + Scale.px(8);
+    int footerGap = Scale.px(10);
+    double scale = HiDpi.scale(g2d);
+    if (textLayoutWidth != textWidth || textLayoutBadgeWidth != badgeWidth || textLayoutScale != scale) {
+      // The name gets the room the footer doesn't need, but always at least most of the row,
+      // the footer is cut short first.
+      int titleMax = Math.max(textWidth - badgeSpace - footerGap - footerMetrics.stringWidth(footer),
+        Math.round(textWidth * 0.6f) - badgeSpace);
+      titleText = ellipsize(title, titleMetrics, titleMax);
+      int footerMax = textWidth - titleMetrics.stringWidth(titleText) - badgeSpace - footerGap;
+      footerText = footerMax < footerMetrics.stringWidth("...") * 3 ? "" : ellipsize(footer, footerMetrics, footerMax);
+      fitDescription(descriptionMetrics, textWidth, 1);
+      textLayoutWidth = textWidth;
+      textLayoutBadgeWidth = badgeWidth;
+      textLayoutScale = scale;
+    }
+
+    int blockHeight = titleMetrics.getAscent() + titleMetrics.getDescent();
+    if (!descriptionLines.isEmpty()) blockHeight += Scale.px(2) + descriptionMetrics.getHeight();
+    int titleY = (h - blockHeight) / 2 + titleMetrics.getAscent();
+
+    g2d.setFont(titleFont);
+    g2d.setColor(new Color(0, 0, 0, 90));
+    g2d.drawString(titleText, textX + Scale.px(1), titleY + Scale.px(2));
+    g2d.setColor(dimmed ? new Color(170, 172, 180) : Color.WHITE);
+    g2d.drawString(titleText, textX, titleY);
+    int x = textX + titleMetrics.stringWidth(titleText);
+
+    if (badgeLabel != null) {
+      int badgeY = titleY - titleMetrics.getAscent() / 2 - BADGE_HEIGHT / 2 + Scale.px(2);
+      Rectangle bounds = new Rectangle(x + Scale.px(8), badgeY, badgeWidth, BADGE_HEIGHT);
+      if (!bounds.equals(badgeLabel.getBounds())) badgeLabel.setBounds(bounds);
+      x += badgeSpace;
+    }
+
+    g2d.setFont(footerFont);
+    g2d.setColor(new Color(125, 130, 145));
+    g2d.drawString(footerText, x + footerGap, titleY);
+
+    if (!descriptionLines.isEmpty()) {
+      g2d.setFont(descriptionFont);
+      g2d.setColor(dimmed ? new Color(120, 124, 135) : new Color(185, 189, 200));
+      g2d.drawString(descriptionLines.get(0), textX,
+        titleY + titleMetrics.getDescent() + Scale.px(2) + descriptionMetrics.getAscent());
+    }
+  }
+
+  /**
+   * Wraps the description to the lines it has room for.
+   * When it doesn't all fit, hovering the card shows it whole.
+   */
+  private void fitDescription (FontMetrics metrics, int maxWidth, int maxLines)
+  {
+    if (description == null || description.trim().isEmpty()) {
+      descriptionLines = new ArrayList<>();
+      return;
+    }
+    descriptionLines = wrap(description, metrics, maxWidth, maxLines);
+    boolean cut = !String.join(" ", descriptionLines).equals(description.replaceAll("\\s+", " ").trim());
+    String tooltip = cut ? description : null;
+    if (!Objects.equals(tooltip, getToolTipText())) setToolTipText(tooltip);
   }
 
   private final MouseAdapter hoverListener = new MouseAdapter()
@@ -399,6 +514,7 @@ public class ModCard extends JPanel
   private JLabel badgeLabel;
   private JComponent toggle;
   private JComponent handle;
+  private final boolean compact;
   private final List<JButton> actions = new ArrayList<>();
   private boolean hovered = false;
   private float hoverProgress = 0f;
@@ -425,6 +541,7 @@ public class ModCard extends JPanel
 
   // At 100% scale, the list scales it when placing the card. Everything below is in actual pixels.
   public static final int HEIGHT = 116;
+  public static final int COMPACT_HEIGHT = 56;
 
   private static final int PADDING = Scale.px(14);
   private static final float CORNER_RADIUS = Scale.px(14f);

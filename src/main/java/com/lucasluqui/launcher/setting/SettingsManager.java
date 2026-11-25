@@ -108,6 +108,7 @@ public class SettingsManager
     Settings.fileProtection = Boolean.parseBoolean(getValue("launcher.fileProtection"));
     Settings.betasEnabled = Boolean.parseBoolean(getValue("launcher.betasEnabled"));
     Settings.showLegacySceneEditor = Boolean.parseBoolean(getValue("launcher.showLegacySceneEditor"));
+    Settings.compactModsList = Boolean.parseBoolean(getValue("launcher.compactModsList", "false"));
     try {
       Settings.uiScale = Integer.parseInt(getValue("launcher.uiScale", "100"));
     } catch (NumberFormatException e) {
@@ -436,6 +437,6 @@ public class SettingsManager
   private HashMap<String, Object> _migrationMap = new HashMap<>();
   private boolean _migrating = false;
 
-  private final String PROP_VER = "33";
+  private final String PROP_VER = "34";
   private final String PROP_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
 }

@@ -12,6 +12,7 @@ import com.lucasluqui.launcher.mod.data.Mod;
 import com.lucasluqui.launcher.mod.data.ModGroup;
 import com.lucasluqui.launcher.mod.data.Modpack;
 import com.lucasluqui.launcher.mod.data.ZipMod;
+import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.swing.SlimProgressBarUI;
 import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.swing.SmoothScrollPane;
@@ -569,6 +570,7 @@ public class ModListUI extends BaseUI
     cardMods.clear();
     cardY.clear();
     collisionButtons.clear();
+    compactCards = Settings.compactModsList;
 
     BufferedImage defaultModImageBuffImg = ImageUtil.loadImageWithinJar("/rsrc/img/icon-default.png");
     defaultModImageBuffImg = ImageUtil.resizeImagePreserveTransparency(
@@ -599,19 +601,19 @@ public class ModListUI extends BaseUI
       header.addMod();
 
       ModCard modCard = buildModCard(mod, defaultModImageBuffImg, position);
-      modCard.setBounds(Scale.rect(0, y, CARD_WIDTH, ModCard.HEIGHT));
+      modCard.setBounds(Scale.rect(0, y, CARD_WIDTH, ModCard.height(compactCards)));
       modListPane.add(modCard);
       slots.add(modCard);
       slotTops.add(y);
       slotGroups.add(group);
       cardMods.put(modCard, mod);
       cardY.put(modCard, (float) modCard.getY());
-      y += CARD_STRIDE;
+      y += cardStride();
       count++;
     }
     refreshCollisions();
 
-    int listHeight = count == 0 ? 0 : y - CARD_GAP;
+    int listHeight = count == 0 ? 0 : y - cardGap();
     modListPane.setBounds(Scale.rect(25, LIST_Y, CARD_WIDTH, listHeight));
 
     int footerY = LIST_Y + listHeight + 6;
@@ -674,7 +676,7 @@ public class ModListUI extends BaseUI
     // The groups already say what type each mod is, so the badge isn't shown.
     ModCard modCard = new ModCard(mod.getDisplayName(), SHOW_TYPE_BADGE ? badgeText : null, accent, badgeForeground, mod.getDescription(),
       _localeManager.getValue("m.mod_footer", new String[]{mod.getVersion(), mod.getAuthor()}),
-      modImageBuffImg == null ? defaultModImageBuffImg : modImageBuffImg);
+      modImageBuffImg == null ? defaultModImageBuffImg : modImageBuffImg, compactCards);
     modCard.setDimmed(!mod.isEnabled());
 
     JCheckBox enabledCheckbox = new JCheckBox(_localeManager.getValue("m.enabled"));
@@ -852,7 +854,7 @@ public class ModListUI extends BaseUI
       float y = Math.max(slotY(first), Math.min(mouse.y - dragGrabY, slotY(slotGroups.lastIndexOf(group))));
       cardY.put(dragCard, y);
 
-      int slot = first + Math.round((y - slotY(first)) / Scale.px((float) CARD_STRIDE));
+      int slot = first + Math.round((y - slotY(first)) / Scale.px((float) cardStride()));
       if (slot != slots.indexOf(dragCard)) {
         slots.remove(dragCard);
         slots.add(slot, dragCard);
@@ -883,6 +885,19 @@ public class ModListUI extends BaseUI
       if (droppedCard != null) droppedCard.setLifted(false);
       droppedCard = null;
     }
+  }
+
+  /**
+   * Distance from one card's top to the next one's, unscaled.
+   */
+  private int cardStride ()
+  {
+    return ModCard.height(compactCards) + cardGap();
+  }
+
+  private int cardGap ()
+  {
+    return compactCards ? COMPACT_CARD_GAP : CARD_GAP;
   }
 
   private float slotY (int slot)
@@ -964,6 +979,9 @@ public class ModListUI extends BaseUI
   private final List<Integer> slotTops = new ArrayList<>();
   private final List<ModGroup> slotGroups = new ArrayList<>();
 
+  /** Whether the cards currently in the list are compact ones, fixed until it's rebuilt. */
+  private boolean compactCards = false;
+
   private final Map<ModCard, Mod> cardMods = new HashMap<>();
   private final Map<ModCard, Float> cardY = new HashMap<>();
   private final Map<Mod, JButton> collisionButtons = new LinkedHashMap<>();
@@ -1001,7 +1019,7 @@ public class ModListUI extends BaseUI
   // Mod cards that are stacked one after the other.
   private static final int CARD_WIDTH = 750;
   private static final int CARD_GAP = 8;
-  private static final int CARD_STRIDE = ModCard.HEIGHT + CARD_GAP;
+  private static final int COMPACT_CARD_GAP = 6;
 
   // Mod group header shenanigans.
   private static final int GROUP_HEADER_HEIGHT = 28;
