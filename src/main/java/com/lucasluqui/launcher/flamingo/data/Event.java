@@ -21,6 +21,14 @@ public class Event
     return endsAt != 0L && startsAt <= now && now < endsAt && endsAt - now < ENDING_SOON_THRESHOLD;
   }
 
+  /**
+   * Whether the event was announced ahead of time and hasn't started yet.
+   */
+  public boolean isStartingLater ()
+  {
+    return startsAt > System.currentTimeMillis();
+  }
+
   public String type;
 
   public String banner;

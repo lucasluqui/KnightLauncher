@@ -626,12 +626,18 @@ public class LauncherEventHandler
     _bannerImageCache.keySet().retainAll(banners);
 
     List<String> titles = new ArrayList<>();
-    List<Boolean> endingSoon = new ArrayList<>();
+    List<String> badges = new ArrayList<>();
     for (Event event : events) {
       titles.add(event.content.split("\\|")[0]);
-      endingSoon.add(event.isEndingSoon());
+      if (event.isStartingLater()) {
+        badges.add(_localeManager.getValue("m.event_starting_soon"));
+      } else if (event.isEndingSoon()) {
+        badges.add(_localeManager.getValue("m.event_ending_soon"));
+      } else {
+        badges.add(null);
+      }
     }
-    this.ui.setEventCards(titles, endingSoon);
+    this.ui.setEventCards(titles, badges);
 
     if (events.isEmpty()) return;
 

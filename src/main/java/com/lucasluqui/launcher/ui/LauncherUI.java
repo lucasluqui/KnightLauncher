@@ -847,19 +847,20 @@ public class LauncherUI extends BaseUI
   }
 
   /**
-   * Replaces the event cards with one per given title, flagging the ones that are ending soon.
+   * Replaces the event cards with one per given title, each with its badge, like for ones starting or ending soon.
    * No cards are shown for a single event, as there's nothing to switch between.
+   *
+   * @param badges The badge text for each card, null for cards without one.
    */
-  public void setEventCards (List<String> titles, List<Boolean> endingSoon)
+  public void setEventCards (List<String> titles, List<String> badges)
   {
     for (EventCard card : eventCards) panel.remove(card);
     eventCards.clear();
 
     if (titles.size() > 1) {
-      String endingSoonBadge = _localeManager.getValue("m.event_ending_soon");
       for (int i = 0; i < titles.size(); i++) {
         final int index = i;
-        EventCard card = new EventCard(titles.get(i), endingSoon.get(i) ? endingSoonBadge : null,
+        EventCard card = new EventCard(titles.get(i), badges.get(i),
           () -> this.eventHandler.selectBannerEvent(index));
         eventCards.add(card);
         panel.add(card);
