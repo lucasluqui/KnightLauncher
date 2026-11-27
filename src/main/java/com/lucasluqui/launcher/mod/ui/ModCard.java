@@ -8,6 +8,7 @@ import com.lucasluqui.launcher.Fonts;
 import com.lucasluqui.swing.Scale;
 import com.lucasluqui.swing.HiDpi;
 import com.lucasluqui.util.ColorUtil;
+import org.apache.commons.text.WordUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -396,7 +397,7 @@ public class ModCard extends JPanel
     }
     descriptionLines = wrap(description, metrics, maxWidth, maxLines);
     boolean cut = !String.join(" ", descriptionLines).equals(description.replaceAll("\\s+", " ").trim());
-    String tooltip = cut ? description : null;
+    String tooltip = cut ? WordUtils.abbreviate(description, 200, 250, "...") : null;
     if (!Objects.equals(tooltip, getToolTipText())) setToolTipText(tooltip);
   }
 

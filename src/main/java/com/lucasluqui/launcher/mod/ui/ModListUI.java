@@ -24,6 +24,7 @@ import com.lucasluqui.swing.HandCursor;
 import com.lucasluqui.swing.Scale;
 import com.lucasluqui.util.ImageUtil;
 import com.lucasluqui.util.ThreadingUtil;
+import org.apache.commons.text.WordUtils;
 
 import jiconfont.icons.font_awesome.FontAwesome;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -751,7 +752,7 @@ public class ModListUI extends BaseUI
 
       JButton button = entry.getValue();
       button.setVisible(!collisions.isEmpty());
-      button.setToolTipText(_localeManager.getValue("m.mod_conflicts_tooltip", String.join(", ", names)));
+      button.setToolTipText(WordUtils.abbreviate(_localeManager.getValue("m.mod_conflicts_tooltip", String.join(", ", names)), 200, 250, "..."));
       button.getParent().revalidate();
       button.getParent().repaint();
     }
